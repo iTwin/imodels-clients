@@ -2,6 +2,7 @@
   "name": "@itwin/imodels-client-tests",
   "version": "1.0.0",
   "description": "Tests for iModels API client wrapper",
+  "license": "MIT",
   "scripts": {
     "build": "tsc 1>&2",
     "lint": "eslint ./src/**/*.ts 1>&2",
@@ -11,7 +12,6 @@
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-utils-eslint/.eslintrc.json"
   },
-  "license": "MIT",
   "dependencies": {
     "@itwin/imodels-client-management": "1.0.0",
     "chai": "~4.3.4",
