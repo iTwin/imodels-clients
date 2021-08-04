@@ -1,0 +1,28 @@
+{
+  "name": "@itwin/imodels-client-tests",
+  "version": "1.0.0",
+  "description": "Tests for iModels API client wrapper",
+  "scripts": {
+    "build": "tsc 1>&2",
+    "lint": "eslint ./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2",
+    "test": "mocha lib/*.test.js --color"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/@itwin/imodels-client-utils-eslint/.eslintrc.json"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@itwin/imodels-client-management": "1.0.0",
+    "chai": "~4.3.4",
+    "mocha": "~9.0.2",
+    "fs-extra": "~10.0.0"
+  },
+  "devDependencies": {
+    "@itwin/imodels-client-utils-eslint": "~1.0.0",
+    "@types/chai": "~4.2.21",
+    "@types/mocha": "~9.0.0",
+    "@types/node": "^16.4.6",
+    "typescript": "~4.3.5"
+  }
+}

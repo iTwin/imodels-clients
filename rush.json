@@ -1,0 +1,31 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
+  "rushVersion": "5.35.2",
+  "pnpmVersion": "4.14.4",
+  "nodeSupportedVersionRange": ">=12.13.0 <15.0.0",
+  "ensureConsistentVersions": true,
+  "projectFolderMinDepth": 1,
+  "projectFolderMaxDepth": 2,
+  "repository": {
+    "url": "https://github.com/microsoft/rush-example",
+    "defaultBranch": "main",
+    "defaultRemote": "origin"
+  },
+  "projects": [
+    {
+      "packageName": "@itwin/imodels-client-management",
+      "projectFolder": "clients/imodels-client-management",
+      "shouldPublish": false
+    },
+    {
+      "packageName": "@itwin/imodels-client-tests",
+      "projectFolder": "tests",
+      "shouldPublish": false
+    },
+    {
+      "packageName": "@itwin/imodels-client-utils-eslint",
+      "projectFolder": "utils/imodels-client-utils-eslint",
+      "shouldPublish": false
+    }
+  ]
+}

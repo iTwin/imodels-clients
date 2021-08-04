@@ -1,0 +1,23 @@
+{
+  "name": "@itwin/imodels-client-management",
+  "version": "1.0.0",
+  "description": "iModels API client wrapper",
+  "main": "lib/iModelsClientExports.js",
+  "typings": "lib/iModelsClientExports",
+  "scripts": {
+    "build": "tsc 1>&2",
+    "lint": "eslint ./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/@itwin/imodels-client-utils-eslint/.eslintrc.json"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@itwin/imodels-client-utils-eslint": "~1.0.0",
+    "typescript": "~4.3.5"
+  },
+  "dependencies": {
+    "axios": "~0.21.1"
+  }
+}

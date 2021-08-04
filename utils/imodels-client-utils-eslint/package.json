@@ -1,0 +1,17 @@
+{
+  "name": "@itwin/imodels-client-utils-eslint",
+  "version": "1.0.0",
+  "description": "Common linting utility for iModels API client wrapper",
+  "scripts": {
+    "build": "",
+    "lint": "",
+    "lint-fix": ""
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "~4.28.4",
+    "@typescript-eslint/parser": "~4.28.4",
+    "eslint": "~7.31.0",
+    "eslint-plugin-import": "~2.23.4"
+  }
+}
