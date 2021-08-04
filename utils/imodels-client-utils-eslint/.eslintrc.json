@@ -38,33 +38,12 @@
       "always"
     ],
     "import/order": [
-      "error",
-      {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index",
-          "object"
-        ],
-        "pathGroups": [
-          {
-            "pattern": "@itwin/imodels-client-management**",
-            "group": "internal"
-          }
-        ],
-        "pathGroupsExcludedImportTypes": [
-          "builtin"
-        ],
-        "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": true
-        }
-      }
+      "error"
     ],
     "@typescript-eslint/no-empty-interface": [
+      "off"
+    ],
+    "@typescript-eslint/no-explicit-any": [
       "off"
     ]
   }
