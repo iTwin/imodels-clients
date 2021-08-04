@@ -5,7 +5,7 @@
 export * from "./iModelsClient";
 
 // Export public models
+export * from "./Errors";
 export * from "./PublicModels";
 export * from "./operations/iModelModels";
 export * from "./operations/iModelOperationParams";
-export * from "./Errors";

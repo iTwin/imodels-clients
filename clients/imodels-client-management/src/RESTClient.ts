@@ -11,7 +11,7 @@ export class RESTClient {
     this._errorParser = errorParser;
   }
 
-  protected sendGetRequest<TResponse>(params: { url: string, headers: unknown }): Promise<TResponse> {
+  public sendGetRequest<TResponse>(params: { url: string, headers: unknown }): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
@@ -21,7 +21,7 @@ export class RESTClient {
       .catch(this.handleError);
   }
 
-  protected sendPostRequest<TResponse>(params: { url: string, headers: unknown, body: unknown }): Promise<TResponse> {
+  public sendPostRequest<TResponse>(params: { url: string, headers: unknown, body: unknown }): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
@@ -31,7 +31,7 @@ export class RESTClient {
       .catch(this.handleError);
   }
 
-  protected sendDeleteRequest<TResponse>(params: { url: string, headers: unknown }): Promise<TResponse> {
+  public sendDeleteRequest<TResponse>(params: { url: string, headers: unknown }): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };

@@ -4,9 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelsErrorParser } from "./Errors";
 import { iModelOperations } from "./operations/iModelOperations";
+import { RESTClient } from "./RESTClient";
 
 export class iModelsClient {
+  private _restClient: RESTClient;
+
+  constructor() {
+    this._restClient = new RESTClient(iModelsErrorParser.parse);
+  }
   public get iModels(): iModelOperations {
-    return new iModelOperations(iModelsErrorParser.parse);
+    return new iModelOperations(this._restClient);
   }
 }

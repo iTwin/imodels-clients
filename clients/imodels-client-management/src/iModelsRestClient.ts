@@ -4,10 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import { PreferReturn } from "./InternalModels";
 import { RequestContextParam } from "./PublicModels";
-import { RESTClient } from "./RESTClient";
 
 export type QueryParameters = { [key: string]: string | number; };
-export class iModelsRestClient extends RESTClient {
+export class BaseOperations {
   protected getHeaders(params: RequestContextParam & { preferReturn?: PreferReturn }): unknown {
     return {
       Authorization: `Bearer ${params.requestContext.accessToken}`,
