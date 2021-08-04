@@ -2,13 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-export interface APIEntity {
+export interface BaseEntity {
   id: string;
   displayName: string;
-}
-
-export interface Link {
-  href: string;
 }
 
 export interface RequestContextParam {

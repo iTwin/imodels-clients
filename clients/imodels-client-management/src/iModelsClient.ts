@@ -12,6 +12,7 @@ export class iModelsClient {
   constructor() {
     this._restClient = new RESTClient(iModelsErrorParser.parse);
   }
+  
   public get iModels(): iModelOperations {
     return new iModelOperations(this._restClient);
   }

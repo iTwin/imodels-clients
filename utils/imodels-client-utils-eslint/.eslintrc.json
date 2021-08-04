@@ -13,7 +13,8 @@
     "sourceType": "module"
   },
   "plugins": [
-    "@typescript-eslint", "import"
+    "@typescript-eslint",
+    "import"
   ],
   "rules": {
     "indent": [
@@ -32,30 +33,39 @@
       "error",
       "always"
     ],
+    "eol-last": [
+      "error",
+      "always"
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "@itwin/imodels-client-management**",
+            "group": "internal"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [
+          "builtin"
+        ],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
     "@typescript-eslint/no-empty-interface": [
       "off"
-    ],
-    "import/order": ["error", {
-      "groups": [
-        "builtin",
-        "external",
-        "internal",
-        "parent",
-        "sibling",
-        "index",
-        "object"
-      ],
-      "pathGroups": [
-        {
-          "pattern": "@itwin/imodels-client-management**",
-          "group": "internal"
-        }
-      ],
-      "pathGroupsExcludedImportTypes": ["builtin"],
-      "alphabetize": {
-        "order": "asc",
-        "caseInsensitive": true
-      }
-    }]
+    ]
   }
 }

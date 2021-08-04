@@ -5,10 +5,10 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export class RESTClient {
-  private _errorParser: (response: { statusCode: number, body: unknown }) => void;
+  private _parseErrorFunc: (response: { statusCode: number, body: unknown }) => void;
 
-  constructor(errorParser: (response: { statusCode: number, body: unknown }) => void) {
-    this._errorParser = errorParser;
+  constructor(parseErrorFunc: (response: { statusCode: number, body: unknown }) => void) {
+    this._parseErrorFunc = parseErrorFunc;
   }
 
   public sendGetRequest<TResponse>(params: { url: string, headers: unknown }): Promise<TResponse> {
@@ -42,7 +42,7 @@ export class RESTClient {
   }
 
   private handleError<TResponse>(errorResponse: AxiosError<TResponse>): void {
-    Promise.reject(this._errorParser({ statusCode: errorResponse.response.status, body: errorResponse.response.data }));
+    Promise.reject(this._parseErrorFunc({ statusCode: errorResponse.response.status, body: errorResponse.response.data }));
   }
 
   private handleSuccess<TResponse>(response: AxiosResponse<TResponse>): TResponse {

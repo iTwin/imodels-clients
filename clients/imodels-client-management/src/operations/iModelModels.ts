@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { APIEntity, Link } from "../PublicModels";
+import { BaseEntity } from "../PublicModels";
 
 export interface Coordinates {
   latitude: number;
@@ -14,13 +14,7 @@ export interface Extent {
   northEast: Coordinates;
 }
 
-export interface iModelLinks {
-  creator: Link;
-  changesets: Link;
-  namedVersions: Link;
-}
-
-export interface MinimaliModel extends APIEntity {
+export interface MinimaliModel extends BaseEntity {
 
 }
 
@@ -31,5 +25,4 @@ export interface iModel extends MinimaliModel {
   createdDateTime: Date;
   projectId: string;
   extent?: Extent;
-  _links: iModelLinks;
 }

@@ -6,6 +6,7 @@ import { PreferReturn } from "./InternalModels";
 import { RequestContextParam } from "./PublicModels";
 
 export type QueryParameters = { [key: string]: string | number; };
+
 export class BaseOperations {
   protected getHeaders(params: RequestContextParam & { preferReturn?: PreferReturn }): unknown {
     return {

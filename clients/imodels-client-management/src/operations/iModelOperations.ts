@@ -3,12 +3,20 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { BaseOperations } from "../iModelsRestClient";
-import { EntityCollectionPage, PreferReturn, iModelResponse, iModelsResponse } from "../InternalModels";
+import { CollectionResponse, EntityCollectionPage, PreferReturn, } from "../InternalModels";
 import { pagedCollectionGenerator } from "../PagedCollectionGenerator";
 import { RequestContextParam } from "../PublicModels";
 import { RESTClient } from "../RESTClient";
 import { MinimaliModel, iModel } from "./iModelModels";
 import { CreateEmptyiModelParams, DeleteiModelParams, GetiModelByIdParams, GetiModelListParams } from "./iModelOperationParams";
+
+interface iModelResponse {
+  iModel: iModel;
+}
+
+interface iModelsResponse<TiModel> extends CollectionResponse {
+  iModels: TiModel[];
+}
 
 export class iModelOperations extends BaseOperations {
   private _baseUrl = "https://sbx-api.bentley.com/imodels";

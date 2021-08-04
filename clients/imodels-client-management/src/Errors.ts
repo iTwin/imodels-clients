@@ -4,19 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelsErrorCode, iModelsErrorDetail, iModelsError as iModelsErrorInterface } from "./PublicModels";
 
-class iModelsError extends Error implements iModelsErrorInterface {
-  code: iModelsErrorCode;
-  details?: iModelsErrorDetail[];
-
-  constructor(params: { name: string, code: iModelsErrorCode, message: string, details?: iModelsErrorDetail[] }) {
-    super();
-    this.name = params.name;
-    this.code = params.code;
-    this.message = params.message;
-    this.details = params.details;
-  }
-}
-
 interface iModelsAPIErrorWrapper {
   error: iModelsAPIError;
 }
@@ -31,6 +18,19 @@ interface iModelsAPIErrorDetail {
   code: string;
   message: string;
   target: string;
+}
+
+class iModelsError extends Error implements iModelsErrorInterface {
+  code: iModelsErrorCode;
+  details?: iModelsErrorDetail[];
+
+  constructor(params: { name: string, code: iModelsErrorCode, message: string, details?: iModelsErrorDetail[] }) {
+    super();
+    this.name = params.name;
+    this.code = params.code;
+    this.message = params.message;
+    this.details = params.details;
+  }
 }
 
 export class iModelsErrorParser {
