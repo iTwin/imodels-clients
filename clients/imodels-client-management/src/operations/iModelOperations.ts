@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BaseOperations } from "../iModelsRestClient";
 import { CollectionResponse, EntityCollectionPage, PreferReturn, } from "../InternalModels";
+import { OperationsBase } from "../OperationsBase";
 import { pagedCollectionGenerator } from "../PagedCollectionGenerator";
 import { RequestContextParam } from "../PublicModels";
 import { RESTClient } from "../RESTClient";
@@ -18,64 +18,57 @@ interface iModelsResponse<TiModel> extends CollectionResponse {
   iModels: TiModel[];
 }
 
-export class iModelOperations extends BaseOperations {
-  private _baseUrl = "https://sbx-api.bentley.com/imodels";
-  private _restClient: RESTClient;
-
+export class iModelOperations extends OperationsBase {
   constructor(restClient: RESTClient) {
-    super();
-    this._restClient = restClient;
+    super(restClient);
   }
 
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
-    return pagedCollectionGenerator(() => this.getList<MinimaliModel>({
-      requestContext: params.requestContext,
+    return pagedCollectionGenerator(() => this.getEntityCollectionPage<MinimaliModel>({
+      ...params,
       url: `${this._baseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal
     }));
   }
 
   public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
-    return pagedCollectionGenerator(() => this.getList<iModel>({
-      requestContext: params.requestContext,
+    return pagedCollectionGenerator(() => this.getEntityCollectionPage<iModel>({
+      ...params,
       url: `${this._baseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation
     }));
   }
 
   public async getById(params: GetiModelByIdParams): Promise<iModel> {
-    const response = await this._restClient.sendGetRequest<iModelResponse>({
-      url: `${this._baseUrl} /${params.imodelId}`,
-      headers: this.getHeaders(params)
+    const response = await this.sendGetRequest<iModelResponse>({
+      ...params,
+      url: `${this._baseUrl}/${params.imodelId}`
     });
     return response.iModel;
   }
 
   public async createEmpty(params: CreateEmptyiModelParams): Promise<iModel> {
-    const response = await this._restClient.sendPostRequest<iModelResponse>({
+    const response = await this.sendPostRequest<iModelResponse>({
+      ...params,
       url: this._baseUrl,
-      body: params.imodelProperties,
-      headers: this.getHeaders(params)
+      body: params.imodelProperties
     });
     return response.iModel;
   }
 
   public delete(params: DeleteiModelParams): Promise<void> {
-    return this._restClient.sendDeleteRequest({
-      url: `${this._baseUrl}/${params.imodelId}`,
-      headers: this.getHeaders(params)
+    return this.sendDeleteRequest({
+      ...params,
+      url: `${this._baseUrl}/${params.imodelId}`
     });
   }
 
-  private async getList<TiModel>(params: RequestContextParam & { url: string, preferReturn: PreferReturn }): Promise<EntityCollectionPage<TiModel>> {
-    const response = await this._restClient.sendGetRequest<iModelsResponse<TiModel>>({
-      url: params.url,
-      headers: this.getHeaders(params)
-    });
+  private async getEntityCollectionPage<TiModel>(params: RequestContextParam & { url: string, preferReturn: PreferReturn }): Promise<EntityCollectionPage<TiModel>> {
+    const response = await this.sendGetRequest<iModelsResponse<TiModel>>(params);
     return {
       entities: response.iModels,
       next: response._links.next
-        ? () => this.getList({ requestContext: params.requestContext, url: response._links.next.href, preferReturn: params.preferReturn })
+        ? () => this.getEntityCollectionPage({ requestContext: params.requestContext, url: response._links.next.href, preferReturn: params.preferReturn })
         : undefined
     };
   }
