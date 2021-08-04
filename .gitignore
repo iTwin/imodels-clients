@@ -1,4 +1,3 @@
-
 *.log
 npm-debug.log*
 node_modules/
@@ -10,5 +9,3 @@ common/autoinstallers/*/.npmrc
 **/.rush/temp/
 lib/
 tests/test-results.xml
-
-
