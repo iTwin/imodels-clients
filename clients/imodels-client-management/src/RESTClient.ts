@@ -17,8 +17,8 @@ export class RESTClient {
     };
 
     return axios.get(params.url, requestConfig)
-      .then(this.handleSuccess)
-      .catch(this.handleError);
+      .then((successResponse: AxiosResponse<TResponse>) => this.handleSuccess(successResponse))
+      .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
   }
 
   public sendPostRequest<TResponse>(params: { url: string, headers: unknown, body: unknown }): Promise<TResponse> {
@@ -27,8 +27,8 @@ export class RESTClient {
     };
 
     return axios.post(params.url, params.body, requestConfig)
-      .then(this.handleSuccess)
-      .catch(this.handleError);
+      .then((successResponse: AxiosResponse<TResponse>) => this.handleSuccess(successResponse))
+      .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
   }
 
   public sendDeleteRequest<TResponse>(params: { url: string, headers: unknown }): Promise<TResponse> {
@@ -37,12 +37,12 @@ export class RESTClient {
     };
 
     return axios.delete(params.url, requestConfig)
-      .then(this.handleSuccess)
-      .catch(this.handleError);
+      .then((successResponse: AxiosResponse<TResponse>) => this.handleSuccess(successResponse))
+      .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
   }
 
-  private handleError<TResponse>(errorResponse: AxiosError<TResponse>): void {
-    Promise.reject(this._parseErrorFunc({ statusCode: errorResponse.response.status, body: errorResponse.response.data }));
+  private handleError<TResponse>(errorResponse: AxiosError<TResponse>): any {
+    return Promise.reject(this._parseErrorFunc({ statusCode: errorResponse.response.status, body: errorResponse.response.data }));
   }
 
   private handleSuccess<TResponse>(response: AxiosResponse<TResponse>): TResponse {

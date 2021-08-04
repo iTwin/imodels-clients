@@ -23,8 +23,10 @@ export enum iModelsErrorCode {
 
   Unknown = "Unknown",
   Unauthorized = "Unauthorized",
+  
   InvalidiModelsRequest = "InvalidiModelsRequest",
-  InvalidValue = "InvalidValue"
+  InvalidValue = "InvalidValue",
+  iModelExists = "iModelExists"
 }
 
 export interface iModelsError extends Error {

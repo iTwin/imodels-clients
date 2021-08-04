@@ -21,8 +21,8 @@ describe("iModelsClient", () => {
     imodelsClient = new iModelsClient();
   });
 
-  after(() => {
-    cleanUpiModelsAfterTestRun(imodelsPrefixForTestSuite, imodelsClient, { accessToken: accessToken }, testProjectId);
+  after(async () => {
+    return cleanUpiModelsAfterTestRun(imodelsPrefixForTestSuite, imodelsClient, { accessToken: accessToken }, testProjectId);
   });
 
   const getiModelNameForCreation = (imodelName: string) => {
@@ -31,7 +31,7 @@ describe("iModelsClient", () => {
 
   it("should create an empty iModel", async () => {
     // Arrange
-    const imodelName = getiModelNameForCreation("Sample iModel");
+    const imodelName = getiModelNameForCreation("Sample iModel (success)");
     const imodelDescription = "Sample iModel description";
     const imodelExtent: Extent = {
       southWest: { latitude: 1, longitude: 2 },
@@ -56,13 +56,13 @@ describe("iModelsClient", () => {
     expect(imodel.extent).to.deep.equal(imodelExtent);
   });
 
-  it.only("should return unauthorized error when calling API with invalid access token", async () => {
+  it("should return unauthorized error when calling API with invalid access token", async () => {
     // Arrange
     const createiModelWithInvalidAccessToken = async () => await imodelsClient.iModels.createEmpty({
       requestContext: { accessToken: "invalidToken" },
       imodelProperties: {
         projectId: testProjectId,
-        name: getiModelNameForCreation("Sample iModel")
+        name: getiModelNameForCreation("Sample iModel (unauthorized)")
       }
     });
 
@@ -87,7 +87,7 @@ describe("iModelsClient", () => {
       requestContext: { accessToken },
       imodelProperties: {
         projectId: testProjectId,
-        name: getiModelNameForCreation("Sample iModel"),
+        name: getiModelNameForCreation("Sample iModel (invalid)"),
         description: "x".repeat(256)
       }
     });
