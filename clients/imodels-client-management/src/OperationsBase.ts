@@ -6,10 +6,12 @@ import { PreferReturn } from "./InternalModels";
 import { RequestContextParam } from "./PublicModels";
 import { RESTClient } from "./RESTClient";
 
-export type Dictionary = { [key: string]: string | number; };
+type Dictionary = { [key: string]: string | number; };
 
 export class OperationsBase {
   protected _baseUrl = "https://api.bentley.com/imodels";
+  protected _version = "v1";
+
   private _restClient: RESTClient;
 
   constructor(restClient: RESTClient) {
@@ -39,9 +41,14 @@ export class OperationsBase {
   }
 
   private formHeaders(params: RequestContextParam & { preferReturn?: PreferReturn }): Dictionary {
-    const headers: Dictionary = { Authorization: `Bearer ${params.requestContext.accessToken}` };
+    const headers: Dictionary = {
+      Authorization: `Bearer ${params.requestContext.accessToken}`,
+      Accept: `application/vnd.bentley.itwin-platform.${this._version}+json`
+    };
+
     if (params.preferReturn)
       headers.Prefer = `return=${params.preferReturn}`;
+      
     return headers;
   }
 
