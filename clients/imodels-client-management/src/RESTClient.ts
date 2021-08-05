@@ -43,6 +43,7 @@ export class RESTClient {
       .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handleError<TResponse>(errorResponse: AxiosError<TResponse>): any {
     return Promise.reject(this._parseErrorFunc({ statusCode: errorResponse.response.status, body: errorResponse.response.data }));
   }

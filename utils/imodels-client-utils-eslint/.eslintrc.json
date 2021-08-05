@@ -23,7 +23,7 @@
     ],
     "linebreak-style": [
       "error",
-      "windows"
+      "unix"
     ],
     "quotes": [
       "error",
@@ -38,13 +38,35 @@
       "always"
     ],
     "import/order": [
-      "error"
-    ],
-    "@typescript-eslint/no-empty-interface": [
-      "off"
-    ],
-    "@typescript-eslint/no-explicit-any": [
-      "off"
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "@itwin/imodels-client**",
+            "group": "internal"
+          },
+          {
+            "pattern": "@bentley/**",
+            "group": "external"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [
+          "builtin"
+        ],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
     ]
   }
 }
