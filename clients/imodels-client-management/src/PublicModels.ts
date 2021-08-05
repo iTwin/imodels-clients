@@ -6,11 +6,11 @@ export interface BaseEntity {
   id: string;
   displayName: string;
 }
-
+export interface RequestContext {
+  accessToken: string;
+}
 export interface RequestContextParam {
-  requestContext: {
-    accessToken: string;
-  };
+  requestContext: RequestContext;
 }
 
 export interface CollectionRequestParams {
@@ -23,7 +23,7 @@ export enum iModelsErrorCode {
 
   Unknown = "Unknown",
   Unauthorized = "Unauthorized",
-  
+
   InvalidiModelsRequest = "InvalidiModelsRequest",
   InvalidValue = "InvalidValue",
   iModelExists = "iModelExists"

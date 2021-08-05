@@ -4,14 +4,40 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient } from "@itwin/imodels-client-management";
 
-export async function cleanUpiModelsAfterTestRun(
-  imodelPrefixForTestSuite: string,
+export function generateiModelNameWithPrefixes(params: {
+  imodelName: string,
+  prefixes: {
+    package: string,
+    testSuite?: string,
+  }
+}): string {
+  return `${getCombinedPrefix(params)} ${params.imodelName}`;
+};
+
+export async function cleanUpiModelsWithPrefix(params: {
   imodelsClient: iModelsClient,
   requestContext: { accessToken: string },
-  projectId: string
-): Promise<void> {
-  const imodels = imodelsClient.iModels.getMinimalList({ requestContext: requestContext, urlParams: { projectId } });
+  projectId: string,
+  prefixes: {
+    package: string,
+    testSuite?: string,
+  }
+}): Promise<void> {
+  const imodels = params.imodelsClient.iModels.getMinimalList({ requestContext: params.requestContext, urlParams: { projectId: params.projectId } });
   for await (const imodel of imodels)
-    if (imodel.displayName.startsWith(imodelPrefixForTestSuite))
-      await imodelsClient.iModels.delete({ requestContext, imodelId: imodel.id });
+    if (imodel.displayName.startsWith(getCombinedPrefix(params)))
+      await params.imodelsClient.iModels.delete({ requestContext: params.requestContext, imodelId: imodel.id });
 }
+
+function getCombinedPrefix(params: {
+  prefixes: {
+    package: string,
+    testSuite?: string,
+  }
+}): string {
+  let combinedPrefix = params.prefixes.package;
+  if (params.prefixes.testSuite)
+    combinedPrefix += params.prefixes.testSuite;
+  return combinedPrefix;
+}
+

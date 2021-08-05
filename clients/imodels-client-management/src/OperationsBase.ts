@@ -9,7 +9,7 @@ import { RESTClient } from "./RESTClient";
 type Dictionary = { [key: string]: string | number; };
 
 export class OperationsBase {
-  protected _apiBaseUrl = "https://api.bentley.com/imodels";
+  protected _apiBaseUrl = "https://sbx-api.bentley.com/imodels";
   protected _apiVersion = "v1";
 
   private _restClient: RESTClient;
