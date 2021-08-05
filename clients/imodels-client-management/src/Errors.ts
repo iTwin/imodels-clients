@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsErrorCode, iModelsErrorDetail, iModelsError as iModelsErrorInterface } from "./PublicModels";
+import { ParseErrorFunc } from "./RESTClient";
 
 interface iModelsAPIErrorWrapper {
   error: iModelsAPIError;
@@ -34,7 +35,7 @@ class iModelsError extends Error implements iModelsErrorInterface {
 }
 
 export class iModelsErrorParser {
-  public static parse(response: { statusCode: number, body: unknown }): iModelsError {
+  public static parse: ParseErrorFunc = (response: { statusCode: number, body: unknown }) => {
     // TODO: remove the special handling when APIM team fixes incorrect error body
     if (response.statusCode === 401) {
       return new iModelsError({ name: iModelsErrorCode.Unauthorized, code: iModelsErrorCode.Unauthorized, message: "" });

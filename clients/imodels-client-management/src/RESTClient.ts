@@ -4,10 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
-export class RESTClient {
-  private _parseErrorFunc: (response: { statusCode: number, body: unknown }) => void;
+export type ParseErrorFunc = (response: { statusCode: number, body: unknown }) => Error;
 
-  constructor(parseErrorFunc: (response: { statusCode: number, body: unknown }) => void) {
+export class RESTClient {
+  private _parseErrorFunc: ParseErrorFunc;
+
+  constructor(parseErrorFunc: ParseErrorFunc) {
     this._parseErrorFunc = parseErrorFunc;
   }
 

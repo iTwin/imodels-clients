@@ -3,9 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-
 import { Extent, iModel, iModelsClient, iModelsError, iModelsErrorCode, iModelsErrorDetail } from "@itwin/imodels-client-management";
-
 import { cleanUpiModelsAfterTestRun } from "./CommonTestUtils";
 
 describe("iModelsClient", () => {

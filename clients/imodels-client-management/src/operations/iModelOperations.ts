@@ -26,7 +26,7 @@ export class iModelOperations extends OperationsBase {
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
     return pagedCollectionGenerator(() => this.getEntityCollectionPage<MinimaliModel>({
       ...params,
-      url: `${this._baseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
+      url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal
     }));
   }
@@ -34,7 +34,7 @@ export class iModelOperations extends OperationsBase {
   public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
     return pagedCollectionGenerator(() => this.getEntityCollectionPage<iModel>({
       ...params,
-      url: `${this._baseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
+      url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation
     }));
   }
@@ -42,7 +42,7 @@ export class iModelOperations extends OperationsBase {
   public async getById(params: GetiModelByIdParams): Promise<iModel> {
     const response = await this.sendGetRequest<iModelResponse>({
       ...params,
-      url: `${this._baseUrl}/${params.imodelId}`
+      url: `${this._apiBaseUrl}/${params.imodelId}`
     });
     return response.iModel;
   }
@@ -50,7 +50,7 @@ export class iModelOperations extends OperationsBase {
   public async createEmpty(params: CreateEmptyiModelParams): Promise<iModel> {
     const response = await this.sendPostRequest<iModelResponse>({
       ...params,
-      url: this._baseUrl,
+      url: this._apiBaseUrl,
       body: params.imodelProperties
     });
     return response.iModel;
@@ -59,7 +59,7 @@ export class iModelOperations extends OperationsBase {
   public delete(params: DeleteiModelParams): Promise<void> {
     return this.sendDeleteRequest({
       ...params,
-      url: `${this._baseUrl}/${params.imodelId}`
+      url: `${this._apiBaseUrl}/${params.imodelId}`
     });
   }
 

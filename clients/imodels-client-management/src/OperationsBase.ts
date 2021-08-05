@@ -9,8 +9,8 @@ import { RESTClient } from "./RESTClient";
 type Dictionary = { [key: string]: string | number; };
 
 export class OperationsBase {
-  protected _baseUrl = "https://api.bentley.com/imodels";
-  protected _version = "v1";
+  protected _apiBaseUrl = "https://api.bentley.com/imodels";
+  protected _apiVersion = "v1";
 
   private _restClient: RESTClient;
 
@@ -43,7 +43,7 @@ export class OperationsBase {
   private formHeaders(params: RequestContextParam & { preferReturn?: PreferReturn }): Dictionary {
     const headers: Dictionary = {
       Authorization: `Bearer ${params.requestContext.accessToken}`,
-      Accept: `application/vnd.bentley.itwin-platform.${this._version}+json`
+      Accept: `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`
     };
 
     if (params.preferReturn)
