@@ -4,25 +4,29 @@
  *--------------------------------------------------------------------------------------------*/
 import { PreferReturn } from "./InternalCommonInterfaces";
 import { RequestContextParam } from "./PublicCommonInterfaces";
-import { RestClient } from "./RESTClient";
+import { RestClient } from "./RestClient";
 
 type Dictionary = { [key: string]: string | number; };
 
+type SendRetRequestParams = RequestContextParam & { url: string, preferReturn?: PreferReturn };
+type SendPostRequestParams = RequestContextParam & { url: string, body: unknown };
+type SendDeleteRequestParams = RequestContextParam & { url: string };
+
 export class OperationsBase {
-  protected _apiBaseUrl = "https://api.bentley.com/imodels";
+  protected _apiBaseUrl = "https://sbx-api.bentley.com/imodels";
   protected _apiVersion = "v1";
 
   constructor(protected _restClient: RestClient) {
   }
 
-  protected sendGetRequest<TResponse>(params: RequestContextParam & { url: string, preferReturn?: PreferReturn }): Promise<TResponse> {
+  protected sendGetRequest<TResponse>(params: SendRetRequestParams): Promise<TResponse> {
     return this._restClient.sendGetRequest<TResponse>({
       url: params.url,
       headers: this.formHeaders(params)
     });
   }
 
-  protected sendPostRequest<TResponse>(params: RequestContextParam & { url: string, body: unknown }): Promise<TResponse> {
+  protected sendPostRequest<TResponse>(params: SendPostRequestParams): Promise<TResponse> {
     return this._restClient.sendPostRequest<TResponse>({
       url: params.url,
       body: params.body,
@@ -30,7 +34,7 @@ export class OperationsBase {
     });
   }
 
-  protected sendDeleteRequest<TResponse>(params: RequestContextParam & { url: string }): Promise<TResponse> {
+  protected sendDeleteRequest<TResponse>(params: SendDeleteRequestParams): Promise<TResponse> {
     return this._restClient.sendDeleteRequest<TResponse>({
       url: params.url,
       headers: this.formHeaders(params)
