@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, RequestContextParam } from "../PublicModels";
-import { Extent } from "./iModelModels";
+import { CollectionRequestParams, RequestContextParam } from "../../PublicCommonInterfaces";
+import { Extent } from "./iModelInterfaces";
 
 export interface GetiModelListParams extends RequestContextParam {
   urlParams: { projectId: string } & CollectionRequestParams;

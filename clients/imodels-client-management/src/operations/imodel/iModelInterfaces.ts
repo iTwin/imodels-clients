@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BaseEntity } from "../PublicModels";
+import { BaseEntity } from "../../PublicCommonInterfaces";
 
 export interface Coordinates {
   latitude: number;

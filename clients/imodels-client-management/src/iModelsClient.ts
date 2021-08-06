@@ -3,14 +3,14 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsErrorParser } from "./Errors";
-import { iModelOperations } from "./operations/iModelOperations";
-import { RESTClient } from "./RESTClient";
+import { iModelOperations } from "./operations/imodel/iModelOperations";
+import { RestClient } from "./RESTClient";
 
 export class iModelsClient {
-  private _restClient: RESTClient;
+  private _restClient: RestClient;
 
   constructor() {
-    this._restClient = new RESTClient(iModelsErrorParser.parse);
+    this._restClient = new RestClient(iModelsErrorParser.parse);
   }
 
   public get iModels(): iModelOperations {

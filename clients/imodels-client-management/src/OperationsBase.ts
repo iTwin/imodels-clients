@@ -2,19 +2,19 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { PreferReturn } from "./InternalModels";
-import { RequestContextParam } from "./PublicModels";
-import { RESTClient } from "./RESTClient";
+import { PreferReturn } from "./InternalCommonInterfaces";
+import { RequestContextParam } from "./PublicCommonInterfaces";
+import { RestClient } from "./RESTClient";
 
 type Dictionary = { [key: string]: string | number; };
 
 export class OperationsBase {
-  protected _apiBaseUrl = "https://sbx-api.bentley.com/imodels";
+  protected _apiBaseUrl = "https://api.bentley.com/imodels";
   protected _apiVersion = "v1";
 
-  private _restClient: RESTClient;
+  private _restClient: RestClient;
 
-  constructor(restClient: RESTClient) {
+  constructor(restClient: RestClient) {
     this._restClient = restClient;
   }
 

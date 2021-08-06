@@ -67,6 +67,53 @@
           "caseInsensitive": true
         }
       }
+    ],
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "property",
+        "modifiers": [
+          "private"
+        ],
+        "format": [
+          "camelCase"
+        ],
+        "leadingUnderscore": "require"
+      },
+      {
+        "selector": "typeParameter",
+        "format": [
+          "PascalCase"
+        ],
+        "filter": {
+          "regex": "TiModel",
+          "match": false
+        },
+        "prefix": [
+          "T"
+        ]
+      },
+      {
+        "selector": [
+          "variableLike"
+        ],
+        "format": [
+          "strictCamelCase"
+        ],
+        "leadingUnderscore": "allow"
+      },
+      {
+        "selector": [
+          "typeLike"
+        ],
+        "format": [
+          "StrictPascalCase"
+        ],
+        "filter": {
+          "regex": "^(iModel.*)$",
+          "match": false
+        }
+      }
     ]
   }
 }

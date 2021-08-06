@@ -42,7 +42,7 @@ describe("iModelsClient", () => {
     });
   }
 
-  it("should create an empty iModel", async () => {
+  it.only("should create an empty iModel", async () => {
     // Arrange
     const imodelCreationParams = {
       requestContext,
@@ -75,7 +75,7 @@ describe("iModelsClient", () => {
         projectId: projectId,
         name: getiModelName("Sample iModel (unauthorized)")
       }
-    }
+    };
 
     // Act
     let errorThrown: Error;

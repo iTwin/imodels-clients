@@ -2,26 +2,47 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsErrorCode, iModelsErrorDetail, iModelsError as iModelsErrorInterface } from "./PublicModels";
 import { ParseErrorFunc } from "./RESTClient";
 
-interface iModelsAPIErrorWrapper {
-  error: iModelsAPIError;
+export enum iModelsErrorCode {
+  Unrecognized = "Unrecognized",
+
+  Unknown = "Unknown",
+  Unauthorized = "Unauthorized",
+
+  InvalidiModelsRequest = "InvalidiModelsRequest",
+  InvalidValue = "InvalidValue",
+  iModelExists = "iModelExists"
 }
 
-interface iModelsAPIError {
+export interface iModelsError extends Error {
+  code: iModelsErrorCode;
+  details?: iModelsErrorDetail[];
+}
+
+export interface iModelsErrorDetail {
+  code: iModelsErrorCode;
+  message: string;
+  target: string;
+}
+
+interface iModelsApiErrorWrapper {
+  error: iModelsApiError;
+}
+
+interface iModelsApiError {
   code: string;
   message?: string;
-  details?: iModelsAPIErrorDetail[];
+  details?: iModelsApiErrorDetail[];
 }
 
-interface iModelsAPIErrorDetail {
+interface iModelsApiErrorDetail {
   code: string;
   message: string;
   target: string;
 }
 
-class iModelsError extends Error implements iModelsErrorInterface {
+class iModelsErrorImpl extends Error implements iModelsError {
   code: iModelsErrorCode;
   details?: iModelsErrorDetail[];
 
@@ -38,23 +59,23 @@ export class iModelsErrorParser {
   public static parse: ParseErrorFunc = (response: { statusCode: number, body: unknown }) => {
     // TODO: remove the special handling when APIM team fixes incorrect error body
     if (response.statusCode === 401) {
-      return new iModelsError({ name: iModelsErrorCode.Unauthorized, code: iModelsErrorCode.Unauthorized, message: "" });
+      return new iModelsErrorImpl({ name: iModelsErrorCode.Unauthorized, code: iModelsErrorCode.Unauthorized, message: "" });
     }
 
-    const errorFromAPI = response.body as iModelsAPIErrorWrapper;
-    const errorCode: iModelsErrorCode = iModelsErrorParser.parseCode(errorFromAPI.error.code);
+    const errorFromApi = response.body as iModelsApiErrorWrapper;
+    const errorCode: iModelsErrorCode = iModelsErrorParser.parseCode(errorFromApi.error.code);
 
-    return new iModelsError({
+    return new iModelsErrorImpl({
       name: errorCode,
       code: errorCode,
-      message: errorFromAPI.error.message,
-      details: errorFromAPI.error.details
-        ? iModelsErrorParser.parseDetails(errorFromAPI.error.details)
+      message: errorFromApi.error.message,
+      details: errorFromApi.error.details
+        ? iModelsErrorParser.parseDetails(errorFromApi.error.details)
         : undefined
     });
   }
 
-  private static parseDetails(details: iModelsAPIErrorDetail[]): iModelsErrorDetail[] {
+  private static parseDetails(details: iModelsApiErrorDetail[]): iModelsErrorDetail[] {
     return details.map(unparsedDetail => {
       return { ...unparsedDetail, code: this.parseCode(unparsedDetail.code) };
     });
@@ -68,4 +89,3 @@ export class iModelsErrorParser {
     return parsedCode;
   }
 }
-

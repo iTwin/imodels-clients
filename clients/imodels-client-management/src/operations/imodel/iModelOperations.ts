@@ -2,29 +2,29 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionResponse, EntityCollectionPage, PreferReturn, } from "../InternalModels";
-import { OperationsBase } from "../OperationsBase";
-import { pagedCollectionGenerator } from "../PagedCollectionGenerator";
-import { RequestContextParam } from "../PublicModels";
-import { RESTClient } from "../RESTClient";
-import { MinimaliModel, iModel } from "./iModelModels";
+import { CollectionResponse, EntityCollectionPage, PreferReturn, } from "../../InternalCommonInterfaces";
+import { OperationsBase } from "../../OperationsBase";
+import { getPagedCollectionGenerator } from "../../PagedCollectionGenerator";
+import { RequestContextParam } from "../../PublicCommonInterfaces";
+import { RestClient } from "../../RESTClient";
+import { MinimaliModel, iModel } from "./iModelInterfaces";
 import { CreateEmptyiModelParams, DeleteiModelParams, GetiModelByIdParams, GetiModelListParams } from "./iModelOperationParams";
 
-interface iModelResponse {
+export interface iModelResponse {
   iModel: iModel;
 }
 
-interface iModelsResponse<TiModel> extends CollectionResponse {
+export interface iModelsResponse<TiModel> extends CollectionResponse {
   iModels: TiModel[];
 }
 
 export class iModelOperations extends OperationsBase {
-  constructor(restClient: RESTClient) {
+  constructor(restClient: RestClient) {
     super(restClient);
   }
 
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
-    return pagedCollectionGenerator(() => this.getEntityCollectionPage<MinimaliModel>({
+    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<MinimaliModel>({
       ...params,
       url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal
@@ -32,7 +32,7 @@ export class iModelOperations extends OperationsBase {
   }
 
   public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
-    return pagedCollectionGenerator(() => this.getEntityCollectionPage<iModel>({
+    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<iModel>({
       ...params,
       url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation

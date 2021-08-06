@@ -12,7 +12,7 @@ export function generateiModelNameWithPrefixes(params: {
   }
 }): string {
   return `${getCombinedPrefix(params)} ${params.imodelName}`;
-};
+}
 
 export async function cleanUpiModelsWithPrefix(params: {
   imodelsClient: iModelsClient,

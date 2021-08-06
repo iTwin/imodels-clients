@@ -6,9 +6,11 @@ export interface BaseEntity {
   id: string;
   displayName: string;
 }
+
 export interface RequestContext {
   accessToken: string;
 }
+
 export interface RequestContextParam {
   requestContext: RequestContext;
 }
@@ -16,26 +18,4 @@ export interface RequestContextParam {
 export interface CollectionRequestParams {
   $skip?: number;
   $top?: number;
-}
-
-export enum iModelsErrorCode {
-  Unrecognized = "Unrecognized",
-
-  Unknown = "Unknown",
-  Unauthorized = "Unauthorized",
-
-  InvalidiModelsRequest = "InvalidiModelsRequest",
-  InvalidValue = "InvalidValue",
-  iModelExists = "iModelExists"
-}
-
-export interface iModelsError extends Error {
-  code: iModelsErrorCode;
-  details?: iModelsErrorDetail[];
-}
-
-export interface iModelsErrorDetail {
-  code: iModelsErrorCode;
-  message: string;
-  target: string;
 }
