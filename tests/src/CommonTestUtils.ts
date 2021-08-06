@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsClient, RequestContext, RequestContextParam } from "@itwin/imodels-client-management";
+import { iModelsClient, RequestContext } from "@itwin/imodels-client-management";
 
 export function generateiModelNameWithPrefixes(params: {
   imodelName: string,
