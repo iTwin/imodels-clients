@@ -23,8 +23,8 @@
       "shouldPublish": false
     },
     {
-      "packageName": "@itwin/imodels-client-clean-code-utils",
-      "projectFolder": "utils/imodels-client-clean-code-utils",
+      "packageName": "@itwin/imodels-client-common-config",
+      "projectFolder": "utils/imodels-client-common-config",
       "shouldPublish": false
     }
   ]

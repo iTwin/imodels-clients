@@ -1,5 +1,5 @@
 {
-  "name": "@itwin/imodels-client-clean-code-utils",
+  "name": "@itwin/imodels-client-common-config",
   "version": "1.0.0",
   "description": "Common linting utility for iModels API client wrapper",
   "license": "MIT",

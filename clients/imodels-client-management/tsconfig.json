@@ -1,20 +1,16 @@
 {
+  "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
     "outDir": "./lib",
     "lib": [
       "es2017",
       "esnext.asynciterable"
     ],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "noUnusedLocals": true,
     "declaration": true,
-    "sourceMap": true
   },
   "include": [
-      "./src/*.ts"
+    "./src/*.ts"
   ],
   "exclude": [
     "lib",

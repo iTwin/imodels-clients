@@ -1,7 +1,7 @@
 dependencies:
   '@rush-temp/imodels-client-management': 'file:projects/imodels-client-management.tgz'
   '@rush-temp/imodels-client-tests': 'file:projects/imodels-client-tests.tgz'
-  '@rush-temp/imodels-client-clean-code-utils': 'file:projects/imodels-client-clean-code-utils.tgz_typescript@4.3.5'
+  '@rush-temp/imodels-client-common-config': 'file:projects/imodels-client-common-config.tgz_typescript@4.3.5'
   '@types/chai': 4.2.21
   '@types/mocha': 9.0.0
   '@types/node': 16.4.6
@@ -3830,7 +3830,7 @@ packages:
       integrity: sha512-QSR1JWU7ybePoIiQgfr0FfhNQCWdnAB46XdqYpTs7WZkzUp4KRSuTQ6G8L07+CwSZEr/aKaIfb35EsaoZcC7bA==
       tarball: 'file:projects/imodels-client-tests.tgz'
     version: 0.0.0
-  'file:projects/imodels-client-clean-code-utils.tgz_typescript@4.3.5':
+  'file:projects/imodels-client-common-config.tgz_typescript@4.3.5':
     dependencies:
       '@typescript-eslint/eslint-plugin': 4.28.4_b1648df9f9ba40bdeef3710a5a5af353
       '@typescript-eslint/parser': 4.28.4_eslint@7.31.0+typescript@4.3.5
@@ -3838,19 +3838,19 @@ packages:
       eslint: 7.31.0
       eslint-plugin-import: 2.23.4_eslint@7.31.0
     dev: false
-    id: 'file:projects/imodels-client-clean-code-utils.tgz'
-    name: '@rush-temp/imodels-client-clean-code-utils'
+    id: 'file:projects/imodels-client-common-config.tgz'
+    name: '@rush-temp/imodels-client-common-config'
     peerDependencies:
       typescript: '*'
     resolution:
       integrity: sha512-dzaV94VZ7c58eIsf4uAOn2QIPSrYrAp+iVS4/iaw8p4cdPX0scewxcDwCo/WaFZLifHqdhKQf5KBsq+Ls4hB3A==
-      tarball: 'file:projects/imodels-client-clean-code-utils.tgz'
+      tarball: 'file:projects/imodels-client-common-config.tgz'
     version: 0.0.0
 registry: ''
 specifiers:
   '@rush-temp/imodels-client-management': 'file:./projects/imodels-client-management.tgz'
   '@rush-temp/imodels-client-tests': 'file:./projects/imodels-client-tests.tgz'
-  '@rush-temp/imodels-client-clean-code-utils': 'file:./projects/imodels-client-clean-code-utils.tgz'
+  '@rush-temp/imodels-client-common-config': 'file:./projects/imodels-client-common-config.tgz'
   '@types/chai': ~4.2.21
   '@types/mocha': ~9.0.0
   '@types/node': ^16.4.6
