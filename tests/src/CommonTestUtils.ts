@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsClient } from "@itwin/imodels-client-management";
+import { iModelsClient, RequestContext, RequestContextParam } from "@itwin/imodels-client-management";
 
 export function generateiModelNameWithPrefixes(params: {
   imodelName: string,
@@ -16,7 +16,7 @@ export function generateiModelNameWithPrefixes(params: {
 
 export async function cleanUpiModelsWithPrefix(params: {
   imodelsClient: iModelsClient,
-  requestContext: { accessToken: string },
+  requestContext: RequestContext,
   projectId: string,
   prefixes: {
     package: string,

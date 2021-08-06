@@ -7,8 +7,13 @@ export interface BaseEntity {
   displayName: string;
 }
 
+export interface AuthorizationHeader {
+  scheme: string;
+  credentials: string;
+}
+
 export interface RequestContext {
-  accessToken: string;
+  authorizationHeader: AuthorizationHeader;
 }
 
 export interface RequestContextParam {
