@@ -17,6 +17,15 @@
       "enableParallelism": true,
       "ignoreMissingScript": false,
       "allowWarningsInSuccessfulBuild": true
+    },
+    {
+      "name": "spell-check",
+      "commandKind": "bulk",
+      "summary": "Run spell check on each package",
+      "description": "Iterates through each package in the monorepo and runs the 'spell-check' script",
+      "enableParallelism": true,
+      "ignoreMissingScript": false,
+      "allowWarningsInSuccessfulBuild": true
     }
   ]
 }

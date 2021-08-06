@@ -23,8 +23,8 @@
       "shouldPublish": false
     },
     {
-      "packageName": "@itwin/imodels-client-utils-eslint",
-      "projectFolder": "utils/imodels-client-utils-eslint",
+      "packageName": "@itwin/imodels-client-clean-code-utils",
+      "projectFolder": "utils/imodels-client-clean-code-utils",
       "shouldPublish": false
     }
   ]

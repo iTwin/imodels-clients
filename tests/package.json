@@ -7,10 +7,11 @@
     "build": "tsc 1>&2",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2",
-    "test": "mocha lib/*.test.js --color"
+    "test": "mocha lib/*.test.js --color",
+    "spell-check": "cspell ./src/**/*.ts --config ./node_modules/@itwin/imodels-client-clean-code-utils/cspell.json"
   },
   "eslintConfig": {
-    "extends": "./node_modules/@itwin/imodels-client-utils-eslint/.eslintrc.json"
+    "extends": "./node_modules/@itwin/imodels-client-clean-code-utils/.eslintrc.json"
   },
   "dependencies": {
     "@itwin/imodels-client-management": "1.0.0",
@@ -19,7 +20,7 @@
     "fs-extra": "~10.0.0"
   },
   "devDependencies": {
-    "@itwin/imodels-client-utils-eslint": "~1.0.0",
+    "@itwin/imodels-client-clean-code-utils": "~1.0.0",
     "@types/chai": "~4.2.21",
     "@types/mocha": "~9.0.0",
     "@types/node": "^16.4.6",

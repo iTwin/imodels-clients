@@ -1,0 +1,12 @@
+{
+  "version": "0.1",
+  "language": "en",
+  "words": [
+    "imodel",
+    "itwin",
+    "apim"
+  ],
+  "ignoreRegExpList": [
+    "/imodel.*/i"
+  ]
+}

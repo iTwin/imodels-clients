@@ -1,9 +1,7 @@
 dependencies:
-  '@bentley/bentleyjs-core': 2.19.3
-  '@bentley/imodelhub-client-tests': 2.19.3
   '@rush-temp/imodels-client-management': 'file:projects/imodels-client-management.tgz'
   '@rush-temp/imodels-client-tests': 'file:projects/imodels-client-tests.tgz'
-  '@rush-temp/imodels-client-utils-eslint': 'file:projects/imodels-client-utils-eslint.tgz_typescript@4.3.5'
+  '@rush-temp/imodels-client-clean-code-utils': 'file:projects/imodels-client-clean-code-utils.tgz_typescript@4.3.5'
   '@types/chai': 4.2.21
   '@types/mocha': 9.0.0
   '@types/node': 16.4.6
@@ -11,6 +9,7 @@ dependencies:
   '@typescript-eslint/parser': 4.28.4_eslint@7.31.0+typescript@4.3.5
   axios: 0.21.1
   chai: 4.3.4
+  cspell: 5.6.6
   eslint: 7.31.0
   eslint-plugin-import: 2.23.4_eslint@7.31.0
   fs-extra: 10.0.0
@@ -189,6 +188,187 @@ packages:
       '@bentley/telemetry-client': ^2.19.3
     resolution:
       integrity: sha512-SyqNClaKTHm4L6h/+xDZPnmKZ7kDTZxmVB8Kkl5h8pYZIhWTFGO/QZrd90h7eMybeOJRDBwHTtfVDoF4FzX1ow==
+  /@cspell/cspell-bundled-dicts/5.6.6:
+    dependencies:
+      '@cspell/dict-ada': 1.1.2
+      '@cspell/dict-aws': 1.0.14
+      '@cspell/dict-bash': 1.0.15
+      '@cspell/dict-companies': 1.0.40
+      '@cspell/dict-cpp': 1.1.39
+      '@cspell/dict-cryptocurrencies': 1.0.10
+      '@cspell/dict-csharp': 1.0.11
+      '@cspell/dict-css': 1.0.12
+      '@cspell/dict-django': 1.0.26
+      '@cspell/dict-dotnet': 1.0.29
+      '@cspell/dict-elixir': 1.0.25
+      '@cspell/dict-en-gb': 1.1.32
+      '@cspell/dict-en_us': 1.2.45
+      '@cspell/dict-filetypes': 1.1.7
+      '@cspell/dict-fonts': 1.0.14
+      '@cspell/dict-fullstack': 1.0.38
+      '@cspell/dict-golang': 1.1.24
+      '@cspell/dict-haskell': 1.0.13
+      '@cspell/dict-html': 1.1.9
+      '@cspell/dict-html-symbol-entities': 1.0.23
+      '@cspell/dict-java': 1.0.23
+      '@cspell/dict-latex': 1.0.25
+      '@cspell/dict-lorem-ipsum': 1.0.22
+      '@cspell/dict-lua': 1.0.16
+      '@cspell/dict-node': 1.0.12
+      '@cspell/dict-npm': 1.0.15
+      '@cspell/dict-php': 1.0.24
+      '@cspell/dict-powershell': 1.0.18
+      '@cspell/dict-python': 1.0.37
+      '@cspell/dict-ruby': 1.0.14
+      '@cspell/dict-rust': 1.0.23
+      '@cspell/dict-scala': 1.0.21
+      '@cspell/dict-software-terms': 1.0.39
+      '@cspell/dict-typescript': 1.0.19
+    dev: false
+    engines:
+      node: '>=12.0.0'
+    resolution:
+      integrity: sha512-am79SwDYrs0g1aLmtoZDWIj/IT070ISPoZabpTqnR58MFn0NGrLlF9yEKy3oVZtJhe10L3WWHreYZkdELLS9Sg==
+  /@cspell/cspell-types/5.6.5:
+    dev: false
+    resolution:
+      integrity: sha512-NCcMIelcQFwr2Yu9ma0buVBAFBlqtlxvAurV5UYmdaYyFv6bKO81HN9oMpu5DFev0ntOjZUSYdAGAhCUuikd3w==
+  /@cspell/dict-ada/1.1.2:
+    dev: false
+    resolution:
+      integrity: sha512-UDrcYcKIVyXDz5mInJabRNQpJoehjBFvja5W+GQyu9pGcx3BS3cAU8mWENstGR0Qc/iFTxB010qwF8F3cHA/aA==
+  /@cspell/dict-aws/1.0.14:
+    dev: false
+    resolution:
+      integrity: sha512-K21CfB4ZpKYwwDQiPfic2zJA/uxkbsd4IQGejEvDAhE3z8wBs6g6BwwqdVO767M9NgZqc021yAVpr79N5pWe3w==
+  /@cspell/dict-bash/1.0.15:
+    dev: false
+    resolution:
+      integrity: sha512-rY5Bq4RWTgJTioG8vqFbCmnalc/UEM+iBuAZBYvBfT3nU/6SN00Zjyvlh823ir2ODkUryT29CwRYwXcPnuM04w==
+  /@cspell/dict-companies/1.0.40:
+    dev: false
+    resolution:
+      integrity: sha512-Aw07qiTroqSST2P5joSrC4uOA05zTXzI2wMb+me3q4Davv1D9sCkzXY0TGoC2vzhNv5ooemRi9KATGaBSdU1sw==
+  /@cspell/dict-cpp/1.1.39:
+    dev: false
+    resolution:
+      integrity: sha512-zrQjzMaT5YqAa4PMEaLfOWnfyh4uJjW53kwtuTo9nfJPaga2+FfrqdeWD8XYMxvTGCtzjivXhAn4FDIMh+66YQ==
+  /@cspell/dict-cryptocurrencies/1.0.10:
+    dev: false
+    resolution:
+      integrity: sha512-47ABvDJOkaST/rXipNMfNvneHUzASvmL6K/CbOFpYKfsd0x23Jc9k1yaOC7JAm82XSC/8a7+3Yu+Fk2jVJNnsA==
+  /@cspell/dict-csharp/1.0.11:
+    dev: false
+    resolution:
+      integrity: sha512-nub+ZCiTgmT87O+swI+FIAzNwaZPWUGckJU4GN402wBq420V+F4ZFqNV7dVALJrGaWH7LvADRtJxi6cZVHJKeA==
+  /@cspell/dict-css/1.0.12:
+    dev: false
+    resolution:
+      integrity: sha512-K6yuxej7n454O7dwKG6lHacHrAOMZ0PhMEbmV6qH2JH0U4TtWXfBASYugHvXZCDDx1UObpiJP+3tQJiBqfGpHA==
+  /@cspell/dict-django/1.0.26:
+    dev: false
+    resolution:
+      integrity: sha512-mn9bd7Et1L2zuibc08GVHTiD2Go3/hdjyX5KLukXDklBkq06r+tb0OtKtf1zKodtFDTIaYekGADhNhA6AnKLkg==
+  /@cspell/dict-dotnet/1.0.29:
+    dev: false
+    resolution:
+      integrity: sha512-41fx7YQM986MBAyJpqL0fH6WOKLG/tNev4NbydNy3avYxz/smr+VwIwGN9/GLNORL5hQLiSQxPU5jfpx+bN94g==
+  /@cspell/dict-elixir/1.0.25:
+    dev: false
+    resolution:
+      integrity: sha512-ZmawoBYjM5k+8fNudRMkK+PpHjhyAFAZt2rUu1EGj2rbCvE3Fn2lhRbDjbreN7nWRvcLRTW+xuPXtKP11X0ahQ==
+  /@cspell/dict-en-gb/1.1.32:
+    dev: false
+    resolution:
+      integrity: sha512-iu83IDyCefo0T4NipEa3jtpJ/WDSr1IWt35kljolj7HFDFrjLr4Y/2t8yqtmB4otturWpa5T/G3/k90y2KU08Q==
+  /@cspell/dict-en_us/1.2.45:
+    dev: false
+    resolution:
+      integrity: sha512-UPwR4rfiJCxnS+Py+EK9E4AUj3aPZE4p/yBRSHN+5aBQConlI0lLDtMceH5wlupA/sQTU1ERZGPJA9L96jVSyQ==
+  /@cspell/dict-filetypes/1.1.7:
+    dev: false
+    resolution:
+      integrity: sha512-b0e+eiBzTiL1yJZgPBGHP8G7Z0Kkpr/35dXlR9LWoP/EnrAlVj0ulXwErPgTwSoFdxWBgbDJjKZsrMdxWCckuA==
+  /@cspell/dict-fonts/1.0.14:
+    dev: false
+    resolution:
+      integrity: sha512-VhIX+FVYAnqQrOuoFEtya6+H72J82cIicz9QddgknsTqZQ3dvgp6lmVnsQXPM3EnzA8n1peTGpLDwHzT7ociLA==
+  /@cspell/dict-fullstack/1.0.38:
+    dev: false
+    resolution:
+      integrity: sha512-4reajWiUxwWrSyZaWm9e15kaWzjYcZbzlB+CVcxE1+0NqdIoqlEESDhbnrAjKPSq+jspKtes7nQ1CdZEOj1gCA==
+  /@cspell/dict-golang/1.1.24:
+    dev: false
+    resolution:
+      integrity: sha512-qq3Cjnx2U1jpeWAGJL1GL0ylEhUMqyaR36Xij6Y6Aq4bViCRp+HRRqk0x5/IHHbOrti45h3yy7ii1itRFo+Xkg==
+  /@cspell/dict-haskell/1.0.13:
+    dev: false
+    resolution:
+      integrity: sha512-kvl8T84cnYRPpND/P3D86P6WRSqebsbk0FnMfy27zo15L5MLAb3d3MOiT1kW3vEWfQgzUD7uddX/vUiuroQ8TA==
+  /@cspell/dict-html-symbol-entities/1.0.23:
+    dev: false
+    resolution:
+      integrity: sha512-PV0UBgcBFbBLf/m1wfkVMM8w96kvfHoiCGLWO6BR3Q9v70IXoE4ae0+T+f0CkxcEkacMqEQk/I7vuE9MzrjaNw==
+  /@cspell/dict-html/1.1.9:
+    dev: false
+    resolution:
+      integrity: sha512-vvnYia0tyIS5Fdoz+gEQm77MGZZE66kOJjuNpIYyRHCXFAhWdYz3SmkRm6YKJSWSvuO+WBJYTKDvkOxSh3Fx/w==
+  /@cspell/dict-java/1.0.23:
+    dev: false
+    resolution:
+      integrity: sha512-LcOg9srYLDoNGd8n3kbfDBlZD+LOC9IVcnFCdua1b/luCHNVmlgBx7e677qPu7olpMYOD5TQIVW2OmM1+/6MFA==
+  /@cspell/dict-latex/1.0.25:
+    dev: false
+    resolution:
+      integrity: sha512-cEgg91Migqcp1SdVV7dUeMxbPDhxdNo6Fgq2eygAXQjIOFK520FFvh/qxyBvW90qdZbIRoU2AJpchyHfGuwZFA==
+  /@cspell/dict-lorem-ipsum/1.0.22:
+    dev: false
+    resolution:
+      integrity: sha512-yqzspR+2ADeAGUxLTfZ4pXvPl7FmkENMRcGDECmddkOiuEwBCWMZdMP5fng9B0Q6j91hQ8w9CLvJKBz10TqNYg==
+  /@cspell/dict-lua/1.0.16:
+    dev: false
+    resolution:
+      integrity: sha512-YiHDt8kmHJ8nSBy0tHzaxiuitYp+oJ66ffCYuFWTNB3//Y0SI4OGHU3omLsQVeXIfCeVrO4DrVvRDoCls9B5zQ==
+  /@cspell/dict-node/1.0.12:
+    dev: false
+    resolution:
+      integrity: sha512-RPNn/7CSkflAWk0sbSoOkg0ORrgBARUjOW3QjB11KwV1gSu8f5W/ij/S50uIXtlrfoBLqd4OyE04jyON+g/Xfg==
+  /@cspell/dict-npm/1.0.15:
+    dev: false
+    resolution:
+      integrity: sha512-6N1G1rGi5AsCaDu9mu+VmrrAj5S9gHv8TvJlarauDeEMS6uVl+ce2JpzDf7ld3Qu/4Dkr0sKS63OeA0DKeQTkw==
+  /@cspell/dict-php/1.0.24:
+    dev: false
+    resolution:
+      integrity: sha512-vHCqETX1idT9tN1plkxUFnXMIHjbbrNOINZh1PYSvVlBrOdahSaL/g6dOJZC5QTaaidoU4WXUlgnNb/7JN4Plg==
+  /@cspell/dict-powershell/1.0.18:
+    dev: false
+    resolution:
+      integrity: sha512-LAfCJBy1hga8/KI/IpAg/GrnoP+b4SbNGdiXiXrejeZ7ZTVfj4qYsTCkZ2p7eYUu92FLyJT4jGex0fGZn/PtVw==
+  /@cspell/dict-python/1.0.37:
+    dev: false
+    resolution:
+      integrity: sha512-RPeYJxC7t6k9uL4aQp5kLarOddEAqfRw9VBTt+cOVSlMqEtEtxJGm8w91V28fwnRX4hQR0yhiHPEYcdLpMtpfQ==
+  /@cspell/dict-ruby/1.0.14:
+    dev: false
+    resolution:
+      integrity: sha512-XHBGN4U1y9rjRuqrCA+3yIm2TCdhwwHXpOEcWkNeyXm8K03yPnIrKFS+kap8GTTrLpfNDuFsrmkkQTa7ssXLRA==
+  /@cspell/dict-rust/1.0.23:
+    dev: false
+    resolution:
+      integrity: sha512-lR4boDzs79YD6+30mmiSGAMMdwh7HTBAPUFSB0obR3Kidibfc3GZ+MHWZXay5dxZ4nBKM06vyjtanF9VJ8q1Iw==
+  /@cspell/dict-scala/1.0.21:
+    dev: false
+    resolution:
+      integrity: sha512-5V/R7PRbbminTpPS3ywgdAalI9BHzcEjEj9ug4kWYvBIGwSnS7T6QCFCiu+e9LvEGUqQC+NHgLY4zs1NaBj2vA==
+  /@cspell/dict-software-terms/1.0.39:
+    dev: false
+    resolution:
+      integrity: sha512-htJU7+CW4gaRpa89SIPp/jTTnwaE0iBpV+NR0l2dFzkFXsfJDR7Rj1PW+Ewuscnil9FVwh62kfn0z1GKirFauw==
+  /@cspell/dict-typescript/1.0.19:
+    dev: false
+    resolution:
+      integrity: sha512-qmJApzoVskDeJnLZzZMaafEDGbEg5Elt4c3Mpg49SWzIHm1N4VXCp5CcFfHsOinJ30dGrs3ARAJGJZIw56kK6A==
   /@eslint/eslintrc/0.4.3:
     dependencies:
       ajv: 6.12.6
@@ -326,6 +506,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-FKyawK3o5KL16AwbeFajen8G4K3mmqUrQsehn5wNKs8IzlKHE8TfnSmILXVMVziAEcnB23u1RCFU1NT6hSyr7Q==
+  /@types/parse-json/4.0.0:
+    dev: false
+    resolution:
+      integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
   /@types/responselike/1.0.0:
     dependencies:
       '@types/node': 16.4.6
@@ -583,6 +767,10 @@ packages:
       node: '>= 0.4'
     resolution:
       integrity: sha512-gcem1KlBU7c9rB+Rq8/3PPKsK2kjqeEBa3bD5kkQo4nYlOHQCJqIJFqBXDEfwaRuYTT4E+FxA9xez7Gf/e3Q7A==
+  /array-timsort/1.0.3:
+    dev: false
+    resolution:
+      integrity: sha512-/+3GRL7dDAGEfM6TseQk/U+mi18TU2Ms9I3UlLdUMhz2hbvGNTKdj9xniwXfUqgYhHxRx0+8UnKkvlNwVU+cWQ==
   /array-union/2.1.0:
     dev: false
     engines:
@@ -810,6 +998,15 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==
+  /clear-module/4.1.1:
+    dependencies:
+      parent-module: 2.0.0
+      resolve-from: 5.0.0
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-ng0E7LeODcT3QkazOckzZqbca+JByQy/Q2Z6qO24YsTp+pLxCfohGz2gJYJqZS0CWTX3LEUiHOqe5KlYeUbEMw==
   /cliui/7.0.4:
     dependencies:
       string-width: 4.2.2
@@ -864,6 +1061,24 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==
+  /commander/7.2.0:
+    dev: false
+    engines:
+      node: '>= 10'
+    resolution:
+      integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==
+  /comment-json/4.1.1:
+    dependencies:
+      array-timsort: 1.0.3
+      core-util-is: 1.0.2
+      esprima: 4.0.1
+      has-own-prop: 2.0.0
+      repeat-string: 1.6.1
+    dev: false
+    engines:
+      node: '>= 6'
+    resolution:
+      integrity: sha512-v8gmtPvxhBlhdRBLwdHSjGy9BgA23t9H1FctdQKyUrErPjSrJcdDMqBq9B4Irtm7w3TNYLQJNH6ARKnpyag1sA==
   /component-emitter/1.3.0:
     dev: false
     resolution:
@@ -872,6 +1087,19 @@ packages:
     dev: false
     resolution:
       integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
+  /configstore/5.0.1:
+    dependencies:
+      dot-prop: 5.3.0
+      graceful-fs: 4.2.6
+      make-dir: 3.1.0
+      unique-string: 2.0.0
+      write-file-atomic: 3.0.3
+      xdg-basedir: 4.0.0
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-aMKprgk5YhBNyH25hj8wGt2+D52Sw1DRRIzqBwLp2Ya9mFmY8KPvvtvmna8SxVR9JMZ4kzMD68N22vlaRpkeFA==
   /continuation-local-storage/3.2.1:
     dependencies:
       async-listener: 0.6.10
@@ -892,6 +1120,18 @@ packages:
     dev: false
     resolution:
       integrity: sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
+  /cosmiconfig/7.0.0:
+    dependencies:
+      '@types/parse-json': 4.0.0
+      import-fresh: 3.3.0
+      parse-json: 5.2.0
+      path-type: 4.0.0
+      yaml: 1.10.2
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-pondGvTuVYDk++upghXJabWzL6Kxu6f26ljFw64Swq9v6sQPUL3EUlVDV56diOjpCayKihL6hVe8exIACU4XcA==
   /cross-spawn/7.0.3:
     dependencies:
       path-key: 3.1.1
@@ -910,6 +1150,80 @@ packages:
     dev: false
     resolution:
       integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
+  /crypto-random-string/2.0.0:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==
+  /cspell-glob/5.6.5:
+    dependencies:
+      micromatch: 4.0.4
+    dev: false
+    engines:
+      node: '>=12.0.0'
+    resolution:
+      integrity: sha512-bobER7IoYBJZCXxkiAc5FT1Tb55TFLf1vZSw0ORCFYMeMHlvYktwDx0Wo6/Nkz39MtMQ9nvLrepCMEEZNpKhVw==
+  /cspell-io/5.6.5:
+    dependencies:
+      iconv-lite: 0.6.3
+      iterable-to-stream: 2.0.0
+    dev: false
+    engines:
+      node: '>=12.0.0'
+    resolution:
+      integrity: sha512-OcnuiOkOetcWtihBF57fefLTNPHgsNEc7+x04U7hto3lwEWe8CFQfnkLbQIZfzXOyiyuPY2yjDO0/Y3oqWrB3A==
+  /cspell-lib/5.6.6:
+    dependencies:
+      '@cspell/cspell-bundled-dicts': 5.6.6
+      '@cspell/cspell-types': 5.6.5
+      clear-module: 4.1.1
+      comment-json: 4.1.1
+      configstore: 5.0.1
+      cosmiconfig: 7.0.0
+      cspell-glob: 5.6.5
+      cspell-io: 5.6.5
+      cspell-trie-lib: 5.6.5
+      find-up: 5.0.0
+      fs-extra: 10.0.0
+      gensequence: 3.1.1
+      import-fresh: 3.3.0
+      resolve-from: 5.0.0
+      resolve-global: 1.0.0
+      vscode-uri: 3.0.2
+    dev: false
+    engines:
+      node: '>=12.0.0'
+    resolution:
+      integrity: sha512-Sum4U7/xWTJm99DeZF0bFBBN5SQ7roArlwnnKMmuRRcYl3s9/3OgtIK2YOOgqoSCxh4G51f7aal+bNAlAnx1bA==
+  /cspell-trie-lib/5.6.5:
+    dependencies:
+      fs-extra: 10.0.0
+      gensequence: 3.1.1
+    dev: false
+    engines:
+      node: '>=12.0.0'
+    resolution:
+      integrity: sha512-x4Ii8LwFp7tt+Ie+5R/a/qgYn43R5RwRfByn3taMy4D++PgF+vHTVZm1yORmUFBPTIT39gFbtkAJR7X0kdBL/w==
+  /cspell/5.6.6:
+    dependencies:
+      '@cspell/cspell-types': 5.6.5
+      chalk: 4.1.1
+      commander: 7.2.0
+      comment-json: 4.1.1
+      cspell-glob: 5.6.5
+      cspell-lib: 5.6.6
+      fs-extra: 10.0.0
+      get-stdin: 8.0.0
+      glob: 7.1.7
+      strip-ansi: 6.0.0
+      vscode-uri: 3.0.2
+    dev: false
+    engines:
+      node: '>=12.0.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-4k3Jcz61mv5SQNjVcrWjARcEVa7gOF8nyg5MPU68AWPoyg5VuE51jgQDr4c01dbG/PGRLtrLwVmr+r6Kh5RDVA==
   /debug/2.6.9:
     dependencies:
       ms: 2.0.0
@@ -1065,6 +1379,14 @@ packages:
       node: '>=6.0.0'
     resolution:
       integrity: sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==
+  /dot-prop/5.3.0:
+    dependencies:
+      is-obj: 2.0.0
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==
   /duplexer3/0.1.4:
     dev: false
     resolution:
@@ -1511,6 +1833,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
+  /gensequence/3.1.1:
+    dev: false
+    engines:
+      node: '>=10.0.0'
+    resolution:
+      integrity: sha512-ys3h0hiteRwmY6BsvSttPmkhC0vEQHPJduANBRtH/dlDPZ0UBIb/dXy80IcckXyuQ6LKg+PloRqvGER9IS7F7g==
   /get-caller-file/2.0.5:
     dev: false
     engines:
@@ -1529,6 +1857,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-kWZrnVM42QCiEA2Ig1bG8zjoIMOgxWwYCEeNdwY6Tv/cOSeGpcoX4pXHfKUxNKVoArnrEr2e9srnAxxGIraS9Q==
+  /get-stdin/8.0.0:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-sY22aA6xchAzprjyqmSEQv4UbAAzRN0L2dQB0NlN5acTTK9Don6nhoc3eAbUnpZiCANAMfd/+40kVdKfFygohg==
   /get-stream/4.1.0:
     dependencies:
       pump: 3.0.0
@@ -1575,6 +1909,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==
+  /global-dirs/0.1.1:
+    dependencies:
+      ini: 1.3.8
+    dev: false
+    engines:
+      node: '>=4'
+    resolution:
+      integrity: sha1-sxnA3UYH81PzvpzKTHL8FIxJ9EU=
   /globals/13.10.0:
     dependencies:
       type-fest: 0.20.2
@@ -1658,6 +2000,12 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==
+  /has-own-prop/2.0.0:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-Pq0h+hvsVm6dDEa8x82GnLSYHOzNDt7f0ddFa3FqcQlgzEiptPqL+XrOJNavjOzSYiYWIrgeVYYgGlLmnxwilQ==
   /has-symbols/1.0.2:
     dev: false
     engines:
@@ -1709,6 +2057,14 @@ packages:
     dev: false
     resolution:
       integrity: sha1-xG4xWaKT9riW2ikxbYtv6Lt5u+0=
+  /iconv-lite/0.6.3:
+    dependencies:
+      safer-buffer: 2.1.2
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==
   /iferr/0.1.5:
     dev: false
     resolution:
@@ -1757,6 +2113,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
+  /ini/1.3.8:
+    dev: false
+    resolution:
+      integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
   /internal-slot/1.0.3:
     dependencies:
       get-intrinsic: 1.1.1
@@ -1863,6 +2223,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-PkcprB9f3gJc19g6iW2rn09n2w8=
+  /is-obj/2.0.0:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-drqDG3cbczxxEJRoOXcOjtdp1J/lyp1mNn0xaznRs8+muBhgQcrnbspox5X5fOw0HnMnbfDzvnEMEtqDEJEo8w==
   /is-plain-obj/2.1.0:
     dev: false
     engines:
@@ -1892,6 +2258,10 @@ packages:
       node: '>= 0.4'
     resolution:
       integrity: sha512-C/CPBqKWnvdcxqIARxyOh4v1UUEOCHpgDa0WYgpKDFMszcrPcffg5uhwSgPCLD2WWxmq6isisz87tzT01tuGhg==
+  /is-typedarray/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha1-5HnICFjfDBsR3dppQPlgEfzaSpo=
   /is-unicode-supported/0.1.0:
     dev: false
     engines:
@@ -1906,6 +2276,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
+  /iterable-to-stream/2.0.0:
+    dev: false
+    engines:
+      node: '>=12.0.0'
+    resolution:
+      integrity: sha512-efkLePxXjJk92hvN+2rS3tGJTRn8/tqXjmZvPI6LQ29xCj2sUF4zW8hkMsVe3jpTkxtMZ89xsKnz9FaRqNWM6g==
   /jose/1.28.1:
     dependencies:
       '@panva/asn1.js': 1.0.0
@@ -1956,6 +2332,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==
+  /json-parse-even-better-errors/2.3.1:
+    dev: false
+    resolution:
+      integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==
   /json-schema-traverse/0.4.1:
     dev: false
     resolution:
@@ -2049,6 +2429,10 @@ packages:
       node: '>= 0.8.0'
     resolution:
       integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==
+  /lines-and-columns/1.1.6:
+    dev: false
+    resolution:
+      integrity: sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
   /load-json-file/4.0.0:
     dependencies:
       graceful-fs: 4.2.6
@@ -2158,6 +2542,14 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
+  /make-dir/3.1.0:
+    dependencies:
+      semver: 6.3.0
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==
   /make-error/1.3.6:
     dev: false
     resolution:
@@ -2552,6 +2944,14 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==
+  /parent-module/2.0.0:
+    dependencies:
+      callsites: 3.1.0
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-uo0Z9JJeWzv8BG+tRcapBKNJ0dro9cLyczGzulS6EfeyAdeC9sbojtW6XwvYxJkEne9En+J2XEl4zyglVeIwFg==
   /parse-json/4.0.0:
     dependencies:
       error-ex: 1.3.2
@@ -2561,6 +2961,17 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-vjX1Qlvh9/bHRxhPmKeIy5lHfuA=
+  /parse-json/5.2.0:
+    dependencies:
+      '@babel/code-frame': 7.12.11
+      error-ex: 1.3.2
+      json-parse-even-better-errors: 2.3.1
+      lines-and-columns: 1.1.6
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-ayCKvm/phCGxOkYRSCM82iDwct8/EonSEgCSxWxD7ve6jHggsFl4fZVQBPRNgQoKiuV/odhFrGzQXZwbifC8Rg==
   /path-exists/3.0.0:
     dev: false
     engines:
@@ -2771,6 +3182,12 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-pq2bWo9mVD43nbts2wGv17XLiNLya+GklZ8kaDLV2Z08gDCsGpnKn9BFMepvWuHCbyVvY7J5o5+BVvoQbmlJLg==
+  /repeat-string/1.6.1:
+    dev: false
+    engines:
+      node: '>=0.10'
+    resolution:
+      integrity: sha1-jcrkcOHIirwtYA//Sndihtp15jc=
   /require-directory/2.1.1:
     dev: false
     engines:
@@ -2793,6 +3210,20 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==
+  /resolve-from/5.0.0:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw==
+  /resolve-global/1.0.0:
+    dependencies:
+      global-dirs: 0.1.1
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-zFa12V4OLtT5XUX/Q4VLvTfBf+Ok0SPc1FNGM/z9ctUdiU618qwKpWnd0CHs3+RqROfyEg/DhuHbMWYqcgljEw==
   /resolve/1.20.0:
     dependencies:
       is-core-module: 2.5.0
@@ -2846,11 +3277,20 @@ packages:
     dev: false
     resolution:
       integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
+  /safer-buffer/2.1.2:
+    dev: false
+    resolution:
+      integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
   /semver/5.7.1:
     dev: false
     hasBin: true
     resolution:
       integrity: sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==
+  /semver/6.3.0:
+    dev: false
+    hasBin: true
+    resolution:
+      integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
   /semver/7.3.5:
     dependencies:
       lru-cache: 6.0.0
@@ -3143,6 +3583,12 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==
+  /typedarray-to-buffer/3.1.5:
+    dependencies:
+      is-typedarray: 1.0.0
+    dev: false
+    resolution:
+      integrity: sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   /typescript/4.3.5:
     dev: false
     engines:
@@ -3159,6 +3605,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-tZU/3NqK3dA5gpE1KtyiJUrEB0lxnGkMFHptJ7q6ewdZ8s12QrODwNbhIJStmJkd1QDXa1NRA8aF2A1zk/Ypyw==
+  /unique-string/2.0.0:
+    dependencies:
+      crypto-random-string: 2.0.0
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-uNaeirEPvpZWSgzwsPGtU2zVSTrn/8L5q/IexZmH0eH6SA73CmAA5U4GwORTxQAZs95TAXLNqeLoPPNO5gZfWg==
   /universalify/0.1.2:
     dev: false
     engines:
@@ -3200,6 +3654,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==
+  /vscode-uri/3.0.2:
+    dev: false
+    resolution:
+      integrity: sha512-jkjy6pjU1fxUvI51P+gCsxg1u2n8LSt0W6KrCNQceaziKzff74GoWmjVG46KieVzybO1sttPQmYfrwSHey7GUA==
   /which-boxed-primitive/1.0.2:
     dependencies:
       is-bigint: 1.0.2
@@ -3253,6 +3711,21 @@ packages:
     dev: false
     resolution:
       integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
+  /write-file-atomic/3.0.3:
+    dependencies:
+      imurmurhash: 0.1.4
+      is-typedarray: 1.0.0
+      signal-exit: 3.0.3
+      typedarray-to-buffer: 3.1.5
+    dev: false
+    resolution:
+      integrity: sha512-AvHcyZ5JnSfq3ioSyjrBkH9yW4m7Ayk8/9My/DD9onKeu/94fwrMocemO2QAJFAlnnDN+ZDS+ZjAR5ua1/PV/Q==
+  /xdg-basedir/4.0.0:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-PSNhEJDejZYV7h50BohL09Er9VaIefr2LMAf3OEmpCkjOi34eYyQYAXUTjEQtZJTKcF0E2UKTh+osDLsgNim9Q==
   /xml/1.0.1:
     dev: false
     resolution:
@@ -3279,6 +3752,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==
+  /yaml/1.10.2:
+    dev: false
+    engines:
+      node: '>= 6'
+    resolution:
+      integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
   /yargs-parser/20.2.4:
     dev: false
     engines:
@@ -3348,31 +3827,30 @@ packages:
     dev: false
     name: '@rush-temp/imodels-client-tests'
     resolution:
-      integrity: sha512-GBiAWKfz/fScUtephcbEvAA1Ro8UeCviC24mjaerc3f3/nIY3VJorFMvFHFsNNLS3ANT3jDtXyhZgDrIqSUCcQ==
+      integrity: sha512-QSR1JWU7ybePoIiQgfr0FfhNQCWdnAB46XdqYpTs7WZkzUp4KRSuTQ6G8L07+CwSZEr/aKaIfb35EsaoZcC7bA==
       tarball: 'file:projects/imodels-client-tests.tgz'
     version: 0.0.0
-  'file:projects/imodels-client-utils-eslint.tgz_typescript@4.3.5':
+  'file:projects/imodels-client-clean-code-utils.tgz_typescript@4.3.5':
     dependencies:
       '@typescript-eslint/eslint-plugin': 4.28.4_b1648df9f9ba40bdeef3710a5a5af353
       '@typescript-eslint/parser': 4.28.4_eslint@7.31.0+typescript@4.3.5
+      cspell: 5.6.6
       eslint: 7.31.0
       eslint-plugin-import: 2.23.4_eslint@7.31.0
     dev: false
-    id: 'file:projects/imodels-client-utils-eslint.tgz'
-    name: '@rush-temp/imodels-client-utils-eslint'
+    id: 'file:projects/imodels-client-clean-code-utils.tgz'
+    name: '@rush-temp/imodels-client-clean-code-utils'
     peerDependencies:
       typescript: '*'
     resolution:
-      integrity: sha512-CbJ+6sA/pS4h62urDlWHMEsD6H0Z1ZiMNc1MT6PZiOnwatYAeBW/zj34qT7ifWsDanwonbWe0wcaqyI9xbRlKw==
-      tarball: 'file:projects/imodels-client-utils-eslint.tgz'
+      integrity: sha512-dzaV94VZ7c58eIsf4uAOn2QIPSrYrAp+iVS4/iaw8p4cdPX0scewxcDwCo/WaFZLifHqdhKQf5KBsq+Ls4hB3A==
+      tarball: 'file:projects/imodels-client-clean-code-utils.tgz'
     version: 0.0.0
 registry: ''
 specifiers:
-  '@bentley/bentleyjs-core': ~2.19.3
-  '@bentley/imodelhub-client-tests': ~2.19.3
   '@rush-temp/imodels-client-management': 'file:./projects/imodels-client-management.tgz'
   '@rush-temp/imodels-client-tests': 'file:./projects/imodels-client-tests.tgz'
-  '@rush-temp/imodels-client-utils-eslint': 'file:./projects/imodels-client-utils-eslint.tgz'
+  '@rush-temp/imodels-client-clean-code-utils': 'file:./projects/imodels-client-clean-code-utils.tgz'
   '@types/chai': ~4.2.21
   '@types/mocha': ~9.0.0
   '@types/node': ^16.4.6
@@ -3380,6 +3858,7 @@ specifiers:
   '@typescript-eslint/parser': ~4.28.4
   axios: ~0.21.1
   chai: ~4.3.4
+  cspell: ~5.6.6
   eslint: ~7.31.0
   eslint-plugin-import: ~2.23.4
   fs-extra: ~10.0.0
