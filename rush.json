@@ -7,7 +7,7 @@
   "projectFolderMinDepth": 1,
   "projectFolderMaxDepth": 2,
   "repository": {
-    "url": "https://github.com/microsoft/rush-example",
+    "url": "https://github.com/iTwin/imodels-clients",
     "defaultBranch": "main",
     "defaultRemote": "origin"
   },
