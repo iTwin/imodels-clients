@@ -7,7 +7,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 export type ParseErrorFunc = (response: { statusCode: number, body: unknown }) => Error;
 
 type HttpRequestParams = { url: string, headers: unknown };
-type HttpPostRequestParams = HttpRequestParams & { body: unknown };
+type HttpRequestWithBodyParams = HttpRequestParams & { body: unknown };
 
 export class RestClient {
   private _parseErrorFunc: ParseErrorFunc;
@@ -26,7 +26,7 @@ export class RestClient {
       .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
   }
 
-  public sendPostRequest<TResponse>(params: HttpPostRequestParams): Promise<TResponse> {
+  public sendPostRequest<TResponse>(params: HttpRequestWithBodyParams): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
