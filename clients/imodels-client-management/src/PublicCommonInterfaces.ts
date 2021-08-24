@@ -13,7 +13,7 @@ export interface AuthorizationHeader {
 }
 
 export interface RequestContext {
-  authorizationHeader: AuthorizationHeader;
+  authorization: AuthorizationHeader;
 }
 
 export interface RequestContextParam {
