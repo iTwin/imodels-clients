@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelsErrorParser } from "./Errors";
 import { iModelOperations } from "./operations/imodel/iModelOperations";
-import { RestClient } from "./RESTClient";
+import { RestClient } from "./RestClient";
 
 export class iModelsClient {
   private _restClient: RestClient;

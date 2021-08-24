@@ -6,7 +6,7 @@ import { CollectionResponse, EntityCollectionPage, PreferReturn, } from "../../I
 import { OperationsBase } from "../../OperationsBase";
 import { getPagedCollectionGenerator } from "../../PagedCollectionGenerator";
 import { RequestContextParam } from "../../PublicCommonInterfaces";
-import { RestClient } from "../../RESTClient";
+import { RestClient } from "../../RestClient";
 import { MinimaliModel, iModel } from "./iModelInterfaces";
 import { CreateEmptyiModelParams, DeleteiModelParams, GetiModelByIdParams, GetiModelListParams } from "./iModelOperationParams";
 
