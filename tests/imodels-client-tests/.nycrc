@@ -1,0 +1,8 @@
+{
+  "extends": "./node_modules/@itwin/imodels-client-common-config/base.nycrc",
+  "cwd": "../../",
+  "include": [
+    "clients/imodels-client-management/src/**/*",
+    "clients/imodels-client-management/lib/**/*"
+  ]
+}

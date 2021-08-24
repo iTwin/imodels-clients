@@ -9,3 +9,5 @@ common/autoinstallers/*/.npmrc
 **/.rush/temp/
 lib/
 tests/test-results.xml
+.nyc_output/
+coverage
