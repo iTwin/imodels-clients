@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { iModelsError, iModelsErrorDetail, iModel, iModelProperties } from "@itwin/imodels-client-management";
+import { iModelsError, iModelsErrorDetail, iModel, iModelProperties, iModelState } from "@itwin/imodels-client-management";
 
 export function assertError(params: { actualError: Error, expectedError: Partial<iModelsError> }): void {
   const imodelsError = params.actualError as iModelsError;
@@ -24,10 +24,11 @@ export function assertError(params: { actualError: Error, expectedError: Partial
   }
 }
 
-export function assertiModel(params: { actualiModel: iModel, expectediModelProperties: iModelProperties }): void {
+export function assertiModel(params: { actualiModel: iModel, expectediModelProperties: iModelProperties & { state: iModelState } }): void {
   expect(params.actualiModel).to.not.be.undefined;
   expect(params.actualiModel.name).to.equal(params.expectediModelProperties.name);
   expect(params.actualiModel.description).to.equal(params.expectediModelProperties.description);
+  expect(params.actualiModel.state).to.equal(params.expectediModelProperties.state);
   expect(params.actualiModel.extent).to.deep.equal(params.expectediModelProperties.extent);
   expect(params.actualiModel.createdDateTime as Date).to.not.be.undefined;
 }
