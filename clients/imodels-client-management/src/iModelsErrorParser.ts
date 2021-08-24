@@ -2,29 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { iModelsError, iModelsErrorCode, iModelsErrorDetail } from "./iModelsErrorInterfaces";
 import { ParseErrorFunc } from "./RestClient";
-
-export enum iModelsErrorCode {
-  Unrecognized = "Unrecognized",
-
-  Unknown = "Unknown",
-  Unauthorized = "Unauthorized",
-
-  InvalidiModelsRequest = "InvalidiModelsRequest",
-  InvalidValue = "InvalidValue",
-  iModelExists = "iModelExists"
-}
-
-export interface iModelsError extends Error {
-  code: iModelsErrorCode;
-  details?: iModelsErrorDetail[];
-}
-
-export interface iModelsErrorDetail {
-  code: iModelsErrorCode;
-  message: string;
-  target: string;
-}
 
 interface iModelsApiErrorWrapper {
   error: iModelsApiError;
