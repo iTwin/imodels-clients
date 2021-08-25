@@ -1,0 +1,17 @@
+lib/
+
+*.log
+npm-debug.log*
+
+node_modules/
+.npm
+.eslintcache
+
+common/deploy/
+common/temp/
+common/autoinstallers/*/.npmrc
+**/.rush/temp/
+
+**/test-results.xml
+.nyc_output/
+coverage

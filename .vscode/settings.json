@@ -1,0 +1,20 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.nyc_output": true,
+    "**/.rush": true
+  },
+  "files.exclude": {
+    "**/.nyc_output": true,
+    "**/.rush": true,
+    "**/*.build.log": true,
+    "**/*.build.error.log": true,
+    "**/package-deps.json": true,
+    "**/node_modules": true,
+    "**/out": true,
+    "**/lib": true,
+    "common/temp": true
+  }
+}

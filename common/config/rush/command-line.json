@@ -1,0 +1,31 @@
+{
+  "commands": [
+    {
+      "name": "lint",
+      "commandKind": "bulk",
+      "summary": "Run lint rules on each package",
+      "description": "Iterates through each package in the monorepo and runs the 'lint' script",
+      "enableParallelism": true,
+      "ignoreMissingScript": false,
+      "allowWarningsInSuccessfulBuild": true
+    },
+    {
+      "name": "lint-fix",
+      "commandKind": "bulk",
+      "summary": "Run lint rules and auto fix on each package",
+      "description": "Iterates through each package in the monorepo and runs the 'lint-fix' script",
+      "enableParallelism": true,
+      "ignoreMissingScript": false,
+      "allowWarningsInSuccessfulBuild": true
+    },
+    {
+      "name": "spell-check",
+      "commandKind": "bulk",
+      "summary": "Run spell check on each package",
+      "description": "Iterates through each package in the monorepo and runs the 'spell-check' script",
+      "enableParallelism": true,
+      "ignoreMissingScript": false,
+      "allowWarningsInSuccessfulBuild": true
+    }
+  ]
+}
