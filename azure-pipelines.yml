@@ -19,3 +19,13 @@ steps:
 
 - script: node common/scripts/install-run-rush.js rebuild -v
   displayName: rush rebuild
+
+- script: node common/scripts/install-run-rush.js lint
+  displayName: rush lint
+
+- script: node common/scripts/install-run-rush.js spell-check
+  displayName: rush spell-check
+  
+- script: node common/scripts/install-run-rush.js publish --pack --include-all --publish
+  displayName: rush publish (into .tgz)
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
