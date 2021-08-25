@@ -55,4 +55,3 @@ export class RestClient {
     return response.data;
   }
 }
-

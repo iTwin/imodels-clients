@@ -40,4 +40,3 @@ function getCombinedPrefix(params: {
     combinedPrefix += params.prefixes.testSuite;
   return combinedPrefix;
 }
-

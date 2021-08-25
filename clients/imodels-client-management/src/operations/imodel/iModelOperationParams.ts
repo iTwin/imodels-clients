@@ -27,4 +27,3 @@ export interface CreateEmptyiModelParams extends RequestContextParam {
 export interface DeleteiModelParams extends RequestContextParam {
   imodelId: string;
 }
-
