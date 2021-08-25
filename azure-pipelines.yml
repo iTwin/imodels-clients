@@ -1,7 +1,5 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+name:
+  $(Date:yyyy.M.d)$(Rev:.r)
 
 trigger:
 - main
@@ -19,3 +17,6 @@ steps:
 
 - script: node common/scripts/install-run-rush.js install --purge
   displayName: rush install
+
+- script: node common/scripts/install-run-rush.js rebuild -v
+  displayName: rush rebuild
