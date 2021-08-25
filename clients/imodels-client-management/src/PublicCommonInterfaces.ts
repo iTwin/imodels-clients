@@ -9,7 +9,7 @@ export interface BaseEntity {
 
 export interface AuthorizationHeader {
   scheme: string;
-  credentials: string;
+  token: string;
 }
 
 export interface RequestContext {

@@ -43,7 +43,7 @@ export class OperationsBase {
 
   private formHeaders(params: RequestContextParam & { preferReturn?: PreferReturn }): Dictionary {
     const headers: Dictionary = {
-      Authorization: `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.credentials}`,
+      Authorization: `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`,
       Accept: `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`
     };
 

@@ -16,7 +16,7 @@ describe("iModelsClient", () => {
 
   before(() => {
     projectId = ""; // TODO: read config
-    requestContext = { authorizationHeader: { scheme: "", credentials: "" } }; // TODO: read config
+    requestContext = { authorization: { scheme: "", token: "" } }; // TODO: read config
     imodelsClient = new iModelsClient();
   });
 
@@ -70,7 +70,7 @@ describe("iModelsClient", () => {
   it("should return unauthorized error when calling API with invalid access token", async () => {
     // Arrange
     const imodelCreationParams = {
-      requestContext: { authorizationHeader: { scheme: "Bearer", credentials: "invalidToken" } },
+      requestContext: { authorization: { scheme: "Bearer", token: "invalidToken" } },
       imodelProperties: {
         projectId: projectId,
         name: getiModelName("Sample iModel (unauthorized)")
