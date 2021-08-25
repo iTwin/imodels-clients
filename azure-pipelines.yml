@@ -1,9 +1,6 @@
 name:
   $(Date:yyyy.M.d)$(Rev:.r)
 
-trigger:
-- main
-
 pool:
   name: iModelTechCI
   demands: Agent.OS -equals Windows_NT
