@@ -15,13 +15,13 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-client-management": "1.0.0",
+    "@itwin/imodels-client-management": "~0.1.0-dev.1",
     "chai": "~4.3.4",
     "mocha": "~9.0.2",
     "fs-extra": "~10.0.0"
   },
   "devDependencies": {
-    "@itwin/imodels-client-common-config": "~1.0.0",
+    "@itwin/imodels-client-common-config": "~0.1.0-dev.1",
     "@types/chai": "~4.2.21",
     "@types/mocha": "~9.0.0",
     "@types/node": "^16.4.6",
