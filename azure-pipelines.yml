@@ -17,3 +17,5 @@ steps:
     versionSpec: '14.17.5'
     checkLatest: true
 
+- script: node common/scripts/install-run-rush.js install --purge
+  displayName: rush install
