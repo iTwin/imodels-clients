@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-client-management",
-  "version": "1.0.0",
+  "version": "0.1.0-dev.1",
   "description": "iModels API client wrapper",
   "license": "MIT",
   "main": "lib/iModelsClientExports.js",

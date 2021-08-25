@@ -15,17 +15,20 @@
     {
       "packageName": "@itwin/imodels-client-management",
       "projectFolder": "clients/imodels-client-management",
-      "shouldPublish": false
+      "shouldPublish": true,
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
       "packageName": "@itwin/imodels-client-tests",
       "projectFolder": "tests/imodels-client-tests",
-      "shouldPublish": false
+      "shouldPublish": true,
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
       "packageName": "@itwin/imodels-client-common-config",
       "projectFolder": "utils/imodels-client-common-config",
-      "shouldPublish": false
+      "shouldPublish": true,
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     }
   ]
 }

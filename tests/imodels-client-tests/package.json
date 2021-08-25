@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-client-tests",
-  "version": "1.0.0",
+  "version": "0.1.0-dev.1",
   "description": "Tests for iModels API client wrapper",
   "license": "MIT",
   "scripts": {
