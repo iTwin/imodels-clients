@@ -2,9 +2,27 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-export enum PreferReturn {
-  Minimal = "minimal",
-  Representation = "representation"
+export interface AuthorizationHeader {
+  scheme: string;
+  token: string;
+}
+
+export interface RequestContext {
+  authorization: AuthorizationHeader;
+}
+
+export interface RequestContextParam {
+  requestContext: RequestContext;
+}
+
+export interface CollectionRequestParams {
+  $skip?: number;
+  $top?: number;
+}
+
+export interface BaseEntity {
+  id: string;
+  displayName: string;
 }
 
 export interface Link {
@@ -24,4 +42,9 @@ export interface CollectionResponse {
 export interface EntityCollectionPage<TEntity> {
   entities: TEntity[];
   next?: () => Promise<EntityCollectionPage<TEntity>>;
+}
+
+export enum PreferReturn {
+  Minimal = "minimal",
+  Representation = "representation"
 }

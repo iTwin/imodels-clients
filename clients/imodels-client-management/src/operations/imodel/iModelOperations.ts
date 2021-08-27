@@ -2,25 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionResponse, EntityCollectionPage, PreferReturn, } from "../../InternalCommonInterfaces";
-import { OperationsBase } from "../../OperationsBase";
-import { getPagedCollectionGenerator } from "../../PagedCollectionGenerator";
-import { RequestContextParam } from "../../PublicCommonInterfaces";
-import { RestClient } from "../../RestClient";
-import { MinimaliModel, iModel } from "./iModelInterfaces";
+import { OperationsBase, RequestContextParam, EntityCollectionPage, RecursiveRequired, getPagedCollectionGenerator, iModel, iModelResponse, iModelsResponse, MinimaliModel, PreferReturn } from "../../base";
+import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateEmptyiModelParams, DeleteiModelParams, GetiModelByIdParams, GetiModelListParams } from "./iModelOperationParams";
 
-export interface iModelResponse {
-  iModel: iModel;
-}
-
-export interface iModelsResponse<TiModel> extends CollectionResponse {
-  iModels: TiModel[];
-}
-
 export class iModelOperations extends OperationsBase {
-  constructor(restClient: RestClient) {
-    super(restClient);
+  constructor(options: RecursiveRequired<iModelsClientOptions>) {
+    super(options);
   }
 
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {

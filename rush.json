@@ -19,8 +19,14 @@
       "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
-      "packageName": "@itwin/imodels-client-tests",
-      "projectFolder": "tests/imodels-client-tests",
+      "packageName": "@itwin/imodels-client-authoring",
+      "projectFolder": "clients/imodels-client-authoring",
+      "shouldPublish": true,
+      "versionPolicyName": "prerelease-monorepo-lockStep"
+    },
+    {
+      "packageName": "@itwin/imodels-clients-tests",
+      "projectFolder": "tests/imodels-clients-tests",
       "shouldPublish": true,
       "versionPolicyName": "prerelease-monorepo-lockStep"
     },

@@ -1,0 +1,34 @@
+{
+  "name": "@itwin/imodels-clients-tests",
+  "version": "0.1.0-dev.1",
+  "description": "Tests for iModels API client wrapper",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc 1>&2",
+    "test": "npm run test:copy-assets && mocha lib/**/*.test.js --color --timeout 60000",
+    "test:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
+    "cover": "nyc npm test",
+    "lint": "eslint ./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2",
+    "spell-check": "cspell ./src/**/*.ts --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
+  },
+  "dependencies": {
+    "@itwin/imodels-client-authoring": "~0.1.0-dev.1",
+    "@itwin/imodels-client-management": "~0.1.0-dev.1",
+    "chai": "~4.3.4",
+    "fs-extra": "~10.0.0",
+    "mocha": "~9.0.2"
+  },
+  "devDependencies": {
+    "@itwin/imodels-client-common-config": "~0.1.0-dev.1",
+    "@types/chai": "~4.2.21",
+    "@types/mocha": "~9.0.0",
+    "@types/node": "^16.4.6",
+    "cpx": "~1.5.0",
+    "nyc": "14.0.0",
+    "typescript": "~4.3.5"
+  }
+}

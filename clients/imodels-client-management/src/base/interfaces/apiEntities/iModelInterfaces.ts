@@ -2,20 +2,21 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BaseEntity } from "../../PublicCommonInterfaces";
+import { BaseEntity, CollectionResponse, Link } from "../CommonInterfaces";
 
 export enum iModelState {
   Initialized = "initialized",
   NotInitialized = "notInitialized",
 }
-export interface Coordinates {
+
+export interface Point {
   latitude: number;
   longitude: number;
 }
 
 export interface Extent {
-  southWest: Coordinates;
-  northEast: Coordinates;
+  southWest: Point;
+  northEast: Point;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -30,4 +31,17 @@ export interface iModel extends MinimaliModel {
   createdDateTime: Date;
   projectId: string;
   extent?: Extent;
+}
+
+export interface iModelLinks {
+  upload: Link;
+  complete: Link;
+}
+
+export interface iModelResponse {
+  iModel: iModel & { _links: iModelLinks };
+}
+
+export interface iModelsResponse<TiModel> extends CollectionResponse {
+  iModels: TiModel[];
 }

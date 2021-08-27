@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsError, iModelsErrorCode, iModelsErrorDetail } from "./iModelsErrorInterfaces";
-import { ParseErrorFunc } from "./RestClient";
+import { iModelsError, iModelsErrorCode, iModelsErrorDetail } from "./interfaces/iModelsErrorInterfaces";
+import { ParseErrorFunc } from "./rest/RestClient";
 
 interface iModelsApiErrorWrapper {
   error: iModelsApiError;
@@ -42,13 +42,13 @@ export class iModelsErrorParser {
     }
 
     const errorFromApi = response.body as iModelsApiErrorWrapper;
-    const errorCode: iModelsErrorCode = iModelsErrorParser.parseCode(errorFromApi.error.code);
+    const errorCode: iModelsErrorCode = iModelsErrorParser.parseCode(errorFromApi?.error?.code);
 
     return new iModelsErrorImpl({
       name: errorCode,
       code: errorCode,
-      message: errorFromApi.error.message,
-      details: errorFromApi.error.details
+      message: errorFromApi?.error?.message,
+      details: errorFromApi?.error?.details
         ? iModelsErrorParser.parseDetails(errorFromApi.error.details)
         : undefined
     });

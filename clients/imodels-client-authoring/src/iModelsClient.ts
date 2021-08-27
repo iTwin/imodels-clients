@@ -2,17 +2,16 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { RecursiveRequired, iModelsErrorParser, RestClient, AxiosRestClient } from "./base";
+import {
+  iModelsClientOptions as iModelsClientOptions_Management,
+  fillConfiguration as fillManagementClientConfiguration,
+  RecursiveRequired
+} from "@itwin/imodels-client-management";
+import { FileHandler, AzureSdkFileHandler } from "./base";
 import { iModelOperations } from "./operations/imodel/iModelOperations";
 
-export interface BackendOptions {
-  baseUri?: string;
-  apiVersion?: string;
-}
-
-export interface iModelsClientOptions {
-  restClient?: RestClient;
-  backendOptions?: BackendOptions;
+export interface iModelsClientOptions extends iModelsClientOptions_Management {
+  fileHandler?: FileHandler;
 }
 
 export class iModelsClient {
@@ -29,10 +28,7 @@ export class iModelsClient {
 
 export function fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
   return {
-    restClient: options?.restClient ?? new AxiosRestClient(iModelsErrorParser.parse),
-    backendOptions: {
-      baseUri: options?.backendOptions?.baseUri ?? "https://api.bentley.com/imodels",
-      apiVersion: options?.backendOptions?.apiVersion ?? "v1",
-    }
+    ...fillManagementClientConfiguration(options),
+    fileHandler: options?.fileHandler ?? new AzureSdkFileHandler(),
   };
 }
