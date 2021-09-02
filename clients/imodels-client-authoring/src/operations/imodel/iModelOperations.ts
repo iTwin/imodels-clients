@@ -23,7 +23,11 @@ export class iModelOperations extends ManagementiModelOperations {
     const imodelCreateResponse = await this.sendPostRequest<iModelResponse>({
       ...params,
       url: this._apiBaseUrl,
-      body: { ...params.imodelProperties, baselineFile: { size: this._fileHandler.getFileSize(params.baselineFileProperties.path) } }
+      body: {
+        ...params.imodelProperties, baselineFile: {
+          size: this._fileHandler.getFileSize(params.baselineFileProperties.path)
+        }
+      }
     });
 
     const uploadUrl = imodelCreateResponse.iModel._links.upload.href;
@@ -41,7 +45,7 @@ export class iModelOperations extends ManagementiModelOperations {
   }
 
   private async waitForiModelInitialization(params: RequestContextParam & { imodelId: string, timeOutInMs?: number }): Promise<void> {
-    const sleepPeriodInMs = 500;
+    const sleepPeriodInMs = 1000;
     const timeOutInMs = params.timeOutInMs ?? 5 * 60 * 1000;
     for (let retries = Math.ceil(timeOutInMs / sleepPeriodInMs); retries > 0; --retries) {
       const baselineFileState = (await this._baselineFileOperations.getByiModelId(params)).state;

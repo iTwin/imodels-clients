@@ -19,20 +19,20 @@ export class iModelsClient {
   private _options: RecursiveRequired<iModelsClientOptions>;
 
   constructor(options?: iModelsClientOptions) {
-    this._options = fillConfiguration(options);
+    this._options = iModelsClient.fillConfiguration(options);
   }
 
   public get iModels(): iModelOperations {
     return new iModelOperations(this._options);
   }
-}
 
-export function fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
-  return {
-    restClient: options?.restClient ?? new AxiosRestClient(iModelsErrorParser.parse),
-    api: {
-      baseUri: options?.api?.baseUri ?? "https://api.bentley.com/imodels",
-      version: options?.api?.version ?? "v1"
-    }
-  };
+  public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
+    return {
+      restClient: options?.restClient ?? new AxiosRestClient(iModelsErrorParser.parse),
+      api: {
+        baseUri: options?.api?.baseUri ?? "https://api.bentley.com/imodels",
+        version: options?.api?.version ?? "v1"
+      }
+    };
+  }
 }

@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import {
+  iModelsClient as ManagementiModelsClient,
   iModelsClientOptions as ManagementiModelsClientOptions,
-  fillConfiguration as fillManagementiModelsClientConfiguration,
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 import { FileHandler, AzureSdkFileHandler } from "./base";
@@ -18,17 +18,17 @@ export class iModelsClient {
   private _options: RecursiveRequired<iModelsClientOptions>;
 
   constructor(options?: iModelsClientOptions) {
-    this._options = fillConfiguration(options);
+    this._options = iModelsClient.fillConfiguration(options);
   }
 
   public get iModels(): iModelOperations {
     return new iModelOperations(this._options);
   }
-}
-
-export function fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
-  return {
-    ...fillManagementiModelsClientConfiguration(options),
-    fileHandler: options?.fileHandler ?? new AzureSdkFileHandler()
-  };
+  
+  public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
+    return {
+      ...ManagementiModelsClient.fillConfiguration(options),
+      fileHandler: options?.fileHandler ?? new AzureSdkFileHandler()
+    };
+  }
 }
