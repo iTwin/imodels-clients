@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
 import { assertiModel } from "../AssertionUtils";
-import { cleanUpiModelsWithPrefix, generateiModelNameWithPrefixes, getAuthorizedRequestContext, getTestiModelsClientConfig, getTestProjectId, waitForiModelInitialization } from "../CommonTestUtils";
+import { cleanUpiModelsWithPrefix, generateiModelNameWithPrefixes, getAuthorizedRequestContext, getTestiModelsClientConfig, getTestProjectId } from "../CommonTestUtils";
 import { Constants } from "../Constants";
 
 describe("[Authoring] iModelsClient", () => {
@@ -63,7 +63,5 @@ describe("[Authoring] iModelsClient", () => {
       actualiModel: imodel,
       expectediModelProperties: { ...imodelCreationParams.imodelProperties }
     });
-
-    await waitForiModelInitialization({ requestContext, imodelsClient, imodelId: imodel.id });
   });
 });

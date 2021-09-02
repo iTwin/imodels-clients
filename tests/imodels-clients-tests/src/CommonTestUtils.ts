@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient as AuthoringiModelsClient, iModelsClientOptions as AuthoringiModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { iModelsClient as ManagementiModelsClient, iModelState, RequestContext } from "@itwin/imodels-client-management";
+import { iModelsClient as ManagementiModelsClient, RequestContext } from "@itwin/imodels-client-management";
 
 export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -53,25 +53,6 @@ export async function cleanUpiModelsWithPrefix(params: {
   for await (const imodel of imodels)
     if (imodel.displayName.startsWith(getCombinedPrefix(params)))
       await params.imodelsClient.iModels.delete({ requestContext: params.requestContext, imodelId: imodel.id });
-}
-
-export async function waitForiModelInitialization(params: {
-  imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
-  requestContext: RequestContext,
-  imodelId: string,
-}): Promise<void> {
-  const sleepPeriodInMs = 500;
-  const totalWaitTimeInMs = 30 * 1000;
-  let retryCount = totalWaitTimeInMs / sleepPeriodInMs;
-
-  let imodelState = iModelState.NotInitialized;
-  while (imodelState !== iModelState.Initialized && retryCount-- > 0) {
-    imodelState = (await params.imodelsClient.iModels.getById(params)).state;
-    await sleep(sleepPeriodInMs);
-  }
-
-  if (imodelState !== iModelState.Initialized)
-    throw new Error("iModel not initialized.");
 }
 
 function getCombinedPrefix(params: {

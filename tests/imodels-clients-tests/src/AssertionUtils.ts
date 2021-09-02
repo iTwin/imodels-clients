@@ -28,7 +28,7 @@ export function assertError(params: { actualError: Error, expectedError: Partial
   }
 }
 
-export function assertiModel(params: { actualiModel: iModel, expectediModelProperties: iModelProperties & { state?: iModelState } }): void {
+export function assertiModel(params: { actualiModel: iModel, expectediModelProperties: iModelProperties}): void {
   expect(params.actualiModel).to.not.be.undefined;
   expect(params.actualiModel.name).to.equal(params.expectediModelProperties.name);
 
@@ -36,8 +36,7 @@ export function assertiModel(params: { actualiModel: iModel, expectediModelPrope
   assertOptionalProperty(params.expectediModelProperties.extent, params.actualiModel.extent);
 
   expect(params.actualiModel.createdDateTime as Date).to.not.be.undefined;
-  if (params.expectediModelProperties.state)
-    expect(params.actualiModel.state).to.equal(iModelState.Initialized);
+  expect(params.actualiModel.state).to.equal(iModelState.Initialized);
 }
 
 function assertOptionalProperty<TPropertyType>(expectedValue: TPropertyType, actualValue: TPropertyType): void {
