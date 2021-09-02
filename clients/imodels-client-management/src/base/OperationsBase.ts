@@ -20,8 +20,8 @@ export class OperationsBase {
 
   constructor(options: RecursiveRequired<iModelsClientOptions>) {
     this._restClient = options.restClient;
-    this._apiBaseUrl = options.backendOptions?.baseUri;
-    this._apiVersion = options.backendOptions?.apiVersion;
+    this._apiBaseUrl = options.api.baseUri;
+    this._apiVersion = options.api.version;
   }
 
   protected sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse> {

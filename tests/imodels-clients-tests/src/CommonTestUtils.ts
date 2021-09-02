@@ -2,16 +2,16 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsClient as iModelsClient_Authoring, iModelsClientOptions as iModelsClientOptions_Authoring } from "@itwin/imodels-client-authoring";
-import { iModelsClient as iModelsClient_Management, iModelState, RequestContext } from "@itwin/imodels-client-management";
+import { iModelsClient as AuthoringiModelsClient, iModelsClientOptions as AuthoringiModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { iModelsClient as ManagementiModelsClient, iModelState, RequestContext } from "@itwin/imodels-client-management";
 
 export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function getTestiModelsClientConfig(): iModelsClientOptions_Authoring {
+export function getTestiModelsClientConfig(): AuthoringiModelsClientOptions {
   return {
-    backendOptions: {
+    api: {
       baseUri: "" // TODO: read config
     }
   };
@@ -41,7 +41,7 @@ export function generateiModelNameWithPrefixes(params: {
 }
 
 export async function cleanUpiModelsWithPrefix(params: {
-  imodelsClient: iModelsClient_Management | iModelsClient_Authoring,
+  imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
   requestContext: RequestContext,
   projectId: string,
   prefixes: {
@@ -56,7 +56,7 @@ export async function cleanUpiModelsWithPrefix(params: {
 }
 
 export async function waitForiModelInitialization(params: {
-  imodelsClient: iModelsClient_Management | iModelsClient_Authoring,
+  imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
   requestContext: RequestContext,
   imodelId: string,
 }): Promise<void> {

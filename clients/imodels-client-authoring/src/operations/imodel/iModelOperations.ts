@@ -2,12 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelOperations as iModelOperations_Management, iModel, iModelResponse, RecursiveRequired } from "@itwin/imodels-client-management";
+import { iModelOperations as ManagementiModelOperations, iModel, iModelResponse, RecursiveRequired } from "@itwin/imodels-client-management";
 import { FileHandler } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateiModelFromBaselineParams } from "./iModelOperationParams";
 
-export class iModelOperations extends iModelOperations_Management {
+export class iModelOperations extends ManagementiModelOperations {
   private _fileHandler: FileHandler;
 
   constructor(options: RecursiveRequired<iModelsClientOptions>) {

@@ -5,14 +5,14 @@
 import { RecursiveRequired, iModelsErrorParser, RestClient, AxiosRestClient } from "./base";
 import { iModelOperations } from "./operations/imodel/iModelOperations";
 
-export interface BackendOptions {
+export interface ApiOptions {
   baseUri?: string;
-  apiVersion?: string;
+  version?: string;
 }
 
 export interface iModelsClientOptions {
   restClient?: RestClient;
-  backendOptions?: BackendOptions;
+  api?: ApiOptions;
 }
 
 export class iModelsClient {
@@ -30,9 +30,9 @@ export class iModelsClient {
 export function fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
   return {
     restClient: options?.restClient ?? new AxiosRestClient(iModelsErrorParser.parse),
-    backendOptions: {
-      baseUri: options?.backendOptions?.baseUri ?? "https://api.bentley.com/imodels",
-      apiVersion: options?.backendOptions?.apiVersion ?? "v1",
+    api: {
+      baseUri: options?.api?.baseUri ?? "https://api.bentley.com/imodels",
+      version: options?.api?.version ?? "v1",
     }
   };
 }

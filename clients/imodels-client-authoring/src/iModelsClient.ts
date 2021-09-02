@@ -3,14 +3,14 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import {
-  iModelsClientOptions as iModelsClientOptions_Management,
-  fillConfiguration as fillManagementClientConfiguration,
+  iModelsClientOptions as ManagementiModelsClientOptions,
+  fillConfiguration as fillManagementiModelsClientConfiguration,
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 import { FileHandler, AzureSdkFileHandler } from "./base";
 import { iModelOperations } from "./operations/imodel/iModelOperations";
 
-export interface iModelsClientOptions extends iModelsClientOptions_Management {
+export interface iModelsClientOptions extends ManagementiModelsClientOptions {
   fileHandler?: FileHandler;
 }
 
@@ -28,7 +28,7 @@ export class iModelsClient {
 
 export function fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
   return {
-    ...fillManagementClientConfiguration(options),
+    ...fillManagementiModelsClientConfiguration(options),
     fileHandler: options?.fileHandler ?? new AzureSdkFileHandler(),
   };
 }
