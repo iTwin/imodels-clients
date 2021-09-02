@@ -24,7 +24,7 @@ export class iModelsClient {
   public get iModels(): iModelOperations {
     return new iModelOperations(this._options);
   }
-  
+
   public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
     return {
       ...ManagementiModelsClient.fillConfiguration(options),
