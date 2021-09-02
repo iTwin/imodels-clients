@@ -53,10 +53,6 @@
           {
             "pattern": "@itwin/imodels-client**",
             "group": "internal"
-          },
-          {
-            "pattern": "@bentley/**",
-            "group": "external"
           }
         ],
         "pathGroupsExcludedImportTypes": [
@@ -67,6 +63,13 @@
           "caseInsensitive": true
         }
       }
+    ],
+    "no-trailing-spaces": [
+      "error"
+    ],
+    "comma-dangle": [
+      "error",
+      "never"
     ],
     "@typescript-eslint/naming-convention": [
       "error",

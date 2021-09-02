@@ -32,7 +32,7 @@ export function fillConfiguration(options?: iModelsClientOptions): RecursiveRequ
     restClient: options?.restClient ?? new AxiosRestClient(iModelsErrorParser.parse),
     api: {
       baseUri: options?.api?.baseUri ?? "https://api.bentley.com/imodels",
-      version: options?.api?.version ?? "v1",
+      version: options?.api?.version ?? "v1"
     }
   };
 }

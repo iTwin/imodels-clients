@@ -29,6 +29,6 @@ export class iModelsClient {
 export function fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
   return {
     ...fillManagementiModelsClientConfiguration(options),
-    fileHandler: options?.fileHandler ?? new AzureSdkFileHandler(),
+    fileHandler: options?.fileHandler ?? new AzureSdkFileHandler()
   };
 }
