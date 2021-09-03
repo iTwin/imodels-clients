@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelOperations as ManagementiModelOperations, iModel, iModelResponse, RecursiveRequired, RequestContextParam, iModelsErrorImpl, iModelsErrorCode } from "@itwin/imodels-client-management";
-import { FileHandler } from "../../base";
+import { iModelOperations as ManagementiModelOperations, iModel, RecursiveRequired, RequestContextParam, iModelsErrorImpl, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { FileHandler, iModelCreateResponse } from "../../base";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
 import { Constants } from "../../Constants";
 import { iModelsClientOptions } from "../../iModelsClient";
@@ -21,7 +21,7 @@ export class iModelOperations extends ManagementiModelOperations {
   }
 
   public async createFromBaseline(params: CreateiModelFromBaselineParams): Promise<iModel> {
-    const imodelCreateResponse = await this.sendPostRequest<iModelResponse>({
+    const imodelCreateResponse = await this.sendPostRequest<iModelCreateResponse>({
       ...params,
       url: this._apiBaseUrl,
       body: {
