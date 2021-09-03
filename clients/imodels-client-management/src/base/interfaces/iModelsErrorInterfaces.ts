@@ -12,7 +12,7 @@ export enum iModelsErrorCode {
   InvalidValue = "InvalidValue",
   iModelExists = "iModelExists",
 
-  InitializationFailed = "InitializationFailed"
+  BaselineFileInitializationFailed = "BaselineFileInitializationFailed"
 }
 
 export interface iModelsError extends Error {

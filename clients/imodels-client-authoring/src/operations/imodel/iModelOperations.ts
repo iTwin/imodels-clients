@@ -41,11 +41,11 @@ export class iModelOperations extends ManagementiModelOperations {
       body: undefined
     });
 
-    await this.waitForiModelInitialization({ ...params, imodelId: imodelCreateResponse.iModel.id });
+    await this.waitForBaselineFileInitialization({ ...params, imodelId: imodelCreateResponse.iModel.id });
     return this.getById({ ...params, imodelId: imodelCreateResponse.iModel.id });
   }
 
-  private async waitForiModelInitialization(params: RequestContextParam & { imodelId: string, timeOutInMs?: number }): Promise<void> {
+  private async waitForBaselineFileInitialization(params: RequestContextParam & { imodelId: string, timeOutInMs?: number }): Promise<void> {
     const sleepPeriodInMs = Constants.Time.SleepPeriodInMs;
     const timeOutInMs = params.timeOutInMs ?? Constants.Time.iModelInitiazationTimeOutInMs;
     for (let retries = Math.ceil(timeOutInMs / sleepPeriodInMs); retries > 0; --retries) {
@@ -56,14 +56,14 @@ export class iModelOperations extends ManagementiModelOperations {
 
       if (baselineFileState !== BaselineFileState.WaitingForFile && baselineFileState !== BaselineFileState.InitializationScheduled)
         throw new iModelsErrorImpl({
-          code: iModelsErrorCode.InitializationFailed,
-          message: `iModel initialization failed with state '${baselineFileState}'`
+          code: iModelsErrorCode.BaselineFileInitializationFailed,
+          message: `Baseline File initialization failed with state '${baselineFileState}'`
         });
     }
 
     throw new iModelsErrorImpl({
-      code: iModelsErrorCode.InitializationFailed,
-      message: "Timed out waiting for iModel initialization."
+      code: iModelsErrorCode.BaselineFileInitializationFailed,
+      message: "Timed out waiting for Baseline File initialization."
     });
   }
 }
