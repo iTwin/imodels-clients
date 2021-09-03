@@ -3,23 +3,25 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { getPagedCollectionGenerator, OperationsBase, PreferReturn } from "../../base";
-import { Changeset, MinimalChangeset } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
+import { Changeset, ChangesetsResponse, MinimalChangeset } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { GetChangesetListParams } from "./ChangesetOperationParams";
 
 export class ChangesetOperations extends OperationsBase {
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
-    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<MinimaliModel>({
+    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<MinimalChangeset>({
       ...params,
       url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
-      preferReturn: PreferReturn.Minimal
+      preferReturn: PreferReturn.Minimal,
+      entityCollectionAccessor: (response: ChangesetsResponse<MinimalChangeset>) => response.changesets
     }));
   }
 
   public getRepresentationList(params: GetChangesetListParams): AsyncIterableIterator<Changeset> {
-    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<iModel>({
+    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<Changeset>({
       ...params,
       url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
-      preferReturn: PreferReturn.Representation
+      preferReturn: PreferReturn.Representation,
+      entityCollectionAccessor: (response: ChangesetsResponse<Changeset>) => response.changesets
     }));
   }
 }

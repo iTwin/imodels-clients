@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
-import { EntityCollectionPage, PreferReturn, RequestContextParam } from "./interfaces/CommonInterfaces";
+import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextParam } from "./interfaces/CommonInterfaces";
 import { RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
@@ -47,12 +47,16 @@ export class OperationsBase {
     });
   }
 
-  protected async getEntityCollectionPage<TResponse, TEntity>(params: RequestContextParam & { url: string, preferReturn: PreferReturn }): Promise<EntityCollectionPage<TiModel>> {
-    const response = await this.sendGetRequest<iModelsResponse<TiModel>>(params);
+  protected async getEntityCollectionPage<TEntity>(params: RequestContextParam & {
+    url: string,
+    preferReturn: PreferReturn,
+    entityCollectionAccessor: (response: unknown) => TEntity[]
+  }): Promise<EntityCollectionPage<TEntity>> {
+    const response = await this.sendGetRequest<CollectionResponse>(params);
     return {
-      entities: response.iModels,
+      entities: params.entityCollectionAccessor(response),
       next: response._links.next
-        ? () => this.getEntityCollectionPage({ requestContext: params.requestContext, url: response._links.next.href, preferReturn: params.preferReturn })
+        ? () => this.getEntityCollectionPage({ ...params, url: response._links.next.href })
         : undefined
     };
   }

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OperationsBase, RequestContextParam, EntityCollectionPage, RecursiveRequired, getPagedCollectionGenerator, iModel, iModelResponse, iModelsResponse, MinimaliModel, PreferReturn } from "../../base";
+import { OperationsBase, RecursiveRequired, getPagedCollectionGenerator, iModel, iModelResponse, iModelsResponse, MinimaliModel, PreferReturn } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateEmptyiModelParams, DeleteiModelParams, GetiModelByIdParams, GetiModelListParams } from "./iModelOperationParams";
 
@@ -15,7 +15,8 @@ export class iModelOperations extends OperationsBase {
     return getPagedCollectionGenerator(() => this.getEntityCollectionPage<MinimaliModel>({
       ...params,
       url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
-      preferReturn: PreferReturn.Minimal
+      preferReturn: PreferReturn.Minimal,
+      entityCollectionAccessor: (response: iModelsResponse<MinimaliModel>) => response.iModels
     }));
   }
 
@@ -23,7 +24,8 @@ export class iModelOperations extends OperationsBase {
     return getPagedCollectionGenerator(() => this.getEntityCollectionPage<iModel>({
       ...params,
       url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
-      preferReturn: PreferReturn.Representation
+      preferReturn: PreferReturn.Representation,
+      entityCollectionAccessor: (response: iModelsResponse<iModel>) => response.iModels
     }));
   }
 
@@ -49,15 +51,5 @@ export class iModelOperations extends OperationsBase {
       ...params,
       url: `${this._apiBaseUrl}/${params.imodelId}`
     });
-  }
-
-  private async getEntityCollectionPage<TiModel>(params: RequestContextParam & { url: string, preferReturn: PreferReturn }): Promise<EntityCollectionPage<TiModel>> {
-    const response = await this.sendGetRequest<iModelsResponse<TiModel>>(params);
-    return {
-      entities: response.iModels,
-      next: response._links.next
-        ? () => this.getEntityCollectionPage({ requestContext: params.requestContext, url: response._links.next.href, preferReturn: params.preferReturn })
-        : undefined
-    };
   }
 }

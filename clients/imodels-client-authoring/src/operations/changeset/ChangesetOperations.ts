@@ -2,7 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-export * from "./imodel/iModelOperationParams";
-export * from "./imodel/iModelOperations";
-export * from "./changeset/ChangesetOperations";
-export * from "./changeset/ChangesetOperationParams";
+import { ChangesetOperations as ManagementChangesetOperations } from "@itwin/imodels-client-management";
+import { Changeset } from "@itwin/imodels-client-management";
+
+export class ChangesetOperations extends ManagementChangesetOperations {
+  public create(): Promise<Changeset> {
+    
+  }
+}
