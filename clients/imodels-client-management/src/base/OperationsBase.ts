@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClientOptions } from "../iModelsClient";
-import { PreferReturn, RequestContextParam } from "./interfaces/CommonInterfaces";
+import { EntityCollectionPage, PreferReturn, RequestContextParam } from "./interfaces/CommonInterfaces";
 import { RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
@@ -44,6 +44,16 @@ export class OperationsBase {
       url: params.url,
       headers: this.formHeaders(params)
     });
+  }
+
+  protected async getEntityCollectionPage<TResponse, TEntity>(params: RequestContextParam & { url: string, preferReturn: PreferReturn }): Promise<EntityCollectionPage<TiModel>> {
+    const response = await this.sendGetRequest<iModelsResponse<TiModel>>(params);
+    return {
+      entities: response.iModels,
+      next: response._links.next
+        ? () => this.getEntityCollectionPage({ requestContext: params.requestContext, url: response._links.next.href, preferReturn: params.preferReturn })
+        : undefined
+    };
   }
 
   private formHeaders(params: RequestContextParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
