@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
 import { PreferReturn, RequestContextParam } from "./interfaces/CommonInterfaces";
 import { RecursiveRequired } from "./interfaces/UtilityTypes";
@@ -47,16 +48,15 @@ export class OperationsBase {
   }
 
   private formHeaders(params: RequestContextParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
-    const headers: Dictionary = {
-      Authorization: `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`,
-      Accept: `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`
-    };
+    const headers = {};
+    headers[Constants.Headers.Authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
+    headers[Constants.Headers.Accept] = `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`;
 
     if (params.preferReturn)
-      headers.Prefer = `return=${params.preferReturn}`;
+      headers[Constants.Headers.Prefer] = `return=${params.preferReturn}`;
 
     if (params.containsBody)
-      headers["Content-Type"] = "application/json";
+      headers[Constants.Headers.ContentType] = Constants.Headers.Values.ContentType;
 
     return headers;
   }
