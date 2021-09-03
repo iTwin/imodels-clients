@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { RecursiveRequired, iModelsErrorParser, RestClient, AxiosRestClient } from "./base";
+import { Constants } from "./Constants";
 import { iModelOperations } from "./operations/imodel/iModelOperations";
 
 export interface ApiOptions {
@@ -30,8 +31,8 @@ export class iModelsClient {
     return {
       restClient: options?.restClient ?? new AxiosRestClient(iModelsErrorParser.parse),
       api: {
-        baseUri: options?.api?.baseUri ?? "https://api.bentley.com/imodels",
-        version: options?.api?.version ?? "v1"
+        baseUri: options?.api?.baseUri ?? Constants.Api.BaseUrl,
+        version: options?.api?.version ?? Constants.Api.Version
       }
     };
   }

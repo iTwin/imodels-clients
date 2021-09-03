@@ -5,6 +5,7 @@
 import { iModelOperations as ManagementiModelOperations, iModel, iModelResponse, RecursiveRequired, RequestContextParam, iModelsErrorImpl, iModelsErrorCode } from "@itwin/imodels-client-management";
 import { FileHandler } from "../../base";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
+import { Constants } from "../../Constants";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { BaselineFileOperations } from "../baselineFile/BaselineFileOperations";
 import { CreateiModelFromBaselineParams } from "./iModelOperationParams";
@@ -45,8 +46,8 @@ export class iModelOperations extends ManagementiModelOperations {
   }
 
   private async waitForiModelInitialization(params: RequestContextParam & { imodelId: string, timeOutInMs?: number }): Promise<void> {
-    const sleepPeriodInMs = 1000;
-    const timeOutInMs = params.timeOutInMs ?? 5 * 60 * 1000;
+    const sleepPeriodInMs = Constants.Time.SleepPeriodInMs;
+    const timeOutInMs = params.timeOutInMs ?? Constants.Time.iModelInitiazationTimeOutInMs;
     for (let retries = Math.ceil(timeOutInMs / sleepPeriodInMs); retries > 0; --retries) {
       const baselineFileState = (await this._baselineFileOperations.getByiModelId(params)).state;
 
