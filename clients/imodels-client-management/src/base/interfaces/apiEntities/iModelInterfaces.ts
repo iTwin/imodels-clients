@@ -39,9 +39,9 @@ export interface iModelLinks {
 }
 
 export interface iModelResponse {
-  iModel: iModel & { _links: iModelLinks };
+  imodel: iModel & { _links: iModelLinks };
 }
 
 export interface iModelsResponse<TiModel> extends CollectionResponse {
-  iModels: TiModel[];
+  imodels: TiModel[];
 }

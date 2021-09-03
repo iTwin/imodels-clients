@@ -32,6 +32,16 @@ export class AxiosRestClient implements RestClient {
       .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
   }
 
+  public sendPatchRequest<TResponse>(params: HttpRequestWithBodyParams): Promise<TResponse> {
+    const requestConfig: AxiosRequestConfig = {
+      headers: params.headers
+    };
+
+    return axios.patch(params.url, params.body, requestConfig)
+      .then((successResponse: AxiosResponse<TResponse>) => this.handleSuccess(successResponse))
+      .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
+  }
+
   public sendDeleteRequest<TResponse>(params: HttpRequestParams): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers

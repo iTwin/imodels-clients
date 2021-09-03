@@ -11,7 +11,7 @@ import { RestClient } from "./rest/RestClient";
 type Dictionary = { [key: string]: string | number; };
 
 type SendGetRequestParams = RequestContextParam & { url: string, preferReturn?: PreferReturn };
-type SendPostRequestParams = RequestContextParam & { url: string, body: unknown };
+type SendPostOrPatchRequestParams = RequestContextParam & { url: string, body: unknown };
 type SendDeleteRequestParams = RequestContextParam & { url: string };
 
 export class OperationsBase {
@@ -32,8 +32,16 @@ export class OperationsBase {
     });
   }
 
-  protected sendPostRequest<TResponse>(params: SendPostRequestParams): Promise<TResponse> {
+  protected sendPostRequest<TResponse>(params: SendPostOrPatchRequestParams): Promise<TResponse> {
     return this._restClient.sendPostRequest<TResponse>({
+      url: params.url,
+      body: params.body,
+      headers: this.formHeaders({ ...params, containsBody: true })
+    });
+  }
+
+  protected sendPatchRequest<TResponse>(params: SendPostOrPatchRequestParams): Promise<TResponse> {
+    return this._restClient.sendPatchRequest<TResponse>({
       url: params.url,
       body: params.body,
       headers: this.formHeaders({ ...params, containsBody: true })

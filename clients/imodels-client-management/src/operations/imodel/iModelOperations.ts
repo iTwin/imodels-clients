@@ -13,42 +13,42 @@ export class iModelOperations extends OperationsBase {
 
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
     return getPagedCollectionGenerator(() => this.getEntityCollectionPage<MinimaliModel>({
-      ...params,
-      url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
+      requestContext: params.requestContext,
+      url: `${this._apiBaseUrl}${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: iModelsResponse<MinimaliModel>) => response.iModels
+      entityCollectionAccessor: (response: iModelsResponse<MinimaliModel>) => response.imodels
     }));
   }
 
   public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
     return getPagedCollectionGenerator(() => this.getEntityCollectionPage<iModel>({
-      ...params,
-      url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
+      requestContext: params.requestContext,
+      url: `${this._apiBaseUrl}${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: iModelsResponse<iModel>) => response.iModels
+      entityCollectionAccessor: (response: iModelsResponse<iModel>) => response.imodels
     }));
   }
 
   public async getById(params: GetiModelByIdParams): Promise<iModel> {
     const response = await this.sendGetRequest<iModelResponse>({
-      ...params,
+      requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}`
     });
-    return response.iModel;
+    return response.imodel;
   }
 
   public async createEmpty(params: CreateEmptyiModelParams): Promise<iModel> {
     const response = await this.sendPostRequest<iModelResponse>({
-      ...params,
+      requestContext: params.requestContext,
       url: this._apiBaseUrl,
       body: params.imodelProperties
     });
-    return response.iModel;
+    return response.imodel;
   }
 
   public delete(params: DeleteiModelParams): Promise<void> {
     return this.sendDeleteRequest({
-      ...params,
+      requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}`
     });
   }

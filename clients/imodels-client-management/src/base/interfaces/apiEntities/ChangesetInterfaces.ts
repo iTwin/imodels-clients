@@ -10,13 +10,13 @@ export enum ChangesetState {
 }
 
 export enum ContainingChanges {
-  Regular           = 0,
-  Schema            = 1 << 0,
-  Definition        = 1 << 1,
-  SpatialData       = 1 << 2,
+  Regular = 0,
+  Schema = 1 << 0,
+  Definition = 1 << 1,
+  SpatialData = 1 << 2,
   SheetsAndDrawings = 1 << 3,
-  ViewsAndModels    = 1 << 4,
-  GlobalProperties  = 1 << 5
+  ViewsAndModels = 1 << 4,
+  GlobalProperties = 1 << 5
 }
 
 export interface Application {
@@ -41,6 +41,10 @@ export interface MinimalChangeset extends BaseEntity {
 export interface Changeset extends MinimalChangeset {
   application?: Application;
   synchronizationInfo?: SynchronizationInfo;
+}
+
+export interface ChangesetResponse {
+  changeset: Changeset;
 }
 
 export interface ChangesetsResponse<TChangeset> extends CollectionResponse {

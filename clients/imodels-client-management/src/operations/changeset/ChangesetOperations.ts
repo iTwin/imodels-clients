@@ -9,8 +9,8 @@ import { GetChangesetListParams } from "./ChangesetOperationParams";
 export class ChangesetOperations extends OperationsBase {
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
     return getPagedCollectionGenerator(() => this.getEntityCollectionPage<MinimalChangeset>({
-      ...params,
-      url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
+      requestContext: params.requestContext,
+      url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: ChangesetsResponse<MinimalChangeset>) => response.changesets
     }));
@@ -18,8 +18,8 @@ export class ChangesetOperations extends OperationsBase {
 
   public getRepresentationList(params: GetChangesetListParams): AsyncIterableIterator<Changeset> {
     return getPagedCollectionGenerator(() => this.getEntityCollectionPage<Changeset>({
-      ...params,
-      url: `${this._apiBaseUrl}/${this.formUrlParams({ ...params.urlParams })}`,
+      requestContext: params.requestContext,
+      url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: ChangesetsResponse<Changeset>) => response.changesets
     }));

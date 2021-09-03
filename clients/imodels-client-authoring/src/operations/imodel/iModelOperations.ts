@@ -22,27 +22,34 @@ export class iModelOperations extends ManagementiModelOperations {
 
   public async createFromBaseline(params: CreateiModelFromBaselineParams): Promise<iModel> {
     const imodelCreateResponse = await this.sendPostRequest<iModelResponse>({
-      ...params,
+      requestContext: params.requestContext,
       url: this._apiBaseUrl,
       body: {
-        ...params.imodelProperties, baselineFile: {
+        ...params.imodelProperties,
+        baselineFile: {
           size: this._fileHandler.getFileSize(params.baselineFileProperties.path)
         }
       }
     });
 
-    const uploadUrl = imodelCreateResponse.iModel._links.upload.href;
+    const uploadUrl = imodelCreateResponse.imodel._links.upload.href;
     await this._fileHandler.uploadFile(uploadUrl, params.baselineFileProperties.path);
 
-    const completeUrl = imodelCreateResponse.iModel._links.complete.href;
+    const completeUrl = imodelCreateResponse.imodel._links.complete.href;
     await this.sendPostRequest({
-      ...params,
+      requestContext: params.requestContext,
       url: completeUrl,
       body: undefined
     });
 
-    await this.waitForBaselineFileInitialization({ ...params, imodelId: imodelCreateResponse.iModel.id });
-    return this.getById({ ...params, imodelId: imodelCreateResponse.iModel.id });
+    await this.waitForBaselineFileInitialization({
+      requestContext: params.requestContext,
+      imodelId: imodelCreateResponse.imodel.id
+    });
+    return this.getById({
+      requestContext: params.requestContext,
+      imodelId: imodelCreateResponse.imodel.id
+    });
   }
 
   private async waitForBaselineFileInitialization(params: RequestContextParam & { imodelId: string, timeOutInMs?: number }): Promise<void> {
