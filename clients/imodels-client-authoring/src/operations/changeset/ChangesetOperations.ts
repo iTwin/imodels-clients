@@ -19,7 +19,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     const { changesetFilePath, ...changesetProperties } = params.changesetProperties;
     const changesetCreateResponse = await this.sendPostRequest<ChangesetCreateResponse>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/changeset`,
+      url: `${this._apiBaseUrl}/${params.imodelId}/changesets`,
       body: {
         ...changesetProperties,
         fileSize: this._fileHandler.getFileSize(changesetFilePath)
@@ -31,7 +31,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
 
     const changesetPatchResponse = await this.sendPatchRequest<ChangesetResponse>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/changeset/${changesetCreateResponse.changeset.id}`,
+      url: `${this._apiBaseUrl}/${params.imodelId}/changesets/${changesetCreateResponse.changeset.id}`,
       body: {
         state: ChangesetState.FileUploaded,
         briefcaseId: params.changesetProperties.briefcaseId
