@@ -4,7 +4,7 @@
       "type": "node",
       "request": "launch",
       "name": "Tests",
-      "cwd": "${workspaceFolder}/tests/imodels-client-tests",
+      "cwd": "${workspaceFolder}/tests/imodels-clients-tests",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
         "run",
@@ -16,6 +16,9 @@
       "sourceMaps": true,
       "outFiles": [
         "${workspaceFolder}/*/lib/**/*.js"
+      ],
+      "skipFiles": [
+        "<node_internals>/**/*.js"
       ]
     },
   ]

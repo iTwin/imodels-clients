@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsError, iModelsErrorCode, iModelsErrorDetail } from "./iModelsErrorInterfaces";
-import { ParseErrorFunc } from "./RestClient";
+import { iModelsError, iModelsErrorCode, iModelsErrorDetail } from "./interfaces/iModelsErrorInterfaces";
+import { ParseErrorFunc } from "./rest/RestClient";
 
 interface iModelsApiErrorWrapper {
   error: iModelsApiError;
@@ -21,14 +21,13 @@ interface iModelsApiErrorDetail {
   target: string;
 }
 
-class iModelsErrorImpl extends Error implements iModelsError {
+export class iModelsErrorImpl extends Error implements iModelsError {
   code: iModelsErrorCode;
   details?: iModelsErrorDetail[];
 
-  constructor(params: { name: string, code: iModelsErrorCode, message: string, details?: iModelsErrorDetail[] }) {
+  constructor(params: { code: iModelsErrorCode, message: string, details?: iModelsErrorDetail[] }) {
     super();
-    this.name = params.name;
-    this.code = params.code;
+    this.name = this.code = params.code;
     this.message = params.message;
     this.details = params.details;
   }
@@ -38,17 +37,16 @@ export class iModelsErrorParser {
   public static parse: ParseErrorFunc = (response: { statusCode: number, body: unknown }) => {
     // TODO: remove the special handling when APIM team fixes incorrect error body
     if (response.statusCode === 401) {
-      return new iModelsErrorImpl({ name: iModelsErrorCode.Unauthorized, code: iModelsErrorCode.Unauthorized, message: "" });
+      return new iModelsErrorImpl({ code: iModelsErrorCode.Unauthorized, message: "" });
     }
 
     const errorFromApi = response.body as iModelsApiErrorWrapper;
-    const errorCode: iModelsErrorCode = iModelsErrorParser.parseCode(errorFromApi.error.code);
+    const errorCode: iModelsErrorCode = iModelsErrorParser.parseCode(errorFromApi?.error?.code);
 
     return new iModelsErrorImpl({
-      name: errorCode,
       code: errorCode,
-      message: errorFromApi.error.message,
-      details: errorFromApi.error.details
+      message: errorFromApi?.error?.message,
+      details: errorFromApi?.error?.details
         ? iModelsErrorParser.parseDetails(errorFromApi.error.details)
         : undefined
     });

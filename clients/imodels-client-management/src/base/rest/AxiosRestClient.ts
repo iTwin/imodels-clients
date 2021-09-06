@@ -3,13 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { RestClient, HttpRequestParams, HttpRequestWithBodyParams, ParseErrorFunc } from "./RestClient";
 
-export type ParseErrorFunc = (response: { statusCode: number, body: unknown }) => Error;
-
-type HttpRequestParams = { url: string, headers: unknown };
-type HttpRequestWithBodyParams = HttpRequestParams & { body: unknown };
-
-export class RestClient {
+export class AxiosRestClient implements RestClient {
   private _parseErrorFunc: ParseErrorFunc;
 
   constructor(parseErrorFunc: ParseErrorFunc) {

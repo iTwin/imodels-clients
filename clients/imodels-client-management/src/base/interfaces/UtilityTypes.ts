@@ -2,5 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-export * from "./imodel/iModelOperationParams";
-export * from "./imodel/iModelOperations";
+import { EntityCollectionPage } from "./CommonInterfaces";
+
+export type RecursiveRequired<T> = Required<T> & { [P in keyof T]: RecursiveRequired<T[P]>; };
+export type EntityPageQueryFunc<TEntity> = () => Promise<EntityCollectionPage<TEntity>>;

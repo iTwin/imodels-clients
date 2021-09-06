@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { iModelsError, iModelsErrorDetail, iModel, iModelProperties, iModelState } from "@itwin/imodels-client-management";
+import { iModelsError, iModelsErrorDetail, iModel, iModelState, iModelProperties } from "@itwin/imodels-client-management";
 
 export function assertError(params: { actualError: Error, expectedError: Partial<iModelsError> }): void {
   const imodelsError = params.actualError as iModelsError;
@@ -28,11 +28,20 @@ export function assertError(params: { actualError: Error, expectedError: Partial
   }
 }
 
-export function assertiModel(params: { actualiModel: iModel, expectediModelProperties: iModelProperties & { state: iModelState } }): void {
+export function assertiModel(params: { actualiModel: iModel, expectediModelProperties: iModelProperties}): void {
   expect(params.actualiModel).to.not.be.undefined;
   expect(params.actualiModel.name).to.equal(params.expectediModelProperties.name);
-  expect(params.actualiModel.description).to.equal(params.expectediModelProperties.description);
-  expect(params.actualiModel.state).to.equal(params.expectediModelProperties.state);
-  expect(params.actualiModel.extent).to.deep.equal(params.expectediModelProperties.extent);
+
+  assertOptionalProperty(params.expectediModelProperties.description, params.actualiModel.description);
+  assertOptionalProperty(params.expectediModelProperties.extent, params.actualiModel.extent);
+
   expect(params.actualiModel.createdDateTime as Date).to.not.be.undefined;
+  expect(params.actualiModel.state).to.equal(iModelState.Initialized);
+}
+
+function assertOptionalProperty<TPropertyType>(expectedValue: TPropertyType, actualValue: TPropertyType): void {
+  if (expectedValue)
+    expect(actualValue).to.deep.equal(expectedValue);
+  else
+    expect(actualValue).to.equal(null);
 }

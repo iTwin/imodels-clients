@@ -2,24 +2,30 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { PreferReturn } from "./InternalCommonInterfaces";
-import { RequestContextParam } from "./PublicCommonInterfaces";
-import { RestClient } from "./RestClient";
+import { Constants } from "../Constants";
+import { iModelsClientOptions } from "../iModelsClient";
+import { PreferReturn, RequestContextParam } from "./interfaces/CommonInterfaces";
+import { RecursiveRequired } from "./interfaces/UtilityTypes";
+import { RestClient } from "./rest/RestClient";
 
 type Dictionary = { [key: string]: string | number; };
 
-type SendRetRequestParams = RequestContextParam & { url: string, preferReturn?: PreferReturn };
+type SendGetRequestParams = RequestContextParam & { url: string, preferReturn?: PreferReturn };
 type SendPostRequestParams = RequestContextParam & { url: string, body: unknown };
 type SendDeleteRequestParams = RequestContextParam & { url: string };
 
 export class OperationsBase {
-  protected _apiBaseUrl = "https://sbx-api.bentley.com/imodels";
-  protected _apiVersion = "v1";
+  protected _restClient: RestClient;
+  protected _apiBaseUrl: string;
+  protected _apiVersion: string;
 
-  constructor(protected _restClient: RestClient) {
+  constructor(options: RecursiveRequired<iModelsClientOptions>) {
+    this._restClient = options.restClient;
+    this._apiBaseUrl = options.api.baseUri;
+    this._apiVersion = options.api.version;
   }
 
-  protected sendGetRequest<TResponse>(params: SendRetRequestParams): Promise<TResponse> {
+  protected sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse> {
     return this._restClient.sendGetRequest<TResponse>({
       url: params.url,
       headers: this.formHeaders(params)
@@ -30,7 +36,7 @@ export class OperationsBase {
     return this._restClient.sendPostRequest<TResponse>({
       url: params.url,
       body: params.body,
-      headers: this.formHeaders(params)
+      headers: this.formHeaders({ ...params, containsBody: true })
     });
   }
 
@@ -41,14 +47,16 @@ export class OperationsBase {
     });
   }
 
-  private formHeaders(params: RequestContextParam & { preferReturn?: PreferReturn }): Dictionary {
-    const headers: Dictionary = {
-      Authorization: `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`,
-      Accept: `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`
-    };
+  private formHeaders(params: RequestContextParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
+    const headers = {};
+    headers[Constants.Headers.Authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
+    headers[Constants.Headers.Accept] = `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`;
 
     if (params.preferReturn)
-      headers.Prefer = `return=${params.preferReturn}`;
+      headers[Constants.Headers.Prefer] = `return=${params.preferReturn}`;
+
+    if (params.containsBody)
+      headers[Constants.Headers.ContentType] = Constants.Headers.Values.ContentType;
 
     return headers;
   }

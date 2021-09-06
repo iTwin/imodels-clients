@@ -1,7 +1,7 @@
 {
-  "name": "@itwin/imodels-client-management",
+  "name": "@itwin/imodels-client-authoring",
   "version": "0.1.0-dev.1",
-  "description": "iModels API client wrapper for applications that manage iModels.",
+  "description": "iModels API client wrapper for applications that author iModels.",
   "license": "MIT",
   "main": "lib/iModelsClientExports.js",
   "typings": "lib/iModelsClientExports",
@@ -15,7 +15,8 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "axios": "~0.21.1"
+    "@itwin/imodels-client-management": "~0.1.0-dev.1",
+    "@azure/storage-blob": "~12.7.0"
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "~0.1.0-dev.1",

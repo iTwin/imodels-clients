@@ -2,7 +2,33 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsClient, RequestContext } from "@itwin/imodels-client-management";
+import { iModelsClient as AuthoringiModelsClient, iModelsClientOptions as AuthoringiModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { iModelsClient as ManagementiModelsClient, RequestContext } from "@itwin/imodels-client-management";
+
+export function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function getTestiModelsClientConfig(): AuthoringiModelsClientOptions {
+  return {
+    api: {
+      baseUri: "" // TODO: read config
+    }
+  };
+}
+
+export function getTestProjectId(): string {
+  return ""; // TODO: read config
+}
+
+export function getAuthorizedRequestContext(): RequestContext {
+  return {
+    authorization: {
+      scheme: "", // TODO: read config
+      token: "" // TODO: read config
+    }
+  };
+}
 
 export function generateiModelNameWithPrefixes(params: {
   imodelName: string,
@@ -15,7 +41,7 @@ export function generateiModelNameWithPrefixes(params: {
 }
 
 export async function cleanUpiModelsWithPrefix(params: {
-  imodelsClient: iModelsClient,
+  imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
   requestContext: RequestContext,
   projectId: string,
   prefixes: {

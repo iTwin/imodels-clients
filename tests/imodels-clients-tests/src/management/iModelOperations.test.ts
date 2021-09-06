@@ -2,22 +2,22 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModel, iModelsClient, iModelsErrorCode, iModelState, RequestContext } from "@itwin/imodels-client-management";
-import { assertError, assertiModel } from "./AssertionUtils";
-import { cleanUpiModelsWithPrefix, generateiModelNameWithPrefixes } from "./CommonTestUtils";
-import { Constants } from "./Constants";
+import { iModel, iModelsClient, iModelsErrorCode, RequestContext } from "@itwin/imodels-client-management";
+import { assertError, assertiModel } from "../AssertionUtils";
+import { cleanUpiModelsWithPrefix, generateiModelNameWithPrefixes, getAuthorizedRequestContext, getTestiModelsClientConfig, getTestProjectId } from "../CommonTestUtils";
+import { Constants } from "../Constants";
 
-describe("iModelsClient", () => {
+describe("[Management] iModelOperations", () => {
   let requestContext: RequestContext;
   let projectId: string;
   let imodelsClient: iModelsClient;
 
-  const imodelsPrefixForTestSuite = "[iModelOperations]";
+  const imodelsPrefixForTestSuite = "[Management][iModelOperations]";
 
-  before(() => {
-    projectId = ""; // TODO: read config
-    requestContext = { authorization: { scheme: "", token: "" } }; // TODO: read config
-    imodelsClient = new iModelsClient();
+  before(async () => {
+    requestContext = getAuthorizedRequestContext();
+    projectId = getTestProjectId();
+    imodelsClient = new iModelsClient(getTestiModelsClientConfig());
   });
 
   after(async () => {
@@ -63,7 +63,7 @@ describe("iModelsClient", () => {
     // Assert
     assertiModel({
       actualiModel: imodel,
-      expectediModelProperties: { ...imodelCreationParams.imodelProperties, state: iModelState.Initialized }
+      expectediModelProperties: { ...imodelCreationParams.imodelProperties }
     });
   });
 
