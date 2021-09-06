@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BaseEntity, CollectionResponse, Link } from "../CommonInterfaces";
+import { BaseEntity, CollectionResponse } from "../CommonInterfaces";
 
 export enum iModelState {
   Initialized = "initialized",
@@ -33,13 +33,8 @@ export interface iModel extends MinimaliModel {
   extent?: Extent;
 }
 
-export interface iModelLinks {
-  upload: Link;
-  complete: Link;
-}
-
 export interface iModelResponse {
-  imodel: iModel & { _links: iModelLinks };
+  imodel: iModel;
 }
 
 export interface iModelsResponse<TiModel> extends CollectionResponse {
