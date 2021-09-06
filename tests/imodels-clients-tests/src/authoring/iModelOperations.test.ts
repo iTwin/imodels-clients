@@ -7,7 +7,7 @@ import { assertiModel } from "../AssertionUtils";
 import { cleanUpiModelsWithPrefix, generateiModelNameWithPrefixes, getAuthorizedRequestContext, getTestiModelsClientConfig, getTestProjectId } from "../CommonTestUtils";
 import { Constants } from "../Constants";
 
-describe("[Authoring] iModelsClient", () => {
+describe("[Authoring] iModelOperations", () => {
   let requestContext: RequestContext;
   let projectId: string;
   let imodelsClient: iModelsClient;
