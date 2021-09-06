@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
+import { CreateiModelFromBaselineParams, iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
 import { assertiModel } from "../AssertionUtils";
 import { cleanUpiModelsWithPrefix, generateiModelNameWithPrefixes, getAuthorizedRequestContext, getTestiModelsClientConfig, getTestProjectId } from "../CommonTestUtils";
 import { Constants } from "../Constants";
@@ -44,14 +44,14 @@ describe("[Authoring] iModelsClient", () => {
 
   it("should create an iModel from baseline", async () => {
     // Arrange
-    const imodelCreationParams = {
+    const imodelCreationParams: CreateiModelFromBaselineParams = {
       requestContext,
       imodelProperties: {
         projectId: projectId,
         name: getiModelName("Sample iModel from baseline")
       },
       baselineFileProperties: {
-        path: `${Constants.AssetsPath}f3e3d446-edc4-4cb0-a80d-dd2ab3e32b0d.bim`
+        path: `${Constants.AssetsPath}test-imodel/f3e3d446-edc4-4cb0-a80d-dd2ab3e32b0d.bim`
       }
     };
 

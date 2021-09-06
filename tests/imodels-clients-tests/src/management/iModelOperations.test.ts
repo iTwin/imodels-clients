@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModel, iModelsClient, iModelsErrorCode, RequestContext } from "@itwin/imodels-client-management";
+import { CreateEmptyiModelParams, iModel, iModelsClient, iModelsErrorCode, RequestContext } from "@itwin/imodels-client-management";
 import { assertError, assertiModel } from "../AssertionUtils";
 import { cleanUpiModelsWithPrefix, generateiModelNameWithPrefixes, getAuthorizedRequestContext, getTestiModelsClientConfig, getTestProjectId } from "../CommonTestUtils";
 import { Constants } from "../Constants";
@@ -44,7 +44,7 @@ describe("[Management] iModelsClient", () => {
 
   it("should create an empty iModel", async () => {
     // Arrange
-    const imodelCreationParams = {
+    const imodelCreationParams: CreateEmptyiModelParams = {
       requestContext,
       imodelProperties: {
         projectId: projectId,
@@ -69,7 +69,7 @@ describe("[Management] iModelsClient", () => {
 
   it("should return unauthorized error when calling API with invalid access token", async () => {
     // Arrange
-    const imodelCreationParams = {
+    const imodelCreationParams: CreateEmptyiModelParams = {
       requestContext: { authorization: { scheme: "Bearer", token: "invalidToken" } },
       imodelProperties: {
         projectId: projectId,
@@ -97,7 +97,7 @@ describe("[Management] iModelsClient", () => {
 
   it("should return a detailed error when attempting to create iModel with invalid description", async () => {
     // Arrange
-    const imodelCreationParams = {
+    const imodelCreationParams: CreateEmptyiModelParams = {
       requestContext,
       imodelProperties: {
         projectId: projectId,

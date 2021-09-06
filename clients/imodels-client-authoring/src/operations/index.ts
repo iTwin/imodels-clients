@@ -4,3 +4,5 @@
  *--------------------------------------------------------------------------------------------*/
 export * from "./imodel/iModelOperationParams";
 export * from "./imodel/iModelOperations";
+export * from "./changeset/ChangesetOperationParams";
+export * from "./changeset/ChangesetOperations";

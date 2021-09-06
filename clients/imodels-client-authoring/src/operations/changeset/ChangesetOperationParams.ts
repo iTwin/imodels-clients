@@ -7,11 +7,12 @@ import { ContainingChanges, RequestContextParam } from "@itwin/imodels-client-ma
 export interface CreateChangesetParams extends RequestContextParam {
   imodelId: string;
   changesetProperties: {
-    id: string;
-    parentId?: string;
     briefcaseId: number;
+    id: string;
+
+    parentId?: string;
     description?: string;
-    containingChanges: ContainingChanges;
+    containingChanges?: ContainingChanges;
 
     changesetFilePath: string;
   }
