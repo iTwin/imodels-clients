@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
+import { Constants } from "./Constants";
 
 export interface TestiModelDescriptor {
   baselineFilePath: string;
@@ -28,7 +29,7 @@ interface ChangesetDescriptorFileItem {
 export class TestiModelDataReader {
   private _changesetDescriptors: TestChangesetDescripor[];
 
-  constructor(private _imodelDataRootPath: string) {
+  constructor(private _imodelDataRootPath: string = `${Constants.AssetsPath}test-imodel`) {
   }
 
   public get iModel(): TestiModelDescriptor {

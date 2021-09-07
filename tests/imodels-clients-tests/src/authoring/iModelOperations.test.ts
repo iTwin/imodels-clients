@@ -2,56 +2,42 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CreateiModelFromBaselineParams, iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
+import { CreateiModelFromBaselineParams, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
 import { assertiModel } from "../AssertionUtils";
-import { cleanUpiModelsWithPrefix, generateiModelNameWithPrefixes, getAuthorizedRequestContext, getTestiModelsClientConfig, getTestProjectId } from "../CommonTestUtils";
+import { cleanUpiModels } from "../CommonTestUtils";
 import { Constants } from "../Constants";
+import { TestiModelDataReader } from "../TestiModelDataReader";
+import { TestSuiteContext } from "../TestSuiteContext";
 
 describe("[Authoring] iModelOperations", () => {
-  let requestContext: RequestContext;
-  let projectId: string;
+  let testContext: TestSuiteContext;
   let imodelsClient: iModelsClient;
-
-  const imodelsPrefixForTestSuite = "[Authoring][iModelOperations]";
+  let testiModelDataReader: TestiModelDataReader;
 
   before(async () => {
-    requestContext = await getAuthorizedRequestContext();
-    projectId = getTestProjectId();
-    imodelsClient = new iModelsClient(getTestiModelsClientConfig());
+    testContext = new TestSuiteContext({
+      package: Constants.PackagePrefix,
+      testSuite: "[Authoring][iModelOperations]"
+    });
+
+    imodelsClient = new iModelsClient(testContext.ClientConfig);
+    testiModelDataReader = new TestiModelDataReader();
   });
 
   after(async () => {
-    return cleanUpiModelsWithPrefix({
-      imodelsClient,
-      requestContext,
-      projectId,
-      prefixes: {
-        package: Constants.PackagePrefix,
-        testSuite: imodelsPrefixForTestSuite
-      }
-    });
+    await cleanUpiModels({ imodelsClient, testContext });
   });
-
-  function getiModelName(name: string): string {
-    return generateiModelNameWithPrefixes({
-      imodelName: name,
-      prefixes: {
-        package: Constants.PackagePrefix,
-        testSuite: imodelsPrefixForTestSuite
-      }
-    });
-  }
 
   it("should create an iModel from baseline", async () => {
     // Arrange
     const imodelCreationParams: CreateiModelFromBaselineParams = {
-      requestContext,
+      requestContext: testContext.RequestContext,
       imodelProperties: {
-        projectId: projectId,
-        name: getiModelName("Sample iModel from baseline")
+        projectId: testContext.ProjectId,
+        name: testContext.getPrefixediModelName("Sample iModel from baseline")
       },
       baselineFileProperties: {
-        path: `${Constants.AssetsPath}test-imodel/f3e3d446-edc4-4cb0-a80d-dd2ab3e32b0d.bim`
+        path: testiModelDataReader.iModel.baselineFilePath
       }
     };
 

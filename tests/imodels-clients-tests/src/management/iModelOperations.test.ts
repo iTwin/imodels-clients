@@ -2,53 +2,36 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CreateEmptyiModelParams, iModel, iModelsClient, iModelsErrorCode, RequestContext } from "@itwin/imodels-client-management";
+import { CreateEmptyiModelParams, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
 import { assertError, assertiModel } from "../AssertionUtils";
-import { cleanUpiModelsWithPrefix, generateiModelNameWithPrefixes, getAuthorizedRequestContext, getTestiModelsClientConfig, getTestProjectId } from "../CommonTestUtils";
+import { cleanUpiModels } from "../CommonTestUtils";
 import { Constants } from "../Constants";
+import { TestSuiteContext } from "../TestSuiteContext";
 
 describe("[Management] iModelOperations", () => {
-  let requestContext: RequestContext;
-  let projectId: string;
+  let testContext: TestSuiteContext;
   let imodelsClient: iModelsClient;
 
-  const imodelsPrefixForTestSuite = "[Management][iModelOperations]";
-
   before(async () => {
-    requestContext = getAuthorizedRequestContext();
-    projectId = getTestProjectId();
-    imodelsClient = new iModelsClient(getTestiModelsClientConfig());
+    testContext = new TestSuiteContext({
+      package: Constants.PackagePrefix,
+      testSuite: "[Authoring][iModelOperations]"
+    });
+
+    imodelsClient = new iModelsClient(testContext.ClientConfig);
   });
 
   after(async () => {
-    return cleanUpiModelsWithPrefix({
-      imodelsClient,
-      requestContext,
-      projectId,
-      prefixes: {
-        package: Constants.PackagePrefix,
-        testSuite: imodelsPrefixForTestSuite
-      }
-    });
+    await cleanUpiModels({ imodelsClient, testContext });
   });
-
-  function getiModelName(name: string): string {
-    return generateiModelNameWithPrefixes({
-      imodelName: name,
-      prefixes: {
-        package: Constants.PackagePrefix,
-        testSuite: imodelsPrefixForTestSuite
-      }
-    });
-  }
 
   it("should create an empty iModel", async () => {
     // Arrange
     const imodelCreationParams: CreateEmptyiModelParams = {
-      requestContext,
+      requestContext: testContext.RequestContext,
       imodelProperties: {
-        projectId: projectId,
-        name: getiModelName("Sample iModel (success)"),
+        projectId: testContext.ProjectId,
+        name: testContext.getPrefixediModelName("Sample iModel (success)"),
         description: "Sample iModel description",
         extent: {
           southWest: { latitude: 1, longitude: 2 },
@@ -72,8 +55,8 @@ describe("[Management] iModelOperations", () => {
     const imodelCreationParams: CreateEmptyiModelParams = {
       requestContext: { authorization: { scheme: "Bearer", token: "invalidToken" } },
       imodelProperties: {
-        projectId: projectId,
-        name: getiModelName("Sample iModel (unauthorized)")
+        projectId: testContext.ProjectId,
+        name: testContext.getPrefixediModelName("Sample iModel (unauthorized)")
       }
     };
 
@@ -98,10 +81,10 @@ describe("[Management] iModelOperations", () => {
   it("should return a detailed error when attempting to create iModel with invalid description", async () => {
     // Arrange
     const imodelCreationParams: CreateEmptyiModelParams = {
-      requestContext,
+      requestContext: testContext.RequestContext,
       imodelProperties: {
-        projectId: projectId,
-        name: getiModelName("Sample iModel (invalid)"),
+        projectId: testContext.ProjectId,
+        name: testContext.getPrefixediModelName("Sample iModel (invalid)"),
         description: "x".repeat(256)
       }
     };
