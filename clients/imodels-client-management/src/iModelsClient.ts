@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { RecursiveRequired, iModelsErrorParser, RestClient, AxiosRestClient } from "./base";
 import { Constants } from "./Constants";
-import { iModelOperations } from "./operations/imodel/iModelOperations";
+import { iModelOperations, ChangesetOperations } from "./operations";
 
 export interface ApiOptions {
   baseUri?: string;
@@ -25,6 +25,10 @@ export class iModelsClient {
 
   public get iModels(): iModelOperations {
     return new iModelOperations(this._options);
+  }
+
+  public get Changesets(): ChangesetOperations {
+    return new ChangesetOperations(this._options);
   }
 
   public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {

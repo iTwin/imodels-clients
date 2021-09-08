@@ -32,10 +32,10 @@ export class iModelOperations extends ManagementiModelOperations {
       }
     });
 
-    const uploadUrl = imodelCreateResponse.imodel._links.upload.href;
+    const uploadUrl = imodelCreateResponse.iModel._links.upload.href;
     await this._fileHandler.uploadFile(uploadUrl, params.baselineFileProperties.path);
 
-    const completeUrl = imodelCreateResponse.imodel._links.complete.href;
+    const completeUrl = imodelCreateResponse.iModel._links.complete.href;
     await this.sendPostRequest({
       requestContext: params.requestContext,
       url: completeUrl,
@@ -44,11 +44,11 @@ export class iModelOperations extends ManagementiModelOperations {
 
     await this.waitForBaselineFileInitialization({
       requestContext: params.requestContext,
-      imodelId: imodelCreateResponse.imodel.id
+      imodelId: imodelCreateResponse.iModel.id
     });
     return this.getById({
       requestContext: params.requestContext,
-      imodelId: imodelCreateResponse.imodel.id
+      imodelId: imodelCreateResponse.iModel.id
     });
   }
 
@@ -64,7 +64,7 @@ export class iModelOperations extends ManagementiModelOperations {
       if (baselineFileState !== BaselineFileState.WaitingForFile && baselineFileState !== BaselineFileState.InitializationScheduled)
         throw new iModelsErrorImpl({
           code: iModelsErrorCode.BaselineFileInitializationFailed,
-          message: `Baseline File initialization failed with state '${baselineFileState}'`
+          message: `Baseline File initialization failed with state '${baselineFileState}.'`
         });
     }
 

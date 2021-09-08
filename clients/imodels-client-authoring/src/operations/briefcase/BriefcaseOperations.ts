@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import { OperationsBase } from "@itwin/imodels-client-management";
 import { Briefcase, BriefcaseAcquireResponse } from "../../base";
-import { CreateBriefcaseParams } from "./BriefcaseOperationParams";
+import { AcquireBriefcaseParams } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations extends OperationsBase {
-  public async acquire(params: CreateBriefcaseParams): Promise<Briefcase> {
+  public async acquire(params: AcquireBriefcaseParams): Promise<Briefcase> {
     const briefcaseAcquireResponse = await this.sendPostRequest<BriefcaseAcquireResponse>({
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/briefcases`,

@@ -27,16 +27,17 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     });
 
     const uploadUrl = changesetCreateResponse.changeset._links.upload.href;
-    this._fileHandler.uploadFile(uploadUrl, changesetFilePath);
+    await this._fileHandler.uploadFile(uploadUrl, changesetFilePath);
 
-    const changesetPatchResponse = await this.sendPatchRequest<ChangesetResponse>({
+    const completeUrl = changesetCreateResponse.changeset._links.complete.href;
+    const changesetUpdateResponse = await this.sendPatchRequest<ChangesetResponse>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/changesets/${changesetCreateResponse.changeset.id}`,
+      url: completeUrl,
       body: {
         state: ChangesetState.FileUploaded,
         briefcaseId: params.changesetProperties.briefcaseId
       }
     });
-    return changesetPatchResponse.changeset;
+    return changesetUpdateResponse.changeset;
   }
 }

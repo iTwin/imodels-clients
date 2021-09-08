@@ -10,5 +10,5 @@ export interface iModelLinks {
 }
 
 export interface iModelCreateResponse {
-  imodel: iModel & { _links: iModelLinks };
+  iModel: iModel & { _links: iModelLinks };
 }

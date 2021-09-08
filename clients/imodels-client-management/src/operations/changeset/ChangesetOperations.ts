@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { getPagedCollectionGenerator, OperationsBase, PreferReturn } from "../../base";
-import { Changeset, ChangesetsResponse, MinimalChangeset } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
-import { GetChangesetListParams } from "./ChangesetOperationParams";
+import { Changeset, ChangesetResponse, ChangesetsResponse, MinimalChangeset } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
+import { GetChangesetByIdParams, GetChangesetListParams } from "./ChangesetOperationParams";
 
 export class ChangesetOperations extends OperationsBase {
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
@@ -23,5 +23,13 @@ export class ChangesetOperations extends OperationsBase {
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: ChangesetsResponse<Changeset>) => response.changesets
     }));
+  }
+
+  public async getById(params: GetChangesetByIdParams): Promise<Changeset> {
+    const response = await this.sendGetRequest<ChangesetResponse>({
+      requestContext: params.requestContext,
+      url: `${this._apiBaseUrl}/${params.imodelId}/changesets/${params.changesetId}`
+    });
+    return response.changeset;
   }
 }

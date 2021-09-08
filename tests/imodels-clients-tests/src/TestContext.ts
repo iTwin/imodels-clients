@@ -3,23 +3,26 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClientOptions, RequestContext } from "@itwin/imodels-client-authoring";
+import { Config } from "./Config";
 
-export class TestSuiteContext {
+export class TestContext {
   private _imodelNamePrefix: string;
 
-  constructor(prefixes: {
-    package: string,
-    testSuite?: string,
+  constructor(params: {
+    labels: {
+      package: string,
+      testSuite?: string,
+    }
   }) {
-    this._imodelNamePrefix = prefixes.package;
-    if (prefixes.testSuite)
-      this._imodelNamePrefix += prefixes.testSuite;
+    this._imodelNamePrefix = `[${params.labels.package}]`;
+    if (params.labels.testSuite)
+      this._imodelNamePrefix += `[${params.labels.testSuite}]`;
   }
 
   public get ClientConfig(): iModelsClientOptions {
     return {
       api: {
-        baseUri: "" // TODO: read config
+        baseUri: Config.get().ApiBaseUrl
       }
     };
   }
@@ -41,7 +44,7 @@ export class TestSuiteContext {
     return `${this._imodelNamePrefix} ${imodelName}`;
   }
 
-  public doesiModelBelongToSuite(imodelName: string): boolean {
+  public doesiModelBelongToContext(imodelName: string): boolean {
     return imodelName.startsWith(this._imodelNamePrefix);
   }
 }

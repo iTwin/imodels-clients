@@ -27,7 +27,7 @@ export class AxiosRestClient implements RestClient {
       headers: params.headers
     };
 
-    return axios.post(params.url, params.body, requestConfig)
+    return axios.post(params.url, params.body ?? {}, requestConfig)
       .then((successResponse: AxiosResponse<TResponse>) => this.handleSuccess(successResponse))
       .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
   }
@@ -54,7 +54,7 @@ export class AxiosRestClient implements RestClient {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handleError<TResponse>(errorResponse: AxiosError<TResponse>): any {
-    return Promise.reject(this._parseErrorFunc({ statusCode: errorResponse.response.status, body: errorResponse.response.data }));
+    return Promise.reject(this._parseErrorFunc({ statusCode: errorResponse.response?.status, body: errorResponse.response?.data }));
   }
 
   private handleSuccess<TResponse>(response: AxiosResponse<TResponse>): TResponse {

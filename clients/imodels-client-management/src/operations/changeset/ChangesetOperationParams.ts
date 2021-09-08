@@ -6,5 +6,10 @@ import { CollectionRequestParams, RequestContextParam } from "../../base";
 
 export interface GetChangesetListParams extends RequestContextParam {
   imodelId: string;
-  urlParams: CollectionRequestParams;
+  urlParams?: CollectionRequestParams;
+}
+
+export interface GetChangesetByIdParams extends RequestContextParam {
+  imodelId: string;
+  changesetId: string;
 }

@@ -5,10 +5,10 @@
 import { RequestContextParam } from "@itwin/imodels-client-management";
 
 export interface BriefcaseProperties {
-  deviceName?: string;
+  deviceName: string;
 }
 
-export interface CreateBriefcaseParams extends RequestContextParam {
+export interface AcquireBriefcaseParams extends RequestContextParam {
   imodelId: string;
-  briefcaseProperties: BriefcaseProperties;
+  briefcaseProperties?: BriefcaseProperties;
 }

@@ -2,20 +2,22 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CreateEmptyiModelParams, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { CreateEmptyiModelParams, GetiModelListParams, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
 import { assertError, assertiModel } from "../AssertionUtils";
-import { cleanUpiModels } from "../CommonTestUtils";
+import { assertCollection, cleanUpiModels } from "../CommonTestUtils";
 import { Constants } from "../Constants";
-import { TestSuiteContext } from "../TestSuiteContext";
+import { TestContext } from "../TestContext";
 
 describe("[Management] iModelOperations", () => {
-  let testContext: TestSuiteContext;
+  let testContext: TestContext;
   let imodelsClient: iModelsClient;
 
   before(async () => {
-    testContext = new TestSuiteContext({
-      package: Constants.PackagePrefix,
-      testSuite: "[Authoring][iModelOperations]"
+    testContext = new TestContext({
+      labels: {
+        package: Constants.PackagePrefix,
+        testSuite: "ManagementiModelOperations"
+      }
     });
 
     imodelsClient = new iModelsClient(testContext.ClientConfig);
@@ -27,11 +29,11 @@ describe("[Management] iModelOperations", () => {
 
   it("should create an empty iModel", async () => {
     // Arrange
-    const imodelCreationParams: CreateEmptyiModelParams = {
+    const createiModelParams: CreateEmptyiModelParams = {
       requestContext: testContext.RequestContext,
       imodelProperties: {
         projectId: testContext.ProjectId,
-        name: testContext.getPrefixediModelName("Sample iModel (success)"),
+        name: testContext.getPrefixediModelName("Empty Test iModel"),
         description: "Sample iModel description",
         extent: {
           southWest: { latitude: 1, longitude: 2 },
@@ -41,18 +43,49 @@ describe("[Management] iModelOperations", () => {
     };
 
     // Act
-    const imodel: iModel = await imodelsClient.iModels.createEmpty(imodelCreationParams);
+    const imodel: iModel = await imodelsClient.iModels.createEmpty(createiModelParams);
 
     // Assert
     assertiModel({
       actualiModel: imodel,
-      expectediModelProperties: { ...imodelCreationParams.imodelProperties }
+      expectediModelProperties: createiModelParams.imodelProperties
+    });
+  });
+
+  [
+    {
+      label: "minimal",
+      functionUnderTest: (params: GetiModelListParams) => imodelsClient.iModels.getMinimalList(params)
+    },
+    {
+      label: "representation",
+      functionUnderTest: (params: GetiModelListParams) => imodelsClient.iModels.getRepresentationList(params)
+    }
+  ].forEach(testCase => {
+    it(`should get ${testCase.label} collection`, async () => {
+      // Arrange
+      const getiModelListParams: GetiModelListParams = {
+        requestContext: testContext.RequestContext,
+        urlParams: {
+          projectId: testContext.ProjectId,
+          $top: 5
+        }
+      };
+
+      // Act
+      const imodels = await testCase.functionUnderTest(getiModelListParams);
+
+      // Assert
+      assertCollection({
+        asyncIterable: imodels,
+        expectedEntityCount: 1
+      });
     });
   });
 
   it("should return unauthorized error when calling API with invalid access token", async () => {
     // Arrange
-    const imodelCreationParams: CreateEmptyiModelParams = {
+    const createiModelParams: CreateEmptyiModelParams = {
       requestContext: { authorization: { scheme: "Bearer", token: "invalidToken" } },
       imodelProperties: {
         projectId: testContext.ProjectId,
@@ -63,7 +96,7 @@ describe("[Management] iModelOperations", () => {
     // Act
     let errorThrown: Error;
     try {
-      await imodelsClient.iModels.createEmpty(imodelCreationParams);
+      await imodelsClient.iModels.createEmpty(createiModelParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -73,14 +106,14 @@ describe("[Management] iModelOperations", () => {
       actualError: errorThrown,
       expectedError: {
         code: iModelsErrorCode.Unauthorized,
-        message: ""
+        message: "The user is unauthorized. Please provide valid authentication credentials."
       }
     });
   });
 
   it("should return a detailed error when attempting to create iModel with invalid description", async () => {
     // Arrange
-    const imodelCreationParams: CreateEmptyiModelParams = {
+    const createiModelParams: CreateEmptyiModelParams = {
       requestContext: testContext.RequestContext,
       imodelProperties: {
         projectId: testContext.ProjectId,
@@ -92,7 +125,7 @@ describe("[Management] iModelOperations", () => {
     // Act
     let errorThrown: Error;
     try {
-      await imodelsClient.iModels.createEmpty(imodelCreationParams);
+      await imodelsClient.iModels.createEmpty(createiModelParams);
     } catch (e) {
       errorThrown = e;
     }

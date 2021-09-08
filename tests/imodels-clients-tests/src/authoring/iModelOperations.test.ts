@@ -6,22 +6,22 @@ import { CreateiModelFromBaselineParams, iModel, iModelsClient } from "@itwin/im
 import { assertiModel } from "../AssertionUtils";
 import { cleanUpiModels } from "../CommonTestUtils";
 import { Constants } from "../Constants";
-import { TestiModelDataReader } from "../TestiModelDataReader";
-import { TestSuiteContext } from "../TestSuiteContext";
+import { TestiModelMetadata } from "../TestiModelMetadata";
+import { TestContext } from "../TestContext";
 
 describe("[Authoring] iModelOperations", () => {
-  let testContext: TestSuiteContext;
+  let testContext: TestContext;
   let imodelsClient: iModelsClient;
-  let testiModelDataReader: TestiModelDataReader;
 
   before(async () => {
-    testContext = new TestSuiteContext({
-      package: Constants.PackagePrefix,
-      testSuite: "[Authoring][iModelOperations]"
+    testContext = new TestContext({
+      labels: {
+        package: Constants.PackagePrefix,
+        testSuite: "AuthoringiModelOperations"
+      }
     });
 
     imodelsClient = new iModelsClient(testContext.ClientConfig);
-    testiModelDataReader = new TestiModelDataReader();
   });
 
   after(async () => {
@@ -30,24 +30,24 @@ describe("[Authoring] iModelOperations", () => {
 
   it("should create an iModel from baseline", async () => {
     // Arrange
-    const imodelCreationParams: CreateiModelFromBaselineParams = {
+    const createiModelParams: CreateiModelFromBaselineParams = {
       requestContext: testContext.RequestContext,
       imodelProperties: {
         projectId: testContext.ProjectId,
         name: testContext.getPrefixediModelName("Sample iModel from baseline")
       },
       baselineFileProperties: {
-        path: testiModelDataReader.iModel.baselineFilePath
+        path: TestiModelMetadata.iModel.baselineFilePath
       }
     };
 
     // Act
-    const imodel: iModel = await imodelsClient.iModels.createFromBaseline(imodelCreationParams);
+    const imodel: iModel = await imodelsClient.iModels.createFromBaseline(createiModelParams);
 
     // Assert
     assertiModel({
       actualiModel: imodel,
-      expectediModelProperties: { ...imodelCreationParams.imodelProperties }
+      expectediModelProperties: createiModelParams.imodelProperties
     });
   });
 });

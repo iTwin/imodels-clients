@@ -83,8 +83,8 @@ export class OperationsBase {
     return headers;
   }
 
-  protected formUrlParams(queryParameters: Dictionary): string | undefined {
-    let queryString = undefined;
+  protected formUrlParams(queryParameters: Dictionary | undefined): string | undefined {
+    let queryString = "";
     const appendToQueryString = (key: string, value: string | number) => {
       if (!queryString) {
         queryString = `?${key}=${value}`;

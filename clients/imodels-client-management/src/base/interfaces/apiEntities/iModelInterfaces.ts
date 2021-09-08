@@ -34,9 +34,9 @@ export interface iModel extends MinimaliModel {
 }
 
 export interface iModelResponse {
-  imodel: iModel;
+  iModel: iModel;
 }
 
 export interface iModelsResponse<TiModel> extends CollectionResponse {
-  imodels: TiModel[];
+  iModels: TiModel[];
 }
