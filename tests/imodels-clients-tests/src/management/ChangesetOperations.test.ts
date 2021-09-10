@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModel, iModelsClient, GetChangesetListParams, Changeset, GetChangesetByIdParams } from "@itwin/imodels-client-management";
-import { assertChangeset } from "../AssertionUtils";
-import { assertCollection, cleanUpiModels, findiModelWithName } from "../CommonTestUtils";
+import { assertChangeset, assertCollection } from "../AssertionUtils";
+import { cleanUpiModels, findiModelWithName } from "../CommonTestUtils";
 import { Config } from "../Config";
 import { Constants } from "../Constants";
 import { TestContext } from "../TestContext";
@@ -57,7 +57,7 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       assertCollection({
         asyncIterable: changesets,
-        expectedEntityCount: TestiModelMetadata.Changesets.length
+        isEntityCountCorrect: count => count === TestiModelMetadata.Changesets.length
       });
     });
   });

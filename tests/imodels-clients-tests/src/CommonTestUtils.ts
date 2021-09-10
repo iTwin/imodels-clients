@@ -2,10 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { BaseEntity, iModel, iModelsClient as ManagementiModelsClient } from "@itwin/imodels-client-management";
-import { assertBaseEntity } from "./AssertionUtils";
+import { iModel, iModelsClient as ManagementiModelsClient } from "@itwin/imodels-client-management";
 import { TestContext } from "./TestContext";
 
 export class TestSetupError extends Error {
@@ -75,16 +73,4 @@ export async function countEntitiesInIterable<T>(iterator: AsyncIterableIterator
   let entityCount = 0;
   for (; entityCount++; iterator.next()); // todo
   return entityCount;
-}
-
-export async function assertCollection<T extends BaseEntity>(params: {
-  asyncIterable: AsyncIterableIterator<T>,
-  expectedEntityCount: number
-}): Promise<void> {
-  let entityCount = 0;
-  for await (const entity of params.asyncIterable) {
-    assertBaseEntity(entity);
-    entityCount++;
-  }
-  expect(entityCount).to.equal(params.expectedEntityCount);
 }

@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { GetBriefcaseListParams, GetBriefcaseByIdParams, iModel, iModelsClient, Briefcase } from "@itwin/imodels-client-management";
-import { assertBriefcase } from "../AssertionUtils";
-import { assertCollection, cleanUpiModels, findiModelWithName } from "../CommonTestUtils";
+import { assertBriefcase, assertCollection } from "../AssertionUtils";
+import { cleanUpiModels, findiModelWithName } from "../CommonTestUtils";
 import { Config } from "../Config";
 import { Constants } from "../Constants";
 import { TestContext } from "../TestContext";
@@ -57,7 +57,7 @@ describe("[Management] BriefcaseOperations", () => {
       // Assert
       assertCollection({
         asyncIterable: briefcases,
-        expectedEntityCount: 1
+        isEntityCountCorrect: count => count === 1
       });
     });
   });

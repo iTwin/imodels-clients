@@ -13,6 +13,18 @@ export function assertBaseEntity(actualEntity: BaseEntity): void {
   expect(actualEntity.displayName).to.not.be.empty;
 }
 
+export async function assertCollection<T extends BaseEntity>(params: {
+  asyncIterable: AsyncIterableIterator<T>,
+  isEntityCountCorrect: (count: number) => boolean
+}): Promise<void> {
+  let entityCount = 0;
+  for await (const entity of params.asyncIterable) {
+    assertBaseEntity(entity);
+    entityCount++;
+  }
+  expect(params.isEntityCountCorrect(entityCount)).to.equal(true);
+}
+
 export function assertiModel(params: {
   actualiModel: iModel,
   expectediModelProperties: iModelProperties

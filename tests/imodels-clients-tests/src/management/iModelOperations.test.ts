@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { CreateEmptyiModelParams, GetiModelListParams, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
-import { assertError, assertiModel } from "../AssertionUtils";
-import { assertCollection, cleanUpiModels } from "../CommonTestUtils";
+import { assertCollection, assertError, assertiModel } from "../AssertionUtils";
+import { cleanUpiModels } from "../CommonTestUtils";
 import { Constants } from "../Constants";
 import { TestContext } from "../TestContext";
 
@@ -78,7 +78,7 @@ describe("[Management] iModelOperations", () => {
       // Assert
       assertCollection({
         asyncIterable: imodels,
-        expectedEntityCount: 1
+        isEntityCountCorrect: count => count > 0
       });
     });
   });
