@@ -47,6 +47,6 @@ export interface ChangesetResponse {
   changeset: Changeset;
 }
 
-export interface ChangesetsResponse<TChangeset> extends CollectionResponse {
+export interface ChangesetsResponse<TChangeset extends MinimalChangeset> extends CollectionResponse {
   changesets: TChangeset[];
 }

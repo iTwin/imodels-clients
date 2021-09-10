@@ -12,3 +12,8 @@ export interface AcquireBriefcaseParams extends RequestContextParam {
   imodelId: string;
   briefcaseProperties?: BriefcaseProperties;
 }
+
+export interface ReleaseBriefcaseParams extends RequestContextParam {
+  imodelId: string;
+  briefcaseId: number;
+}

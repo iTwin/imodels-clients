@@ -15,6 +15,7 @@ export interface TestiModelDescriptor {
 
 export interface TestBriefcaseDescriptor {
   id: number;
+  deviceName: string;
 }
 
 export interface TestChangesetDescriptor {
@@ -50,7 +51,7 @@ export class TestiModelMetadata {
   }
 
   public static get Briefcase(): TestBriefcaseDescriptor {
-    return { id: 2 };
+    return { id: 2, deviceName: "Test device" }; // todo: out into constant
   }
 
   public static get Changesets(): TestChangesetDescriptor[] {

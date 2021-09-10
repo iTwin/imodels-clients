@@ -5,6 +5,7 @@
 import { RecursiveRequired, iModelsErrorParser, RestClient, AxiosRestClient } from "./base";
 import { Constants } from "./Constants";
 import { iModelOperations, ChangesetOperations } from "./operations";
+import { BriefcaseOperations } from "./operations/briefcase/BriefcaseOperations";
 
 export interface ApiOptions {
   baseUri?: string;
@@ -25,6 +26,10 @@ export class iModelsClient {
 
   public get iModels(): iModelOperations {
     return new iModelOperations(this._options);
+  }
+
+  public get Briefcases(): BriefcaseOperations {
+    return new BriefcaseOperations(this._options);
   }
 
   public get Changesets(): ChangesetOperations {

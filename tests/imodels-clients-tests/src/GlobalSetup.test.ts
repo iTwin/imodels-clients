@@ -41,7 +41,10 @@ async function createDefaultTestiModel(params: {
 
   const briefcase = await params.imodelsClient.Briefcases.acquire({
     requestContext: params.testContext.RequestContext,
-    imodelId: imodel.id
+    imodelId: imodel.id,
+    briefcaseProperties: {
+      deviceName: TestiModelMetadata.Briefcase.deviceName
+    }
   });
   if (briefcase.briefcaseId !== TestiModelMetadata.Briefcase.id)
     throw new TestSetupError(`Unexpected briefcaseId: expected the default iModel briefcase to equal ${TestiModelMetadata.Briefcase.id}`);
