@@ -2,14 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, RequestContextParam } from "../../base";
+import { CollectionRequestParams, iModelScopedOperationParams } from "../../base";
 
-export interface GetBriefcaseListParams extends RequestContextParam {
-  imodelId: string;
+export interface GetBriefcaseListParams extends iModelScopedOperationParams {
   urlParams?: CollectionRequestParams; // todo: extract
 }
 
-export interface GetBriefcaseByIdParams extends RequestContextParam {
-  imodelId: string;
+export interface GetBriefcaseByIdParams extends iModelScopedOperationParams {
   briefcaseId: number;
 }

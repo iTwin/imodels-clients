@@ -15,6 +15,10 @@ export interface RequestContextParam {
   requestContext: RequestContext;
 }
 
+export interface iModelScopedOperationParams extends RequestContextParam {
+  imodelId: string;
+}
+
 export interface CollectionRequestParams {
   $skip?: number;
   $top?: number;

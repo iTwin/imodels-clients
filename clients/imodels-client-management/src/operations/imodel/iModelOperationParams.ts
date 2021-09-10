@@ -2,14 +2,14 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, Extent, RequestContextParam } from "../../base";
+import { CollectionRequestParams, Extent, RequestContextParam, iModelScopedOperationParams } from "../../base";
 
 export interface GetiModelListParams extends RequestContextParam {
   urlParams: { projectId: string } & CollectionRequestParams;
 }
 
-export interface GetiModelByIdParams extends RequestContextParam {
-  imodelId: string;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface GetiModelByIdParams extends iModelScopedOperationParams {
 }
 
 export interface iModelProperties {
@@ -23,6 +23,6 @@ export interface CreateEmptyiModelParams extends RequestContextParam {
   imodelProperties: iModelProperties;
 }
 
-export interface DeleteiModelParams extends RequestContextParam {
-  imodelId: string;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface DeleteiModelParams extends iModelScopedOperationParams {
 }

@@ -21,7 +21,6 @@ export interface Extent {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface MinimaliModel extends BaseEntity {
-
 }
 
 export interface iModel extends MinimaliModel {
