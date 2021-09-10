@@ -6,8 +6,8 @@ import { CreateiModelFromBaselineParams, iModel, iModelsClient } from "@itwin/im
 import { assertiModel } from "../AssertionUtils";
 import { cleanUpiModels } from "../CommonTestUtils";
 import { Constants } from "../Constants";
-import { TestiModelMetadata } from "../TestiModelMetadata";
 import { TestContext } from "../TestContext";
+import { TestiModelMetadata } from "../TestiModelMetadata";
 
 describe("[Authoring] iModelOperations", () => {
   let testContext: TestContext;

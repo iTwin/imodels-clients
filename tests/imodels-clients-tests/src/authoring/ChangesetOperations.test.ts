@@ -6,8 +6,8 @@ import { AcquireBriefcaseParams, CreateChangesetParams, iModel, iModelsClient } 
 import { assertChangeset } from "../AssertionUtils";
 import { cleanUpiModels, createEmptyiModel } from "../CommonTestUtils";
 import { Constants } from "../Constants";
-import { TestiModelMetadata } from "../TestiModelMetadata";
 import { TestContext } from "../TestContext";
+import { TestiModelMetadata } from "../TestiModelMetadata";
 
 describe("[Authoring] ChangesetOperations", () => {
   let testContext: TestContext;

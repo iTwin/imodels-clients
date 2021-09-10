@@ -6,8 +6,8 @@ import { iModel, iModelsClient } from "@itwin/imodels-client-authoring";
 import { cleanUpiModels, findiModelWithName, TestSetupError } from "./CommonTestUtils";
 import { Config } from "./Config";
 import { Constants } from "./Constants";
-import { TestiModelMetadata } from "./TestiModelMetadata";
 import { TestContext } from "./TestContext";
+import { TestiModelMetadata } from "./TestiModelMetadata";
 
 before(async () => {
   const testContext = new TestContext({ labels: { package: Constants.PackagePrefix } });

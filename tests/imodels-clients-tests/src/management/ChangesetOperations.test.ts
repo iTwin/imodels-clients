@@ -7,8 +7,8 @@ import { assertChangeset } from "../AssertionUtils";
 import { assertCollection, cleanUpiModels, findiModelWithName } from "../CommonTestUtils";
 import { Config } from "../Config";
 import { Constants } from "../Constants";
-import { TestiModelMetadata } from "../TestiModelMetadata";
 import { TestContext } from "../TestContext";
+import { TestiModelMetadata } from "../TestiModelMetadata";
 
 describe("[Management] ChangesetOperations", () => {
   let testContext: TestContext;

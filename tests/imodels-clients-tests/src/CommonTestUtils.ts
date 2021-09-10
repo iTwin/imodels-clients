@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { BaseEntity, iModel, iModelsClient as ManagementiModelsClient } from "@itwin/imodels-client-management";
-import { expect } from "chai";
 import { assertBaseEntity } from "./AssertionUtils";
 import { TestContext } from "./TestContext";
 
