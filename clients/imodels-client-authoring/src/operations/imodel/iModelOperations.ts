@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelOperations as ManagementiModelOperations, iModel, RecursiveRequired, RequestContextParam, iModelsErrorImpl, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { iModelOperations as ManagementiModelOperations, iModel, RecursiveRequired, iModelsErrorImpl, iModelsErrorCode, RequestContextParams } from "@itwin/imodels-client-management";
 import { FileHandler, iModelCreateResponse } from "../../base";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
 import { Constants } from "../../Constants";
@@ -52,7 +52,7 @@ export class iModelOperations extends ManagementiModelOperations {
     });
   }
 
-  private async waitForBaselineFileInitialization(params: RequestContextParam & { imodelId: string, timeOutInMs?: number }): Promise<void> {
+  private async waitForBaselineFileInitialization(params: RequestContextParams & { imodelId: string, timeOutInMs?: number }): Promise<void> {
     const sleepPeriodInMs = Constants.Time.SleepPeriodInMs;
     const timeOutInMs = params.timeOutInMs ?? Constants.Time.iModelInitiazationTimeOutInMs;
     for (let retries = Math.ceil(timeOutInMs / sleepPeriodInMs); retries > 0; --retries) {
