@@ -40,11 +40,15 @@ export function assertiModel(params: {
 
 export function assertBriefcase(params: {
   actualBriefcase: Briefcase,
-  expectedBriefcaseProperties: BriefcaseProperties
+  expectedBriefcaseProperties: BriefcaseProperties & { briefcaseId?: number }
 }): void {
   assertBaseEntity(params.actualBriefcase);
 
-  expect(params.actualBriefcase.briefcaseId).to.be.greaterThan(0);
+  if (params.expectedBriefcaseProperties.briefcaseId)
+    expect(params.actualBriefcase.briefcaseId).to.equal(params.expectedBriefcaseProperties.briefcaseId);
+  else
+    expect(params.actualBriefcase.briefcaseId).to.be.greaterThan(0);
+
   expect(params.actualBriefcase.fileSize).to.be.greaterThan(0);
   assertOptionalProperty(params.expectedBriefcaseProperties?.deviceName, params.actualBriefcase.deviceName);
   expect(params.actualBriefcase.acquiredDateTime as Date).to.not.be.undefined;

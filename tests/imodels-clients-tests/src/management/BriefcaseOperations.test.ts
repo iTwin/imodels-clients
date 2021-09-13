@@ -78,6 +78,7 @@ describe("[Management] BriefcaseOperations", () => {
     assertBriefcase({
       actualBriefcase: briefcase,
       expectedBriefcaseProperties: {
+        briefcaseId: briefcaseMetadata.id,
         deviceName: briefcaseMetadata.deviceName
       }
     });

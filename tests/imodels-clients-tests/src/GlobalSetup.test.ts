@@ -12,6 +12,9 @@ import { TestiModelMetadata } from "./TestiModelMetadata";
 before(async () => {
   const testContext = new TestContext({ labels: { package: Constants.PackagePrefix } });
   const imodelsClient = new iModelsClient(testContext.ClientConfig);
+
+  cleanUpiModels({ imodelsClient, testContext });
+
   const existingiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().DefaultiModelName });
   if (!existingiModel)
     await createDefaultTestiModel({ imodelsClient, testContext, imodelName: Config.get().DefaultiModelName });
@@ -20,6 +23,7 @@ before(async () => {
 after(async () => {
   const testContext = new TestContext({ labels: { package: Constants.PackagePrefix } });
   const imodelsClient = new iModelsClient(testContext.ClientConfig);
+  
   cleanUpiModels({ imodelsClient, testContext });
 });
 
