@@ -5,7 +5,7 @@
 import { CollectionRequestParams, iModelScopedOperationParams } from "../../base";
 
 export interface GetBriefcaseListParams extends iModelScopedOperationParams {
-  urlParams?: CollectionRequestParams; // todo: extract
+  urlParams?: CollectionRequestParams;
 }
 
 export interface GetBriefcaseByIdParams extends iModelScopedOperationParams {

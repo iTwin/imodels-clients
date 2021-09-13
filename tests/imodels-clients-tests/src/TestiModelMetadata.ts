@@ -51,7 +51,7 @@ export class TestiModelMetadata {
   }
 
   public static get Briefcase(): TestBriefcaseDescriptor {
-    return { id: 2, deviceName: "Test device" }; // todo: out into constant
+    return { id: 2, deviceName: Constants.TestDeviceName };
   }
 
   public static get Changesets(): TestChangesetDescriptor[] {
@@ -82,10 +82,13 @@ export class TestiModelMetadata {
     if (!changesetDescriptorFile?.changesets)
       throw new TestSetupError("Changeset descriptor file does not contain expected data.");
 
-    this._changesetDescriptors = changesetDescriptorFile.changesets.map(cs => ({
-      ...cs,
-      changesetFilePath: `${this._imodelDataRootPath}/changesets/${cs.fileName}` // todo test error
-    }));
+    this._changesetDescriptors = changesetDescriptorFile.changesets.map(cs => {
+      const changesetFilePath = `${this._imodelDataRootPath}/changesets/${cs.fileName}`;
+      if (!fs.existsSync(changesetFilePath))
+        throw new TestSetupError("Changeset file for test iModel not found.");
+      return { ...cs, changesetFilePath };
+    });
+
     return this._changesetDescriptors;
   }
 }

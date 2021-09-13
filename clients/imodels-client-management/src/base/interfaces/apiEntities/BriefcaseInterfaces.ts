@@ -6,7 +6,6 @@ import { BaseEntity, CollectionResponse } from "../CommonInterfaces";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface MinimalBriefcase extends BaseEntity {
-
 }
 
 export interface Briefcase extends MinimalBriefcase {
@@ -23,4 +22,3 @@ export interface BriefcaseResponse {
 export interface BriefcasesResponse<TBriefcase extends MinimalBriefcase> extends CollectionResponse {
   briefcases: TBriefcase[];
 }
-

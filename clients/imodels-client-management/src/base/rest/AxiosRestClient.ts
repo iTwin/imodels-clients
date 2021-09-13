@@ -3,12 +3,13 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { iModelsErrorParser } from "../iModelsErrorParser";
 import { RestClient, HttpRequestParams, HttpRequestWithBodyParams, ParseErrorFunc } from "./RestClient";
 
 export class AxiosRestClient implements RestClient {
   private _parseErrorFunc: ParseErrorFunc;
 
-  constructor(parseErrorFunc: ParseErrorFunc) {
+  constructor(parseErrorFunc: ParseErrorFunc = iModelsErrorParser.parse) {
     this._parseErrorFunc = parseErrorFunc;
   }
 
@@ -37,7 +38,7 @@ export class AxiosRestClient implements RestClient {
       headers: params.headers
     };
 
-    return axios.patch(params.url, params.body, requestConfig)
+    return axios.patch(params.url, params.body ?? {}, requestConfig)
       .then((successResponse: AxiosResponse<TResponse>) => this.handleSuccess(successResponse))
       .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
   }

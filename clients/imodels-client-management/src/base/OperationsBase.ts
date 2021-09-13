@@ -4,15 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
-import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextParam } from "./interfaces/CommonInterfaces";
+import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextParams } from "./interfaces/CommonInterfaces";
 import { RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
 type Dictionary = { [key: string]: string | number; };
 
-type SendGetRequestParams = RequestContextParam & { url: string, preferReturn?: PreferReturn };
-type SendPostOrPatchRequestParams = RequestContextParam & { url: string, body: unknown };
-type SendDeleteRequestParams = RequestContextParam & { url: string };
+type SendGetRequestParams = RequestContextParams & { url: string, preferReturn?: PreferReturn };
+type SendPostOrPatchRequestParams = RequestContextParams & { url: string, body: unknown };
+type SendDeleteRequestParams = RequestContextParams & { url: string };
 
 export class OperationsBase {
   protected _restClient: RestClient;
@@ -55,7 +55,7 @@ export class OperationsBase {
     });
   }
 
-  protected async getEntityCollectionPage<TEntity>(params: RequestContextParam & {
+  protected async getEntityCollectionPage<TEntity>(params: RequestContextParams & {
     url: string,
     preferReturn: PreferReturn,
     entityCollectionAccessor: (response: unknown) => TEntity[]
@@ -69,7 +69,7 @@ export class OperationsBase {
     };
   }
 
-  private formHeaders(params: RequestContextParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
+  private formHeaders(params: RequestContextParams & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
     const headers = {};
     headers[Constants.Headers.Authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
     headers[Constants.Headers.Accept] = `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`;

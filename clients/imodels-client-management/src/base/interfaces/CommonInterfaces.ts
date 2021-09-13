@@ -11,11 +11,11 @@ export interface RequestContext {
   authorization: AuthorizationHeader;
 }
 
-export interface RequestContextParam {
+export interface RequestContextParams {
   requestContext: RequestContext;
 }
 
-export interface iModelScopedOperationParams extends RequestContextParam {
+export interface iModelScopedOperationParams extends RequestContextParams {
   imodelId: string;
 }
 

@@ -5,12 +5,11 @@
 import { ContainingChanges, iModelScopedOperationParams } from "@itwin/imodels-client-management";
 
 export interface ChangesetProperties {
-  briefcaseId: number;
   id: string;
-  parentId?: string;
   description?: string;
+  parentId?: string;
+  briefcaseId: number;
   containingChanges?: ContainingChanges;
-
   changesetFilePath: string;
 }
 

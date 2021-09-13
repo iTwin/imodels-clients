@@ -68,9 +68,3 @@ export async function findiModelWithName(params: {
 
   return undefined;
 }
-
-export async function countEntitiesInIterable<T>(iterator: AsyncIterableIterator<T>): Promise<number> {
-  let entityCount = 0;
-  for (; entityCount++; iterator.next()); // todo
-  return entityCount;
-}
