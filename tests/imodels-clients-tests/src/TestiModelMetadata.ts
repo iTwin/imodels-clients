@@ -77,8 +77,8 @@ export class TestiModelMetadata {
     if (!fs.existsSync(changesetDescriptorFilePath))
       throw new TestSetupError("Changeset descriptor file for test iModel not found.");
 
-    const changesetDescriptFileString = fs.readFileSync(changesetDescriptorFilePath, "utf8");
-    const changesetDescriptorFile: ChangesetDescriptorFile = JSON.parse(changesetDescriptFileString);
+    const changesetDescriptorFileString = fs.readFileSync(changesetDescriptorFilePath, "utf8");
+    const changesetDescriptorFile: ChangesetDescriptorFile = JSON.parse(changesetDescriptorFileString);
     if (!changesetDescriptorFile?.changesets)
       throw new TestSetupError("Changeset descriptor file does not contain expected data.");
 
