@@ -23,7 +23,7 @@ before(async () => {
 after(async () => {
   const testContext = new TestContext({ labels: { package: Constants.PackagePrefix } });
   const imodelsClient = new iModelsClient(testContext.ClientConfig);
-  
+
   cleanUpiModels({ imodelsClient, testContext });
 });
 
