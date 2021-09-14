@@ -24,7 +24,7 @@ describe("[Management] BriefcaseOperations", () => {
     });
 
     imodelsClient = new iModelsClient(testContext.ClientConfig);
-    defaultiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().DefaultiModelName });
+    defaultiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
   });
 
   after(async () => {

@@ -22,7 +22,7 @@ export class TestContext {
   public get ClientConfig(): iModelsClientOptions {
     return {
       api: {
-        baseUri: Config.get().ApiBaseUrl
+        baseUri: Config.get().apiBaseUrl
       }
     };
   }

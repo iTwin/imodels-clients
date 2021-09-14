@@ -6,8 +6,8 @@ import * as dotenv from "dotenv";
 import { TestSetupError } from "./CommonTestUtils";
 
 export interface ConfigValues {
-  DefaultiModelName: string;
-  ApiBaseUrl: string;
+  defaultiModelName: string;
+  apiBaseUrl: string;
 }
 
 export class Config {
@@ -27,8 +27,8 @@ export class Config {
       throw new TestSetupError("Invalid configuration: missing API_BASE_URL.");
 
     return {
-      DefaultiModelName: process.env.TEST_IMODEL_NAME,
-      ApiBaseUrl: process.env.API_BASE_URL
+      defaultiModelName: process.env.TEST_IMODEL_NAME,
+      apiBaseUrl: process.env.API_BASE_URL
     };
   }
 }
