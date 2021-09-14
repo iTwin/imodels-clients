@@ -4,7 +4,8 @@
   "words": [
     "imodel",
     "itwin",
-    "apim"
+    "apim",
+    "changesets"
   ],
   "ignoreRegExpList": [
     "/imodel.*/i"

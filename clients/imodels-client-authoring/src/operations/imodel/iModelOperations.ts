@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelOperations as ManagementiModelOperations, iModel, RecursiveRequired, RequestContextParam, iModelsErrorImpl, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { iModelOperations as ManagementiModelOperations, iModel, RecursiveRequired, iModelsErrorImpl, iModelsErrorCode, RequestContextParams } from "@itwin/imodels-client-management";
 import { FileHandler, iModelCreateResponse } from "../../base";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
 import { Constants } from "../../Constants";
@@ -22,10 +22,11 @@ export class iModelOperations extends ManagementiModelOperations {
 
   public async createFromBaseline(params: CreateiModelFromBaselineParams): Promise<iModel> {
     const imodelCreateResponse = await this.sendPostRequest<iModelCreateResponse>({
-      ...params,
+      requestContext: params.requestContext,
       url: this._apiBaseUrl,
       body: {
-        ...params.imodelProperties, baselineFile: {
+        ...params.imodelProperties,
+        baselineFile: {
           size: this._fileHandler.getFileSize(params.baselineFileProperties.path)
         }
       }
@@ -36,16 +37,22 @@ export class iModelOperations extends ManagementiModelOperations {
 
     const completeUrl = imodelCreateResponse.iModel._links.complete.href;
     await this.sendPostRequest({
-      ...params,
+      requestContext: params.requestContext,
       url: completeUrl,
       body: undefined
     });
 
-    await this.waitForBaselineFileInitialization({ ...params, imodelId: imodelCreateResponse.iModel.id });
-    return this.getById({ ...params, imodelId: imodelCreateResponse.iModel.id });
+    await this.waitForBaselineFileInitialization({
+      requestContext: params.requestContext,
+      imodelId: imodelCreateResponse.iModel.id
+    });
+    return this.getById({
+      requestContext: params.requestContext,
+      imodelId: imodelCreateResponse.iModel.id
+    });
   }
 
-  private async waitForBaselineFileInitialization(params: RequestContextParam & { imodelId: string, timeOutInMs?: number }): Promise<void> {
+  private async waitForBaselineFileInitialization(params: RequestContextParams & { imodelId: string, timeOutInMs?: number }): Promise<void> {
     const sleepPeriodInMs = Constants.Time.SleepPeriodInMs;
     const timeOutInMs = params.timeOutInMs ?? Constants.Time.iModelInitiazationTimeOutInMs;
     for (let retries = Math.ceil(timeOutInMs / sleepPeriodInMs); retries > 0; --retries) {
@@ -57,7 +64,7 @@ export class iModelOperations extends ManagementiModelOperations {
       if (baselineFileState !== BaselineFileState.WaitingForFile && baselineFileState !== BaselineFileState.InitializationScheduled)
         throw new iModelsErrorImpl({
           code: iModelsErrorCode.BaselineFileInitializationFailed,
-          message: `Baseline File initialization failed with state '${baselineFileState}'`
+          message: `Baseline File initialization failed with state '${baselineFileState}.'`
         });
     }
 

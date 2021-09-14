@@ -2,67 +2,69 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsClient as AuthoringiModelsClient, iModelsClientOptions as AuthoringiModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { iModelsClient as ManagementiModelsClient, RequestContext } from "@itwin/imodels-client-management";
+import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
+import { iModel, iModelsClient as ManagementiModelsClient } from "@itwin/imodels-client-management";
+import { TestContext } from "./TestContext";
+
+export class TestSetupError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "TestSetupFailed";
+  }
+}
 
 export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function getTestiModelsClientConfig(): AuthoringiModelsClientOptions {
-  return {
-    api: {
-      baseUri: "" // TODO: read config
-    }
-  };
-}
-
-export function getTestProjectId(): string {
-  return ""; // TODO: read config
-}
-
-export function getAuthorizedRequestContext(): RequestContext {
-  return {
-    authorization: {
-      scheme: "", // TODO: read config
-      token: "" // TODO: read config
-    }
-  };
-}
-
-export function generateiModelNameWithPrefixes(params: {
-  imodelName: string,
-  prefixes: {
-    package: string,
-    testSuite?: string,
-  }
-}): string {
-  return `${getCombinedPrefix(params)} ${params.imodelName}`;
-}
-
-export async function cleanUpiModelsWithPrefix(params: {
+export async function createEmptyiModel(params: {
   imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
-  requestContext: RequestContext,
-  projectId: string,
-  prefixes: {
-    package: string,
-    testSuite?: string,
-  }
-}): Promise<void> {
-  const imodels = params.imodelsClient.iModels.getMinimalList({ requestContext: params.requestContext, urlParams: { projectId: params.projectId } });
-  for await (const imodel of imodels)
-    if (imodel.displayName.startsWith(getCombinedPrefix(params)))
-      await params.imodelsClient.iModels.delete({ requestContext: params.requestContext, imodelId: imodel.id });
+  testContext: TestContext,
+  imodelName: string
+}): Promise<iModel> {
+  return params.imodelsClient.iModels.createEmpty({
+    requestContext: params.testContext.RequestContext,
+    imodelProperties: {
+      projectId: params.testContext.ProjectId,
+      name: params.imodelName
+    }
+  });
 }
 
-function getCombinedPrefix(params: {
-  prefixes: {
-    package: string,
-    testSuite?: string,
-  }
-}): string {
-  let combinedPrefix = params.prefixes.package;
-  if (params.prefixes.testSuite)
-    combinedPrefix += params.prefixes.testSuite;
-  return combinedPrefix;
+export async function cleanUpiModels(params: {
+  imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
+  testContext: TestContext
+}): Promise<void> {
+  const imodels = params.imodelsClient.iModels.getMinimalList({
+    requestContext: params.testContext.RequestContext,
+    urlParams: {
+      projectId: params.testContext.ProjectId
+    }
+  });
+
+  for await (const imodel of imodels)
+    if (params.testContext.doesiModelBelongToContext(imodel.displayName))
+      await params.imodelsClient.iModels.delete({
+        requestContext: params.testContext.RequestContext,
+        imodelId: imodel.id
+      });
+}
+
+export async function findiModelWithName(params: {
+  imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
+  testContext: TestContext,
+  expectediModelname: string
+}): Promise<iModel> {
+  const imodels = params.imodelsClient.iModels.getRepresentationList({
+    requestContext: params.testContext.RequestContext,
+    urlParams: {
+      projectId: params.testContext.ProjectId
+    }
+  });
+
+  for await (const imodel of imodels)
+    if (imodel.displayName === params.expectediModelname)
+      return imodel;
+
+  return undefined;
 }

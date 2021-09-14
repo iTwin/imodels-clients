@@ -2,9 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { RecursiveRequired, iModelsErrorParser, RestClient, AxiosRestClient } from "./base";
+import { RecursiveRequired, RestClient, AxiosRestClient } from "./base";
 import { Constants } from "./Constants";
-import { iModelOperations } from "./operations/imodel/iModelOperations";
+import { iModelOperations, ChangesetOperations } from "./operations";
+import { BriefcaseOperations } from "./operations/briefcase/BriefcaseOperations";
 
 export interface ApiOptions {
   baseUri?: string;
@@ -27,9 +28,17 @@ export class iModelsClient {
     return new iModelOperations(this._options);
   }
 
+  public get Briefcases(): BriefcaseOperations {
+    return new BriefcaseOperations(this._options);
+  }
+
+  public get Changesets(): ChangesetOperations {
+    return new ChangesetOperations(this._options);
+  }
+
   public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
     return {
-      restClient: options?.restClient ?? new AxiosRestClient(iModelsErrorParser.parse),
+      restClient: options?.restClient ?? new AxiosRestClient(),
       api: {
         baseUri: options?.api?.baseUri ?? Constants.Api.BaseUrl,
         version: options?.api?.version ?? Constants.Api.Version

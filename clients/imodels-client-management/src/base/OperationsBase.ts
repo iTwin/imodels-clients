@@ -4,15 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
-import { PreferReturn, RequestContextParam } from "./interfaces/CommonInterfaces";
+import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextParams } from "./interfaces/CommonInterfaces";
 import { RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
 type Dictionary = { [key: string]: string | number; };
 
-type SendGetRequestParams = RequestContextParam & { url: string, preferReturn?: PreferReturn };
-type SendPostRequestParams = RequestContextParam & { url: string, body: unknown };
-type SendDeleteRequestParams = RequestContextParam & { url: string };
+type SendGetRequestParams = RequestContextParams & { url: string, preferReturn?: PreferReturn };
+type SendPostOrPatchRequestParams = RequestContextParams & { url: string, body: unknown };
+type SendDeleteRequestParams = RequestContextParams & { url: string };
 
 export class OperationsBase {
   protected _restClient: RestClient;
@@ -32,8 +32,16 @@ export class OperationsBase {
     });
   }
 
-  protected sendPostRequest<TResponse>(params: SendPostRequestParams): Promise<TResponse> {
+  protected sendPostRequest<TResponse>(params: SendPostOrPatchRequestParams): Promise<TResponse> {
     return this._restClient.sendPostRequest<TResponse>({
+      url: params.url,
+      body: params.body,
+      headers: this.formHeaders({ ...params, containsBody: true })
+    });
+  }
+
+  protected sendPatchRequest<TResponse>(params: SendPostOrPatchRequestParams): Promise<TResponse> {
+    return this._restClient.sendPatchRequest<TResponse>({
       url: params.url,
       body: params.body,
       headers: this.formHeaders({ ...params, containsBody: true })
@@ -47,7 +55,21 @@ export class OperationsBase {
     });
   }
 
-  private formHeaders(params: RequestContextParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
+  protected async getEntityCollectionPage<TEntity>(params: RequestContextParams & {
+    url: string,
+    preferReturn: PreferReturn,
+    entityCollectionAccessor: (response: unknown) => TEntity[]
+  }): Promise<EntityCollectionPage<TEntity>> {
+    const response = await this.sendGetRequest<CollectionResponse>(params);
+    return {
+      entities: params.entityCollectionAccessor(response),
+      next: response._links.next
+        ? () => this.getEntityCollectionPage({ ...params, url: response._links.next.href })
+        : undefined
+    };
+  }
+
+  private formHeaders(params: RequestContextParams & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
     const headers = {};
     headers[Constants.Headers.Authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
     headers[Constants.Headers.Accept] = `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`;
@@ -61,8 +83,8 @@ export class OperationsBase {
     return headers;
   }
 
-  protected formUrlParams(queryParameters: Dictionary): string | undefined {
-    let queryString = undefined;
+  protected formUrlParams(queryParameters: Dictionary | undefined): string | undefined {
+    let queryString = "";
     const appendToQueryString = (key: string, value: string | number) => {
       if (!queryString) {
         queryString = `?${key}=${value}`;

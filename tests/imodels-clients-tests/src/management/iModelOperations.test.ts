@@ -2,53 +2,38 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModel, iModelsClient, iModelsErrorCode, RequestContext } from "@itwin/imodels-client-management";
-import { assertError, assertiModel } from "../AssertionUtils";
-import { cleanUpiModelsWithPrefix, generateiModelNameWithPrefixes, getAuthorizedRequestContext, getTestiModelsClientConfig, getTestProjectId } from "../CommonTestUtils";
+import { CreateEmptyiModelParams, GetiModelListParams, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { assertCollection, assertError, assertiModel } from "../AssertionUtils";
+import { cleanUpiModels } from "../CommonTestUtils";
 import { Constants } from "../Constants";
+import { TestContext } from "../TestContext";
 
 describe("[Management] iModelOperations", () => {
-  let requestContext: RequestContext;
-  let projectId: string;
+  let testContext: TestContext;
   let imodelsClient: iModelsClient;
 
-  const imodelsPrefixForTestSuite = "[Management][iModelOperations]";
-
   before(async () => {
-    requestContext = getAuthorizedRequestContext();
-    projectId = getTestProjectId();
-    imodelsClient = new iModelsClient(getTestiModelsClientConfig());
+    testContext = new TestContext({
+      labels: {
+        package: Constants.PackagePrefix,
+        testSuite: "ManagementiModelOperations"
+      }
+    });
+
+    imodelsClient = new iModelsClient(testContext.ClientConfig);
   });
 
   after(async () => {
-    return cleanUpiModelsWithPrefix({
-      imodelsClient,
-      requestContext,
-      projectId,
-      prefixes: {
-        package: Constants.PackagePrefix,
-        testSuite: imodelsPrefixForTestSuite
-      }
-    });
+    await cleanUpiModels({ imodelsClient, testContext });
   });
-
-  function getiModelName(name: string): string {
-    return generateiModelNameWithPrefixes({
-      imodelName: name,
-      prefixes: {
-        package: Constants.PackagePrefix,
-        testSuite: imodelsPrefixForTestSuite
-      }
-    });
-  }
 
   it("should create an empty iModel", async () => {
     // Arrange
-    const imodelCreationParams = {
-      requestContext,
+    const createiModelParams: CreateEmptyiModelParams = {
+      requestContext: testContext.RequestContext,
       imodelProperties: {
-        projectId: projectId,
-        name: getiModelName("Sample iModel (success)"),
+        projectId: testContext.ProjectId,
+        name: testContext.getPrefixediModelName("Empty Test iModel"),
         description: "Sample iModel description",
         extent: {
           southWest: { latitude: 1, longitude: 2 },
@@ -58,29 +43,60 @@ describe("[Management] iModelOperations", () => {
     };
 
     // Act
-    const imodel: iModel = await imodelsClient.iModels.createEmpty(imodelCreationParams);
+    const imodel: iModel = await imodelsClient.iModels.createEmpty(createiModelParams);
 
     // Assert
     assertiModel({
       actualiModel: imodel,
-      expectediModelProperties: { ...imodelCreationParams.imodelProperties }
+      expectediModelProperties: createiModelParams.imodelProperties
+    });
+  });
+
+  [
+    {
+      label: "minimal",
+      functionUnderTest: (params: GetiModelListParams) => imodelsClient.iModels.getMinimalList(params)
+    },
+    {
+      label: "representation",
+      functionUnderTest: (params: GetiModelListParams) => imodelsClient.iModels.getRepresentationList(params)
+    }
+  ].forEach(testCase => {
+    it(`should get ${testCase.label} collection`, async () => {
+      // Arrange
+      const getiModelListParams: GetiModelListParams = {
+        requestContext: testContext.RequestContext,
+        urlParams: {
+          projectId: testContext.ProjectId,
+          $top: 5
+        }
+      };
+
+      // Act
+      const imodels = await testCase.functionUnderTest(getiModelListParams);
+
+      // Assert
+      assertCollection({
+        asyncIterable: imodels,
+        isEntityCountCorrect: count => count > 0
+      });
     });
   });
 
   it("should return unauthorized error when calling API with invalid access token", async () => {
     // Arrange
-    const imodelCreationParams = {
+    const createiModelParams: CreateEmptyiModelParams = {
       requestContext: { authorization: { scheme: "Bearer", token: "invalidToken" } },
       imodelProperties: {
-        projectId: projectId,
-        name: getiModelName("Sample iModel (unauthorized)")
+        projectId: testContext.ProjectId,
+        name: testContext.getPrefixediModelName("Sample iModel (unauthorized)")
       }
     };
 
     // Act
     let errorThrown: Error;
     try {
-      await imodelsClient.iModels.createEmpty(imodelCreationParams);
+      await imodelsClient.iModels.createEmpty(createiModelParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -90,18 +106,18 @@ describe("[Management] iModelOperations", () => {
       actualError: errorThrown,
       expectedError: {
         code: iModelsErrorCode.Unauthorized,
-        message: ""
+        message: "The user is unauthorized. Please provide valid authentication credentials."
       }
     });
   });
 
   it("should return a detailed error when attempting to create iModel with invalid description", async () => {
     // Arrange
-    const imodelCreationParams = {
-      requestContext,
+    const createiModelParams: CreateEmptyiModelParams = {
+      requestContext: testContext.RequestContext,
       imodelProperties: {
-        projectId: projectId,
-        name: getiModelName("Sample iModel (invalid)"),
+        projectId: testContext.ProjectId,
+        name: testContext.getPrefixediModelName("Sample iModel (invalid)"),
         description: "x".repeat(256)
       }
     };
@@ -109,7 +125,7 @@ describe("[Management] iModelOperations", () => {
     // Act
     let errorThrown: Error;
     try {
-      await imodelsClient.iModels.createEmpty(imodelCreationParams);
+      await imodelsClient.iModels.createEmpty(createiModelParams);
     } catch (e) {
       errorThrown = e;
     }

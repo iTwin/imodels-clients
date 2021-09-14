@@ -2,66 +2,52 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
+import { CreateiModelFromBaselineParams, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
 import { assertiModel } from "../AssertionUtils";
-import { cleanUpiModelsWithPrefix, generateiModelNameWithPrefixes, getAuthorizedRequestContext, getTestiModelsClientConfig, getTestProjectId } from "../CommonTestUtils";
+import { cleanUpiModels } from "../CommonTestUtils";
 import { Constants } from "../Constants";
+import { TestContext } from "../TestContext";
+import { TestiModelMetadata } from "../TestiModelMetadata";
 
 describe("[Authoring] iModelOperations", () => {
-  let requestContext: RequestContext;
-  let projectId: string;
+  let testContext: TestContext;
   let imodelsClient: iModelsClient;
 
-  const imodelsPrefixForTestSuite = "[Authoring][iModelOperations]";
-
   before(async () => {
-    requestContext = await getAuthorizedRequestContext();
-    projectId = getTestProjectId();
-    imodelsClient = new iModelsClient(getTestiModelsClientConfig());
+    testContext = new TestContext({
+      labels: {
+        package: Constants.PackagePrefix,
+        testSuite: "AuthoringiModelOperations"
+      }
+    });
+
+    imodelsClient = new iModelsClient(testContext.ClientConfig);
   });
 
   after(async () => {
-    return cleanUpiModelsWithPrefix({
-      imodelsClient,
-      requestContext,
-      projectId,
-      prefixes: {
-        package: Constants.PackagePrefix,
-        testSuite: imodelsPrefixForTestSuite
-      }
-    });
+    await cleanUpiModels({ imodelsClient, testContext });
   });
-
-  function getiModelName(name: string): string {
-    return generateiModelNameWithPrefixes({
-      imodelName: name,
-      prefixes: {
-        package: Constants.PackagePrefix,
-        testSuite: imodelsPrefixForTestSuite
-      }
-    });
-  }
 
   it("should create an iModel from baseline", async () => {
     // Arrange
-    const imodelCreationParams = {
-      requestContext,
+    const createiModelParams: CreateiModelFromBaselineParams = {
+      requestContext: testContext.RequestContext,
       imodelProperties: {
-        projectId: projectId,
-        name: getiModelName("Sample iModel from baseline")
+        projectId: testContext.ProjectId,
+        name: testContext.getPrefixediModelName("Sample iModel from baseline")
       },
       baselineFileProperties: {
-        path: `${Constants.AssetsPath}f3e3d446-edc4-4cb0-a80d-dd2ab3e32b0d.bim`
+        path: TestiModelMetadata.iModel.baselineFilePath
       }
     };
 
     // Act
-    const imodel: iModel = await imodelsClient.iModels.createFromBaseline(imodelCreationParams);
+    const imodel: iModel = await imodelsClient.iModels.createFromBaseline(createiModelParams);
 
     // Assert
     assertiModel({
       actualiModel: imodel,
-      expectediModelProperties: { ...imodelCreationParams.imodelProperties }
+      expectediModelProperties: createiModelParams.imodelProperties
     });
   });
 });

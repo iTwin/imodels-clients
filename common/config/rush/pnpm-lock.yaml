@@ -13,6 +13,7 @@ dependencies:
   chai: 4.3.4
   cpx: 1.5.0
   cspell: 5.6.7
+  dotenv: 10.0.0
   eslint: 7.31.0
   eslint-plugin-import: 2.23.4_eslint@7.31.0
   fs-extra: 10.0.0
@@ -1537,6 +1538,12 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==
+  /dotenv/10.0.0:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
   /duplexer/0.1.2:
     dev: false
     resolution:
@@ -4819,6 +4826,7 @@ packages:
       axios: 0.21.4
       chai: 4.3.4
       cpx: 1.5.0
+      dotenv: 10.0.0
       fs-extra: 10.0.0
       mocha: 9.0.3
       nyc: 14.0.0
@@ -4827,7 +4835,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-clients-tests'
     resolution:
-      integrity: sha512-Edi33G5wQP8Gmh9gAG2c6Xh1R4h0xVExcZoG7cgROlP3OguET5NeMHtbXxwfMRxHNLWWod0O3PAXbQe/2tkq0A==
+      integrity: sha512-IAFtb3lIk/s54fgdF7zyXLyaf2sEuVY4zZrPBB+mPOLfPZN11HA9pGa+djxlbzSmANgL3GETmYi+E9ZyoumRPQ==
       tarball: 'file:projects/imodels-clients-tests.tgz'
     version: 0.0.0
 specifiers:
@@ -4845,6 +4853,7 @@ specifiers:
   chai: ~4.3.4
   cpx: ~1.5.0
   cspell: ~5.6.6
+  dotenv: ~10.0.0
   eslint: ~7.31.0
   eslint-plugin-import: ~2.23.4
   fs-extra: ~10.0.0
