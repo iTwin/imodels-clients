@@ -17,7 +17,7 @@ export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export async function createEmptyiModel(params: {
+export function createEmptyiModel(params: {
   imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
   testContext: TestContext,
   imodelName: string
