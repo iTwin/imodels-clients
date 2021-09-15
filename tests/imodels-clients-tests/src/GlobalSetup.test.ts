@@ -13,8 +13,10 @@ before(async () => {
   const testContext = new TestContext({ labels: { package: Constants.PackagePrefix } });
   const imodelsClient = new iModelsClient(testContext.ClientConfig);
 
+  console.log("Starting iModel cleanup");
   await cleanUpiModels({ imodelsClient, testContext });
 
+  console.log("Starting iModel recreate");
   const existingiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
   if (!existingiModel)
     await createDefaultTestiModel({ imodelsClient, testContext, imodelName: Config.get().defaultiModelName });
@@ -24,6 +26,7 @@ after(async () => {
   const testContext = new TestContext({ labels: { package: Constants.PackagePrefix } });
   const imodelsClient = new iModelsClient(testContext.ClientConfig);
 
+  console.log("Starting iModel cleanup");
   await cleanUpiModels({ imodelsClient, testContext });
 });
 

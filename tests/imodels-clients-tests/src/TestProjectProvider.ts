@@ -23,6 +23,7 @@ class ProjectsClient {
   }
 
   public async getProjectIdByName(projectName: string): Promise<string> {
+    console.log("Starting project resolution");
     const requestContext = await this.getRequestContext();
     const headers = {
       Authorization: `${requestContext.authorization.scheme} ${requestContext.authorization.token}`
@@ -36,6 +37,7 @@ class ProjectsClient {
     if (getProjectsWithNameResponse.projects.length > 0)
       return getProjectsWithNameResponse.projects[0].id;
 
+    console.log("Creating project");
     const createProjectResponse = await this._restClient.sendPostRequest<CreateProjectResponse>({
       url: Config.get().apis.projects.baseUrl,
       headers,
@@ -52,6 +54,7 @@ class ProjectsClient {
   }
 
   private async getRequestContext(): Promise<RequestContext> {
+    console.log("Starting request context for projects initialization");
     const authClient = new TestAuthClient({
       authority: Config.get().auth.authority,
       clientId: Config.get().auth.clientId,
@@ -59,7 +62,7 @@ class ProjectsClient {
       scopes: Config.get().apis.projects.scopes,
       redirectUrl: Config.get().auth.redirectUrl
     });
-    return {
+    const token = {
       authorization: {
         scheme: "Bearer",
         token: await authClient.getAccessToken({
@@ -68,6 +71,8 @@ class ProjectsClient {
         })
       }
     };
+    console.log("Finishing request context for projects initialization");
+    return token;
   }
 }
 

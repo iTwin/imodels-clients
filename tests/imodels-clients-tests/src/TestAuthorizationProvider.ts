@@ -17,6 +17,7 @@ export class TestAuthorizationProvider {
   }
 
   private static async initializeAndGetRequestContext(): Promise<RequestContext> {
+    console.log("Starting request context initialization");
     TestAuthorizationProvider._requestContext = {
       authorization: {
         scheme: "Bearer",
@@ -26,6 +27,7 @@ export class TestAuthorizationProvider {
         })
       }
     };
+    console.log("Finishing request context initialization");
     return TestAuthorizationProvider._requestContext;
   }
 }
