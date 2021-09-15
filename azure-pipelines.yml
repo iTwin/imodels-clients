@@ -29,3 +29,6 @@ steps:
 - script: node common/scripts/install-run-rush.js publish --pack --include-all --publish
   displayName: rush publish (into .tgz)
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+
+- script: node common/scripts/install-run-rush.js test
+  displayName: rush test
