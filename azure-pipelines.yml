@@ -37,5 +37,5 @@ jobs:
     
     - script: node common/scripts/install-run-rush.js test:integration
       displayName: rush test integration
-      - env:
+      env:
         AUTH_CLIENT_ID: $(AUTH_CLIENT_ID)
