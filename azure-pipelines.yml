@@ -39,3 +39,6 @@ jobs:
       displayName: rush test integration
       env:
         AUTH_CLIENT_ID: $(AUTH_CLIENT_ID)
+        AUTH_CLIENT_SECRET: $(AUTH_CLIENT_SECRET)
+        TEST_USER_EMAIL: $(TEST_USER_EMAIL)
+        TEST_USER_PASSWORD: $(TEST_USER_PASSWORD)
