@@ -8,9 +8,9 @@ pool:
   demands: Agent.OS -equals Windows_NT
 
 jobs:
-  - job: BuildAndTestDev
+  - job: BuildAndTestSBX
     variables:
-      - group: iModels Clients - Integration Tests - DEV
+      - group: iModels Clients - Integration Tests - SBX
 
     steps:
     - task: NodeTool@0
