@@ -22,7 +22,7 @@ describe("[Management] iModelOperations", () => {
     });
 
     imodelsClient = new iModelsClient(testContext.ClientConfig);
-    // requestContext = await testContext.getRequestContext();
+    requestContext = await testContext.getRequestContext();
   });
 
   after(async () => {

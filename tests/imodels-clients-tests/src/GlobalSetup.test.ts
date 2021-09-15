@@ -13,7 +13,7 @@ before(async () => {
   const testContext = new TestContext({ labels: { package: Constants.PackagePrefix } });
   const imodelsClient = new iModelsClient(testContext.ClientConfig);
 
-  cleanUpiModels({ imodelsClient, testContext });
+  await cleanUpiModels({ imodelsClient, testContext });
 
   const existingiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
   if (!existingiModel)
@@ -24,7 +24,7 @@ after(async () => {
   const testContext = new TestContext({ labels: { package: Constants.PackagePrefix } });
   const imodelsClient = new iModelsClient(testContext.ClientConfig);
 
-  cleanUpiModels({ imodelsClient, testContext });
+  await cleanUpiModels({ imodelsClient, testContext });
 });
 
 async function createDefaultTestiModel(params: {

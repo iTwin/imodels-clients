@@ -7,6 +7,7 @@ import { assertBriefcase } from "../AssertionUtils";
 import { cleanUpiModels, createEmptyiModel } from "../CommonTestUtils";
 import { Constants } from "../Constants";
 import { TestContext } from "../TestContext";
+import { TestiModelMetadata } from "../TestiModelMetadata";
 
 describe("[Authoring] BriefcaseOperations", () => {
   let testContext: TestContext;
@@ -40,7 +41,10 @@ describe("[Authoring] BriefcaseOperations", () => {
     // Arrange
     const acquireBriefcaseParams: AcquireBriefcaseParams = {
       requestContext,
-      imodelId: testiModel.id
+      imodelId: testiModel.id,
+      briefcaseProperties: {
+        deviceName: TestiModelMetadata.Briefcase.deviceName
+      }
     };
 
     // Act
