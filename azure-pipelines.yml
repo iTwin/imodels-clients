@@ -30,5 +30,5 @@ steps:
   displayName: rush publish (into .tgz)
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
 
-- script: node common/scripts/install-run-rush.js test
-  displayName: rush test
+- script: node common/scripts/install-run-rush.js test:integration
+  displayName: rush test integration
