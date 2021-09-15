@@ -30,6 +30,7 @@ export class TestAuthClient {
 
     const authorizationCodePromise = this.interceptRedirectAndGetAuthorizationCode(browserPage);
 
+    // cspell:disable-next-line
     await browserPage.goto(this.getAuthenticationUrl(), { waitUntil: "networkidle2" });
     await this.fillCredentials(browserPage, testUserCredentials);
     await this.consentIfNeeded(browserPage);
@@ -60,6 +61,7 @@ export class TestAuthClient {
     const signInButton = await browserPage.waitForSelector("#sign-in-button");
     await Promise.all([
       signInButton.click(),
+      // cspell:disable-next-line
       browserPage.waitForNavigation({ waitUntil: "networkidle2" })
     ]);
   }
@@ -72,6 +74,7 @@ export class TestAuthClient {
     const consentButton = await browserPage.waitForSelector("#bentleySubmit");
     await Promise.all([
       consentButton.click(),
+      // cspell:disable-next-line
       browserPage.waitForNavigation({ waitUntil: "networkidle2" }) // todo: event names into constants
     ]);
   }
