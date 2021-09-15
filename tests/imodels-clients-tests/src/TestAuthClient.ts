@@ -1,6 +1,6 @@
-import * as puppeteer from "puppeteer";
-import axios, { AxiosResponse } from "axios";
 import { URLSearchParams } from "url";
+import axios, { AxiosResponse } from "axios";
+import * as puppeteer from "puppeteer";
 
 interface AccessTokenResponse {
   access_token: string;
@@ -43,7 +43,7 @@ export class TestAuthClient {
     return `${this._authConfig.authority}/connect/authorize?` +
       `client_id=${encodeURIComponent(this._authConfig.clientId)}&` +
       `scope=${encodeURIComponent(this._authConfig.scopes)}&` +
-      `response_type=code&` +
+      "response_type=code&" +
       `redirect_uri=${encodeURIComponent(this._authConfig.redirectUrl)}`;
   }
 
@@ -77,7 +77,7 @@ export class TestAuthClient {
   }
 
   private async exchangeAuthorizationCodeForAccessToken(authorizationCode: string): Promise<string> {
-    const encodedClientCredentials = Buffer.from(`${encodeURIComponent(this._authConfig.clientId)}:${encodeURIComponent(this._authConfig.clientSecret)}`).toString('base64');
+    const encodedClientCredentials = Buffer.from(`${encodeURIComponent(this._authConfig.clientId)}:${encodeURIComponent(this._authConfig.clientSecret)}`).toString("base64");
 
     const response: AxiosResponse<AccessTokenResponse> = await axios({
       method: "POST",
@@ -119,7 +119,7 @@ export class TestAuthClient {
 
           resolve(this.getCodeFromUrl(currentRequestUrl));
         }
-      })
+      });
     });
   }
 }

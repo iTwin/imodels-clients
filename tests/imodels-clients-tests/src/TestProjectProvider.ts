@@ -67,7 +67,7 @@ class ProjectsClient {
           password: Config.get().testUser.password
         })
       }
-    }
+    };
   }
 }
 

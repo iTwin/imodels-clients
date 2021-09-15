@@ -12,7 +12,7 @@ describe("[Management] iModelOperations", () => {
   let testContext: TestContext;
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
-  
+
   before(async () => {
     testContext = new TestContext({
       labels: {

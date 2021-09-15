@@ -15,7 +15,7 @@ describe("[Management] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
   let defaultiModel: iModel;
   let requestContext: RequestContext;
-  
+
   before(async () => {
     testContext = new TestContext({
       labels: {
