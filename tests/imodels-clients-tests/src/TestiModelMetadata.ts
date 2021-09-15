@@ -65,7 +65,7 @@ export class TestiModelMetadata {
       throw new TestSetupError("Baseline file for test iModel not found.");
 
     this._imodelDescriptor = {
-      name: Config.get().DefaultiModelName,
+      name: Config.get().defaultiModelName,
       description: "Default test iModel description",
       baselineFilePath: `${this._imodelDataRootPath}/${bimFile}`
     };

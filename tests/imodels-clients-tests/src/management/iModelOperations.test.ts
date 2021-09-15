@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CreateEmptyiModelParams, GetiModelListParams, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { CreateEmptyiModelParams, GetiModelListParams, iModel, iModelsClient, iModelsErrorCode, RequestContext } from "@itwin/imodels-client-management";
 import { assertCollection, assertError, assertiModel } from "../AssertionUtils";
 import { cleanUpiModels } from "../CommonTestUtils";
 import { Constants } from "../Constants";
@@ -11,7 +11,8 @@ import { TestContext } from "../TestContext";
 describe("[Management] iModelOperations", () => {
   let testContext: TestContext;
   let imodelsClient: iModelsClient;
-
+  let requestContext: RequestContext;
+  
   before(async () => {
     testContext = new TestContext({
       labels: {
@@ -21,6 +22,7 @@ describe("[Management] iModelOperations", () => {
     });
 
     imodelsClient = new iModelsClient(testContext.ClientConfig);
+    // requestContext = await testContext.getRequestContext();
   });
 
   after(async () => {
@@ -30,9 +32,9 @@ describe("[Management] iModelOperations", () => {
   it("should create an empty iModel", async () => {
     // Arrange
     const createiModelParams: CreateEmptyiModelParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelProperties: {
-        projectId: testContext.ProjectId,
+        projectId: await testContext.getProjectId(),
         name: testContext.getPrefixediModelName("Empty Test iModel"),
         description: "Sample iModel description",
         extent: {
@@ -65,9 +67,9 @@ describe("[Management] iModelOperations", () => {
     it(`should get ${testCase.label} collection`, async () => {
       // Arrange
       const getiModelListParams: GetiModelListParams = {
-        requestContext: testContext.RequestContext,
+        requestContext,
         urlParams: {
-          projectId: testContext.ProjectId,
+          projectId: await testContext.getProjectId(),
           $top: 5
         }
       };
@@ -88,7 +90,7 @@ describe("[Management] iModelOperations", () => {
     const createiModelParams: CreateEmptyiModelParams = {
       requestContext: { authorization: { scheme: "Bearer", token: "invalidToken" } },
       imodelProperties: {
-        projectId: testContext.ProjectId,
+        projectId: await testContext.getProjectId(),
         name: testContext.getPrefixediModelName("Sample iModel (unauthorized)")
       }
     };
@@ -114,9 +116,9 @@ describe("[Management] iModelOperations", () => {
   it("should return a detailed error when attempting to create iModel with invalid description", async () => {
     // Arrange
     const createiModelParams: CreateEmptyiModelParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelProperties: {
-        projectId: testContext.ProjectId,
+        projectId: await testContext.getProjectId(),
         name: testContext.getPrefixediModelName("Sample iModel (invalid)"),
         description: "x".repeat(256)
       }

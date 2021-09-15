@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CreateiModelFromBaselineParams, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
+import { CreateiModelFromBaselineParams, iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
 import { assertiModel } from "../AssertionUtils";
 import { cleanUpiModels } from "../CommonTestUtils";
 import { Constants } from "../Constants";
@@ -12,7 +12,8 @@ import { TestiModelMetadata } from "../TestiModelMetadata";
 describe("[Authoring] iModelOperations", () => {
   let testContext: TestContext;
   let imodelsClient: iModelsClient;
-
+  let requestContext: RequestContext;
+  
   before(async () => {
     testContext = new TestContext({
       labels: {
@@ -22,6 +23,7 @@ describe("[Authoring] iModelOperations", () => {
     });
 
     imodelsClient = new iModelsClient(testContext.ClientConfig);
+    requestContext = await testContext.getRequestContext();
   });
 
   after(async () => {
@@ -31,9 +33,9 @@ describe("[Authoring] iModelOperations", () => {
   it("should create an iModel from baseline", async () => {
     // Arrange
     const createiModelParams: CreateiModelFromBaselineParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelProperties: {
-        projectId: testContext.ProjectId,
+        projectId: await testContext.getProjectId(),
         name: testContext.getPrefixediModelName("Sample iModel from baseline")
       },
       baselineFileProperties: {

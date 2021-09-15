@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModel, iModelsClient, GetChangesetListParams, Changeset, GetChangesetByIdParams } from "@itwin/imodels-client-management";
+import { iModel, iModelsClient, GetChangesetListParams, Changeset, GetChangesetByIdParams, RequestContext } from "@itwin/imodels-client-management";
 import { assertChangeset, assertCollection } from "../AssertionUtils";
 import { cleanUpiModels, findiModelWithName } from "../CommonTestUtils";
 import { Config } from "../Config";
@@ -14,7 +14,8 @@ describe("[Management] ChangesetOperations", () => {
   let testContext: TestContext;
   let imodelsClient: iModelsClient;
   let defaultiModel: iModel;
-
+  let requestContext: RequestContext;
+  
   before(async () => {
     testContext = new TestContext({
       labels: {
@@ -24,7 +25,8 @@ describe("[Management] ChangesetOperations", () => {
     });
 
     imodelsClient = new iModelsClient(testContext.ClientConfig);
-    defaultiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().DefaultiModelName });
+    defaultiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
+    requestContext = await testContext.getRequestContext();
   });
 
   after(async () => {
@@ -44,7 +46,7 @@ describe("[Management] ChangesetOperations", () => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getChangesetListParams: GetChangesetListParams = {
-        requestContext: testContext.RequestContext,
+        requestContext,
         imodelId: defaultiModel.id,
         urlParams: {
           $top: 5
@@ -66,7 +68,7 @@ describe("[Management] ChangesetOperations", () => {
     // Arrange
     const changesetMetadata = TestiModelMetadata.Changesets[0];
     const getChangesetByIdParams: GetChangesetByIdParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelId: defaultiModel.id,
       changesetId: changesetMetadata.id
     };

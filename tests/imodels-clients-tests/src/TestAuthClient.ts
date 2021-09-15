@@ -24,7 +24,7 @@ export class TestAuthClient {
   }
 
   public async getAccessToken(testUserCredentials: TestUserCredentials): Promise<string> {
-    const browserLaunchOptions: puppeteer.LaunchOptions & puppeteer.BrowserLaunchArgumentOptions = { dumpio: true, headless: true };
+    const browserLaunchOptions: puppeteer.BrowserLaunchArgumentOptions = { headless: true };
     const browser: puppeteer.Browser = await puppeteer.launch(browserLaunchOptions);
     const browserPage: puppeteer.Page = await browser.newPage();
 
@@ -32,6 +32,7 @@ export class TestAuthClient {
 
     await browserPage.goto(this.getAuthenticationUrl(), { waitUntil: "networkidle2" });
     await this.fillCredentials(browserPage, testUserCredentials);
+    await this.consentIfNeeded(browserPage);
     const accessToken = await this.exchangeAuthorizationCodeForAccessToken(await authorizationCodePromise);
 
     await browser.close();
@@ -61,12 +62,10 @@ export class TestAuthClient {
       signInButton.click(),
       browserPage.waitForNavigation({ waitUntil: "networkidle2" })
     ]);
-
-    await this.handleConsentPageIfNeeded(browserPage);
   }
 
-  private async handleConsentPageIfNeeded(browserPage: puppeteer.Page): Promise<void> {
-    const isConsentPage = browserPage.url().indexOf("consent") !== -1; // todo double check if logic is correct
+  private async consentIfNeeded(browserPage: puppeteer.Page): Promise<void> {
+    const isConsentPage = await browserPage.title() === "Request for Approval"; // todo: check if valid
     if (!isConsentPage)
       return;
 
@@ -124,18 +123,3 @@ export class TestAuthClient {
     });
   }
 }
-
-describe("auth client", () => {
-  it.only("should auth", async () => {
-    const testAuthClient = new TestAuthClient();
-    const token = await testAuthClient.getAccessToken({
-      authConfig: {
-
-      },
-      testUserCredentials: {
-
-      }
-    });
-    console.log(token);
-  });
-})

@@ -4,6 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClientOptions, RequestContext } from "@itwin/imodels-client-authoring";
 import { Config } from "./Config";
+import { TestAuthorizationProvider } from "./TestAuthorizationProvider";
+import { TestProjectProvider } from "./TestProjectProvider";
 
 export class TestContext {
   private _imodelNamePrefix: string;
@@ -22,22 +24,17 @@ export class TestContext {
   public get ClientConfig(): iModelsClientOptions {
     return {
       api: {
-        baseUri: Config.get().ApiBaseUrl
+        baseUri: Config.get().apis.imodels.baseUrl
       }
     };
   }
 
-  public get ProjectId(): string {
-    return ""; // TODO: read config
+  public async getProjectId(): Promise<string> {
+    return TestProjectProvider.getProjectId();
   }
 
-  public get RequestContext(): RequestContext {
-    return {
-      authorization: {
-        scheme: "", // TODO: read config
-        token: "" // TODO: read config
-      }
-    };
+  public async getRequestContext(): Promise<RequestContext> {
+    return TestAuthorizationProvider.getRequestContext();
   }
 
   public getPrefixediModelName(imodelName: string): string {

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AcquireBriefcaseParams, CreateChangesetParams, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, CreateChangesetParams, iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
 import { assertChangeset } from "../AssertionUtils";
 import { cleanUpiModels, createEmptyiModel } from "../CommonTestUtils";
 import { Constants } from "../Constants";
@@ -13,6 +13,7 @@ describe("[Authoring] ChangesetOperations", () => {
   let testContext: TestContext;
   let imodelsClient: iModelsClient;
   let testiModel: iModel;
+  let requestContext: RequestContext;
 
   before(async () => {
     testContext = new TestContext({
@@ -28,6 +29,8 @@ describe("[Authoring] ChangesetOperations", () => {
       testContext,
       imodelName: testContext.getPrefixediModelName("Test iModel for write")
     });
+
+    requestContext = await testContext.getRequestContext();
   });
 
   after(async () => {
@@ -37,14 +40,14 @@ describe("[Authoring] ChangesetOperations", () => {
   it("should create changeset", async () => {
     // Arrange
     const acquireBriefcaseParams: AcquireBriefcaseParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelId: testiModel.id
     };
     const briefcase = await imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
 
     const changesetMetadata = TestiModelMetadata.Changesets[0];
     const createChangesetParams: CreateChangesetParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelId: testiModel.id,
       changesetProperties: {
         briefcaseId: briefcase.briefcaseId,

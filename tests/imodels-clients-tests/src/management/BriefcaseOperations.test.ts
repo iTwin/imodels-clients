@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { GetBriefcaseListParams, GetBriefcaseByIdParams, iModel, iModelsClient, Briefcase } from "@itwin/imodels-client-management";
+import { GetBriefcaseListParams, GetBriefcaseByIdParams, iModel, iModelsClient, Briefcase, RequestContext } from "@itwin/imodels-client-management";
 import { assertBriefcase, assertCollection } from "../AssertionUtils";
 import { cleanUpiModels, findiModelWithName } from "../CommonTestUtils";
 import { Config } from "../Config";
@@ -14,6 +14,7 @@ describe("[Management] BriefcaseOperations", () => {
   let testContext: TestContext;
   let imodelsClient: iModelsClient;
   let defaultiModel: iModel;
+  let requestContext: RequestContext;
 
   before(async () => {
     testContext = new TestContext({
@@ -24,7 +25,8 @@ describe("[Management] BriefcaseOperations", () => {
     });
 
     imodelsClient = new iModelsClient(testContext.ClientConfig);
-    defaultiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().DefaultiModelName });
+    defaultiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
+    requestContext = await testContext.getRequestContext();
   });
 
   after(async () => {
@@ -44,7 +46,7 @@ describe("[Management] BriefcaseOperations", () => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getBriefcaseListParams: GetBriefcaseListParams = {
-        requestContext: testContext.RequestContext,
+        requestContext,
         imodelId: defaultiModel.id,
         urlParams: {
           $top: 5
@@ -66,7 +68,7 @@ describe("[Management] BriefcaseOperations", () => {
     // Arrange
     const briefcaseMetadata = TestiModelMetadata.Briefcase;
     const getBriefcaseByIdParams: GetBriefcaseByIdParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelId: defaultiModel.id,
       briefcaseId: briefcaseMetadata.id
     };

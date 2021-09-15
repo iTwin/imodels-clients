@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AcquireBriefcaseParams, Briefcase, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, Briefcase, iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
 import { assertBriefcase } from "../AssertionUtils";
 import { cleanUpiModels, createEmptyiModel } from "../CommonTestUtils";
 import { Constants } from "../Constants";
@@ -12,6 +12,7 @@ describe("[Authoring] BriefcaseOperations", () => {
   let testContext: TestContext;
   let imodelsClient: iModelsClient;
   let testiModel: iModel;
+  let requestContext: RequestContext;
 
   before(async () => {
     testContext = new TestContext({
@@ -27,6 +28,8 @@ describe("[Authoring] BriefcaseOperations", () => {
       testContext,
       imodelName: testContext.getPrefixediModelName("Test iModel for write")
     });
+
+    requestContext = await testContext.getRequestContext();
   });
 
   after(async () => {
@@ -36,7 +39,7 @@ describe("[Authoring] BriefcaseOperations", () => {
   it("should acquire briefcase", async () => {
     // Arrange
     const acquireBriefcaseParams: AcquireBriefcaseParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelId: testiModel.id
     };
 

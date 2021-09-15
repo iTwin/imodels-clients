@@ -23,9 +23,9 @@ export async function createEmptyiModel(params: {
   imodelName: string
 }): Promise<iModel> {
   return params.imodelsClient.iModels.createEmpty({
-    requestContext: params.testContext.RequestContext,
+    requestContext: await params.testContext.getRequestContext(),
     imodelProperties: {
-      projectId: params.testContext.ProjectId,
+      projectId: await params.testContext.getProjectId(),
       name: params.imodelName
     }
   });
@@ -36,16 +36,16 @@ export async function cleanUpiModels(params: {
   testContext: TestContext
 }): Promise<void> {
   const imodels = params.imodelsClient.iModels.getMinimalList({
-    requestContext: params.testContext.RequestContext,
+    requestContext: await params.testContext.getRequestContext(),
     urlParams: {
-      projectId: params.testContext.ProjectId
+      projectId: await params.testContext.getProjectId()
     }
   });
 
   for await (const imodel of imodels)
     if (params.testContext.doesiModelBelongToContext(imodel.displayName))
       await params.imodelsClient.iModels.delete({
-        requestContext: params.testContext.RequestContext,
+        requestContext: await params.testContext.getRequestContext(),
         imodelId: imodel.id
       });
 }
@@ -56,9 +56,9 @@ export async function findiModelWithName(params: {
   expectediModelname: string
 }): Promise<iModel> {
   const imodels = params.imodelsClient.iModels.getRepresentationList({
-    requestContext: params.testContext.RequestContext,
+    requestContext: await params.testContext.getRequestContext(),
     urlParams: {
-      projectId: params.testContext.ProjectId
+      projectId: await params.testContext.getProjectId()
     }
   });
 

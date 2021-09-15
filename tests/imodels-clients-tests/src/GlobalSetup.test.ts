@@ -15,9 +15,9 @@ before(async () => {
 
   cleanUpiModels({ imodelsClient, testContext });
 
-  const existingiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().DefaultiModelName });
+  const existingiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
   if (!existingiModel)
-    await createDefaultTestiModel({ imodelsClient, testContext, imodelName: Config.get().DefaultiModelName });
+    await createDefaultTestiModel({ imodelsClient, testContext, imodelName: Config.get().defaultiModelName });
 });
 
 after(async () => {
@@ -32,10 +32,13 @@ async function createDefaultTestiModel(params: {
   testContext: TestContext,
   imodelName: string
 }): Promise<iModel> {
+  const requestContext = await params.testContext.getRequestContext();
+  const projectId = await params.testContext.getProjectId();
+
   const imodel = await params.imodelsClient.iModels.createFromBaseline({
-    requestContext: params.testContext.RequestContext,
+    requestContext,
     imodelProperties: {
-      projectId: params.testContext.ProjectId,
+      projectId,
       name: params.imodelName
     },
     baselineFileProperties: {
@@ -44,7 +47,7 @@ async function createDefaultTestiModel(params: {
   });
 
   const briefcase = await params.imodelsClient.Briefcases.acquire({
-    requestContext: params.testContext.RequestContext,
+    requestContext,
     imodelId: imodel.id,
     briefcaseProperties: {
       deviceName: TestiModelMetadata.Briefcase.deviceName
@@ -58,7 +61,7 @@ async function createDefaultTestiModel(params: {
 
   for (let i = 0; i < TestiModelMetadata.Changesets.length; i++) {
     await params.imodelsClient.Changesets.create({
-      requestContext: params.testContext.RequestContext,
+      requestContext,
       imodelId: imodel.id,
       changesetProperties: {
         briefcaseId: briefcase.briefcaseId,
