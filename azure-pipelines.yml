@@ -30,10 +30,6 @@ jobs:
     
     - script: node common/scripts/install-run-rush.js spell-check
       displayName: rush spell-check
-      
-    - script: node common/scripts/install-run-rush.js publish --pack --include-all --publish
-      displayName: rush publish (into .tgz)
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     
     - script: npm run test:integration
       displayName: npm run test:integration
@@ -43,3 +39,12 @@ jobs:
         AUTH_CLIENT_SECRET: $(AUTH_CLIENT_SECRET)
         TEST_USER_EMAIL: $(TEST_USER_EMAIL)
         TEST_USER_PASSWORD: $(TEST_USER_PASSWORD)
+
+    - script: node common/scripts/install-run-rush.js publish --pack --include-all --publish
+      displayName: rush publish (into .tgz)
+
+    - task: PublishBuildArtifacts@1
+      displayName: publish .tgz as build artifacts
+      inputs:
+        PathtoPublish: '$(Build.SourcesDirectory)/common/temp/artifacts/packages'
+        ArtifactName: packages
