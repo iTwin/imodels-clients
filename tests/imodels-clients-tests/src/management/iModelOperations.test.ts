@@ -85,7 +85,7 @@ describe("[Management] iModelOperations", () => {
     });
   });
 
-  it("should return unauthorized error when calling API with invalid access token", async () => {
+  it.skip("should return unauthorized error when calling API with invalid access token", async () => { // TODO: re-enable the test when API is fixed
     // Arrange
     const createiModelParams: CreateEmptyiModelParams = {
       requestContext: { authorization: { scheme: "Bearer", token: "invalidToken" } },
