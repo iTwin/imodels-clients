@@ -28,8 +28,8 @@ export interface TestUserConfigValues {
 }
 
 export interface ConfigValues {
-  defaultProjectName: string;
-  defaultiModelName: string;
+  testProjectName: string;
+  testiModelName: string;
   auth: AuthConfigValues;
   apis: ApisConfigValues;
   testUser: TestUserConfigValues;
@@ -47,8 +47,8 @@ export class Config {
     this.validateAllValuesPresent();
 
     return {
-      defaultProjectName: process.env.TEST_PROJECT_NAME,
-      defaultiModelName: process.env.TEST_IMODEL_NAME,
+      testProjectName: process.env.TEST_PROJECT_NAME,
+      testiModelName: process.env.TEST_IMODEL_NAME,
       auth: {
         authority: process.env.AUTH_AUTHORITY,
         clientId: process.env.AUTH_CLIENT_ID,
@@ -73,7 +73,7 @@ export class Config {
   }
 
   private static validateAllValuesPresent(): void {
-    this.validateConfigValue("TEST_PROJECT_NAME"); // todo: decide between test and default
+    this.validateConfigValue("TEST_PROJECT_NAME");
     this.validateConfigValue("TEST_IMODEL_NAME");
 
     this.validateConfigValue("AUTH_AUTHORITY");

@@ -10,7 +10,7 @@ export class TestProjectProvider {
   }
 
   private static async initializeAndGetProjectId(): Promise<string> {
-    TestProjectProvider._projectId = await TestProjectProvider._projectsClient.getProjectIdByName(Config.get().defaultProjectName);
+    TestProjectProvider._projectId = await TestProjectProvider._projectsClient.getProjectIdByName(Config.get().testProjectName);
     return TestProjectProvider._projectId;
   }
 }

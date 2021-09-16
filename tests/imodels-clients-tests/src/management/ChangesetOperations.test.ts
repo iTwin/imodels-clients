@@ -25,7 +25,7 @@ describe("[Management] ChangesetOperations", () => {
     });
 
     imodelsClient = new iModelsClient(testContext.ClientConfig);
-    defaultiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
+    defaultiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().testiModelName });
     requestContext = await testContext.getRequestContext();
   });
 

@@ -15,9 +15,9 @@ before(async () => {
 
   await cleanUpiModels({ imodelsClient, testContext });
 
-  const existingiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
+  const existingiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().testiModelName });
   if (!existingiModel)
-    await createDefaultTestiModel({ imodelsClient, testContext, imodelName: Config.get().defaultiModelName });
+    await createDefaultTestiModel({ imodelsClient, testContext, imodelName: Config.get().testiModelName });
 });
 
 after(async () => {
