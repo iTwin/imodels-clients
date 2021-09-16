@@ -35,9 +35,9 @@ jobs:
       displayName: rush publish (into .tgz)
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     
-    - script: "npm run test:integration"
-      displayName: rush test integration
-      workingDirectory: "tests/imodels-clients-tests"
+    - script: npm run test:integration
+      displayName: npm run test:integration
+      workingDirectory: tests/imodels-clients-tests
       env:
         AUTH_CLIENT_ID: $(AUTH_CLIENT_ID)
         AUTH_CLIENT_SECRET: $(AUTH_CLIENT_SECRET)
