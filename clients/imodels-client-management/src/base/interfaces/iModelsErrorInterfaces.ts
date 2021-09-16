@@ -11,6 +11,8 @@ export enum iModelsErrorCode {
   InvalidiModelsRequest = "InvalidiModelsRequest",
   InvalidValue = "InvalidValue",
   iModelExists = "iModelExists",
+  FileNotFound = "FileNotFound",
+  ChangesetNotFound = "ChangesetNotFound",
 
   BaselineFileInitializationFailed = "BaselineFileInitializationFailed"
 }

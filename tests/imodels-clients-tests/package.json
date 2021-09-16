@@ -20,7 +20,8 @@
     "@itwin/imodels-client-management": "~0.1.0-dev.1",
     "chai": "~4.3.4",
     "fs-extra": "~10.0.0",
-    "mocha": "~9.0.2"
+    "mocha": "~9.0.2",
+    "dotenv": "~10.0.0"
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "~0.1.0-dev.1",

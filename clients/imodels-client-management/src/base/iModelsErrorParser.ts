@@ -37,7 +37,7 @@ export class iModelsErrorParser {
   public static parse: ParseErrorFunc = (response: { statusCode: number, body: unknown }) => {
     // TODO: remove the special handling when APIM team fixes incorrect error body
     if (response.statusCode === 401) {
-      return new iModelsErrorImpl({ code: iModelsErrorCode.Unauthorized, message: "" });
+      return new iModelsErrorImpl({ code: iModelsErrorCode.Unauthorized, message: "The user is unauthorized. Please provide valid authentication credentials." });
     }
 
     const errorFromApi = response.body as iModelsApiErrorWrapper;
