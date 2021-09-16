@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
 import axios, { AxiosResponse } from "axios";
 import * as puppeteer from "puppeteer";
-import { ParsedUrlQuery } from "querystring";
 import { AuthConfigValues } from "./Config";
 
 interface AccessTokenResponse {
@@ -18,6 +18,7 @@ export interface TestUserCredentials {
 }
 
 export class TestAuthenticationClient {
+  // cspell:disable-next-line
   private _pageLoadedEvent: puppeteer.PuppeteerLifeCycleEvent = "networkidle2";
   private _consentPageTitle = "Request for Approval";
   private _pageElementIds = {
@@ -42,7 +43,6 @@ export class TestAuthenticationClient {
 
     const authorizationCodePromise = this.interceptRedirectAndGetAuthorizationCode(browserPage);
 
-    // cspell:disable-next-line
     await browserPage.goto(this.getAuthenticationUrl(), { waitUntil: this._pageLoadedEvent });
     await this.fillCredentials(browserPage, testUserCredentials);
     await this.consentIfNeeded(browserPage);
@@ -73,7 +73,6 @@ export class TestAuthenticationClient {
     const signInButton = await browserPage.waitForSelector(this._pageElementIds.buttons.signIn);
     await Promise.all([
       signInButton.click(),
-      // cspell:disable-next-line
       browserPage.waitForNavigation({ waitUntil: this._pageLoadedEvent })
     ]);
   }
@@ -86,7 +85,6 @@ export class TestAuthenticationClient {
     const consentButton = await browserPage.waitForSelector(this._pageElementIds.buttons.consent);
     await Promise.all([
       consentButton.click(),
-      // cspell:disable-next-line
       browserPage.waitForNavigation({ waitUntil: this._pageLoadedEvent })
     ]);
   }
@@ -104,7 +102,7 @@ export class TestAuthenticationClient {
         "content-type": "application/x-www-form-urlencoded",
         Authorization: `Basic ${encodedClientCredentials}`
       }
-    }
+    };
 
     const response: AxiosResponse<AccessTokenResponse> = await axios.post(requestUrl, requestBody, requestConfig);
     return response.data.access_token;

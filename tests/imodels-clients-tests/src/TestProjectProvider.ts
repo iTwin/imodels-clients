@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ProjectsClient } from "./ProjectsClient";
 import { Config } from "./Config";
+import { ProjectsClient } from "./ProjectsClient";
 import { TestAuthenticationClient } from "./TestAuthenticationClient";
 
 export class TestProjectProvider {
