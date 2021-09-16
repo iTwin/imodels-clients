@@ -1,15 +1,15 @@
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *--------------------------------------------------------------------------------------------*/
 import { URLSearchParams, parse } from "url";
 import axios, { AxiosResponse } from "axios";
 import * as puppeteer from "puppeteer";
-import { AuthConfigValues } from "./Config";
 import { ParsedUrlQuery } from "querystring";
+import { AuthConfigValues } from "./Config";
 
 interface AccessTokenResponse {
   access_token: string;
-}
-
-export interface AuthConfig extends AuthConfigValues {
-  scopes: string;
 }
 
 export interface TestUserCredentials {
@@ -32,7 +32,7 @@ export class TestAuthenticationClient {
     }
   }
 
-  constructor(private _authConfig: AuthConfig) {
+  constructor(private _authConfig: AuthConfigValues & { scopes: string }) {
   }
 
   public async getAccessToken(testUserCredentials: TestUserCredentials): Promise<string> {

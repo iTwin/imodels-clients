@@ -1,13 +1,16 @@
-import { BaseEntity, RestClient, AxiosRestClient, RequestContext } from "@itwin/imodels-client-management";
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *--------------------------------------------------------------------------------------------*/
+import { BaseEntity, RestClient, AxiosRestClient, RequestContextParams } from "@itwin/imodels-client-management";
 import { TestSetupError } from "./CommonTestUtils";
 import { Config } from "./Config";
-import { TestAuthenticationClient } from "./TestAuthenticationClient";
 
 interface ProjectsResponse {
   projects: BaseEntity[]
 }
 
-interface CreateProjectResponse {
+interface ProjectResponse {
   project: BaseEntity;
 }
 
@@ -23,51 +26,27 @@ export class ProjectsClient {
     this._restClient = new AxiosRestClient(parseErrorFunc);
   }
 
-  public async getProjectIdByName(projectName: string): Promise<string> {
-    const requestContext = await this.getRequestContext();
+  public async getProjectIdByName(params: RequestContextParams & { projectName: string }): Promise<string> {
     const headers = {
-      Authorization: `${requestContext.authorization.scheme} ${requestContext.authorization.token}`
+      Authorization: `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`
     };
 
     const getProjectsWithNameResponse = await this._restClient.sendGetRequest<ProjectsResponse>({
-      url: `${Config.get().apis.projects.baseUrl}?displayName=${projectName}`,
+      url: `${Config.get().apis.projects.baseUrl}?displayName=${params.projectName}`,
       headers
     });
 
     if (getProjectsWithNameResponse.projects.length > 0)
       return getProjectsWithNameResponse.projects[0].id;
 
-    const createProjectResponse = await this._restClient.sendPostRequest<CreateProjectResponse>({
+    const createProjectResponse = await this._restClient.sendPostRequest<ProjectResponse>({
       url: Config.get().apis.projects.baseUrl,
       headers,
       body: {
-        displayName: projectName,
-        projectNumber: `${projectName} #${this.getUniqueProjectNumber()}`
+        displayName: params.projectName,
+        projectNumber: `${params.projectName} ${new Date()}`
       }
     });
     return createProjectResponse.project.id;
-  }
-
-  private getUniqueProjectNumber(): string {
-    return (new Date()).getTime().toString(36);
-  }
-
-  private async getRequestContext(): Promise<RequestContext> {
-    const authClient = new TestAuthenticationClient({
-      authority: Config.get().auth.authority,
-      clientId: Config.get().auth.clientId,
-      clientSecret: Config.get().auth.clientSecret,
-      scopes: Config.get().apis.projects.scopes,
-      redirectUrl: Config.get().auth.redirectUrl
-    });
-    return {
-      authorization: {
-        scheme: "Bearer",
-        token: await authClient.getAccessToken({
-          email: Config.get().testUser.email,
-          password: Config.get().testUser.password
-        })
-      }
-    };
   }
 }
