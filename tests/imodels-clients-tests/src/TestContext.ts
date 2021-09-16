@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClientOptions, RequestContext } from "@itwin/imodels-client-authoring";
 import { Config } from "./Config";
-import { TestAuthorizationProvider } from "./TestAuthorizationProvider";
+import { TestAuthenticationProvider } from "./TestAuthenticationProvider";
 import { TestProjectProvider } from "./TestProjectProvider";
 
 export class TestContext {
@@ -34,7 +34,7 @@ export class TestContext {
   }
 
   public async getRequestContext(): Promise<RequestContext> {
-    return TestAuthorizationProvider.getRequestContext();
+    return TestAuthenticationProvider.getRequestContext();
   }
 
   public getPrefixediModelName(imodelName: string): string {

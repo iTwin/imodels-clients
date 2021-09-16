@@ -1,25 +1,37 @@
-import { URLSearchParams } from "url";
+import { URLSearchParams, parse } from "url";
 import axios, { AxiosResponse } from "axios";
 import * as puppeteer from "puppeteer";
+import { AuthConfigValues } from "./Config";
+import { ParsedUrlQuery } from "querystring";
 
 interface AccessTokenResponse {
   access_token: string;
 }
 
-interface AuthConfig {
-  authority: string;
-  clientId: string;
-  clientSecret: string;
+export interface AuthConfig extends AuthConfigValues {
   scopes: string;
-  redirectUrl: string;
 }
 
-interface TestUserCredentials {
+export interface TestUserCredentials {
   email: string;
   password: string;
 }
 
-export class TestAuthClient {
+export class TestAuthenticationClient {
+  private _pageLoadedEvent: puppeteer.PuppeteerLifeCycleEvent = "networkidle2";
+  private _consentPageTitle = "Request for Approval";
+  private _pageElementIds = {
+    fields: {
+      email: "#identifierInput",
+      password: "#password"
+    },
+    buttons: {
+      next: "#sign-in-button",
+      signIn: "#sign-in-button",
+      consent: "#bentleySubmit"
+    }
+  }
+
   constructor(private _authConfig: AuthConfig) {
   }
 
@@ -31,7 +43,7 @@ export class TestAuthClient {
     const authorizationCodePromise = this.interceptRedirectAndGetAuthorizationCode(browserPage);
 
     // cspell:disable-next-line
-    await browserPage.goto(this.getAuthenticationUrl(), { waitUntil: "networkidle2" });
+    await browserPage.goto(this.getAuthenticationUrl(), { waitUntil: this._pageLoadedEvent });
     await this.fillCredentials(browserPage, testUserCredentials);
     await this.consentIfNeeded(browserPage);
     const accessToken = await this.exchangeAuthorizationCodeForAccessToken(await authorizationCodePromise);
@@ -49,80 +61,81 @@ export class TestAuthClient {
   }
 
   private async fillCredentials(browserPage: puppeteer.Page, testUserCredentials: TestUserCredentials): Promise<void> {
-    const emailField = await browserPage.waitForSelector("#identifierInput");
+    const emailField = await browserPage.waitForSelector(this._pageElementIds.fields.email);
     await emailField.type(testUserCredentials.email);
 
-    const nextButton = await browserPage.waitForSelector("#sign-in-button");
+    const nextButton = await browserPage.waitForSelector(this._pageElementIds.buttons.next);
     await nextButton.click();
 
-    const passwordField = await browserPage.waitForSelector("#password");
+    const passwordField = await browserPage.waitForSelector(this._pageElementIds.fields.password);
     await passwordField.type(testUserCredentials.password);
 
-    const signInButton = await browserPage.waitForSelector("#sign-in-button");
+    const signInButton = await browserPage.waitForSelector(this._pageElementIds.buttons.signIn);
     await Promise.all([
       signInButton.click(),
       // cspell:disable-next-line
-      browserPage.waitForNavigation({ waitUntil: "networkidle2" })
+      browserPage.waitForNavigation({ waitUntil: this._pageLoadedEvent })
     ]);
   }
 
   private async consentIfNeeded(browserPage: puppeteer.Page): Promise<void> {
-    const isConsentPage = await browserPage.title() === "Request for Approval"; // todo: check if valid
+    const isConsentPage = await browserPage.title() === this._consentPageTitle;
     if (!isConsentPage)
       return;
 
-    const consentButton = await browserPage.waitForSelector("#bentleySubmit");
+    const consentButton = await browserPage.waitForSelector(this._pageElementIds.buttons.consent);
     await Promise.all([
       consentButton.click(),
       // cspell:disable-next-line
-      browserPage.waitForNavigation({ waitUntil: "networkidle2" }) // todo: event names into constants
+      browserPage.waitForNavigation({ waitUntil: this._pageLoadedEvent })
     ]);
   }
 
   private async exchangeAuthorizationCodeForAccessToken(authorizationCode: string): Promise<string> {
+    const requestUrl = `${this._authConfig.authority}/connect/token`;
+    const requestBody = new URLSearchParams({
+      grant_type: "authorization_code",
+      code: authorizationCode,
+      redirect_uri: this._authConfig.redirectUrl
+    });
     const encodedClientCredentials = Buffer.from(`${encodeURIComponent(this._authConfig.clientId)}:${encodeURIComponent(this._authConfig.clientSecret)}`).toString("base64");
-
-    const response: AxiosResponse<AccessTokenResponse> = await axios({
-      method: "POST",
+    const requestConfig = {
       headers: {
         "content-type": "application/x-www-form-urlencoded",
         Authorization: `Basic ${encodedClientCredentials}`
-      },
-      data: new URLSearchParams({
-        grant_type: "authorization_code",
-        code: authorizationCode,
-        redirect_uri: this._authConfig.redirectUrl
-      }),
-      url: `${this._authConfig.authority}/connect/token`
-    });
+      }
+    }
 
+    const response: AxiosResponse<AccessTokenResponse> = await axios.post(requestUrl, requestBody, requestConfig);
     return response.data.access_token;
   }
 
-  private getCodeFromUrl(redirectUrl: string): string {
-    const codeOccurrenceIdx = redirectUrl.indexOf("code");
-    const codeUrlParam = redirectUrl.substring(codeOccurrenceIdx);
-    const code = codeUrlParam.split("=")[1];
-    return code;
-  }
 
   private async interceptRedirectAndGetAuthorizationCode(browserPage: puppeteer.Page): Promise<string> {
     await browserPage.setRequestInterception(true);
     return new Promise<string>((resolve) => {
       browserPage.on("request", async (interceptedRequest) => {
         const currentRequestUrl = interceptedRequest.url();
-        if (!currentRequestUrl.startsWith(this._authConfig.redirectUrl)) {
+        if (!currentRequestUrl.startsWith(this._authConfig.redirectUrl))
           interceptedRequest.continue();
-        } else {
-          await interceptedRequest.respond({
-            status: 200,
-            contentType: "text/html",
-            body: "OK"
-          });
-
+        else {
+          await this.respondSuccess(interceptedRequest);
           resolve(this.getCodeFromUrl(currentRequestUrl));
         }
       });
     });
+  }
+
+  private async respondSuccess(request: puppeteer.HTTPRequest): Promise<void> {
+    await request.respond({
+      status: 200,
+      contentType: "text/html",
+      body: "OK"
+    });
+  }
+
+  private getCodeFromUrl(redirectUrl: string): string {
+    const urlQuery: ParsedUrlQuery = parse(redirectUrl, true).query;
+    return urlQuery.code.toString();
   }
 }
