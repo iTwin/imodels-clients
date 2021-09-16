@@ -19,9 +19,7 @@ export interface Extent {
   northEast: Point;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MinimaliModel extends BaseEntity {
-}
+export type MinimaliModel = BaseEntity
 
 export interface iModel extends MinimaliModel {
   name: string;

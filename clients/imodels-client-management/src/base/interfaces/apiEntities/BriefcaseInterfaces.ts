@@ -4,9 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { BaseEntity, CollectionResponse } from "../CommonInterfaces";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MinimalBriefcase extends BaseEntity {
-}
+export type MinimalBriefcase = BaseEntity
 
 export interface Briefcase extends MinimalBriefcase {
   briefcaseId: number;

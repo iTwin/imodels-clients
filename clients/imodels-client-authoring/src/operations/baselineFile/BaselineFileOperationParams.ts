@@ -4,6 +4,4 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelScopedOperationParams } from "@itwin/imodels-client-management";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface GetBaselineFileByiModelIdParams extends iModelScopedOperationParams {
-}
+export type GetBaselineFileByiModelIdParams = iModelScopedOperationParams;
