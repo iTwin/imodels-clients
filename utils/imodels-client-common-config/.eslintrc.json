@@ -71,6 +71,9 @@
       "error",
       "never"
     ],
+    "require-await": [
+      "error"
+    ],
     "@typescript-eslint/naming-convention": [
       "error",
       {

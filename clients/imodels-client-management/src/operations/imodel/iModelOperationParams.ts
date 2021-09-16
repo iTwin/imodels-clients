@@ -8,9 +8,7 @@ export interface GetiModelListParams extends RequestContextParams {
   urlParams: { projectId: string } & CollectionRequestParams;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface GetiModelByIdParams extends iModelScopedOperationParams {
-}
+export type GetiModelByIdParams = iModelScopedOperationParams
 
 export interface iModelProperties {
   projectId: string;
@@ -23,6 +21,4 @@ export interface CreateEmptyiModelParams extends RequestContextParams {
   imodelProperties: iModelProperties;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface DeleteiModelParams extends iModelScopedOperationParams {
-}
+export type DeleteiModelParams = iModelScopedOperationParams
