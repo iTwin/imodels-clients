@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, BaseEntity, RequestContextParams, RestClient } from "@itwin/imodels-client-management";
-import { TestSetupError } from "./CommonTestUtils";
+import axios, { AxiosResponse } from "axios";
+import { BaseEntity, RequestContextParams } from "@itwin/imodels-client-management";
 import { Config } from "./Config";
 
 interface ProjectsResponse {
@@ -15,38 +15,24 @@ interface ProjectResponse {
 }
 
 export class ProjectsClient {
-  private _restClient: RestClient;
-
-  constructor() {
-    const parseErrorFunc = (response: {
-      statusCode: number,
-      body: unknown
-    }) => new TestSetupError(`Projects request failed with status code ${response?.statusCode}: ${JSON.stringify(response?.body)}`);
-
-    this._restClient = new AxiosRestClient(parseErrorFunc);
-  }
-
   public async getProjectIdByName(params: RequestContextParams & { projectName: string }): Promise<string> {
-    const headers = {
-      Authorization: `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`
+    const requestConfig = {
+      headers: {
+        Authorization: `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`
+      }
     };
 
-    const getProjectsWithNameResponse = await this._restClient.sendGetRequest<ProjectsResponse>({
-      url: `${Config.get().apis.projects.baseUrl}?displayName=${params.projectName}`,
-      headers
-    });
+    const getProjectsWithNameUrl = `${Config.get().apis.projects.baseUrl}?displayName=${params.projectName}`;
+    const getProjectsWithNameResponse: AxiosResponse<ProjectsResponse> = await axios.get(getProjectsWithNameUrl, requestConfig);
+    if (getProjectsWithNameResponse.data.projects.length > 0)
+      return getProjectsWithNameResponse.data.projects[0].id;
 
-    if (getProjectsWithNameResponse.projects.length > 0)
-      return getProjectsWithNameResponse.projects[0].id;
-
-    const createProjectResponse = await this._restClient.sendPostRequest<ProjectResponse>({
-      url: Config.get().apis.projects.baseUrl,
-      headers,
-      body: {
-        displayName: params.projectName,
-        projectNumber: `${params.projectName} ${new Date()}`
-      }
-    });
-    return createProjectResponse.project.id;
+    const createProjectUrl = Config.get().apis.projects.baseUrl;
+    const createProjectBody = {
+      displayName: params.projectName,
+      projectNumber: `${params.projectName} ${new Date()}`
+    };
+    const createProjectResponse: AxiosResponse<ProjectResponse> = await axios.post(createProjectUrl, createProjectBody, requestConfig);
+    return createProjectResponse.data.project.id;
   }
 }
