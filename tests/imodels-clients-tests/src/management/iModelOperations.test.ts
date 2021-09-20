@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import { CreateEmptyiModelParams, GetiModelListParams, iModel, iModelsClient, iModelsErrorCode, RequestContext } from "@itwin/imodels-client-management";
 import { assertCollection, assertError, assertiModel } from "../AssertionUtils";
-import { testClientOptions } from "../CommonTestUtils";
 import { Constants } from "../Constants";
 import { TestAuthenticationProvider } from "../TestAuthenticationProvider";
+import { TestClientOptions } from "../TestClientOptions";
 import { TestiModelGroup } from "../TestContext";
 import { TestProjectProvider } from "../TestProjectProvider";
 
@@ -17,7 +17,7 @@ describe("[Management] iModelOperations", () => {
   let testiModelGroup: TestiModelGroup;
 
   before(async () => {
-    imodelsClient = new iModelsClient(testClientOptions);
+    imodelsClient = new iModelsClient(new TestClientOptions());
     requestContext = await TestAuthenticationProvider.getRequestContext();
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({

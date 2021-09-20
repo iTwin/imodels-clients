@@ -4,9 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import { AcquireBriefcaseParams, Briefcase, iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
 import { assertBriefcase } from "../AssertionUtils";
-import { cleanUpiModels, createEmptyiModel, testClientOptions } from "../CommonTestUtils";
+import { cleanUpiModels, createEmptyiModel } from "../CommonTestUtils";
 import { Constants } from "../Constants";
 import { TestAuthenticationProvider } from "../TestAuthenticationProvider";
+import { TestClientOptions } from "../TestClientOptions";
 import { TestiModelGroup } from "../TestContext";
 import { TestiModelMetadata } from "../TestiModelMetadata";
 import { TestProjectProvider } from "../TestProjectProvider";
@@ -19,7 +20,7 @@ describe("[Authoring] BriefcaseOperations", () => {
   let testiModel: iModel;
 
   before(async () => {
-    imodelsClient = new iModelsClient(testClientOptions);
+    imodelsClient = new iModelsClient(new TestClientOptions());
     requestContext = await TestAuthenticationProvider.getRequestContext();
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({

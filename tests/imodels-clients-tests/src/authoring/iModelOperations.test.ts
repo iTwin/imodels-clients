@@ -4,9 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import { CreateiModelFromBaselineParams, iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
 import { assertiModel } from "../AssertionUtils";
-import { cleanUpiModels, testClientOptions } from "../CommonTestUtils";
+import { cleanUpiModels } from "../CommonTestUtils";
 import { Constants } from "../Constants";
 import { TestAuthenticationProvider } from "../TestAuthenticationProvider";
+import { TestClientOptions } from "../TestClientOptions";
 import { TestiModelGroup } from "../TestContext";
 import { TestiModelMetadata } from "../TestiModelMetadata";
 import { TestProjectProvider } from "../TestProjectProvider";
@@ -18,7 +19,7 @@ describe("[Authoring] iModelOperations", () => {
   let testiModelGroup: TestiModelGroup;
 
   before(async () => {
-    imodelsClient = new iModelsClient(testClientOptions);
+    imodelsClient = new iModelsClient(new TestClientOptions());
     requestContext = await TestAuthenticationProvider.getRequestContext();
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({

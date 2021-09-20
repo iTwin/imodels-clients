@@ -3,15 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { iModel, iModelsClient as ManagementiModelsClient, iModelsClientOptions, RequestContext } from "@itwin/imodels-client-management";
-import { Config } from "./Config";
+import { iModel, iModelsClient as ManagementiModelsClient, RequestContext } from "@itwin/imodels-client-management";
 import { TestiModelGroup } from "./TestContext";
-
-export const testClientOptions: iModelsClientOptions = {
-  api: {
-    baseUri: Config.get().apis.imodels.baseUrl
-  }
-};
 
 export class TestSetupError extends Error {
   constructor(message: string) {

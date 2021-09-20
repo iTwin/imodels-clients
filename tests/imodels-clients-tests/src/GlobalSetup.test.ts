@@ -3,16 +3,17 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
-import { cleanUpiModels, findiModelWithName, testClientOptions, TestSetupError } from "./CommonTestUtils";
+import { cleanUpiModels, findiModelWithName, TestSetupError } from "./CommonTestUtils";
 import { Config } from "./Config";
 import { Constants } from "./Constants";
 import { TestAuthenticationProvider } from "./TestAuthenticationProvider";
+import { TestClientOptions } from "./TestClientOptions";
 import { TestiModelGroup } from "./TestContext";
 import { TestiModelMetadata } from "./TestiModelMetadata";
 import { TestProjectProvider } from "./TestProjectProvider";
 
 before(async () => {
-  const imodelsClient = new iModelsClient(testClientOptions);
+  const imodelsClient = new iModelsClient(new TestClientOptions());
   const requestContext = await TestAuthenticationProvider.getRequestContext();
   const projectId = await TestProjectProvider.getProjectId();
   const testiModelGroup = new TestiModelGroup({ labels: { package: Constants.PackagePrefix } });
@@ -25,7 +26,7 @@ before(async () => {
 });
 
 after(async () => {
-  const imodelsClient = new iModelsClient(testClientOptions);
+  const imodelsClient = new iModelsClient(new TestClientOptions());
   const requestContext = await TestAuthenticationProvider.getRequestContext();
   const projectId = await TestProjectProvider.getProjectId();
   const testiModelGroup = new TestiModelGroup({ labels: { package: Constants.PackagePrefix } });
