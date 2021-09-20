@@ -58,7 +58,7 @@ describe("[Management] iModelOperations", () => {
       functionUnderTest: (params: GetiModelListParams) => imodelsClient.iModels.getRepresentationList(params)
     }
   ].forEach(testCase => {
-    it(`should get ${testCase.label} collection`, async () => {
+    it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getiModelListParams: GetiModelListParams = {
         requestContext,
