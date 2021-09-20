@@ -7,7 +7,7 @@ import { Config } from "./Config";
 
 export class TestClientOptions implements iModelsClientOptions {
   public api: ApiOptions;
-  
+
   constructor() {
     this.api = {
       baseUri: Config.get().apis.imodels.baseUrl

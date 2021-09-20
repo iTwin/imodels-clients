@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { iModel, iModelsClient as ManagementiModelsClient, RequestContext } from "@itwin/imodels-client-management";
-import { TestiModelGroup } from "./TestContext";
+import { TestiModelGroup } from "./TestiModelGroup";
 
 export class TestSetupError extends Error {
   constructor(message: string) {

@@ -3,12 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { CreateEmptyiModelParams, GetiModelListParams, iModel, iModelsClient, iModelsErrorCode, RequestContext } from "@itwin/imodels-client-management";
-import { assertCollection, assertError, assertiModel } from "../AssertionUtils";
-import { Constants } from "../Constants";
-import { TestAuthenticationProvider } from "../TestAuthenticationProvider";
-import { TestClientOptions } from "../TestClientOptions";
-import { TestiModelGroup } from "../TestContext";
-import { TestProjectProvider } from "../TestProjectProvider";
+import { TestiModelGroup, Constants, TestClientOptions, TestAuthenticationProvider, TestProjectProvider, assertiModel, assertCollection, assertError } from "../common";
 
 describe("[Management] iModelOperations", () => {
   let imodelsClient: iModelsClient;

@@ -3,13 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModel, iModelsClient, GetChangesetListParams, Changeset, GetChangesetByIdParams, RequestContext } from "@itwin/imodels-client-management";
-import { assertChangeset, assertCollection } from "../AssertionUtils";
-import { findiModelWithName } from "../CommonTestUtils";
-import { Config } from "../Config";
-import { TestAuthenticationProvider } from "../TestAuthenticationProvider";
-import { TestClientOptions } from "../TestClientOptions";
-import { TestiModelMetadata } from "../TestiModelMetadata";
-import { TestProjectProvider } from "../TestProjectProvider";
+import { assertChangeset, assertCollection, Config, findiModelWithName, TestAuthenticationProvider, TestClientOptions, TestiModelMetadata, TestProjectProvider } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;

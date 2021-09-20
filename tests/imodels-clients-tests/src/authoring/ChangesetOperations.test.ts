@@ -3,14 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AcquireBriefcaseParams, CreateChangesetParams, iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
-import { assertChangeset } from "../AssertionUtils";
-import { cleanUpiModels, createEmptyiModel } from "../CommonTestUtils";
-import { Constants } from "../Constants";
-import { TestAuthenticationProvider } from "../TestAuthenticationProvider";
-import { TestClientOptions } from "../TestClientOptions";
-import { TestiModelGroup } from "../TestContext";
-import { TestiModelMetadata } from "../TestiModelMetadata";
-import { TestProjectProvider } from "../TestProjectProvider";
+import { cleanUpiModels, createEmptyiModel, Constants, TestAuthenticationProvider, TestClientOptions, TestiModelGroup, TestiModelMetadata, TestProjectProvider } from "../common";
+import { assertChangeset } from "../common/AssertionUtils";
 
 describe("[Authoring] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
