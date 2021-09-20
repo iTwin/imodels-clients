@@ -9,7 +9,7 @@ describe("[Management] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
-  let defaultiModel: iModel; // todo: test vs default
+  let defaultiModel: iModel;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
