@@ -19,7 +19,7 @@ export class TestProjectProvider {
   }
 
   private static async initializeAndGetProjectId(): Promise<string> {
-    TestProjectProvider._projectId = await TestProjectProvider._projectsClient.getProjectIdByName({
+    TestProjectProvider._projectId = await TestProjectProvider._projectsClient.getOrCreateProject({
       requestContext: {
         authorization: {
           scheme: "Bearer",

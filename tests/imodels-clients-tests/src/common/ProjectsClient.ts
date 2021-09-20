@@ -15,7 +15,7 @@ interface ProjectResponse {
 }
 
 export class ProjectsClient {
-  public async getProjectIdByName(params: RequestContextParams & { projectName: string }): Promise<string> {
+  public async getOrCreateProject(params: RequestContextParams & { projectName: string }): Promise<string> {
     const requestConfig = {
       headers: {
         Authorization: `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`
