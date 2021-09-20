@@ -4,37 +4,41 @@
  *--------------------------------------------------------------------------------------------*/
 import { AcquireBriefcaseParams, Briefcase, iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
 import { assertBriefcase } from "../AssertionUtils";
-import { cleanUpiModels, createEmptyiModel } from "../CommonTestUtils";
+import { cleanUpiModels, createEmptyiModel, testClientOptions } from "../CommonTestUtils";
 import { Constants } from "../Constants";
-import { TestContext } from "../TestContext";
+import { TestAuthenticationProvider } from "../TestAuthenticationProvider";
+import { TestiModelGroup } from "../TestContext";
 import { TestiModelMetadata } from "../TestiModelMetadata";
+import { TestProjectProvider } from "../TestProjectProvider";
 
 describe("[Authoring] BriefcaseOperations", () => {
-  let testContext: TestContext;
   let imodelsClient: iModelsClient;
-  let testiModel: iModel;
   let requestContext: RequestContext;
+  let projectId: string;
+  let testiModelGroup: TestiModelGroup;
+  let testiModel: iModel;
 
   before(async () => {
-    testContext = new TestContext({
+    imodelsClient = new iModelsClient(testClientOptions);
+    requestContext = await TestAuthenticationProvider.getRequestContext();
+    projectId = await TestProjectProvider.getProjectId();
+    testiModelGroup = new TestiModelGroup({
       labels: {
         package: Constants.PackagePrefix,
         testSuite: "AuthoringBriefcaseOperations"
       }
     });
 
-    imodelsClient = new iModelsClient(testContext.ClientConfig);
     testiModel = await createEmptyiModel({
       imodelsClient,
-      testContext,
-      imodelName: testContext.getPrefixediModelName("Test iModel for write")
+      requestContext,
+      projectId,
+      imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
     });
-
-    requestContext = await testContext.getRequestContext();
   });
 
   after(async () => {
-    await cleanUpiModels({ imodelsClient, testContext });
+    await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
   });
 
   it("should acquire briefcase", async () => {

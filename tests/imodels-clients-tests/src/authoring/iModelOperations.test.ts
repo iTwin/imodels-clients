@@ -4,30 +4,33 @@
  *--------------------------------------------------------------------------------------------*/
 import { CreateiModelFromBaselineParams, iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
 import { assertiModel } from "../AssertionUtils";
-import { cleanUpiModels } from "../CommonTestUtils";
+import { cleanUpiModels, testClientOptions } from "../CommonTestUtils";
 import { Constants } from "../Constants";
-import { TestContext } from "../TestContext";
+import { TestAuthenticationProvider } from "../TestAuthenticationProvider";
+import { TestiModelGroup } from "../TestContext";
 import { TestiModelMetadata } from "../TestiModelMetadata";
+import { TestProjectProvider } from "../TestProjectProvider";
 
 describe("[Authoring] iModelOperations", () => {
-  let testContext: TestContext;
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
+  let projectId: string;
+  let testiModelGroup: TestiModelGroup;
 
   before(async () => {
-    testContext = new TestContext({
+    imodelsClient = new iModelsClient(testClientOptions);
+    requestContext = await TestAuthenticationProvider.getRequestContext();
+    projectId = await TestProjectProvider.getProjectId();
+    testiModelGroup = new TestiModelGroup({
       labels: {
         package: Constants.PackagePrefix,
         testSuite: "AuthoringiModelOperations"
       }
     });
-
-    imodelsClient = new iModelsClient(testContext.ClientConfig);
-    requestContext = await testContext.getRequestContext();
   });
 
   after(async () => {
-    await cleanUpiModels({ imodelsClient, testContext });
+    await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
   });
 
   it("should create an iModel from baseline", async () => {
@@ -35,8 +38,8 @@ describe("[Authoring] iModelOperations", () => {
     const createiModelParams: CreateiModelFromBaselineParams = {
       requestContext,
       imodelProperties: {
-        projectId: await testContext.getProjectId(),
-        name: testContext.getPrefixediModelName("Sample iModel from baseline")
+        projectId,
+        name: testiModelGroup.getPrefixediModelName("Sample iModel from baseline")
       },
       baselineFileProperties: {
         path: TestiModelMetadata.iModel.baselineFilePath

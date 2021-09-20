@@ -4,29 +4,28 @@
  *--------------------------------------------------------------------------------------------*/
 import { CreateEmptyiModelParams, GetiModelListParams, iModel, iModelsClient, iModelsErrorCode, RequestContext } from "@itwin/imodels-client-management";
 import { assertCollection, assertError, assertiModel } from "../AssertionUtils";
-import { cleanUpiModels } from "../CommonTestUtils";
+import { testClientOptions } from "../CommonTestUtils";
 import { Constants } from "../Constants";
-import { TestContext } from "../TestContext";
+import { TestAuthenticationProvider } from "../TestAuthenticationProvider";
+import { TestiModelGroup } from "../TestContext";
+import { TestProjectProvider } from "../TestProjectProvider";
 
 describe("[Management] iModelOperations", () => {
-  let testContext: TestContext;
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
+  let projectId: string;
+  let testiModelGroup: TestiModelGroup;
 
   before(async () => {
-    testContext = new TestContext({
+    imodelsClient = new iModelsClient(testClientOptions);
+    requestContext = await TestAuthenticationProvider.getRequestContext();
+    projectId = await TestProjectProvider.getProjectId();
+    testiModelGroup = new TestiModelGroup({
       labels: {
         package: Constants.PackagePrefix,
         testSuite: "ManagementiModelOperations"
       }
     });
-
-    imodelsClient = new iModelsClient(testContext.ClientConfig);
-    requestContext = await testContext.getRequestContext();
-  });
-
-  after(async () => {
-    await cleanUpiModels({ imodelsClient, testContext });
   });
 
   it("should create an empty iModel", async () => {
@@ -34,8 +33,8 @@ describe("[Management] iModelOperations", () => {
     const createiModelParams: CreateEmptyiModelParams = {
       requestContext,
       imodelProperties: {
-        projectId: await testContext.getProjectId(),
-        name: testContext.getPrefixediModelName("Empty Test iModel"),
+        projectId,
+        name: testiModelGroup.getPrefixediModelName("Empty Test iModel"),
         description: "Sample iModel description",
         extent: {
           southWest: { latitude: 1, longitude: 2 },
@@ -69,7 +68,7 @@ describe("[Management] iModelOperations", () => {
       const getiModelListParams: GetiModelListParams = {
         requestContext,
         urlParams: {
-          projectId: await testContext.getProjectId(),
+          projectId,
           $top: 5
         }
       };
@@ -90,8 +89,8 @@ describe("[Management] iModelOperations", () => {
     const createiModelParams: CreateEmptyiModelParams = {
       requestContext: { authorization: { scheme: "Bearer", token: "invalidToken" } },
       imodelProperties: {
-        projectId: await testContext.getProjectId(),
-        name: testContext.getPrefixediModelName("Sample iModel (unauthorized)")
+        projectId,
+        name: testiModelGroup.getPrefixediModelName("Sample iModel (unauthorized)")
       }
     };
 
@@ -118,8 +117,8 @@ describe("[Management] iModelOperations", () => {
     const createiModelParams: CreateEmptyiModelParams = {
       requestContext,
       imodelProperties: {
-        projectId: await testContext.getProjectId(),
-        name: testContext.getPrefixediModelName("Sample iModel (invalid)"),
+        projectId,
+        name: testiModelGroup.getPrefixediModelName("Sample iModel (invalid)"),
         description: "x".repeat(256)
       }
     };

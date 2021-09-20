@@ -4,33 +4,24 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModel, iModelsClient, GetChangesetListParams, Changeset, GetChangesetByIdParams, RequestContext } from "@itwin/imodels-client-management";
 import { assertChangeset, assertCollection } from "../AssertionUtils";
-import { cleanUpiModels, findiModelWithName } from "../CommonTestUtils";
+import { findiModelWithName, testClientOptions } from "../CommonTestUtils";
 import { Config } from "../Config";
-import { Constants } from "../Constants";
-import { TestContext } from "../TestContext";
+import { TestAuthenticationProvider } from "../TestAuthenticationProvider";
 import { TestiModelMetadata } from "../TestiModelMetadata";
+import { TestProjectProvider } from "../TestProjectProvider";
 
 describe("[Management] ChangesetOperations", () => {
-  let testContext: TestContext;
   let imodelsClient: iModelsClient;
-  let defaultiModel: iModel;
   let requestContext: RequestContext;
+  let projectId: string;
+  let defaultiModel: iModel; // todo: test vs default
 
   before(async () => {
-    testContext = new TestContext({
-      labels: {
-        package: Constants.PackagePrefix,
-        testSuite: "ManagementChangesetOperations"
-      }
-    });
+    imodelsClient = new iModelsClient(testClientOptions);
+    requestContext = await TestAuthenticationProvider.getRequestContext();
+    projectId = await TestProjectProvider.getProjectId();
 
-    imodelsClient = new iModelsClient(testContext.ClientConfig);
-    defaultiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().testiModelName });
-    requestContext = await testContext.getRequestContext();
-  });
-
-  after(async () => {
-    await cleanUpiModels({ imodelsClient, testContext });
+    defaultiModel = await findiModelWithName({ imodelsClient, requestContext, projectId, expectediModelname: Config.get().testiModelName });
   });
 
   [
