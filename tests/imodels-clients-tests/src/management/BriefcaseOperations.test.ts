@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { GetBriefcaseListParams, GetBriefcaseByIdParams, iModel, iModelsClient, Briefcase, RequestContext } from "@itwin/imodels-client-management";
-import { assertBriefcase, assertCollection, Config, findiModelWithName, TestAuthenticationProvider, TestClientOptions, TestiModelMetadata, TestProjectProvider } from "../common";
+import { Briefcase, GetBriefcaseByIdParams, GetBriefcaseListParams, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-management";
+import { Config, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelMetadata, assertBriefcase, assertCollection, findiModelWithName } from "../common";
 
 describe("[Management] BriefcaseOperations", () => {
   let imodelsClient: iModelsClient;

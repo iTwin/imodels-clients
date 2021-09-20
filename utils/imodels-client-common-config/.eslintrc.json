@@ -59,9 +59,20 @@
           "builtin"
         ],
         "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": true
+          "order": "ignore"
         }
+      }
+    ],
+    "sort-imports": [
+      "error",
+      {
+        "ignoreDeclarationSort": true,
+        "memberSyntaxSortOrder": [
+          "none",
+          "all",
+          "single",
+          "multiple"
+        ]
       }
     ],
     "no-trailing-spaces": [

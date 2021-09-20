@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BaseEntity, RestClient, AxiosRestClient, RequestContextParams } from "@itwin/imodels-client-management";
+import { AxiosRestClient, BaseEntity, RequestContextParams, RestClient } from "@itwin/imodels-client-management";
 import { TestSetupError } from "./CommonTestUtils";
 import { Config } from "./Config";
 

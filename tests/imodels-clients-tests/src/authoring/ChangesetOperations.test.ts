@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AcquireBriefcaseParams, CreateChangesetParams, iModel, iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
-import { cleanUpiModels, createEmptyiModel, Constants, TestAuthenticationProvider, TestClientOptions, TestiModelGroup, TestiModelMetadata, TestProjectProvider } from "../common";
+import { AcquireBriefcaseParams, CreateChangesetParams, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
+import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, cleanUpiModels, createEmptyiModel } from "../common";
 import { assertChangeset } from "../common/AssertionUtils";
 
 describe("[Authoring] ChangesetOperations", () => {
