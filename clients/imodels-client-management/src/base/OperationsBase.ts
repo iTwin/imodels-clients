@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
-import { RecursiveRequired } from "./interfaces/UtilityTypes";
 import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextParams } from "./interfaces/CommonInterfaces";
+import { RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
 type Dictionary = { [key: string]: string | number; };

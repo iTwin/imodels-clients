@@ -59,7 +59,8 @@
           "builtin"
         ],
         "alphabetize": {
-          "order": "ignore"
+          "order": "asc",
+          "caseInsensitive": true
         }
       }
     ],
