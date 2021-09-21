@@ -9,14 +9,14 @@ describe("[Management] BriefcaseOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
-  let defaultiModel: iModel;
+  let testiModel: iModel;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
     requestContext = await TestAuthenticationProvider.getRequestContext();
     projectId = await TestProjectProvider.getProjectId();
 
-    defaultiModel = await findiModelWithName({ imodelsClient, requestContext, projectId, expectediModelname: Config.get().testiModelName });
+    testiModel = await findiModelWithName({ imodelsClient, requestContext, projectId, expectediModelname: Config.get().testiModelName });
   });
 
   [
@@ -33,7 +33,7 @@ describe("[Management] BriefcaseOperations", () => {
       // Arrange
       const getBriefcaseListParams: GetBriefcaseListParams = {
         requestContext,
-        imodelId: defaultiModel.id,
+        imodelId: testiModel.id,
         urlParams: {
           $top: 5
         }
@@ -55,7 +55,7 @@ describe("[Management] BriefcaseOperations", () => {
     const briefcaseMetadata = TestiModelMetadata.Briefcase;
     const getBriefcaseByIdParams: GetBriefcaseByIdParams = {
       requestContext,
-      imodelId: defaultiModel.id,
+      imodelId: testiModel.id,
       briefcaseId: briefcaseMetadata.id
     };
 

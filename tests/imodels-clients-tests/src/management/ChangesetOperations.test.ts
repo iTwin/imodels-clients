@@ -9,14 +9,14 @@ describe("[Management] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
-  let defaultiModel: iModel;
+  let testiModel: iModel;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
     requestContext = await TestAuthenticationProvider.getRequestContext();
     projectId = await TestProjectProvider.getProjectId();
 
-    defaultiModel = await findiModelWithName({ imodelsClient, requestContext, projectId, expectediModelname: Config.get().testiModelName });
+    testiModel = await findiModelWithName({ imodelsClient, requestContext, projectId, expectediModelname: Config.get().testiModelName });
   });
 
   [
@@ -33,7 +33,7 @@ describe("[Management] ChangesetOperations", () => {
       // Arrange
       const getChangesetListParams: GetChangesetListParams = {
         requestContext,
-        imodelId: defaultiModel.id,
+        imodelId: testiModel.id,
         urlParams: {
           $top: 5
         }
@@ -55,7 +55,7 @@ describe("[Management] ChangesetOperations", () => {
     const changesetMetadata = TestiModelMetadata.Changesets[0];
     const getChangesetByIdParams: GetChangesetByIdParams = {
       requestContext,
-      imodelId: defaultiModel.id,
+      imodelId: testiModel.id,
       changesetId: changesetMetadata.id
     };
 
