@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { iModel, iModelsClient as ManagementiModelsClient } from "@itwin/imodels-client-management";
-import { TestContext } from "./TestContext";
+import { iModelsClient as ManagementiModelsClient, RequestContext, iModel } from "@itwin/imodels-client-management";
+import { TestiModelGroup } from "./TestiModelGroup";
 
 export class TestSetupError extends Error {
   constructor(message: string) {
@@ -19,13 +19,14 @@ export function sleep(ms: number): Promise<void> {
 
 export function createEmptyiModel(params: {
   imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
-  testContext: TestContext,
+  requestContext: RequestContext,
+  projectId: string,
   imodelName: string
 }): Promise<iModel> {
   return params.imodelsClient.iModels.createEmpty({
-    requestContext: params.testContext.RequestContext,
+    requestContext: params.requestContext,
     imodelProperties: {
-      projectId: params.testContext.ProjectId,
+      projectId: params.projectId,
       name: params.imodelName
     }
   });
@@ -33,35 +34,36 @@ export function createEmptyiModel(params: {
 
 export async function cleanUpiModels(params: {
   imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
-  testContext: TestContext
+  requestContext: RequestContext,
+  projectId: string,
+  testiModelGroup: TestiModelGroup,
 }): Promise<void> {
   const imodels = params.imodelsClient.iModels.getMinimalList({
-    requestContext: params.testContext.RequestContext,
+    requestContext: params.requestContext,
     urlParams: {
-      projectId: params.testContext.ProjectId
+      projectId: params.projectId
     }
   });
-
   for await (const imodel of imodels)
-    if (params.testContext.doesiModelBelongToContext(imodel.displayName))
+    if (params.testiModelGroup.doesiModelBelongToContext(imodel.displayName))
       await params.imodelsClient.iModels.delete({
-        requestContext: params.testContext.RequestContext,
+        requestContext: params.requestContext,
         imodelId: imodel.id
       });
 }
 
 export async function findiModelWithName(params: {
   imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
-  testContext: TestContext,
+  requestContext: RequestContext,
+  projectId: string,
   expectediModelname: string
-}): Promise<iModel> {
+}): Promise<iModel | undefined> {
   const imodels = params.imodelsClient.iModels.getRepresentationList({
-    requestContext: params.testContext.RequestContext,
+    requestContext: params.requestContext,
     urlParams: {
-      projectId: params.testContext.ProjectId
+      projectId: params.projectId
     }
   });
-
   for await (const imodel of imodels)
     if (imodel.displayName === params.expectediModelname)
       return imodel;

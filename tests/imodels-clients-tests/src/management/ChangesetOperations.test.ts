@@ -2,33 +2,21 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModel, iModelsClient, GetChangesetListParams, Changeset, GetChangesetByIdParams } from "@itwin/imodels-client-management";
-import { assertChangeset, assertCollection } from "../AssertionUtils";
-import { cleanUpiModels, findiModelWithName } from "../CommonTestUtils";
-import { Config } from "../Config";
-import { Constants } from "../Constants";
-import { TestContext } from "../TestContext";
-import { TestiModelMetadata } from "../TestiModelMetadata";
+import { Changeset, GetChangesetByIdParams, GetChangesetListParams, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-management";
+import { Config, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelMetadata, assertChangeset, assertCollection, findiModelWithName } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
-  let testContext: TestContext;
   let imodelsClient: iModelsClient;
-  let defaultiModel: iModel;
+  let requestContext: RequestContext;
+  let projectId: string;
+  let testiModel: iModel;
 
   before(async () => {
-    testContext = new TestContext({
-      labels: {
-        package: Constants.PackagePrefix,
-        testSuite: "ManagementChangesetOperations"
-      }
-    });
+    imodelsClient = new iModelsClient(new TestClientOptions());
+    requestContext = await TestAuthenticationProvider.getRequestContext();
+    projectId = await TestProjectProvider.getProjectId();
 
-    imodelsClient = new iModelsClient(testContext.ClientConfig);
-    defaultiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
-  });
-
-  after(async () => {
-    await cleanUpiModels({ imodelsClient, testContext });
+    testiModel = await findiModelWithName({ imodelsClient, requestContext, projectId, expectediModelname: Config.get().testiModelName });
   });
 
   [
@@ -44,8 +32,8 @@ describe("[Management] ChangesetOperations", () => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getChangesetListParams: GetChangesetListParams = {
-        requestContext: testContext.RequestContext,
-        imodelId: defaultiModel.id,
+        requestContext,
+        imodelId: testiModel.id,
         urlParams: {
           $top: 5
         }
@@ -66,8 +54,8 @@ describe("[Management] ChangesetOperations", () => {
     // Arrange
     const changesetMetadata = TestiModelMetadata.Changesets[0];
     const getChangesetByIdParams: GetChangesetByIdParams = {
-      requestContext: testContext.RequestContext,
-      imodelId: defaultiModel.id,
+      requestContext,
+      imodelId: testiModel.id,
       changesetId: changesetMetadata.id
     };
 

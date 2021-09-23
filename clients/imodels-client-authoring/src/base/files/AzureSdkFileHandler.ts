@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
-import { BlockBlobClient, AnonymousCredential } from "@azure/storage-blob";
+import { AnonymousCredential, BlockBlobClient } from "@azure/storage-blob";
 import { FileHandler } from "./FileHandler";
 
 export class AzureSdkFileHandler implements FileHandler {

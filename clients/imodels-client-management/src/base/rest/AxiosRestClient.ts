@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { iModelsErrorParser } from "../iModelsErrorParser";
-import { RestClient, HttpRequestParams, HttpRequestWithBodyParams, ParseErrorFunc } from "./RestClient";
+import { HttpRequestParams, HttpRequestWithBodyParams, ParseErrorFunc, RestClient } from "./RestClient";
 
 export class AxiosRestClient implements RestClient {
   private _parseErrorFunc: ParseErrorFunc;

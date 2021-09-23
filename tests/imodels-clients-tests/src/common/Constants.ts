@@ -4,6 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 export class Constants {
   static PackagePrefix = "iModelsClientsTests";
-  static AssetsPath = `${__dirname}/assets/`;
+  static AssetsPath = `${__dirname}/../assets/`;
   static TestDeviceName = "Test device";
 }

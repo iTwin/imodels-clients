@@ -2,42 +2,48 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AcquireBriefcaseParams, Briefcase, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { assertBriefcase } from "../AssertionUtils";
-import { cleanUpiModels, createEmptyiModel } from "../CommonTestUtils";
-import { Constants } from "../Constants";
-import { TestContext } from "../TestContext";
+import { AcquireBriefcaseParams, Briefcase, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
+import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, cleanUpiModels, createEmptyiModel } from "../common";
+import { assertBriefcase } from "../common/AssertionUtils";
 
 describe("[Authoring] BriefcaseOperations", () => {
-  let testContext: TestContext;
   let imodelsClient: iModelsClient;
+  let requestContext: RequestContext;
+  let projectId: string;
+  let testiModelGroup: TestiModelGroup;
   let testiModel: iModel;
 
   before(async () => {
-    testContext = new TestContext({
+    imodelsClient = new iModelsClient(new TestClientOptions());
+    requestContext = await TestAuthenticationProvider.getRequestContext();
+    projectId = await TestProjectProvider.getProjectId();
+    testiModelGroup = new TestiModelGroup({
       labels: {
         package: Constants.PackagePrefix,
         testSuite: "AuthoringBriefcaseOperations"
       }
     });
 
-    imodelsClient = new iModelsClient(testContext.ClientConfig);
     testiModel = await createEmptyiModel({
       imodelsClient,
-      testContext,
-      imodelName: testContext.getPrefixediModelName("Test iModel for write")
+      requestContext,
+      projectId,
+      imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
     });
   });
 
   after(async () => {
-    await cleanUpiModels({ imodelsClient, testContext });
+    await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
   });
 
   it("should acquire briefcase", async () => {
     // Arrange
     const acquireBriefcaseParams: AcquireBriefcaseParams = {
-      requestContext: testContext.RequestContext,
-      imodelId: testiModel.id
+      requestContext,
+      imodelId: testiModel.id,
+      briefcaseProperties: {
+        deviceName: TestiModelMetadata.Briefcase.deviceName
+      }
     };
 
     // Act

@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc 1>&2",
-    "test": "npm run test:copy-assets && mocha lib/**/*.test.js --color --timeout 60000",
-    "test:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
+    "test:integration": "npm run test:integration:copy-assets && mocha lib/**/*.test.js --color --timeout 60000",
+    "test:integration:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
     "cover": "nyc npm test",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2",
@@ -21,7 +21,9 @@
     "chai": "~4.3.4",
     "fs-extra": "~10.0.0",
     "mocha": "~9.0.2",
-    "dotenv": "~10.0.0"
+    "dotenv": "~10.0.0",
+    "puppeteer": "~10.2.0",
+    "axios": "~0.21.1"
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "~0.1.0-dev.1",

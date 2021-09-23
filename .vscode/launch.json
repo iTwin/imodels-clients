@@ -8,7 +8,7 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": [
         "run",
-        "test",
+        "test:integration",
         "--",
         "--inspect-brk=9229"
       ],
