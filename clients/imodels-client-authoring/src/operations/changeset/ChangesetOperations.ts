@@ -3,9 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { ChangesetOperations as ManagementChangesetOperations, Changeset, ChangesetState, ChangesetResponse, RecursiveRequired } from "@itwin/imodels-client-management";
-import { ChangesetCreateResponse, FileHandler } from "../../base";
+import { DownloadedFileProps, FileHandler } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
-import { CreateChangesetParams } from "./ChangesetOperationParams";
+import { CreateChangesetParams, DownloadChangesetsParams } from "./ChangesetOperationParams";
 
 export class ChangesetOperations extends ManagementChangesetOperations {
   private _fileHandler: FileHandler;
@@ -17,7 +17,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
 
   public async create(params: CreateChangesetParams): Promise<Changeset> {
     const { changesetFilePath, ...changesetProperties } = params.changesetProperties;
-    const changesetCreateResponse = await this.sendPostRequest<ChangesetCreateResponse>({
+    const changesetCreateResponse = await this.sendPostRequest<ChangesetResponse>({
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/changesets`,
       body: {
@@ -39,5 +39,28 @@ export class ChangesetOperations extends ManagementChangesetOperations {
       }
     });
     return changesetUpdateResponse.changeset;
+  }
+
+  public async download(params: DownloadChangesetsParams): Promise<(Changeset & DownloadedFileProps)[]> {
+    const result: (Changeset & DownloadedFileProps)[] = [];
+
+    this._fileHandler.createDirectory(params.targetPath);
+
+    for await (const changesetPage of this.getChangesetPages(params)) {
+      const downloads: Promise<void>[] = [];
+      for (const changeset of changesetPage) {
+        const downloadUrl = changeset._links.download.href;
+        const targetPath = this._fileHandler.join(params.targetPath, this.createFileName(changeset.id));
+        downloads.push(this._fileHandler.downloadFile(downloadUrl, targetPath));
+        result.push({ ...changeset, filePath: targetPath });
+      }
+      await Promise.all(downloads);
+    }
+
+    return result;
+  }
+
+  private createFileName(changesetId: string): string {
+    return `${changesetId}.cs`;
   }
 }

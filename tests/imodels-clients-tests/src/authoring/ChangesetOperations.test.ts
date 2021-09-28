@@ -2,9 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AcquireBriefcaseParams, CreateChangesetParams, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { assertChangeset } from "../AssertionUtils";
-import { cleanUpiModels, createEmptyiModel } from "../CommonTestUtils";
+import { AcquireBriefcaseParams, CreateChangesetParams, DownloadChangesetsParams, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
+import { expect } from "chai";
+import { assertChangeset, assertCollection } from "../AssertionUtils";
+import { cleanUpiModels, createEmptyiModel, findiModelWithName } from "../CommonTestUtils";
+import { Config } from "../Config";
 import { Constants } from "../Constants";
 import { TestContext } from "../TestContext";
 import { TestiModelMetadata } from "../TestiModelMetadata";
@@ -62,6 +64,20 @@ describe("[Authoring] ChangesetOperations", () => {
       expectedChangesetProperties: createChangesetParams.changesetProperties
     });
   });
+
+  it.only("should download changesets", async () => {
+    // Arrange
+    const existingiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
+    const downloadChangesetsParams: DownloadChangesetsParams = {
+      requestContext: testContext.RequestContext,
+      imodelId: existingiModel.id,
+      targetPath: Constants.DownloadPath
+    };
+
+    // Act
+    const changesets = await imodelsClient.Changesets.download(downloadChangesetsParams);
+
+    // Assert
+    expect(changesets.length).to.equal(TestiModelMetadata.Changesets.length);
+  });
 });
-
-

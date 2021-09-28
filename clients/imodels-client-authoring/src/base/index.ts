@@ -3,6 +3,6 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 export * from "./interfaces/apiEntities/iModelInterfaces";
-export * from "./interfaces/apiEntities/ChangesetInterfaces";
+export * from "./interfaces/CommonInterfaces";
 export * from "./files/FileHandler";
 export * from "./files/AzureSdkFileHandler";

@@ -2,13 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { getPagedCollectionGenerator, OperationsBase, PreferReturn } from "../../base";
+import { getCollectionIterator, getCollectionPagesIterator, OperationsBase, PreferReturn } from "../../base";
 import { Changeset, ChangesetResponse, ChangesetsResponse, MinimalChangeset } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { GetChangesetByIdParams, GetChangesetListParams } from "./ChangesetOperationParams";
 
 export class ChangesetOperations extends OperationsBase {
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
-    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<MinimalChangeset>({
+    return getCollectionIterator(() => this.getEntityCollectionPage<MinimalChangeset>({
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
@@ -17,7 +17,11 @@ export class ChangesetOperations extends OperationsBase {
   }
 
   public getRepresentationList(params: GetChangesetListParams): AsyncIterableIterator<Changeset> {
-    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<Changeset>({
+    return flatten(this.getChangesetPages(params));
+  }
+
+  protected getChangesetPages(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
+    return getCollectionPagesIterator(() => this.getEntityCollectionPage<Changeset>({
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
@@ -33,3 +37,7 @@ export class ChangesetOperations extends OperationsBase {
     return response.changeset;
   }
 }
+function flatten(arg0: AsyncIterableIterator<Changeset[]>): AsyncIterableIterator<Changeset> {
+  throw new Error("Function not implemented.");
+}
+

@@ -4,5 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 export interface FileHandler {
   uploadFile(uploadUrl: string, sourcePath: string): Promise<void>;
+  downloadFile(downloadUrl: string, targetPath: string): Promise<void>;
   getFileSize(filePath: string): number;
+  createDirectory(directory: string): void;
+  join(...paths: string[]): string;
 }

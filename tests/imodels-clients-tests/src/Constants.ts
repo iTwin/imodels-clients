@@ -5,5 +5,6 @@
 export class Constants {
   static PackagePrefix = "iModelsClientsTests";
   static AssetsPath = `${__dirname}/assets/`;
+  static DownloadPath = `${__dirname}/../lib/downloads/`;
   static TestDeviceName = "Test device";
 }
