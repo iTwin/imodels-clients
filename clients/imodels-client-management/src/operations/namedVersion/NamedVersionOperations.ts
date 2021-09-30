@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { getPagedCollectionGenerator, MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn } from "../../base";
+import { MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn, getPagedCollectionGenerator } from "../../base";
 import { CreateNamedVersionParams, GetNamedVersionByIdParams, GetNamedVersionListParams, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
 
 export class NamedVersionOperations extends OperationsBase {
@@ -27,7 +27,7 @@ export class NamedVersionOperations extends OperationsBase {
   public async getById(params: GetNamedVersionByIdParams): Promise<NamedVersion> {
     const response = await this.sendGetRequest<NamedVersionResponse>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions/${params.namedVersionId}`,
+      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions/${params.namedVersionId}`
     });
     return response.namedVersion;
   }
@@ -50,3 +50,4 @@ export class NamedVersionOperations extends OperationsBase {
     return response.namedVersion;
   }
 }
+

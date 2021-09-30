@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { AxiosRestClient, RecursiveRequired, RestClient } from "./base";
 import { Constants } from "./Constants";
-import { BriefcaseOperations, ChangesetOperations, iModelOperations, NamedVersionOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, NamedVersionOperations, iModelOperations } from "./operations";
 
 export interface ApiOptions {
   baseUri?: string;

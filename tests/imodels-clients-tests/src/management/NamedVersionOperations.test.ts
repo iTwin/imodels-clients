@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { RequestContext, iModel, iModelsClient, GetNamedVersionListParams, CreateNamedVersionParams, UpdateNamedVersionParams, NamedVersion, NamedVersionState } from "@itwin/imodels-client-management";
 import { expect } from "chai";
-import { TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelMetadata, assertCollection, TestiModelGroup, Constants, createDefaultTestiModel, assertNamedVersion, cleanUpiModels } from "../common";
+import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
+import { CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, RequestContext, UpdateNamedVersionParams, iModel, iModelsClient } from "@itwin/imodels-client-management";
+import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, assertCollection, assertNamedVersion, cleanUpiModels, createDefaultTestiModel } from "../common";
 
 describe.only("[Management] NamedVersionOperations", () => {
   let imodelsClient: iModelsClient;
@@ -14,7 +14,7 @@ describe.only("[Management] NamedVersionOperations", () => {
   let testiModelGroup: TestiModelGroup;
   let testiModel: iModel;
 
-  // Since we reuse the same iModel to create several named versions we track the index of 
+  // Since we reuse the same iModel to create several named versions we track the index of
   // the next available changeset to create a new named version on.
   let lastNamedVersionChangesetIdx = 1;
 
@@ -97,7 +97,7 @@ describe.only("[Management] NamedVersionOperations", () => {
       requestContext,
       imodelId: testiModel.id,
       namedVersionProperties: {
-        name: `Named Version on baseline`,
+        name: "Named Version on baseline"
       }
     };
 
