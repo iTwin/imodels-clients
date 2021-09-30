@@ -8,3 +8,5 @@ export * from "./briefcase/BriefcaseOperationParams";
 export * from "./briefcase/BriefcaseOperations";
 export * from "./changeset/ChangesetOperations";
 export * from "./changeset/ChangesetOperationParams";
+export * from "./namedVersion/NamedVersionOperations";
+export * from "./namedVersion/NamedVersionOperationParams";
