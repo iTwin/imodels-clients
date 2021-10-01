@@ -76,7 +76,7 @@ describe("[Management] NamedVersionOperations", () => {
         requestContext,
         imodelId: testiModel.id,
         urlParams: {
-          $top: 5
+          $top: 2
         }
       };
 
