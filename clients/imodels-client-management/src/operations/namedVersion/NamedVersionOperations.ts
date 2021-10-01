@@ -50,4 +50,3 @@ export class NamedVersionOperations extends OperationsBase {
     return response.namedVersion;
   }
 }
-

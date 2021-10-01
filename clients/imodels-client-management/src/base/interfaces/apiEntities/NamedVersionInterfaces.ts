@@ -2,8 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionResponse } from "../..";
-import { BaseEntity } from "../CommonInterfaces";
+import { BaseEntity, CollectionResponse } from "../CommonInterfaces";
 
 export enum NamedVersionState {
   Visible = "visible",
