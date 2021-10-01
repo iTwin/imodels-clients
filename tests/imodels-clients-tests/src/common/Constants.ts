@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 export class Constants {
-  static PackagePrefix = "iModelsClientsTests";
-  static AssetsPath = `${__dirname}/assets/`;
+  static AssetsPath = `${__dirname}/../assets/`;
   static DownloadPath = `${__dirname}/../lib/downloads/`;
+  static PackagePrefix = "iModelsClientsTests";
   static TestDeviceName = "Test device";
 }

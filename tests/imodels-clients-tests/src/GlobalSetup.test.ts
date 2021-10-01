@@ -2,40 +2,41 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { cleanUpiModels, findiModelWithName, TestSetupError } from "./CommonTestUtils";
-import { Config } from "./Config";
-import { Constants } from "./Constants";
-import { TestContext } from "./TestContext";
-import { TestiModelMetadata } from "./TestiModelMetadata";
+import { RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelGroup, TestiModelMetadata, cleanUpiModels, findiModelWithName } from "./common";
 
 before(async () => {
-  const testContext = new TestContext({ labels: { package: Constants.PackagePrefix } });
-  const imodelsClient = new iModelsClient(testContext.ClientConfig);
+  const imodelsClient = new iModelsClient(new TestClientOptions());
+  const requestContext = await TestAuthenticationProvider.getRequestContext();
+  const projectId = await TestProjectProvider.getProjectId();
+  const testiModelGroup = new TestiModelGroup({ labels: { package: Constants.PackagePrefix } });
 
-  await cleanUpiModels({ imodelsClient, testContext });
+  await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
 
-  const existingiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
+  const existingiModel = await findiModelWithName({ imodelsClient, requestContext, projectId, expectediModelname: Config.get().testiModelName });
   if (!existingiModel)
-    await createDefaultTestiModel({ imodelsClient, testContext, imodelName: Config.get().defaultiModelName });
+    await createDefaultTestiModel({ imodelsClient, requestContext, projectId, imodelName: Config.get().testiModelName });
 });
 
 after(async () => {
-  const testContext = new TestContext({ labels: { package: Constants.PackagePrefix } });
-  const imodelsClient = new iModelsClient(testContext.ClientConfig);
+  const imodelsClient = new iModelsClient(new TestClientOptions());
+  const requestContext = await TestAuthenticationProvider.getRequestContext();
+  const projectId = await TestProjectProvider.getProjectId();
+  const testiModelGroup = new TestiModelGroup({ labels: { package: Constants.PackagePrefix } });
 
-  await cleanUpiModels({ imodelsClient, testContext });
+  await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
 });
 
 async function createDefaultTestiModel(params: {
   imodelsClient: iModelsClient,
-  testContext: TestContext,
+  requestContext: RequestContext,
+  projectId: string,
   imodelName: string
 }): Promise<iModel> {
   const imodel = await params.imodelsClient.iModels.createFromBaseline({
-    requestContext: params.testContext.RequestContext,
+    requestContext: params.requestContext,
     imodelProperties: {
-      projectId: params.testContext.ProjectId,
+      projectId: params.projectId,
       name: params.imodelName
     },
     baselineFileProperties: {
@@ -44,7 +45,7 @@ async function createDefaultTestiModel(params: {
   });
 
   const briefcase = await params.imodelsClient.Briefcases.acquire({
-    requestContext: params.testContext.RequestContext,
+    requestContext: params.requestContext,
     imodelId: imodel.id,
     briefcaseProperties: {
       deviceName: TestiModelMetadata.Briefcase.deviceName
@@ -58,7 +59,7 @@ async function createDefaultTestiModel(params: {
 
   for (let i = 0; i < TestiModelMetadata.Changesets.length; i++) {
     await params.imodelsClient.Changesets.create({
-      requestContext: params.testContext.RequestContext,
+      requestContext: params.requestContext,
       imodelId: imodel.id,
       changesetProperties: {
         briefcaseId: briefcase.briefcaseId,

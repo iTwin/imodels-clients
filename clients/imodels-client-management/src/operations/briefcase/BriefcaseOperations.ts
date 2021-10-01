@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Briefcase, BriefcaseResponse, BriefcasesResponse, getCollectionIterator, MinimalBriefcase, OperationsBase, PreferReturn } from "../../base";
+import { Briefcase, BriefcaseResponse, BriefcasesResponse, MinimalBriefcase, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
 import { GetBriefcaseByIdParams, GetBriefcaseListParams } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations extends OperationsBase {

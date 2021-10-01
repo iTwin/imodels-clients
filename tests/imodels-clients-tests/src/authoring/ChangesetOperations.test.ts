@@ -2,51 +2,52 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AcquireBriefcaseParams, CreateChangesetParams, DownloadChangesetsParams, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, CreateChangesetParams, RequestContext, iModel, iModelsClient, DownloadChangesetsParams } from "@itwin/imodels-client-authoring";
 import { expect } from "chai";
-import { assertChangeset, assertCollection } from "../AssertionUtils";
-import { cleanUpiModels, createEmptyiModel, findiModelWithName } from "../CommonTestUtils";
-import { Config } from "../Config";
-import { Constants } from "../Constants";
-import { TestContext } from "../TestContext";
-import { TestiModelMetadata } from "../TestiModelMetadata";
+import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, cleanUpiModels, createEmptyiModel } from "../common";
+import { assertChangeset } from "../common/AssertionUtils";
 
 describe("[Authoring] ChangesetOperations", () => {
-  let testContext: TestContext;
   let imodelsClient: iModelsClient;
+  let requestContext: RequestContext;
+  let projectId: string;
+  let testiModelGroup: TestiModelGroup;
   let testiModel: iModel;
 
   before(async () => {
-    testContext = new TestContext({
+    imodelsClient = new iModelsClient(new TestClientOptions());
+    requestContext = await TestAuthenticationProvider.getRequestContext();
+    projectId = await TestProjectProvider.getProjectId();
+    testiModelGroup = new TestiModelGroup({
       labels: {
         package: Constants.PackagePrefix,
         testSuite: "AuthoringChangesetOperations"
       }
     });
 
-    imodelsClient = new iModelsClient(testContext.ClientConfig);
     testiModel = await createEmptyiModel({
       imodelsClient,
-      testContext,
-      imodelName: testContext.getPrefixediModelName("Test iModel for write")
+      requestContext,
+      projectId,
+      imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
     });
   });
 
   after(async () => {
-    await cleanUpiModels({ imodelsClient, testContext });
+    await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
   });
 
   it("should create changeset", async () => {
     // Arrange
     const acquireBriefcaseParams: AcquireBriefcaseParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelId: testiModel.id
     };
     const briefcase = await imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
 
     const changesetMetadata = TestiModelMetadata.Changesets[0];
     const createChangesetParams: CreateChangesetParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelId: testiModel.id,
       changesetProperties: {
         briefcaseId: briefcase.briefcaseId,
@@ -67,10 +68,9 @@ describe("[Authoring] ChangesetOperations", () => {
 
   it.only("should download changesets", async () => {
     // Arrange
-    const existingiModel = await findiModelWithName({ imodelsClient, testContext, expectediModelname: Config.get().defaultiModelName });
     const downloadChangesetsParams: DownloadChangesetsParams = {
-      requestContext: testContext.RequestContext,
-      imodelId: existingiModel.id,
+      requestContext,
+      imodelId: testiModel.id,
       targetPath: Constants.DownloadPath
     };
 

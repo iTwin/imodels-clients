@@ -2,13 +2,15 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Link, iModel } from "@itwin/imodels-client-management";
+import { ApiOptions, iModelsClientOptions } from "@itwin/imodels-client-management";
+import { Config } from "./Config";
 
-export interface iModelLinks {
-  upload: Link;
-  complete: Link;
-}
+export class TestClientOptions implements iModelsClientOptions {
+  public api: ApiOptions;
 
-export interface iModelCreateResponse {
-  iModel: iModel & { _links: iModelLinks };
+  constructor() {
+    this.api = {
+      baseUri: Config.get().apis.imodels.baseUrl
+    };
+  }
 }

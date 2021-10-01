@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { RecursiveRequired, RestClient, AxiosRestClient } from "./base";
+import { AxiosRestClient, RecursiveRequired, RestClient } from "./base";
 import { Constants } from "./Constants";
-import { iModelOperations, ChangesetOperations } from "./operations";
+import { ChangesetOperations, iModelOperations } from "./operations";
 import { BriefcaseOperations } from "./operations/briefcase/BriefcaseOperations";
 
 export interface ApiOptions {

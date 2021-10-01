@@ -2,38 +2,34 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CreateEmptyiModelParams, GetiModelListParams, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
-import { assertCollection, assertError, assertiModel } from "../AssertionUtils";
-import { cleanUpiModels } from "../CommonTestUtils";
-import { Constants } from "../Constants";
-import { TestContext } from "../TestContext";
+import { CreateEmptyiModelParams, GetiModelListParams, RequestContext, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, assertCollection, assertError, assertiModel } from "../common";
 
 describe("[Management] iModelOperations", () => {
-  let testContext: TestContext;
   let imodelsClient: iModelsClient;
+  let requestContext: RequestContext;
+  let projectId: string;
+  let testiModelGroup: TestiModelGroup;
 
-  before(() => {
-    testContext = new TestContext({
+  before(async () => {
+    imodelsClient = new iModelsClient(new TestClientOptions());
+    requestContext = await TestAuthenticationProvider.getRequestContext();
+    projectId = await TestProjectProvider.getProjectId();
+    testiModelGroup = new TestiModelGroup({
       labels: {
         package: Constants.PackagePrefix,
         testSuite: "ManagementiModelOperations"
       }
     });
-
-    imodelsClient = new iModelsClient(testContext.ClientConfig);
-  });
-
-  after(async () => {
-    await cleanUpiModels({ imodelsClient, testContext });
   });
 
   it("should create an empty iModel", async () => {
     // Arrange
     const createiModelParams: CreateEmptyiModelParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelProperties: {
-        projectId: testContext.ProjectId,
-        name: testContext.getPrefixediModelName("Empty Test iModel"),
+        projectId,
+        name: testiModelGroup.getPrefixediModelName("Empty Test iModel"),
         description: "Sample iModel description",
         extent: {
           southWest: { latitude: 1, longitude: 2 },
@@ -62,12 +58,12 @@ describe("[Management] iModelOperations", () => {
       functionUnderTest: (params: GetiModelListParams) => imodelsClient.iModels.getRepresentationList(params)
     }
   ].forEach(testCase => {
-    it(`should get ${testCase.label} collection`, async () => {
+    it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getiModelListParams: GetiModelListParams = {
-        requestContext: testContext.RequestContext,
+        requestContext,
         urlParams: {
-          projectId: testContext.ProjectId,
+          projectId,
           $top: 5
         }
       };
@@ -88,8 +84,8 @@ describe("[Management] iModelOperations", () => {
     const createiModelParams: CreateEmptyiModelParams = {
       requestContext: { authorization: { scheme: "Bearer", token: "invalidToken" } },
       imodelProperties: {
-        projectId: testContext.ProjectId,
-        name: testContext.getPrefixediModelName("Sample iModel (unauthorized)")
+        projectId,
+        name: testiModelGroup.getPrefixediModelName("Sample iModel (unauthorized)")
       }
     };
 
@@ -114,10 +110,10 @@ describe("[Management] iModelOperations", () => {
   it("should return a detailed error when attempting to create iModel with invalid description", async () => {
     // Arrange
     const createiModelParams: CreateEmptyiModelParams = {
-      requestContext: testContext.RequestContext,
+      requestContext,
       imodelProperties: {
-        projectId: testContext.ProjectId,
-        name: testContext.getPrefixediModelName("Sample iModel (invalid)"),
+        projectId,
+        name: testiModelGroup.getPrefixediModelName("Sample iModel (invalid)"),
         description: "x".repeat(256)
       }
     };

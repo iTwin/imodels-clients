@@ -2,10 +2,47 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetOperations as ManagementChangesetOperations, Changeset, ChangesetState, ChangesetResponse, RecursiveRequired } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired } from "@itwin/imodels-client-management";
 import { DownloadedFileProps, FileHandler } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateChangesetParams, DownloadChangesetsParams } from "./ChangesetOperationParams";
+
+/** Queue for limiting number of promises executed in parallel. */
+class ParallelQueue {
+  private _queue: Array<() => Promise<void>> = [];
+  private _parallelDownloads = 10;
+
+  /** Add a promise to the queue. */
+  public push(downloadFunc: () => Promise<void>) {
+    this._queue.push(downloadFunc);
+  }
+
+  /** Wait for all promises in the queue to finish. */
+  public async waitAll() {
+    let i = 0;
+    const promises = new Array<Promise<number>>();
+    const indexes = new Array<number>();
+    const completed = new Array<number>();
+
+    while (this._queue.length > 0 || promises.length > 0) {
+      while (this._queue.length > 0 && promises.length < this._parallelDownloads) {
+        const currentIndex = i++;
+        promises.push(this._queue[0]().then(() => completed.push(currentIndex)));
+        indexes.push(currentIndex);
+        this._queue.shift();
+      }
+      await Promise.race(promises);
+      while (completed.length > 0) {
+        const completedIndex = completed.shift()!;
+        const index = indexes.findIndex((value) => value === completedIndex);
+        if (index !== undefined) {
+          promises.splice(index, 1);
+          indexes.splice(index, 1);
+        }
+      }
+    }
+  }
+}
 
 export class ChangesetOperations extends ManagementChangesetOperations {
   private _fileHandler: FileHandler;
@@ -41,23 +78,28 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     return changesetUpdateResponse.changeset;
   }
 
+  // TODO: accept range params
   public async download(params: DownloadChangesetsParams): Promise<(Changeset & DownloadedFileProps)[]> {
     const result: (Changeset & DownloadedFileProps)[] = [];
 
     this._fileHandler.createDirectory(params.targetPath);
 
-    for await (const changesetPage of this.getChangesetPages(params)) {
-      const downloads: Promise<void>[] = [];
+    for await (const changesetPage of this.getRepresentationListInPages(params)) {
+      const queue = new ParallelQueue();
       for (const changeset of changesetPage) {
-        const downloadUrl = changeset._links.download.href;
         const targetPath = this._fileHandler.join(params.targetPath, this.createFileName(changeset.id));
-        downloads.push(this._fileHandler.downloadFile(downloadUrl, targetPath));
-        result.push({ ...changeset, filePath: targetPath });
+        queue.push(() => this.downloadChangeset(changeset, targetPath));
       }
-      await Promise.all(downloads);
+      queue.waitAll();
     }
 
     return result;
+  }
+
+  private downloadChangeset(changeset: Changeset, targetPath: string): Promise<void> {
+    // TODO: retry downlaod by re-querying the changeset
+    const downloadUrl = changeset._links.download.href;
+    return this._fileHandler.downloadFile(downloadUrl, targetPath);
   }
 
   private createFileName(changesetId: string): string {

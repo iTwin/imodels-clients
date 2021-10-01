@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OperationsBase, getCollectionIterator, iModel, iModelResponse, iModelsResponse, MinimaliModel, PreferReturn } from "../../base";
+import { MinimaliModel, OperationsBase, PreferReturn, iModel, iModelResponse, iModelsResponse, getCollectionIterator } from "../../base";
 import { CreateEmptyiModelParams, DeleteiModelParams, GetiModelByIdParams, GetiModelListParams } from "./iModelOperationParams";
 
 export class iModelOperations extends OperationsBase {
