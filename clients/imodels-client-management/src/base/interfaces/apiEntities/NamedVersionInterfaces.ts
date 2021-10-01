@@ -25,6 +25,6 @@ export interface NamedVersionResponse {
   namedVersion: NamedVersion;
 }
 
-export interface NamedVersionsResponse<TiModel extends MinimalNamedVersion> extends CollectionResponse {
-  namedVersions: TiModel[];
+export interface NamedVersionsResponse<TNamedVersion extends MinimalNamedVersion> extends CollectionResponse {
+  namedVersions: TNamedVersion[];
 }

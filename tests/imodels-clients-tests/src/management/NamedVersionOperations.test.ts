@@ -7,16 +7,16 @@ import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-a
 import { CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, RequestContext, UpdateNamedVersionParams, iModel, iModelsClient } from "@itwin/imodels-client-management";
 import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, assertCollection, assertNamedVersion, cleanUpiModels, createDefaultTestiModel } from "../common";
 
-describe.only("[Management] NamedVersionOperations", () => {
+describe("[Management] NamedVersionOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
   let testiModel: iModel;
 
-  // Since we reuse the same iModel to create several named versions we track the index of
-  // the next available changeset to create a new named version on.
-  let lastNamedVersionChangesetIdx = 1;
+  // Since we reuse the same iModel to create several named versions we use this variable to
+  // track the index of the next available changeset to create a new named version on.
+  let changesetWithoutNamedVersion = 1;
 
   // We create several named versions in setup to have some entities for collection
   // query tests and persist them to use in entity update tests.
@@ -47,12 +47,12 @@ describe.only("[Management] NamedVersionOperations", () => {
         requestContext,
         imodelId: testiModel.id,
         namedVersionProperties: {
-          name: `Milestone ${lastNamedVersionChangesetIdx}`,
-          description: `Description for milestone ${lastNamedVersionChangesetIdx}`,
-          changesetId: TestiModelMetadata.Changesets[lastNamedVersionChangesetIdx - 1].id
+          name: `Milestone ${changesetWithoutNamedVersion}`,
+          description: `Description for milestone ${changesetWithoutNamedVersion}`,
+          changesetId: TestiModelMetadata.Changesets[changesetWithoutNamedVersion - 1].id
         }
       }));
-      lastNamedVersionChangesetIdx++;
+      changesetWithoutNamedVersion++;
     }
   });
 
@@ -97,7 +97,8 @@ describe.only("[Management] NamedVersionOperations", () => {
       requestContext,
       imodelId: testiModel.id,
       namedVersionProperties: {
-        name: "Named Version on baseline"
+        name: "Named Version on baseline",
+        description: "Some description for Named Version on baseline"
       }
     };
 
@@ -117,11 +118,12 @@ describe.only("[Management] NamedVersionOperations", () => {
       requestContext,
       imodelId: testiModel.id,
       namedVersionProperties: {
-        name: `Named Version ${lastNamedVersionChangesetIdx}`,
-        changesetId: TestiModelMetadata.Changesets[lastNamedVersionChangesetIdx - 1].id
+        name: `Named Version ${changesetWithoutNamedVersion}`,
+        description: `Some description for Named Version ${changesetWithoutNamedVersion}`,
+        changesetId: TestiModelMetadata.Changesets[changesetWithoutNamedVersion - 1].id
       }
     };
-    lastNamedVersionChangesetIdx++;
+    changesetWithoutNamedVersion++;
 
     // Act
     const namedVersion = await imodelsClient.NamedVersions.create(createNamedVersionParams);

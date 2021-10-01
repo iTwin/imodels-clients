@@ -42,9 +42,9 @@ export class NamedVersionOperations extends OperationsBase {
   }
 
   public async update(params: UpdateNamedVersionParams): Promise<NamedVersion> {
-    const response = await this.sendPostRequest<NamedVersionResponse>({
+    const response = await this.sendPatchRequest<NamedVersionResponse>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions/${params.namedVersionId})}`,
+      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions/${params.namedVersionId}`,
       body: params.namedVersionProperties
     });
     return response.namedVersion;
