@@ -135,7 +135,7 @@ describe("[Management] NamedVersionOperations", () => {
     });
   });
 
-  it("should upate named version name", async () => {
+  it("should update named version name", async () => {
     // Arrange
     const namedVersionToUpdate = namedVersionsCreatedInSetup[updatedNamedVersions++];
     const newNamedVersionName = "Some other name";
@@ -157,7 +157,7 @@ describe("[Management] NamedVersionOperations", () => {
     expect(updatedNamedVersion.state).to.equal(namedVersionToUpdate.state);
   });
 
-  it("should upate named version description", async () => {
+  it("should update named version description", async () => {
     // Arrange
     const namedVersionToUpdate = namedVersionsCreatedInSetup[updatedNamedVersions++];
     const newNamedVersionDescription = "Some other description";
@@ -179,7 +179,7 @@ describe("[Management] NamedVersionOperations", () => {
     expect(updatedNamedVersion.state).to.equal(namedVersionToUpdate.state);
   });
 
-  it("should upate named version state", async () => {
+  it("should update named version state", async () => {
     // Arrange
     const namedVersionToUpdate = namedVersionsCreatedInSetup[updatedNamedVersions++];
     const newNamedVersionState = NamedVersionState.Hidden;
