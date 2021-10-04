@@ -48,6 +48,27 @@ describe("[Management] ChangesetOperations", () => {
         isEntityCountCorrect: count => count === TestiModelMetadata.Changesets.length
       });
     });
+
+    it(`should return items that belong to specified range when querying ${testCase.label} collection`, async () => {
+      // Arrange
+      const getChangesetListParams: GetChangesetListParams = {
+        requestContext,
+        imodelId: testiModel.id,
+        urlParams: {
+          afterIndex: 5,
+          lastIndex: 10
+        }
+      };
+
+      // Act
+      const changesets = await testCase.functionUnderTest(getChangesetListParams);
+
+      // Assert
+      assertCollection({
+        asyncIterable: changesets,
+        isEntityCountCorrect: count => count === (getChangesetListParams.urlParams.lastIndex - getChangesetListParams.urlParams.afterIndex)
+      });
+    });
   });
 
   it("should get changeset by id", async () => {

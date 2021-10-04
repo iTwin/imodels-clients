@@ -5,7 +5,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { AnonymousCredential, BlockBlobClient } from "@azure/storage-blob";
-import { FileHandler } from "./FileHandler";
+import { FileHandler, FileTransferResult, FileTransferStatus } from "./FileHandler";
 
 export class AzureSdkFileHandler implements FileHandler {
   public async uploadFile(uploadUrl: string, sourcePath: string): Promise<void> {
@@ -13,9 +13,10 @@ export class AzureSdkFileHandler implements FileHandler {
     await blockBlobClient.uploadFile(sourcePath);
   }
 
-  public async downloadFile(downloadUrl: string, targetPath: string): Promise<void> {
+  public async downloadFile(downloadUrl: string, targetPath: string): Promise<FileTransferResult> {
     const blockBlobClient = new BlockBlobClient(downloadUrl, new AnonymousCredential());
     await blockBlobClient.downloadToFile(targetPath);
+    return { status: FileTransferStatus.Success };
   }
 
   public getFileSize(filePath: string): number {

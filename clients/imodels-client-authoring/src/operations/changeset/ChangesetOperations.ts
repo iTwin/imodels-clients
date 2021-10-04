@@ -2,44 +2,35 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired } from "@itwin/imodels-client-management";
-import { DownloadedFileProps, FileHandler } from "../../base";
+import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorImpl, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { DownloadedFileProps, FileHandler, FileTransferStatus } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateChangesetParams, DownloadChangesetsParams } from "./ChangesetOperationParams";
 
-/** Queue for limiting number of promises executed in parallel. */
-class ParallelQueue {
-  private _queue: Array<() => Promise<void>> = [];
-  private _parallelDownloads = 10;
+class LimitedParallelQueue {
+  private _queue: Array<() => Promise<void>> = new Array();
+  private _maxParallelPromises;
 
-  /** Add a promise to the queue. */
-  public push(downloadFunc: () => Promise<void>) {
-    this._queue.push(downloadFunc);
+  constructor(config: { maxParallelPromises: number }) {
+    this._maxParallelPromises = config.maxParallelPromises;
   }
 
-  /** Wait for all promises in the queue to finish. */
-  public async waitAll() {
-    let i = 0;
-    const promises = new Array<Promise<number>>();
-    const indexes = new Array<number>();
-    const completed = new Array<number>();
+  public push(item: () => Promise<void>): void {
+    this._queue.push(item);
+  }
 
-    while (this._queue.length > 0 || promises.length > 0) {
-      while (this._queue.length > 0 && promises.length < this._parallelDownloads) {
-        const currentIndex = i++;
-        promises.push(this._queue[0]().then(() => completed.push(currentIndex)));
-        indexes.push(currentIndex);
-        this._queue.shift();
+  public async waitAll(): Promise<void> {
+    const currentlyExecutingPromises = new Array<Promise<void>>();
+    while (this._queue.length !== 0 || currentlyExecutingPromises.length !== 0) {
+      while (this._queue.length !== 0 && currentlyExecutingPromises.length < this._maxParallelPromises) {
+        // We create a promise that removes itself from the `currentlyExecutingPromises` queue after it resolves.
+        const executingItem = this._queue.shift()().then(() => {
+          const indexOfItemInQueue = currentlyExecutingPromises.indexOf(executingItem);
+          currentlyExecutingPromises.splice(indexOfItemInQueue, 1);
+        });
+        currentlyExecutingPromises.push(executingItem);
       }
-      await Promise.race(promises);
-      while (completed.length > 0) {
-        const completedIndex = completed.shift()!;
-        const index = indexes.findIndex((value) => value === completedIndex);
-        if (index !== undefined) {
-          promises.splice(index, 1);
-          indexes.splice(index, 1);
-        }
-      }
+      await Promise.race(currentlyExecutingPromises);
     }
   }
 }
@@ -78,28 +69,56 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     return changesetUpdateResponse.changeset;
   }
 
-  // TODO: accept range params
   public async download(params: DownloadChangesetsParams): Promise<(Changeset & DownloadedFileProps)[]> {
     const result: (Changeset & DownloadedFileProps)[] = [];
 
     this._fileHandler.createDirectory(params.targetPath);
 
     for await (const changesetPage of this.getRepresentationListInPages(params)) {
-      const queue = new ParallelQueue();
+      // We sort the changesets by fileSize in descending order to download small
+      // changesets first because their SAS tokens have a shorter lifespan.
+      changesetPage.sort((changeset1, changeset2) => changeset1.fileSize - changeset2.fileSize);
+
+      const queue = new LimitedParallelQueue({maxParallelPromises: 10});
       for (const changeset of changesetPage) {
         const targetPath = this._fileHandler.join(params.targetPath, this.createFileName(changeset.id));
-        queue.push(() => this.downloadChangeset(changeset, targetPath));
+        queue.push(() => this.downloadChangesetWithRetry({
+          requestContext: params.requestContext,
+          imodelId: params.imodelId,
+          changeset,
+          targetPath
+        }));
+        result.push({ ...changeset, filePath: targetPath });
       }
-      queue.waitAll();
+      await queue.waitAll();
     }
 
     return result;
   }
 
-  private downloadChangeset(changeset: Changeset, targetPath: string): Promise<void> {
-    // TODO: retry downlaod by re-querying the changeset
-    const downloadUrl = changeset._links.download.href;
-    return this._fileHandler.downloadFile(downloadUrl, targetPath);
+  private async downloadChangesetWithRetry(params: { changeset: Changeset, targetPath: string } & iModelScopedOperationParams): Promise<void> {
+    let downloadUrl = params.changeset._links.download.href;
+    let fileDownloadResult = await this._fileHandler.downloadFile(downloadUrl, params.targetPath);
+
+    if (fileDownloadResult.status === FileTransferStatus.IntermittentFailure) {
+      const changeset = await this.getById({
+        requestContext: params.requestContext,
+        imodelId: params.imodelId,
+        changesetId: params.changeset.id
+      });
+      downloadUrl = changeset._links.download.href;
+      fileDownloadResult = await this._fileHandler.downloadFile(downloadUrl, params.targetPath);
+    }
+
+    if (fileDownloadResult.status !== FileTransferStatus.Success)
+      throw new iModelsErrorImpl({
+        code: iModelsErrorCode.ChangesetDownloadFailed,
+        message: `Failed to download changeset. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}`,
+        details: [{
+          code: iModelsErrorCode.ChangesetDownloadFailed, // TODO: nah
+          message: JSON.stringify(fileDownloadResult.data)
+        }]
+      });
   }
 
   private createFileName(changesetId: string): string {

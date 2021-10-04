@@ -24,6 +24,10 @@ export interface CollectionRequestParams {
   $top?: number;
 }
 
+export interface OrderedCollectionRequestParams extends CollectionRequestParams {
+  $orderBy?: number;
+}
+
 export interface BaseEntity {
   id: string;
   displayName: string;

@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import * as fs from "fs";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { iModelsClient as ManagementiModelsClient, RequestContext, iModel } from "@itwin/imodels-client-management";
 import { TestiModelGroup } from "./TestiModelGroup";
@@ -69,4 +70,11 @@ export async function findiModelWithName(params: {
       return imodel;
 
   return undefined;
+}
+
+export function cleanupDirectory(directory: string): void {
+  if (fs.existsSync(directory)) {
+    fs.rmdirSync(directory, { recursive: true });
+    fs.mkdirSync(directory);
+  }
 }

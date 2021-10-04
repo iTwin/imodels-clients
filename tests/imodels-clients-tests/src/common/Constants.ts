@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 export class Constants {
   static AssetsPath = `${__dirname}/../assets/`;
-  static DownloadPath = `${__dirname}/../lib/downloads/`;
+  static TestDownloadDirectoryPath = `${__dirname}/../testdownloads/`;
   static PackagePrefix = "iModelsClientsTests";
   static TestDeviceName = "Test device";
 }
