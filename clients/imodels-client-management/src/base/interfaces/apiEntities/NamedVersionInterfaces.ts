@@ -10,7 +10,7 @@ export enum NamedVersionState {
 }
 
 export interface MinimalNamedVersion extends BaseEntity {
-  changesetId: string;
+  changesetId?: string;
 }
 
 export interface NamedVersion extends MinimalNamedVersion {
