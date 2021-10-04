@@ -22,13 +22,13 @@ export interface CreateNamedVersionParams extends iModelScopedOperationParams {
   namedVersionProperties: NamedVersionPropertiesForCreate;
 }
 
-export interface UpdateableNamedVersionProperties {
+export interface EditableNamedVersionProperties {
   name: string;
   description: string;
   state: NamedVersionState;
 }
 
-export type NamedVersionPropertiesForUpdate = AtLeastOneProperty<UpdateableNamedVersionProperties>;
+export type NamedVersionPropertiesForUpdate = AtLeastOneProperty<EditableNamedVersionProperties>;
 
 export interface UpdateNamedVersionParams extends iModelScopedOperationParams {
   namedVersionId: string;
