@@ -86,6 +86,7 @@
     "require-await": [
       "error"
     ],
+    "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/naming-convention": [
       "error",
       {

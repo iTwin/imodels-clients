@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { expect } from "chai";
 import { CreateEmptyiModelParams, GetiModelListParams, RequestContext, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
 import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, assertCollection, assertError, assertiModel } from "../common";
 
@@ -90,7 +91,7 @@ describe("[Management] iModelOperations", () => {
     };
 
     // Act
-    let errorThrown: Error;
+    let errorThrown: Error | undefined = undefined;
     try {
       await imodelsClient.iModels.createEmpty(createiModelParams);
     } catch (e) {
@@ -98,8 +99,9 @@ describe("[Management] iModelOperations", () => {
     }
 
     // Assert
+    expect(errorThrown).to.not.be.undefined;
     assertError({
-      actualError: errorThrown,
+      actualError: errorThrown!,
       expectedError: {
         code: iModelsErrorCode.Unauthorized,
         message: "The user is unauthorized. Please provide valid authentication credentials."
@@ -119,7 +121,7 @@ describe("[Management] iModelOperations", () => {
     };
 
     // Act
-    let errorThrown: Error;
+    let errorThrown: Error | undefined = undefined;
     try {
       await imodelsClient.iModels.createEmpty(createiModelParams);
     } catch (e) {
@@ -127,8 +129,9 @@ describe("[Management] iModelOperations", () => {
     }
 
     // Assert
+    expect(errorThrown).to.not.be.undefined;
     assertError({
-      actualError: errorThrown,
+      actualError: errorThrown!,
       expectedError: {
         code: iModelsErrorCode.InvalidiModelsRequest,
         message: "Cannot create iModel.",

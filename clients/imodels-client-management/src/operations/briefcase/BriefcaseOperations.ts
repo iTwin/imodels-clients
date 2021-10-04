@@ -11,7 +11,7 @@ export class BriefcaseOperations extends OperationsBase {
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/briefcases${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: BriefcasesResponse<MinimalBriefcase>) => response.briefcases
+      entityCollectionAccessor: (response: unknown) => (response as BriefcasesResponse<MinimalBriefcase>).briefcases
     }));
   }
 
@@ -20,7 +20,7 @@ export class BriefcaseOperations extends OperationsBase {
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/briefcases${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: BriefcasesResponse<Briefcase>) => response.briefcases
+      entityCollectionAccessor: (response: unknown) => (response as BriefcasesResponse<Briefcase>).briefcases
     }));
   }
 

@@ -52,7 +52,7 @@ describe("[Authoring] BriefcaseOperations", () => {
     // Assert
     assertBriefcase({
       actualBriefcase: briefcase,
-      expectedBriefcaseProperties: acquireBriefcaseParams.briefcaseProperties
+      expectedBriefcaseProperties: acquireBriefcaseParams.briefcaseProperties!
     });
   });
 });

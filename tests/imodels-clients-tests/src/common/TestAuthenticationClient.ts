@@ -6,6 +6,7 @@ import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
 import axios, { AxiosResponse } from "axios";
 import * as puppeteer from "puppeteer";
+import { TestSetupError } from "./CommonTestUtils";
 import { AuthConfigValues } from "./Config";
 
 interface AccessTokenResponse {
@@ -61,16 +62,16 @@ export class TestAuthenticationClient {
   }
 
   private async fillCredentials(browserPage: puppeteer.Page, testUserCredentials: TestUserCredentials): Promise<void> {
-    const emailField = await browserPage.waitForSelector(this._pageElementIds.fields.email);
+    const emailField = await this.captureElement(browserPage, this._pageElementIds.fields.email);
     await emailField.type(testUserCredentials.email);
 
-    const nextButton = await browserPage.waitForSelector(this._pageElementIds.buttons.next);
+    const nextButton = await this.captureElement(browserPage, this._pageElementIds.buttons.next);
     await nextButton.click();
 
-    const passwordField = await browserPage.waitForSelector(this._pageElementIds.fields.password);
+    const passwordField = await this.captureElement(browserPage, this._pageElementIds.fields.password);
     await passwordField.type(testUserCredentials.password);
 
-    const signInButton = await browserPage.waitForSelector(this._pageElementIds.buttons.signIn);
+    const signInButton = await this.captureElement(browserPage, this._pageElementIds.buttons.signIn);
     await Promise.all([
       signInButton.click(),
       browserPage.waitForNavigation({ waitUntil: this._pageLoadedEvent })
@@ -82,7 +83,7 @@ export class TestAuthenticationClient {
     if (!isConsentPage)
       return;
 
-    const consentButton = await browserPage.waitForSelector(this._pageElementIds.buttons.consent);
+    const consentButton = await this.captureElement(browserPage, this._pageElementIds.buttons.consent);
     await Promise.all([
       consentButton.click(),
       browserPage.waitForNavigation({ waitUntil: this._pageLoadedEvent })
@@ -134,6 +135,17 @@ export class TestAuthenticationClient {
 
   private getCodeFromUrl(redirectUrl: string): string {
     const urlQuery: ParsedUrlQuery = parse(redirectUrl, true).query;
+    if (!urlQuery.code)
+      throw new TestSetupError("Sign in failed: could not parse code from url.");
+
     return urlQuery.code.toString();
+  }
+
+  private async captureElement(browserPage: puppeteer.Page, selector: string): Promise<puppeteer.ElementHandle<Element>> {
+    const element = await browserPage.waitForSelector(selector);
+    if (!element)
+      throw new TestSetupError(`Sign in failed: could not find element with selector '${selector}'.`);
+
+    return element;
   }
 }
