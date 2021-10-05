@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import * as path from "path";
+import { URL } from "url";
 import { AnonymousCredential, BlockBlobClient } from "@azure/storage-blob";
 import { FileHandler, FileTransferStatus } from "./FileHandler";
-import { URL } from "url";
 
 export class AzureSdkFileHandler implements FileHandler {
   public async uploadFile(uploadUrl: string, sourceFilePath: string): Promise<FileTransferStatus> {

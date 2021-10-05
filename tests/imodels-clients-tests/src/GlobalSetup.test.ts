@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelGroup, TestiModelMetadata, cleanUpiModels, findiModelWithName, cleanupDirectory } from "./common";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelGroup, TestiModelMetadata, cleanUpiModels, cleanupDirectory, findiModelWithName } from "./common";
 
 before(async () => {
   const imodelsClient = new iModelsClient(new TestClientOptions());

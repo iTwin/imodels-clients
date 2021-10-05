@@ -3,9 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
-import { AcquireBriefcaseParams, CreateChangesetParams, RequestContext, iModel, iModelsClient, DownloadChangesetsParams } from "@itwin/imodels-client-authoring";
 import { expect } from "chai";
-import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, cleanUpiModels, createEmptyiModel, Config, findiModelWithName, cleanupDirectory } from "../common";
+import { AcquireBriefcaseParams, CreateChangesetParams, DownloadChangesetsParams, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, cleanUpiModels, cleanupDirectory, createEmptyiModel, findiModelWithName } from "../common";
 import { assertChangeset } from "../common/AssertionUtils";
 
 describe("[Authoring] ChangesetOperations", () => {
@@ -97,7 +97,7 @@ describe("[Authoring] ChangesetOperations", () => {
     expect(fs.readdirSync(downloadPath).length).to.equal(TestiModelMetadata.Changesets.length);
 
     for (const changeset of changesets) {
-      const changesetMetadata = TestiModelMetadata.Changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)
+      const changesetMetadata = TestiModelMetadata.Changesets.find(changesetMetadata => changesetMetadata.index === changeset.index);
       assertChangeset({
         actualChangeset: changeset,
         expectedChangesetProperties: {
@@ -138,7 +138,7 @@ describe("[Authoring] ChangesetOperations", () => {
     expect(changesets.map(changeset => changeset.index)).to.have.members([6, 7, 8, 9, 10]);
 
     for (const changeset of changesets) {
-      const changesetMetadata = TestiModelMetadata.Changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)
+      const changesetMetadata = TestiModelMetadata.Changesets.find(changesetMetadata => changesetMetadata.index === changeset.index);
       assertChangeset({
         actualChangeset: changeset,
         expectedChangesetProperties: {

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OperationsBase, PreferReturn, getCollectionIterator, flatten, getCollectionPagesIterator } from "../../base";
+import { OperationsBase, PreferReturn, flatten, getCollectionIterator, getCollectionPagesIterator } from "../../base";
 import { Changeset, ChangesetResponse, ChangesetsResponse, MinimalChangeset } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { GetChangesetByIdParams, GetChangesetListParams } from "./ChangesetOperationParams";
 

@@ -2,13 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorImpl, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
 import { DownloadedFileProps, FileHandler, FileTransferStatus } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateChangesetParams, DownloadChangesetsParams } from "./ChangesetOperationParams";
 
 class LimitedParallelQueue {
-  private _queue: Array<() => Promise<void>> = new Array();
+  private _queue: Array<() => Promise<void>> = [];
   private _maxParallelPromises;
 
   constructor(config: { maxParallelPromises: number }) {
