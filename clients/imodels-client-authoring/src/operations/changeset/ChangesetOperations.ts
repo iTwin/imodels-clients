@@ -79,14 +79,14 @@ export class ChangesetOperations extends ManagementChangesetOperations {
       // changesets first because their SAS tokens have a shorter lifespan.
       changesetPage.sort((changeset1, changeset2) => changeset1.fileSize - changeset2.fileSize);
 
-      const queue = new LimitedParallelQueue({maxParallelPromises: 10});
+      const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
       for (const changeset of changesetPage) {
         const targetFilePath = this._fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id));
         queue.push(() => this.downloadChangesetWithRetry({
           requestContext: params.requestContext,
           imodelId: params.imodelId,
           changeset,
-          targetPath: targetFilePath
+          targetFilePath: targetFilePath
         }));
         result.push({ ...changeset, downloadedFilePath: targetFilePath });
       }
@@ -96,9 +96,12 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     return result;
   }
 
-  private async downloadChangesetWithRetry(params: { changeset: Changeset, targetPath: string } & iModelScopedOperationParams): Promise<void> {
+  private async downloadChangesetWithRetry(params: { changeset: Changeset, targetFilePath: string } & iModelScopedOperationParams): Promise<void> { // TODO: not sure about signature
+    if (this.isChangesetAlreadyDownloaded(params.targetFilePath, params.changeset.fileSize))
+      return;
+
     let downloadUrl = params.changeset._links.download.href;
-    let fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, params.targetPath);
+    let fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, params.targetFilePath);
 
     if (fileDownloadStatus === FileTransferStatus.IntermittentFailure) {
       const changeset = await this.getById({
@@ -107,7 +110,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
         changesetId: params.changeset.id
       });
       downloadUrl = changeset._links.download.href;
-      fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, params.targetPath);
+      fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, params.targetFilePath);
     }
 
     if (fileDownloadStatus !== FileTransferStatus.Success)
@@ -115,6 +118,18 @@ export class ChangesetOperations extends ManagementChangesetOperations {
         code: iModelsErrorCode.ChangesetDownloadFailed,
         message: `Failed to download changeset with status ${fileDownloadStatus}. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}`
       });
+  }
+
+  private isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): boolean {
+    if (!this._fileHandler.exists(targetFilePath))
+      return false;
+
+    const existingFileSize = this._fileHandler.getFileSize(targetFilePath);
+    if (existingFileSize === expectedFileSize)
+      return true;
+
+    this._fileHandler.unlink(targetFilePath);
+    return false;
   }
 
   private createFileName(changesetId: string): string {

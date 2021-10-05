@@ -9,9 +9,11 @@ export enum FileTransferStatus {
 }
 
 export interface FileHandler {
-  uploadFile(uploadUrl: string, sourcePath: string): Promise<FileTransferStatus>;
-  downloadFile(downloadUrl: string, targetPath: string): Promise<FileTransferStatus>;
+  uploadFile(uploadUrl: string, sourceFilePath: string): Promise<FileTransferStatus>;
+  downloadFile(downloadUrl: string, targetFilePath: string): Promise<FileTransferStatus>;
+  exists(filePath: string): boolean;
   getFileSize(filePath: string): number;
-  createDirectory(directory: string): void;
+  unlink(filePath: string): void;
+  createDirectory(directoryPath: string): void;
   join(...paths: string[]): string;
 }

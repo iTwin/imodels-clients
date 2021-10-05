@@ -16,3 +16,5 @@ export * from "./TestAuthenticationClient";
 
 export * from "./TestProjectProvider";
 export * from "./TestAuthenticationProvider";
+
+export * from "./TrackableTestFileHandler";

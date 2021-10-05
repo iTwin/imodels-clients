@@ -27,8 +27,16 @@ export class AzureSdkFileHandler implements FileHandler {
     return FileTransferStatus.Success;
   }
 
+  public exists(filePath: string): boolean {
+    return fs.existsSync(filePath);
+  }
+
   public getFileSize(filePath: string): number {
     return fs.statSync(filePath).size;
+  }
+
+  public unlink(filePath: string): void {
+    return fs.unlinkSync(filePath);
   }
 
   public createDirectory(directoryPath: string): void {

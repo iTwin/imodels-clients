@@ -4,9 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, CreateChangesetParams, DownloadChangesetsParams, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, cleanUpiModels, cleanupDirectory, createEmptyiModel, findiModelWithName } from "../common";
+import { AcquireBriefcaseParams, CreateChangesetParams, DownloadChangesetsParams, RequestContext, iModel, iModelsClient, AzureSdkFileHandler, FileTransferStatus } from "@itwin/imodels-client-authoring";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, TrackableTestFileHandler, cleanUpiModels, cleanupDirectory, createEmptyiModel, findiModelWithName } from "../common";
 import { assertChangeset } from "../common/AssertionUtils";
+import { FileTransferLog } from "../common/TrackableTestFileHandler";
 
 describe("[Authoring] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
@@ -16,6 +17,10 @@ describe("[Authoring] ChangesetOperations", () => {
 
   let testiModelForWrite: iModel;
   let testiModelForDownload: iModel;
+
+  beforeEach(() => {
+    cleanupDirectory(Constants.TestDownloadDirectoryPath);
+  });
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
@@ -154,5 +159,91 @@ describe("[Authoring] ChangesetOperations", () => {
       expect(fs.existsSync(changeset.downloadedFilePath)).to.equal(true);
       expect(fs.statSync(changeset.downloadedFilePath).size).to.equal(fs.statSync(changesetMetadata.changesetFilePath).size);
     }
+  });
+
+  it("should retry changeset download if it fails with intermittent failure", async () => {
+    // Arrange
+    const fileTransferLog = new FileTransferLog();
+    const azureSdkFileHandler = new AzureSdkFileHandler();
+    let hasDownloadFailed = false;
+    const downloadStub = (downloadUrl: string, targetPath: string) => {
+      fileTransferLog.recordDownload(downloadUrl);
+
+      if (!hasDownloadFailed) {
+        hasDownloadFailed = true;
+        return Promise.resolve(FileTransferStatus.IntermittentFailure);
+      }
+
+      return azureSdkFileHandler.downloadFile(downloadUrl, targetPath);
+    };
+
+    const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
+    const imodelsClientWithTrackedFileTransfer = new iModelsClient({ ...new TestClientOptions(), fileHandler: trackedFileHandler });
+
+    const downloadPath = Constants.TestDownloadDirectoryPath;
+    const downloadChangesetsParams: DownloadChangesetsParams = {
+      requestContext,
+      imodelId: testiModelForDownload.id,
+      urlParams: {
+        afterIndex: 0,
+        lastIndex: 1
+      },
+      targetDirectoryPath: downloadPath
+    };
+
+    // Act
+    const changesets = await imodelsClientWithTrackedFileTransfer.Changesets.download(downloadChangesetsParams);
+
+    // Assert
+    expect(changesets.length).to.equal(1);
+
+    const allDownloadUrlsCalled = Object.keys(fileTransferLog.downloads);
+    expect(allDownloadUrlsCalled.length).to.equal(2);
+    expect(allDownloadUrlsCalled[0]).to.contain(changesets[0].id);
+    expect(allDownloadUrlsCalled[1]).to.contain(changesets[0].id);
+
+    const timesDownloadUrl1WasCalled = fileTransferLog.downloads[allDownloadUrlsCalled[0]];
+    expect(timesDownloadUrl1WasCalled).to.equal(1);
+    const timesDownloadUrl2WasCalled = fileTransferLog.downloads[allDownloadUrlsCalled[1]];
+    expect(timesDownloadUrl2WasCalled).to.equal(1);
+  });
+
+  it("should not download changeset again if it is already present", async () => {
+    // Arrange
+    const fileTransferLog = new FileTransferLog();
+    const azureSdkFileHandler = new AzureSdkFileHandler();
+    const downloadStub = (downloadUrl: string, targetPath: string) => {
+      fileTransferLog.recordDownload(downloadUrl);
+      return azureSdkFileHandler.downloadFile(downloadUrl, targetPath);
+    };
+
+    const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
+    const imodelsClientWithTrackedFileTransfer = new iModelsClient({ ...new TestClientOptions(), fileHandler: trackedFileHandler });
+
+    const downloadPath = Constants.TestDownloadDirectoryPath;
+    const downloadChangesetsParams: DownloadChangesetsParams = {
+      requestContext,
+      imodelId: testiModelForDownload.id,
+      urlParams: {
+        afterIndex: 0,
+        lastIndex: 1
+      },
+      targetDirectoryPath: downloadPath
+    };
+
+    await imodelsClientWithTrackedFileTransfer.Changesets.download(downloadChangesetsParams);
+
+    // Act
+    const changesets = await imodelsClientWithTrackedFileTransfer.Changesets.download(downloadChangesetsParams);
+
+    // Assert
+    expect(changesets.length).to.equal(1);
+
+    const allDownloadUrlsCalled = Object.keys(fileTransferLog.downloads);
+    expect(allDownloadUrlsCalled.length).to.equal(1);
+    expect(allDownloadUrlsCalled[0]).to.contain(changesets[0].id);
+
+    const timesDownloadUrlWasCalled = fileTransferLog.downloads[allDownloadUrlsCalled[0]];
+    expect(timesDownloadUrlWasCalled).to.equal(1);
   });
 });
