@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, CreateChangesetParams, DownloadChangesetsParams, RequestContext, iModel, iModelsClient, AzureSdkFileHandler, FileTransferStatus } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetsParams, FileTransferStatus, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
 import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, TrackableTestFileHandler, cleanUpiModels, cleanupDirectory, createEmptyiModel, findiModelWithName } from "../common";
 import { assertChangeset } from "../common/AssertionUtils";
 import { FileTransferLog } from "../common/TrackableTestFileHandler";

@@ -7,7 +7,7 @@ import { FileHandler, FileTransferStatus } from "@itwin/imodels-client-authoring
 export class FileTransferLog {
   public downloads: { [key: string]: number; } = {};
 
-  public recordDownload(downloadUrl: string) {
+  public recordDownload(downloadUrl: string): void {
     if (this.downloads[downloadUrl] === undefined)
       this.downloads[downloadUrl] = 0;
 
@@ -40,7 +40,7 @@ export class TrackableTestFileHandler implements FileHandler {
 
   getFileSize(filePath: string): number {
     return this._underlyingHandler.getFileSize(filePath);
-  };
+  }
 
   unlink(filePath: string): void {
     this._underlyingHandler.unlink(filePath);
