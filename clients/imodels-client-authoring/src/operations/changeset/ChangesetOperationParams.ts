@@ -19,5 +19,5 @@ export interface CreateChangesetParams extends iModelScopedOperationParams {
 
 export interface DownloadChangesetsParams extends iModelScopedOperationParams {
   urlParams?: Omit<GetChangesetListUrlParams, "$orderBy" | "$skip">;
-  targetPath: string;
+  targetDirectoryPath: string;
 }

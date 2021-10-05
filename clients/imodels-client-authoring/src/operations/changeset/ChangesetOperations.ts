@@ -72,7 +72,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
   public async download(params: DownloadChangesetsParams): Promise<(Changeset & DownloadedFileProps)[]> {
     const result: (Changeset & DownloadedFileProps)[] = [];
 
-    this._fileHandler.createDirectory(params.targetPath);
+    this._fileHandler.createDirectory(params.targetDirectoryPath);
 
     for await (const changesetPage of this.getRepresentationListInPages(params)) {
       // We sort the changesets by fileSize in descending order to download small
@@ -81,7 +81,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
 
       const queue = new LimitedParallelQueue({maxParallelPromises: 10});
       for (const changeset of changesetPage) {
-        const targetPath = this._fileHandler.join(params.targetPath, this.createFileName(changeset.id));
+        const targetPath = this._fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id));
         queue.push(() => this.downloadChangesetWithRetry({
           requestContext: params.requestContext,
           imodelId: params.imodelId,
@@ -98,26 +98,22 @@ export class ChangesetOperations extends ManagementChangesetOperations {
 
   private async downloadChangesetWithRetry(params: { changeset: Changeset, targetPath: string } & iModelScopedOperationParams): Promise<void> {
     let downloadUrl = params.changeset._links.download.href;
-    let fileDownloadResult = await this._fileHandler.downloadFile(downloadUrl, params.targetPath);
+    let fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, params.targetPath);
 
-    if (fileDownloadResult.status === FileTransferStatus.IntermittentFailure) {
+    if (fileDownloadStatus === FileTransferStatus.IntermittentFailure) {
       const changeset = await this.getById({
         requestContext: params.requestContext,
         imodelId: params.imodelId,
         changesetId: params.changeset.id
       });
       downloadUrl = changeset._links.download.href;
-      fileDownloadResult = await this._fileHandler.downloadFile(downloadUrl, params.targetPath);
+      fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, params.targetPath);
     }
 
-    if (fileDownloadResult.status !== FileTransferStatus.Success)
+    if (fileDownloadStatus !== FileTransferStatus.Success)
       throw new iModelsErrorImpl({
         code: iModelsErrorCode.ChangesetDownloadFailed,
-        message: `Failed to download changeset. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}`,
-        details: [{
-          code: iModelsErrorCode.ChangesetDownloadFailed, // TODO: nah
-          message: JSON.stringify(fileDownloadResult.data)
-        }]
+        message: `Failed to download changeset with status ${fileDownloadStatus}. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}`
       });
   }
 

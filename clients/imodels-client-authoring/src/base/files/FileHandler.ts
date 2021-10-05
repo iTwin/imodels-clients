@@ -8,14 +8,9 @@ export enum FileTransferStatus {
   Failure = 2
 }
 
-export interface FileTransferResult {
-  status: FileTransferStatus;
-  data?: unknown;
-}
-
 export interface FileHandler {
-  uploadFile(uploadUrl: string, sourcePath: string): Promise<void>;
-  downloadFile(downloadUrl: string, targetPath: string): Promise<FileTransferResult>;
+  uploadFile(uploadUrl: string, sourcePath: string): Promise<FileTransferStatus>;
+  downloadFile(downloadUrl: string, targetPath: string): Promise<FileTransferStatus>;
   getFileSize(filePath: string): number;
   createDirectory(directory: string): void;
   join(...paths: string[]): string;
