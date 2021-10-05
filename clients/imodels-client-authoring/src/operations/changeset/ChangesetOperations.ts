@@ -81,14 +81,14 @@ export class ChangesetOperations extends ManagementChangesetOperations {
 
       const queue = new LimitedParallelQueue({maxParallelPromises: 10});
       for (const changeset of changesetPage) {
-        const targetPath = this._fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id));
+        const targetFilePath = this._fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id));
         queue.push(() => this.downloadChangesetWithRetry({
           requestContext: params.requestContext,
           imodelId: params.imodelId,
           changeset,
-          targetPath
+          targetPath: targetFilePath
         }));
-        result.push({ ...changeset, filePath: targetPath });
+        result.push({ ...changeset, downloadedFilePath: targetFilePath });
       }
       await queue.waitAll();
     }

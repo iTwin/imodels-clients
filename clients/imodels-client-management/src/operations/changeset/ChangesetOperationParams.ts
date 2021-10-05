@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelScopedOperationParams, OrderedCollectionRequestParams } from "../../base";
+import { CollectionRequestParams, iModelScopedOperationParams } from "../../base";
 
-export interface GetChangesetListUrlParams extends OrderedCollectionRequestParams {
+export interface GetChangesetListUrlParams extends CollectionRequestParams {
   afterIndex?: number;
   lastIndex?: number;
 }

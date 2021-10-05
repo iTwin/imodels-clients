@@ -9,21 +9,21 @@ import { FileHandler, FileTransferStatus } from "./FileHandler";
 import { URL } from "url";
 
 export class AzureSdkFileHandler implements FileHandler {
-  public async uploadFile(uploadUrl: string, sourcePath: string): Promise<FileTransferStatus> {
+  public async uploadFile(uploadUrl: string, sourceFilePath: string): Promise<FileTransferStatus> {
     if (this.isUrlExpired(uploadUrl))
       return FileTransferStatus.IntermittentFailure;
 
     const blockBlobClient = new BlockBlobClient(uploadUrl, new AnonymousCredential());
-    await blockBlobClient.uploadFile(sourcePath);
+    await blockBlobClient.uploadFile(sourceFilePath);
     return FileTransferStatus.Success;
   }
 
-  public async downloadFile(downloadUrl: string, targetPath: string): Promise<FileTransferStatus> {
+  public async downloadFile(downloadUrl: string, targetFilePath: string): Promise<FileTransferStatus> {
     if (this.isUrlExpired(downloadUrl))
       return FileTransferStatus.IntermittentFailure;
 
     const blockBlobClient = new BlockBlobClient(downloadUrl, new AnonymousCredential());
-    await blockBlobClient.downloadToFile(targetPath);
+    await blockBlobClient.downloadToFile(targetFilePath);
     return FileTransferStatus.Success;
   }
 
@@ -31,13 +31,13 @@ export class AzureSdkFileHandler implements FileHandler {
     return fs.statSync(filePath).size;
   }
 
-  public createDirectory(directory: string): void {
-    if (fs.existsSync(directory))
+  public createDirectory(directoryPath: string): void {
+    if (fs.existsSync(directoryPath))
       return;
 
-    const parentDirectory = path.dirname(directory);
+    const parentDirectory = path.dirname(directoryPath);
     this.createDirectory(parentDirectory);
-    fs.mkdirSync(directory);
+    fs.mkdirSync(directoryPath);
   }
 
   public join(...paths: string[]): string {

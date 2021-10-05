@@ -110,8 +110,8 @@ describe("[Authoring] ChangesetOperations", () => {
         }
       });
 
-      expect(fs.existsSync(changeset.filePath)).to.equal(true);
-      expect(fs.statSync(changeset.filePath).size).to.equal(fs.statSync(changesetMetadata.changesetFilePath).size);
+      expect(fs.existsSync(changeset.downloadedFilePath)).to.equal(true);
+      expect(fs.statSync(changeset.downloadedFilePath).size).to.equal(fs.statSync(changesetMetadata.changesetFilePath).size);
     }
   });
 
@@ -151,8 +151,8 @@ describe("[Authoring] ChangesetOperations", () => {
         }
       });
 
-      expect(fs.existsSync(changeset.filePath)).to.equal(true);
-      expect(fs.statSync(changeset.filePath).size).to.equal(fs.statSync(changesetMetadata.changesetFilePath).size);
+      expect(fs.existsSync(changeset.downloadedFilePath)).to.equal(true);
+      expect(fs.statSync(changeset.downloadedFilePath).size).to.equal(fs.statSync(changesetMetadata.changesetFilePath).size);
     }
   });
 });

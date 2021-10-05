@@ -18,7 +18,7 @@ export enum iModelsErrorCode {
 
   // Operation specific errors thrown by the client library
   BaselineFileInitializationFailed = "BaselineFileInitializationFailed",
-  ChangesetDownloadFailed = "ChangesetDownloadFailed" // TODO: probably too specific
+  ChangesetDownloadFailed = "ChangesetDownloadFailed"
 }
 
 export interface iModelsError extends Error {
