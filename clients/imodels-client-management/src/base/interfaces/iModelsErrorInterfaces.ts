@@ -5,20 +5,16 @@
 export enum iModelsErrorCode {
   Unrecognized = "Unrecognized",
 
-  // Common errors returned by API
   Unknown = "Unknown",
   Unauthorized = "Unauthorized",
 
-  // Operation specific errors returned by the API
   InvalidiModelsRequest = "InvalidiModelsRequest",
   InvalidValue = "InvalidValue",
   iModelExists = "iModelExists",
   FileNotFound = "FileNotFound",
   ChangesetNotFound = "ChangesetNotFound",
 
-  // Operation specific errors thrown by the client library
-  BaselineFileInitializationFailed = "BaselineFileInitializationFailed",
-  ChangesetDownloadFailed = "ChangesetDownloadFailed" // TODO: probably too specific
+  BaselineFileInitializationFailed = "BaselineFileInitializationFailed"
 }
 
 export interface iModelsError extends Error {
