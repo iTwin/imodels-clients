@@ -96,7 +96,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     return result;
   }
 
-  private async downloadChangesetWithRetry(params: { changeset: Changeset, targetFilePath: string } & iModelScopedOperationParams): Promise<void> { // TODO: not sure about signature
+  private async downloadChangesetWithRetry(params: iModelScopedOperationParams & { changeset: Changeset, targetFilePath: string }): Promise<void> {
     if (this.isChangesetAlreadyDownloaded(params.targetFilePath, params.changeset.fileSize))
       return;
 
