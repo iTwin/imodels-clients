@@ -47,27 +47,27 @@ export class Config {
     this.validateAllValuesPresent();
 
     return {
-      testProjectName: process.env.TEST_PROJECT_NAME,
-      testiModelName: process.env.TEST_IMODEL_NAME,
+      testProjectName: process.env.TEST_PROJECT_NAME!,
+      testiModelName: process.env.TEST_IMODEL_NAME!,
       auth: {
-        authority: process.env.AUTH_AUTHORITY,
-        clientId: process.env.AUTH_CLIENT_ID,
-        clientSecret: process.env.AUTH_CLIENT_SECRET,
-        redirectUrl: process.env.AUTH_REDIRECT_URL
+        authority: process.env.AUTH_AUTHORITY!,
+        clientId: process.env.AUTH_CLIENT_ID!,
+        clientSecret: process.env.AUTH_CLIENT_SECRET!,
+        redirectUrl: process.env.AUTH_REDIRECT_URL!
       },
       apis: {
         imodels: {
-          baseUrl: process.env.APIS_IMODELS_BASE_URL,
-          scopes: process.env.APIS_IMODELS_SCOPES
+          baseUrl: process.env.APIS_IMODELS_BASE_URL!,
+          scopes: process.env.APIS_IMODELS_SCOPES!
         },
         projects: {
-          baseUrl: process.env.APIS_PROJECTS_BASE_URL,
-          scopes: process.env.APIS_PROJECTS_SCOPES
+          baseUrl: process.env.APIS_PROJECTS_BASE_URL!,
+          scopes: process.env.APIS_PROJECTS_SCOPES!
         }
       },
       testUser: {
-        email: process.env.TEST_USER_EMAIL,
-        password: process.env.TEST_USER_PASSWORD
+        email: process.env.TEST_USER_EMAIL!,
+        password: process.env.TEST_USER_PASSWORD!
       }
     };
   }

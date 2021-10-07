@@ -65,13 +65,13 @@ export class OperationsBase {
     return {
       entities: params.entityCollectionAccessor(response),
       next: response._links.next
-        ? () => this.getEntityCollectionPage({ ...params, url: response._links.next.href })
+        ? () => this.getEntityCollectionPage({ ...params, url: response._links.next!.href })
         : undefined
     };
   }
 
   private formHeaders(params: RequestContextParams & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
-    const headers = {};
+    const headers: Dictionary = {};
     headers[Constants.Headers.Authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
     headers[Constants.Headers.Accept] = `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`;
 

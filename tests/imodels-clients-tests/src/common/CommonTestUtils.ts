@@ -57,7 +57,7 @@ export async function findiModelWithName(params: {
   requestContext: RequestContext,
   projectId: string,
   expectediModelname: string
-}): Promise<iModel | undefined> {
+}): Promise<iModel> {
   const imodels = params.imodelsClient.iModels.getRepresentationList({
     requestContext: params.requestContext,
     urlParams: {
@@ -68,5 +68,5 @@ export async function findiModelWithName(params: {
     if (imodel.displayName === params.expectediModelname)
       return imodel;
 
-  return undefined;
+  throw new TestSetupError(`Failed to find an iModel with name ${params.expectediModelname}.`);
 }
