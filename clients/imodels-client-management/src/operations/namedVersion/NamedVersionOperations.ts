@@ -11,7 +11,7 @@ export class NamedVersionOperations extends OperationsBase {
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: NamedVersionsResponse<MinimalNamedVersion>) => response.namedVersions
+      entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<MinimalNamedVersion>).namedVersions
     }));
   }
 
@@ -20,7 +20,7 @@ export class NamedVersionOperations extends OperationsBase {
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: NamedVersionsResponse<NamedVersion>) => response.namedVersions
+      entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<NamedVersion>).namedVersions
     }));
   }
 
