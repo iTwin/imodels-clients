@@ -11,7 +11,7 @@ export class iModelOperations extends OperationsBase {
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: iModelsResponse<MinimaliModel>) => response.iModels
+      entityCollectionAccessor: (response: unknown) => (response as iModelsResponse<MinimaliModel>).iModels
     }));
   }
 
@@ -20,7 +20,7 @@ export class iModelOperations extends OperationsBase {
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: iModelsResponse<iModel>) => response.iModels
+      entityCollectionAccessor: (response: unknown) => (response as iModelsResponse<iModel>).iModels
     }));
   }
 

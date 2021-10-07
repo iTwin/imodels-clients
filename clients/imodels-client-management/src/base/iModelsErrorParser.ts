@@ -34,18 +34,24 @@ export class iModelsErrorImpl extends Error implements iModelsError {
 }
 
 export class iModelsErrorParser {
-  public static parse: ParseErrorFunc = (response: { statusCode: number, body: unknown }) => {
-    // TODO: remove the special handling when APIM team fixes incorrect error body
-    if (response.statusCode === 401) {
-      return new iModelsErrorImpl({ code: iModelsErrorCode.Unauthorized, message: "The user is unauthorized. Please provide valid authentication credentials." });
-    }
+  private static readonly _defaultErrorMessage  = "Unknown error occurred";
 
-    const errorFromApi = response.body as iModelsApiErrorWrapper;
+  public static parse: ParseErrorFunc = (response: { statusCode?: number, body?: unknown }) => {
+    if (!response.statusCode)
+      return new iModelsErrorImpl({ code: iModelsErrorCode.Unknown, message: iModelsErrorParser._defaultErrorMessage });
+
+
+    // TODO: remove the special handling when APIM team fixes incorrect error body
+    if (response.statusCode === 401)
+      return new iModelsErrorImpl({ code: iModelsErrorCode.Unauthorized, message: "The user is unauthorized. Please provide valid authentication credentials." });
+
+
+    const errorFromApi: iModelsApiErrorWrapper | undefined = response.body as iModelsApiErrorWrapper;
     const errorCode: iModelsErrorCode = iModelsErrorParser.parseCode(errorFromApi?.error?.code);
 
     return new iModelsErrorImpl({
       code: errorCode,
-      message: errorFromApi?.error?.message,
+      message: errorFromApi?.error?.message ?? iModelsErrorParser._defaultErrorMessage,
       details: errorFromApi?.error?.details
         ? iModelsErrorParser.parseDetails(errorFromApi.error.details)
         : undefined
