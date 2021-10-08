@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, RequestContext, UpdateNamedVersionParams, iModel, iModelsClient } from "@itwin/imodels-client-management";
-import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, assertCollection, assertNamedVersion, cleanUpiModels, createDefaultTestiModel } from "../common";
+import { CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, RequestContext, UpdateNamedVersionParams, iModel, iModelsClient, iModelScopedOperationParams } from "@itwin/imodels-client-management";
+import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, assertCollection, assertNamedVersion, cleanUpiModels, createDefaultTestiModel, TestSetupError } from "../common";
 
 describe("[Management] NamedVersionOperations", () => {
   let imodelsClient: iModelsClient;
@@ -13,10 +13,6 @@ describe("[Management] NamedVersionOperations", () => {
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
   let testiModel: iModel;
-
-  // Since we reuse the same iModel to create several named versions we use this variable to
-  // track the index of the next available changeset to create a new named version on.
-  let changesetWithoutNamedVersion = 1;
 
   // We create several named versions in setup to have some entities for collection
   // query tests and persist them to use in entity update tests.
@@ -43,16 +39,16 @@ describe("[Management] NamedVersionOperations", () => {
     });
 
     for (let i = 0; i < namedVersionCountCreatedInSetup; i++) {
+      const changesetIndex = await getChangesetIndexForNewNamedVersion({requestContext, imodelId: testiModel.id});
       namedVersionsCreatedInSetup.push(await imodelsClient.NamedVersions.create({
         requestContext,
         imodelId: testiModel.id,
         namedVersionProperties: {
-          name: `Milestone ${changesetWithoutNamedVersion}`,
-          description: `Description for milestone ${changesetWithoutNamedVersion}`,
-          changesetId: TestiModelMetadata.Changesets[changesetWithoutNamedVersion - 1].id
+          name: `Milestone ${changesetIndex}`,
+          description: `Description for milestone ${changesetIndex}`,
+          changesetId: TestiModelMetadata.Changesets[changesetIndex - 1].id
         }
       }));
-      changesetWithoutNamedVersion++;
     }
   });
 
@@ -114,16 +110,16 @@ describe("[Management] NamedVersionOperations", () => {
 
   it("should create named version on a specific changeset", async () => {
     // Arrange
+    const changesetIndex = await getChangesetIndexForNewNamedVersion({requestContext, imodelId: testiModel.id});
     const createNamedVersionParams: CreateNamedVersionParams = {
       requestContext,
       imodelId: testiModel.id,
       namedVersionProperties: {
-        name: `Named Version ${changesetWithoutNamedVersion}`,
-        description: `Some description for Named Version ${changesetWithoutNamedVersion}`,
-        changesetId: TestiModelMetadata.Changesets[changesetWithoutNamedVersion - 1].id
+        name: `Named Version ${changesetIndex}`,
+        description: `Some description for Named Version ${changesetIndex}`,
+        changesetId: TestiModelMetadata.Changesets[changesetIndex - 1].id
       }
     };
-    changesetWithoutNamedVersion++;
 
     // Act
     const namedVersion = await imodelsClient.NamedVersions.create(createNamedVersionParams);
@@ -200,4 +196,12 @@ describe("[Management] NamedVersionOperations", () => {
     expect(updatedNamedVersion.description).to.equal(namedVersionToUpdate.description);
     expect(updatedNamedVersion.state).to.equal(newNamedVersionState);
   });
+
+  async function getChangesetIndexForNewNamedVersion(params: iModelScopedOperationParams): Promise<number> {
+    for await (const changeset of imodelsClient.Changesets.getRepresentationList(params))
+      if (!changeset._links.namedVersion)
+        return changeset.index;
+
+    throw new TestSetupError("Test iModel does not have any changesets without named versions.");
+  }
 });
