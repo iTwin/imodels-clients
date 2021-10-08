@@ -39,14 +39,11 @@ export async function createDefaultTestiModel(params: {
   projectId: string,
   imodelName: string
 }): Promise<iModel> {
-  const imodel = await params.imodelsClient.iModels.createFromBaseline({
+  const imodel = await params.imodelsClient.iModels.createEmpty({
     requestContext: params.requestContext,
     imodelProperties: {
       projectId: params.projectId,
       name: params.imodelName
-    },
-    baselineFileProperties: {
-      path: TestiModelMetadata.iModel.baselineFilePath
     }
   });
 
