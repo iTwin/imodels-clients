@@ -6,35 +6,7 @@ import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as Ma
 import { DownloadedChangeset, FileHandler, FileTransferStatus } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateChangesetParams, DownloadChangesetsParams } from "./ChangesetOperationParams";
-
-class LimitedParallelQueue {
-  private _queue: Array<() => Promise<void>> = [];
-  private _maxParallelPromises;
-
-  constructor(config: { maxParallelPromises: number }) {
-    this._maxParallelPromises = config.maxParallelPromises;
-  }
-
-  public push(item: () => Promise<void>): void {
-    this._queue.push(item);
-  }
-
-  public async waitAll(): Promise<void> {
-    const currentlyExecutingPromises = new Array<Promise<void>>();
-    while (this._queue.length !== 0 || currentlyExecutingPromises.length !== 0) {
-      while (this._queue.length !== 0 && currentlyExecutingPromises.length < this._maxParallelPromises) {
-        // We create a promise that removes itself from the `currentlyExecutingPromises` queue after it resolves.
-        const itemToExecute = this._queue.shift()!;
-        const executingItem = itemToExecute().then(() => {
-          const indexOfItemInQueue = currentlyExecutingPromises.indexOf(executingItem);
-          currentlyExecutingPromises.splice(indexOfItemInQueue, 1);
-        });
-        currentlyExecutingPromises.push(executingItem);
-      }
-      await Promise.race(currentlyExecutingPromises);
-    }
-  }
-}
+import { LimitedParallelQueue } from "./LimitedParallelQueue";
 
 export class ChangesetOperations extends ManagementChangesetOperations {
   private _fileHandler: FileHandler;
