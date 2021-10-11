@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
-import { DownloadedFileProps, FileHandler, FileTransferStatus } from "../../base";
+import { FileHandler, FileTransferStatus } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateChangesetParams, DownloadChangesetsParams } from "./ChangesetOperationParams";
 
@@ -70,39 +70,43 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     return changesetUpdateResponse.changeset;
   }
 
-  public async download(params: DownloadChangesetsParams): Promise<(Changeset & DownloadedFileProps)[]> {
-    const result: (Changeset & DownloadedFileProps)[] = [];
+  public async download(params: DownloadChangesetsParams): Promise<DownloadedChangeset[]> {
+    let result: DownloadedChangeset[] = [];
 
     this._fileHandler.createDirectory(params.targetDirectoryPath);
 
     for await (const changesetPage of this.getRepresentationListInPages(params)) {
+      const changesetsWithFilePath: DownloadedChangeset[] = changesetPage.map(
+        (changeset: Changeset) => ({
+          ...changeset,
+          filePath: this._fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id))
+        }));
+      result = result.concat(changesetsWithFilePath);
+
       // We sort the changesets by fileSize in descending order to download small
       // changesets first because their SAS tokens have a shorter lifespan.
-      changesetPage.sort((changeset1: Changeset, changeset2: Changeset) => changeset1.fileSize - changeset2.fileSize);
+      changesetsWithFilePath.sort((changeset1: Changeset, changeset2: Changeset) => changeset1.fileSize - changeset2.fileSize);
 
       const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
-      for (const changeset of changesetPage) {
-        const targetFilePath = this._fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id));
+      for (const changeset of changesetsWithFilePath)
         queue.push(() => this.downloadChangesetWithRetry({
           requestContext: params.requestContext,
           imodelId: params.imodelId,
-          changeset,
-          targetFilePath: targetFilePath
+          changeset
         }));
-        result.push({ ...changeset, downloadedFilePath: targetFilePath });
-      }
       await queue.waitAll();
     }
 
     return result;
   }
 
-  private async downloadChangesetWithRetry(params: iModelScopedOperationParams & { changeset: Changeset, targetFilePath: string }): Promise<void> {
-    if (this.isChangesetAlreadyDownloaded(params.targetFilePath, params.changeset.fileSize))
+  private async downloadChangesetWithRetry(params: iModelScopedOperationParams & { changeset: DownloadedChangeset }): Promise<void> {
+    const targetFilePath = params.changeset.filePath;
+    if (this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
       return;
 
     let downloadUrl = params.changeset._links.download.href;
-    let fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, params.targetFilePath);
+    let fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, targetFilePath);
 
     if (fileDownloadStatus === FileTransferStatus.IntermittentFailure) {
       const changeset = await this.getById({
@@ -111,7 +115,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
         changesetId: params.changeset.id
       });
       downloadUrl = changeset._links.download.href;
-      fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, params.targetFilePath);
+      fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, targetFilePath);
     }
 
     if (fileDownloadStatus !== FileTransferStatus.Success)

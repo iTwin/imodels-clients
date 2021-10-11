@@ -9,7 +9,7 @@ import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestP
 import { assertChangeset } from "../common/AssertionUtils";
 import { FileTransferLog } from "../common/TrackableTestFileHandler";
 
-describe("[Authoring] ChangesetOperations", () => {
+describe.only("[Authoring] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
@@ -115,8 +115,8 @@ describe("[Authoring] ChangesetOperations", () => {
         }
       });
 
-      expect(fs.existsSync(changeset.downloadedFilePath)).to.equal(true);
-      expect(fs.statSync(changeset.downloadedFilePath).size).to.equal(fs.statSync(changesetMetadata.changesetFilePath).size);
+      expect(fs.existsSync(changeset.filePath)).to.equal(true);
+      expect(fs.statSync(changeset.filePath).size).to.equal(fs.statSync(changesetMetadata.changesetFilePath).size);
     }
   });
 
@@ -156,8 +156,8 @@ describe("[Authoring] ChangesetOperations", () => {
         }
       });
 
-      expect(fs.existsSync(changeset.downloadedFilePath)).to.equal(true);
-      expect(fs.statSync(changeset.downloadedFilePath).size).to.equal(fs.statSync(changesetMetadata.changesetFilePath).size);
+      expect(fs.existsSync(changeset.filePath)).to.equal(true);
+      expect(fs.statSync(changeset.filePath).size).to.equal(fs.statSync(changesetMetadata.changesetFilePath).size);
     }
   });
 
