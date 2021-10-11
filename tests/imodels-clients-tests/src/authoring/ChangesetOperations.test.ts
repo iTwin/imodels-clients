@@ -9,7 +9,7 @@ import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestP
 import { assertChangeset } from "../common/AssertionUtils";
 import { FileTransferLog } from "../common/TrackableTestFileHandler";
 
-describe.only("[Authoring] ChangesetOperations", () => {
+describe("[Authoring] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
