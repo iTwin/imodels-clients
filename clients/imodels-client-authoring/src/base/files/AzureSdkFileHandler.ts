@@ -6,25 +6,23 @@ import * as fs from "fs";
 import * as path from "path";
 import { URL } from "url";
 import { AnonymousCredential, BlockBlobClient } from "@azure/storage-blob";
-import { FileHandler, FileTransferStatus } from "./FileHandler";
+import { FileHandler } from "./FileHandler";
 
 export class AzureSdkFileHandler implements FileHandler {
-  public async uploadFile(uploadUrl: string, sourceFilePath: string): Promise<FileTransferStatus> {
+  public async uploadFile(uploadUrl: string, sourceFilePath: string): Promise<void> {
     if (this.isUrlExpired(uploadUrl))
-      return FileTransferStatus.IntermittentFailure;
+      throw new Error("AzureSdkFileHandler: cannot upload file because SAS url is expired.");
 
     const blockBlobClient = new BlockBlobClient(uploadUrl, new AnonymousCredential());
     await blockBlobClient.uploadFile(sourceFilePath);
-    return FileTransferStatus.Success;
   }
 
-  public async downloadFile(downloadUrl: string, targetFilePath: string): Promise<FileTransferStatus> {
+  public async downloadFile(downloadUrl: string, targetFilePath: string): Promise<void> {
     if (this.isUrlExpired(downloadUrl))
-      return FileTransferStatus.IntermittentFailure;
+      throw new Error("AzureSdkFileHandler: cannot download file because SAS url is expired.");
 
     const blockBlobClient = new BlockBlobClient(downloadUrl, new AnonymousCredential());
     await blockBlobClient.downloadToFile(targetFilePath);
-    return FileTransferStatus.Success;
   }
 
   public exists(filePath: string): boolean {

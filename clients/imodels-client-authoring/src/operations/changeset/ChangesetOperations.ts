@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
-import { DownloadedChangeset, FileHandler, FileTransferStatus } from "../../base";
+import { DownloadedChangeset, FileHandler } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateChangesetParams, DownloadChangesetsParams } from "./ChangesetOperationParams";
 import { LimitedParallelQueue } from "./LimitedParallelQueue";
@@ -77,24 +77,24 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     if (this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
       return;
 
-    let downloadUrl = params.changeset._links.download.href;
-    let fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, targetFilePath);
-
-    if (fileDownloadStatus === FileTransferStatus.IntermittentFailure) {
+    try {
+      await this._fileHandler.downloadFile(params.changeset._links.download.href, targetFilePath);
+    } catch (error) {
       const changeset = await this.getById({
         requestContext: params.requestContext,
         imodelId: params.imodelId,
         changesetId: params.changeset.id
       });
-      downloadUrl = changeset._links.download.href;
-      fileDownloadStatus = await this._fileHandler.downloadFile(downloadUrl, targetFilePath);
-    }
 
-    if (fileDownloadStatus !== FileTransferStatus.Success)
-      throw new iModelsErrorImpl({
-        code: iModelsErrorCode.ChangesetDownloadFailed,
-        message: `Failed to download changeset with status ${fileDownloadStatus}. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}`
-      });
+      try {
+        await this._fileHandler.downloadFile(changeset._links.download.href, targetFilePath);
+      } catch (errorAfterRetry) {
+        throw new iModelsErrorImpl({
+          code: iModelsErrorCode.ChangesetDownloadFailed,
+          message: `Failed to download changeset. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}, error: ${JSON.stringify(errorAfterRetry)}.`
+        });
+      }
+    }
   }
 
   private isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): boolean {

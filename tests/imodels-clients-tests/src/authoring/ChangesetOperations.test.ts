@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetsParams, FileTransferStatus, RequestContext, iModel, iModelsClient, Changeset } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetsParams, RequestContext, iModel, iModelsClient, Changeset } from "@itwin/imodels-client-authoring";
 import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, TrackableTestFileHandler, cleanUpiModels, cleanupDirectory, createEmptyiModel, findiModelWithName } from "../common";
 import { assertChangeset } from "../common/AssertionUtils";
 import { FileTransferLog } from "../common/TrackableTestFileHandler";
@@ -161,7 +161,7 @@ describe.only("[Authoring] ChangesetOperations", () => {
     }
   });
 
-  it("should retry changeset download if it fails with intermittent failure", async () => {
+  it("should retry changeset download if it fails the first time", async () => {
     // Arrange
     const fileTransferLog = new FileTransferLog();
     const azureSdkFileHandler = new AzureSdkFileHandler();
@@ -171,7 +171,7 @@ describe.only("[Authoring] ChangesetOperations", () => {
 
       if (!hasDownloadFailed) {
         hasDownloadFailed = true;
-        return Promise.resolve(FileTransferStatus.IntermittentFailure);
+        throw new Error("Download failed.");
       }
 
       return azureSdkFileHandler.downloadFile(downloadUrl, targetPath);

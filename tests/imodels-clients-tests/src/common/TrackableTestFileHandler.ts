@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { FileHandler, FileTransferStatus } from "@itwin/imodels-client-authoring";
+import { FileHandler } from "@itwin/imodels-client-authoring";
 
 export class FileTransferLog {
   public downloads: { [key: string]: number; } = {};
@@ -19,15 +19,15 @@ export class TrackableTestFileHandler implements FileHandler {
   constructor(
     private _underlyingHandler: FileHandler,
     private _stubs?: {
-      downloadStub?: (downloadUrl: string, targetFilePath: string) => Promise<FileTransferStatus>
+      downloadStub?: (downloadUrl: string, targetFilePath: string) => Promise<void>
     }) {
   }
 
-  uploadFile(uploadUrl: string, sourcePath: string): Promise<FileTransferStatus> {
+  uploadFile(uploadUrl: string, sourcePath: string): Promise<void> {
     return this._underlyingHandler.uploadFile(uploadUrl, sourcePath);
   }
 
-  downloadFile(downloadUrl: string, targetPath: string): Promise<FileTransferStatus> {
+  downloadFile(downloadUrl: string, targetPath: string): Promise<void> {
     if (this._stubs?.downloadStub)
       return this._stubs?.downloadStub(downloadUrl, targetPath);
 
