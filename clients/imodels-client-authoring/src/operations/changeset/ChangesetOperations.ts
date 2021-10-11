@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired } from "@itwin/imodels-client-management";
-import { ChangesetCreateResponse, FileHandler } from "../../base";
+import { FileHandler } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateChangesetParams } from "./ChangesetOperationParams";
 
@@ -17,7 +17,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
 
   public async create(params: CreateChangesetParams): Promise<Changeset> {
     const { changesetFilePath, ...changesetProperties } = params.changesetProperties;
-    const changesetCreateResponse = await this.sendPostRequest<ChangesetCreateResponse>({
+    const changesetCreateResponse = await this.sendPostRequest<ChangesetResponse>({
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/changesets`,
       body: {

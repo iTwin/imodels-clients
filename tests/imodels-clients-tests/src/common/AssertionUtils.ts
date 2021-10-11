@@ -5,7 +5,7 @@
 import * as fs from "fs";
 import { expect } from "chai";
 import { Briefcase, BriefcaseProperties, ChangesetProperties } from "@itwin/imodels-client-authoring";
-import { BaseEntity, Changeset, ChangesetState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
+import { BaseEntity, Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
 
 export function assertBaseEntity(actualEntity: BaseEntity): void {
   expect(actualEntity).to.not.be.undefined;
@@ -71,6 +71,17 @@ export function assertChangeset(params: {
 
   // TODO: add correct expected value when test client is set up
   // expect(params.actualChangeset.application).to.equal(null);
+}
+
+export function assertNamedVersion(params: {
+  actualNamedVersion: NamedVersion,
+  expectedNamedVersionProperties: NamedVersionPropertiesForCreate
+}): void {
+  assertBaseEntity(params.actualNamedVersion);
+  expect(params.actualNamedVersion.name).to.equal(params.expectedNamedVersionProperties.name);
+  assertOptionalProperty(params.expectedNamedVersionProperties.description, params.actualNamedVersion.description);
+  assertOptionalProperty(params.expectedNamedVersionProperties.changesetId, params.actualNamedVersion.changesetId);
+  expect(params.actualNamedVersion.state).to.equal(NamedVersionState.Visible);
 }
 
 export function assertError(params: { actualError: Error, expectedError: Partial<iModelsError> }): void {
