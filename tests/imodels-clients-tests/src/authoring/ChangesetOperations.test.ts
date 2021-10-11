@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetsParams, FileTransferStatus, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetsParams, FileTransferStatus, RequestContext, iModel, iModelsClient, Changeset } from "@itwin/imodels-client-authoring";
 import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, TrackableTestFileHandler, cleanUpiModels, cleanupDirectory, createEmptyiModel, findiModelWithName } from "../common";
 import { assertChangeset } from "../common/AssertionUtils";
 import { FileTransferLog } from "../common/TrackableTestFileHandler";
@@ -102,7 +102,7 @@ describe("[Authoring] ChangesetOperations", () => {
     expect(fs.readdirSync(downloadPath).length).to.equal(TestiModelMetadata.Changesets.length);
 
     for (const changeset of changesets) {
-      const changesetMetadata = TestiModelMetadata.Changesets.find(changesetMetadata => changesetMetadata.index === changeset.index);
+      const changesetMetadata = TestiModelMetadata.Changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
       assertChangeset({
         actualChangeset: changeset,
         expectedChangesetProperties: {
@@ -137,13 +137,13 @@ describe("[Authoring] ChangesetOperations", () => {
     const changesets = await imodelsClient.Changesets.download(downloadChangesetsParams);
 
     // Assert
-    const expectedChangesetCount = downloadChangesetsParams.urlParams.lastIndex - downloadChangesetsParams.urlParams.afterIndex;
+    const expectedChangesetCount = downloadChangesetsParams.urlParams!.lastIndex! - downloadChangesetsParams.urlParams!.afterIndex!;
     expect(changesets.length).to.equal(expectedChangesetCount);
     expect(fs.readdirSync(downloadPath).length).to.equal(expectedChangesetCount);
-    expect(changesets.map(changeset => changeset.index)).to.have.members([6, 7, 8, 9, 10]);
+    expect(changesets.map((changeset: Changeset) => changeset.index)).to.have.members([6, 7, 8, 9, 10]);
 
     for (const changeset of changesets) {
-      const changesetMetadata = TestiModelMetadata.Changesets.find(changesetMetadata => changesetMetadata.index === changeset.index);
+      const changesetMetadata = TestiModelMetadata.Changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
       assertChangeset({
         actualChangeset: changeset,
         expectedChangesetProperties: {

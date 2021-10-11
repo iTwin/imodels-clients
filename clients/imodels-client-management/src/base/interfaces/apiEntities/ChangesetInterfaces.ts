@@ -44,6 +44,12 @@ export interface MinimalChangeset extends BaseEntity {
   briefcaseId: number;
 }
 
+export interface ChangesetLinks {
+  upload: Link;
+  complete: Link;
+  namedVersion?: Link;
+}
+
 export interface Changeset extends MinimalChangeset {
   application?: Application;
   synchronizationInfo?: SynchronizationInfo;

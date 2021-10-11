@@ -24,7 +24,8 @@ class LimitedParallelQueue {
     while (this._queue.length !== 0 || currentlyExecutingPromises.length !== 0) {
       while (this._queue.length !== 0 && currentlyExecutingPromises.length < this._maxParallelPromises) {
         // We create a promise that removes itself from the `currentlyExecutingPromises` queue after it resolves.
-        const executingItem = this._queue.shift()().then(() => {
+        const itemToExecute = this._queue.shift()!;
+        const executingItem = itemToExecute().then(() => {
           const indexOfItemInQueue = currentlyExecutingPromises.indexOf(executingItem);
           currentlyExecutingPromises.splice(indexOfItemInQueue, 1);
         });
@@ -77,7 +78,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     for await (const changesetPage of this.getRepresentationListInPages(params)) {
       // We sort the changesets by fileSize in descending order to download small
       // changesets first because their SAS tokens have a shorter lifespan.
-      changesetPage.sort((changeset1, changeset2) => changeset1.fileSize - changeset2.fileSize);
+      changesetPage.sort((changeset1: Changeset, changeset2: Changeset) => changeset1.fileSize - changeset2.fileSize);
 
       const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
       for (const changeset of changesetPage) {

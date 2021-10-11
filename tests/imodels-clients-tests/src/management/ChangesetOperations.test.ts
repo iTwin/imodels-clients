@@ -66,7 +66,7 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       assertCollection({
         asyncIterable: changesets,
-        isEntityCountCorrect: count => count === (getChangesetListParams.urlParams.lastIndex - getChangesetListParams.urlParams.afterIndex)
+        isEntityCountCorrect: count => count === (getChangesetListParams.urlParams!.lastIndex! - getChangesetListParams.urlParams!.afterIndex!)
       });
     });
   });

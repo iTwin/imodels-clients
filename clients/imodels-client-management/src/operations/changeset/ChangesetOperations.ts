@@ -12,7 +12,7 @@ export class ChangesetOperations extends OperationsBase {
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: ChangesetsResponse<MinimalChangeset>) => response.changesets
+      entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse<MinimalChangeset>).changesets
     }));
   }
 
@@ -25,7 +25,7 @@ export class ChangesetOperations extends OperationsBase {
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: ChangesetsResponse<Changeset>) => response.changesets
+      entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse<Changeset>).changesets
     }));
   }
 

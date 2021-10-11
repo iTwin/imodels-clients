@@ -6,5 +6,7 @@ export * from "./imodel/iModelOperationParams";
 export * from "./imodel/iModelOperations";
 export * from "./briefcase/BriefcaseOperationParams";
 export * from "./briefcase/BriefcaseOperations";
-export * from "./changeset/ChangesetOperations";
 export * from "./changeset/ChangesetOperationParams";
+export * from "./changeset/ChangesetOperations";
+export * from "./namedVersion/NamedVersionOperationParams";
+export * from "./namedVersion/NamedVersionOperations";

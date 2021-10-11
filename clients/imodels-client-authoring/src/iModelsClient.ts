@@ -5,6 +5,7 @@
 import {
   iModelsClient as ManagementiModelsClient,
   iModelsClientOptions as ManagementiModelsClientOptions,
+  NamedVersionOperations,
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 import { AzureSdkFileHandler, FileHandler } from "./base";
@@ -31,6 +32,10 @@ export class iModelsClient {
 
   public get Changesets(): ChangesetOperations {
     return new ChangesetOperations(this._options);
+  }
+
+  public get NamedVersions(): NamedVersionOperations {
+    return new NamedVersionOperations(this._options);
   }
 
   public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
