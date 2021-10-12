@@ -3,15 +3,20 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosResponse } from "axios";
-import { BaseEntity, RequestContextParams } from "@itwin/imodels-client-management";
+import { RequestContextParams } from "@itwin/imodels-client-management";
 import { Config } from "./Config";
 
+interface MinimalProject {
+  id: string;
+  displayName: string;
+}
+
 interface ProjectsResponse {
-  projects: BaseEntity[]
+  projects: MinimalProject[]
 }
 
 interface ProjectResponse {
-  project: BaseEntity;
+  project: MinimalProject;
 }
 
 export class ProjectsClient {

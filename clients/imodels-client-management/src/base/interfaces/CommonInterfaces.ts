@@ -24,11 +24,6 @@ export interface CollectionRequestParams {
   $top?: number;
 }
 
-export interface BaseEntity {
-  id: string;
-  displayName: string;
-}
-
 export interface Link {
   href: string;
 }

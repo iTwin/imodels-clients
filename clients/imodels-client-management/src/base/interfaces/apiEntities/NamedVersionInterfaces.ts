@@ -2,14 +2,16 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BaseEntity, CollectionResponse } from "../CommonInterfaces";
+import { CollectionResponse } from "../CommonInterfaces";
 
 export enum NamedVersionState {
   Visible = "visible",
   Hidden = "hidden"
 }
 
-export interface MinimalNamedVersion extends BaseEntity {
+export interface MinimalNamedVersion {
+  id: string;
+  displayName: string;
   changesetId?: string;
 }
 
