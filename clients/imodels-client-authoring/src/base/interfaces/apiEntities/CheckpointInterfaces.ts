@@ -5,7 +5,10 @@
 import { BaseEntity, Link } from "@itwin/imodels-client-management";
 
 export enum CheckpointState {
-  Successful = "successful"
+  Successful = "successful",
+  Scheduled = "scheduled",
+  Failed = "failed",
+  NotGenerated = "notGenerated"
 }
 
 export interface ContainerAccessKey {

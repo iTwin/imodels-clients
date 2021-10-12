@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams, iModelsClient, RequestContext, iModel, iModelsErrorCode, iModelScopedOperationParams } from "@itwin/imodels-client-authoring";
+import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams, iModelsClient, RequestContext, iModel, iModelsErrorCode, iModelScopedOperationParams, CheckpointState } from "@itwin/imodels-client-authoring";
 import { expect } from "chai";
-import { TestiModelGroup, TestClientOptions, TestAuthenticationProvider, TestProjectProvider, Constants, createDefaultTestiModel, cleanUpiModels, assertBaseEntity, TestiModelMetadata, assertError, Config } from "../common";
+import { TestiModelGroup, TestClientOptions, TestAuthenticationProvider, TestProjectProvider, Constants, createDefaultTestiModel, cleanUpiModels, assertBaseEntity, TestiModelMetadata, assertError, Config, TestSetupError, sleep } from "../common";
 
 interface iModelTimelinePoint {
   changesetId: string;
@@ -43,6 +43,7 @@ describe.only("[Authoring] CheckpointOperations", () => {
     const changesetIndexWithCheckpoint = 5;
     const requestContextForUser2 = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user2);
     imodelPointWithCheckpoint = await setupNamedVersion({ requestContext: requestContextForUser2, changesetIndex: changesetIndexWithCheckpoint });
+    await waitForNamedVersionCheckpointGenerated(imodelPointWithCheckpoint.namedVersionId);
 
     const changesetIndexWithoutCheckpoint = changesetIndexWithCheckpoint + 1;
     imodelPointWithoutCheckpoint = await setupNamedVersion({ requestContext, changesetIndex: changesetIndexWithoutCheckpoint });
@@ -52,7 +53,7 @@ describe.only("[Authoring] CheckpointOperations", () => {
     await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
   });
 
-  it("should get by changeset id", async () => {
+  it.only("should get by changeset id", async () => {
     // Arrange
     const getCheckpointByChangesetIdParams: GetCheckpointByChangesetIdParams = {
       requestContext,
@@ -179,10 +180,10 @@ describe.only("[Authoring] CheckpointOperations", () => {
   async function setupNamedVersion(params: { requestContext: RequestContext, changesetIndex: number }): Promise<iModelTimelinePoint> { // TODO rename
     const changesetMetadata = TestiModelMetadata.Changesets[params.changesetIndex - 1];
     const namedVersion = await imodelsClient.NamedVersions.create({
-      requestContext,
+      requestContext: params.requestContext,
       imodelId: testiModel.id,
       namedVersionProperties: {
-        name: "Named Version",
+        name: `Named Version ${changesetMetadata.index}`,
         changesetId: changesetMetadata.id
       }
     });
@@ -191,5 +192,27 @@ describe.only("[Authoring] CheckpointOperations", () => {
       changesetIndex: changesetMetadata.index,
       namedVersionId: namedVersion.id
     }
+  }
+
+  async function waitForNamedVersionCheckpointGenerated(namedVersionId: string): Promise<void> { // TODO: rethink params
+    const sleepPeriodInMs = 1000;
+    const timeOutInMs = 5 * 60 * 1000;
+    for (let retries = timeOutInMs / sleepPeriodInMs; retries > 0; --retries) {
+      const checkpoint = await imodelsClient.Checkpoints.getByNamedVersionId({
+        requestContext,
+        imodelId: testiModel.id,
+        namedVersionId
+      });
+
+      if (checkpoint.state === CheckpointState.Successful)
+        return;
+
+      if (checkpoint.state !== CheckpointState.Scheduled)
+        throw new TestSetupError(`Checkpoint generation failed with state: ${checkpoint.state}.`);
+
+      await sleep(sleepPeriodInMs);
+    }
+
+    throw new TestSetupError(`Timed out while waiting for checkpoint generation to complete.`);
   }
 });
