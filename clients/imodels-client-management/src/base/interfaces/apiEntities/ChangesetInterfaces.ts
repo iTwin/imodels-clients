@@ -27,6 +27,12 @@ export interface SynchronizationInfo {
   changedFiles: string[];
 }
 
+export interface ChangesetLinks {
+  upload: Link;
+  download: Link;
+  complete: Link;
+}
+
 export interface MinimalChangeset extends BaseEntity {
   description: string;
   index: number;

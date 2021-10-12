@@ -2,10 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired } from "@itwin/imodels-client-management";
-import { FileHandler } from "../../base";
+import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
+import { DownloadedChangeset, FileHandler } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
-import { CreateChangesetParams } from "./ChangesetOperationParams";
+import { CreateChangesetParams, DownloadChangesetsParams } from "./ChangesetOperationParams";
+import { LimitedParallelQueue } from "./LimitedParallelQueue";
 
 export class ChangesetOperations extends ManagementChangesetOperations {
   private _fileHandler: FileHandler;
@@ -39,5 +40,76 @@ export class ChangesetOperations extends ManagementChangesetOperations {
       }
     });
     return changesetUpdateResponse.changeset;
+  }
+
+  public async download(params: DownloadChangesetsParams): Promise<DownloadedChangeset[]> {
+    let result: DownloadedChangeset[] = [];
+
+    this._fileHandler.createDirectory(params.targetDirectoryPath);
+
+    for await (const changesetPage of this.getRepresentationListInPages(params)) {
+      const changesetsWithFilePath: DownloadedChangeset[] = changesetPage.map(
+        (changeset: Changeset) => ({
+          ...changeset,
+          filePath: this._fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id))
+        }));
+      result = result.concat(changesetsWithFilePath);
+
+      // We sort the changesets by fileSize in descending order to download small
+      // changesets first because their SAS tokens have a shorter lifespan.
+      changesetsWithFilePath.sort((changeset1: Changeset, changeset2: Changeset) => changeset1.fileSize - changeset2.fileSize);
+
+      const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
+      for (const changeset of changesetsWithFilePath)
+        queue.push(() => this.downloadChangesetWithRetry({
+          requestContext: params.requestContext,
+          imodelId: params.imodelId,
+          changeset
+        }));
+      await queue.waitAll();
+    }
+
+    return result;
+  }
+
+  private async downloadChangesetWithRetry(params: iModelScopedOperationParams & { changeset: DownloadedChangeset }): Promise<void> {
+    const targetFilePath = params.changeset.filePath;
+    if (this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
+      return;
+
+    try {
+      await this._fileHandler.downloadFile(params.changeset._links.download.href, targetFilePath);
+    } catch (error) {
+      const changeset = await this.getById({
+        requestContext: params.requestContext,
+        imodelId: params.imodelId,
+        changesetId: params.changeset.id
+      });
+
+      try {
+        await this._fileHandler.downloadFile(changeset._links.download.href, targetFilePath);
+      } catch (errorAfterRetry) {
+        throw new iModelsErrorImpl({
+          code: iModelsErrorCode.ChangesetDownloadFailed,
+          message: `Failed to download changeset. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}, error: ${JSON.stringify(errorAfterRetry)}.`
+        });
+      }
+    }
+  }
+
+  private isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): boolean {
+    if (!this._fileHandler.exists(targetFilePath))
+      return false;
+
+    const existingFileSize = this._fileHandler.getFileSize(targetFilePath);
+    if (existingFileSize === expectedFileSize)
+      return true;
+
+    this._fileHandler.unlink(targetFilePath);
+    return false;
+  }
+
+  private createFileName(changesetId: string): string {
+    return `${changesetId}.cs`;
   }
 }

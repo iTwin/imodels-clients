@@ -2,12 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn, getPagedCollectionGenerator } from "../../base";
+import { MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
 import { CreateNamedVersionParams, GetNamedVersionByIdParams, GetNamedVersionListParams, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
 
 export class NamedVersionOperations extends OperationsBase {
   public getMinimalList(params: GetNamedVersionListParams): AsyncIterableIterator<MinimalNamedVersion> {
-    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<MinimalNamedVersion>({
+    return getCollectionIterator(() => this.getEntityCollectionPage<MinimalNamedVersion>({
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
@@ -16,7 +16,7 @@ export class NamedVersionOperations extends OperationsBase {
   }
 
   public getRepresentationList(params: GetNamedVersionListParams): AsyncIterableIterator<NamedVersion> {
-    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<NamedVersion>({
+    return getCollectionIterator(() => this.getEntityCollectionPage<NamedVersion>({
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,

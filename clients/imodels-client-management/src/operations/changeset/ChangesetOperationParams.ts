@@ -4,8 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 import { CollectionRequestParams, iModelScopedOperationParams } from "../../base";
 
+export interface GetChangesetListUrlParams extends CollectionRequestParams {
+  afterIndex?: number;
+  lastIndex?: number;
+}
+
 export interface GetChangesetListParams extends iModelScopedOperationParams {
-  urlParams?: CollectionRequestParams;
+  urlParams?: GetChangesetListUrlParams;
 }
 
 export interface GetChangesetByIdParams extends iModelScopedOperationParams {

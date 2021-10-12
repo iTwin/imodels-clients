@@ -5,14 +5,22 @@
 import { EntityCollectionPage } from "./interfaces/CommonInterfaces";
 import { EntityPageQueryFunc } from "./interfaces/UtilityTypes";
 
-export async function* getPagedCollectionGenerator<TEntity>(pageQueryFunc: EntityPageQueryFunc<TEntity>): AsyncIterableIterator<TEntity> {
+export function getCollectionIterator<TEntity>(pageQueryFunc: EntityPageQueryFunc<TEntity>): AsyncIterableIterator<TEntity> {
+  return flatten(getCollectionPagesIterator(pageQueryFunc));
+}
+
+export async function* getCollectionPagesIterator<TEntity>(pageQueryFunc: EntityPageQueryFunc<TEntity>): AsyncIterableIterator<TEntity[]> {
   let nextPageQueryFunc: EntityPageQueryFunc<TEntity> | undefined = pageQueryFunc;
 
   while (nextPageQueryFunc) {
     const entityPage: EntityCollectionPage<TEntity> = await nextPageQueryFunc();
     nextPageQueryFunc = entityPage.next;
-
-    for (const entity of entityPage.entities)
-      yield entity;
+    yield entityPage.entities;
   }
+}
+
+export async function* flatten<TEntity>(pagedIterator: AsyncIterableIterator<TEntity[]>): AsyncIterableIterator<TEntity> {
+  for await (const entityChunk of pagedIterator)
+    for (const entity of entityChunk)
+      yield entity;
 }

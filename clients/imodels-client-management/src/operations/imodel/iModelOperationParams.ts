@@ -4,8 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { CollectionRequestParams, Extent, RequestContextParams, iModelScopedOperationParams } from "../../base";
 
+export interface GetiModelListUrlParams extends CollectionRequestParams {
+  projectId: string;
+}
+
 export interface GetiModelListParams extends RequestContextParams {
-  urlParams: { projectId: string } & CollectionRequestParams;
+  urlParams: GetiModelListUrlParams;
 }
 
 export type GetiModelByIdParams = iModelScopedOperationParams

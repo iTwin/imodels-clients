@@ -2,12 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { MinimaliModel, OperationsBase, PreferReturn, getPagedCollectionGenerator, iModel, iModelResponse, iModelsResponse } from "../../base";
+import { MinimaliModel, OperationsBase, PreferReturn, getCollectionIterator, iModel, iModelResponse, iModelsResponse } from "../../base";
 import { CreateEmptyiModelParams, DeleteiModelParams, GetiModelByIdParams, GetiModelListParams } from "./iModelOperationParams";
 
 export class iModelOperations extends OperationsBase {
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
-    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<MinimaliModel>({
+    return getCollectionIterator(() => this.getEntityCollectionPage<MinimaliModel>({
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
@@ -16,7 +16,7 @@ export class iModelOperations extends OperationsBase {
   }
 
   public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
-    return getPagedCollectionGenerator(() => this.getEntityCollectionPage<iModel>({
+    return getCollectionIterator(() => this.getEntityCollectionPage<iModel>({
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,

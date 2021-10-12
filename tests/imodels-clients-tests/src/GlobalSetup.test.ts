@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelGroup, cleanUpiModels, createDefaultTestiModel, findiModelWithName } from "./common";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelGroup, cleanUpiModels, cleanupDirectory, createDefaultTestiModel, findiModelWithName } from "./common";
 
 before(async () => {
   const imodelsClient = new iModelsClient(new TestClientOptions());
@@ -22,6 +22,8 @@ before(async () => {
     }
     throw e;
   }
+
+  cleanupDirectory(Constants.TestDownloadDirectoryPath);
 });
 
 after(async () => {
@@ -31,6 +33,8 @@ after(async () => {
   const testiModelGroup = new TestiModelGroup({ labels: { package: Constants.PackagePrefix } });
 
   await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
+
+  cleanupDirectory(Constants.TestDownloadDirectoryPath);
 });
 
 
