@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AcquireBriefcaseParams, Briefcase, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, cleanUpiModels, createEmptyiModel } from "../common";
+import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, cleanUpiModels, createEmptyiModel, Config } from "../common";
 import { assertBriefcase } from "../common/AssertionUtils";
 
 describe("[Authoring] BriefcaseOperations", () => {
@@ -15,7 +15,7 @@ describe("[Authoring] BriefcaseOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext();
+    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {

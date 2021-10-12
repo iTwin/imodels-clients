@@ -13,7 +13,7 @@ describe("[Management] ChangesetOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext();
+    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
     projectId = await TestProjectProvider.getProjectId();
 
     testiModel = await findiModelWithName({ imodelsClient, requestContext, projectId, expectediModelname: Config.get().testiModelName });

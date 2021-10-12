@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams, iModelsClient, RequestContext, iModel, iModelsErrorCode, iModelScopedOperationParams } from "@itwin/imodels-client-authoring";
 import { expect } from "chai";
-import { TestiModelGroup, TestClientOptions, TestAuthenticationProvider, TestProjectProvider, Constants, createDefaultTestiModel, cleanUpiModels, assertBaseEntity, TestiModelMetadata, assertError } from "../common";
+import { TestiModelGroup, TestClientOptions, TestAuthenticationProvider, TestProjectProvider, Constants, createDefaultTestiModel, cleanUpiModels, assertBaseEntity, TestiModelMetadata, assertError, Config } from "../common";
 
 interface iModelTimelinePoint {
   changesetId: string;
@@ -24,7 +24,7 @@ describe.only("[Authoring] CheckpointOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext();
+    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {
@@ -41,7 +41,8 @@ describe.only("[Authoring] CheckpointOperations", () => {
     });
 
     const changesetIndexWithCheckpoint = 5;
-    imodelPointWithCheckpoint = await setupNamedVersion({ requestContext, changesetIndex: changesetIndexWithCheckpoint }); // TODO: different context
+    const requestContextForUser2 = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user2);
+    imodelPointWithCheckpoint = await setupNamedVersion({ requestContext: requestContextForUser2, changesetIndex: changesetIndexWithCheckpoint });
 
     const changesetIndexWithoutCheckpoint = changesetIndexWithCheckpoint + 1;
     imodelPointWithoutCheckpoint = await setupNamedVersion({ requestContext, changesetIndex: changesetIndexWithoutCheckpoint });

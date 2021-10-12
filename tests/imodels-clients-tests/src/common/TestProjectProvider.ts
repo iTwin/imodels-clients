@@ -23,7 +23,7 @@ export class TestProjectProvider {
       requestContext: {
         authorization: {
           scheme: "Bearer",
-          token: await this._projectsApiAuthClient.getAccessToken(Config.get().testUser)
+          token: await this._projectsApiAuthClient.getAccessToken(Config.get().testUsers.user1)
         }
       },
       projectName: Config.get().testProjectName

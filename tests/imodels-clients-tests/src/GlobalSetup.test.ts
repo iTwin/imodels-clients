@@ -7,7 +7,7 @@ import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestP
 
 before(async () => {
   const imodelsClient = new iModelsClient(new TestClientOptions());
-  const requestContext = await TestAuthenticationProvider.getRequestContext();
+  const requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
   const projectId = await TestProjectProvider.getProjectId();
   const testiModelGroup = new TestiModelGroup({ labels: { package: Constants.PackagePrefix } });
 
@@ -28,7 +28,7 @@ before(async () => {
 
 after(async () => {
   const imodelsClient = new iModelsClient(new TestClientOptions());
-  const requestContext = await TestAuthenticationProvider.getRequestContext();
+  const requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
   const projectId = await TestProjectProvider.getProjectId();
   const testiModelGroup = new TestiModelGroup({ labels: { package: Constants.PackagePrefix } });
 
