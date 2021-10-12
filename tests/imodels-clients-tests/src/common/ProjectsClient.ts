@@ -6,17 +6,16 @@ import axios, { AxiosResponse } from "axios";
 import { RequestContextParams } from "@itwin/imodels-client-management";
 import { Config } from "./Config";
 
-interface MinimalProject {
+interface Project {
   id: string;
-  displayName: string;
 }
 
 interface ProjectsResponse {
-  projects: MinimalProject[]
+  projects: Project[]
 }
 
 interface ProjectResponse {
-  project: MinimalProject;
+  project: Project;
 }
 
 export class ProjectsClient {
