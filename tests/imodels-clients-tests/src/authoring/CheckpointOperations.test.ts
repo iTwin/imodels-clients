@@ -2,9 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams, iModelsClient, RequestContext, iModel, iModelsErrorCode, iModelScopedOperationParams, CheckpointState } from "@itwin/imodels-client-authoring";
+import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams, iModelsClient, RequestContext, iModelsErrorCode, iModelScopedOperationParams, CheckpointState } from "@itwin/imodels-client-authoring";
 import { expect } from "chai";
-import { TestiModelGroup, TestClientOptions, TestAuthenticationProvider, TestProjectProvider, Constants, createDefaultTestiModel, cleanUpiModels, TestiModelMetadata, assertError, Config, TestSetupError, sleep, assertCheckpoint } from "../common";
+import { TestiModelGroup, TestClientOptions, TestAuthenticationProvider, TestProjectProvider, Constants, cleanUpiModels, assertError, Config, TestSetupError, sleep, assertCheckpoint } from "../common";
+import { TestiModelWithChangesets, TestiModelProvider } from "../common/TestiModelProvider";
 
 interface iModelTimelinePoint {
   changesetId: string;
@@ -12,12 +13,12 @@ interface iModelTimelinePoint {
   namedVersionId: string;
 }
 
-describe.only("[Authoring] CheckpointOperations", () => {
+describe("[Authoring] CheckpointOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
-  let testiModel: iModel;
+  let testiModel: TestiModelWithChangesets;
   let imodelPointWithCheckpoint: iModelTimelinePoint;
 
   before(async () => {
@@ -31,9 +32,9 @@ describe.only("[Authoring] CheckpointOperations", () => {
       }
     });
 
-    testiModel = await createDefaultTestiModel({
-      imodelsClient,
+    testiModel = await TestiModelProvider.createWithChangesets({
       requestContext,
+      imodelsClient,
       projectId,
       imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
     });
@@ -240,7 +241,7 @@ describe.only("[Authoring] CheckpointOperations", () => {
   });
 
   async function setupNamedVersion(params: { requestContext: RequestContext, changesetIndex: number }): Promise<iModelTimelinePoint> { // TODO rename
-    const changesetMetadata = TestiModelMetadata.Changesets[params.changesetIndex - 1];
+    const changesetMetadata = testiModel.changesets[params.changesetIndex - 1];
     const namedVersion = await imodelsClient.NamedVersions.create({
       requestContext: params.requestContext,
       imodelId: testiModel.id,

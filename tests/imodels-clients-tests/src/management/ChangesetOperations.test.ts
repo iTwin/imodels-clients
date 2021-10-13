@@ -2,21 +2,26 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, GetChangesetByIdParams, GetChangesetListParams, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-management";
-import { Config, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelMetadata, assertChangeset, assertCollection, findiModelWithName } from "../common";
+import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
+import { Changeset, GetChangesetByIdParams, GetChangesetListParams, RequestContext, iModelsClient } from "@itwin/imodels-client-management";
+import { Config, TestAuthenticationProvider, TestClientOptions, assertChangeset, assertCollection, TestProjectProvider } from "../common";
+import { TestiModelWithChangesets, TestiModelProvider } from "../common/TestiModelProvider";
 
 describe("[Management] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
-  let testiModel: iModel;
+  let testiModel: TestiModelWithChangesets;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
     requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
     projectId = await TestProjectProvider.getProjectId();
-
-    testiModel = await findiModelWithName({ imodelsClient, requestContext, projectId, expectediModelname: Config.get().testiModelName });
+    testiModel = await TestiModelProvider.getOrCreateReusable({
+      imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
+      requestContext,
+      projectId
+    });
   });
 
   [
@@ -45,7 +50,7 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       assertCollection({
         asyncIterable: changesets,
-        isEntityCountCorrect: count => count === TestiModelMetadata.Changesets.length
+        isEntityCountCorrect: count => count === testiModel.changesets.length
       });
     });
 
@@ -73,11 +78,11 @@ describe("[Management] ChangesetOperations", () => {
 
   it("should get changeset by id", async () => {
     // Arrange
-    const changesetMetadata = TestiModelMetadata.Changesets[0];
+    const expectedChangeset = testiModel.changesets[0];
     const getChangesetByIdParams: GetChangesetByIdParams = {
       requestContext,
       imodelId: testiModel.id,
-      changesetId: changesetMetadata.id
+      changesetId: expectedChangeset.id
     };
 
     // Act
@@ -87,12 +92,11 @@ describe("[Management] ChangesetOperations", () => {
     assertChangeset({
       actualChangeset: changeset,
       expectedChangesetProperties: {
-        id: changesetMetadata.id,
-        briefcaseId: TestiModelMetadata.Briefcase.id,
-        parentId: changesetMetadata.parentId,
-        description: changesetMetadata.description,
-        containingChanges: changesetMetadata.containingChanges,
-        changesetFilePath: changesetMetadata.changesetFilePath
+        id: expectedChangeset.id,
+        briefcaseId: testiModel.briefcase.id,
+        parentId: expectedChangeset.parentId,
+        description: expectedChangeset.description,
+        containingChanges: expectedChangeset.containingChanges
       }
     });
   });

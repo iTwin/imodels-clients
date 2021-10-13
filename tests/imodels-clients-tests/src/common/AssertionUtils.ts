@@ -4,8 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Briefcase, BriefcaseProperties, ChangesetProperties, Checkpoint, CheckpointState } from "@itwin/imodels-client-authoring";
+import { Briefcase, BriefcaseProperties, ChangesetProperties, Checkpoint, CheckpointState, DownloadedChangeset } from "@itwin/imodels-client-authoring";
 import { BaseEntity, Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
+import { TestiModelMetadata } from "./TestiModelMetadata";
 
 export function assertBaseEntity(actualEntity: BaseEntity): void {
   expect(actualEntity).to.not.be.undefined;
@@ -56,12 +57,11 @@ export function assertBriefcase(params: {
 
 export function assertChangeset(params: {
   actualChangeset: Changeset,
-  expectedChangesetProperties: ChangesetProperties
+  expectedChangesetProperties: Partial<ChangesetProperties>
 }): void {
   assertBaseEntity(params.actualChangeset);
 
   expect(params.actualChangeset.parentId).to.equal(params.expectedChangesetProperties.parentId ?? "");
-  expect(params.actualChangeset.fileSize).to.equal(fs.statSync(params.expectedChangesetProperties.changesetFilePath).size);
   expect(params.actualChangeset.index).to.be.greaterThan(0);
   expect(params.actualChangeset.briefcaseId).to.be.greaterThan(0);
   assertOptionalProperty(params.expectedChangesetProperties.description, params.actualChangeset.description);
@@ -69,8 +69,25 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
   expect(params.actualChangeset.synchronizationInfo).to.equal(null);
 
+  // check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
+  const expecteChangesetMetadata = TestiModelMetadata.Changesets.find(changeset => changeset.id === params.expectedChangesetProperties.id)
+  expect(params.actualChangeset.fileSize).to.equal(fs.statSync(expecteChangesetMetadata!.changesetFilePath).size);
+
   // TODO: add correct expected value when test client is set up
   // expect(params.actualChangeset.application).to.equal(null);
+}
+
+export function assertDownloadedChangeset(params: {
+  actualChangeset: DownloadedChangeset,
+  expectedChangesetProperties: Partial<ChangesetProperties>
+}): void {
+  assertChangeset(params);
+
+  expect(fs.existsSync(params.actualChangeset.filePath)).to.equal(true);
+
+  // check if the downloaded file size matches the size of the changeset file used for test iModel creation
+  const expecteChangesetMetadata = TestiModelMetadata.Changesets.find(changeset => changeset.id === params.expectedChangesetProperties.id)
+  expect(fs.statSync(params.actualChangeset.filePath).size).to.equal(fs.statSync(expecteChangesetMetadata!.changesetFilePath).size);
 }
 
 export function assertNamedVersion(params: {

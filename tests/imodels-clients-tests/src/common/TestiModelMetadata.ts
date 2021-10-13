@@ -4,27 +4,18 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { TestSetupError } from "./CommonTestUtils";
-import { Config } from "./Config";
 import { Constants } from "./Constants";
 
 export interface TestiModelDescriptor {
-  name: string;
-  description: string;
   baselineFilePath: string;
-}
-
-export interface TestBriefcaseDescriptor {
-  id: number;
-  deviceName: string;
 }
 
 export interface TestChangesetDescriptor {
   id: string;
+  index: number;
   description: string;
   parentId: string;
   containingChanges: number;
-
-  index: number;
   changesetFilePath: string;
 }
 
@@ -32,12 +23,7 @@ interface ChangesetDescriptorFile {
   changesets: ChangesetDescriptorFileItem[];
 }
 
-interface ChangesetDescriptorFileItem {
-  id: string;
-  index: number;
-  description: string;
-  containingChanges: number;
-  parentId: string;
+interface ChangesetDescriptorFileItem extends TestChangesetDescriptor {
   fileName: string;
 }
 
@@ -48,10 +34,6 @@ export class TestiModelMetadata {
 
   public static get iModel(): TestiModelDescriptor {
     return this._imodelDescriptor ?? this.initializeiModelDescriptor();
-  }
-
-  public static get Briefcase(): TestBriefcaseDescriptor {
-    return { id: 2, deviceName: Constants.TestDeviceName };
   }
 
   public static get Changesets(): TestChangesetDescriptor[] {
@@ -65,8 +47,6 @@ export class TestiModelMetadata {
       throw new TestSetupError("Baseline file for test iModel not found.");
 
     this._imodelDescriptor = {
-      name: Config.get().testiModelName,
-      description: "Default test iModel description",
       baselineFilePath: `${this._imodelDataRootPath}/${bimFile}`
     };
     return this._imodelDescriptor;

@@ -2,16 +2,17 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AcquireBriefcaseParams, Briefcase, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, cleanUpiModels, createEmptyiModel, Config } from "../common";
+import { AcquireBriefcaseParams, Briefcase, RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
+import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, cleanUpiModels, Config } from "../common";
 import { assertBriefcase } from "../common/AssertionUtils";
+import { TestiModelWithChangesets, TestiModelProvider } from "../common/TestiModelProvider";
 
 describe("[Authoring] BriefcaseOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
-  let testiModel: iModel;
+  let testiModel: TestiModelWithChangesets;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
@@ -24,7 +25,7 @@ describe("[Authoring] BriefcaseOperations", () => {
       }
     });
 
-    testiModel = await createEmptyiModel({
+    testiModel = await TestiModelProvider.createWithChangesets({
       imodelsClient,
       requestContext,
       projectId,
@@ -42,7 +43,7 @@ describe("[Authoring] BriefcaseOperations", () => {
       requestContext,
       imodelId: testiModel.id,
       briefcaseProperties: {
-        deviceName: TestiModelMetadata.Briefcase.deviceName
+        deviceName: "some device name"
       }
     };
 
