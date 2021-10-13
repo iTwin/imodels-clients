@@ -16,6 +16,7 @@ export enum iModelsErrorCode {
   FileNotFound = "FileNotFound",
   iModelNotFound = "iModelNotFound",
   ChangesetNotFound = "ChangesetNotFound",
+  NamedVersionNotFound = "NamedVersionNotFound",
   CheckpointNotFound = "CheckpointNotFound",
 
   // Operation specific errors thrown by the client library

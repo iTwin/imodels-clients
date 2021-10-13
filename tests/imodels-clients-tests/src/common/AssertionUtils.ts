@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Briefcase, BriefcaseProperties, ChangesetProperties } from "@itwin/imodels-client-authoring";
+import { Briefcase, BriefcaseProperties, ChangesetProperties, Checkpoint, CheckpointState } from "@itwin/imodels-client-authoring";
 import { BaseEntity, Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
 
 export function assertBaseEntity(actualEntity: BaseEntity): void {
@@ -82,6 +82,20 @@ export function assertNamedVersion(params: {
   assertOptionalProperty(params.expectedNamedVersionProperties.description, params.actualNamedVersion.description);
   assertOptionalProperty(params.expectedNamedVersionProperties.changesetId, params.actualNamedVersion.changesetId);
   expect(params.actualNamedVersion.state).to.equal(NamedVersionState.Visible);
+}
+
+export function assertCheckpoint(params: {
+  actualCheckpoint: Checkpoint,
+  expectedCheckpointProperties: {
+    changesetId: string,
+    changesetIndex: number
+    state: CheckpointState
+  }
+}): void {
+  expect(params.actualCheckpoint.changesetId).to.equal(params.expectedCheckpointProperties.changesetId);
+  expect(params.actualCheckpoint.changesetIndex).to.equal(params.expectedCheckpointProperties.changesetIndex);
+  expect(params.actualCheckpoint.state).to.equal(params.expectedCheckpointProperties.state);
+  expect(params.actualCheckpoint._links?.download).to.not.be.undefined;
 }
 
 export function assertError(params: { actualError: Error, expectedError: Partial<iModelsError> }): void {
