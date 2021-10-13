@@ -5,21 +5,15 @@
 import * as fs from "fs";
 import { expect } from "chai";
 import { Briefcase, BriefcaseProperties, ChangesetProperties } from "@itwin/imodels-client-authoring";
-import { BaseEntity, Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
 
-export function assertBaseEntity(actualEntity: BaseEntity): void {
-  expect(actualEntity).to.not.be.undefined;
-  expect(actualEntity.id).to.not.be.empty;
-  expect(actualEntity.displayName).to.not.be.empty;
-}
-
-export async function assertCollection<T extends BaseEntity>(params: {
+export async function assertCollection<T>(params: {
   asyncIterable: AsyncIterableIterator<T>,
   isEntityCountCorrect: (count: number) => boolean
 }): Promise<void> {
   let entityCount = 0;
   for await (const entity of params.asyncIterable) {
-    assertBaseEntity(entity);
+    expect(entity).to.not.be.undefined;
     entityCount++;
   }
   expect(params.isEntityCountCorrect(entityCount)).to.equal(true);
@@ -29,7 +23,9 @@ export function assertiModel(params: {
   actualiModel: iModel,
   expectediModelProperties: iModelProperties
 }): void {
-  assertBaseEntity(params.actualiModel);
+  expect(params.actualiModel).to.not.be.undefined;
+  expect(params.actualiModel.id).to.not.be.empty;
+  expect(params.actualiModel.displayName).to.not.be.empty;
 
   expect(params.actualiModel.name).to.equal(params.expectediModelProperties.name);
   assertOptionalProperty(params.expectediModelProperties.description, params.actualiModel.description);
@@ -42,7 +38,9 @@ export function assertBriefcase(params: {
   actualBriefcase: Briefcase,
   expectedBriefcaseProperties: BriefcaseProperties & { briefcaseId?: number }
 }): void {
-  assertBaseEntity(params.actualBriefcase);
+  expect(params.actualBriefcase).to.not.be.undefined;
+  expect(params.actualBriefcase.id).to.not.be.empty;
+  expect(params.actualBriefcase.displayName).to.not.be.empty;
 
   if (params.expectedBriefcaseProperties.briefcaseId)
     expect(params.actualBriefcase.briefcaseId).to.equal(params.expectedBriefcaseProperties.briefcaseId);
@@ -58,7 +56,9 @@ export function assertChangeset(params: {
   actualChangeset: Changeset,
   expectedChangesetProperties: ChangesetProperties
 }): void {
-  assertBaseEntity(params.actualChangeset);
+  expect(params.actualChangeset).to.not.be.undefined;
+  expect(params.actualChangeset.id).to.not.be.empty;
+  expect(params.actualChangeset.displayName).to.not.be.empty;
 
   expect(params.actualChangeset.parentId).to.equal(params.expectedChangesetProperties.parentId ?? "");
   expect(params.actualChangeset.fileSize).to.equal(fs.statSync(params.expectedChangesetProperties.changesetFilePath).size);
@@ -77,7 +77,10 @@ export function assertNamedVersion(params: {
   actualNamedVersion: NamedVersion,
   expectedNamedVersionProperties: NamedVersionPropertiesForCreate
 }): void {
-  assertBaseEntity(params.actualNamedVersion);
+  expect(params.actualNamedVersion).to.not.be.undefined;
+  expect(params.actualNamedVersion.id).to.not.be.empty;
+  expect(params.actualNamedVersion.displayName).to.not.be.empty;
+
   expect(params.actualNamedVersion.name).to.equal(params.expectedNamedVersionProperties.name);
   assertOptionalProperty(params.expectedNamedVersionProperties.description, params.actualNamedVersion.description);
   assertOptionalProperty(params.expectedNamedVersionProperties.changesetId, params.actualNamedVersion.changesetId);

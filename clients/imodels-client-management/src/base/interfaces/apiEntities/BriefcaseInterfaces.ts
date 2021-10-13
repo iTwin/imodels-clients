@@ -2,9 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BaseEntity, CollectionResponse } from "../CommonInterfaces";
+import { CollectionResponse } from "../CommonInterfaces";
 
-export type MinimalBriefcase = BaseEntity
+export interface MinimalBriefcase {
+  id: string;
+  displayName: string;
+}
 
 export interface Briefcase extends MinimalBriefcase {
   briefcaseId: number;
