@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { Briefcase, GetBriefcaseByIdParams, GetBriefcaseListParams, RequestContext, iModelsClient } from "@itwin/imodels-client-management";
-import { Config, TestAuthenticationProvider, TestClientOptions, assertBriefcase, assertCollection, TestProjectProvider } from "../common";
-import { TestiModelWithChangesets, TestiModelProvider } from "../common/TestiModelProvider";
+import { Config, TestAuthenticationProvider, TestClientOptions, assertBriefcase, assertCollection, TestProjectProvider, ReusableTestiModelProvider, TestiModelWithChangesets } from "../common";
+
 
 describe("[Management] BriefcaseOperations", () => {
   let imodelsClient: iModelsClient;
@@ -17,7 +17,7 @@ describe("[Management] BriefcaseOperations", () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
     requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
     projectId = await TestProjectProvider.getProjectId();
-    testiModel = await TestiModelProvider.getOrCreateReusable({
+    testiModel = await ReusableTestiModelProvider.getOrCreate({
       imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
       requestContext,
       projectId

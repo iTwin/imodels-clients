@@ -5,8 +5,7 @@
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { Changeset, GetChangesetByIdParams, GetChangesetListParams, RequestContext, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
 import { expect } from "chai";
-import { Config, TestAuthenticationProvider, TestClientOptions, assertChangeset, assertCollection, TestProjectProvider } from "../common";
-import { TestiModelNamedVersion, TestiModelProvider, TestiModelWithChangesetsAndNamedVersions } from "../common/TestiModelProvider";
+import { Config, TestAuthenticationProvider, TestClientOptions, assertChangeset, assertCollection, TestProjectProvider, ReusableTestiModelProvider, TestiModelNamedVersion, TestiModelWithChangesetsAndNamedVersions } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
   let imodelsClientOptions: iModelsClientOptions;
@@ -20,7 +19,7 @@ describe("[Management] ChangesetOperations", () => {
     imodelsClient = new iModelsClient(imodelsClientOptions);
     requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
     projectId = await TestProjectProvider.getProjectId();
-    testiModel = await TestiModelProvider.getOrCreateReusable({
+    testiModel = await ReusableTestiModelProvider.getOrCreate({
       imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
       requestContext,
       projectId

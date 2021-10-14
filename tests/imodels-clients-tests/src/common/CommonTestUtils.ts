@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { iModelsClient as ManagementiModelsClient, RequestContext, iModel } from "@itwin/imodels-client-management";
+import { iModelsClient as ManagementiModelsClient, RequestContext } from "@itwin/imodels-client-management";
 import { TestiModelGroup } from "./TestiModelGroup";
 
 export class TestSetupError extends Error {

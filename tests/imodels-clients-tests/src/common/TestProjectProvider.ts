@@ -2,9 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Config } from "./Config";
-import { ProjectsClient } from "./ProjectsClient";
-import { TestAuthenticationClient } from "./TestAuthenticationClient";
+import { ProjectsClient, TestAuthenticationClient, Config } from ".";
 
 export class TestProjectProvider {
   private static _projectId: string;

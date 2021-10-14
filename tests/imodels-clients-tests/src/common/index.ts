@@ -18,3 +18,7 @@ export * from "./TestProjectProvider";
 export * from "./TestAuthenticationProvider";
 
 export * from "./TrackableTestFileHandler";
+
+export * from "./TestiModelInterfaces";
+export * from "./TestiModelCreator";
+export * from "./ReusableTestiModelProvider";

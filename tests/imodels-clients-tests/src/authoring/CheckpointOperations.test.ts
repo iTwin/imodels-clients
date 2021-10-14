@@ -4,8 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams, iModelsClient, RequestContext, iModelsErrorCode, iModelScopedOperationParams, CheckpointState } from "@itwin/imodels-client-authoring";
 import { expect } from "chai";
-import { TestiModelGroup, TestClientOptions, TestAuthenticationProvider, TestProjectProvider, Constants, cleanUpiModels, assertError, Config, assertCheckpoint } from "../common";
-import { TestiModelNamedVersion, TestiModelProvider, TestiModelWithChangesetsAndNamedVersions } from "../common/TestiModelProvider";
+import { TestiModelGroup, TestClientOptions, TestAuthenticationProvider, TestProjectProvider, Constants, cleanUpiModels, assertError, Config, assertCheckpoint, ReusableTestiModelProvider, TestiModelNamedVersion, TestiModelWithChangesetsAndNamedVersions } from "../common";
 
 describe("[Authoring] CheckpointOperations", () => {
   let imodelsClient: iModelsClient;
@@ -26,7 +25,7 @@ describe("[Authoring] CheckpointOperations", () => {
       }
     });
 
-    testiModel = await TestiModelProvider.getOrCreateReusable({
+    testiModel = await ReusableTestiModelProvider.getOrCreate({
       requestContext,
       imodelsClient,
       projectId

@@ -5,10 +5,7 @@
 import * as fs from "fs";
 import { expect } from "chai";
 import { AcquireBriefcaseParams, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetsParams, RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, TrackableTestFileHandler, cleanUpiModels, cleanupDirectory } from "../common";
-import { assertChangeset, assertDownloadedChangeset } from "../common/AssertionUtils";
-import { FileTransferLog } from "../common/TrackableTestFileHandler";
-import { EmptyTestiModel, TestiModelWithChangesets, TestiModelProvider } from "../common/TestiModelProvider";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, TrackableTestFileHandler, cleanUpiModels, cleanupDirectory, assertChangeset, assertDownloadedChangeset, FileTransferLog, ReusableTestiModelProvider, TestiModelCreator, EmptyTestiModel, TestiModelWithChangesets } from "../common";
 
 describe("[Authoring] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
@@ -34,13 +31,13 @@ describe("[Authoring] ChangesetOperations", () => {
       }
     });
 
-    testiModelForWrite = await TestiModelProvider.createEmpty({
+    testiModelForWrite = await TestiModelCreator.createEmpty({
       requestContext,
       imodelsClient,
       projectId,
       imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
     });
-    testiModelForDownload = await TestiModelProvider.getOrCreateReusable({
+    testiModelForDownload = await ReusableTestiModelProvider.getOrCreate({
       requestContext,
       imodelsClient,
       projectId
