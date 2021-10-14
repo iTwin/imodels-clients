@@ -11,7 +11,7 @@ export enum CheckpointState {
   NotGenerated = "notGenerated"
 }
 
-export interface ContainerAccessKey {
+export interface ContainerAccessInfo {
   account: string;
   sas: string;
   container: string;
@@ -26,7 +26,7 @@ export interface Checkpoint {
   changesetIndex: number;
   changesetId: string;
   state: CheckpointState;
-  containerAccessKey: ContainerAccessKey;
+  containerAccessInfo: ContainerAccessInfo;
   _links?: CheckpointLinks;
 }
 
