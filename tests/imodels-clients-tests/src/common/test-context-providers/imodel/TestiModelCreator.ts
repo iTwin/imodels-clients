@@ -3,7 +3,12 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { CheckpointState, Changeset } from "@itwin/imodels-client-authoring";
-import { TestiModelSetupContext, iModelIdentificationByNameParams, EmptyTestiModel, TestiModelWithChangesets, TestiModelMetadata, TestiModelWithChangesetsAndNamedVersions, TestAuthenticationProvider, Config, iModelIdParam, TestiModelNamedVersion, TestSetupError, sleep, TestiModelBriefcase, TestiModelChangeset } from "./index";
+import { sleep, TestSetupError } from "../../CommonTestUtils";
+import { Config } from "../../Config";
+import { TestAuthenticationProvider } from "../auth/TestAuthenticationProvider";
+import { EmptyTestiModel, iModelIdentificationByNameParams, iModelIdParam, TestiModelBriefcase, TestiModelChangeset, TestiModelNamedVersion, TestiModelSetupContext, TestiModelWithChangesets, TestiModelWithChangesetsAndNamedVersions } from "./TestiModelInterfaces";
+import { TestiModelMetadata } from "./TestiModelMetadata";
+
 
 export class TestiModelCreator {
   private static _imodelDescription = "Some description";

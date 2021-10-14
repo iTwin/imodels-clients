@@ -3,7 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { NamedVersion, iModel } from "@itwin/imodels-client-authoring";
-import { iModelIdentificationByNameParams, iModelIdParam, TestiModelBriefcase, TestiModelChangeset, TestiModelMetadata, TestiModelNamedVersion, TestiModelSetupContext, TestiModelWithChangesetsAndNamedVersions, TestSetupError, toArray } from "./index";
+import { TestSetupError, toArray } from "../../CommonTestUtils";
+import { iModelIdentificationByNameParams, iModelIdParam, TestiModelBriefcase, TestiModelChangeset, TestiModelNamedVersion, TestiModelSetupContext, TestiModelWithChangesetsAndNamedVersions } from "./TestiModelInterfaces";
+import { TestiModelMetadata } from "./TestiModelMetadata";
 
 export class TestiModelRetriever {
   public static async queryWithRelatedData(params: TestiModelSetupContext & iModelIdentificationByNameParams)
@@ -30,7 +32,7 @@ export class TestiModelRetriever {
   private static async queryAndValidateBriefcase(params: TestiModelSetupContext & iModelIdParam): Promise<TestiModelBriefcase> {
     const briefcases = await toArray(params.imodelsClient.Briefcases.getRepresentationList(params));
     if (briefcases.length !== 1)
-      throw new TestSetupError("");
+      throw new TestSetupError(`${briefcases.length} is an unexpected briefcase count for reusable test iModel.`);
 
     return { id: briefcases[0].briefcaseId, deviceName: briefcases[0].deviceName! };
   }
@@ -38,13 +40,16 @@ export class TestiModelRetriever {
   private static async queryAndValidateChangesets(params: TestiModelSetupContext & iModelIdParam): Promise<TestiModelChangeset[]> {
     const changesets = await toArray(params.imodelsClient.Changesets.getRepresentationList(params));
     if (changesets.length !== TestiModelMetadata.Changesets.length)
-      throw new TestSetupError("");
+      throw new TestSetupError(`${changesets.length} is an unexpected changeset count for reusable test iModel.`);
 
     return changesets;
   }
 
   private static async queryAndValidateNamedVersions(params: TestiModelSetupContext & iModelIdParam): Promise<TestiModelNamedVersion[]> {
     const namedVersions: NamedVersion[] = await toArray(params.imodelsClient.NamedVersions.getRepresentationList(params));
+    if (namedVersions.length !== 2)
+      throw new TestSetupError(`${namedVersions.length} is an unexpected named version count for reusable test iModel.`);
+
     const mappedNamedVersions = namedVersions
       .map(nv => ({
         id: nv.id,

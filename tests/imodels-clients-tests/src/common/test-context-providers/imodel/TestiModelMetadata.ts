@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
-import { TestSetupError } from "./CommonTestUtils";
-import { Constants } from "./Constants";
+import { TestSetupError } from "../../CommonTestUtils";
+import { Constants } from "../../Constants";
 
 export interface TestiModelDescriptor {
   baselineFilePath: string;

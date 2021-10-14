@@ -6,7 +6,7 @@ import * as fs from "fs";
 import { expect } from "chai";
 import { Briefcase, BriefcaseProperties, ChangesetProperties, Checkpoint, CheckpointState, DownloadedChangeset } from "@itwin/imodels-client-authoring";
 import { BaseEntity, Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
-import { TestiModelMetadata } from "./TestiModelMetadata";
+import { TestiModelMetadata } from "./test-context-providers/imodel/TestiModelMetadata";
 
 export function assertBaseEntity(actualEntity: BaseEntity): void {
   expect(actualEntity).to.not.be.undefined;

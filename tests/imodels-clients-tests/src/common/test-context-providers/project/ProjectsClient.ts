@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosResponse } from "axios";
 import { BaseEntity, RequestContextParams } from "@itwin/imodels-client-management";
-import { Config } from "./Config";
+import { Config } from "../../Config";
 
 interface ProjectsResponse {
   projects: BaseEntity[]

@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { RequestContext } from "@itwin/imodels-client-management";
-import { Config, TestUserConfigValues } from "./Config";
+import { Config, TestUserConfigValues } from "../../Config";
 import { TestAuthenticationClient } from "./TestAuthenticationClient";
 
 export class TestAuthenticationProvider {
