@@ -18,21 +18,6 @@ export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function createEmptyiModel(params: {
-  imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
-  requestContext: RequestContext,
-  projectId: string,
-  imodelName: string
-}): Promise<iModel> {
-  return params.imodelsClient.iModels.createEmpty({
-    requestContext: params.requestContext,
-    imodelProperties: {
-      projectId: params.projectId,
-      name: params.imodelName
-    }
-  });
-}
-
 export async function cleanUpiModels(params: {
   imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
   requestContext: RequestContext,

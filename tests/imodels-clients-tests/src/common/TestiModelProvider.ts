@@ -36,14 +36,24 @@ export interface TestiModelWithChangesetsAndNamedVersions extends TestiModelWith
   namedVersions: TestiModelNamedVersion[];
 }
 
+export interface TestiModelSetupContext {
+  imodelsClient: iModelsClient;
+  requestContext: RequestContext;
+}
+
+export interface iModelIdentificationByNameParams {
+  projectId: string;
+  imodelName: string;
+}
+
+interface iModelIdParam {
+  imodelId: string;
+}
+
 export class TestiModelProvider {
   private static _reusableiModel: TestiModelWithChangesetsAndNamedVersions | undefined;
 
-  public static async getOrCreateReusable(params: {
-    imodelsClient: iModelsClient,
-    requestContext: RequestContext,
-    projectId: string
-  }): Promise<TestiModelWithChangesetsAndNamedVersions> {
+  public static async getOrCreateReusable(params: TestiModelSetupContext & { projectId: string }): Promise<TestiModelWithChangesetsAndNamedVersions> {
     if (TestiModelProvider._reusableiModel)
       return TestiModelProvider._reusableiModel;
 
@@ -59,12 +69,7 @@ export class TestiModelProvider {
     return TestiModelProvider._reusableiModel!;
   }
 
-  public static async createEmpty(params: {
-    imodelsClient: iModelsClient,
-    requestContext: RequestContext,
-    projectId: string,
-    imodelName: string
-  }): Promise<EmptyTestiModel> {
+  public static async createEmpty(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<EmptyTestiModel> {
     const imodel = await params.imodelsClient.iModels.createEmpty({
       requestContext: params.requestContext,
       imodelProperties: {
@@ -81,12 +86,7 @@ export class TestiModelProvider {
     }
   }
 
-  public static async createWithChangesets(params: {
-    imodelsClient: iModelsClient,
-    requestContext: RequestContext,
-    projectId: string,
-    imodelName: string
-  }): Promise<TestiModelWithChangesets> {
+  public static async createWithChangesets(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<TestiModelWithChangesets> {
     const imodel = await TestiModelProvider.createEmpty(params);
 
     const briefcase = await params.imodelsClient.Briefcases.acquire({
@@ -126,17 +126,11 @@ export class TestiModelProvider {
     }
   }
 
-  public static async createWithChangesetsAndNamedVersions(params: {
-    imodelsClient: iModelsClient,
-    requestContext: RequestContext,
-    projectId: string,
-    imodelName: string
-  }): Promise<TestiModelWithChangesetsAndNamedVersions> {
-
+  public static async createWithChangesetsAndNamedVersions(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<TestiModelWithChangesetsAndNamedVersions> {
     const imodel = await TestiModelProvider.createWithChangesets(params);
 
-    // We use this specific user for named version creation to mimic production
-    // environment since this user is able to generate checkpoints.
+    // We use this specific user that is able to generate checkpoints
+    // for named version creation to mimic production environment.
     const requestContextForUser2 = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user2);
     const imodelScopedRequestParams = {
       imodelsClient: params.imodelsClient,
@@ -157,12 +151,8 @@ export class TestiModelProvider {
     }
   }
 
-  private static async createNamedVersionOnChangesetIndex(params: {
-    imodelsClient: iModelsClient,
-    requestContext: RequestContext,
-    imodelId: string,
-    changesetIndex: number
-  }): Promise<TestiModelNamedVersion> {
+  private static async createNamedVersionOnChangesetIndex(params: TestiModelSetupContext & iModelIdParam & { changesetIndex: number })
+    : Promise<TestiModelNamedVersion> {
     const changesetMetadata = TestiModelMetadata.Changesets[params.changesetIndex - 1];
     const namedVersion = await params.imodelsClient.NamedVersions.create({
       requestContext: params.requestContext,
@@ -179,23 +169,21 @@ export class TestiModelProvider {
     }
   }
 
-  private static async queryWithRelatedData(params: {
-    imodelsClient: iModelsClient,
-    requestContext: RequestContext,
-    projectId: string,
-    imodelName: string
-  }): Promise<TestiModelWithChangesetsAndNamedVersions | undefined> {
-    const existingiModel = await TestiModelProvider.findiModelByName(params);
-    if (!existingiModel)
+  private static async queryWithRelatedData(params: TestiModelSetupContext & iModelIdentificationByNameParams)
+    : Promise<TestiModelWithChangesetsAndNamedVersions | undefined> {
+    const imodel = await TestiModelProvider.findiModelByName(params);
+    if (!imodel)
       return undefined;
 
-    const imodelScopedRequestParams = {
-      requestContext: params.requestContext,
-      imodelId: existingiModel.id
-    };
-    const briefcase: Briefcase = (await toArray(params.imodelsClient.Briefcases.getRepresentationList(imodelScopedRequestParams)))[0];
-    const changesets: Changeset[] = await toArray(params.imodelsClient.Changesets.getRepresentationList(imodelScopedRequestParams));
+    const mappediModel = { id: imodel.id, name: imodel.name, description: imodel.description! };
 
+    const imodelScopedRequestParams = { requestContext: params.requestContext, imodelId: imodel.id };
+
+    const briefcase: Briefcase = (await toArray(params.imodelsClient.Briefcases.getRepresentationList(imodelScopedRequestParams)))[0];
+    const mappedBriefcase = { id: briefcase.briefcaseId, deviceName: briefcase.deviceName! };
+
+    const changesets: Changeset[] = await toArray(params.imodelsClient.Changesets.getRepresentationList(imodelScopedRequestParams));
+    
     const namedVersions: NamedVersion[] = await toArray(params.imodelsClient.NamedVersions.getRepresentationList(imodelScopedRequestParams));
     const mappedNamedVersions = namedVersions
       .map(nv => ({
@@ -206,24 +194,14 @@ export class TestiModelProvider {
       .sort((nv1, nv2) => nv1.changesetIndex - nv2.changesetIndex);
 
     return {
-      id: existingiModel.id,
-      name: existingiModel.name,
-      description: existingiModel.description!,
-      briefcase: {
-        id: briefcase.briefcaseId,
-        deviceName: briefcase.deviceName!
-      },
+      ...mappediModel,
+      briefcase: mappedBriefcase,
       changesets,
       namedVersions: mappedNamedVersions
     }
   }
 
-  private static async findiModelByName(params: {
-    imodelsClient: iModelsClient,
-    requestContext: RequestContext,
-    projectId: string,
-    imodelName: string
-  }): Promise<iModel | undefined> {
+  private static async findiModelByName(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<iModel | undefined> {
     const imodels = params.imodelsClient.iModels.getRepresentationList({
       requestContext: params.requestContext,
       urlParams: {
@@ -232,20 +210,14 @@ export class TestiModelProvider {
     });
 
     for await (const imodel of imodels) {
-      if (imodel.displayName === params.imodelName) {
-        return imodel
-      }
+      if (imodel.displayName === params.imodelName)
+        return imodel;
     }
 
     return undefined;
   }
 
-  private static async waitForNamedVersionCheckpointGenerated(params: {
-    imodelsClient: iModelsClient,
-    requestContext: RequestContext,
-    imodelId: string,
-    namedVersionId: string
-  }): Promise<void> {
+  private static async waitForNamedVersionCheckpointGenerated(params: TestiModelSetupContext & iModelIdParam & { namedVersionId: string }): Promise<void> {
     const sleepPeriodInMs = 1000;
     const timeOutInMs = 5 * 60 * 1000;
     for (let retries = timeOutInMs / sleepPeriodInMs; retries > 0; --retries) {
