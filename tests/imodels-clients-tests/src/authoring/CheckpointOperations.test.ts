@@ -4,15 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { CheckpointState, GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams, RequestContext, iModelScopedOperationParams, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-authoring";
-import { Config, Constants, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelNamedVersion, TestiModelWithChangesetsAndNamedVersions, assertCheckpoint, assertError, cleanUpiModels } from "../common";
+import { Config, Constants, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, NamedVersionMetadata, ReusableiModelMetadata, assertCheckpoint, assertError, cleanUpiModels } from "../common";
 
 describe("[Authoring] CheckpointOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
-  let testiModel: TestiModelWithChangesetsAndNamedVersions;
-  let testiModelNamedVersion: TestiModelNamedVersion;
+  let testiModel: ReusableiModelMetadata;
+  let testiModelNamedVersion: NamedVersionMetadata;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());

@@ -6,8 +6,8 @@ import { Changeset, CheckpointState } from "@itwin/imodels-client-authoring";
 import { TestSetupError, sleep } from "../../CommonTestUtils";
 import { Config } from "../../Config";
 import { TestAuthenticationProvider } from "../auth/TestAuthenticationProvider";
-import { EmptyTestiModel, TestiModelBriefcase, TestiModelChangeset, TestiModelNamedVersion, TestiModelSetupContext, TestiModelWithChangesets, TestiModelWithChangesetsAndNamedVersions, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
-import { TestiModelMetadata } from "./TestiModelMetadata";
+import { EmptyiModelMetadata, BriefcaseMetadata, ChangesetMetadata, NamedVersionMetadata, TestiModelSetupContext, iModelWithChangesetsMetadata, ReusableiModelMetadata, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
+import { TestiModelFileProvider } from "./TestiModelFileProvider";
 
 
 export class TestiModelCreator {
@@ -16,7 +16,7 @@ export class TestiModelCreator {
   private static _namedVersionIndex1 = 5;
   private static _namedVersionIndex2 = 10;
 
-  public static async createEmpty(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<EmptyTestiModel> {
+  public static async createEmpty(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<EmptyiModelMetadata> {
     const imodel = await params.imodelsClient.iModels.createEmpty({
       requestContext: params.requestContext,
       imodelProperties: {
@@ -33,7 +33,7 @@ export class TestiModelCreator {
     };
   }
 
-  public static async createWithChangesets(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<TestiModelWithChangesets> {
+  public static async createWithChangesets(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<iModelWithChangesetsMetadata> {
     const imodel = await TestiModelCreator.createEmpty(params);
     const briefcase = await TestiModelCreator.acquireBriefcase({ ...params, imodelId: imodel.id });
     const changesets = await TestiModelCreator.uploadChangesets({ ...params, imodelId: imodel.id, briefcaseId: briefcase.id });
@@ -45,7 +45,7 @@ export class TestiModelCreator {
     };
   }
 
-  public static async createWithChangesetsAndNamedVersions(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<TestiModelWithChangesetsAndNamedVersions> {
+  public static async createWithChangesetsAndNamedVersions(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<ReusableiModelMetadata> {
     const imodel = await TestiModelCreator.createWithChangesets(params);
 
     // We use this specific user that is able to generate checkpoints
@@ -77,7 +77,7 @@ export class TestiModelCreator {
     };
   }
 
-  private static async acquireBriefcase(params: TestiModelSetupContext & iModelIdParam): Promise<TestiModelBriefcase> {
+  private static async acquireBriefcase(params: TestiModelSetupContext & iModelIdParam): Promise<BriefcaseMetadata> {
     const briefcase = await params.imodelsClient.Briefcases.acquire({
       requestContext: params.requestContext,
       imodelId: params.imodelId,
@@ -92,21 +92,21 @@ export class TestiModelCreator {
     };
   }
 
-  private static async uploadChangesets(params: TestiModelSetupContext & iModelIdParam & { briefcaseId: number }): Promise<TestiModelChangeset[]> {
+  private static async uploadChangesets(params: TestiModelSetupContext & iModelIdParam & { briefcaseId: number }): Promise<ChangesetMetadata[]> {
     const changesets: Changeset[] = [];
-    for (let i = 0; i < TestiModelMetadata.Changesets.length; i++) {
+    for (let i = 0; i < TestiModelFileProvider.Changesets.length; i++) {
       const createdChangeset = await params.imodelsClient.Changesets.create({
         requestContext: params.requestContext,
         imodelId: params.imodelId,
         changesetProperties: {
           briefcaseId: params.briefcaseId,
-          description: TestiModelMetadata.Changesets[i].description,
-          containingChanges: TestiModelMetadata.Changesets[i].containingChanges,
-          id: TestiModelMetadata.Changesets[i].id,
+          description: TestiModelFileProvider.Changesets[i].description,
+          containingChanges: TestiModelFileProvider.Changesets[i].containingChanges,
+          id: TestiModelFileProvider.Changesets[i].id,
           parentId: i == 0
             ? undefined
-            : TestiModelMetadata.Changesets[i - 1].id,
-          changesetFilePath: TestiModelMetadata.Changesets[i].changesetFilePath
+            : TestiModelFileProvider.Changesets[i - 1].id,
+          changesetFilePath: TestiModelFileProvider.Changesets[i].filePath
         }
       });
       changesets.push(createdChangeset);
@@ -116,8 +116,8 @@ export class TestiModelCreator {
   }
 
   private static async createNamedVersionOnChangesetIndex(params: TestiModelSetupContext & iModelIdParam & { changesetIndex: number })
-    : Promise<TestiModelNamedVersion> {
-    const changesetMetadata = TestiModelMetadata.Changesets[params.changesetIndex - 1];
+    : Promise<NamedVersionMetadata> {
+    const changesetMetadata = TestiModelFileProvider.Changesets[params.changesetIndex - 1];
     const namedVersion = await params.imodelsClient.NamedVersions.create({
       requestContext: params.requestContext,
       imodelId: params.imodelId,

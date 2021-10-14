@@ -5,7 +5,7 @@
 import * as fs from "fs";
 import { expect } from "chai";
 import { AcquireBriefcaseParams, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetsParams, RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, EmptyTestiModel, FileTransferLog, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelGroup, TestiModelMetadata, TestiModelWithChangesets, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory } from "../common";
+import { Config, Constants, EmptyiModelMetadata, FileTransferLog, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelGroup, TestiModelFileProvider, iModelWithChangesetsMetadata, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory } from "../common";
 
 describe("[Authoring] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
@@ -13,8 +13,8 @@ describe("[Authoring] ChangesetOperations", () => {
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
 
-  let testiModelForWrite: EmptyTestiModel;
-  let testiModelForDownload: TestiModelWithChangesets;
+  let testiModelForWrite: EmptyiModelMetadata;
+  let testiModelForDownload: iModelWithChangesetsMetadata;
 
   beforeEach(() => {
     cleanupDirectory(Constants.TestDownloadDirectoryPath);
@@ -60,14 +60,14 @@ describe("[Authoring] ChangesetOperations", () => {
     };
     const briefcase = await imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
 
-    const changesetMetadata = TestiModelMetadata.Changesets[0];
+    const changesetMetadata = TestiModelFileProvider.Changesets[0];
     const createChangesetParams: CreateChangesetParams = {
       requestContext,
       imodelId: testiModelForWrite.id,
       changesetProperties: {
         briefcaseId: briefcase.briefcaseId,
         id: changesetMetadata.id,
-        changesetFilePath: changesetMetadata.changesetFilePath
+        changesetFilePath: changesetMetadata.filePath
       }
     };
 

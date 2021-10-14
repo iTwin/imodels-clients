@@ -4,13 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 import { Config } from "../../Config";
 import { TestiModelCreator } from "./TestiModelCreator";
-import { TestiModelSetupContext, TestiModelWithChangesetsAndNamedVersions } from "./TestiModelInterfaces";
+import { TestiModelSetupContext, ReusableiModelMetadata } from "./TestiModelInterfaces";
 import { TestiModelRetriever } from "./TestiModelRetriever";
 
 export class ReusableTestiModelProvider {
-  private static _reusableiModel: TestiModelWithChangesetsAndNamedVersions | undefined;
+  private static _reusableiModel: ReusableiModelMetadata | undefined;
 
-  public static async getOrCreate(params: TestiModelSetupContext & { projectId: string }): Promise<TestiModelWithChangesetsAndNamedVersions> {
+  public static async getOrCreate(params: TestiModelSetupContext & { projectId: string }): Promise<ReusableiModelMetadata> {
     if (ReusableTestiModelProvider._reusableiModel)
       return ReusableTestiModelProvider._reusableiModel;
 

@@ -4,14 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { Briefcase, GetBriefcaseByIdParams, GetBriefcaseListParams, RequestContext, iModelsClient } from "@itwin/imodels-client-management";
-import { Config, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelWithChangesets, assertBriefcase, assertCollection } from "../common";
+import { Config, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, iModelWithChangesetsMetadata, assertBriefcase, assertCollection } from "../common";
 
 
 describe("[Management] BriefcaseOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
-  let testiModel: TestiModelWithChangesets;
+  let testiModel: iModelWithChangesetsMetadata;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());

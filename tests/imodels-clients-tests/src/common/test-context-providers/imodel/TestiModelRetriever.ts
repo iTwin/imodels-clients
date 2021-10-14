@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { NamedVersion, iModel } from "@itwin/imodels-client-authoring";
 import { TestSetupError, toArray } from "../../CommonTestUtils";
-import { TestiModelBriefcase, TestiModelChangeset, TestiModelNamedVersion, TestiModelSetupContext, TestiModelWithChangesetsAndNamedVersions, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
-import { TestiModelMetadata } from "./TestiModelMetadata";
+import { BriefcaseMetadata, ChangesetMetadata, NamedVersionMetadata, TestiModelSetupContext, ReusableiModelMetadata, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
+import { TestiModelFileProvider } from "./TestiModelFileProvider";
 
 export class TestiModelRetriever {
   public static async queryWithRelatedData(params: TestiModelSetupContext & iModelIdentificationByNameParams)
-    : Promise<TestiModelWithChangesetsAndNamedVersions | undefined> {
+    : Promise<ReusableiModelMetadata | undefined> {
     const imodel = await TestiModelRetriever.findiModelByName(params);
     if (!imodel)
       return undefined;
@@ -29,7 +29,7 @@ export class TestiModelRetriever {
     };
   }
 
-  private static async queryAndValidateBriefcase(params: TestiModelSetupContext & iModelIdParam): Promise<TestiModelBriefcase> {
+  private static async queryAndValidateBriefcase(params: TestiModelSetupContext & iModelIdParam): Promise<BriefcaseMetadata> {
     const briefcases = await toArray(params.imodelsClient.Briefcases.getRepresentationList(params));
     if (briefcases.length !== 1)
       throw new TestSetupError(`${briefcases.length} is an unexpected briefcase count for reusable test iModel.`);
@@ -37,15 +37,15 @@ export class TestiModelRetriever {
     return { id: briefcases[0].briefcaseId, deviceName: briefcases[0].deviceName! };
   }
 
-  private static async queryAndValidateChangesets(params: TestiModelSetupContext & iModelIdParam): Promise<TestiModelChangeset[]> {
+  private static async queryAndValidateChangesets(params: TestiModelSetupContext & iModelIdParam): Promise<ChangesetMetadata[]> {
     const changesets = await toArray(params.imodelsClient.Changesets.getRepresentationList(params));
-    if (changesets.length !== TestiModelMetadata.Changesets.length)
+    if (changesets.length !== TestiModelFileProvider.Changesets.length)
       throw new TestSetupError(`${changesets.length} is an unexpected changeset count for reusable test iModel.`);
 
     return changesets;
   }
 
-  private static async queryAndValidateNamedVersions(params: TestiModelSetupContext & iModelIdParam): Promise<TestiModelNamedVersion[]> {
+  private static async queryAndValidateNamedVersions(params: TestiModelSetupContext & iModelIdParam): Promise<NamedVersionMetadata[]> {
     const namedVersions: NamedVersion[] = await toArray(params.imodelsClient.NamedVersions.getRepresentationList(params));
     if (namedVersions.length !== 2)
       throw new TestSetupError(`${namedVersions.length} is an unexpected named version count for reusable test iModel.`);
@@ -54,7 +54,7 @@ export class TestiModelRetriever {
       .map(nv => ({
         id: nv.id,
         changesetId: nv.changesetId!,
-        changesetIndex: TestiModelMetadata.Changesets.find(cs => cs.id === nv.changesetId)!.index
+        changesetIndex: TestiModelFileProvider.Changesets.find(cs => cs.id === nv.changesetId)!.index
       }))
       .sort((nv1, nv2) => nv1.changesetIndex - nv2.changesetIndex);
 

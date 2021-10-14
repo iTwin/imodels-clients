@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
 
-export interface TestiModelBriefcase {
+export interface BriefcaseMetadata {
   id: number;
   deviceName: string;
 }
 
-export interface TestiModelChangeset {
+export interface ChangesetMetadata {
   id: string;
   index: number;
   description: string;
@@ -17,25 +17,25 @@ export interface TestiModelChangeset {
   containingChanges: number;
 }
 
-export interface TestiModelNamedVersion {
+export interface NamedVersionMetadata {
   id: string;
   changesetId: string;
   changesetIndex: number;
 }
 
-export interface EmptyTestiModel {
+export interface EmptyiModelMetadata {
   id: string;
   name: string;
   description: string;
 }
 
-export interface TestiModelWithChangesets extends EmptyTestiModel {
-  briefcase: TestiModelBriefcase;
-  changesets: TestiModelChangeset[];
+export interface iModelWithChangesetsMetadata extends EmptyiModelMetadata {
+  briefcase: BriefcaseMetadata;
+  changesets: ChangesetMetadata[];
 }
 
-export interface TestiModelWithChangesetsAndNamedVersions extends TestiModelWithChangesets {
-  namedVersions: TestiModelNamedVersion[];
+export interface ReusableiModelMetadata extends iModelWithChangesetsMetadata {
+  namedVersions: NamedVersionMetadata[];
 }
 
 export interface TestiModelSetupContext {
@@ -51,4 +51,3 @@ export interface iModelIdentificationByNameParams {
 export interface iModelIdParam {
   imodelId: string;
 }
-

@@ -5,14 +5,14 @@
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, RequestContext, UpdateNamedVersionParams, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-management";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelCreator, TestiModelGroup, TestiModelWithChangesets, assertCollection, assertNamedVersion, cleanUpiModels } from "../common";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelCreator, TestiModelGroup, iModelWithChangesetsMetadata, assertCollection, assertNamedVersion, cleanUpiModels } from "../common";
 
 describe("[Management] NamedVersionOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
-  let testiModel: TestiModelWithChangesets;
+  let testiModel: iModelWithChangesetsMetadata;
 
   // We create several named versions in setup to have some entities for collection
   // query tests and persist them to use in entity update tests.

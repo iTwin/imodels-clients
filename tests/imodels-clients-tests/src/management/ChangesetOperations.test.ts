@@ -5,14 +5,14 @@
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { Changeset, GetChangesetByIdParams, GetChangesetListParams, RequestContext, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
-import { Config, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelNamedVersion, TestiModelWithChangesetsAndNamedVersions, assertChangeset, assertCollection } from "../common";
+import { Config, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, NamedVersionMetadata, ReusableiModelMetadata, assertChangeset, assertCollection } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
   let imodelsClientOptions: iModelsClientOptions;
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
-  let testiModel: TestiModelWithChangesetsAndNamedVersions;
+  let testiModel: ReusableiModelMetadata;
 
   before(async () => {
     imodelsClientOptions = new TestClientOptions();
@@ -104,7 +104,7 @@ describe("[Management] ChangesetOperations", () => {
   });
 
   describe("link to checkpoint", () => {
-    let firstNamedVersion: TestiModelNamedVersion;
+    let firstNamedVersion: NamedVersionMetadata;
 
     before(() => {
       firstNamedVersion = testiModel.namedVersions[0];
