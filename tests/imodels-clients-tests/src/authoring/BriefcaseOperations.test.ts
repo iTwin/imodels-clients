@@ -25,11 +25,10 @@ describe("[Authoring] BriefcaseOperations", () => {
       }
     });
 
-    testiModel = await TestiModelProvider.createWithChangesets({
+    testiModel = await TestiModelProvider.getOrCreateReusable({
       imodelsClient,
       requestContext,
-      projectId,
-      imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
+      projectId
     });
   });
 

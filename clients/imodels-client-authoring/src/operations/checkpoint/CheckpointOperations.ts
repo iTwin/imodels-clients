@@ -2,31 +2,36 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OperationsBase } from "@itwin/imodels-client-management";
-import { Checkpoint, CheckpointResponse } from "../../base/interfaces/apiEntities/CheckpointInterfaces";
+import { iModelScopedOperationParams, OperationsBase } from "@itwin/imodels-client-management";
+import { Checkpoint, CheckpointResponse } from "../../base";
 import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams } from "./CheckpointOperationParams";
 
 export class CheckpointOperations extends OperationsBase {
   public async getByChangesetId(params: GetCheckpointByChangesetIdParams): Promise<Checkpoint> {
-    const response = await this.sendGetRequest<CheckpointResponse>({
-      requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/changesets/${params.changesetId}/checkpoint`
+    return this.getByParentEntity({
+      ...params,
+      parentEntityPath: `changesets/${params.changesetId}`
     });
-    return response.checkpoint;
   }
 
   public async getByChangesetIndex(params: GetCheckpointByChangesetIndexParams): Promise<Checkpoint> {
-    const response = await this.sendGetRequest<CheckpointResponse>({
-      requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/changesets/${params.changesetIndex}/checkpoint`
+    return this.getByParentEntity({
+      ...params,
+      parentEntityPath: `changesets/${params.changesetIndex}`
     });
-    return response.checkpoint;
   }
 
   public async getByNamedVersionId(params: GetCheckpointByNamedVersionIdParams): Promise<Checkpoint> {
+    return this.getByParentEntity({
+      ...params,
+      parentEntityPath: `namedversions/${params.namedVersionId}`
+    });
+  }
+
+  private async getByParentEntity(params: iModelScopedOperationParams & { parentEntityPath: string }): Promise<Checkpoint> {
     const response = await this.sendGetRequest<CheckpointResponse>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions/${params.namedVersionId}/checkpoint`
+      url: `${this._apiBaseUrl}/${params.imodelId}/${params.parentEntityPath}/checkpoint`
     });
     return response.checkpoint;
   }
