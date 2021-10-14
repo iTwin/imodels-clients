@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { Briefcase, GetBriefcaseByIdParams, GetBriefcaseListParams, RequestContext, iModelsClient } from "@itwin/imodels-client-management";
-import { Config, TestAuthenticationProvider, TestClientOptions, assertBriefcase, assertCollection, TestProjectProvider, ReusableTestiModelProvider, TestiModelWithChangesets } from "../common";
+import { Config, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelWithChangesets, assertBriefcase, assertCollection } from "../common";
 
 
 describe("[Management] BriefcaseOperations", () => {

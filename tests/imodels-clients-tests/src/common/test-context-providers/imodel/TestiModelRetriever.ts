@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { NamedVersion, iModel } from "@itwin/imodels-client-authoring";
 import { TestSetupError, toArray } from "../../CommonTestUtils";
-import { iModelIdentificationByNameParams, iModelIdParam, TestiModelBriefcase, TestiModelChangeset, TestiModelNamedVersion, TestiModelSetupContext, TestiModelWithChangesetsAndNamedVersions } from "./TestiModelInterfaces";
+import { TestiModelBriefcase, TestiModelChangeset, TestiModelNamedVersion, TestiModelSetupContext, TestiModelWithChangesetsAndNamedVersions, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
 import { TestiModelMetadata } from "./TestiModelMetadata";
 
 export class TestiModelRetriever {
@@ -26,7 +26,7 @@ export class TestiModelRetriever {
       briefcase,
       changesets,
       namedVersions
-    }
+    };
   }
 
   private static async queryAndValidateBriefcase(params: TestiModelSetupContext & iModelIdParam): Promise<TestiModelBriefcase> {

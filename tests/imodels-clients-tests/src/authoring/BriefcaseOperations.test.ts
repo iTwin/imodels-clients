@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AcquireBriefcaseParams, Briefcase, RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, cleanUpiModels, Config, assertBriefcase, TestiModelWithChangesets, ReusableTestiModelProvider } from "../common";
+import { Config, Constants, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelWithChangesets, assertBriefcase, cleanUpiModels } from "../common";
 
 describe("[Authoring] BriefcaseOperations", () => {
   let imodelsClient: iModelsClient;

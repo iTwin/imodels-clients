@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { TestiModelSetupContext, TestiModelWithChangesetsAndNamedVersions } from "./TestiModelInterfaces"
-import { TestiModelCreator } from "./TestiModelCreator";
-import { TestiModelRetriever } from "./TestiModelRetriever";
 import { Config } from "../../Config";
+import { TestiModelCreator } from "./TestiModelCreator";
+import { TestiModelSetupContext, TestiModelWithChangesetsAndNamedVersions } from "./TestiModelInterfaces";
+import { TestiModelRetriever } from "./TestiModelRetriever";
 
 export class ReusableTestiModelProvider {
   private static _reusableiModel: TestiModelWithChangesetsAndNamedVersions | undefined;

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { CreateEmptyiModelParams, GetiModelListParams, RequestContext, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
-import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, assertCollection, assertError, assertiModel, Config } from "../common";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, assertCollection, assertError, assertiModel } from "../common";
 
 describe("[Management] iModelOperations", () => {
   let imodelsClient: iModelsClient;

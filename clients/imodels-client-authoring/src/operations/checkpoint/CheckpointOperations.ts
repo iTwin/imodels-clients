@@ -2,26 +2,26 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelScopedOperationParams, OperationsBase } from "@itwin/imodels-client-management";
+import { OperationsBase, iModelScopedOperationParams } from "@itwin/imodels-client-management";
 import { Checkpoint, CheckpointResponse } from "../../base";
 import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams } from "./CheckpointOperationParams";
 
 export class CheckpointOperations extends OperationsBase {
-  public async getByChangesetId(params: GetCheckpointByChangesetIdParams): Promise<Checkpoint> {
+  public getByChangesetId(params: GetCheckpointByChangesetIdParams): Promise<Checkpoint> {
     return this.getByParentEntity({
       ...params,
       parentEntityPath: `changesets/${params.changesetId}`
     });
   }
 
-  public async getByChangesetIndex(params: GetCheckpointByChangesetIndexParams): Promise<Checkpoint> {
+  public getByChangesetIndex(params: GetCheckpointByChangesetIndexParams): Promise<Checkpoint> {
     return this.getByParentEntity({
       ...params,
       parentEntityPath: `changesets/${params.changesetIndex}`
     });
   }
 
-  public async getByNamedVersionId(params: GetCheckpointByNamedVersionIdParams): Promise<Checkpoint> {
+  public getByNamedVersionId(params: GetCheckpointByNamedVersionIdParams): Promise<Checkpoint> {
     return this.getByParentEntity({
       ...params,
       parentEntityPath: `namedversions/${params.namedVersionId}`

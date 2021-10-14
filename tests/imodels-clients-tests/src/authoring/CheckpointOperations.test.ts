@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams, iModelsClient, RequestContext, iModelsErrorCode, iModelScopedOperationParams, CheckpointState } from "@itwin/imodels-client-authoring";
 import { expect } from "chai";
-import { TestiModelGroup, TestClientOptions, TestAuthenticationProvider, TestProjectProvider, Constants, cleanUpiModels, assertError, Config, assertCheckpoint, ReusableTestiModelProvider, TestiModelNamedVersion, TestiModelWithChangesetsAndNamedVersions } from "../common";
+import { CheckpointState, GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams, RequestContext, iModelScopedOperationParams, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-authoring";
+import { Config, Constants, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelNamedVersion, TestiModelWithChangesetsAndNamedVersions, assertCheckpoint, assertError, cleanUpiModels } from "../common";
 
 describe("[Authoring] CheckpointOperations", () => {
   let imodelsClient: iModelsClient;
@@ -201,7 +201,7 @@ describe("[Authoring] CheckpointOperations", () => {
     });
   });
 
-  it(`should not find checkpoint by named version id if named version does not exist`, async () => {
+  it("should not find checkpoint by named version id if named version does not exist", async () => {
     // Arrange
     const getCheckpointByNamedVersionIdParams: GetCheckpointByNamedVersionIdParams = {
       requestContext,

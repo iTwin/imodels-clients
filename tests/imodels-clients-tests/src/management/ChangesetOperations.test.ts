@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { Changeset, GetChangesetByIdParams, GetChangesetListParams, RequestContext, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
-import { expect } from "chai";
-import { Config, TestAuthenticationProvider, TestClientOptions, assertChangeset, assertCollection, TestProjectProvider, ReusableTestiModelProvider, TestiModelNamedVersion, TestiModelWithChangesetsAndNamedVersions } from "../common";
+import { Config, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelNamedVersion, TestiModelWithChangesetsAndNamedVersions, assertChangeset, assertCollection } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
   let imodelsClientOptions: iModelsClientOptions;
@@ -106,7 +106,7 @@ describe("[Management] ChangesetOperations", () => {
   describe("link to checkpoint", () => {
     let firstNamedVersion: TestiModelNamedVersion;
 
-    before(async () => {
+    before(() => {
       firstNamedVersion = testiModel.namedVersions[0];
     });
 
@@ -128,7 +128,7 @@ describe("[Management] ChangesetOperations", () => {
         expect(changeset._links.currentOrPrecedingCheckpoint?.href).to.not.be.undefined;
 
         const changesetsUrl = `${adjustBaseUrl(imodelsClientOptions.api!.baseUri!)}/${testiModel.id}/changesets`;
-        let expectedLinkToCheckpoint = changeset.index === firstNamedVersion.changesetIndex
+        const expectedLinkToCheckpoint = changeset.index === firstNamedVersion.changesetIndex
           ? `${changesetsUrl}/${firstNamedVersion.changesetIndex}/checkpoint`
           : `${changesetsUrl}/0/checkpoint`;
         expect(changeset._links.currentOrPrecedingCheckpoint!.href).to.equal(expectedLinkToCheckpoint);

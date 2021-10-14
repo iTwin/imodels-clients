@@ -2,11 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CheckpointState, Changeset } from "@itwin/imodels-client-authoring";
-import { sleep, TestSetupError } from "../../CommonTestUtils";
+import { Changeset, CheckpointState } from "@itwin/imodels-client-authoring";
+import { TestSetupError, sleep } from "../../CommonTestUtils";
 import { Config } from "../../Config";
 import { TestAuthenticationProvider } from "../auth/TestAuthenticationProvider";
-import { EmptyTestiModel, iModelIdentificationByNameParams, iModelIdParam, TestiModelBriefcase, TestiModelChangeset, TestiModelNamedVersion, TestiModelSetupContext, TestiModelWithChangesets, TestiModelWithChangesetsAndNamedVersions } from "./TestiModelInterfaces";
+import { EmptyTestiModel, TestiModelBriefcase, TestiModelChangeset, TestiModelNamedVersion, TestiModelSetupContext, TestiModelWithChangesets, TestiModelWithChangesetsAndNamedVersions, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
 import { TestiModelMetadata } from "./TestiModelMetadata";
 
 
@@ -30,7 +30,7 @@ export class TestiModelCreator {
       id: imodel.id,
       name: imodel.name,
       description: imodel.description!
-    }
+    };
   }
 
   public static async createWithChangesets(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<TestiModelWithChangesets> {
@@ -42,7 +42,7 @@ export class TestiModelCreator {
       ...imodel,
       briefcase,
       changesets
-    }
+    };
   }
 
   public static async createWithChangesetsAndNamedVersions(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<TestiModelWithChangesetsAndNamedVersions> {
@@ -74,7 +74,7 @@ export class TestiModelCreator {
     return {
       ...imodel,
       namedVersions: [testNamedVersion1, testNamedVersion2]
-    }
+    };
   }
 
   private static async acquireBriefcase(params: TestiModelSetupContext & iModelIdParam): Promise<TestiModelBriefcase> {
@@ -89,7 +89,7 @@ export class TestiModelCreator {
     return {
       id: briefcase.briefcaseId,
       deviceName: briefcase.deviceName!
-    }
+    };
   }
 
   private static async uploadChangesets(params: TestiModelSetupContext & iModelIdParam & { briefcaseId: number }): Promise<TestiModelChangeset[]> {
@@ -130,7 +130,7 @@ export class TestiModelCreator {
       id: namedVersion.id,
       changesetId: changesetMetadata.id,
       changesetIndex: changesetMetadata.index
-    }
+    };
   }
 
   private static async waitForNamedVersionCheckpointGenerated(params: TestiModelSetupContext & iModelIdParam & { namedVersionId: string }): Promise<void> {

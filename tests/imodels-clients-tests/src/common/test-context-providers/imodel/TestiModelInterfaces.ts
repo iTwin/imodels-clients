@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsClient, RequestContext } from "@itwin/imodels-client-authoring";
+import { RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
 
 export interface TestiModelBriefcase {
   id: number;

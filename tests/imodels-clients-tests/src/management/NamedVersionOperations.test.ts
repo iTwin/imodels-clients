@@ -5,7 +5,7 @@
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, RequestContext, UpdateNamedVersionParams, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-management";
-import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelGroup, assertCollection, assertNamedVersion, cleanUpiModels, Config, TestiModelCreator, TestiModelWithChangesets } from "../common";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelCreator, TestiModelGroup, TestiModelWithChangesets, assertCollection, assertNamedVersion, cleanUpiModels } from "../common";
 
 describe("[Management] NamedVersionOperations", () => {
   let imodelsClient: iModelsClient;
