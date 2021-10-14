@@ -48,6 +48,7 @@ export interface ChangesetLinks {
   upload: Link;
   complete: Link;
   namedVersion?: Link;
+  currentOrPrecedingCheckpoint?: Link;
 }
 
 export interface Changeset extends MinimalChangeset {

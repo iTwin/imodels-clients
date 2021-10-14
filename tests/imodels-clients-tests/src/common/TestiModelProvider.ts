@@ -195,7 +195,15 @@ export class TestiModelProvider {
     };
     const briefcase: Briefcase = (await toArray(params.imodelsClient.Briefcases.getRepresentationList(imodelScopedRequestParams)))[0];
     const changesets: Changeset[] = await toArray(params.imodelsClient.Changesets.getRepresentationList(imodelScopedRequestParams));
+
     const namedVersions: NamedVersion[] = await toArray(params.imodelsClient.NamedVersions.getRepresentationList(imodelScopedRequestParams));
+    const mappedNamedVersions = namedVersions
+      .map(nv => ({
+        id: nv.id,
+        changesetId: nv.changesetId!,
+        changesetIndex: TestiModelMetadata.Changesets.find(cs => cs.id === nv.changesetId)!.index
+      }))
+      .sort((nv1, nv2) => nv1.changesetIndex - nv2.changesetIndex);
 
     return {
       id: existingiModel.id,
@@ -206,13 +214,7 @@ export class TestiModelProvider {
         deviceName: briefcase.deviceName!
       },
       changesets,
-      namedVersions: namedVersions.map(nv => {
-        return {
-          id: nv.id,
-          changesetId: nv.changesetId!,
-          changesetIndex: TestiModelMetadata.Changesets.find(cs => cs.id === nv.changesetId)!.index
-        }
-      })
+      namedVersions: mappedNamedVersions
     }
   }
 
