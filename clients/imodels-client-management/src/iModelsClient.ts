@@ -43,8 +43,8 @@ export class iModelsClient {
     return {
       restClient: options?.restClient ?? new AxiosRestClient(),
       api: {
-        baseUri: options?.api?.baseUri ?? Constants.api.baseUrl,
-        version: options?.api?.version ?? Constants.api.version
+        baseUri: options?.api?.baseUri ?? Constants.Api.BaseUrl,
+        version: options?.api?.version ?? Constants.Api.Version
       }
     };
   }

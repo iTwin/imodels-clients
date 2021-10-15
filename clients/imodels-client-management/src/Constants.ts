@@ -3,19 +3,19 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 export class Constants {
-  public static api = {
-    baseUrl: "https://api.bentley.com/imodels",
-    version: "v1"
+  public static Api = {
+    BaseUrl: "https://api.bentley.com/imodels",
+    Version: "v1"
   }
 
-  public static headers = {
-    accept: "Accept",
-    authorization: "Authorization",
-    contentType: "ContentType",
-    prefer: "Prefer",
+  public static Headers = {
+    Accept: "Accept",
+    Authorization: "Authorization",
+    ContentType: "ContentType",
+    Prefer: "Prefer",
 
-    values: {
-      contentType: "application/json"
+    Values: {
+      ContentType: "application/json"
     }
   }
 }
