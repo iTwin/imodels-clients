@@ -53,19 +53,19 @@ export class TestiModelCreator {
     };
 
     const namedVersions: NamedVersionMetadata[] = [];
-    const checpointGenerationPromises: Promise<void>[] = [];
+    const checkpointGenerationPromises: Promise<void>[] = [];
     for (const index of TestiModelCreator.namedVersionIndexes) {
       const namedVersion: NamedVersionMetadata = await TestiModelCreator.createNamedVersionOnChangesetIndex({
         ...imodelScopedRequestParams,
         changesetIndex: index
       });
       namedVersions.push(namedVersion);
-      checpointGenerationPromises.push(
+      checkpointGenerationPromises.push(
         TestiModelCreator.waitForNamedVersionCheckpointGenerated({ ...imodelScopedRequestParams, namedVersionId: namedVersion.id })
       );
     }
 
-    await Promise.all(checpointGenerationPromises);
+    await Promise.all(checkpointGenerationPromises);
 
     return {
       ...imodel,
