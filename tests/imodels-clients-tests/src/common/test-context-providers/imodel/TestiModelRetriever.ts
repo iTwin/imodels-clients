@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { NamedVersion, iModel } from "@itwin/imodels-client-authoring";
 import { TestSetupError, toArray } from "../../CommonTestUtils";
-import { BriefcaseMetadata, ChangesetMetadata, NamedVersionMetadata, TestiModelSetupContext, ReusableiModelMetadata, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
+import { BriefcaseMetadata, NamedVersionMetadata, TestiModelSetupContext, ReusableiModelMetadata, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
 import { TestiModelFileProvider } from "./TestiModelFileProvider";
 import { TestiModelCreator } from "./TestiModelCreator";
 
@@ -17,7 +17,6 @@ export class TestiModelRetriever {
 
     const paramsWithiModelId = { ...params, imodelId: imodel.id };
     const briefcase = await TestiModelRetriever.queryAndValidateBriefcase(paramsWithiModelId);
-    const changesets = await TestiModelRetriever.queryAndValidateChangesets(paramsWithiModelId);
     const namedVersions = await TestiModelRetriever.queryAndValidateNamedVersions(paramsWithiModelId);
 
     return {
@@ -25,7 +24,6 @@ export class TestiModelRetriever {
       name: imodel.name,
       description: imodel.description!,
       briefcase,
-      changesets,
       namedVersions
     };
   }
@@ -38,14 +36,6 @@ export class TestiModelRetriever {
     return { id: briefcases[0].briefcaseId, deviceName: briefcases[0].deviceName! };
   }
 
-  private static async queryAndValidateChangesets(params: TestiModelSetupContext & iModelIdParam): Promise<ChangesetMetadata[]> {
-    const changesets = await toArray(params.imodelsClient.Changesets.getRepresentationList(params));
-    if (changesets.length !== TestiModelFileProvider.Changesets.length)
-      throw new TestSetupError(`${changesets.length} is an unexpected changeset count for reusable test iModel.`);
-
-    return changesets;
-  }
-
   private static async queryAndValidateNamedVersions(params: TestiModelSetupContext & iModelIdParam): Promise<NamedVersionMetadata[]> {
     const namedVersions: NamedVersion[] = await toArray(params.imodelsClient.NamedVersions.getRepresentationList(params));
     if (namedVersions.length !== TestiModelCreator.namedVersionIndexes.length)
@@ -55,7 +45,7 @@ export class TestiModelRetriever {
       .map(namedVersion => ({
         id: namedVersion.id,
         changesetId: namedVersion.changesetId!,
-        changesetIndex: TestiModelFileProvider.Changesets.find(cs => cs.id === namedVersion.changesetId)!.index
+        changesetIndex: TestiModelFileProvider.changesets.find(cs => cs.id === namedVersion.changesetId)!.index
       }))
       .sort((nv1, nv2) => nv1.changesetIndex - nv2.changesetIndex);
 

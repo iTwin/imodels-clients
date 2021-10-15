@@ -5,7 +5,7 @@
 import * as fs from "fs";
 import { expect } from "chai";
 import { AcquireBriefcaseParams, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetsParams, RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, EmptyiModelMetadata, FileTransferLog, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelGroup, TestiModelFileProvider, iModelWithChangesetsMetadata, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory } from "../common";
+import { Config, Constants, iModelMetadata, FileTransferLog, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelGroup, TestiModelFileProvider, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory, ReusableiModelMetadata } from "../common";
 
 describe("[Authoring] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
@@ -13,8 +13,8 @@ describe("[Authoring] ChangesetOperations", () => {
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
 
-  let testiModelForWrite: EmptyiModelMetadata;
-  let testiModelForDownload: iModelWithChangesetsMetadata;
+  let testiModelForWrite: iModelMetadata;
+  let testiModelForDownload: ReusableiModelMetadata;
 
   beforeEach(() => {
     cleanupDirectory(Constants.TestDownloadDirectoryPath);
@@ -60,7 +60,7 @@ describe("[Authoring] ChangesetOperations", () => {
     };
     const briefcase = await imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
 
-    const changesetMetadata = TestiModelFileProvider.Changesets[0];
+    const changesetMetadata = TestiModelFileProvider.changesets[0];
     const createChangesetParams: CreateChangesetParams = {
       requestContext,
       imodelId: testiModelForWrite.id,
@@ -94,11 +94,11 @@ describe("[Authoring] ChangesetOperations", () => {
     const changesets = await imodelsClient.Changesets.download(downloadChangesetsParams);
 
     // Assert
-    expect(changesets.length).to.equal(testiModelForDownload.changesets.length);
-    expect(fs.readdirSync(downloadPath).length).to.equal(testiModelForDownload.changesets.length);
+    expect(changesets.length).to.equal(TestiModelFileProvider.changesets.length);
+    expect(fs.readdirSync(downloadPath).length).to.equal(TestiModelFileProvider.changesets.length);
 
     for (const changeset of changesets) {
-      const changesetMetadata = testiModelForDownload.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
+      const changesetMetadata = TestiModelFileProvider.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
       assertDownloadedChangeset({
         actualChangeset: changeset,
         expectedChangesetProperties: {
@@ -135,7 +135,7 @@ describe("[Authoring] ChangesetOperations", () => {
     expect(changesets.map((changeset: Changeset) => changeset.index)).to.have.members([6, 7, 8, 9, 10]);
 
     for (const changeset of changesets) {
-      const changesetMetadata = testiModelForDownload.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
+      const changesetMetadata = TestiModelFileProvider.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
       assertDownloadedChangeset({
         actualChangeset: changeset,
         expectedChangesetProperties: {

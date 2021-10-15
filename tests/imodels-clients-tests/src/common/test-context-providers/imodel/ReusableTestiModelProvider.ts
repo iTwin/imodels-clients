@@ -21,7 +21,7 @@ export class ReusableTestiModelProvider {
 
     ReusableTestiModelProvider._reusableiModel =
       await TestiModelRetriever.queryWithRelatedData(paramsWithiModelName) ??
-      await TestiModelCreator.createWithChangesetsAndNamedVersions(paramsWithiModelName);
+      await TestiModelCreator.createReusable(paramsWithiModelName);
 
     return ReusableTestiModelProvider._reusableiModel!;
   }

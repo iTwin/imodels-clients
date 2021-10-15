@@ -36,7 +36,7 @@ describe("[Authoring] iModelOperations", () => {
         name: testiModelGroup.getPrefixediModelName("Sample iModel from baseline")
       },
       baselineFileProperties: {
-        path: TestiModelFileProvider.iModel.filePath
+        path: TestiModelFileProvider.imodel.filePath
       }
     };
 

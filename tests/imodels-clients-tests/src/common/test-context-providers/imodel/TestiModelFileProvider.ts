@@ -31,11 +31,11 @@ export class TestiModelFileProvider {
   private static _baselineFile: TestiModelBaselineFile;
   private static _changesetFiles: TestChangesetFile[];
 
-  public static get iModel(): TestiModelBaselineFile {
+  public static get imodel(): TestiModelBaselineFile {
     return this._baselineFile ?? this.initializeBaselineFile();
   }
 
-  public static get Changesets(): TestChangesetFile[] {
+  public static get changesets(): TestChangesetFile[] {
     return this._changesetFiles ?? this.initializeChangesetFiles();
   }
 

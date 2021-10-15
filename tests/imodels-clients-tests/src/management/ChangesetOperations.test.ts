@@ -5,7 +5,7 @@
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { Changeset, GetChangesetByIdParams, GetChangesetListParams, RequestContext, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
-import { Config, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, NamedVersionMetadata, ReusableiModelMetadata, assertChangeset, assertCollection } from "../common";
+import { Config, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, NamedVersionMetadata, ReusableiModelMetadata, assertChangeset, assertCollection, TestiModelFileProvider } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
   let imodelsClientOptions: iModelsClientOptions;
@@ -52,7 +52,7 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       assertCollection({
         asyncIterable: changesets,
-        isEntityCountCorrect: count => count === testiModel.changesets.length
+        isEntityCountCorrect: count => count === TestiModelFileProvider.changesets.length
       });
     });
 
@@ -80,7 +80,7 @@ describe("[Management] ChangesetOperations", () => {
 
   it("should get changeset by id", async () => {
     // Arrange
-    const expectedChangeset = testiModel.changesets[0];
+    const expectedChangeset = TestiModelFileProvider.changesets[0];
     const getChangesetByIdParams: GetChangesetByIdParams = {
       requestContext,
       imodelId: testiModel.id,

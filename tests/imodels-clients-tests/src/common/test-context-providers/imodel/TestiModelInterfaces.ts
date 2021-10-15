@@ -9,32 +9,20 @@ export interface BriefcaseMetadata {
   deviceName: string;
 }
 
-export interface ChangesetMetadata {
-  id: string;
-  index: number;
-  description: string;
-  parentId?: string;
-  containingChanges: number;
-}
-
 export interface NamedVersionMetadata {
   id: string;
   changesetId: string;
   changesetIndex: number;
 }
 
-export interface EmptyiModelMetadata {
+export interface iModelMetadata {
   id: string;
   name: string;
   description: string;
 }
 
-export interface iModelWithChangesetsMetadata extends EmptyiModelMetadata {
+export interface ReusableiModelMetadata extends iModelMetadata {
   briefcase: BriefcaseMetadata;
-  changesets: ChangesetMetadata[];
-}
-
-export interface ReusableiModelMetadata extends iModelWithChangesetsMetadata {
   namedVersions: NamedVersionMetadata[];
 }
 

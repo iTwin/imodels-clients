@@ -5,14 +5,14 @@
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, RequestContext, UpdateNamedVersionParams, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-management";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelCreator, TestiModelGroup, iModelWithChangesetsMetadata, assertCollection, assertNamedVersion, cleanUpiModels } from "../common";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelCreator, TestiModelGroup, assertCollection, assertNamedVersion, cleanUpiModels, iModelMetadata, TestiModelFileProvider } from "../common";
 
 describe("[Management] NamedVersionOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
-  let testiModel: iModelWithChangesetsMetadata;
+  let testiModel: iModelMetadata;
 
   // We create several named versions in setup to have some entities for collection
   // query tests and persist them to use in entity update tests.
@@ -31,7 +31,7 @@ describe("[Management] NamedVersionOperations", () => {
       }
     });
 
-    testiModel = await TestiModelCreator.createWithChangesets({
+    testiModel = await TestiModelCreator.createEmptyAndUploadChangesets({
       imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
       requestContext,
       projectId,
@@ -46,7 +46,7 @@ describe("[Management] NamedVersionOperations", () => {
         namedVersionProperties: {
           name: `Milestone ${changesetIndex}`,
           description: `Description for milestone ${changesetIndex}`,
-          changesetId: testiModel.changesets[changesetIndex - 1].id
+          changesetId: TestiModelFileProvider.changesets[changesetIndex - 1].id
         }
       }));
     }
@@ -117,7 +117,7 @@ describe("[Management] NamedVersionOperations", () => {
       namedVersionProperties: {
         name: `Named Version ${changesetIndex}`,
         description: `Some description for Named Version ${changesetIndex}`,
-        changesetId: testiModel.changesets[changesetIndex - 1].id
+        changesetId: TestiModelFileProvider.changesets[changesetIndex - 1].id
       }
     };
 
