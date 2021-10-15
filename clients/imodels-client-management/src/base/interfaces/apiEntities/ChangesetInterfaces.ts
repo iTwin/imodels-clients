@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BaseEntity, CollectionResponse, Link } from "../CommonInterfaces";
+import { CollectionResponse, Link } from "../CommonInterfaces";
 
 export enum ChangesetState {
   WaitingForFile = "waitingForFile",
@@ -33,7 +33,9 @@ export interface ChangesetLinks {
   complete: Link;
 }
 
-export interface MinimalChangeset extends BaseEntity {
+export interface MinimalChangeset {
+  id: string;
+  displayName: string;
   description: string;
   index: number;
   parentId?: string;
