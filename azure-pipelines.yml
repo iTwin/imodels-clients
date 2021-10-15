@@ -37,8 +37,10 @@ jobs:
       env:
         AUTH_CLIENT_ID: $(AUTH_CLIENT_ID)
         AUTH_CLIENT_SECRET: $(AUTH_CLIENT_SECRET)
-        TEST_USER_EMAIL: $(TEST_USER_EMAIL)
-        TEST_USER_PASSWORD: $(TEST_USER_PASSWORD)
+        TEST_USERS_USER1_EMAIL: $(TEST_USERS_USER1_EMAIL)
+        TEST_USERS_USER1_PASSWORD: $(TEST_USERS_USER1_PASSWORD)
+        TEST_USERS_USER2_EMAIL: $(TEST_USERS_USER2_EMAIL)
+        TEST_USERS_USER2_PASSWORD: $(TEST_USERS_USER2_PASSWORD)
 
     - script: node common/scripts/install-run-rush.js publish --pack --include-all --publish
       displayName: rush publish (into .tgz)
