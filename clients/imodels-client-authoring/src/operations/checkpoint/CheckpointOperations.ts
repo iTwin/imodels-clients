@@ -10,28 +10,28 @@ export class CheckpointOperations extends OperationsBase {
   public getByChangesetId(params: GetCheckpointByChangesetIdParams): Promise<Checkpoint> {
     return this.getByParentEntity({
       ...params,
-      parentEntityPath: `changesets/${params.changesetId}`
+      parentEntityUrlPath: `changesets/${params.changesetId}`
     });
   }
 
   public getByChangesetIndex(params: GetCheckpointByChangesetIndexParams): Promise<Checkpoint> {
     return this.getByParentEntity({
       ...params,
-      parentEntityPath: `changesets/${params.changesetIndex}`
+      parentEntityUrlPath: `changesets/${params.changesetIndex}`
     });
   }
 
   public getByNamedVersionId(params: GetCheckpointByNamedVersionIdParams): Promise<Checkpoint> {
     return this.getByParentEntity({
       ...params,
-      parentEntityPath: `namedversions/${params.namedVersionId}`
+      parentEntityUrlPath: `namedversions/${params.namedVersionId}`
     });
   }
 
-  private async getByParentEntity(params: iModelScopedOperationParams & { parentEntityPath: string }): Promise<Checkpoint> {
+  private async getByParentEntity(params: iModelScopedOperationParams & { parentEntityUrlPath: string }): Promise<Checkpoint> {
     const response = await this.sendGetRequest<CheckpointResponse>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/${params.parentEntityPath}/checkpoint`
+      url: `${this._apiBaseUrl}/${params.imodelId}/${params.parentEntityUrlPath}/checkpoint`
     });
     return response.checkpoint;
   }

@@ -69,7 +69,7 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
   expect(params.actualChangeset.synchronizationInfo).to.equal(null);
 
-  // check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
+  // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
   const expectedChangesetMetadata = TestiModelFileProvider.Changesets.find(changeset => changeset.id === params.expectedChangesetProperties.id);
   expect(params.actualChangeset.fileSize).to.equal(fs.statSync(expectedChangesetMetadata!.filePath).size);
 
@@ -85,7 +85,7 @@ export function assertDownloadedChangeset(params: {
 
   expect(fs.existsSync(params.actualChangeset.filePath)).to.equal(true);
 
-  // check if the downloaded file size matches the size of the changeset file used for test iModel creation
+  // Check if the downloaded file size matches the size of the changeset file used for test iModel creation
   const expectedChangesetMetadata = TestiModelFileProvider.Changesets.find(changeset => changeset.id === params.expectedChangesetProperties.id);
   expect(fs.statSync(params.actualChangeset.filePath).size).to.equal(fs.statSync(expectedChangesetMetadata!.filePath).size);
 }
