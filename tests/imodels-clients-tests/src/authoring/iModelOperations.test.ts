@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { CreateiModelFromBaselineParams, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, assertiModel, cleanUpiModels, TestiModelGroup, TestiModelFileProvider } from "../common";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, TestiModelGroup, assertiModel, cleanUpiModels } from "../common";
 
 describe("[Authoring] iModelOperations", () => {
   let imodelsClient: iModelsClient;

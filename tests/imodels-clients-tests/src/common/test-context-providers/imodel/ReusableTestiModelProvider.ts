@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { Config } from "../../Config";
 import { TestiModelCreator } from "./TestiModelCreator";
-import { TestiModelSetupContext, ReusableiModelMetadata } from "./TestiModelInterfaces";
+import { ReusableiModelMetadata, TestiModelSetupContext } from "./TestiModelInterfaces";
 import { TestiModelRetriever } from "./TestiModelRetriever";
 
 export class ReusableTestiModelProvider {

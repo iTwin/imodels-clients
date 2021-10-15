@@ -6,8 +6,8 @@ import { Changeset, CheckpointState } from "@itwin/imodels-client-authoring";
 import { TestSetupError, sleep } from "../../CommonTestUtils";
 import { Config } from "../../Config";
 import { TestAuthenticationProvider } from "../auth/TestAuthenticationProvider";
-import { iModelMetadata, BriefcaseMetadata, NamedVersionMetadata, TestiModelSetupContext, ReusableiModelMetadata, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
 import { TestiModelFileProvider } from "./TestiModelFileProvider";
+import { BriefcaseMetadata, NamedVersionMetadata, ReusableiModelMetadata, TestiModelSetupContext, iModelIdParam, iModelIdentificationByNameParams, iModelMetadata } from "./TestiModelInterfaces";
 
 export class TestiModelCreator {
   public static namedVersionIndexes = [5, 10];
@@ -58,7 +58,7 @@ export class TestiModelCreator {
       const namedVersion: NamedVersionMetadata = await TestiModelCreator.createNamedVersionOnChangesetIndex({
         ...imodelScopedRequestParams,
         changesetIndex: index
-      })
+      });
       namedVersions.push(namedVersion);
       checpointGenerationPromises.push(
         TestiModelCreator.waitForNamedVersionCheckpointGenerated({ ...imodelScopedRequestParams, namedVersionId: namedVersion.id })

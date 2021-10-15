@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import { NamedVersion, iModel } from "@itwin/imodels-client-authoring";
 import { TestSetupError, toArray } from "../../CommonTestUtils";
-import { BriefcaseMetadata, NamedVersionMetadata, TestiModelSetupContext, ReusableiModelMetadata, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
-import { TestiModelFileProvider } from "./TestiModelFileProvider";
 import { TestiModelCreator } from "./TestiModelCreator";
+import { TestiModelFileProvider } from "./TestiModelFileProvider";
+import { BriefcaseMetadata, NamedVersionMetadata, ReusableiModelMetadata, TestiModelSetupContext, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
 
 export class TestiModelRetriever {
   public static async queryWithRelatedData(params: TestiModelSetupContext & iModelIdentificationByNameParams)

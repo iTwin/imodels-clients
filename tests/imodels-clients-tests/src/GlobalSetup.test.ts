@@ -6,12 +6,12 @@ import { iModelsClient } from "@itwin/imodels-client-authoring";
 import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, cleanUpiModels, cleanupDirectory } from "./common";
 
 before(async () => {
-  cleanupiModelsInTestProject();
+  await cleanupiModelsInTestProject();
   cleanupDirectory(Constants.TestDownloadDirectoryPath);
 });
 
 after(async () => {
-  cleanupiModelsInTestProject();
+  await cleanupiModelsInTestProject();
   cleanupDirectory(Constants.TestDownloadDirectoryPath);
 });
 
