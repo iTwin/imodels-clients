@@ -3,14 +3,14 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AcquireBriefcaseParams, Briefcase, RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, ReusableTestiModelProvider, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, iModelWithChangesetsMetadata, assertBriefcase, cleanUpiModels } from "../common";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, assertBriefcase, cleanUpiModels, TestiModelCreator, EmptyiModelMetadata } from "../common";
 
 describe("[Authoring] BriefcaseOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
-  let testiModel: iModelWithChangesetsMetadata;
+  let testiModel: EmptyiModelMetadata;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
@@ -23,10 +23,11 @@ describe("[Authoring] BriefcaseOperations", () => {
       }
     });
 
-    testiModel = await ReusableTestiModelProvider.getOrCreate({
+    testiModel = await TestiModelCreator.createEmpty({
       imodelsClient,
       requestContext,
-      projectId
+      projectId,
+      imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
     });
   });
 

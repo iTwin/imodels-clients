@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { TestSetupError } from "../../CommonTestUtils";
-import { Constants } from "../../Constants";
 
 export interface TestiModelBaselineFile {
   filePath: string;
@@ -28,7 +27,7 @@ interface ChangesetDescriptorFileItem extends TestChangesetFile {
 }
 
 export class TestiModelFileProvider {
-  private static _imodelDataRootPath = `${Constants.AssetsPath}test-imodel`
+  private static _imodelDataRootPath = `${__dirname}/../../../assets/test-imodel`;
   private static _baselineFile: TestiModelBaselineFile;
   private static _changesetFiles: TestChangesetFile[];
 
@@ -66,7 +65,7 @@ export class TestiModelFileProvider {
       const changesetFilePath = `${this._imodelDataRootPath}/changesets/${cs.fileName}`;
       if (!fs.existsSync(changesetFilePath))
         throw new TestSetupError("Changeset file for test iModel not found.");
-      return { ...cs, changesetFilePath };
+      return { ...cs, filePath: changesetFilePath };
     });
 
     return this._changesetFiles;
