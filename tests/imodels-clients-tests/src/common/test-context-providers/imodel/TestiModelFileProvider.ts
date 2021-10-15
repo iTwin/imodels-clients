@@ -27,7 +27,7 @@ interface ChangesetDescriptorFileItem extends TestChangesetFile {
 }
 
 export class TestiModelFileProvider {
-  private static _imodelDataRootPath = `${__dirname}/../../../assets/test-imodel`;
+  private static readonly _imodelDataRootPath = `${__dirname}/../../../assets/test-imodel`;
   private static _baselineFile: TestiModelBaselineFile;
   private static _changesetFiles: TestChangesetFile[];
 

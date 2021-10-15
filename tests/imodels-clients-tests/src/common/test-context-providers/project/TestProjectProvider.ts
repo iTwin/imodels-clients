@@ -8,8 +8,8 @@ import { ProjectsClient } from "./ProjectsClient";
 
 export class TestProjectProvider {
   private static _projectId: string;
-  private static _projectsClient = new ProjectsClient();
-  private static _projectsApiAuthClient = new TestAuthenticationClient({
+  private static readonly _projectsClient = new ProjectsClient();
+  private static readonly _projectsApiAuthClient = new TestAuthenticationClient({
     ...Config.get().auth,
     scopes: Config.get().apis.projects.scopes
   });

@@ -9,12 +9,11 @@ import { TestAuthenticationProvider } from "../auth/TestAuthenticationProvider";
 import { EmptyiModelMetadata, BriefcaseMetadata, ChangesetMetadata, NamedVersionMetadata, TestiModelSetupContext, iModelWithChangesetsMetadata, ReusableiModelMetadata, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
 import { TestiModelFileProvider } from "./TestiModelFileProvider";
 
-
 export class TestiModelCreator {
-  private static _imodelDescription = "Some description";
-  private static _briefcaseDeviceName = "Some device name";
-  private static _namedVersionIndex1 = 5;
-  private static _namedVersionIndex2 = 10;
+  public static namedVersionIndexes = [5, 10];
+
+  private static readonly _imodelDescription = "Some description";
+  private static readonly _briefcaseDeviceName = "Some device name";
 
   public static async createEmpty(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<EmptyiModelMetadata> {
     const imodel = await params.imodelsClient.iModels.createEmpty({
@@ -57,23 +56,24 @@ export class TestiModelCreator {
       imodelId: imodel.id
     };
 
-    const testNamedVersion1 = await TestiModelCreator.createNamedVersionOnChangesetIndex({
-      ...imodelScopedRequestParams,
-      changesetIndex: TestiModelCreator._namedVersionIndex1
-    });
-    const testNamedVersion2 = await TestiModelCreator.createNamedVersionOnChangesetIndex({
-      ...imodelScopedRequestParams,
-      changesetIndex: TestiModelCreator._namedVersionIndex2
-    });
+    const namedVersions: NamedVersionMetadata[] = [];
+    const checpointGenerationPromises: Promise<void>[] = [];
+    for (const index of TestiModelCreator.namedVersionIndexes) {
+      const namedVersion: NamedVersionMetadata = await TestiModelCreator.createNamedVersionOnChangesetIndex({
+        ...imodelScopedRequestParams,
+        changesetIndex: index
+      })
+      namedVersions.push(namedVersion);
+      checpointGenerationPromises.push(
+        TestiModelCreator.waitForNamedVersionCheckpointGenerated({ ...imodelScopedRequestParams, namedVersionId: namedVersion.id })
+      );
+    }
 
-    await Promise.all([
-      TestiModelCreator.waitForNamedVersionCheckpointGenerated({ ...imodelScopedRequestParams, namedVersionId: testNamedVersion1.id }),
-      TestiModelCreator.waitForNamedVersionCheckpointGenerated({ ...imodelScopedRequestParams, namedVersionId: testNamedVersion2.id })
-    ]);
+    await Promise.all(checpointGenerationPromises);
 
     return {
       ...imodel,
-      namedVersions: [testNamedVersion1, testNamedVersion2]
+      namedVersions
     };
   }
 

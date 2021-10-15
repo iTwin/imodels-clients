@@ -6,6 +6,7 @@ import { NamedVersion, iModel } from "@itwin/imodels-client-authoring";
 import { TestSetupError, toArray } from "../../CommonTestUtils";
 import { BriefcaseMetadata, ChangesetMetadata, NamedVersionMetadata, TestiModelSetupContext, ReusableiModelMetadata, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
 import { TestiModelFileProvider } from "./TestiModelFileProvider";
+import { TestiModelCreator } from "./TestiModelCreator";
 
 export class TestiModelRetriever {
   public static async queryWithRelatedData(params: TestiModelSetupContext & iModelIdentificationByNameParams)
@@ -47,19 +48,19 @@ export class TestiModelRetriever {
 
   private static async queryAndValidateNamedVersions(params: TestiModelSetupContext & iModelIdParam): Promise<NamedVersionMetadata[]> {
     const namedVersions: NamedVersion[] = await toArray(params.imodelsClient.NamedVersions.getRepresentationList(params));
-    if (namedVersions.length !== 2)
+    if (namedVersions.length !== TestiModelCreator.namedVersionIndexes.length)
       throw new TestSetupError(`${namedVersions.length} is an unexpected named version count for reusable test iModel.`);
 
     const mappedNamedVersions = namedVersions
-      .map(nv => ({
-        id: nv.id,
-        changesetId: nv.changesetId!,
-        changesetIndex: TestiModelFileProvider.Changesets.find(cs => cs.id === nv.changesetId)!.index
+      .map(namedVersion => ({
+        id: namedVersion.id,
+        changesetId: namedVersion.changesetId!,
+        changesetIndex: TestiModelFileProvider.Changesets.find(cs => cs.id === namedVersion.changesetId)!.index
       }))
       .sort((nv1, nv2) => nv1.changesetIndex - nv2.changesetIndex);
 
-    if (mappedNamedVersions[0].changesetIndex !== 5 || mappedNamedVersions[1].changesetIndex !== 10)
-      throw new TestSetupError("");
+    if (!mappedNamedVersions.every((mappedNamedVersion, i) => mappedNamedVersion.changesetIndex === TestiModelCreator.namedVersionIndexes[i]))
+      throw new TestSetupError("Reusable test iModel contains unexpected named versions.");
 
     return mappedNamedVersions;
   }
