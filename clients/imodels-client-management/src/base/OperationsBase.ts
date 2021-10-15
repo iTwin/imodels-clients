@@ -73,7 +73,7 @@ export class OperationsBase {
   private formHeaders(params: RequestContextParams & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
     const headers: Dictionary = {};
     headers[Constants.Headers.Authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
-    headers[Constants.Headers.Accept] = `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`;
+    headers[Constants.Headers.Accept] = `application/vnd.bentley.${this._apiVersion}+json`;
 
     if (params.preferReturn)
       headers[Constants.Headers.Prefer] = `return=${params.preferReturn}`;
