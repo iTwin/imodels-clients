@@ -115,7 +115,14 @@ export function assertCheckpoint(params: {
   expect(params.actualCheckpoint.changesetId).to.equal(params.expectedCheckpointProperties.changesetId);
   expect(params.actualCheckpoint.changesetIndex).to.equal(params.expectedCheckpointProperties.changesetIndex);
   expect(params.actualCheckpoint.state).to.equal(params.expectedCheckpointProperties.state);
-  expect(params.actualCheckpoint._links?.download).to.not.be.undefined;
+
+  expect(params.actualCheckpoint.containerAccessInfo).to.not.be.null;
+  expect(params.actualCheckpoint.containerAccessInfo.account).to.not.be.empty;
+  expect(params.actualCheckpoint.containerAccessInfo.sas).to.not.be.empty;
+  expect(params.actualCheckpoint.containerAccessInfo.container).to.not.be.empty;
+  expect(params.actualCheckpoint.containerAccessInfo.dbName).to.not.be.empty;
+
+  expect(params.actualCheckpoint._links?.download).to.not.be.empty;
 }
 
 export function assertError(params: { actualError: Error, expectedError: Partial<iModelsError> }): void {
