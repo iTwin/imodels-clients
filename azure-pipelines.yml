@@ -11,6 +11,8 @@ jobs:
   - job: BuildAndTestSBX
     variables:
       - group: iModels Clients - Integration Tests - SBX
+    workspace:
+      clean: all
 
     steps:
     - task: NodeTool@0
