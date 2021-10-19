@@ -24,6 +24,16 @@ export interface CollectionRequestParams {
   $top?: number;
 }
 
+export enum CollectionOrderOperator {
+  Ascending = "asc",
+  Descending = "desc"
+}
+
+export interface OrderBy<TEntity, TProperties extends keyof TEntity> {
+  property: TProperties;
+  operator?: CollectionOrderOperator;
+}
+
 export interface Link {
   href: string;
 }

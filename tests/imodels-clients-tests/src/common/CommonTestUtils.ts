@@ -34,6 +34,14 @@ export function createEmptyiModel(params: {
   });
 }
 
+export async function toArray<T>(iterator: AsyncIterableIterator<T>): Promise<T[]> {
+  const result: T[] = [];
+  for await (const entity of iterator)
+    result.push(entity);
+
+  return result;
+}
+
 export async function createDefaultTestiModel(params: {
   imodelsClient: AuthoringiModelsClient,
   requestContext: RequestContext,

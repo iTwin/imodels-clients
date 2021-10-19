@@ -4,11 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
-import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextParams } from "./interfaces/CommonInterfaces";
+import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextParams, OrderBy } from "./interfaces/CommonInterfaces";
 import { RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
-type Dictionary = { [key: string]: string | number; };
+type GenericOrderBy = OrderBy<{ [key: string]: unknown }, string>;
+type QueryParameterValue = string | number | GenericOrderBy;
+type QueryParameterDictionary = { [key: string]: QueryParameterValue; };
 
 type SendGetRequestParams = RequestContextParams & { url: string, preferReturn?: PreferReturn };
 type SendPostRequestParams = RequestContextParams & { url: string, body: unknown };
@@ -70,8 +72,8 @@ export class OperationsBase {
     };
   }
 
-  private formHeaders(params: RequestContextParams & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
-    const headers: Dictionary = {};
+  private formHeaders(params: RequestContextParams & { preferReturn?: PreferReturn, containsBody?: boolean }): QueryParameterDictionary {
+    const headers: QueryParameterDictionary = {};
     headers[Constants.Headers.Authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
     headers[Constants.Headers.Accept] = `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`;
 
@@ -84,9 +86,9 @@ export class OperationsBase {
     return headers;
   }
 
-  protected formUrlParams(queryParameters: Dictionary | undefined): string | undefined {
+  protected formUrlParams(queryParameters: QueryParameterDictionary | undefined): string | undefined {
     let queryString = "";
-    const appendToQueryString = (key: string, value: string | number) => {
+    const appendToQueryString = (key: string, value: string) => {
       if (!queryString) {
         queryString = `?${key}=${value}`;
       } else {
@@ -94,14 +96,31 @@ export class OperationsBase {
       }
     };
 
+    const stringify = (queryParameterValue: QueryParameterValue): string => {
+      if (this.isOrderByParam(queryParameterValue)) {
+        let result: string = queryParameterValue.property;
+        if (queryParameterValue.operator)
+          result += ` ${queryParameterValue.operator}`;
+
+        return result;
+      }
+
+      return queryParameterValue.toString();
+    }
+
     for (const key in queryParameters) {
       const queryParameterValue = queryParameters[key];
       if (!queryParameterValue)
         continue;
 
-      appendToQueryString(key, queryParameterValue);
+      appendToQueryString(key, stringify(queryParameterValue));
     }
 
     return queryString;
+  }
+
+
+  private isOrderByParam(param: QueryParameterValue): param is GenericOrderBy {
+    return (param as GenericOrderBy).property !== undefined;
   }
 }
