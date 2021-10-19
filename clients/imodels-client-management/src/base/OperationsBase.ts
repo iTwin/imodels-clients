@@ -8,9 +8,9 @@ import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextP
 import { RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
-type GenericOrderBy = OrderBy<{ [key: string]: unknown }, string>;
-type QueryParameterValue = string | number | GenericOrderBy;
-type QueryParameterDictionary = { [key: string]: QueryParameterValue; };
+type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
+type UrlParameterValue = string | number | OrderByForAnyEntity;
+type UrlParameterDictionary = { [key: string]: UrlParameterValue; };
 
 type SendGetRequestParams = RequestContextParams & { url: string, preferReturn?: PreferReturn };
 type SendPostRequestParams = RequestContextParams & { url: string, body: unknown };
@@ -72,8 +72,8 @@ export class OperationsBase {
     };
   }
 
-  private formHeaders(params: RequestContextParams & { preferReturn?: PreferReturn, containsBody?: boolean }): QueryParameterDictionary {
-    const headers: QueryParameterDictionary = {};
+  private formHeaders(params: RequestContextParams & { preferReturn?: PreferReturn, containsBody?: boolean }): UrlParameterDictionary {
+    const headers: UrlParameterDictionary = {};
     headers[Constants.Headers.Authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
     headers[Constants.Headers.Accept] = `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`;
 
@@ -86,7 +86,7 @@ export class OperationsBase {
     return headers;
   }
 
-  protected formUrlParams(queryParameters: QueryParameterDictionary | undefined): string | undefined {
+  protected formUrlParams(queryParameters: UrlParameterDictionary | undefined): string | undefined {
     let queryString = "";
     const appendToQueryString = (key: string, value: string) => {
       if (!queryString) {
@@ -96,31 +96,30 @@ export class OperationsBase {
       }
     };
 
-    const stringify = (queryParameterValue: QueryParameterValue): string => {
-      if (this.isOrderByParam(queryParameterValue)) {
-        let result: string = queryParameterValue.property;
-        if (queryParameterValue.operator)
-          result += ` ${queryParameterValue.operator}`;
-
-        return result;
-      }
-
-      return queryParameterValue.toString();
-    }
-
     for (const key in queryParameters) {
       const queryParameterValue = queryParameters[key];
       if (!queryParameterValue)
         continue;
 
-      appendToQueryString(key, stringify(queryParameterValue));
+      appendToQueryString(key, this.stringify(queryParameterValue));
     }
 
     return queryString;
   }
 
+  private stringify(param: UrlParameterValue): string {
+    if (this.isOrderByParam(param)) {
+      let result: string = param.property;
+      if (param.operator)
+        result += ` ${param.operator}`;
 
-  private isOrderByParam(param: QueryParameterValue): param is GenericOrderBy {
-    return (param as GenericOrderBy).property !== undefined;
+      return result;
+    }
+
+    return param.toString();
+  }
+
+  private isOrderByParam(param: UrlParameterValue): param is OrderByForAnyEntity {
+    return (param as OrderByForAnyEntity).property !== undefined;
   }
 }
