@@ -53,8 +53,8 @@ export class iModelOperations extends ManagementiModelOperations {
   }
 
   private async waitForBaselineFileInitialization(params: RequestContextParams & { imodelId: string, timeOutInMs?: number }): Promise<void> {
-    const sleepPeriodInMs = Constants.Time.SleepPeriodInMs;
-    const timeOutInMs = params.timeOutInMs ?? Constants.Time.iModelInitiazationTimeOutInMs;
+    const sleepPeriodInMs = Constants.time.sleepPeriodInMs;
+    const timeOutInMs = params.timeOutInMs ?? Constants.time.imodelInitiazationTimeOutInMs;
     for (let retries = Math.ceil(timeOutInMs / sleepPeriodInMs); retries > 0; --retries) {
       const baselineFileState = (await this._baselineFileOperations.getByiModelId(params)).state;
 

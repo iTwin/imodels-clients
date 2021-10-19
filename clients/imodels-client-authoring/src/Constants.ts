@@ -5,8 +5,8 @@
 import { Constants as ManagementiModelsClientConstants } from "@itwin/imodels-client-management";
 
 export class Constants extends ManagementiModelsClientConstants {
-  public static Time = {
-    SleepPeriodInMs: 1000,
-    iModelInitiazationTimeOutInMs: 5 * 60 * 1000
+  public static time = {
+    sleepPeriodInMs: 1000,
+    imodelInitiazationTimeOutInMs: 5 * 60 * 1000
   }
 }
