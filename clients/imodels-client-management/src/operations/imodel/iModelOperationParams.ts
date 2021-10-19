@@ -2,9 +2,14 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, Extent, RequestContextParams, iModelScopedOperationParams } from "../../base";
+import { CollectionRequestParams, Extent, RequestContextParams, iModelScopedOperationParams, OrderBy, iModel } from "../../base";
+
+export enum iModelProps {
+  Name = "name"
+}
 
 export interface GetiModelListUrlParams extends CollectionRequestParams {
+  $orderBy?: OrderBy<iModel, iModelProps>;
   projectId: string;
 }
 
