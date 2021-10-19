@@ -22,7 +22,7 @@ describe("[Management] NamedVersionOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
+    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {

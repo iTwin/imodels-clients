@@ -15,7 +15,7 @@ describe("[Management] BriefcaseOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
+    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModel = await ReusableTestiModelProvider.getOrCreate({
       imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),

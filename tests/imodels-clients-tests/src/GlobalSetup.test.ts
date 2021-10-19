@@ -17,7 +17,7 @@ after(async () => {
 
 async function cleanupiModelsInTestProject(): Promise<void> {
   const imodelsClient = new iModelsClient(new TestClientOptions());
-  const requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
+  const requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
   const projectId = await TestProjectProvider.getProjectId();
   const testiModelGroup = new TestiModelGroup({ labels: { package: Constants.PackagePrefix } });
   await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });

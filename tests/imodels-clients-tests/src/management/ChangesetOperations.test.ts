@@ -17,7 +17,7 @@ describe("[Management] ChangesetOperations", () => {
   before(async () => {
     imodelsClientOptions = new TestClientOptions();
     imodelsClient = new iModelsClient(imodelsClientOptions);
-    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.user1);
+    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModel = await ReusableTestiModelProvider.getOrCreate({
       imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),

@@ -28,8 +28,8 @@ export interface TestUserConfigValues {
 }
 
 export interface TestUsersConfigValues {
-  user1: TestUserConfigValues;
-  user2: TestUserConfigValues;
+  admin1: TestUserConfigValues;
+  admin2FeatureFlagsOn: TestUserConfigValues;
 }
 
 export interface ConfigValues {
@@ -71,13 +71,13 @@ export class Config {
         }
       },
       testUsers: {
-        user1: {
-          email: process.env.TEST_USERS_USER1_EMAIL!,
-          password: process.env.TEST_USERS_USER1_PASSWORD!
+        admin1: {
+          email: process.env.TEST_USERS_ADMIN1_EMAIL!,
+          password: process.env.TEST_USERS_ADMIN1_PASSWORD!
         },
-        user2: {
-          email: process.env.TEST_USERS_USER2_EMAIL!,
-          password: process.env.TEST_USERS_USER2_PASSWORD!
+        admin2FeatureFlagsOn: {
+          email: process.env.TEST_USERS_ADMIN2_FF_ON_EMAIL!,
+          password: process.env.TEST_USERS_ADMIN2_FF_ON_PASSWORD!
         }
       }
     };
@@ -98,11 +98,11 @@ export class Config {
     this.validateConfigValue("APIS_PROJECTS_BASE_URL");
     this.validateConfigValue("APIS_PROJECTS_SCOPES");
 
-    this.validateConfigValue("TEST_USERS_USER1_EMAIL");
-    this.validateConfigValue("TEST_USERS_USER1_PASSWORD");
+    this.validateConfigValue("TEST_USERS_ADMIN1_EMAIL");
+    this.validateConfigValue("TEST_USERS_ADMIN1_PASSWORD");
 
-    this.validateConfigValue("TEST_USERS_USER2_EMAIL");
-    this.validateConfigValue("TEST_USERS_USER2_PASSWORD");
+    this.validateConfigValue("TEST_USERS_ADMIN2_FF_ON_EMAIL");
+    this.validateConfigValue("TEST_USERS_ADMIN2_FF_ON_PASSWORD");
   }
 
   private static validateConfigValue(key: string): void {
