@@ -11,6 +11,8 @@ jobs:
   - job: BuildAndTestSBX
     variables:
       - group: iModels Clients - Integration Tests - SBX
+    workspace:
+      clean: all
 
     steps:
     - task: NodeTool@0
@@ -37,8 +39,10 @@ jobs:
       env:
         AUTH_CLIENT_ID: $(AUTH_CLIENT_ID)
         AUTH_CLIENT_SECRET: $(AUTH_CLIENT_SECRET)
-        TEST_USER_EMAIL: $(TEST_USER_EMAIL)
-        TEST_USER_PASSWORD: $(TEST_USER_PASSWORD)
+        TEST_USERS_ADMIN1_EMAIL: $(TEST_USERS_ADMIN1_EMAIL)
+        TEST_USERS_ADMIN1_PASSWORD: $(TEST_USERS_ADMIN1_PASSWORD)
+        TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL: $(TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL)
+        TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD: $(TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD)
 
     - script: node common/scripts/install-run-rush.js publish --pack --include-all --publish
       displayName: rush publish (into .tgz)

@@ -6,8 +6,8 @@ import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
 import axios, { AxiosResponse } from "axios";
 import * as puppeteer from "puppeteer";
-import { TestSetupError } from "./CommonTestUtils";
-import { AuthConfigValues } from "./Config";
+import { TestSetupError } from "../../CommonTestUtils";
+import { AuthConfigValues } from "../../Config";
 
 interface AccessTokenResponse {
   access_token: string;

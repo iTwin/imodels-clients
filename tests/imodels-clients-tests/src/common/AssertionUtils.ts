@@ -4,8 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Briefcase, BriefcaseProperties, ChangesetProperties } from "@itwin/imodels-client-authoring";
+import { Briefcase, BriefcaseProperties, ChangesetProperties, Checkpoint, CheckpointState, DownloadedChangeset } from "@itwin/imodels-client-authoring";
 import { Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
+import { TestiModelFileProvider } from "./test-context-providers/imodel/TestiModelFileProvider";
 
 export async function assertCollection<T>(params: {
   asyncIterable: AsyncIterableIterator<T>,
@@ -54,14 +55,13 @@ export function assertBriefcase(params: {
 
 export function assertChangeset(params: {
   actualChangeset: Changeset,
-  expectedChangesetProperties: ChangesetProperties
+  expectedChangesetProperties: Partial<ChangesetProperties>
 }): void {
   expect(params.actualChangeset).to.not.be.undefined;
   expect(params.actualChangeset.id).to.not.be.empty;
   expect(params.actualChangeset.displayName).to.not.be.empty;
 
   expect(params.actualChangeset.parentId).to.equal(params.expectedChangesetProperties.parentId ?? "");
-  expect(params.actualChangeset.fileSize).to.equal(fs.statSync(params.expectedChangesetProperties.changesetFilePath).size);
   expect(params.actualChangeset.index).to.be.greaterThan(0);
   expect(params.actualChangeset.briefcaseId).to.be.greaterThan(0);
   assertOptionalProperty(params.expectedChangesetProperties.description, params.actualChangeset.description);
@@ -69,8 +69,25 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
   expect(params.actualChangeset.synchronizationInfo).to.equal(null);
 
+  // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
+  const expectedChangesetMetadata = TestiModelFileProvider.changesets.find(changeset => changeset.id === params.expectedChangesetProperties.id);
+  expect(params.actualChangeset.fileSize).to.equal(fs.statSync(expectedChangesetMetadata!.filePath).size);
+
   // TODO: add correct expected value when test client is set up
   // expect(params.actualChangeset.application).to.equal(null);
+}
+
+export function assertDownloadedChangeset(params: {
+  actualChangeset: DownloadedChangeset,
+  expectedChangesetProperties: Partial<ChangesetProperties>
+}): void {
+  assertChangeset(params);
+
+  expect(fs.existsSync(params.actualChangeset.filePath)).to.equal(true);
+
+  // Check if the downloaded file size matches the size of the changeset file used for test iModel creation
+  const expectedChangesetMetadata = TestiModelFileProvider.changesets.find(changeset => changeset.id === params.expectedChangesetProperties.id);
+  expect(fs.statSync(params.actualChangeset.filePath).size).to.equal(fs.statSync(expectedChangesetMetadata!.filePath).size);
 }
 
 export function assertNamedVersion(params: {
@@ -85,6 +102,27 @@ export function assertNamedVersion(params: {
   assertOptionalProperty(params.expectedNamedVersionProperties.description, params.actualNamedVersion.description);
   assertOptionalProperty(params.expectedNamedVersionProperties.changesetId, params.actualNamedVersion.changesetId);
   expect(params.actualNamedVersion.state).to.equal(NamedVersionState.Visible);
+}
+
+export function assertCheckpoint(params: {
+  actualCheckpoint: Checkpoint,
+  expectedCheckpointProperties: {
+    changesetId: string,
+    changesetIndex: number
+    state: CheckpointState
+  }
+}): void {
+  expect(params.actualCheckpoint.changesetId).to.equal(params.expectedCheckpointProperties.changesetId);
+  expect(params.actualCheckpoint.changesetIndex).to.equal(params.expectedCheckpointProperties.changesetIndex);
+  expect(params.actualCheckpoint.state).to.equal(params.expectedCheckpointProperties.state);
+
+  expect(params.actualCheckpoint.containerAccessInfo).to.not.be.null;
+  expect(params.actualCheckpoint.containerAccessInfo.account).to.not.be.empty;
+  expect(params.actualCheckpoint.containerAccessInfo.sas).to.not.be.empty;
+  expect(params.actualCheckpoint.containerAccessInfo.container).to.not.be.empty;
+  expect(params.actualCheckpoint.containerAccessInfo.dbName).to.not.be.empty;
+
+  expect(params.actualCheckpoint._links?.download).to.not.be.empty;
 }
 
 export function assertError(params: { actualError: Error, expectedError: Partial<iModelsError> }): void {

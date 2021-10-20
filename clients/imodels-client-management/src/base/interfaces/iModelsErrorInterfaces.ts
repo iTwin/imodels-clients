@@ -14,7 +14,10 @@ export enum iModelsErrorCode {
   InvalidValue = "InvalidValue",
   iModelExists = "iModelExists",
   FileNotFound = "FileNotFound",
+  iModelNotFound = "iModelNotFound",
   ChangesetNotFound = "ChangesetNotFound",
+  NamedVersionNotFound = "NamedVersionNotFound",
+  CheckpointNotFound = "CheckpointNotFound",
 
   // Operation specific errors thrown by the client library
   BaselineFileInitializationFailed = "BaselineFileInitializationFailed",
