@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { Changeset, CollectionRequestParams, iModelScopedOperationParams, OrderBy } from "../../base";
 
-export enum ChangesetOrderByProperties {
+export enum ChangesetOrderByProperty {
   Index = "index"
 }
 
 export interface GetChangesetListUrlParams extends CollectionRequestParams {
-  $orderBy?: OrderBy<Changeset, ChangesetOrderByProperties>;
+  $orderBy?: OrderBy<Changeset, ChangesetOrderByProperty>;
   afterIndex?: number;
   lastIndex?: number;
 }

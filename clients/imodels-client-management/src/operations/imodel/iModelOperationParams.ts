@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { CollectionRequestParams, Extent, RequestContextParams, iModelScopedOperationParams, OrderBy, iModel } from "../../base";
 
-export enum iModelOrderByProperties {
+export enum iModelOrderByProperty {
   Name = "name"
 }
 
 export interface GetiModelListUrlParams extends CollectionRequestParams {
-  $orderBy?: OrderBy<iModel, iModelOrderByProperties>;
+  $orderBy?: OrderBy<iModel, iModelOrderByProperty>;
   projectId: string;
 }
 

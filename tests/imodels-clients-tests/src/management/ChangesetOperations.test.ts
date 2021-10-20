@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { Changeset, GetChangesetByIdParams, GetChangesetListParams, ChangesetOrderByProperties, CollectionOrderOperator, RequestContext, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
+import { Changeset, GetChangesetByIdParams, GetChangesetListParams, ChangesetOrderByProperty, OrderByOperator, RequestContext, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
 import { Config, NamedVersionMetadata, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, assertChangeset, assertCollection, toArray } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
@@ -63,7 +63,7 @@ describe("[Management] ChangesetOperations", () => {
         imodelId: testiModel.id,
         urlParams: {
           $orderBy: {
-            property: ChangesetOrderByProperties.Index
+            property: ChangesetOrderByProperty.Index
           }
         }
       };
@@ -84,8 +84,8 @@ describe("[Management] ChangesetOperations", () => {
         imodelId: testiModel.id,
         urlParams: {
           $orderBy: {
-            property: ChangesetOrderByProperties.Index,
-            operator: CollectionOrderOperator.Descending
+            property: ChangesetOrderByProperty.Index,
+            operator: OrderByOperator.Descending
           }
         }
       };
@@ -129,8 +129,8 @@ describe("[Management] ChangesetOperations", () => {
           afterIndex: 5,
           lastIndex: 10,
           $orderBy: {
-            property: ChangesetOrderByProperties.Index,
-            operator: CollectionOrderOperator.Descending
+            property: ChangesetOrderByProperty.Index,
+            operator: OrderByOperator.Descending
           }
         }
       };
