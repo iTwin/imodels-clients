@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { CreateEmptyiModelParams, GetiModelListParams, RequestContext, iModel, iModelProps, CollectionOrderOperator, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { CreateEmptyiModelParams, GetiModelListParams, RequestContext, iModel, iModelOrderByProperties, CollectionOrderOperator, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
 import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestiModelCreator, TestProjectProvider, TestiModelGroup, assertCollection, assertError, assertiModel, cleanUpiModels, toArray } from "../common";
 
 describe("[Management] iModelOperations", () => {
@@ -99,7 +99,7 @@ describe("[Management] iModelOperations", () => {
       urlParams: {
         projectId,
         $orderBy: {
-          property: iModelProps.Name
+          property: iModelOrderByProperties.Name
         }
       }
     };
@@ -120,7 +120,7 @@ describe("[Management] iModelOperations", () => {
       urlParams: {
         projectId,
         $orderBy: {
-          property: iModelProps.Name,
+          property: iModelOrderByProperties.Name,
           operator: CollectionOrderOperator.Descending
         }
       }
