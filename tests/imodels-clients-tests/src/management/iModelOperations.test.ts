@@ -83,7 +83,7 @@ describe("[Management] iModelOperations", () => {
   it("should return unauthorized error when calling API with invalid access token", async () => {
     // Arrange
     const createiModelParams: CreateEmptyiModelParams = {
-      authorization,
+      authorization: () => Promise.resolve({ scheme: "Bearer", token: "invalid token" }),
       imodelProperties: {
         projectId,
         name: testiModelGroup.getPrefixediModelName("Sample iModel (unauthorized)")
