@@ -3,8 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { CreateEmptyiModelParams, GetiModelListParams, RequestContext, iModel, iModelsClient, iModelsErrorCode, iModelProps, CollectionOrderOperator } from "@itwin/imodels-client-management";
-import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, assertCollection, assertError, assertiModel, cleanUpiModels, createEmptyiModel, toArray } from "../common";
+import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
+import { CreateEmptyiModelParams, GetiModelListParams, RequestContext, iModel, iModelProps, CollectionOrderOperator, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestiModelCreator, TestProjectProvider, TestiModelGroup, assertCollection, assertError, assertiModel, cleanUpiModels, toArray } from "../common";
 
 describe("[Management] iModelOperations", () => {
   let imodelsClient: iModelsClient;
@@ -14,7 +15,7 @@ describe("[Management] iModelOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext();
+    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {
@@ -23,8 +24,8 @@ describe("[Management] iModelOperations", () => {
       }
     });
 
-    await createEmptyiModel({
-      imodelsClient,
+    await TestiModelCreator.createEmpty({
+      imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
       requestContext,
       projectId,
       imodelName: testiModelGroup.getPrefixediModelName("Test iModel for collection queries")

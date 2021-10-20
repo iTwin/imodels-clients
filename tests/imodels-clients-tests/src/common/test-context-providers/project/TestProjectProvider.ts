@@ -2,14 +2,14 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Config } from "./Config";
+import { Config } from "../../Config";
+import { TestAuthenticationClient } from "../auth/TestAuthenticationClient";
 import { ProjectsClient } from "./ProjectsClient";
-import { TestAuthenticationClient } from "./TestAuthenticationClient";
 
 export class TestProjectProvider {
   private static _projectId: string;
-  private static _projectsClient = new ProjectsClient();
-  private static _projectsApiAuthClient = new TestAuthenticationClient({
+  private static readonly _projectsClient = new ProjectsClient();
+  private static readonly _projectsApiAuthClient = new TestAuthenticationClient({
     ...Config.get().auth,
     scopes: Config.get().apis.projects.scopes
   });
@@ -23,7 +23,7 @@ export class TestProjectProvider {
       requestContext: {
         authorization: {
           scheme: "Bearer",
-          token: await this._projectsApiAuthClient.getAccessToken(Config.get().testUser)
+          token: await this._projectsApiAuthClient.getAccessToken(Config.get().testUsers.admin1)
         }
       },
       projectName: Config.get().testProjectName

@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { CreateiModelFromBaselineParams, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, assertiModel, cleanUpiModels } from "../common";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, TestiModelGroup, assertiModel, cleanUpiModels } from "../common";
 
 describe("[Authoring] iModelOperations", () => {
   let imodelsClient: iModelsClient;
@@ -13,7 +13,7 @@ describe("[Authoring] iModelOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext();
+    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {
@@ -36,7 +36,7 @@ describe("[Authoring] iModelOperations", () => {
         name: testiModelGroup.getPrefixediModelName("Sample iModel from baseline")
       },
       baselineFileProperties: {
-        path: TestiModelMetadata.iModel.baselineFilePath
+        path: TestiModelFileProvider.imodel.filePath
       }
     };
 

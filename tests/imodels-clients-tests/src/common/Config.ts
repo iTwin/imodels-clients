@@ -27,12 +27,17 @@ export interface TestUserConfigValues {
   password: string;
 }
 
+export interface TestUsersConfigValues {
+  admin1: TestUserConfigValues;
+  admin2FullyFeatured: TestUserConfigValues;
+}
+
 export interface ConfigValues {
   testProjectName: string;
   testiModelName: string;
   auth: AuthConfigValues;
   apis: ApisConfigValues;
-  testUser: TestUserConfigValues;
+  testUsers: TestUsersConfigValues;
 }
 
 export class Config {
@@ -65,9 +70,15 @@ export class Config {
           scopes: process.env.APIS_PROJECTS_SCOPES!
         }
       },
-      testUser: {
-        email: process.env.TEST_USER_EMAIL!,
-        password: process.env.TEST_USER_PASSWORD!
+      testUsers: {
+        admin1: {
+          email: process.env.TEST_USERS_ADMIN1_EMAIL!,
+          password: process.env.TEST_USERS_ADMIN1_PASSWORD!
+        },
+        admin2FullyFeatured: {
+          email: process.env.TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL!,
+          password: process.env.TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD!
+        }
       }
     };
   }
@@ -87,8 +98,11 @@ export class Config {
     this.validateConfigValue("APIS_PROJECTS_BASE_URL");
     this.validateConfigValue("APIS_PROJECTS_SCOPES");
 
-    this.validateConfigValue("TEST_USER_EMAIL");
-    this.validateConfigValue("TEST_USER_PASSWORD");
+    this.validateConfigValue("TEST_USERS_ADMIN1_EMAIL");
+    this.validateConfigValue("TEST_USERS_ADMIN1_PASSWORD");
+
+    this.validateConfigValue("TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL");
+    this.validateConfigValue("TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD");
   }
 
   private static validateConfigValue(key: string): void {

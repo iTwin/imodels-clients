@@ -8,3 +8,5 @@ export * from "./briefcase/BriefcaseOperationParams";
 export * from "./briefcase/BriefcaseOperations";
 export * from "./changeset/ChangesetOperationParams";
 export * from "./changeset/ChangesetOperations";
+export * from "./checkpoint/CheckpointOperationParams";
+export * from "./checkpoint/CheckpointOperations";

@@ -2,20 +2,19 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AcquireBriefcaseParams, Briefcase, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, cleanUpiModels, createEmptyiModel } from "../common";
-import { assertBriefcase } from "../common/AssertionUtils";
+import { AcquireBriefcaseParams, Briefcase, RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelGroup, assertBriefcase, cleanUpiModels, iModelMetadata } from "../common";
 
 describe("[Authoring] BriefcaseOperations", () => {
   let imodelsClient: iModelsClient;
   let requestContext: RequestContext;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
-  let testiModel: iModel;
+  let testiModel: iModelMetadata;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext();
+    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {
@@ -24,7 +23,7 @@ describe("[Authoring] BriefcaseOperations", () => {
       }
     });
 
-    testiModel = await createEmptyiModel({
+    testiModel = await TestiModelCreator.createEmpty({
       imodelsClient,
       requestContext,
       projectId,
@@ -42,7 +41,7 @@ describe("[Authoring] BriefcaseOperations", () => {
       requestContext,
       imodelId: testiModel.id,
       briefcaseProperties: {
-        deviceName: TestiModelMetadata.Briefcase.deviceName
+        deviceName: "some device name"
       }
     };
 

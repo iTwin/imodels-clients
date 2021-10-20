@@ -8,6 +8,8 @@ import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextP
 import { RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
+type StringDictionary = { [key: string]: string; };
+
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
 type UrlParameterDictionary = { [key: string]: UrlParameterValue; };
@@ -73,15 +75,15 @@ export class OperationsBase {
   }
 
   private formHeaders(params: RequestContextParams & { preferReturn?: PreferReturn, containsBody?: boolean }): UrlParameterDictionary {
-    const headers: UrlParameterDictionary = {};
-    headers[Constants.Headers.Authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
-    headers[Constants.Headers.Accept] = `application/vnd.bentley.itwin-platform.${this._apiVersion}+json`;
+    const headers: StringDictionary = {};
+    headers[Constants.headers.authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
+    headers[Constants.headers.accept] = `application/vnd.bentley.${this._apiVersion}+json`;
 
     if (params.preferReturn)
-      headers[Constants.Headers.Prefer] = `return=${params.preferReturn}`;
+      headers[Constants.headers.prefer] = `return=${params.preferReturn}`;
 
     if (params.containsBody)
-      headers[Constants.Headers.ContentType] = Constants.Headers.Values.ContentType;
+      headers[Constants.headers.contentType] = Constants.headers.values.contentType;
 
     return headers;
   }

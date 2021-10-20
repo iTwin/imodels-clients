@@ -9,7 +9,7 @@ import {
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 import { AzureSdkFileHandler, FileHandler } from "./base";
-import { BriefcaseOperations, ChangesetOperations, iModelOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, CheckpointOperations, iModelOperations } from "./operations";
 
 export interface iModelsClientOptions extends ManagementiModelsClientOptions {
   fileHandler?: FileHandler;
@@ -36,6 +36,10 @@ export class iModelsClient {
 
   public get NamedVersions(): NamedVersionOperations {
     return new NamedVersionOperations(this._options);
+  }
+
+  public get Checkpoints(): CheckpointOperations {
+    return new CheckpointOperations(this._options);
   }
 
   public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
