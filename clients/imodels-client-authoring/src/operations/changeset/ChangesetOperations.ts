@@ -17,12 +17,12 @@ export class ChangesetOperations extends ManagementChangesetOperations {
   }
 
   public async create(params: CreateChangesetParams): Promise<Changeset> {
-    const { changesetFilePath, ...changesetProperties } = params.changesetProperties;
+    const { filePath: changesetFilePath, ...changesetMetadataProperties } = params.changesetProperties;
     const changesetCreateResponse = await this.sendPostRequest<ChangesetResponse>({
       requestContext: params.requestContext,
       url: `${this._apiBaseUrl}/${params.imodelId}/changesets`,
       body: {
-        ...changesetProperties,
+        ...changesetMetadataProperties,
         fileSize: this._fileHandler.getFileSize(changesetFilePath)
       }
     });

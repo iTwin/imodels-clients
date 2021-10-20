@@ -67,7 +67,7 @@ describe("[Authoring] ChangesetOperations", () => {
       changesetProperties: {
         briefcaseId: briefcase.briefcaseId,
         id: changesetMetadata.id,
-        changesetFilePath: changesetMetadata.filePath
+        filePath: changesetMetadata.filePath
       }
     };
 
