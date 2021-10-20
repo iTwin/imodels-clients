@@ -3,12 +3,12 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { CreateEmptyiModelParams, GetiModelListParams, Authorization, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { CreateEmptyiModelParams, GetiModelListParams, AuthorizationCallback, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
 import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, assertCollection, assertError, assertiModel } from "../common";
 
 describe("[Management] iModelOperations", () => {
   let imodelsClient: iModelsClient;
-  let authorization: Authorization;
+  let authorization: AuthorizationCallback;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
 

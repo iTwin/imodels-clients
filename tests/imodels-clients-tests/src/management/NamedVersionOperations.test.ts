@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, Authorization, UpdateNamedVersionParams, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-management";
+import { CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, AuthorizationCallback, UpdateNamedVersionParams, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-management";
 import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, assertCollection, assertNamedVersion, cleanUpiModels, iModelMetadata } from "../common";
 
 describe("[Management] NamedVersionOperations", () => {
   let imodelsClient: iModelsClient;
-  let authorization: Authorization;
+  let authorization: AuthorizationCallback;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
   let testiModel: iModelMetadata;

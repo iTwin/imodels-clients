@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { iModelsClient as ManagementiModelsClient, Authorization } from "@itwin/imodels-client-management";
+import { iModelsClient as ManagementiModelsClient, AuthorizationParam } from "@itwin/imodels-client-management";
 import { TestiModelGroup } from "./TestiModelGroup";
 
 export class TestSetupError extends Error {
@@ -18,9 +18,8 @@ export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export async function cleanUpiModels(params: {
+export async function cleanUpiModels(params: AuthorizationParam & {
   imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
-  authorization: Authorization,
   projectId: string,
   testiModelGroup: TestiModelGroup,
 }): Promise<void> {

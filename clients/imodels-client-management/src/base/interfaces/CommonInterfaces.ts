@@ -7,8 +7,10 @@ export interface Authorization {
   token: string;
 }
 
+export type AuthorizationCallback = () => Promise<Authorization>;
+
 export interface AuthorizationParam {
-  authorization: Authorization;
+  authorization: AuthorizationCallback;
 }
 
 export interface iModelScopedOperationParams extends AuthorizationParam {

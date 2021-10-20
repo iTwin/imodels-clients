@@ -19,11 +19,9 @@ export class TestProjectProvider {
   }
 
   private static async initializeAndGetProjectId(): Promise<string> {
+    const accessToken = await this._projectsApiAuthClient.getAccessToken(Config.get().testUsers.admin1);
     TestProjectProvider._projectId = await TestProjectProvider._projectsClient.getOrCreateProject({
-      authorization: {
-        scheme: "Bearer",
-        token: await this._projectsApiAuthClient.getAccessToken(Config.get().testUsers.admin1)
-      },
+      authorization: () => Promise.resolve({ scheme: "Bearer", token: accessToken }),
       projectName: Config.get().testProjectName
     });
     return TestProjectProvider._projectId;

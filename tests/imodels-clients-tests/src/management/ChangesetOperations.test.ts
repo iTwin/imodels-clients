@@ -4,13 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { Changeset, GetChangesetByIdParams, GetChangesetListParams, Authorization, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
+import { Changeset, GetChangesetByIdParams, GetChangesetListParams, AuthorizationCallback, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
 import { Config, NamedVersionMetadata, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, assertChangeset, assertCollection } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
   let imodelsClientOptions: iModelsClientOptions;
   let imodelsClient: iModelsClient;
-  let authorization: Authorization;
+  let authorization: AuthorizationCallback;
   let projectId: string;
   let testiModel: ReusableiModelMetadata;
 
