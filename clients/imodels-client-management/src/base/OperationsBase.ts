@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
-import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextParams, OrderBy } from "./interfaces/CommonInterfaces";
+import { CollectionResponse, EntityCollectionPage, OrderBy, PreferReturn, RequestContextParams } from "./interfaces/CommonInterfaces";
 import { RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
@@ -91,7 +91,7 @@ export class OperationsBase {
   protected formQueryString(urlParameters: UrlParameterDictionary | undefined): string | undefined {
     let queryString = "";
     const appendToQueryString = (key: string, value: string) => {
-      const separator = queryString.length === 0 ? '?' : '&';
+      const separator = queryString.length === 0 ? "?" : "&";
       queryString += `${separator}${key}=${value}`;
     };
 

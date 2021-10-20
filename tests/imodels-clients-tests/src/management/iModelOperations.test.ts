@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { CreateEmptyiModelParams, GetiModelListParams, RequestContext, iModel, iModelOrderByProperty, OrderByOperator, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestiModelCreator, TestProjectProvider, TestiModelGroup, assertCollection, assertError, assertiModel, cleanUpiModels, toArray } from "../common";
+import { CreateEmptyiModelParams, GetiModelListParams, OrderByOperator, RequestContext, iModel, iModelOrderByProperty, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelGroup, assertCollection, assertError, assertiModel, cleanUpiModels, toArray } from "../common";
 
 describe("[Management] iModelOperations", () => {
   let imodelsClient: iModelsClient;
@@ -85,14 +85,14 @@ describe("[Management] iModelOperations", () => {
       const imodels = testCase.functionUnderTest(getiModelListParams);
 
       // Assert
-      assertCollection({
+      await assertCollection({
         asyncIterable: imodels,
         isEntityCountCorrect: count => count >= 2
       });
     });
   });
 
-  it(`should return items in ascending order when querying representation collection`, async () => {
+  it("should return items in ascending order when querying representation collection", async () => {
     // Arrange
     const getiModelListParams: GetiModelListParams = {
       requestContext,
@@ -113,7 +113,7 @@ describe("[Management] iModelOperations", () => {
       expect(imodelNames[i] < imodelNames[i + 1]).to.be.true;
   });
 
-  it(`should return items in descending order when querying representation collection`, async () => {
+  it("should return items in descending order when querying representation collection", async () => {
     // Arrange
     const getiModelListParams: GetiModelListParams = {
       requestContext,
