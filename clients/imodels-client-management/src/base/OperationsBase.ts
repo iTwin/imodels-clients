@@ -5,10 +5,8 @@
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
 import { AuthorizationParam, CollectionResponse, EntityCollectionPage, PreferReturn } from "./interfaces/CommonInterfaces";
-import { RecursiveRequired } from "./interfaces/UtilityTypes";
+import { RecursiveRequired, Dictionary } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
-
-type Dictionary = { [key: string]: string | number; };
 
 type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn };
 type SendPostRequestParams = AuthorizationParam & { url: string, body: unknown };
@@ -26,33 +24,33 @@ export class OperationsBase {
     this._apiVersion = options.api.version;
   }
 
-  protected sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse> {
+  protected async sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse> {
     return this._restClient.sendGetRequest<TResponse>({
       url: params.url,
-      headers: this.formHeaders(params)
+      headers: await this.formHeaders(params)
     });
   }
 
-  protected sendPostRequest<TResponse>(params: SendPostRequestParams): Promise<TResponse> {
+  protected async sendPostRequest<TResponse>(params: SendPostRequestParams): Promise<TResponse> {
     return this._restClient.sendPostRequest<TResponse>({
       url: params.url,
       body: params.body,
-      headers: this.formHeaders({ ...params, containsBody: true })
+      headers: await this.formHeaders({ ...params, containsBody: true })
     });
   }
 
-  protected sendPatchRequest<TResponse>(params: SendPatchRequestParams): Promise<TResponse> {
+  protected async sendPatchRequest<TResponse>(params: SendPatchRequestParams): Promise<TResponse> {
     return this._restClient.sendPatchRequest<TResponse>({
       url: params.url,
       body: params.body,
-      headers: this.formHeaders({ ...params, containsBody: true })
+      headers: await this.formHeaders({ ...params, containsBody: true })
     });
   }
 
-  protected sendDeleteRequest<TResponse>(params: SendDeleteRequestParams): Promise<TResponse> {
+  protected async sendDeleteRequest<TResponse>(params: SendDeleteRequestParams): Promise<TResponse> {
     return this._restClient.sendDeleteRequest<TResponse>({
       url: params.url,
-      headers: this.formHeaders(params)
+      headers: await this.formHeaders(params)
     });
   }
 
@@ -70,8 +68,8 @@ export class OperationsBase {
     };
   }
 
-  private async formHeaders(params: AuthorizationParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Promise<Dictionary> {
-    const headers: Dictionary = {};
+  private async formHeaders(params: AuthorizationParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Promise<Dictionary<string>> {
+    const headers: Dictionary<string> = {};
     const autorization = await params.authorization();
     headers[Constants.headers.authorization] = `${autorization.scheme} ${autorization.token}`;
     headers[Constants.headers.accept] = `application/vnd.bentley.${this._apiVersion}+json`;
@@ -85,7 +83,7 @@ export class OperationsBase {
     return headers;
   }
 
-  protected formUrlParams(queryParameters: Dictionary | undefined): string | undefined {
+  protected formUrlParams(queryParameters: Dictionary<string | number> | undefined): string | undefined {
     let queryString = "";
     const appendToQueryString = (key: string, value: string | number) => {
       if (!queryString) {
