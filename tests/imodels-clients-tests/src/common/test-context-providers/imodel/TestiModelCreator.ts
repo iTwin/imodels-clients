@@ -45,7 +45,7 @@ export class TestiModelCreator {
 
     // We use this specific user that is able to generate checkpoints
     // for named version creation to mimic production environment.
-    const requestContextForUser2 = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin2FeatureFlagsOn);
+    const requestContextForUser2 = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin2FullyFeatured);
     const imodelScopedRequestParams = {
       imodelsClient: params.imodelsClient,
       requestContext: requestContextForUser2,

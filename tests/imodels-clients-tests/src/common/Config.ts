@@ -29,7 +29,7 @@ export interface TestUserConfigValues {
 
 export interface TestUsersConfigValues {
   admin1: TestUserConfigValues;
-  admin2FeatureFlagsOn: TestUserConfigValues;
+  admin2FullyFeatured: TestUserConfigValues;
 }
 
 export interface ConfigValues {
@@ -75,9 +75,9 @@ export class Config {
           email: process.env.TEST_USERS_ADMIN1_EMAIL!,
           password: process.env.TEST_USERS_ADMIN1_PASSWORD!
         },
-        admin2FeatureFlagsOn: {
-          email: process.env.TEST_USERS_ADMIN2_FF_ON_EMAIL!,
-          password: process.env.TEST_USERS_ADMIN2_FF_ON_PASSWORD!
+        admin2FullyFeatured: {
+          email: process.env.TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL!,
+          password: process.env.TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD!
         }
       }
     };
@@ -101,8 +101,8 @@ export class Config {
     this.validateConfigValue("TEST_USERS_ADMIN1_EMAIL");
     this.validateConfigValue("TEST_USERS_ADMIN1_PASSWORD");
 
-    this.validateConfigValue("TEST_USERS_ADMIN2_FF_ON_EMAIL");
-    this.validateConfigValue("TEST_USERS_ADMIN2_FF_ON_PASSWORD");
+    this.validateConfigValue("TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL");
+    this.validateConfigValue("TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD");
   }
 
   private static validateConfigValue(key: string): void {
