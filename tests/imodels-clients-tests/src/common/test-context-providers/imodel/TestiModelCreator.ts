@@ -141,7 +141,7 @@ export class TestiModelCreator {
       if (checkpoint.state === CheckpointState.Successful && checkpoint._links?.download !== undefined && checkpoint.containerAccessInfo !== null)
         return;
 
-      if (checkpoint.state !== CheckpointState.Scheduled)
+      if (checkpoint.state !== CheckpointState.Scheduled && checkpoint.state !== CheckpointState.Successful)
         throw new TestSetupError(`Checkpoint generation failed with state: ${checkpoint.state}.`);
 
       await sleep(sleepPeriodInMs);
