@@ -4,10 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetsParams, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, TestiModelMetadata, TrackableTestFileHandler, cleanUpiModels, cleanupDirectory, createEmptyiModel, findiModelWithName } from "../common";
-import { assertChangeset } from "../common/AssertionUtils";
-import { FileTransferLog } from "../common/TrackableTestFileHandler";
+import { AcquireBriefcaseParams, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetsParams, RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
+import { Config, Constants, FileTransferLog, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory, iModelMetadata } from "../common";
 
 describe("[Authoring] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
@@ -15,8 +13,8 @@ describe("[Authoring] ChangesetOperations", () => {
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
 
-  let testiModelForWrite: iModel;
-  let testiModelForDownload: iModel;
+  let testiModelForWrite: iModelMetadata;
+  let testiModelForDownload: ReusableiModelMetadata;
 
   beforeEach(() => {
     cleanupDirectory(Constants.TestDownloadDirectoryPath);
@@ -24,7 +22,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext();
+    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {
@@ -33,18 +31,16 @@ describe("[Authoring] ChangesetOperations", () => {
       }
     });
 
-    testiModelForWrite = await createEmptyiModel({
-      imodelsClient,
+    testiModelForWrite = await TestiModelCreator.createEmpty({
       requestContext,
+      imodelsClient,
       projectId,
       imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
     });
-
-    testiModelForDownload = await findiModelWithName({
-      imodelsClient,
+    testiModelForDownload = await ReusableTestiModelProvider.getOrCreate({
       requestContext,
-      projectId,
-      expectediModelname: Config.get().testiModelName
+      imodelsClient,
+      projectId
     });
   });
 
@@ -64,14 +60,14 @@ describe("[Authoring] ChangesetOperations", () => {
     };
     const briefcase = await imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
 
-    const changesetMetadata = TestiModelMetadata.Changesets[0];
+    const changesetMetadata = TestiModelFileProvider.changesets[0];
     const createChangesetParams: CreateChangesetParams = {
       requestContext,
       imodelId: testiModelForWrite.id,
       changesetProperties: {
         briefcaseId: briefcase.briefcaseId,
         id: changesetMetadata.id,
-        changesetFilePath: changesetMetadata.changesetFilePath
+        changesetFilePath: changesetMetadata.filePath
       }
     };
 
@@ -98,25 +94,21 @@ describe("[Authoring] ChangesetOperations", () => {
     const changesets = await imodelsClient.Changesets.download(downloadChangesetsParams);
 
     // Assert
-    expect(changesets.length).to.equal(TestiModelMetadata.Changesets.length);
-    expect(fs.readdirSync(downloadPath).length).to.equal(TestiModelMetadata.Changesets.length);
+    expect(changesets.length).to.equal(TestiModelFileProvider.changesets.length);
+    expect(fs.readdirSync(downloadPath).length).to.equal(TestiModelFileProvider.changesets.length);
 
     for (const changeset of changesets) {
-      const changesetMetadata = TestiModelMetadata.Changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
-      assertChangeset({
+      const changesetMetadata = TestiModelFileProvider.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
+      assertDownloadedChangeset({
         actualChangeset: changeset,
         expectedChangesetProperties: {
           id: changesetMetadata.id,
-          briefcaseId: TestiModelMetadata.Briefcase.id,
+          briefcaseId: testiModelForDownload.briefcase.id,
           parentId: changesetMetadata.parentId,
           description: changesetMetadata.description,
-          containingChanges: changesetMetadata.containingChanges,
-          changesetFilePath: changesetMetadata.changesetFilePath
+          containingChanges: changesetMetadata.containingChanges
         }
       });
-
-      expect(fs.existsSync(changeset.filePath)).to.equal(true);
-      expect(fs.statSync(changeset.filePath).size).to.equal(fs.statSync(changesetMetadata.changesetFilePath).size);
     }
   });
 
@@ -143,21 +135,17 @@ describe("[Authoring] ChangesetOperations", () => {
     expect(changesets.map((changeset: Changeset) => changeset.index)).to.have.members([6, 7, 8, 9, 10]);
 
     for (const changeset of changesets) {
-      const changesetMetadata = TestiModelMetadata.Changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
-      assertChangeset({
+      const changesetMetadata = TestiModelFileProvider.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
+      assertDownloadedChangeset({
         actualChangeset: changeset,
         expectedChangesetProperties: {
           id: changesetMetadata.id,
-          briefcaseId: TestiModelMetadata.Briefcase.id,
+          briefcaseId: testiModelForDownload.briefcase.id,
           parentId: changesetMetadata.parentId,
           description: changesetMetadata.description,
-          containingChanges: changesetMetadata.containingChanges,
-          changesetFilePath: changesetMetadata.changesetFilePath
+          containingChanges: changesetMetadata.containingChanges
         }
       });
-
-      expect(fs.existsSync(changeset.filePath)).to.equal(true);
-      expect(fs.statSync(changeset.filePath).size).to.equal(fs.statSync(changesetMetadata.changesetFilePath).size);
     }
   });
 

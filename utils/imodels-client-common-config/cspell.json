@@ -5,7 +5,8 @@
     "imodel",
     "itwin",
     "apim",
-    "changesets"
+    "changesets",
+    "namedversions"
   ],
   "ignoreRegExpList": [
     "/imodel.*/i"
