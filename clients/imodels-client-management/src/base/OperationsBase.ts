@@ -5,7 +5,7 @@
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
 import { AuthorizationParam, CollectionResponse, EntityCollectionPage, PreferReturn } from "./interfaces/CommonInterfaces";
-import { RecursiveRequired, Dictionary } from "./interfaces/UtilityTypes";
+import { Dictionary, RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
 type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn };
@@ -70,8 +70,8 @@ export class OperationsBase {
 
   private async formHeaders(params: AuthorizationParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Promise<Dictionary<string>> {
     const headers: Dictionary<string> = {};
-    const autorizationInfo = await params.authorization();
-    headers[Constants.headers.authorization] = `${autorizationInfo.scheme} ${autorizationInfo.token}`;
+    const authorizationInfo = await params.authorization();
+    headers[Constants.headers.authorization] = `${authorizationInfo.scheme} ${authorizationInfo.token}`;
     headers[Constants.headers.accept] = `application/vnd.bentley.${this._apiVersion}+json`;
 
     if (params.preferReturn)

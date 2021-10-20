@@ -20,10 +20,10 @@ interface ProjectResponse {
 
 export class ProjectsClient {
   public async getOrCreateProject(params: AuthorizationParam & { projectName: string }): Promise<string> {
-    const autorizationInfo = await params.authorization();
+    const authorizationInfo = await params.authorization();
     const requestConfig = {
       headers: {
-        Authorization: `${autorizationInfo.scheme} ${autorizationInfo.token}`
+        Authorization: `${authorizationInfo.scheme} ${authorizationInfo.token}`
       }
     };
 
