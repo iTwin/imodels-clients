@@ -88,40 +88,37 @@ export class OperationsBase {
     return headers;
   }
 
-  protected formUrlParams(queryParameters: UrlParameterDictionary | undefined): string | undefined {
+  protected formQueryString(urlParameters: UrlParameterDictionary | undefined): string | undefined {
     let queryString = "";
     const appendToQueryString = (key: string, value: string) => {
-      if (!queryString) {
-        queryString = `?${key}=${value}`;
-      } else {
-        queryString += `&${key}=${value}`;
-      }
+      const separator = queryString.length === 0 ? '?' : '&';
+      queryString += `${separator}${key}=${value}`;
     };
 
-    for (const key in queryParameters) {
-      const queryParameterValue = queryParameters[key];
-      if (!queryParameterValue)
+    for (const urlParameterKey in urlParameters) {
+      const urlParameterValue = urlParameters[urlParameterKey];
+      if (!urlParameterValue)
         continue;
 
-      appendToQueryString(key, this.stringify(queryParameterValue));
+      appendToQueryString(urlParameterKey, this.stringify(urlParameterValue));
     }
 
     return queryString;
   }
 
-  private stringify(param: UrlParameterValue): string {
-    if (this.isOrderByParam(param)) {
-      let result: string = param.property;
-      if (param.operator)
-        result += ` ${param.operator}`;
+  private stringify(urlParameterValue: UrlParameterValue): string {
+    if (this.isOrderBy(urlParameterValue)) {
+      let result: string = urlParameterValue.property;
+      if (urlParameterValue.operator)
+        result += ` ${urlParameterValue.operator}`;
 
       return result;
     }
 
-    return param.toString();
+    return urlParameterValue.toString();
   }
 
-  private isOrderByParam(param: UrlParameterValue): param is OrderByForAnyEntity {
-    return (param as OrderByForAnyEntity).property !== undefined;
+  private isOrderBy(parameterValue: UrlParameterValue): parameterValue is OrderByForAnyEntity {
+    return (parameterValue as OrderByForAnyEntity).property !== undefined;
   }
 }

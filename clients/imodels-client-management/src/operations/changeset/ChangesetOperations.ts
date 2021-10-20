@@ -10,7 +10,7 @@ export class ChangesetOperations extends OperationsBase {
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
     return getCollectionIterator(() => this.getEntityCollectionPage<MinimalChangeset>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formUrlParams({ ...params.urlParams })}`,
+      url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse<MinimalChangeset>).changesets
     }));
@@ -23,7 +23,7 @@ export class ChangesetOperations extends OperationsBase {
   protected getRepresentationListInPages(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
     return getCollectionPagesIterator(() => this.getEntityCollectionPage<Changeset>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formUrlParams({ ...params.urlParams })}`,
+      url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse<Changeset>).changesets
     }));

@@ -9,7 +9,7 @@ export class BriefcaseOperations extends OperationsBase {
   public getMinimalList(params: GetBriefcaseListParams): AsyncIterableIterator<MinimalBriefcase> {
     return getCollectionIterator(() => this.getEntityCollectionPage<MinimalBriefcase>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/briefcases${this.formUrlParams({ ...params.urlParams })}`,
+      url: `${this._apiBaseUrl}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as BriefcasesResponse<MinimalBriefcase>).briefcases
     }));
@@ -18,7 +18,7 @@ export class BriefcaseOperations extends OperationsBase {
   public getRepresentationList(params: GetBriefcaseListParams): AsyncIterableIterator<Briefcase> {
     return getCollectionIterator(() => this.getEntityCollectionPage<Briefcase>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/briefcases${this.formUrlParams({ ...params.urlParams })}`,
+      url: `${this._apiBaseUrl}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as BriefcasesResponse<Briefcase>).briefcases
     }));
