@@ -3,23 +3,23 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { Briefcase, GetBriefcaseByIdParams, GetBriefcaseListParams, RequestContext, iModelsClient } from "@itwin/imodels-client-management";
+import { Briefcase, GetBriefcaseByIdParams, GetBriefcaseListParams, Authorization, iModelsClient } from "@itwin/imodels-client-management";
 import { Config, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, assertBriefcase, assertCollection } from "../common";
 
 
 describe("[Management] BriefcaseOperations", () => {
   let imodelsClient: iModelsClient;
-  let requestContext: RequestContext;
+  let authorization: Authorization;
   let projectId: string;
   let testiModel: ReusableiModelMetadata;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
+    authorization = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModel = await ReusableTestiModelProvider.getOrCreate({
       imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
-      requestContext,
+      authorization,
       projectId
     });
   });
@@ -37,7 +37,7 @@ describe("[Management] BriefcaseOperations", () => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getBriefcaseListParams: GetBriefcaseListParams = {
-        requestContext,
+        authorization,
         imodelId: testiModel.id,
         urlParams: {
           $top: 5
@@ -58,7 +58,7 @@ describe("[Management] BriefcaseOperations", () => {
   it("should get briefcase by id", async () => {
     // Arrange
     const getBriefcaseByIdParams: GetBriefcaseByIdParams = {
-      requestContext,
+      authorization,
       imodelId: testiModel.id,
       briefcaseId: testiModel.briefcase.id
     };

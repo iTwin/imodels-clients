@@ -8,7 +8,7 @@ import { CreateNamedVersionParams, GetNamedVersionByIdParams, GetNamedVersionLis
 export class NamedVersionOperations extends OperationsBase {
   public getMinimalList(params: GetNamedVersionListParams): AsyncIterableIterator<MinimalNamedVersion> {
     return getCollectionIterator(() => this.getEntityCollectionPage<MinimalNamedVersion>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<MinimalNamedVersion>).namedVersions
@@ -17,7 +17,7 @@ export class NamedVersionOperations extends OperationsBase {
 
   public getRepresentationList(params: GetNamedVersionListParams): AsyncIterableIterator<NamedVersion> {
     return getCollectionIterator(() => this.getEntityCollectionPage<NamedVersion>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formUrlParams({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<NamedVersion>).namedVersions
@@ -26,7 +26,7 @@ export class NamedVersionOperations extends OperationsBase {
 
   public async getById(params: GetNamedVersionByIdParams): Promise<NamedVersion> {
     const response = await this.sendGetRequest<NamedVersionResponse>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/namedversions/${params.namedVersionId}`
     });
     return response.namedVersion;
@@ -34,7 +34,7 @@ export class NamedVersionOperations extends OperationsBase {
 
   public async create(params: CreateNamedVersionParams): Promise<NamedVersion> {
     const response = await this.sendPostRequest<NamedVersionResponse>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/namedversions`,
       body: params.namedVersionProperties
     });
@@ -43,7 +43,7 @@ export class NamedVersionOperations extends OperationsBase {
 
   public async update(params: UpdateNamedVersionParams): Promise<NamedVersion> {
     const response = await this.sendPatchRequest<NamedVersionResponse>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/namedversions/${params.namedVersionId}`,
       body: params.namedVersionProperties
     });

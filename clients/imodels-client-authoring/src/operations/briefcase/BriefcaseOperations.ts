@@ -8,7 +8,7 @@ import { AcquireBriefcaseParams, ReleaseBriefcaseParams } from "./BriefcaseOpera
 export class BriefcaseOperations extends ManagementBriefcaseOperations {
   public async acquire(params: AcquireBriefcaseParams): Promise<Briefcase> {
     const briefcaseAcquireResponse = await this.sendPostRequest<BriefcaseResponse>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/briefcases`,
       body: params.briefcaseProperties
     });
@@ -17,7 +17,7 @@ export class BriefcaseOperations extends ManagementBriefcaseOperations {
 
   public release(params: ReleaseBriefcaseParams): Promise<void> {
     return this.sendDeleteRequest({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/briefcases/${params.briefcaseId}`
     });
   }

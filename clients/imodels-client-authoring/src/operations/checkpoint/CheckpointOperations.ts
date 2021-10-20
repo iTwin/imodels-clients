@@ -30,7 +30,7 @@ export class CheckpointOperations extends OperationsBase {
 
   private async getByParentEntity(params: iModelScopedOperationParams & { parentEntityUrlPath: string }): Promise<Checkpoint> {
     const response = await this.sendGetRequest<CheckpointResponse>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/${params.parentEntityUrlPath}/checkpoint`
     });
     return response.checkpoint;

@@ -4,16 +4,16 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
-import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextParams } from "./interfaces/CommonInterfaces";
+import { AuthorizationParam, CollectionResponse, EntityCollectionPage, PreferReturn } from "./interfaces/CommonInterfaces";
 import { RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
 type Dictionary = { [key: string]: string | number; };
 
-type SendGetRequestParams = RequestContextParams & { url: string, preferReturn?: PreferReturn };
-type SendPostRequestParams = RequestContextParams & { url: string, body: unknown };
+type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn };
+type SendPostRequestParams = AuthorizationParam & { url: string, body: unknown };
 type SendPatchRequestParams = SendPostRequestParams;
-type SendDeleteRequestParams = RequestContextParams & { url: string };
+type SendDeleteRequestParams = AuthorizationParam & { url: string };
 
 export class OperationsBase {
   protected _restClient: RestClient;
@@ -56,7 +56,7 @@ export class OperationsBase {
     });
   }
 
-  protected async getEntityCollectionPage<TEntity>(params: RequestContextParams & {
+  protected async getEntityCollectionPage<TEntity>(params: AuthorizationParam & {
     url: string,
     preferReturn: PreferReturn,
     entityCollectionAccessor: (response: unknown) => TEntity[]
@@ -70,9 +70,9 @@ export class OperationsBase {
     };
   }
 
-  private formHeaders(params: RequestContextParams & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
+  private formHeaders(params: AuthorizationParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
     const headers: Dictionary = {};
-    headers[Constants.headers.authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
+    headers[Constants.headers.authorization] = `${params.authorization.scheme} ${params.authorization.token}`;
     headers[Constants.headers.accept] = `application/vnd.bentley.${this._apiVersion}+json`;
 
     if (params.preferReturn)

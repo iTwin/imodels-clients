@@ -2,18 +2,18 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CreateiModelFromBaselineParams, RequestContext, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
+import { CreateiModelFromBaselineParams, Authorization, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
 import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, TestiModelGroup, assertiModel, cleanUpiModels } from "../common";
 
 describe("[Authoring] iModelOperations", () => {
   let imodelsClient: iModelsClient;
-  let requestContext: RequestContext;
+  let authorization: Authorization;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
+    authorization = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {
@@ -24,13 +24,13 @@ describe("[Authoring] iModelOperations", () => {
   });
 
   after(async () => {
-    await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
+    await cleanUpiModels({ imodelsClient, authorization, projectId, testiModelGroup });
   });
 
   it("should create an iModel from baseline", async () => {
     // Arrange
     const createiModelParams: CreateiModelFromBaselineParams = {
-      requestContext,
+      authorization,
       imodelProperties: {
         projectId,
         name: testiModelGroup.getPrefixediModelName("Sample iModel from baseline")

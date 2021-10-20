@@ -19,7 +19,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
   public async create(params: CreateChangesetParams): Promise<Changeset> {
     const { changesetFilePath, ...changesetProperties } = params.changesetProperties;
     const changesetCreateResponse = await this.sendPostRequest<ChangesetResponse>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/changesets`,
       body: {
         ...changesetProperties,
@@ -32,7 +32,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
 
     const completeUrl = changesetCreateResponse.changeset._links.complete.href;
     const changesetUpdateResponse = await this.sendPatchRequest<ChangesetResponse>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: completeUrl,
       body: {
         state: ChangesetState.FileUploaded,
@@ -62,7 +62,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
       const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
       for (const changeset of changesetsWithFilePath)
         queue.push(() => this.downloadChangesetWithRetry({
-          requestContext: params.requestContext,
+          authorization: params.authorization,
           imodelId: params.imodelId,
           changeset
         }));
@@ -81,7 +81,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
       await this._fileHandler.downloadFile(params.changeset._links.download.href, targetFilePath);
     } catch (error) {
       const changeset = await this.getById({
-        requestContext: params.requestContext,
+        authorization: params.authorization,
         imodelId: params.imodelId,
         changesetId: params.changeset.id
       });

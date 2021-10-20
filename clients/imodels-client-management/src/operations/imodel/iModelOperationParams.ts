@@ -2,13 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, Extent, RequestContextParams, iModelScopedOperationParams } from "../../base";
+import { CollectionRequestParams, Extent, AuthorizationParam, iModelScopedOperationParams } from "../../base";
 
 export interface GetiModelListUrlParams extends CollectionRequestParams {
   projectId: string;
 }
 
-export interface GetiModelListParams extends RequestContextParams {
+export interface GetiModelListParams extends AuthorizationParam {
   urlParams: GetiModelListUrlParams;
 }
 
@@ -21,7 +21,7 @@ export interface iModelProperties {
   extent?: Extent;
 }
 
-export interface CreateEmptyiModelParams extends RequestContextParams {
+export interface CreateEmptyiModelParams extends AuthorizationParam {
   imodelProperties: iModelProperties;
 }
 

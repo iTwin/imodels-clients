@@ -20,11 +20,9 @@ export class TestProjectProvider {
 
   private static async initializeAndGetProjectId(): Promise<string> {
     TestProjectProvider._projectId = await TestProjectProvider._projectsClient.getOrCreateProject({
-      requestContext: {
-        authorization: {
-          scheme: "Bearer",
-          token: await this._projectsApiAuthClient.getAccessToken(Config.get().testUsers.admin1)
-        }
+      authorization: {
+        scheme: "Bearer",
+        token: await this._projectsApiAuthClient.getAccessToken(Config.get().testUsers.admin1)
       },
       projectName: Config.get().testProjectName
     });

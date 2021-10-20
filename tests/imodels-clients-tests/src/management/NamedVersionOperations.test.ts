@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, RequestContext, UpdateNamedVersionParams, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-management";
+import { CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, Authorization, UpdateNamedVersionParams, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-management";
 import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, assertCollection, assertNamedVersion, cleanUpiModels, iModelMetadata } from "../common";
 
 describe("[Management] NamedVersionOperations", () => {
   let imodelsClient: iModelsClient;
-  let requestContext: RequestContext;
+  let authorization: Authorization;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
   let testiModel: iModelMetadata;
@@ -22,7 +22,7 @@ describe("[Management] NamedVersionOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
+    authorization = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {
@@ -33,15 +33,15 @@ describe("[Management] NamedVersionOperations", () => {
 
     testiModel = await TestiModelCreator.createEmptyAndUploadChangesets({
       imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
-      requestContext,
+      authorization,
       projectId,
       imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
     });
 
     for (let i = 0; i < namedVersionCountCreatedInSetup; i++) {
-      const changesetIndex = await getChangesetIndexForNewNamedVersion({ requestContext, imodelId: testiModel.id });
+      const changesetIndex = await getChangesetIndexForNewNamedVersion({ authorization, imodelId: testiModel.id });
       namedVersionsCreatedInSetup.push(await imodelsClient.NamedVersions.create({
-        requestContext,
+        authorization,
         imodelId: testiModel.id,
         namedVersionProperties: {
           name: `Milestone ${changesetIndex}`,
@@ -53,7 +53,7 @@ describe("[Management] NamedVersionOperations", () => {
   });
 
   after(async () => {
-    await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
+    await cleanUpiModels({ imodelsClient, authorization, projectId, testiModelGroup });
   });
 
   [
@@ -69,7 +69,7 @@ describe("[Management] NamedVersionOperations", () => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getNamedVersionListParams: GetNamedVersionListParams = {
-        requestContext,
+        authorization,
         imodelId: testiModel.id,
         urlParams: {
           $top: 2
@@ -90,7 +90,7 @@ describe("[Management] NamedVersionOperations", () => {
   it("should create named version on baseline", async () => {
     // Arrange
     const createNamedVersionParams: CreateNamedVersionParams = {
-      requestContext,
+      authorization,
       imodelId: testiModel.id,
       namedVersionProperties: {
         name: "Named Version on baseline",
@@ -110,9 +110,9 @@ describe("[Management] NamedVersionOperations", () => {
 
   it("should create named version on a specific changeset", async () => {
     // Arrange
-    const changesetIndex = await getChangesetIndexForNewNamedVersion({ requestContext, imodelId: testiModel.id });
+    const changesetIndex = await getChangesetIndexForNewNamedVersion({ authorization, imodelId: testiModel.id });
     const createNamedVersionParams: CreateNamedVersionParams = {
-      requestContext,
+      authorization,
       imodelId: testiModel.id,
       namedVersionProperties: {
         name: `Named Version ${changesetIndex}`,
@@ -136,7 +136,7 @@ describe("[Management] NamedVersionOperations", () => {
     const namedVersionToUpdate = namedVersionsCreatedInSetup[updatedNamedVersions++];
     const newNamedVersionName = "Some other name";
     const updateNamedVersionParams: UpdateNamedVersionParams = {
-      requestContext,
+      authorization,
       imodelId: testiModel.id,
       namedVersionId: namedVersionToUpdate.id,
       namedVersionProperties: {
@@ -158,7 +158,7 @@ describe("[Management] NamedVersionOperations", () => {
     const namedVersionToUpdate = namedVersionsCreatedInSetup[updatedNamedVersions++];
     const newNamedVersionDescription = "Some other description";
     const updateNamedVersionParams: UpdateNamedVersionParams = {
-      requestContext,
+      authorization,
       imodelId: testiModel.id,
       namedVersionId: namedVersionToUpdate.id,
       namedVersionProperties: {
@@ -180,7 +180,7 @@ describe("[Management] NamedVersionOperations", () => {
     const namedVersionToUpdate = namedVersionsCreatedInSetup[updatedNamedVersions++];
     const newNamedVersionState = NamedVersionState.Hidden;
     const updateNamedVersionParams: UpdateNamedVersionParams = {
-      requestContext,
+      authorization,
       imodelId: testiModel.id,
       namedVersionId: namedVersionToUpdate.id,
       namedVersionProperties: {

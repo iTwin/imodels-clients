@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
+import { Authorization, iModelsClient } from "@itwin/imodels-client-authoring";
 
 export interface BriefcaseMetadata {
   id: number;
@@ -28,7 +28,7 @@ export interface ReusableiModelMetadata extends iModelMetadata {
 
 export interface TestiModelSetupContext {
   imodelsClient: iModelsClient;
-  requestContext: RequestContext;
+  authorization: Authorization;
 }
 
 export interface iModelIdentificationByNameParams {
