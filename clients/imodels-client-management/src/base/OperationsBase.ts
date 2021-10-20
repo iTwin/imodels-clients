@@ -70,8 +70,8 @@ export class OperationsBase {
 
   private async formHeaders(params: AuthorizationParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Promise<Dictionary<string>> {
     const headers: Dictionary<string> = {};
-    const autorization = await params.authorization();
-    headers[Constants.headers.authorization] = `${autorization.scheme} ${autorization.token}`;
+    const autorizationInfo = await params.authorization();
+    headers[Constants.headers.authorization] = `${autorizationInfo.scheme} ${autorizationInfo.token}`;
     headers[Constants.headers.accept] = `application/vnd.bentley.${this._apiVersion}+json`;
 
     if (params.preferReturn)
