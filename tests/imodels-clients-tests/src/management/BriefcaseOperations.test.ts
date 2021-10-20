@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { Briefcase, GetBriefcaseByIdParams, GetBriefcaseListParams, AuthorizationCallback, iModelsClient } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Briefcase, GetBriefcaseByIdParams, GetBriefcaseListParams, iModelsClient } from "@itwin/imodels-client-management";
 import { Config, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, assertBriefcase, assertCollection } from "../common";
 
 

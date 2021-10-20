@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { Changeset, GetChangesetByIdParams, GetChangesetListParams, AuthorizationCallback, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Changeset, GetChangesetByIdParams, GetChangesetListParams, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
 import { Config, NamedVersionMetadata, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, assertChangeset, assertCollection } from "../common";
 
 describe("[Management] ChangesetOperations", () => {

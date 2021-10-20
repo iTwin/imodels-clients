@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelOperations as ManagementiModelOperations, RecursiveRequired, iModel, iModelsErrorCode, iModelsErrorImpl, AuthorizationParam } from "@itwin/imodels-client-management";
+import { AuthorizationParam, iModelOperations as ManagementiModelOperations, RecursiveRequired, iModel, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
 import { FileHandler, iModelCreateResponse } from "../../base";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
 import { Constants } from "../../Constants";
