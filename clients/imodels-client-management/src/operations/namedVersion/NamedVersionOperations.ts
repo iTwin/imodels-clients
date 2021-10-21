@@ -9,7 +9,7 @@ export class NamedVersionOperations extends OperationsBase {
   public getMinimalList(params: GetNamedVersionListParams): AsyncIterableIterator<MinimalNamedVersion> {
     return getCollectionIterator(() => this.getEntityCollectionPage<MinimalNamedVersion>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formUrlParams({ ...params.urlParams })}`,
+      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<MinimalNamedVersion>).namedVersions
     }));
@@ -18,7 +18,7 @@ export class NamedVersionOperations extends OperationsBase {
   public getRepresentationList(params: GetNamedVersionListParams): AsyncIterableIterator<NamedVersion> {
     return getCollectionIterator(() => this.getEntityCollectionPage<NamedVersion>({
       requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formUrlParams({ ...params.urlParams })}`,
+      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<NamedVersion>).namedVersions
     }));
