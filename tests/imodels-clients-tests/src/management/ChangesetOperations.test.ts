@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, Changeset, GetChangesetByIdParams, GetChangesetListParams, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
-import { Config, NamedVersionMetadata, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, assertChangeset, assertCollection } from "../common";
+import { Changeset, ChangesetOrderByProperty, GetChangesetByIdParams, GetChangesetListParams, OrderByOperator, AuthorizationCallback, iModelsClient, iModelsClientOptions } from "@itwin/imodels-client-management";
+import { Config, NamedVersionMetadata, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, assertChangeset, assertCollection, toArray } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
   let imodelsClientOptions: iModelsClientOptions;
@@ -47,13 +47,56 @@ describe("[Management] ChangesetOperations", () => {
       };
 
       // Act
-      const changesets = await testCase.functionUnderTest(getChangesetListParams);
+      const changesets = testCase.functionUnderTest(getChangesetListParams);
 
       // Assert
-      assertCollection({
+      await assertCollection({
         asyncIterable: changesets,
         isEntityCountCorrect: count => count === TestiModelFileProvider.changesets.length
       });
+    });
+
+    it(`should return items in ascending order when querying ${testCase.label} collection`, async () => {
+      // Arrange
+      const getChangesetListParams: GetChangesetListParams = {
+        authorization,
+        imodelId: testiModel.id,
+        urlParams: {
+          $orderBy: {
+            property: ChangesetOrderByProperty.Index
+          }
+        }
+      };
+
+      // Act
+      const changesets = testCase.functionUnderTest(getChangesetListParams);
+
+      // Assert
+      const changesetIndexes = (await toArray(changesets)).map(changeset => changeset.index);
+      for (let i = 0; i < changesetIndexes.length - 1; i++)
+        expect(changesetIndexes[i]).to.be.lessThan(changesetIndexes[i + 1]);
+    });
+
+    it(`should return items in descending order when querying ${testCase.label} collection`, async () => {
+      // Arrange
+      const getChangesetListParams: GetChangesetListParams = {
+        authorization,
+        imodelId: testiModel.id,
+        urlParams: {
+          $orderBy: {
+            property: ChangesetOrderByProperty.Index,
+            operator: OrderByOperator.Descending
+          }
+        }
+      };
+
+      // Act
+      const changesets = testCase.functionUnderTest(getChangesetListParams);
+
+      // Assert
+      const changesetIndexes = (await toArray(changesets)).map(changeset => changeset.index);
+      for (let i = 0; i < changesetIndexes.length - 1; i++)
+        expect(changesetIndexes[i]).to.be.greaterThan(changesetIndexes[i + 1]);
     });
 
     it(`should return items that belong to specified range when querying ${testCase.label} collection`, async () => {
@@ -68,13 +111,36 @@ describe("[Management] ChangesetOperations", () => {
       };
 
       // Act
-      const changesets = await testCase.functionUnderTest(getChangesetListParams);
+      const changesets = testCase.functionUnderTest(getChangesetListParams);
 
       // Assert
-      assertCollection({
+      await assertCollection({
         asyncIterable: changesets,
         isEntityCountCorrect: count => count === (getChangesetListParams.urlParams!.lastIndex! - getChangesetListParams.urlParams!.afterIndex!)
       });
+    });
+
+    it(`should allow to combine url parameters when querying ${testCase.label} collection`, async () => {
+      // Arrange
+      const getChangesetListParams: GetChangesetListParams = {
+        authorization,
+        imodelId: testiModel.id,
+        urlParams: {
+          afterIndex: 5,
+          lastIndex: 10,
+          $orderBy: {
+            property: ChangesetOrderByProperty.Index,
+            operator: OrderByOperator.Descending
+          }
+        }
+      };
+
+      // Act
+      const changesets = testCase.functionUnderTest(getChangesetListParams);
+
+      // Assert
+      const changesetIndexes = (await toArray(changesets)).map(changeset => changeset.index);
+      expect(changesetIndexes).to.deep.equal([10, 9, 8, 7, 6]);
     });
   });
 

@@ -21,19 +21,20 @@ export class iModelOperations extends ManagementiModelOperations {
   }
 
   public async createFromBaseline(params: CreateiModelFromBaselineParams): Promise<iModel> {
+    const { filePath: imodelFilePath, ...imodelMetadataProperties } = params.imodelProperties;
     const imodelCreateResponse = await this.sendPostRequest<iModelCreateResponse>({
       authorization: params.authorization,
       url: this._apiBaseUrl,
       body: {
-        ...params.imodelProperties,
+        ...imodelMetadataProperties,
         baselineFile: {
-          size: this._fileHandler.getFileSize(params.baselineFileProperties.path)
+          size: this._fileHandler.getFileSize(imodelFilePath)
         }
       }
     });
 
     const uploadUrl = imodelCreateResponse.iModel._links.upload.href;
-    await this._fileHandler.uploadFile(uploadUrl, params.baselineFileProperties.path);
+    await this._fileHandler.uploadFile(uploadUrl, imodelFilePath);
 
     const completeUrl = imodelCreateResponse.iModel._links.complete.href;
     await this.sendPostRequest({

@@ -4,9 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
-import { AuthorizationParam, CollectionResponse, EntityCollectionPage, PreferReturn } from "./interfaces/CommonInterfaces";
+import { CollectionResponse, EntityCollectionPage, OrderBy, PreferReturn, AuthorizationParam } from "./interfaces/CommonInterfaces";
 import { Dictionary, RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
+
+type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
+type UrlParameterValue = string | number | OrderByForAnyEntity;
+type UrlParameterDictionary = Dictionary<UrlParameterValue>;
 
 type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn };
 type SendPostRequestParams = AuthorizationParam & { url: string, body: unknown };
@@ -83,24 +87,37 @@ export class OperationsBase {
     return headers;
   }
 
-  protected formUrlParams(queryParameters: Dictionary<string | number> | undefined): string | undefined {
+  protected formQueryString(urlParameters: UrlParameterDictionary | undefined): string {
     let queryString = "";
-    const appendToQueryString = (key: string, value: string | number) => {
-      if (!queryString) {
-        queryString = `?${key}=${value}`;
-      } else {
-        queryString += `&${key}=${value}`;
-      }
-    };
-
-    for (const key in queryParameters) {
-      const queryParameterValue = queryParameters[key];
-      if (!queryParameterValue)
+    for (const urlParameterKey in urlParameters) {
+      const urlParameterValue = urlParameters[urlParameterKey];
+      if (!urlParameterValue)
         continue;
 
-      appendToQueryString(key, queryParameterValue);
+      queryString = this.appendToQueryString(queryString, urlParameterKey, urlParameterValue);
     }
 
     return queryString;
+  }
+
+  private appendToQueryString(existingQueryString: string, parameterKey: string, parameterValue: UrlParameterValue): string {
+    const separator = existingQueryString.length === 0 ? "?" : "&";
+    return existingQueryString + `${separator}${parameterKey}=${this.stringify(parameterValue)}`;
+  }
+
+  private stringify(urlParameterValue: UrlParameterValue): string {
+    if (this.isOrderBy(urlParameterValue)) {
+      let result: string = urlParameterValue.property;
+      if (urlParameterValue.operator)
+        result += ` ${urlParameterValue.operator}`;
+
+      return result;
+    }
+
+    return urlParameterValue.toString();
+  }
+
+  private isOrderBy(parameterValue: UrlParameterValue): parameterValue is OrderByForAnyEntity {
+    return (parameterValue as OrderByForAnyEntity).property !== undefined;
   }
 }

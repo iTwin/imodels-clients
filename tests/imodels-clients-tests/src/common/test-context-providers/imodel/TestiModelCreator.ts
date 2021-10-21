@@ -90,7 +90,7 @@ export class TestiModelCreator {
           parentId: i == 0
             ? undefined
             : TestiModelFileProvider.changesets[i - 1].id,
-          changesetFilePath: TestiModelFileProvider.changesets[i].filePath
+          filePath: TestiModelFileProvider.changesets[i].filePath
         }
       });
       changesets.push(createdChangeset);

@@ -9,7 +9,7 @@ export class iModelOperations extends OperationsBase {
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
     return getCollectionIterator(() => this.getEntityCollectionPage<MinimaliModel>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}${this.formUrlParams({ ...params.urlParams })}`,
+      url: `${this._apiBaseUrl}${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as iModelsResponse<MinimaliModel>).iModels
     }));
@@ -18,7 +18,7 @@ export class iModelOperations extends OperationsBase {
   public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
     return getCollectionIterator(() => this.getEntityCollectionPage<iModel>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}${this.formUrlParams({ ...params.urlParams })}`,
+      url: `${this._apiBaseUrl}${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as iModelsResponse<iModel>).iModels
     }));
