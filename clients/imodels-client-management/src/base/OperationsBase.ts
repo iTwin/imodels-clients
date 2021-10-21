@@ -88,22 +88,22 @@ export class OperationsBase {
     return headers;
   }
 
-  protected formQueryString(urlParameters: UrlParameterDictionary | undefined): string | undefined {
+  protected formQueryString(urlParameters: UrlParameterDictionary | undefined): string {
     let queryString = "";
-    const appendToQueryString = (key: string, value: string) => {
-      const separator = queryString.length === 0 ? "?" : "&";
-      queryString += `${separator}${key}=${value}`;
-    };
-
     for (const urlParameterKey in urlParameters) {
       const urlParameterValue = urlParameters[urlParameterKey];
       if (!urlParameterValue)
         continue;
 
-      appendToQueryString(urlParameterKey, this.stringify(urlParameterValue));
+      queryString = this.appendToQueryString(queryString, urlParameterKey, urlParameterValue);
     }
 
     return queryString;
+  }
+
+  private appendToQueryString(existingQueryString: string, parameterKey: string, parameterValue: UrlParameterValue): string {
+    const separator = existingQueryString.length === 0 ? "?" : "&";
+    return existingQueryString + `${separator}${parameterKey}=${this.stringify(parameterValue)}`;
   }
 
   private stringify(urlParameterValue: UrlParameterValue): string {
