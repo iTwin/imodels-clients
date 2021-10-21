@@ -38,7 +38,7 @@ export interface MinimalChangeset {
   displayName: string;
   description: string;
   index: number;
-  parentId?: string;
+  parentId: string;
   pushDateTime: Date;
   state: ChangesetState;
   containingChanges: ContainingChanges;
@@ -49,13 +49,13 @@ export interface MinimalChangeset {
 export interface ChangesetLinks {
   upload: Link;
   complete: Link;
-  namedVersion?: Link;
-  currentOrPrecedingCheckpoint?: Link;
+  namedVersion: Link | null;
+  currentOrPrecedingCheckpoint: Link | null;
 }
 
 export interface Changeset extends MinimalChangeset {
-  application?: Application;
-  synchronizationInfo?: SynchronizationInfo;
+  application: Application | null;
+  synchronizationInfo: SynchronizationInfo | null;
   _links: ChangesetLinks;
 }
 

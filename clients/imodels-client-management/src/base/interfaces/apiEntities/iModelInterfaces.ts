@@ -26,11 +26,11 @@ export interface MinimaliModel {
 
 export interface iModel extends MinimaliModel {
   name: string;
-  description?: string;
+  description: string | null;
   state: iModelState;
   createdDateTime: Date;
   projectId: string;
-  extent?: Extent;
+  extent: Extent | null;
 }
 
 export interface iModelResponse {
