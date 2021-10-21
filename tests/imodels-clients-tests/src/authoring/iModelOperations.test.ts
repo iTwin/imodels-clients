@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AuthorizationCallback, CreateiModelFromBaselineParams, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, TestiModelGroup, assertiModel, cleanUpiModels } from "../common";
+import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, TestiModelGroup, assertiModel, cleanUpiModels } from "../common";
 
 describe("[Authoring] iModelOperations", () => {
   let imodelsClient: iModelsClient;
@@ -13,7 +13,7 @@ describe("[Authoring] iModelOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    authorization = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
+    authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {

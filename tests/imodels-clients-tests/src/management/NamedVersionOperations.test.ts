@@ -5,7 +5,7 @@
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { AuthorizationCallback, CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, UpdateNamedVersionParams, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-management";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, assertCollection, assertNamedVersion, cleanUpiModels, iModelMetadata } from "../common";
+import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, assertCollection, assertNamedVersion, cleanUpiModels, iModelMetadata } from "../common";
 
 describe("[Management] NamedVersionOperations", () => {
   let imodelsClient: iModelsClient;
@@ -22,7 +22,7 @@ describe("[Management] NamedVersionOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    authorization = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
+    authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {

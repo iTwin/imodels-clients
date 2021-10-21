@@ -5,7 +5,7 @@
 import { Changeset, CheckpointState } from "@itwin/imodels-client-authoring";
 import { TestSetupError, sleep } from "../../CommonTestUtils";
 import { Config } from "../../Config";
-import { TestAuthenticationProvider } from "../auth/TestAuthenticationProvider";
+import { TestAuthorizationProvider } from "../auth/TestAuthenticationProvider";
 import { TestiModelFileProvider } from "./TestiModelFileProvider";
 import { BriefcaseMetadata, NamedVersionMetadata, ReusableiModelMetadata, TestiModelSetupContext, iModelIdParam, iModelIdentificationByNameParams, iModelMetadata } from "./TestiModelInterfaces";
 
@@ -45,7 +45,7 @@ export class TestiModelCreator {
 
     // We use this specific user that is able to generate checkpoints
     // for named version creation to mimic production environment.
-    const authorizationForUser2 = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin2FullyFeatured);
+    const authorizationForUser2 = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin2FullyFeatured);
     const imodelScopedRequestParams = {
       imodelsClient: params.imodelsClient,
       authorization: authorizationForUser2,
