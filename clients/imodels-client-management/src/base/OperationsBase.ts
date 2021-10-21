@@ -10,7 +10,6 @@ import { RestClient } from "./rest/RestClient";
 
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
-type UrlParameterDictionary = Dictionary<UrlParameterValue>;
 
 type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn };
 type SendPostRequestParams = AuthorizationParam & { url: string, body: unknown };
@@ -87,7 +86,7 @@ export class OperationsBase {
     return headers;
   }
 
-  protected formQueryString(urlParameters: UrlParameterDictionary | undefined): string {
+  protected formQueryString(urlParameters: Dictionary<UrlParameterValue> | undefined): string {
     let queryString = "";
     for (const urlParameterKey in urlParameters) {
       const urlParameterValue = urlParameters[urlParameterKey];
