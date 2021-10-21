@@ -3,9 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
-import { DownloadedChangeset, FileHandler } from "../../base";
+import { DownloadedChangeset, TargetDirectoryParam, FileHandler } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
-import { CreateChangesetParams, DownloadChangesetsParams } from "./ChangesetOperationParams";
+import { CreateChangesetParams, DownloadChangesetByIdParams, DownloadChangesetByIndexParams, DownloadChangesetListParams } from "./ChangesetOperationParams";
 import { LimitedParallelQueue } from "./LimitedParallelQueue";
 
 export class ChangesetOperations extends ManagementChangesetOperations {
@@ -42,7 +42,17 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     return changesetUpdateResponse.changeset;
   }
 
-  public async download(params: DownloadChangesetsParams): Promise<DownloadedChangeset[]> {
+  public async downloadById(params: DownloadChangesetByIdParams): Promise<DownloadedChangeset> {
+    const changeset: Changeset = await this.getById(params);
+    return this.downloadSingleChangeset({ ...params, changeset });
+  }
+
+  public async downloadByIndex(params: DownloadChangesetByIndexParams): Promise<DownloadedChangeset> {
+    const changeset: Changeset = await this.getByIndex(params);
+    return this.downloadSingleChangeset({ ...params, changeset });
+  }
+
+  public async downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]> {
     let result: DownloadedChangeset[] = [];
 
     this._fileHandler.createDirectory(params.targetDirectoryPath);
@@ -61,7 +71,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
 
       const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
       for (const changeset of changesetsWithFilePath)
-        queue.push(() => this.downloadChangesetWithRetry({
+        queue.push(() => this.downloadChangesetFileWithRetry({
           requestContext: params.requestContext,
           imodelId: params.imodelId,
           changeset
@@ -72,7 +82,22 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     return result;
   }
 
-  private async downloadChangesetWithRetry(params: iModelScopedOperationParams & { changeset: DownloadedChangeset }): Promise<void> {
+  private async downloadSingleChangeset(params: iModelScopedOperationParams & TargetDirectoryParam & { changeset: Changeset }): Promise<DownloadedChangeset> {
+    const changesetWithPath: DownloadedChangeset = {
+      ...params.changeset,
+      filePath: this._fileHandler.join(params.targetDirectoryPath, this.createFileName(params.changeset.id))
+    };
+
+    await this.downloadChangesetFileWithRetry({
+      requestContext: params.requestContext,
+      imodelId: params.imodelId,
+      changeset: changesetWithPath
+    });
+
+    return changesetWithPath;
+  }
+
+  private async downloadChangesetFileWithRetry(params: iModelScopedOperationParams & { changeset: DownloadedChangeset }): Promise<void> {
     const targetFilePath = params.changeset.filePath;
     if (this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
       return;

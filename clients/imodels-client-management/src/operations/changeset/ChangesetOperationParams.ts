@@ -21,3 +21,7 @@ export interface GetChangesetListParams extends iModelScopedOperationParams {
 export interface GetChangesetByIdParams extends iModelScopedOperationParams {
   changesetId: string;
 }
+
+export interface GetChangesetByIndexParams extends iModelScopedOperationParams {
+  changesetIndex: number;
+}

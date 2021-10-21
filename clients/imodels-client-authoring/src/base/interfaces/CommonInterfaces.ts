@@ -5,3 +5,7 @@
 export interface DownloadedFileProps {
   filePath: string;
 }
+
+export interface TargetDirectoryParam {
+  targetDirectoryPath: string;
+}
