@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, Extent, OrderBy, AuthorizationParam, iModel, iModelScopedOperationParams } from "../../base";
+import { AuthorizationParam, CollectionRequestParams, Extent, OrderBy, iModel, iModelScopedOperationParams } from "../../base";
 
 export enum iModelOrderByProperty {
   Name = "name"
