@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { iModelsClient as ManagementiModelsClient, RequestContext } from "@itwin/imodels-client-management";
+import { AuthorizationParam, iModelsClient as ManagementiModelsClient } from "@itwin/imodels-client-management";
 import { TestiModelGroup } from "./TestiModelGroup";
 
 export class TestSetupError extends Error {
@@ -18,14 +18,13 @@ export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export async function cleanUpiModels(params: {
+export async function cleanUpiModels(params: AuthorizationParam & {
   imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
-  requestContext: RequestContext,
   projectId: string,
   testiModelGroup: TestiModelGroup,
 }): Promise<void> {
   const imodels = params.imodelsClient.iModels.getMinimalList({
-    requestContext: params.requestContext,
+    authorization: params.authorization,
     urlParams: {
       projectId: params.projectId
     }
@@ -33,7 +32,7 @@ export async function cleanUpiModels(params: {
   for await (const imodel of imodels)
     if (params.testiModelGroup.doesiModelBelongToContext(imodel.displayName))
       await params.imodelsClient.iModels.delete({
-        requestContext: params.requestContext,
+        authorization: params.authorization,
         imodelId: imodel.id
       });
 }

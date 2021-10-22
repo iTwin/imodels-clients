@@ -2,20 +2,18 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-export interface AuthorizationHeader {
+export interface Authorization {
   scheme: string;
   token: string;
 }
 
-export interface RequestContext {
-  authorization: AuthorizationHeader;
+export type AuthorizationCallback = () => Promise<Authorization>;
+
+export interface AuthorizationParam {
+  authorization: AuthorizationCallback;
 }
 
-export interface RequestContextParams {
-  requestContext: RequestContext;
-}
-
-export interface iModelScopedOperationParams extends RequestContextParams {
+export interface iModelScopedOperationParams extends AuthorizationParam {
   imodelId: string;
 }
 

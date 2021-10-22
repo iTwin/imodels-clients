@@ -3,12 +3,12 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { CheckpointState, GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams, RequestContext, iModelScopedOperationParams, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-authoring";
-import { Config, Constants, NamedVersionMetadata, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, assertCheckpoint, assertError, cleanUpiModels } from "../common";
+import { AuthorizationCallback, CheckpointState, GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams, iModelScopedOperationParams, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-authoring";
+import { Config, Constants, NamedVersionMetadata, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, assertCheckpoint, assertError, cleanUpiModels } from "../common";
 
 describe("[Authoring] CheckpointOperations", () => {
   let imodelsClient: iModelsClient;
-  let requestContext: RequestContext;
+  let authorization: AuthorizationCallback;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
   let testiModel: ReusableiModelMetadata;
@@ -16,7 +16,7 @@ describe("[Authoring] CheckpointOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
+    authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {
@@ -26,7 +26,7 @@ describe("[Authoring] CheckpointOperations", () => {
     });
 
     testiModel = await ReusableTestiModelProvider.getOrCreate({
-      requestContext,
+      authorization,
       imodelsClient,
       projectId
     });
@@ -34,13 +34,13 @@ describe("[Authoring] CheckpointOperations", () => {
   });
 
   after(async () => {
-    await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
+    await cleanUpiModels({ imodelsClient, authorization, projectId, testiModelGroup });
   });
 
   it("should get by changeset id", async () => {
     // Arrange
     const getCheckpointByChangesetIdParams: GetCheckpointByChangesetIdParams = {
-      requestContext,
+      authorization,
       imodelId: testiModel.id,
       changesetId: testiModelNamedVersion.changesetId
     };
@@ -62,7 +62,7 @@ describe("[Authoring] CheckpointOperations", () => {
   it("should get by changeset index", async () => {
     // Arrange
     const getCheckpointByChangesetIndexParams: GetCheckpointByChangesetIndexParams = {
-      requestContext,
+      authorization,
       imodelId: testiModel.id,
       changesetIndex: testiModelNamedVersion.changesetIndex
     };
@@ -84,7 +84,7 @@ describe("[Authoring] CheckpointOperations", () => {
   it("should get by named version id", async () => {
     // Arrange
     const getCheckpointByNamedVersionIdParams: GetCheckpointByNamedVersionIdParams = {
-      requestContext,
+      authorization,
       imodelId: testiModel.id,
       namedVersionId: testiModelNamedVersion.id
     };
@@ -132,7 +132,7 @@ describe("[Authoring] CheckpointOperations", () => {
     it(`should not find checkpoint ${testCase.label} if iModel does not exist`, async () => {
       // Arrange
       const imodelScopedOperationParams: iModelScopedOperationParams = {
-        requestContext,
+        authorization,
         imodelId: "invalidiModelId"
       };
 
@@ -177,7 +177,7 @@ describe("[Authoring] CheckpointOperations", () => {
     it(`should not find checkpoint ${testCase.label} if changeset does not exist`, async () => {
       // Arrange
       const imodelScopedOperationParams: iModelScopedOperationParams = {
-        requestContext,
+        authorization,
         imodelId: testiModel.id
       };
 
@@ -204,7 +204,7 @@ describe("[Authoring] CheckpointOperations", () => {
   it("should not find checkpoint by named version id if named version does not exist", async () => {
     // Arrange
     const getCheckpointByNamedVersionIdParams: GetCheckpointByNamedVersionIdParams = {
-      requestContext,
+      authorization,
       imodelId: testiModel.id,
       namedVersionId: "invalidId"
     };

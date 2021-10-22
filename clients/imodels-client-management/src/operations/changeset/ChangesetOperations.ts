@@ -9,7 +9,7 @@ import { GetChangesetByIdParams, GetChangesetListParams } from "./ChangesetOpera
 export class ChangesetOperations extends OperationsBase {
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
     return getCollectionIterator(() => this.getEntityCollectionPage<MinimalChangeset>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse<MinimalChangeset>).changesets
@@ -22,7 +22,7 @@ export class ChangesetOperations extends OperationsBase {
 
   protected getRepresentationListInPages(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
     return getCollectionPagesIterator(() => this.getEntityCollectionPage<Changeset>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse<Changeset>).changesets
@@ -31,7 +31,7 @@ export class ChangesetOperations extends OperationsBase {
 
   public async getById(params: GetChangesetByIdParams): Promise<Changeset> {
     const response = await this.sendGetRequest<ChangesetResponse>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/changesets/${params.changesetId}`
     });
     return response.changeset;
