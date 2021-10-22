@@ -3,18 +3,19 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { CreateEmptyiModelParams, GetiModelListParams, RequestContext, iModel, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, assertCollection, assertError, assertiModel } from "../common";
+import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, CreateEmptyiModelParams, GetiModelListParams, OrderByOperator, iModel, iModelOrderByProperty, iModelsClient, iModelsErrorCode } from "@itwin/imodels-client-management";
+import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelGroup, assertCollection, assertError, assertiModel, cleanUpiModels, toArray } from "../common";
 
 describe("[Management] iModelOperations", () => {
   let imodelsClient: iModelsClient;
-  let requestContext: RequestContext;
+  let authorization: AuthorizationCallback;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
+    authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {
@@ -22,12 +23,23 @@ describe("[Management] iModelOperations", () => {
         testSuite: "ManagementiModelOperations"
       }
     });
+
+    await TestiModelCreator.createEmpty({
+      imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
+      authorization,
+      projectId,
+      imodelName: testiModelGroup.getPrefixediModelName("Test iModel for collection queries")
+    });
+  });
+
+  after(async () => {
+    await cleanUpiModels({ imodelsClient, authorization, projectId, testiModelGroup });
   });
 
   it("should create an empty iModel", async () => {
     // Arrange
     const createiModelParams: CreateEmptyiModelParams = {
-      requestContext,
+      authorization,
       imodelProperties: {
         projectId,
         name: testiModelGroup.getPrefixediModelName("Empty Test iModel"),
@@ -62,7 +74,7 @@ describe("[Management] iModelOperations", () => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getiModelListParams: GetiModelListParams = {
-        requestContext,
+        authorization,
         urlParams: {
           projectId,
           $top: 5
@@ -70,20 +82,63 @@ describe("[Management] iModelOperations", () => {
       };
 
       // Act
-      const imodels = await testCase.functionUnderTest(getiModelListParams);
+      const imodels = testCase.functionUnderTest(getiModelListParams);
 
       // Assert
-      assertCollection({
+      await assertCollection({
         asyncIterable: imodels,
-        isEntityCountCorrect: count => count > 0
+        isEntityCountCorrect: count => count >= 2
       });
     });
+  });
+
+  it("should return items in ascending order when querying representation collection", async () => {
+    // Arrange
+    const getiModelListParams: GetiModelListParams = {
+      authorization,
+      urlParams: {
+        projectId,
+        $orderBy: {
+          property: iModelOrderByProperty.Name
+        }
+      }
+    };
+
+    // Act
+    const imodels = imodelsClient.iModels.getRepresentationList(getiModelListParams);
+
+    // Assert
+    const imodelNames = (await toArray(imodels)).map(imodel => imodel.name);
+    for (let i = 0; i < imodelNames.length - 1; i++)
+      expect(imodelNames[i] < imodelNames[i + 1]).to.be.true;
+  });
+
+  it("should return items in descending order when querying representation collection", async () => {
+    // Arrange
+    const getiModelListParams: GetiModelListParams = {
+      authorization,
+      urlParams: {
+        projectId,
+        $orderBy: {
+          property: iModelOrderByProperty.Name,
+          operator: OrderByOperator.Descending
+        }
+      }
+    };
+
+    // Act
+    const imodels = imodelsClient.iModels.getRepresentationList(getiModelListParams);
+
+    // Assert
+    const imodelNames = (await toArray(imodels)).map(imodel => imodel.name);
+    for (let i = 0; i < imodelNames.length - 1; i++)
+      expect(imodelNames[i] > imodelNames[i + 1]).to.be.true;
   });
 
   it("should return unauthorized error when calling API with invalid access token", async () => {
     // Arrange
     const createiModelParams: CreateEmptyiModelParams = {
-      requestContext: { authorization: { scheme: "Bearer", token: "invalidToken" } },
+      authorization: () => Promise.resolve({ scheme: "Bearer", token: "invalid token" }),
       imodelProperties: {
         projectId,
         name: testiModelGroup.getPrefixediModelName("Sample iModel (unauthorized)")
@@ -112,7 +167,7 @@ describe("[Management] iModelOperations", () => {
   it("should return a detailed error when attempting to create iModel with invalid description", async () => {
     // Arrange
     const createiModelParams: CreateEmptyiModelParams = {
-      requestContext,
+      authorization,
       imodelProperties: {
         projectId,
         name: testiModelGroup.getPrefixediModelName("Sample iModel (invalid)"),

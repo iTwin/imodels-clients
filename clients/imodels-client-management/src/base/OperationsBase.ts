@@ -4,16 +4,17 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
-import { CollectionResponse, EntityCollectionPage, PreferReturn, RequestContextParams } from "./interfaces/CommonInterfaces";
-import { RecursiveRequired } from "./interfaces/UtilityTypes";
+import { AuthorizationParam, CollectionResponse, EntityCollectionPage, OrderBy, PreferReturn } from "./interfaces/CommonInterfaces";
+import { Dictionary, RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
-type Dictionary = { [key: string]: string | number; };
+type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
+type UrlParameterValue = string | number | OrderByForAnyEntity;
 
-type SendGetRequestParams = RequestContextParams & { url: string, preferReturn?: PreferReturn };
-type SendPostRequestParams = RequestContextParams & { url: string, body: unknown };
+type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn };
+type SendPostRequestParams = AuthorizationParam & { url: string, body: unknown };
 type SendPatchRequestParams = SendPostRequestParams;
-type SendDeleteRequestParams = RequestContextParams & { url: string };
+type SendDeleteRequestParams = AuthorizationParam & { url: string };
 
 export class OperationsBase {
   protected _restClient: RestClient;
@@ -26,37 +27,37 @@ export class OperationsBase {
     this._apiVersion = options.api.version;
   }
 
-  protected sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse> {
+  protected async sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse> {
     return this._restClient.sendGetRequest<TResponse>({
       url: params.url,
-      headers: this.formHeaders(params)
+      headers: await this.formHeaders(params)
     });
   }
 
-  protected sendPostRequest<TResponse>(params: SendPostRequestParams): Promise<TResponse> {
+  protected async sendPostRequest<TResponse>(params: SendPostRequestParams): Promise<TResponse> {
     return this._restClient.sendPostRequest<TResponse>({
       url: params.url,
       body: params.body,
-      headers: this.formHeaders({ ...params, containsBody: true })
+      headers: await this.formHeaders({ ...params, containsBody: true })
     });
   }
 
-  protected sendPatchRequest<TResponse>(params: SendPatchRequestParams): Promise<TResponse> {
+  protected async sendPatchRequest<TResponse>(params: SendPatchRequestParams): Promise<TResponse> {
     return this._restClient.sendPatchRequest<TResponse>({
       url: params.url,
       body: params.body,
-      headers: this.formHeaders({ ...params, containsBody: true })
+      headers: await this.formHeaders({ ...params, containsBody: true })
     });
   }
 
-  protected sendDeleteRequest<TResponse>(params: SendDeleteRequestParams): Promise<TResponse> {
+  protected async sendDeleteRequest<TResponse>(params: SendDeleteRequestParams): Promise<TResponse> {
     return this._restClient.sendDeleteRequest<TResponse>({
       url: params.url,
-      headers: this.formHeaders(params)
+      headers: await this.formHeaders(params)
     });
   }
 
-  protected async getEntityCollectionPage<TEntity>(params: RequestContextParams & {
+  protected async getEntityCollectionPage<TEntity>(params: AuthorizationParam & {
     url: string,
     preferReturn: PreferReturn,
     entityCollectionAccessor: (response: unknown) => TEntity[]
@@ -70,9 +71,10 @@ export class OperationsBase {
     };
   }
 
-  private formHeaders(params: RequestContextParams & { preferReturn?: PreferReturn, containsBody?: boolean }): Dictionary {
-    const headers: Dictionary = {};
-    headers[Constants.headers.authorization] = `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`;
+  private async formHeaders(params: AuthorizationParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Promise<Dictionary<string>> {
+    const headers: Dictionary<string> = {};
+    const authorizationInfo = await params.authorization();
+    headers[Constants.headers.authorization] = `${authorizationInfo.scheme} ${authorizationInfo.token}`;
     headers[Constants.headers.accept] = `application/vnd.bentley.${this._apiVersion}+json`;
 
     if (params.preferReturn)
@@ -84,24 +86,37 @@ export class OperationsBase {
     return headers;
   }
 
-  protected formUrlParams(queryParameters: Dictionary | undefined): string | undefined {
+  protected formQueryString(urlParameters: Dictionary<UrlParameterValue> | undefined): string {
     let queryString = "";
-    const appendToQueryString = (key: string, value: string | number) => {
-      if (!queryString) {
-        queryString = `?${key}=${value}`;
-      } else {
-        queryString += `&${key}=${value}`;
-      }
-    };
-
-    for (const key in queryParameters) {
-      const queryParameterValue = queryParameters[key];
-      if (!queryParameterValue)
+    for (const urlParameterKey in urlParameters) {
+      const urlParameterValue = urlParameters[urlParameterKey];
+      if (!urlParameterValue)
         continue;
 
-      appendToQueryString(key, queryParameterValue);
+      queryString = this.appendToQueryString(queryString, urlParameterKey, urlParameterValue);
     }
 
     return queryString;
+  }
+
+  private appendToQueryString(existingQueryString: string, parameterKey: string, parameterValue: UrlParameterValue): string {
+    const separator = existingQueryString.length === 0 ? "?" : "&";
+    return existingQueryString + `${separator}${parameterKey}=${this.stringify(parameterValue)}`;
+  }
+
+  private stringify(urlParameterValue: UrlParameterValue): string {
+    if (this.isOrderBy(urlParameterValue)) {
+      let result: string = urlParameterValue.property;
+      if (urlParameterValue.operator)
+        result += ` ${urlParameterValue.operator}`;
+
+      return result;
+    }
+
+    return urlParameterValue.toString();
+  }
+
+  private isOrderBy(parameterValue: UrlParameterValue): parameterValue is OrderByForAnyEntity {
+    return (parameterValue as OrderByForAnyEntity).property !== undefined;
   }
 }

@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetsParams, RequestContext, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, FileTransferLog, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory, iModelMetadata } from "../common";
+import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetsParams, iModelsClient } from "@itwin/imodels-client-authoring";
+import { Config, Constants, FileTransferLog, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory, iModelMetadata } from "../common";
 
 describe("[Authoring] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
-  let requestContext: RequestContext;
+  let authorization: AuthorizationCallback;
   let projectId: string;
   let testiModelGroup: TestiModelGroup;
 
@@ -22,7 +22,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
   before(async () => {
     imodelsClient = new iModelsClient(new TestClientOptions());
-    requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
+    authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
     testiModelGroup = new TestiModelGroup({
       labels: {
@@ -32,13 +32,13 @@ describe("[Authoring] ChangesetOperations", () => {
     });
 
     testiModelForWrite = await TestiModelCreator.createEmpty({
-      requestContext,
+      authorization,
       imodelsClient,
       projectId,
       imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
     });
     testiModelForDownload = await ReusableTestiModelProvider.getOrCreate({
-      requestContext,
+      authorization,
       imodelsClient,
       projectId
     });
@@ -49,25 +49,25 @@ describe("[Authoring] ChangesetOperations", () => {
   });
 
   after(async () => {
-    await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
+    await cleanUpiModels({ imodelsClient, authorization, projectId, testiModelGroup });
   });
 
   it("should create changeset", async () => {
     // Arrange
     const acquireBriefcaseParams: AcquireBriefcaseParams = {
-      requestContext,
+      authorization,
       imodelId: testiModelForWrite.id
     };
     const briefcase = await imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
 
     const changesetMetadata = TestiModelFileProvider.changesets[0];
     const createChangesetParams: CreateChangesetParams = {
-      requestContext,
+      authorization,
       imodelId: testiModelForWrite.id,
       changesetProperties: {
         briefcaseId: briefcase.briefcaseId,
         id: changesetMetadata.id,
-        changesetFilePath: changesetMetadata.filePath
+        filePath: changesetMetadata.filePath
       }
     };
 
@@ -85,7 +85,7 @@ describe("[Authoring] ChangesetOperations", () => {
     // Arrange
     const downloadPath = Constants.TestDownloadDirectoryPath;
     const downloadChangesetsParams: DownloadChangesetsParams = {
-      requestContext,
+      authorization,
       imodelId: testiModelForDownload.id,
       targetDirectoryPath: downloadPath
     };
@@ -116,7 +116,7 @@ describe("[Authoring] ChangesetOperations", () => {
     // Arrange
     const downloadPath = Constants.TestDownloadDirectoryPath;
     const downloadChangesetsParams: DownloadChangesetsParams = {
-      requestContext,
+      authorization,
       imodelId: testiModelForDownload.id,
       urlParams: {
         afterIndex: 5,
@@ -170,7 +170,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
     const downloadPath = Constants.TestDownloadDirectoryPath;
     const downloadChangesetsParams: DownloadChangesetsParams = {
-      requestContext,
+      authorization,
       imodelId: testiModelForDownload.id,
       urlParams: {
         afterIndex: 0,
@@ -210,7 +210,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
     const downloadPath = Constants.TestDownloadDirectoryPath;
     const downloadChangesetsParams: DownloadChangesetsParams = {
-      requestContext,
+      authorization,
       imodelId: testiModelForDownload.id,
       urlParams: {
         afterIndex: 0,

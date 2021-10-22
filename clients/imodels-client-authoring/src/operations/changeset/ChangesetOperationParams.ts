@@ -10,7 +10,7 @@ export interface ChangesetProperties {
   parentId?: string;
   briefcaseId: number;
   containingChanges?: ContainingChanges;
-  changesetFilePath: string;
+  filePath: string;
 }
 
 export interface CreateChangesetParams extends iModelScopedOperationParams {

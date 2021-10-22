@@ -8,8 +8,8 @@ import { CreateEmptyiModelParams, DeleteiModelParams, GetiModelByIdParams, GetiM
 export class iModelOperations extends OperationsBase {
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
     return getCollectionIterator(() => this.getEntityCollectionPage<MinimaliModel>({
-      requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}${this.formUrlParams({ ...params.urlParams })}`,
+      authorization: params.authorization,
+      url: `${this._apiBaseUrl}${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as iModelsResponse<MinimaliModel>).iModels
     }));
@@ -17,8 +17,8 @@ export class iModelOperations extends OperationsBase {
 
   public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
     return getCollectionIterator(() => this.getEntityCollectionPage<iModel>({
-      requestContext: params.requestContext,
-      url: `${this._apiBaseUrl}${this.formUrlParams({ ...params.urlParams })}`,
+      authorization: params.authorization,
+      url: `${this._apiBaseUrl}${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as iModelsResponse<iModel>).iModels
     }));
@@ -26,7 +26,7 @@ export class iModelOperations extends OperationsBase {
 
   public async getById(params: GetiModelByIdParams): Promise<iModel> {
     const response = await this.sendGetRequest<iModelResponse>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}`
     });
     return response.iModel;
@@ -34,7 +34,7 @@ export class iModelOperations extends OperationsBase {
 
   public async createEmpty(params: CreateEmptyiModelParams): Promise<iModel> {
     const response = await this.sendPostRequest<iModelResponse>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: this._apiBaseUrl,
       body: params.imodelProperties
     });
@@ -43,7 +43,7 @@ export class iModelOperations extends OperationsBase {
 
   public delete(params: DeleteiModelParams): Promise<void> {
     return this.sendDeleteRequest({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}`
     });
   }

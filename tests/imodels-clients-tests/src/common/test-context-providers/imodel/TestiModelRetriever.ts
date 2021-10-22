@@ -57,7 +57,7 @@ export class TestiModelRetriever {
 
   private static async findiModelByName(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<iModel | undefined> {
     const imodels = params.imodelsClient.iModels.getRepresentationList({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       urlParams: {
         projectId: params.projectId
       }

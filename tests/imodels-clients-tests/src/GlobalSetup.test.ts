@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, cleanUpiModels, cleanupDirectory } from "./common";
+import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, cleanUpiModels, cleanupDirectory } from "./common";
 
 before(async () => {
   await cleanupiModelsInTestProject();
@@ -17,8 +17,8 @@ after(async () => {
 
 async function cleanupiModelsInTestProject(): Promise<void> {
   const imodelsClient = new iModelsClient(new TestClientOptions());
-  const requestContext = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin1);
+  const authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
   const projectId = await TestProjectProvider.getProjectId();
   const testiModelGroup = new TestiModelGroup({ labels: { package: Constants.PackagePrefix } });
-  await cleanUpiModels({ imodelsClient, requestContext, projectId, testiModelGroup });
+  await cleanUpiModels({ imodelsClient, authorization, projectId, testiModelGroup });
 }
