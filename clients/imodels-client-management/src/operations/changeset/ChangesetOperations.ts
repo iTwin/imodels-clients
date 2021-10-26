@@ -20,6 +20,14 @@ export class ChangesetOperations extends OperationsBase {
     return flatten(this.getRepresentationListInPages(params));
   }
 
+  public getById(params: GetChangesetByIdParams): Promise<Changeset> {
+    return this.getByIdOrIndex({ ...params, changesetIdOrIndex: params.changesetId });
+  }
+
+  public getByIndex(params: GetChangesetByIndexParams): Promise<Changeset> {
+    return this.getByIdOrIndex({ ...params, changesetIdOrIndex: params.changesetIndex });
+  }
+
   protected getRepresentationListInPages(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
     return getCollectionPagesIterator(() => this.getEntityCollectionPage<Changeset>({
       requestContext: params.requestContext,
@@ -27,14 +35,6 @@ export class ChangesetOperations extends OperationsBase {
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse<Changeset>).changesets
     }));
-  }
-
-  public getById(params: GetChangesetByIdParams): Promise<Changeset> {
-    return this.getByIdOrIndex({ ...params, changesetIdOrIndex: params.changesetId });
-  }
-
-  public getByIndex(params: GetChangesetByIndexParams): Promise<Changeset> {
-    return this.getByIdOrIndex({ ...params, changesetIdOrIndex: params.changesetIndex });
   }
 
   private async getByIdOrIndex(params: iModelScopedOperationParams & { changesetIdOrIndex: string | number }): Promise<Changeset> {
