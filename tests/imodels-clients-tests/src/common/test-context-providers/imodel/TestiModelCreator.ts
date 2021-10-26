@@ -5,7 +5,7 @@
 import { Changeset, CheckpointState } from "@itwin/imodels-client-authoring";
 import { TestSetupError, sleep } from "../../CommonTestUtils";
 import { Config } from "../../Config";
-import { TestAuthenticationProvider } from "../auth/TestAuthenticationProvider";
+import { TestAuthorizationProvider } from "../auth/TestAuthenticationProvider";
 import { TestiModelFileProvider } from "./TestiModelFileProvider";
 import { BriefcaseMetadata, NamedVersionMetadata, ReusableiModelMetadata, TestiModelSetupContext, iModelIdParam, iModelIdentificationByNameParams, iModelMetadata } from "./TestiModelInterfaces";
 
@@ -17,7 +17,7 @@ export class TestiModelCreator {
 
   public static async createEmpty(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<iModelMetadata> {
     const imodel = await params.imodelsClient.iModels.createEmpty({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       imodelProperties: {
         projectId: params.projectId,
         name: params.imodelName,
@@ -45,10 +45,10 @@ export class TestiModelCreator {
 
     // We use this specific user that is able to generate checkpoints
     // for named version creation to mimic production environment.
-    const requestContextForUser2 = await TestAuthenticationProvider.getRequestContext(Config.get().testUsers.admin2FullyFeatured);
+    const authorizationForUser2 = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin2FullyFeatured);
     const imodelScopedRequestParams = {
       imodelsClient: params.imodelsClient,
-      requestContext: requestContextForUser2,
+      authorization: authorizationForUser2,
       imodelId: imodel.id
     };
 
@@ -80,7 +80,7 @@ export class TestiModelCreator {
     const changesets: Changeset[] = [];
     for (let i = 0; i < TestiModelFileProvider.changesets.length; i++) {
       const createdChangeset = await params.imodelsClient.Changesets.create({
-        requestContext: params.requestContext,
+        authorization: params.authorization,
         imodelId: params.imodelId,
         changesetProperties: {
           briefcaseId: briefcase.id,
@@ -101,7 +101,7 @@ export class TestiModelCreator {
 
   private static async acquireBriefcase(params: TestiModelSetupContext & iModelIdParam): Promise<BriefcaseMetadata> {
     const briefcase = await params.imodelsClient.Briefcases.acquire({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       imodelId: params.imodelId,
       briefcaseProperties: {
         deviceName: TestiModelCreator._briefcaseDeviceName
@@ -118,7 +118,7 @@ export class TestiModelCreator {
     : Promise<NamedVersionMetadata> {
     const changesetMetadata = TestiModelFileProvider.changesets[params.changesetIndex - 1];
     const namedVersion = await params.imodelsClient.NamedVersions.create({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       imodelId: params.imodelId,
       namedVersionProperties: {
         name: `Named version ${changesetMetadata.index}`,

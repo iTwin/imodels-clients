@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosResponse } from "axios";
-import { RequestContextParams } from "@itwin/imodels-client-management";
+import { AuthorizationParam } from "@itwin/imodels-client-management";
 import { Config } from "../../Config";
 
 interface Project {
@@ -19,10 +19,11 @@ interface ProjectResponse {
 }
 
 export class ProjectsClient {
-  public async getOrCreateProject(params: RequestContextParams & { projectName: string }): Promise<string> {
+  public async getOrCreateProject(params: AuthorizationParam & { projectName: string }): Promise<string> {
+    const authorizationInfo = await params.authorization();
     const requestConfig = {
       headers: {
-        Authorization: `${params.requestContext.authorization.scheme} ${params.requestContext.authorization.token}`
+        Authorization: `${authorizationInfo.scheme} ${authorizationInfo.token}`
       }
     };
 

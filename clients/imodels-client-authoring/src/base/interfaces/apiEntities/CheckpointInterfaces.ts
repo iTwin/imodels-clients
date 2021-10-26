@@ -27,7 +27,7 @@ export interface Checkpoint {
   changesetId: string;
   state: CheckpointState;
   containerAccessInfo: ContainerAccessInfo;
-  _links?: CheckpointLinks;
+  _links: CheckpointLinks | null;
 }
 
 export interface CheckpointResponse {

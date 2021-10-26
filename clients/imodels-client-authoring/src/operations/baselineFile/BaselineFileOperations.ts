@@ -9,7 +9,7 @@ import { GetBaselineFileByiModelIdParams } from "./BaselineFileOperationParams";
 export class BaselineFileOperations extends OperationsBase {
   public async getByiModelId(params: GetBaselineFileByiModelIdParams): Promise<BaselineFile> {
     const response = await this.sendGetRequest<BaselineFileResponse>({
-      requestContext: params.requestContext,
+      authorization: params.authorization,
       url: `${this._apiBaseUrl}/${params.imodelId}/baselineFile`
     });
     return response.baselineFile;

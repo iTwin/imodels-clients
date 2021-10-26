@@ -12,12 +12,12 @@ export enum NamedVersionState {
 export interface MinimalNamedVersion {
   id: string;
   displayName: string;
-  changesetId?: string;
+  changesetId: string | null;
 }
 
 export interface NamedVersion extends MinimalNamedVersion {
   name: string;
-  description?: string;
+  description: string | null;
   createdDateTime: Date;
   state: NamedVersionState;
 }
