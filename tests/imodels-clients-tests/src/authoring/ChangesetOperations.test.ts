@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetListParams, RequestContext, iModelsClient, iModelScopedOperationParams, TargetDirectoryParam } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetListParams, RequestContext, TargetDirectoryParam, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-authoring";
 import { Config, Constants, FileTransferLog, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthenticationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory, iModelMetadata } from "../common";
 
 type CommonDownloadParams = iModelScopedOperationParams & TargetDirectoryParam;
@@ -161,7 +161,7 @@ describe("[Authoring] ChangesetOperations", () => {
             {
               ...params,
               changesetId: this.changesetUnderTest.id
-            })
+            });
         }
       },
       {
@@ -172,9 +172,9 @@ describe("[Authoring] ChangesetOperations", () => {
             {
               ...params,
               changesetIndex: this.changesetUnderTest.index
-            })
+            });
         }
-      },
+      }
     ].forEach(testCase => {
       it(`should download changeset by ${testCase.label}`, async () => {
         // Arrange

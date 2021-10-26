@@ -29,11 +29,11 @@ export class ChangesetOperations extends OperationsBase {
     }));
   }
 
-  public async getById(params: GetChangesetByIdParams): Promise<Changeset> {
+  public getById(params: GetChangesetByIdParams): Promise<Changeset> {
     return this.getByIdOrIndex({ ...params, changesetIdOrIndex: params.changesetId });
   }
 
-  public async getByIndex(params: GetChangesetByIndexParams): Promise<Changeset> {
+  public getByIndex(params: GetChangesetByIndexParams): Promise<Changeset> {
     return this.getByIdOrIndex({ ...params, changesetIdOrIndex: params.changesetIndex });
   }
 
