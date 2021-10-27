@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, Briefcase, GetBriefcaseByIdParams, GetBriefcaseListParams, iModelsClient } from "@itwin/imodels-client-management";
-import { Config, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, assertBriefcase, assertCollection } from "../common";
-
+import { AuthorizationCallback, Briefcase, GetBriefcaseByIdParams, GetBriefcaseListParams, iModelsClient, SPECIAL_VALUES_ME } from "@itwin/imodels-client-management";
+import { Config, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, assertBriefcase, assertCollection, toArray } from "../common";
 
 describe("[Management] BriefcaseOperations", () => {
   let imodelsClient: iModelsClient;
@@ -53,6 +53,45 @@ describe("[Management] BriefcaseOperations", () => {
         isEntityCountCorrect: count => count === 1
       });
     });
+  });
+
+  it("should return user owned briefcases when querying representation collection", async () => {
+    // Arrange
+    const getBriefcaseListParams: GetBriefcaseListParams = {
+      authorization,
+      imodelId: testiModel.id,
+      urlParams: {
+        ownerId: SPECIAL_VALUES_ME
+      }
+    };
+
+    // Act
+    const briefcases = imodelsClient.Briefcases.getRepresentationList(getBriefcaseListParams);
+
+    // Assert
+    const briefcasesArray = await toArray(briefcases);
+    expect(briefcasesArray.length).to.equal(1);
+    const briefcase = briefcasesArray[0];
+    expect(briefcase.briefcaseId).to.equal(testiModel.briefcase.id);
+  });
+
+  it("should not return user owned briefcases if user does not own any when querying representation collection", async () => {
+    // Arrange
+    const authorizationForUser2 = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin2FullyFeatured);
+    const getBriefcaseListParams: GetBriefcaseListParams = {
+      authorization: authorizationForUser2,
+      imodelId: testiModel.id,
+      urlParams: {
+        ownerId: SPECIAL_VALUES_ME
+      }
+    };
+
+    // Act
+    const briefcases = imodelsClient.Briefcases.getRepresentationList(getBriefcaseListParams);
+
+    // Assert
+    const briefcasesArray = await toArray(briefcases);
+    expect(briefcasesArray.length).to.equal(0);
   });
 
   it("should get briefcase by id", async () => {

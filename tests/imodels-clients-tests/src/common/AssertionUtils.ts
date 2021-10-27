@@ -42,6 +42,7 @@ export function assertBriefcase(params: {
   expect(params.actualBriefcase).to.not.be.undefined;
   expect(params.actualBriefcase.id).to.not.be.empty;
   expect(params.actualBriefcase.displayName).to.not.be.empty;
+  expect(params.actualBriefcase.ownerId).to.not.be.empty;
 
   if (params.expectedBriefcaseProperties.briefcaseId)
     expect(params.actualBriefcase.briefcaseId).to.equal(params.expectedBriefcaseProperties.briefcaseId);
