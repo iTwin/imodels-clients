@@ -87,7 +87,7 @@ describe("[Management] NamedVersionOperations", () => {
     });
   });
 
-  it(`should filter versions by name when querying representation collection`, async () => {
+  it("should filter versions by name when querying representation collection", async () => {
     // Arrange
     const existingNamedVersion = namedVersionsCreatedInSetup[0];
     const getNamedVersionListParams: GetNamedVersionListParams = {
