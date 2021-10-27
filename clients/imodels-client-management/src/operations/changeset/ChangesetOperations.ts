@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OperationsBase, PreferReturn, flatten, getCollectionIterator, getCollectionPagesIterator } from "../../base";
+import { OperationsBase, PreferReturn, flatten, getCollectionIterator, getCollectionPagesIterator, iModelScopedOperationParams } from "../../base";
 import { Changeset, ChangesetResponse, ChangesetsResponse, MinimalChangeset } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
-import { GetChangesetByIdParams, GetChangesetListParams } from "./ChangesetOperationParams";
+import { GetChangesetByIdParams, GetChangesetByIndexParams, GetChangesetListParams } from "./ChangesetOperationParams";
 
 export class ChangesetOperations extends OperationsBase {
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
@@ -20,6 +20,14 @@ export class ChangesetOperations extends OperationsBase {
     return flatten(this.getRepresentationListInPages(params));
   }
 
+  public getById(params: GetChangesetByIdParams): Promise<Changeset> {
+    return this.getByIdOrIndex({ ...params, changesetIdOrIndex: params.changesetId });
+  }
+
+  public getByIndex(params: GetChangesetByIndexParams): Promise<Changeset> {
+    return this.getByIdOrIndex({ ...params, changesetIdOrIndex: params.changesetIndex });
+  }
+
   protected getRepresentationListInPages(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
     return getCollectionPagesIterator(() => this.getEntityCollectionPage<Changeset>({
       authorization: params.authorization,
@@ -29,10 +37,10 @@ export class ChangesetOperations extends OperationsBase {
     }));
   }
 
-  public async getById(params: GetChangesetByIdParams): Promise<Changeset> {
+  private async getByIdOrIndex(params: iModelScopedOperationParams & { changesetIdOrIndex: string | number }): Promise<Changeset> {
     const response = await this.sendGetRequest<ChangesetResponse>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/changesets/${params.changesetId}`
+      url: `${this._apiBaseUrl}/${params.imodelId}/changesets/${params.changesetIdOrIndex}`
     });
     return response.changeset;
   }

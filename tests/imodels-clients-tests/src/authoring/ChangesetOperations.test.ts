@@ -4,8 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetsParams, iModelsClient } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetListParams, TargetDirectoryParam, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-authoring";
 import { Config, Constants, FileTransferLog, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory, iModelMetadata } from "../common";
+
+type CommonDownloadParams = iModelScopedOperationParams & TargetDirectoryParam;
 
 describe("[Authoring] ChangesetOperations", () => {
   let imodelsClient: iModelsClient;
@@ -81,157 +83,231 @@ describe("[Authoring] ChangesetOperations", () => {
     });
   });
 
-  it("should download all changesets", async () => {
-    // Arrange
-    const downloadPath = Constants.TestDownloadDirectoryPath;
-    const downloadChangesetsParams: DownloadChangesetsParams = {
-      authorization,
-      imodelId: testiModelForDownload.id,
-      targetDirectoryPath: downloadPath
-    };
+  describe("download operations", () => {
+    it("should download all changesets", async () => {
+      // Arrange
+      const downloadPath = Constants.TestDownloadDirectoryPath;
+      const downloadChangesetListParams: DownloadChangesetListParams = {
+        authorization,
+        imodelId: testiModelForDownload.id,
+        targetDirectoryPath: downloadPath
+      };
 
-    // Act
-    const changesets = await imodelsClient.Changesets.download(downloadChangesetsParams);
+      // Act
+      const changesets = await imodelsClient.Changesets.downloadList(downloadChangesetListParams);
 
-    // Assert
-    expect(changesets.length).to.equal(TestiModelFileProvider.changesets.length);
-    expect(fs.readdirSync(downloadPath).length).to.equal(TestiModelFileProvider.changesets.length);
+      // Assert
+      expect(changesets.length).to.equal(TestiModelFileProvider.changesets.length);
+      expect(fs.readdirSync(downloadPath).length).to.equal(TestiModelFileProvider.changesets.length);
 
-    for (const changeset of changesets) {
-      const changesetMetadata = TestiModelFileProvider.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
-      assertDownloadedChangeset({
-        actualChangeset: changeset,
-        expectedChangesetProperties: {
-          id: changesetMetadata.id,
-          briefcaseId: testiModelForDownload.briefcase.id,
-          parentId: changesetMetadata.parentId,
-          description: changesetMetadata.description,
-          containingChanges: changesetMetadata.containingChanges
-        }
-      });
-    }
-  });
-
-  it("should download some changesets based on range", async () => {
-    // Arrange
-    const downloadPath = Constants.TestDownloadDirectoryPath;
-    const downloadChangesetsParams: DownloadChangesetsParams = {
-      authorization,
-      imodelId: testiModelForDownload.id,
-      urlParams: {
-        afterIndex: 5,
-        lastIndex: 10
-      },
-      targetDirectoryPath: downloadPath
-    };
-
-    // Act
-    const changesets = await imodelsClient.Changesets.download(downloadChangesetsParams);
-
-    // Assert
-    const expectedChangesetCount = downloadChangesetsParams.urlParams!.lastIndex! - downloadChangesetsParams.urlParams!.afterIndex!;
-    expect(changesets.length).to.equal(expectedChangesetCount);
-    expect(fs.readdirSync(downloadPath).length).to.equal(expectedChangesetCount);
-    expect(changesets.map((changeset: Changeset) => changeset.index)).to.have.members([6, 7, 8, 9, 10]);
-
-    for (const changeset of changesets) {
-      const changesetMetadata = TestiModelFileProvider.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
-      assertDownloadedChangeset({
-        actualChangeset: changeset,
-        expectedChangesetProperties: {
-          id: changesetMetadata.id,
-          briefcaseId: testiModelForDownload.briefcase.id,
-          parentId: changesetMetadata.parentId,
-          description: changesetMetadata.description,
-          containingChanges: changesetMetadata.containingChanges
-        }
-      });
-    }
-  });
-
-  it("should retry changeset download if it fails the first time", async () => {
-    // Arrange
-    const fileTransferLog = new FileTransferLog();
-    const azureSdkFileHandler = new AzureSdkFileHandler();
-    let hasDownloadFailed = false;
-    const downloadStub = (downloadUrl: string, targetPath: string) => {
-      fileTransferLog.recordDownload(downloadUrl);
-
-      if (!hasDownloadFailed) {
-        hasDownloadFailed = true;
-        throw new Error("Download failed.");
+      for (const changeset of changesets) {
+        const changesetMetadata = TestiModelFileProvider.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
+        assertDownloadedChangeset({
+          actualChangeset: changeset,
+          expectedChangesetProperties: {
+            id: changesetMetadata.id,
+            briefcaseId: testiModelForDownload.briefcase.id,
+            parentId: changesetMetadata.parentId,
+            description: changesetMetadata.description,
+            containingChanges: changesetMetadata.containingChanges
+          }
+        });
       }
+    });
 
-      return azureSdkFileHandler.downloadFile(downloadUrl, targetPath);
-    };
+    it("should download some changesets based on range", async () => {
+      // Arrange
+      const downloadPath = Constants.TestDownloadDirectoryPath;
+      const downloadChangesetListParams: DownloadChangesetListParams = {
+        authorization,
+        imodelId: testiModelForDownload.id,
+        urlParams: {
+          afterIndex: 5,
+          lastIndex: 10
+        },
+        targetDirectoryPath: downloadPath
+      };
 
-    const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
-    const imodelsClientWithTrackedFileTransfer = new iModelsClient({ ...new TestClientOptions(), fileHandler: trackedFileHandler });
+      // Act
+      const changesets = await imodelsClient.Changesets.downloadList(downloadChangesetListParams);
 
-    const downloadPath = Constants.TestDownloadDirectoryPath;
-    const downloadChangesetsParams: DownloadChangesetsParams = {
-      authorization,
-      imodelId: testiModelForDownload.id,
-      urlParams: {
-        afterIndex: 0,
-        lastIndex: 1
+      // Assert
+      const expectedChangesetCount = downloadChangesetListParams.urlParams!.lastIndex! - downloadChangesetListParams.urlParams!.afterIndex!;
+      expect(changesets.length).to.equal(expectedChangesetCount);
+      expect(fs.readdirSync(downloadPath).length).to.equal(expectedChangesetCount);
+      expect(changesets.map((changeset: Changeset) => changeset.index)).to.have.members([6, 7, 8, 9, 10]);
+
+      for (const changeset of changesets) {
+        const changesetMetadata = TestiModelFileProvider.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
+        assertDownloadedChangeset({
+          actualChangeset: changeset,
+          expectedChangesetProperties: {
+            id: changesetMetadata.id,
+            briefcaseId: testiModelForDownload.briefcase.id,
+            parentId: changesetMetadata.parentId,
+            description: changesetMetadata.description,
+            containingChanges: changesetMetadata.containingChanges
+          }
+        });
+      }
+    });
+
+    [
+      {
+        label: "id",
+        changesetUnderTest: TestiModelFileProvider.changesets[0],
+        get functionUnderTest() {
+          return (params: CommonDownloadParams) => imodelsClient.Changesets.downloadById(
+            {
+              ...params,
+              changesetId: this.changesetUnderTest.id
+            });
+        }
       },
-      targetDirectoryPath: downloadPath
-    };
+      {
+        label: "index",
+        changesetUnderTest: TestiModelFileProvider.changesets[0],
+        get functionUnderTest() {
+          return (params: CommonDownloadParams) => imodelsClient.Changesets.downloadByIndex(
+            {
+              ...params,
+              changesetIndex: this.changesetUnderTest.index
+            });
+        }
+      }
+    ].forEach(testCase => {
+      it(`should download changeset by ${testCase.label}`, async () => {
+        // Arrange
+        const downloadPath = Constants.TestDownloadDirectoryPath;
+        const partialDownloadChangesetParams: CommonDownloadParams = {
+          authorization,
+          imodelId: testiModelForDownload.id,
+          targetDirectoryPath: downloadPath
+        };
 
-    // Act
-    const changesets = await imodelsClientWithTrackedFileTransfer.Changesets.download(downloadChangesetsParams);
+        // Act
+        const changeset = await testCase.functionUnderTest(partialDownloadChangesetParams);
 
-    // Assert
-    expect(changesets.length).to.equal(1);
+        // Assert
+        const changesetMetadata = testCase.changesetUnderTest;
+        assertDownloadedChangeset({
+          actualChangeset: changeset,
+          expectedChangesetProperties: {
+            id: changesetMetadata.id,
+            briefcaseId: testiModelForDownload.briefcase.id,
+            parentId: changesetMetadata.parentId,
+            description: changesetMetadata.description,
+            containingChanges: changesetMetadata.containingChanges
+          }
+        });
+      });
+    });
 
-    const allDownloadUrlsCalled = Object.keys(fileTransferLog.downloads);
-    expect(allDownloadUrlsCalled.length).to.equal(2);
-    expect(allDownloadUrlsCalled[0]).to.contain(changesets[0].id);
-    expect(allDownloadUrlsCalled[1]).to.contain(changesets[0].id);
-
-    const timesDownloadUrl1WasCalled = fileTransferLog.downloads[allDownloadUrlsCalled[0]];
-    expect(timesDownloadUrl1WasCalled).to.equal(1);
-    const timesDownloadUrl2WasCalled = fileTransferLog.downloads[allDownloadUrlsCalled[1]];
-    expect(timesDownloadUrl2WasCalled).to.equal(1);
-  });
-
-  it("should not download changeset again if it is already present", async () => {
-    // Arrange
-    const fileTransferLog = new FileTransferLog();
-    const azureSdkFileHandler = new AzureSdkFileHandler();
-    const downloadStub = (downloadUrl: string, targetPath: string) => {
-      fileTransferLog.recordDownload(downloadUrl);
-      return azureSdkFileHandler.downloadFile(downloadUrl, targetPath);
-    };
-
-    const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
-    const imodelsClientWithTrackedFileTransfer = new iModelsClient({ ...new TestClientOptions(), fileHandler: trackedFileHandler });
-
-    const downloadPath = Constants.TestDownloadDirectoryPath;
-    const downloadChangesetsParams: DownloadChangesetsParams = {
-      authorization,
-      imodelId: testiModelForDownload.id,
-      urlParams: {
-        afterIndex: 0,
-        lastIndex: 1
+    [
+      {
+        label: "by id",
+        functionUnderTest: (client: iModelsClient, params: CommonDownloadParams) =>
+          client.Changesets.downloadById({
+            ...params,
+            changesetId: TestiModelFileProvider.changesets[0].id
+          })
       },
-      targetDirectoryPath: downloadPath
-    };
+      {
+        label: "by index",
+        functionUnderTest: (client: iModelsClient, params: CommonDownloadParams) =>
+          client.Changesets.downloadByIndex({
+            ...params,
+            changesetIndex: TestiModelFileProvider.changesets[0].index
+          })
+      },
+      {
+        label: "list",
+        functionUnderTest: (client: iModelsClient, params: CommonDownloadParams) =>
+          client.Changesets
+            .downloadList({
+              ...params,
+              urlParams: { afterIndex: 0, lastIndex: 1 }
+            })
+            .then(changesets => changesets[0])
+      }
+    ].forEach(testCase => {
+      it(`should should retry changeset download if it fails the first time when downloading changeset ${testCase.label}`, async () => {
+        // Arrange
+        const fileTransferLog = new FileTransferLog();
+        const azureSdkFileHandler = new AzureSdkFileHandler();
+        let hasDownloadFailed = false;
+        const downloadStub = (downloadUrl: string, targetPath: string) => {
+          fileTransferLog.recordDownload(downloadUrl);
 
-    await imodelsClientWithTrackedFileTransfer.Changesets.download(downloadChangesetsParams);
+          if (!hasDownloadFailed) {
+            hasDownloadFailed = true;
+            throw new Error("Download failed.");
+          }
 
-    // Act
-    const changesets = await imodelsClientWithTrackedFileTransfer.Changesets.download(downloadChangesetsParams);
+          return azureSdkFileHandler.downloadFile(downloadUrl, targetPath);
+        };
 
-    // Assert
-    expect(changesets.length).to.equal(1);
+        const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
+        const imodelsClientWithTrackedFileTransfer = new iModelsClient({ ...new TestClientOptions(), fileHandler: trackedFileHandler });
 
-    const allDownloadUrlsCalled = Object.keys(fileTransferLog.downloads);
-    expect(allDownloadUrlsCalled.length).to.equal(1);
-    expect(allDownloadUrlsCalled[0]).to.contain(changesets[0].id);
+        const downloadPath = Constants.TestDownloadDirectoryPath;
+        const partialDownloadChangesetParams: CommonDownloadParams = {
+          authorization,
+          imodelId: testiModelForDownload.id,
+          targetDirectoryPath: downloadPath
+        };
 
-    const timesDownloadUrlWasCalled = fileTransferLog.downloads[allDownloadUrlsCalled[0]];
-    expect(timesDownloadUrlWasCalled).to.equal(1);
+        // Act
+        const changeset: Changeset = await testCase.functionUnderTest(imodelsClientWithTrackedFileTransfer, partialDownloadChangesetParams);
+
+        // Assert
+        expect(changeset).to.be.not.be.undefined;
+
+        const allDownloadUrlsCalled = Object.keys(fileTransferLog.downloads);
+        expect(allDownloadUrlsCalled.length).to.equal(2);
+        expect(allDownloadUrlsCalled[0]).to.contain(changeset.id);
+        expect(allDownloadUrlsCalled[1]).to.contain(changeset.id);
+
+        const timesDownloadUrl1WasCalled = fileTransferLog.downloads[allDownloadUrlsCalled[0]];
+        expect(timesDownloadUrl1WasCalled).to.equal(1);
+        const timesDownloadUrl2WasCalled = fileTransferLog.downloads[allDownloadUrlsCalled[1]];
+        expect(timesDownloadUrl2WasCalled).to.equal(1);
+      });
+
+      it(`should not download changeset again if it is already present when downloading changeset ${testCase.label}`, async () => {
+        // Arrange
+        const fileTransferLog = new FileTransferLog();
+        const azureSdkFileHandler = new AzureSdkFileHandler();
+        const downloadStub = (downloadUrl: string, targetPath: string) => {
+          fileTransferLog.recordDownload(downloadUrl);
+          return azureSdkFileHandler.downloadFile(downloadUrl, targetPath);
+        };
+
+        const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
+        const imodelsClientWithTrackedFileTransfer = new iModelsClient({ ...new TestClientOptions(), fileHandler: trackedFileHandler });
+
+        const downloadPath = Constants.TestDownloadDirectoryPath;
+        const partialDownloadChangesetParams: CommonDownloadParams = {
+          authorization,
+          imodelId: testiModelForDownload.id,
+          targetDirectoryPath: downloadPath
+        };
+
+        await testCase.functionUnderTest(imodelsClientWithTrackedFileTransfer, partialDownloadChangesetParams);
+
+        // Act
+        const changeset = await testCase.functionUnderTest(imodelsClientWithTrackedFileTransfer, partialDownloadChangesetParams);
+
+        // Assert
+        expect(changeset).to.be.not.be.undefined;
+
+        const allDownloadUrlsCalled = Object.keys(fileTransferLog.downloads);
+        expect(allDownloadUrlsCalled.length).to.equal(1);
+        expect(allDownloadUrlsCalled[0]).to.contain(changeset.id);
+
+        const timesDownloadUrlWasCalled = fileTransferLog.downloads[allDownloadUrlsCalled[0]];
+        expect(timesDownloadUrlWasCalled).to.equal(1);
+      });
+    });
   });
 });
