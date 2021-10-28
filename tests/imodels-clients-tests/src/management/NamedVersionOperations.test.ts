@@ -5,7 +5,7 @@
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { AuthorizationCallback, CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, UpdateNamedVersionParams, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-management";
-import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, assertCollection, assertNamedVersion, cleanUpiModels, iModelMetadata } from "../common";
+import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, assertCollection, assertNamedVersion, cleanUpiModels, iModelMetadata, toArray } from "../common";
 
 describe("[Management] NamedVersionOperations", () => {
   let imodelsClient: iModelsClient;
@@ -85,6 +85,46 @@ describe("[Management] NamedVersionOperations", () => {
         isEntityCountCorrect: count => count >= namedVersionCountCreatedInSetup
       });
     });
+  });
+
+  it("should return versions that match the name filter when querying representation collection", async () => {
+    // Arrange
+    const existingNamedVersion = namedVersionsCreatedInSetup[0];
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      authorization,
+      imodelId: testiModel.id,
+      urlParams: {
+        name: existingNamedVersion.name
+      }
+    };
+
+    // Act
+    const namedVersions = imodelsClient.NamedVersions.getRepresentationList(getNamedVersionListParams);
+
+    // Assert
+    const namedVersionArray = await toArray(namedVersions);
+    expect(namedVersionArray.length).to.equal(1);
+    const namedVersion = namedVersionArray[0];
+    expect(namedVersion.id).to.equal(existingNamedVersion.id);
+    expect(namedVersion.name).to.equal(existingNamedVersion.name);
+  });
+
+  it("should not return versions if none match the name filter when querying representation collection", async () => {
+    // Arrange
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      authorization,
+      imodelId: testiModel.id,
+      urlParams: {
+        name: "Non existent name"
+      }
+    };
+
+    // Act
+    const namedVersions = imodelsClient.NamedVersions.getRepresentationList(getNamedVersionListParams);
+
+    // Assert
+    const namedVersionArray = await toArray(namedVersions);
+    expect(namedVersionArray.length).to.equal(0);
   });
 
   it("should create named version on baseline", async () => {

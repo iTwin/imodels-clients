@@ -4,8 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { AtLeastOneProperty, CollectionRequestParams, NamedVersionState, iModelScopedOperationParams } from "../../base";
 
+export interface GetNamedVersionListUrlParams extends CollectionRequestParams {
+  name?: string;
+}
+
 export interface GetNamedVersionListParams extends iModelScopedOperationParams {
-  urlParams?: CollectionRequestParams;
+  urlParams?: GetNamedVersionListUrlParams;
 }
 
 export interface GetNamedVersionByIdParams extends iModelScopedOperationParams {
