@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { CollectionRequestParams, iModelScopedOperationParams } from "../../base";
 
-export const SPECIAL_VALUES_ME = "@me";
+export const SPECIAL_VALUES_ME = "me";
 
 export type ValidOwnerIdValue = typeof SPECIAL_VALUES_ME;
 
