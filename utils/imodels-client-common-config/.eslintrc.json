@@ -90,6 +90,16 @@
     "@typescript-eslint/naming-convention": [
       "error",
       {
+        "selector": "variable",
+        "modifiers": [
+          "exported",
+          "const"
+        ],
+        "format": [
+          "UPPER_CASE"
+        ]
+      },
+      {
         "selector": "property",
         "modifiers": [
           "private"
