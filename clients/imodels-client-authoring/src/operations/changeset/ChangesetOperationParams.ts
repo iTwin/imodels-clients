@@ -5,7 +5,7 @@
 import { ContainingChanges, GetChangesetByIdParams, GetChangesetByIndexParams, GetChangesetListUrlParams, iModelScopedOperationParams } from "@itwin/imodels-client-management";
 import { TargetDirectoryParam } from "../../base";
 
-export interface ChangesetProperties {
+export interface ChangesetPropertiesForCreate {
   id: string;
   description?: string;
   parentId?: string;
@@ -15,7 +15,7 @@ export interface ChangesetProperties {
 }
 
 export interface CreateChangesetParams extends iModelScopedOperationParams {
-  changesetProperties: ChangesetProperties;
+  changesetProperties: ChangesetPropertiesForCreate;
 }
 
 export type DownloadChangesetByIdParams = GetChangesetByIdParams & TargetDirectoryParam;

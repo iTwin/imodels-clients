@@ -1,12 +1,7 @@
 {
   "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
   "compilerOptions": {
-    "lib": [
-      "es2017",
-      "esnext.asynciterable",
-      "dom"
-    ],
-    "outDir": "./lib",
+    "outDir": "./lib"
   },
   "include": [
     "./src/**/*.ts"

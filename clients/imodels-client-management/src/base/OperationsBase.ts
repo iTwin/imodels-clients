@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
+import { iModelsApiUrlFormatter } from "./iModelsApiUrlFormatter";
 import { AuthorizationParam, CollectionResponse, EntityCollectionPage, OrderBy, PreferReturn } from "./interfaces/CommonInterfaces";
 import { Dictionary, RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
@@ -20,11 +21,13 @@ export class OperationsBase {
   protected _restClient: RestClient;
   protected _apiBaseUrl: string;
   protected _apiVersion: string;
+  protected _urlFormatter: iModelsApiUrlFormatter;
 
   constructor(options: RecursiveRequired<iModelsClientOptions>) {
     this._restClient = options.restClient;
     this._apiBaseUrl = options.api.baseUri;
     this._apiVersion = options.api.version;
+    this._urlFormatter = new iModelsApiUrlFormatter(options.api.baseUri);
   }
 
   protected async sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse> {

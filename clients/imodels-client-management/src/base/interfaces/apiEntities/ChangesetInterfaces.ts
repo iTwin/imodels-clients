@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, CollectionResponse, Link } from "../CommonInterfaces";
+import { CollectionResponse, Link } from "../CommonInterfaces";
 import { Checkpoint } from "./CheckpointInterfaces";
 
 export enum ChangesetState {
@@ -28,13 +28,7 @@ export interface SynchronizationInfo {
   changedFiles: string[];
 }
 
-export interface ChangesetLinks {
-  upload: Link;
-  download: Link;
-  complete: Link;
-}
-
-export interface MinimalChangeset {
+export interface MinimalChangesetProperties {
   id: string;
   displayName: string;
   description: string;
@@ -47,24 +41,43 @@ export interface MinimalChangeset {
   briefcaseId: number;
 }
 
-export interface ChangesetLinks {
-  upload: Link;
-  complete: Link;
-  namedVersion: Link | null;
-  currentOrPrecedingCheckpoint: Link | null;
-}
-
-export interface Changeset extends MinimalChangeset {
+export interface ChangesetProperties extends MinimalChangesetProperties {
   application: Application | null;
   synchronizationInfo: SynchronizationInfo | null;
-  _links: ChangesetLinks;
-  getCurrentOrPrecedingCheckpoint: (params: AuthorizationParam) => Promise<Checkpoint>;
 }
 
-export interface ChangesetResponse {
-  changeset: Changeset;
+
+export interface ChangesetLinksApiModel {
+  upload: Link;
+  download: Link;
+  complete: Link;
+  currentOrPrecedingCheckpoint?: Link;
 }
 
-export interface ChangesetsResponse<TChangeset extends MinimalChangeset> extends CollectionResponse {
-  changesets: TChangeset[];
+export type MinimalChangesetApiModel = MinimalChangesetProperties;
+
+export type ChangesetApiModel = ChangesetProperties & { _links: ChangesetLinksApiModel };
+
+export interface ChangesetResponseApiModel {
+  changeset: ChangesetApiModel;
 }
+
+export interface MinimalChangesetsResponseApiModel extends CollectionResponse {
+  changesets: MinimalChangesetApiModel[];
+}
+
+export interface ChangesetsResponseApiModel extends CollectionResponse {
+  changesets: ChangesetApiModel[];
+}
+
+
+export interface ChangesetRelationships {
+  getCurrentOrPrecedingCheckpoint?: () => Promise<Checkpoint>;
+}
+
+export type MinimalChangeset = MinimalChangesetProperties;
+
+export type Changeset = ChangesetProperties & ChangesetRelationships;
+
+
+

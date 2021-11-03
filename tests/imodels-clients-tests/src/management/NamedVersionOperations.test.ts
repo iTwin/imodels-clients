@@ -239,7 +239,7 @@ describe("[Management] NamedVersionOperations", () => {
 
   async function getChangesetIndexForNewNamedVersion(params: iModelScopedOperationParams): Promise<number> {
     for await (const changeset of imodelsClient.Changesets.getRepresentationList(params))
-      if (!changeset._links.namedVersion)
+      if (!(changeset as any)._links.namedVersion) // todo
         return changeset.index;
 
     throw new TestSetupError("Test iModel does not have any changesets without named versions.");

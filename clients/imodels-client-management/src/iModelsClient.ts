@@ -32,7 +32,7 @@ export class iModelsClient {
   }
 
   public get Changesets(): ChangesetOperations {
-    return new ChangesetOperations(this._options);
+    return new ChangesetOperations(this._options, this.Checkpoints);
   }
 
   public get NamedVersions(): NamedVersionOperations {
