@@ -11,6 +11,7 @@ export enum iModelOrderByProperty {
 export interface GetiModelListUrlParams extends CollectionRequestParams {
   $orderBy?: OrderBy<iModel, iModelOrderByProperty>;
   projectId: string;
+  name?: string;
 }
 
 export interface GetiModelListParams extends AuthorizationParam {
