@@ -5,4 +5,3 @@
 export * from "./imodel/iModelOperations";
 export * from "./briefcase/BriefcaseOperations";
 export * from "./changeset/ChangesetOperations";
-export * from "./checkpoint/CheckpointOperations";

@@ -2,7 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionResponse, Link } from "../CommonInterfaces";
+import { AuthorizationParam, CollectionResponse, Link } from "../CommonInterfaces";
+import { Checkpoint } from "./CheckpointInterfaces";
 
 export enum ChangesetState {
   WaitingForFile = "waitingForFile",
@@ -57,6 +58,7 @@ export interface Changeset extends MinimalChangeset {
   application: Application | null;
   synchronizationInfo: SynchronizationInfo | null;
   _links: ChangesetLinks;
+  getCurrentOrPrecedingCheckpoint: (params: AuthorizationParam) => Promise<Checkpoint>;
 }
 
 export interface ChangesetResponse {

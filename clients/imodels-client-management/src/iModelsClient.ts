@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { AxiosRestClient, RecursiveRequired, RestClient } from "./base";
 import { Constants } from "./Constants";
-import { BriefcaseOperations, ChangesetOperations, NamedVersionOperations, iModelOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, NamedVersionOperations, iModelOperations, CheckpointOperations } from "./operations";
 
 export interface ApiOptions {
   baseUri?: string;
@@ -37,6 +37,10 @@ export class iModelsClient {
 
   public get NamedVersions(): NamedVersionOperations {
     return new NamedVersionOperations(this._options);
+  }
+
+  public get Checkpoints(): CheckpointOperations {
+    return new CheckpointOperations(this._options);
   }
 
   public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
