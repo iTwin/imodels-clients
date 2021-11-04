@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, ChangesetResponseApiModel, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl, ChangesetApiModel, CheckpointOperations } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetApiModel, ChangesetResponseApiModel, ChangesetState, CheckpointOperations, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl, NamedVersionOperations } from "@itwin/imodels-client-management";
 import { DownloadedChangeset, DownloadedFileProps, FileHandler, TargetDirectoryParam } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateChangesetParams, DownloadChangesetByIdParams, DownloadChangesetByIndexParams, DownloadChangesetListParams } from "./ChangesetOperationParams";
@@ -13,8 +13,12 @@ type ChangesetApiModelWithFilePath = ChangesetApiModel & DownloadedFileProps;
 export class ChangesetOperations extends ManagementChangesetOperations {
   private _fileHandler: FileHandler;
 
-  constructor(options: RecursiveRequired<iModelsClientOptions>, checkpointOperations: CheckpointOperations) {
-    super(options, checkpointOperations);
+  constructor(
+    options: RecursiveRequired<iModelsClientOptions>,
+    namedVersionOperations: NamedVersionOperations,
+    checkpointOperations: CheckpointOperations
+  ) {
+    super(options, namedVersionOperations, checkpointOperations);
     this._fileHandler = options.fileHandler;
   }
 
@@ -41,7 +45,8 @@ export class ChangesetOperations extends ManagementChangesetOperations {
         briefcaseId: params.changesetProperties.briefcaseId
       }
     });
-    return this.mapChangeset(params.authorization, changesetUpdateResponse.changeset);
+    const result = this.convertToChangeset(params.authorization, changesetUpdateResponse.changeset);
+    return result;
   }
 
   public async downloadById(params: DownloadChangesetByIdParams): Promise<DownloadedChangeset> {
@@ -55,7 +60,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
   }
 
   public async downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]> {
-    let intermediateResult: ChangesetApiModelWithFilePath[] = [];
+    let changesetsWithPaths: ChangesetApiModelWithFilePath[] = [];
 
     this._fileHandler.createDirectory(params.targetDirectoryPath);
 
@@ -65,11 +70,11 @@ export class ChangesetOperations extends ManagementChangesetOperations {
           ...changeset,
           filePath: this._fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id))
         }));
-      intermediateResult = intermediateResult.concat(changesetsWithFilePath);
+      changesetsWithPaths = changesetsWithPaths.concat(changesetsWithFilePath);
 
       // We sort the changesets by fileSize in descending order to download small
       // changesets first because their SAS tokens have a shorter lifespan.
-      changesetsWithFilePath.sort((changeset1: DownloadedChangeset, changeset2: DownloadedChangeset) => changeset1.fileSize - changeset2.fileSize);
+      changesetsWithFilePath.sort((changeset1: ChangesetApiModelWithFilePath, changeset2: ChangesetApiModelWithFilePath) => changeset1.fileSize - changeset2.fileSize);
 
       const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
       for (const changeset of changesetsWithFilePath)
@@ -81,7 +86,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
       await queue.waitAll();
     }
 
-    const result = intermediateResult.map(this.mapDownloadedChangeset);
+    const result = changesetsWithPaths.map(this.convertToDownloadedChangeset);
     return result;
   }
 
@@ -141,8 +146,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     return `${changesetId}.cs`;
   }
 
-  private mapDownloadedChangeset(changeset: ChangesetApiModel): DownloadedChangeset {
-    return changeset as any;
+  private convertToDownloadedChangeset(changeset: ChangesetApiModelWithFilePath): DownloadedChangeset {
+    return changeset;
   }
-
 }

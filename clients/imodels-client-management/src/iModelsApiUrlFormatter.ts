@@ -2,12 +2,32 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OrderBy } from "./interfaces/CommonInterfaces";
-import { Dictionary } from "./interfaces/UtilityTypes";
-import { GetChangesetListUrlParams } from "../operations";
+import { GetChangesetListUrlParams } from "./operations";
+import { OrderBy } from "./base/interfaces/CommonInterfaces";
+import { Dictionary } from "./base/interfaces/UtilityTypes";
 
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
+
+interface iModelId {
+  imodelId: string;
+}
+
+interface ChangesetIndex {
+  changesetIndex: number;
+}
+
+interface ChangesetIdOrIndex {
+  changesetIdOrIndex: string | number;
+}
+
+interface NamedVersionId {
+  namedVersionId: string;
+}
+
+interface UrlParams<TParams> {
+  urlParams?: TParams;
+}
 
 export class iModelsApiUrlFormatter {
   private _apiBaseUrl: string;
@@ -16,23 +36,31 @@ export class iModelsApiUrlFormatter {
     this._apiBaseUrl = apiBaseUrl;
   }
 
-  public getChangesetsUrl(params: { imodelId: string, urlParams?: GetChangesetListUrlParams }): string {
+  public getChangesetsUrl(params: iModelId & UrlParams<GetChangesetListUrlParams>): string {
     return `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formQueryString({ ...params.urlParams })}`;
   }
 
-  public getChangesetUrl(params: { imodelId: string, changesetIdOrIndex: string | number }): string {
+  public getChangesetUrl(params: iModelId & ChangesetIdOrIndex): string {
     return `${this._apiBaseUrl}/${params.imodelId}/changesets/${params.changesetIdOrIndex}`;
   }
 
-  public getCheckpointUrl(params: { imodelId: string, changesetIdOrIndex: number | string }): string {
+  public getCheckpointUrl(params: iModelId & ChangesetIdOrIndex): string {
     return `${this._apiBaseUrl}/${params.imodelId}/changesets/${params.changesetIdOrIndex}/checkpoint`;
   }
 
-  public parseCheckpointUrl(url: string): { imodelId: string, changesetIndex: number } {
-    var urlParts = url.split('/');
+  public parseCheckpointUrl(url: string): iModelId & ChangesetIndex {
+    const urlParts = url.split("/");
     return {
       imodelId: urlParts[4], // TODO
       changesetIndex: parseInt(urlParts[6]) // TODO
+    };
+  }
+
+  public parseNamedVersionUrl(url: string): iModelId & NamedVersionId {
+    const urlParts = url.split("/");
+    return {
+      imodelId: urlParts[4], // TODO
+      namedVersionId: urlParts[6] // TODO
     };
   }
 

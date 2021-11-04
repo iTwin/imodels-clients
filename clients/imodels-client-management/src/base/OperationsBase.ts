@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
-import { iModelsApiUrlFormatter } from "./iModelsApiUrlFormatter";
+import { iModelsApiUrlFormatter } from "../iModelsApiUrlFormatter";
 import { AuthorizationParam, CollectionResponse, EntityCollectionPage, OrderBy, PreferReturn } from "./interfaces/CommonInterfaces";
 import { Dictionary, RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";

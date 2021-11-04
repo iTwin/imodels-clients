@@ -5,7 +5,7 @@
 import * as fs from "fs";
 import { expect } from "chai";
 import { Briefcase, BriefcaseProperties, ChangesetProperties, Checkpoint, CheckpointState, DownloadedChangeset } from "@itwin/imodels-client-authoring";
-import { ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail, MinimalChangesetProperties } from "@itwin/imodels-client-management";
+import { ChangesetState, MinimalChangesetProperties, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
 import { TestiModelFileProvider } from "./test-context-providers/imodel/TestiModelFileProvider";
 
 export async function assertCollection<T>(params: {

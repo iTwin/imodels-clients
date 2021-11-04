@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { CollectionResponse, Link } from "../CommonInterfaces";
 import { Checkpoint } from "./CheckpointInterfaces";
+import { NamedVersion } from "./NamedVersionInterfaces";
 
 export enum ChangesetState {
   WaitingForFile = "waitingForFile",
@@ -51,6 +52,7 @@ export interface ChangesetLinksApiModel {
   upload: Link;
   download: Link;
   complete: Link;
+  namedVersion?: Link;
   currentOrPrecedingCheckpoint?: Link;
 }
 
@@ -72,6 +74,7 @@ export interface ChangesetsResponseApiModel extends CollectionResponse {
 
 
 export interface ChangesetRelationships {
+  getNamedVersion?: () => Promise<NamedVersion>;
   getCurrentOrPrecedingCheckpoint?: () => Promise<Checkpoint>;
 }
 

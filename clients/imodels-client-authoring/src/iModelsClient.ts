@@ -3,10 +3,10 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import {
+  CheckpointOperations,
   iModelsClient as ManagementiModelsClient,
   iModelsClientOptions as ManagementiModelsClientOptions,
   NamedVersionOperations,
-  CheckpointOperations,
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 import { AzureSdkFileHandler, FileHandler } from "./base";
@@ -32,7 +32,7 @@ export class iModelsClient {
   }
 
   public get Changesets(): ChangesetOperations {
-    return new ChangesetOperations(this._options, this.Checkpoints);
+    return new ChangesetOperations(this._options, this.NamedVersions, this.Checkpoints);
   }
 
   public get NamedVersions(): NamedVersionOperations {
