@@ -31,6 +31,8 @@ interface UrlParams<TParams> {
 
 export class iModelsApiUrlFormatter {
   private _apiBaseUrl: string;
+  private readonly _checkpointUrlRegex = new RegExp("\/imodels\/(?<imodelId>.*?)\/changesets\/(?<changesetIndex>.*?)\/checkpoint");
+  private readonly _namedVersionUrlRegex = new RegExp("\/imodels\/(?<imodelId>.*?)\/namedversions\/(?<namedVersionId>.*)");
 
   constructor(apiBaseUrl: string) {
     this._apiBaseUrl = apiBaseUrl;
@@ -49,18 +51,18 @@ export class iModelsApiUrlFormatter {
   }
 
   public parseCheckpointUrl(url: string): iModelId & ChangesetIndex {
-    const urlParts = url.split("/");
+    const matchedGroups: Dictionary<string> = this._checkpointUrlRegex.exec(new URL(url).pathname)!.groups!;
     return {
-      imodelId: urlParts[4], // TODO
-      changesetIndex: parseInt(urlParts[6]) // TODO
+      imodelId: matchedGroups.imodelId,
+      changesetIndex: parseInt(matchedGroups.changesetIndex)
     };
   }
 
   public parseNamedVersionUrl(url: string): iModelId & NamedVersionId {
-    const urlParts = url.split("/");
+    const matchedGroups: Dictionary<string> = this._namedVersionUrlRegex.exec(new URL(url).pathname)!.groups!;
     return {
-      imodelId: urlParts[4], // TODO
-      namedVersionId: urlParts[6] // TODO
+      imodelId: matchedGroups.imodelId, 
+      namedVersionId: matchedGroups.namedVersionId
     };
   }
 

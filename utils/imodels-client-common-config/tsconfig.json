@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2018",
     "module": "commonjs",
     "sourceMap": true,
     "lib": [
-      "es2017",
+      "es2018",
+      "es2018.regexp",
       "esnext.asynciterable",
       "DOM"
     ],
