@@ -4,8 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Briefcase, BriefcaseProperties, ChangesetProperties, Checkpoint, CheckpointState, DownloadedChangeset } from "@itwin/imodels-client-authoring";
-import { ChangesetState, MinimalChangesetProperties, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
+import { Briefcase, BriefcaseProperties, ChangesetPropertiesForCreate, Checkpoint, CheckpointState, DownloadedChangeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail, Changeset} from "@itwin/imodels-client-authoring";
 import { TestiModelFileProvider } from "./test-context-providers/imodel/TestiModelFileProvider";
 
 export async function assertCollection<T>(params: {
@@ -53,9 +52,9 @@ export function assertBriefcase(params: {
   expect(params.actualBriefcase.acquiredDateTime as Date).to.not.be.undefined;
 }
 
-function assertMinimalChangeset(params: {
-  actualChangeset: MinimalChangesetProperties,
-  expectedChangesetProperties: Partial<ChangesetProperties>
+export function assertChangeset(params: {
+  actualChangeset: Changeset,
+  expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>
 }): void {
   expect(params.actualChangeset).to.not.be.undefined;
   expect(params.actualChangeset.id).to.not.be.empty;
@@ -67,6 +66,8 @@ function assertMinimalChangeset(params: {
   assertOptionalProperty(params.expectedChangesetProperties.description, params.actualChangeset.description);
   expect(params.actualChangeset.pushDateTime as Date).to.not.be.undefined;
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
+  expect(params.actualChangeset.application).to.not.be.null;
+  expect(params.actualChangeset.synchronizationInfo).to.equal(null);
 
   // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
   const expectedChangesetMetadata = TestiModelFileProvider.changesets.find(changeset => changeset.id === params.expectedChangesetProperties.id);
@@ -76,20 +77,11 @@ function assertMinimalChangeset(params: {
   // expect(params.actualChangeset.application).to.equal(null);
 }
 
-export function assertChangeset(params: {
-  actualChangeset: ChangesetProperties,
-  expectedChangesetProperties: Partial<ChangesetProperties>
-}): void {
-  assertMinimalChangeset(params);
-  expect(params.actualChangeset.application).to.not.be.null;
-  expect(params.actualChangeset.synchronizationInfo).to.equal(null);
-}
-
 export function assertDownloadedChangeset(params: {
   actualChangeset: DownloadedChangeset,
-  expectedChangesetProperties: Partial<ChangesetProperties>
+  expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>
 }): void {
-  assertMinimalChangeset(params);
+  assertChangeset(params);
   expect(fs.existsSync(params.actualChangeset.filePath)).to.equal(true);
 
   // Check if the downloaded file size matches the size of the changeset file used for test iModel creation

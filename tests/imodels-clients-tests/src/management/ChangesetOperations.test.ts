@@ -191,13 +191,12 @@ describe("[Management] ChangesetOperations", () => {
 
       // Assert
       for await (const changeset of changesets) {
-        expect(changeset.getCurrentOrPrecedingCheckpoint).to.not.be.undefined;
-        const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint!();
+        const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
         expect(checkpoint).to.not.be.undefined;
         const expectedCheckpointChangesetIndex = changeset.index === firstNamedVersion.changesetIndex
           ? firstNamedVersion.changesetIndex
           : 0;
-        expect(checkpoint.changesetIndex).to.equal(expectedCheckpointChangesetIndex);
+        expect(checkpoint!.changesetIndex).to.equal(expectedCheckpointChangesetIndex);
       }
     });
 
@@ -213,10 +212,9 @@ describe("[Management] ChangesetOperations", () => {
       const changeset: Changeset = await imodelsClient.Changesets.getById(getChangesetByIdParams);
 
       // Assert
-      expect(changeset.getCurrentOrPrecedingCheckpoint).to.not.be.undefined;
       const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint!();
       expect(checkpoint).to.not.be.undefined;
-      expect(checkpoint.changesetIndex).to.equal(firstNamedVersion.changesetIndex);
+      expect(checkpoint!.changesetIndex).to.equal(firstNamedVersion.changesetIndex);
     });
   });
 });

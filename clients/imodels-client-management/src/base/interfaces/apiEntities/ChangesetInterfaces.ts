@@ -29,7 +29,15 @@ export interface SynchronizationInfo {
   changedFiles: string[];
 }
 
-export interface MinimalChangesetProperties {
+export interface ChangesetLinks {
+  upload: Link;
+  download: Link;
+  complete: Link;
+  namedVersion?: Link;
+  currentOrPrecedingCheckpoint?: Link;
+}
+
+export interface MinimalChangeset {
   id: string;
   displayName: string;
   description: string;
@@ -42,45 +50,23 @@ export interface MinimalChangesetProperties {
   briefcaseId: number;
 }
 
-export interface ChangesetProperties extends MinimalChangesetProperties {
+export interface Changeset extends MinimalChangeset {
   application: Application | null;
   synchronizationInfo: SynchronizationInfo | null;
+  _links: ChangesetLinks;
+  getNamedVersion: () => Promise<NamedVersion | undefined>;
+  getCurrentOrPrecedingCheckpoint: () => Promise<Checkpoint | undefined>;
 }
 
-
-export interface ChangesetLinksApiModel {
-  upload: Link;
-  download: Link;
-  complete: Link;
-  namedVersion?: Link;
-  currentOrPrecedingCheckpoint?: Link;
+export interface ChangesetResponse {
+  changeset: Changeset;
 }
 
-export type MinimalChangesetApiModel = MinimalChangesetProperties;
-
-export type ChangesetApiModel = ChangesetProperties & { _links: ChangesetLinksApiModel };
-
-export interface ChangesetResponseApiModel {
-  changeset: ChangesetApiModel;
+export interface MinimalChangesetsResponse extends CollectionResponse {
+  changesets: MinimalChangeset[];
 }
 
-export interface MinimalChangesetsResponseApiModel extends CollectionResponse {
-  changesets: MinimalChangesetApiModel[];
+export interface ChangesetsResponse extends CollectionResponse {
+  changesets: Changeset[];
 }
-
-export interface ChangesetsResponseApiModel extends CollectionResponse {
-  changesets: ChangesetApiModel[];
-}
-
-
-export interface ChangesetRelationships {
-  getNamedVersion?: () => Promise<NamedVersion>;
-  getCurrentOrPrecedingCheckpoint?: () => Promise<Checkpoint>;
-}
-
-export type MinimalChangeset = MinimalChangesetProperties;
-
-export type Changeset = ChangesetProperties & ChangesetRelationships;
-
-
 

@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, Checkpoint, OperationsBase, PreferReturn, RecursiveRequired, flatten, getCollectionIterator, getCollectionPagesIterator, iModelScopedOperationParams, map, NamedVersion } from "../../base";
-import { Changeset, ChangesetApiModel, ChangesetResponseApiModel, ChangesetsResponseApiModel, MinimalChangeset, MinimalChangesetApiModel, MinimalChangesetsResponseApiModel } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
+import { AuthorizationCallback, Checkpoint, OperationsBase, PreferReturn, RecursiveRequired, flatten, getCollectionIterator, getCollectionPagesIterator, iModelScopedOperationParams, ChangesetResponse, map, NamedVersion } from "../../base";
+import { Changeset, ChangesetsResponse, MinimalChangeset, MinimalChangesetsResponse } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CheckpointOperations } from "../checkpoint/CheckpointOperations";
 import { NamedVersionOperations } from "../namedVersion/NamedVersionOperations";
@@ -19,89 +19,90 @@ export class ChangesetOperations extends OperationsBase {
   }
 
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
-    const getEntityPageFunc = () => this.getEntityCollectionPage<MinimalChangesetApiModel>({
+    const getEntityPageFunc = () => this.getEntityCollectionPage<MinimalChangeset>({
       authorization: params.authorization,
       url: this._urlFormatter.getChangesetsUrl(params),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: unknown) => (response as MinimalChangesetsResponseApiModel).changesets
+      entityCollectionAccessor: (response: unknown) => (response as MinimalChangesetsResponse).changesets
     });
 
-    const collection: AsyncIterableIterator<MinimalChangesetApiModel> = getCollectionIterator(getEntityPageFunc);
-    const mappedCollection: AsyncIterableIterator<MinimalChangeset> = map<MinimalChangesetApiModel, MinimalChangeset>(collection, this.convertToMinimalChangeset);
-    return mappedCollection;
+    const collection: AsyncIterableIterator<MinimalChangeset> = getCollectionIterator(getEntityPageFunc);
+    return collection;
   }
 
   public getRepresentationList(params: GetChangesetListParams): AsyncIterableIterator<Changeset> {
-    const pagedCollection: AsyncIterableIterator<ChangesetApiModel[]> = this.getRepresentationListIntenal(params);
-    const flattenedCollection: AsyncIterableIterator<ChangesetApiModel> = flatten<ChangesetApiModel>(pagedCollection);
-    const mappedCollection: AsyncIterableIterator<Changeset> = map<ChangesetApiModel, Changeset>(
+    const pagedCollection: AsyncIterableIterator<Changeset[]> = this.getRepresentationListIntenal(params);
+    const flattenedCollection: AsyncIterableIterator<Changeset> = flatten<Changeset>(pagedCollection);
+    const mappedCollection: AsyncIterableIterator<Changeset> = map<Changeset, Changeset>( // TODO:
       flattenedCollection,
-      changeset => this.convertToChangeset(params.authorization, changeset)
+      changeset => this.appendRelatedEntityCallbacks(params.authorization, changeset)
     );
     return mappedCollection;
   }
 
   public async getById(params: GetChangesetByIdParams): Promise<Changeset> {
     const changeset = await this.getByIdOrIndexInternal({ ...params, changesetIdOrIndex: params.changesetId });
-    return this.convertToChangeset(params.authorization, changeset);
+    return this.appendRelatedEntityCallbacks(params.authorization, changeset);
   }
 
   public async getByIndex(params: GetChangesetByIndexParams): Promise<Changeset> {
     const changeset = await this.getByIdOrIndexInternal({ ...params, changesetIdOrIndex: params.changesetIndex });
-    return this.convertToChangeset(params.authorization, changeset);
+    return this.appendRelatedEntityCallbacks(params.authorization, changeset);
   }
 
-  protected getRepresentationListIntenal(params: GetChangesetListParams): AsyncIterableIterator<ChangesetApiModel[]> {
-    const getEntityPageFunc = () => this.getEntityCollectionPage<ChangesetApiModel>({
+  protected getRepresentationListIntenal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
+    const getEntityPageFunc = () => this.getEntityCollectionPage<Changeset>({
       authorization: params.authorization,
       url: this._urlFormatter.getChangesetsUrl(params),
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponseApiModel).changesets
+      entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse).changesets
     });
 
     return getCollectionPagesIterator(getEntityPageFunc);
   }
 
-  protected async getByIdOrIndexInternal(params: iModelScopedOperationParams & { changesetIdOrIndex: string | number }): Promise<ChangesetApiModel> {
-    const response = await this.sendGetRequest<ChangesetResponseApiModel>({
+  protected async getByIdOrIndexInternal(params: iModelScopedOperationParams & { changesetIdOrIndex: string | number }): Promise<Changeset> {
+    const response = await this.sendGetRequest<ChangesetResponse>({
       authorization: params.authorization,
       url: this._urlFormatter.getChangesetsUrl(params)
     });
     return response.changeset;
   }
 
-  private convertToMinimalChangeset(changeset: MinimalChangesetApiModel): MinimalChangeset {
-    return changeset; // todo: manual property map?
-  }
+  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, changeset: Changeset): Changeset {
+    const getNamedVersion = () => this.getNamedVersion(authorization, changeset._links.namedVersion?.href);
+    const getCurrentOrPrecedingCheckpoint = () => this.getCurrentOrPrecedingCheckpoint(authorization, changeset._links.currentOrPrecedingCheckpoint?.href);
 
-  protected convertToChangeset(authorization: AuthorizationCallback, changeset: ChangesetApiModel): Changeset {
-    const { _links: changesetLinks, ...changesetProperties } = changeset;
-    const result: Changeset = changesetProperties;
-
-    if (changesetLinks.namedVersion)
-      result.getNamedVersion = () => this.getNamedVersion(authorization, changesetLinks.namedVersion!.href);
-
-    if (changesetLinks.currentOrPrecedingCheckpoint)
-      result.getCurrentOrPrecedingCheckpoint = () => this.getCurrentOrPrecedingCheckpoint(authorization, changesetLinks.currentOrPrecedingCheckpoint!.href);
+    const result: Changeset = {
+      ...changeset,
+      getNamedVersion,
+      getCurrentOrPrecedingCheckpoint
+    };
 
     return result;
   }
+  
+  private getNamedVersion(authorization: AuthorizationCallback, namedVersionLink: string | undefined): Promise<NamedVersion | undefined> {
+    if (!namedVersionLink)
+      return Promise.resolve(undefined);
 
-  private getCurrentOrPrecedingCheckpoint(authorization: AuthorizationCallback, currentOrPrecedingCheckpointLink: string): Promise<Checkpoint> {
-    const { imodelId, changesetIndex } = this._urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
-    return this._checkpointOperations.getByChangesetIndex({
-      authorization,
-      imodelId,
-      changesetIndex
-    });
-  }
-
-  private getNamedVersion(authorization: AuthorizationCallback, namedVersionLink: string): Promise<NamedVersion> {
     const { imodelId, namedVersionId } = this._urlFormatter.parseNamedVersionUrl(namedVersionLink);
     return this._namedVersionOperations.getById({
       authorization,
       imodelId,
       namedVersionId
+    });
+  }
+
+  private getCurrentOrPrecedingCheckpoint(authorization: AuthorizationCallback, currentOrPrecedingCheckpointLink: string | undefined): Promise<Checkpoint | undefined> {
+    if (!currentOrPrecedingCheckpointLink)
+      return Promise.resolve(undefined);
+
+    const { imodelId, changesetIndex } = this._urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
+    return this._checkpointOperations.getByChangesetIndex({
+      authorization,
+      imodelId,
+      changesetIndex
     });
   }
 }
