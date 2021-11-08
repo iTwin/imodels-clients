@@ -212,7 +212,7 @@ describe("[Management] ChangesetOperations", () => {
       const changeset: Changeset = await imodelsClient.Changesets.getById(getChangesetByIdParams);
 
       // Assert
-      const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint!();
+      const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
       expect(checkpoint).to.not.be.undefined;
       expect(checkpoint!.changesetIndex).to.equal(firstNamedVersion.changesetIndex);
     });

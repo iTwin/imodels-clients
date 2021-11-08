@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { GetChangesetListUrlParams } from "./operations";
-import { OrderBy } from "./base/interfaces/CommonInterfaces";
-import { Dictionary } from "./base/interfaces/UtilityTypes";
+import { GetChangesetListUrlParams } from "../operations";
+import { OrderBy } from "./interfaces/CommonInterfaces";
+import { Dictionary } from "./interfaces/UtilityTypes";
 
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
@@ -30,9 +30,15 @@ interface UrlParams<TParams> {
 }
 
 export class iModelsApiUrlFormatter {
-  private _apiBaseUrl: string;
-  private readonly _checkpointUrlRegex = new RegExp("\/imodels\/(?<imodelId>.*?)\/changesets\/(?<changesetIndex>.*?)\/checkpoint");
-  private readonly _namedVersionUrlRegex = new RegExp("\/imodels\/(?<imodelId>.*?)\/namedversions\/(?<namedVersionId>.*)");
+  private readonly _apiBaseUrl: string;
+  private readonly _regexIgnoreCaseOption = "i";
+  private readonly _groupNames = {
+    imodelId: "imodelId",
+    changesetIndex: "changesetIndex",
+    namedVersionId: "namedVersionId"
+  };
+  private readonly _checkpointUrlRegex = new RegExp(`\/imodels\/(?<${this._groupNames.imodelId}>.*?)\/changesets\/(?<${this._groupNames.changesetIndex}>.*?)\/checkpoint`, this._regexIgnoreCaseOption);
+  private readonly _namedVersionUrlRegex = new RegExp(`\/imodels\/(?<${this._groupNames.imodelId}>.*?)\/namedversions\/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
 
   constructor(apiBaseUrl: string) {
     this._apiBaseUrl = apiBaseUrl;
@@ -51,18 +57,18 @@ export class iModelsApiUrlFormatter {
   }
 
   public parseCheckpointUrl(url: string): iModelId & ChangesetIndex {
-    const matchedGroups: Dictionary<string> = this._checkpointUrlRegex.exec(new URL(url).pathname)!.groups!;
+    const matchedGroups: Dictionary<string> = this._checkpointUrlRegex.exec(url)!.groups!;
     return {
-      imodelId: matchedGroups.imodelId,
-      changesetIndex: parseInt(matchedGroups.changesetIndex)
+      imodelId: matchedGroups[this._groupNames.imodelId],
+      changesetIndex: parseInt(matchedGroups[this._groupNames.changesetIndex])
     };
   }
 
   public parseNamedVersionUrl(url: string): iModelId & NamedVersionId {
-    const matchedGroups: Dictionary<string> = this._namedVersionUrlRegex.exec(new URL(url).pathname)!.groups!;
+    const matchedGroups: Dictionary<string> = this._namedVersionUrlRegex.exec(url)!.groups!;
     return {
-      imodelId: matchedGroups.imodelId, 
-      namedVersionId: matchedGroups.namedVersionId
+      imodelId: matchedGroups[this._groupNames.imodelId],
+      namedVersionId: matchedGroups[this._groupNames.namedVersionId]
     };
   }
 

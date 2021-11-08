@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
 import { iModelsClientOptions } from "../iModelsClient";
-import { iModelsApiUrlFormatter } from "../iModelsApiUrlFormatter";
+import { iModelsApiUrlFormatter } from "./iModelsApiUrlFormatter";
 import { AuthorizationParam, CollectionResponse, EntityCollectionPage, OrderBy, PreferReturn } from "./interfaces/CommonInterfaces";
 import { Dictionary, RecursiveRequired } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
@@ -19,6 +19,7 @@ type SendDeleteRequestParams = AuthorizationParam & { url: string };
 
 export class OperationsBase {
   protected _restClient: RestClient;
+  // TODO: remove _apiBaseUrl when all urls are migrated to iModelsApiUrlFormatter
   protected _apiBaseUrl: string;
   protected _apiVersion: string;
   protected _urlFormatter: iModelsApiUrlFormatter;

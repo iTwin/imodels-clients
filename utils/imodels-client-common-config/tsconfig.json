@@ -5,7 +5,6 @@
     "sourceMap": true,
     "lib": [
       "es2018",
-      "es2018.regexp",
       "esnext.asynciterable",
       "DOM"
     ],

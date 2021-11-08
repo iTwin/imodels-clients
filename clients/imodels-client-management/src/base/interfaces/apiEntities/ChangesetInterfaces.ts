@@ -69,4 +69,3 @@ export interface MinimalChangesetsResponse extends CollectionResponse {
 export interface ChangesetsResponse extends CollectionResponse {
   changesets: Changeset[];
 }
-

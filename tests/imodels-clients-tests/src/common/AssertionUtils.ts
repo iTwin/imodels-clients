@@ -1,10 +1,11 @@
-/*---------------------------------------------------------------------------------------------
+ /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Briefcase, BriefcaseProperties, ChangesetPropertiesForCreate, Checkpoint, CheckpointState, DownloadedChangeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail, Changeset} from "@itwin/imodels-client-authoring";
+import { Briefcase, BriefcaseProperties, ChangesetPropertiesForCreate, Checkpoint, CheckpointState, DownloadedChangeset } from "@itwin/imodels-client-authoring";
+import { Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
 import { TestiModelFileProvider } from "./test-context-providers/imodel/TestiModelFileProvider";
 
 export async function assertCollection<T>(params: {
@@ -66,7 +67,6 @@ export function assertChangeset(params: {
   assertOptionalProperty(params.expectedChangesetProperties.description, params.actualChangeset.description);
   expect(params.actualChangeset.pushDateTime as Date).to.not.be.undefined;
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
-  expect(params.actualChangeset.application).to.not.be.null;
   expect(params.actualChangeset.synchronizationInfo).to.equal(null);
 
   // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
@@ -82,6 +82,7 @@ export function assertDownloadedChangeset(params: {
   expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>
 }): void {
   assertChangeset(params);
+
   expect(fs.existsSync(params.actualChangeset.filePath)).to.equal(true);
 
   // Check if the downloaded file size matches the size of the changeset file used for test iModel creation

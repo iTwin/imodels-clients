@@ -5,7 +5,7 @@
 import { expect } from "chai";
 import { iModelsApiUrlFormatter } from "@itwin/imodels-client-management";
 
-describe.only("iModelsApiUrlFormatter", () => {
+describe("iModelsApiUrlFormatter", () => {
   let imodelsApiUrlFormatter: iModelsApiUrlFormatter;
   let imodelsApiBaseUri: string;
 

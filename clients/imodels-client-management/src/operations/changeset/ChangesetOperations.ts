@@ -12,8 +12,8 @@ import { GetChangesetByIdParams, GetChangesetByIndexParams, GetChangesetListPara
 export class ChangesetOperations extends OperationsBase {
   constructor(
     options: RecursiveRequired<iModelsClientOptions>,
-    private _namedVersionOperations: NamedVersionOperations,
-    private _checkpointOperations: CheckpointOperations
+    protected _namedVersionOperations: NamedVersionOperations,
+    protected _checkpointOperations: CheckpointOperations
   ) {
     super(options);
   }
@@ -64,7 +64,7 @@ export class ChangesetOperations extends OperationsBase {
   protected async getByIdOrIndexInternal(params: iModelScopedOperationParams & { changesetIdOrIndex: string | number }): Promise<Changeset> {
     const response = await this.sendGetRequest<ChangesetResponse>({
       authorization: params.authorization,
-      url: this._urlFormatter.getChangesetsUrl(params)
+      url: this._urlFormatter.getChangesetUrl(params)
     });
     return response.changeset;
   }
