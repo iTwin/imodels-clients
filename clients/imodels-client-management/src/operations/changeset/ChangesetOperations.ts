@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, Checkpoint, OperationsBase, PreferReturn, RecursiveRequired, flatten, getCollectionIterator, getCollectionPagesIterator, iModelScopedOperationParams, ChangesetResponse, map, NamedVersion } from "../../base";
+import { AuthorizationCallback, ChangesetResponse, Checkpoint, NamedVersion, OperationsBase, PreferReturn, RecursiveRequired, flatten, getCollectionIterator, getCollectionPagesIterator, iModelScopedOperationParams, map } from "../../base";
 import { Changeset, ChangesetsResponse, MinimalChangeset, MinimalChangesetsResponse } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CheckpointOperations } from "../checkpoint/CheckpointOperations";
@@ -81,7 +81,7 @@ export class ChangesetOperations extends OperationsBase {
 
     return result;
   }
-  
+
   private getNamedVersion(authorization: AuthorizationCallback, namedVersionLink: string | undefined): Promise<NamedVersion | undefined> {
     if (!namedVersionLink)
       return Promise.resolve(undefined);

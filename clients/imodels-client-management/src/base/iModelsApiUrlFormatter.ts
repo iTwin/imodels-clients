@@ -37,8 +37,8 @@ export class iModelsApiUrlFormatter {
     changesetIndex: "changesetIndex",
     namedVersionId: "namedVersionId"
   };
-  private readonly _checkpointUrlRegex = new RegExp(`\/imodels\/(?<${this._groupNames.imodelId}>.*?)\/changesets\/(?<${this._groupNames.changesetIndex}>.*?)\/checkpoint`, this._regexIgnoreCaseOption);
-  private readonly _namedVersionUrlRegex = new RegExp(`\/imodels\/(?<${this._groupNames.imodelId}>.*?)\/namedversions\/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
+  private readonly _checkpointUrlRegex = new RegExp(`/imodels/(?<${this._groupNames.imodelId}>.*?)/changesets/(?<${this._groupNames.changesetIndex}>.*?)/checkpoint`, this._regexIgnoreCaseOption);
+  private readonly _namedVersionUrlRegex = new RegExp(`/imodels/(?<${this._groupNames.imodelId}>.*?)/namedversions/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
 
   constructor(apiBaseUrl: string) {
     this._apiBaseUrl = apiBaseUrl;

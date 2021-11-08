@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, ChangesetResponse, ChangesetState, CheckpointOperations, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl, NamedVersionOperations } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetResponse, ChangesetState, CheckpointOperations, ChangesetOperations as ManagementChangesetOperations, NamedVersionOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
 import { DownloadedChangeset, FileHandler, TargetDirectoryParam } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateChangesetParams, DownloadChangesetByIdParams, DownloadChangesetByIndexParams, DownloadChangesetListParams } from "./ChangesetOperationParams";
@@ -68,7 +68,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
           ...changeset,
           filePath: this._fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id))
         }));
-        result = result.concat(changesetsWithFilePath);
+      result = result.concat(changesetsWithFilePath);
 
       // We sort the changesets by fileSize in descending order to download small
       // changesets first because their SAS tokens have a shorter lifespan.

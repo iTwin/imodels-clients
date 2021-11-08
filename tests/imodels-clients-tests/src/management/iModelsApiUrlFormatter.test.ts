@@ -25,7 +25,7 @@ describe("iModelsApiUrlFormatter", () => {
     const changesetsUrl = imodelsApiUrlFormatter.getChangesetsUrl({ imodelId, urlParams: { $skip, $top, afterIndex } });
 
     // Assert
-    expect(changesetsUrl).to.be.equal("https://api.bentley.com/imodels/imodelId/changesets?$skip=10&$top=15&afterIndex=5")
+    expect(changesetsUrl).to.be.equal("https://api.bentley.com/imodels/imodelId/changesets?$skip=10&$top=15&afterIndex=5");
   });
 
   it("should format changeset url with id", () => {
