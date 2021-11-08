@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelScopedOperationParams } from "@itwin/imodels-client-management";
+import { iModelScopedOperationParams } from "../../base";
 
 export interface GetCheckpointByChangesetIdParams extends iModelScopedOperationParams {
   changesetId: string;

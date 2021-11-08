@@ -19,6 +19,11 @@ export async function* getCollectionPagesIterator<TEntity>(pageQueryFunc: Entity
   }
 }
 
+export async function* map<TSource, TTarget>(iterator: AsyncIterableIterator<TSource>, mapFunc: (entity: TSource) => TTarget): AsyncIterableIterator<TTarget> {
+  for await (const entity of iterator)
+    yield mapFunc(entity);
+}
+
 export async function* flatten<TEntity>(pagedIterator: AsyncIterableIterator<TEntity[]>): AsyncIterableIterator<TEntity> {
   for await (const entityChunk of pagedIterator)
     for (const entity of entityChunk)

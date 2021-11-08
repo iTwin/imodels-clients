@@ -2,8 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OperationsBase, iModelScopedOperationParams } from "@itwin/imodels-client-management";
-import { Checkpoint, CheckpointResponse } from "../../base";
+import { Checkpoint, CheckpointResponse, OperationsBase, iModelScopedOperationParams } from "../../base";
 import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams } from "./CheckpointOperationParams";
 
 export class CheckpointOperations extends OperationsBase {

@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 export * from "./interfaces/apiEntities/iModelInterfaces";
 export * from "./interfaces/apiEntities/ChangesetInterfaces";
-export * from "./interfaces/apiEntities/CheckpointInterfaces";
 export * from "./interfaces/CommonInterfaces";
 export * from "./files/FileHandler";
 export * from "./files/AzureSdkFileHandler";

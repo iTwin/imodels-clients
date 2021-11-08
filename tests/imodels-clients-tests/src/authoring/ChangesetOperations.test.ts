@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, Changeset, CreateChangesetParams, DownloadChangesetListParams, TargetDirectoryParam, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetListParams, DownloadedChangeset, TargetDirectoryParam, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-authoring";
 import { Config, Constants, FileTransferLog, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory, iModelMetadata } from "../common";
 
 type CommonDownloadParams = iModelScopedOperationParams & TargetDirectoryParam;
@@ -135,7 +135,7 @@ describe("[Authoring] ChangesetOperations", () => {
       const expectedChangesetCount = downloadChangesetListParams.urlParams!.lastIndex! - downloadChangesetListParams.urlParams!.afterIndex!;
       expect(changesets.length).to.equal(expectedChangesetCount);
       expect(fs.readdirSync(downloadPath).length).to.equal(expectedChangesetCount);
-      expect(changesets.map((changeset: Changeset) => changeset.index)).to.have.members([6, 7, 8, 9, 10]);
+      expect(changesets.map((changeset: DownloadedChangeset) => changeset.index)).to.have.members([6, 7, 8, 9, 10]);
 
       for (const changeset of changesets) {
         const changesetMetadata = TestiModelFileProvider.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
@@ -258,7 +258,7 @@ describe("[Authoring] ChangesetOperations", () => {
         };
 
         // Act
-        const changeset: Changeset = await testCase.functionUnderTest(imodelsClientWithTrackedFileTransfer, partialDownloadChangesetParams);
+        const changeset: DownloadedChangeset = await testCase.functionUnderTest(imodelsClientWithTrackedFileTransfer, partialDownloadChangesetParams);
 
         // Assert
         expect(changeset).to.be.not.be.undefined;

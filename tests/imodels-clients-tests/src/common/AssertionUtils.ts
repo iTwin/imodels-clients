@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Briefcase, BriefcaseProperties, ChangesetProperties, Checkpoint, CheckpointState, DownloadedChangeset } from "@itwin/imodels-client-authoring";
+import { Briefcase, BriefcaseProperties, ChangesetPropertiesForCreate, Checkpoint, CheckpointState, DownloadedChangeset } from "@itwin/imodels-client-authoring";
 import { Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
 import { TestiModelFileProvider } from "./test-context-providers/imodel/TestiModelFileProvider";
 
@@ -56,7 +56,7 @@ export function assertBriefcase(params: {
 
 export function assertChangeset(params: {
   actualChangeset: Changeset,
-  expectedChangesetProperties: Partial<ChangesetProperties>
+  expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>
 }): void {
   expect(params.actualChangeset).to.not.be.undefined;
   expect(params.actualChangeset.id).to.not.be.empty;
@@ -80,7 +80,7 @@ export function assertChangeset(params: {
 
 export function assertDownloadedChangeset(params: {
   actualChangeset: DownloadedChangeset,
-  expectedChangesetProperties: Partial<ChangesetProperties>
+  expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>
 }): void {
   assertChangeset(params);
 
