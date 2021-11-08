@@ -62,7 +62,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
 
     this._fileHandler.createDirectory(params.targetDirectoryPath);
 
-    for await (const changesetPage of this.getRepresentationListIntenal(params)) {
+    for await (const changesetPage of this.getRepresentationListInternal(params)) {
       const changesetsWithFilePath: DownloadedChangeset[] = changesetPage.map(
         (changeset: Changeset) => ({
           ...changeset,

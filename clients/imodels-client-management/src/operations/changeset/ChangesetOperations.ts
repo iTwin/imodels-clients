@@ -31,7 +31,7 @@ export class ChangesetOperations extends OperationsBase {
   }
 
   public getRepresentationList(params: GetChangesetListParams): AsyncIterableIterator<Changeset> {
-    const pagedCollection: AsyncIterableIterator<Changeset[]> = this.getRepresentationListIntenal(params);
+    const pagedCollection: AsyncIterableIterator<Changeset[]> = this.getRepresentationListInternal(params);
     const flattenedCollection: AsyncIterableIterator<Changeset> = flatten<Changeset>(pagedCollection);
     const mappedCollection: AsyncIterableIterator<Changeset> = map<Changeset, Changeset>( // TODO:
       flattenedCollection,
@@ -50,7 +50,7 @@ export class ChangesetOperations extends OperationsBase {
     return this.appendRelatedEntityCallbacks(params.authorization, changeset);
   }
 
-  protected getRepresentationListIntenal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
+  protected getRepresentationListInternal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
     const getEntityPageFunc = () => this.getEntityCollectionPage<Changeset>({
       authorization: params.authorization,
       url: this._urlFormatter.getChangesetsUrl(params),
