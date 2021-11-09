@@ -2,18 +2,18 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, ChangesetResponse, Checkpoint, NamedVersion, OperationsBase, PreferReturn, RecursiveRequired, flatten, getCollectionIterator, getCollectionPagesIterator, iModelScopedOperationParams, map } from "../../base";
+import { AuthorizationCallback, ChangesetResponse, Checkpoint, NamedVersion, OperationsBase, PreferReturn, flatten, getCollectionIterator, getCollectionPagesIterator, iModelScopedOperationParams, map } from "../../base";
 import { Changeset, ChangesetsResponse, MinimalChangeset, MinimalChangesetsResponse } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
-import { iModelsClientOptions } from "../../iModelsClient";
 import { CheckpointOperations } from "../checkpoint/CheckpointOperations";
 import { NamedVersionOperations } from "../namedVersion/NamedVersionOperations";
+import { OperationOptions } from "../OperationOptions";
 import { GetChangesetByIdParams, GetChangesetByIndexParams, GetChangesetListParams } from "./ChangesetOperationParams";
 
-export class ChangesetOperations extends OperationsBase {
+export class ChangesetOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   constructor(
-    options: RecursiveRequired<iModelsClientOptions>,
-    protected _namedVersionOperations: NamedVersionOperations,
-    protected _checkpointOperations: CheckpointOperations
+    options: TOptions,
+    protected _namedVersionOperations: NamedVersionOperations<TOptions>,
+    protected _checkpointOperations: CheckpointOperations<TOptions>
   ) {
     super(options);
   }
@@ -21,7 +21,7 @@ export class ChangesetOperations extends OperationsBase {
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
     const getEntityPageFunc = () => this.getEntityCollectionPage<MinimalChangeset>({
       authorization: params.authorization,
-      url: this._urlFormatter.getChangesetsUrl(params),
+      url: this._options.urlFormatter.getChangesetsUrl(params),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as MinimalChangesetsResponse).changesets
     });
@@ -53,7 +53,7 @@ export class ChangesetOperations extends OperationsBase {
   protected getRepresentationListInternal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
     const getEntityPageFunc = () => this.getEntityCollectionPage<Changeset>({
       authorization: params.authorization,
-      url: this._urlFormatter.getChangesetsUrl(params),
+      url: this._options.urlFormatter.getChangesetsUrl(params),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse).changesets
     });
@@ -64,7 +64,7 @@ export class ChangesetOperations extends OperationsBase {
   protected async getByIdOrIndexInternal(params: iModelScopedOperationParams & { changesetIdOrIndex: string | number }): Promise<Changeset> {
     const response = await this.sendGetRequest<ChangesetResponse>({
       authorization: params.authorization,
-      url: this._urlFormatter.getChangesetUrl(params)
+      url: this._options.urlFormatter.getChangesetUrl(params)
     });
     return response.changeset;
   }
@@ -86,7 +86,7 @@ export class ChangesetOperations extends OperationsBase {
     if (!namedVersionLink)
       return Promise.resolve(undefined);
 
-    const { imodelId, namedVersionId } = this._urlFormatter.parseNamedVersionUrl(namedVersionLink);
+    const { imodelId, namedVersionId } = this._options.urlFormatter.parseNamedVersionUrl(namedVersionLink);
     return this._namedVersionOperations.getById({
       authorization,
       imodelId,
@@ -98,7 +98,7 @@ export class ChangesetOperations extends OperationsBase {
     if (!currentOrPrecedingCheckpointLink)
       return Promise.resolve(undefined);
 
-    const { imodelId, changesetIndex } = this._urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
+    const { imodelId, changesetIndex } = this._options.urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
     return this._checkpointOperations.getByChangesetIndex({
       authorization,
       imodelId,

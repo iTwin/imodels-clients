@@ -3,13 +3,14 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Briefcase, BriefcaseResponse, BriefcasesResponse, MinimalBriefcase, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
+import { OperationOptions } from "../OperationOptions";
 import { GetBriefcaseByIdParams, GetBriefcaseListParams } from "./BriefcaseOperationParams";
 
-export class BriefcaseOperations extends OperationsBase {
+export class BriefcaseOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetBriefcaseListParams): AsyncIterableIterator<MinimalBriefcase> {
     return getCollectionIterator(() => this.getEntityCollectionPage<MinimalBriefcase>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`,
+      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as BriefcasesResponse<MinimalBriefcase>).briefcases
     }));
@@ -18,7 +19,7 @@ export class BriefcaseOperations extends OperationsBase {
   public getRepresentationList(params: GetBriefcaseListParams): AsyncIterableIterator<Briefcase> {
     return getCollectionIterator(() => this.getEntityCollectionPage<Briefcase>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`,
+      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as BriefcasesResponse<Briefcase>).briefcases
     }));
@@ -27,7 +28,7 @@ export class BriefcaseOperations extends OperationsBase {
   public async getById(params: GetBriefcaseByIdParams): Promise<Briefcase> {
     const response = await this.sendGetRequest<BriefcaseResponse>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/briefcases/${params.briefcaseId}`
+      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/briefcases/${params.briefcaseId}`
     });
     return response.briefcase;
   }
