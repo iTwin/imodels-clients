@@ -4,7 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import { AxiosRestClient, RecursiveRequired, RestClient } from "./base";
 import { Constants } from "./Constants";
-import { BriefcaseOperations, ChangesetOperations, CheckpointOperations, NamedVersionOperations, iModelOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, NamedVersionOperations, iModelOperations } from "./operations";
+import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
+import { iModelsApiUrlFormatter } from "./operations/iModelsApiUrlFormatter";
+import { OperationOptions } from "./operations/OperationOptions";
 
 export interface ApiOptions {
   baseUri?: string;
@@ -17,30 +20,34 @@ export interface iModelsClientOptions {
 }
 
 export class iModelsClient {
-  private _options: RecursiveRequired<iModelsClientOptions>;
+  private _operationsOptions: OperationOptions;
 
   constructor(options?: iModelsClientOptions) {
-    this._options = iModelsClient.fillConfiguration(options);
+    const fillediModelsClientOptions = iModelsClient.fillConfiguration(options);
+    this._operationsOptions = {
+      ...fillediModelsClientOptions,
+      urlFormatter: new iModelsApiUrlFormatter(fillediModelsClientOptions.api.baseUri)
+    };
   }
 
-  public get iModels(): iModelOperations {
-    return new iModelOperations(this._options);
+  public get iModels(): iModelOperations<OperationOptions> {
+    return new iModelOperations(this._operationsOptions);
   }
 
-  public get Briefcases(): BriefcaseOperations {
-    return new BriefcaseOperations(this._options);
+  public get Briefcases(): BriefcaseOperations<OperationOptions> {
+    return new BriefcaseOperations(this._operationsOptions);
   }
 
-  public get Changesets(): ChangesetOperations {
-    return new ChangesetOperations(this._options, this.NamedVersions, this.Checkpoints);
+  public get Changesets(): ChangesetOperations<OperationOptions> {
+    return new ChangesetOperations(this._operationsOptions, this.NamedVersions, this.Checkpoints);
   }
 
-  public get NamedVersions(): NamedVersionOperations {
-    return new NamedVersionOperations(this._options);
+  public get NamedVersions(): NamedVersionOperations<OperationOptions> {
+    return new NamedVersionOperations(this._operationsOptions);
   }
 
-  public get Checkpoints(): CheckpointOperations {
-    return new CheckpointOperations(this._options);
+  public get Checkpoints(): CheckpointOperations<OperationOptions> {
+    return new CheckpointOperations(this._operationsOptions);
   }
 
   public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {

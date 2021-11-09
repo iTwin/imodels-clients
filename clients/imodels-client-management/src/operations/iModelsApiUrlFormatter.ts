@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { GetChangesetListUrlParams } from "../operations";
-import { OrderBy } from "./interfaces/CommonInterfaces";
-import { Dictionary } from "./interfaces/UtilityTypes";
+import { OrderBy } from "../base/interfaces/CommonInterfaces";
+import { Dictionary } from "../base/interfaces/UtilityTypes";
+import { GetChangesetListUrlParams } from ".";
 
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
@@ -30,7 +30,6 @@ interface UrlParams<TParams> {
 }
 
 export class iModelsApiUrlFormatter {
-  private readonly _apiBaseUrl: string;
   private readonly _regexIgnoreCaseOption = "i";
   private readonly _groupNames = {
     imodelId: "imodelId",
@@ -40,20 +39,20 @@ export class iModelsApiUrlFormatter {
   private readonly _checkpointUrlRegex = new RegExp(`/imodels/(?<${this._groupNames.imodelId}>.*?)/changesets/(?<${this._groupNames.changesetIndex}>.*?)/checkpoint`, this._regexIgnoreCaseOption);
   private readonly _namedVersionUrlRegex = new RegExp(`/imodels/(?<${this._groupNames.imodelId}>.*?)/namedversions/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
 
-  constructor(apiBaseUrl: string) {
-    this._apiBaseUrl = apiBaseUrl;
+  // TODO: make `apiBaseUrl` protected when all url formation is move here
+  constructor(public readonly baseUri: string) {
   }
 
   public getChangesetsUrl(params: iModelId & UrlParams<GetChangesetListUrlParams>): string {
-    return `${this._apiBaseUrl}/${params.imodelId}/changesets${this.formQueryString({ ...params.urlParams })}`;
+    return `${this.baseUri}/${params.imodelId}/changesets${this.formQueryString({ ...params.urlParams })}`;
   }
 
   public getChangesetUrl(params: iModelId & ChangesetIdOrIndex): string {
-    return `${this._apiBaseUrl}/${params.imodelId}/changesets/${params.changesetIdOrIndex}`;
+    return `${this.baseUri}/${params.imodelId}/changesets/${params.changesetIdOrIndex}`;
   }
 
   public getCheckpointUrl(params: iModelId & ChangesetIdOrIndex): string {
-    return `${this._apiBaseUrl}/${params.imodelId}/changesets/${params.changesetIdOrIndex}/checkpoint`;
+    return `${this.baseUri}/${params.imodelId}/changesets/${params.changesetIdOrIndex}/checkpoint`;
   }
 
   public parseCheckpointUrl(url: string): iModelId & ChangesetIndex {

@@ -4,13 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 import { OperationsBase } from "@itwin/imodels-client-management";
 import { BaselineFile, BaselineFileResponse } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
+import { OperationOptions } from "../OperationOptions";
 import { GetBaselineFileByiModelIdParams } from "./BaselineFileOperationParams";
 
-export class BaselineFileOperations extends OperationsBase {
+export class BaselineFileOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public async getByiModelId(params: GetBaselineFileByiModelIdParams): Promise<BaselineFile> {
     const response = await this.sendGetRequest<BaselineFileResponse>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/baselineFile`
+      url: this._options.urlFormatter.getBaselineUrl(params)
     });
     return response.baselineFile;
   }

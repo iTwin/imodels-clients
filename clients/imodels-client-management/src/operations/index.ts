@@ -4,3 +4,5 @@
  *--------------------------------------------------------------------------------------------*/
 export * from "./OperationExports";
 export * from "./OperationParamExports";
+export * from "./OperationOptions";
+export * from "./iModelsApiUrlFormatter";

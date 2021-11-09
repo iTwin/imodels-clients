@@ -2,39 +2,37 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, iModelOperations as ManagementiModelOperations, RecursiveRequired, iModel, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
-import { FileHandler, iModelCreateResponse } from "../../base";
+import { AuthorizationParam, iModelOperations as ManagementiModelOperations, iModel, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
+import { iModelCreateResponse } from "../../base";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
 import { Constants } from "../../Constants";
-import { iModelsClientOptions } from "../../iModelsClient";
 import { BaselineFileOperations } from "../baselineFile/BaselineFileOperations";
+import { OperationOptions } from "../OperationOptions";
 import { CreateiModelFromBaselineParams } from "./iModelOperationParams";
 
-export class iModelOperations extends ManagementiModelOperations {
-  private _fileHandler: FileHandler;
-  private _baselineFileOperations: BaselineFileOperations;
+export class iModelOperations<TOptions extends OperationOptions> extends ManagementiModelOperations<TOptions> {
+  private _baselineFileOperations: BaselineFileOperations<TOptions>;
 
-  constructor(options: RecursiveRequired<iModelsClientOptions>) {
+  constructor(options: TOptions) {
     super(options);
-    this._fileHandler = options.fileHandler;
-    this._baselineFileOperations = new BaselineFileOperations(options);
+    this._baselineFileOperations = new BaselineFileOperations<TOptions>(options);
   }
 
   public async createFromBaseline(params: CreateiModelFromBaselineParams): Promise<iModel> {
     const { filePath: imodelFilePath, ...imodelMetadataProperties } = params.imodelProperties;
     const imodelCreateResponse = await this.sendPostRequest<iModelCreateResponse>({
       authorization: params.authorization,
-      url: this._apiBaseUrl,
+      url: this._options.urlFormatter.baseUri,
       body: {
         ...imodelMetadataProperties,
         baselineFile: {
-          size: this._fileHandler.getFileSize(imodelFilePath)
+          size: this._options.fileHandler.getFileSize(imodelFilePath)
         }
       }
     });
 
     const uploadUrl = imodelCreateResponse.iModel._links.upload.href;
-    await this._fileHandler.uploadFile(uploadUrl, imodelFilePath);
+    await this._options.fileHandler.uploadFile(uploadUrl, imodelFilePath);
 
     const completeUrl = imodelCreateResponse.iModel._links.complete.href;
     await this.sendPostRequest({

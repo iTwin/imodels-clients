@@ -2,7 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-export * from "./OperationExports";
-export * from "./OperationParamExports";
-export * from "./OperationOptions";
-export * from "./iModelsApiUrlFormatter";
+import { OperationsBaseOptions } from "../base/OperationsBase";
+import { iModelsApiUrlFormatter } from "./iModelsApiUrlFormatter";
+
+export interface OperationOptions extends OperationsBaseOptions {
+  urlFormatter: iModelsApiUrlFormatter;
+}

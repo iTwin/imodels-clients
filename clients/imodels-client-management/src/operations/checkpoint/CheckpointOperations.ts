@@ -3,9 +3,10 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Checkpoint, CheckpointResponse, OperationsBase, iModelScopedOperationParams } from "../../base";
+import { OperationOptions } from "../OperationOptions";
 import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams } from "./CheckpointOperationParams";
 
-export class CheckpointOperations extends OperationsBase {
+export class CheckpointOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getByChangesetId(params: GetCheckpointByChangesetIdParams): Promise<Checkpoint> {
     return this.getByParentEntity({
       ...params,
@@ -30,7 +31,7 @@ export class CheckpointOperations extends OperationsBase {
   private async getByParentEntity(params: iModelScopedOperationParams & { parentEntityUrlPath: string }): Promise<Checkpoint> {
     const response = await this.sendGetRequest<CheckpointResponse>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/${params.parentEntityUrlPath}/checkpoint`
+      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/${params.parentEntityUrlPath}/checkpoint`
     });
     return response.checkpoint;
   }

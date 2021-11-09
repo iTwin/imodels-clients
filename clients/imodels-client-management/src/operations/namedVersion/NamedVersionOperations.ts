@@ -3,13 +3,14 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
+import { OperationOptions } from "../OperationOptions";
 import { CreateNamedVersionParams, GetNamedVersionByIdParams, GetNamedVersionListParams, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
 
-export class NamedVersionOperations extends OperationsBase {
+export class NamedVersionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetNamedVersionListParams): AsyncIterableIterator<MinimalNamedVersion> {
     return getCollectionIterator(() => this.getEntityCollectionPage<MinimalNamedVersion>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`,
+      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<MinimalNamedVersion>).namedVersions
     }));
@@ -18,7 +19,7 @@ export class NamedVersionOperations extends OperationsBase {
   public getRepresentationList(params: GetNamedVersionListParams): AsyncIterableIterator<NamedVersion> {
     return getCollectionIterator(() => this.getEntityCollectionPage<NamedVersion>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`,
+      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<NamedVersion>).namedVersions
     }));
@@ -27,7 +28,7 @@ export class NamedVersionOperations extends OperationsBase {
   public async getById(params: GetNamedVersionByIdParams): Promise<NamedVersion> {
     const response = await this.sendGetRequest<NamedVersionResponse>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions/${params.namedVersionId}`
+      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions/${params.namedVersionId}`
     });
     return response.namedVersion;
   }
@@ -35,7 +36,7 @@ export class NamedVersionOperations extends OperationsBase {
   public async create(params: CreateNamedVersionParams): Promise<NamedVersion> {
     const response = await this.sendPostRequest<NamedVersionResponse>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions`,
+      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions`,
       body: params.namedVersionProperties
     });
     return response.namedVersion;
@@ -44,7 +45,7 @@ export class NamedVersionOperations extends OperationsBase {
   public async update(params: UpdateNamedVersionParams): Promise<NamedVersion> {
     const response = await this.sendPatchRequest<NamedVersionResponse>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/namedversions/${params.namedVersionId}`,
+      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions/${params.namedVersionId}`,
       body: params.namedVersionProperties
     });
     return response.namedVersion;

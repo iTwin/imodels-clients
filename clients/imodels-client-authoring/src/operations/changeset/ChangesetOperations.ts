@@ -2,37 +2,26 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, ChangesetResponse, ChangesetState, CheckpointOperations, ChangesetOperations as ManagementChangesetOperations, NamedVersionOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
-import { DownloadedChangeset, FileHandler, TargetDirectoryParam } from "../../base";
-import { iModelsClientOptions } from "../../iModelsClient";
+import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
+import { DownloadedChangeset, TargetDirectoryParam } from "../../base";
+import { OperationOptions } from "../OperationOptions";
 import { CreateChangesetParams, DownloadChangesetByIdParams, DownloadChangesetByIndexParams, DownloadChangesetListParams } from "./ChangesetOperationParams";
 import { LimitedParallelQueue } from "./LimitedParallelQueue";
 
-export class ChangesetOperations extends ManagementChangesetOperations {
-  private _fileHandler: FileHandler;
-
-  constructor(
-    options: RecursiveRequired<iModelsClientOptions>,
-    namedVersionOperations: NamedVersionOperations,
-    checkpointOperations: CheckpointOperations
-  ) {
-    super(options, namedVersionOperations, checkpointOperations);
-    this._fileHandler = options.fileHandler;
-  }
-
+export class ChangesetOperations<TOptions extends OperationOptions> extends ManagementChangesetOperations<TOptions>{
   public async create(params: CreateChangesetParams): Promise<Changeset> {
     const { filePath: changesetFilePath, ...changesetMetadataProperties } = params.changesetProperties;
     const changesetCreateResponse = await this.sendPostRequest<ChangesetResponse>({
       authorization: params.authorization,
-      url: this._urlFormatter.getChangesetsUrl(params),
+      url: this._options.urlFormatter.getChangesetsUrl(params),
       body: {
         ...changesetMetadataProperties,
-        fileSize: this._fileHandler.getFileSize(changesetFilePath)
+        fileSize: this._options.fileHandler.getFileSize(changesetFilePath)
       }
     });
 
     const uploadUrl = changesetCreateResponse.changeset._links.upload.href;
-    await this._fileHandler.uploadFile(uploadUrl, changesetFilePath);
+    await this._options.fileHandler.uploadFile(uploadUrl, changesetFilePath);
 
     const completeUrl = changesetCreateResponse.changeset._links.complete.href;
     const changesetUpdateResponse = await this.sendPatchRequest<ChangesetResponse>({
@@ -60,13 +49,13 @@ export class ChangesetOperations extends ManagementChangesetOperations {
   public async downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]> {
     let result: DownloadedChangeset[] = [];
 
-    this._fileHandler.createDirectory(params.targetDirectoryPath);
+    this._options.fileHandler.createDirectory(params.targetDirectoryPath);
 
     for await (const changesetPage of this.getRepresentationListInternal(params)) {
       const changesetsWithFilePath: DownloadedChangeset[] = changesetPage.map(
         (changeset: Changeset) => ({
           ...changeset,
-          filePath: this._fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id))
+          filePath: this._options.fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id))
         }));
       result = result.concat(changesetsWithFilePath);
 
@@ -90,7 +79,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
   private async downloadSingleChangeset(params: iModelScopedOperationParams & TargetDirectoryParam & { changeset: Changeset }): Promise<DownloadedChangeset> {
     const changesetWithPath: DownloadedChangeset = {
       ...params.changeset,
-      filePath: this._fileHandler.join(params.targetDirectoryPath, this.createFileName(params.changeset.id))
+      filePath: this._options.fileHandler.join(params.targetDirectoryPath, this.createFileName(params.changeset.id))
     };
 
     await this.downloadChangesetFileWithRetry({
@@ -108,7 +97,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
       return;
 
     try {
-      await this._fileHandler.downloadFile(params.changeset._links.download.href, targetFilePath);
+      await this._options.fileHandler.downloadFile(params.changeset._links.download.href, targetFilePath);
     } catch (error) {
       const changeset = await this.getByIdOrIndexInternal({
         authorization: params.authorization,
@@ -117,7 +106,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
       });
 
       try {
-        await this._fileHandler.downloadFile(changeset._links.download.href, targetFilePath);
+        await this._options.fileHandler.downloadFile(changeset._links.download.href, targetFilePath);
       } catch (errorAfterRetry) {
         throw new iModelsErrorImpl({
           code: iModelsErrorCode.ChangesetDownloadFailed,
@@ -128,14 +117,14 @@ export class ChangesetOperations extends ManagementChangesetOperations {
   }
 
   private isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): boolean {
-    if (!this._fileHandler.exists(targetFilePath))
+    if (!this._options.fileHandler.exists(targetFilePath))
       return false;
 
-    const existingFileSize = this._fileHandler.getFileSize(targetFilePath);
+    const existingFileSize = this._options.fileHandler.getFileSize(targetFilePath);
     if (existingFileSize === expectedFileSize)
       return true;
 
-    this._fileHandler.unlink(targetFilePath);
+    this._options.fileHandler.unlink(targetFilePath);
     return false;
   }
 

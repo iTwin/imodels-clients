@@ -3,10 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
-import { iModelsClientOptions } from "../iModelsClient";
-import { iModelsApiUrlFormatter } from "./iModelsApiUrlFormatter";
 import { AuthorizationParam, CollectionResponse, EntityCollectionPage, OrderBy, PreferReturn } from "./interfaces/CommonInterfaces";
-import { Dictionary, RecursiveRequired } from "./interfaces/UtilityTypes";
+import { Dictionary } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
@@ -17,29 +15,24 @@ type SendPostRequestParams = AuthorizationParam & { url: string, body: unknown }
 type SendPatchRequestParams = SendPostRequestParams;
 type SendDeleteRequestParams = AuthorizationParam & { url: string };
 
-export class OperationsBase {
-  protected _restClient: RestClient;
-  // TODO: remove _apiBaseUrl when all urls are migrated to iModelsApiUrlFormatter
-  protected _apiBaseUrl: string;
-  protected _apiVersion: string;
-  protected _urlFormatter: iModelsApiUrlFormatter;
+export interface OperationsBaseOptions {
+  restClient: RestClient;
+  api: { version: string };
+}
 
-  constructor(options: RecursiveRequired<iModelsClientOptions>) {
-    this._restClient = options.restClient;
-    this._apiBaseUrl = options.api.baseUri;
-    this._apiVersion = options.api.version;
-    this._urlFormatter = new iModelsApiUrlFormatter(options.api.baseUri);
+export class OperationsBase<TOptions extends OperationsBaseOptions> {
+  constructor(protected _options: TOptions) {
   }
 
   protected async sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse> {
-    return this._restClient.sendGetRequest<TResponse>({
+    return this._options.restClient.sendGetRequest<TResponse>({
       url: params.url,
       headers: await this.formHeaders(params)
     });
   }
 
   protected async sendPostRequest<TResponse>(params: SendPostRequestParams): Promise<TResponse> {
-    return this._restClient.sendPostRequest<TResponse>({
+    return this._options.restClient.sendPostRequest<TResponse>({
       url: params.url,
       body: params.body,
       headers: await this.formHeaders({ ...params, containsBody: true })
@@ -47,7 +40,7 @@ export class OperationsBase {
   }
 
   protected async sendPatchRequest<TResponse>(params: SendPatchRequestParams): Promise<TResponse> {
-    return this._restClient.sendPatchRequest<TResponse>({
+    return this._options.restClient.sendPatchRequest<TResponse>({
       url: params.url,
       body: params.body,
       headers: await this.formHeaders({ ...params, containsBody: true })
@@ -55,7 +48,7 @@ export class OperationsBase {
   }
 
   protected async sendDeleteRequest<TResponse>(params: SendDeleteRequestParams): Promise<TResponse> {
-    return this._restClient.sendDeleteRequest<TResponse>({
+    return this._options.restClient.sendDeleteRequest<TResponse>({
       url: params.url,
       headers: await this.formHeaders(params)
     });
@@ -79,7 +72,7 @@ export class OperationsBase {
     const headers: Dictionary<string> = {};
     const authorizationInfo = await params.authorization();
     headers[Constants.headers.authorization] = `${authorizationInfo.scheme} ${authorizationInfo.token}`;
-    headers[Constants.headers.accept] = `application/vnd.bentley.${this._apiVersion}+json`;
+    headers[Constants.headers.accept] = `application/vnd.bentley.${this._options.api.version}+json`;
 
     if (params.preferReturn)
       headers[Constants.headers.prefer] = `return=${params.preferReturn}`;

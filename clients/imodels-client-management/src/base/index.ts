@@ -5,7 +5,6 @@
 export * from "./OperationsBase";
 export * from "./iModelsErrorParser";
 export * from "./PagedCollectionGenerator";
-export * from "./iModelsApiUrlFormatter";
 export * from "./interfaces/CommonInterfaces";
 export * from "./interfaces/UtilityTypes";
 export * from "./interfaces/iModelsErrorInterfaces";
