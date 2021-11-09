@@ -191,13 +191,12 @@ describe("[Management] ChangesetOperations", () => {
 
       // Assert
       for await (const changeset of changesets) {
-        expect(changeset._links.currentOrPrecedingCheckpoint?.href).to.not.be.undefined;
-
-        const changesetsUrl = `${adjustBaseUrl(imodelsClientOptions.api!.baseUri!)}/${testiModel.id}/changesets`;
-        const expectedLinkToCheckpoint = changeset.index === firstNamedVersion.changesetIndex
-          ? `${changesetsUrl}/${firstNamedVersion.changesetIndex}/checkpoint`
-          : `${changesetsUrl}/0/checkpoint`;
-        expect(changeset._links.currentOrPrecedingCheckpoint!.href).to.equal(expectedLinkToCheckpoint);
+        const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
+        expect(checkpoint).to.not.be.undefined;
+        const expectedCheckpointChangesetIndex = changeset.index === firstNamedVersion.changesetIndex
+          ? firstNamedVersion.changesetIndex
+          : 0;
+        expect(checkpoint!.changesetIndex).to.equal(expectedCheckpointChangesetIndex);
       }
     });
 
@@ -213,13 +212,9 @@ describe("[Management] ChangesetOperations", () => {
       const changeset: Changeset = await imodelsClient.Changesets.getById(getChangesetByIdParams);
 
       // Assert
-      expect(changeset._links.currentOrPrecedingCheckpoint?.href).to.not.be.undefined;
-      expect(changeset._links.currentOrPrecedingCheckpoint!.href).to.equal(`${adjustBaseUrl(imodelsClientOptions.api!.baseUri!)}/${testiModel.id}/changesets/${firstNamedVersion.changesetIndex}/checkpoint`);
+      const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
+      expect(checkpoint).to.not.be.undefined;
+      expect(checkpoint!.changesetIndex).to.equal(firstNamedVersion.changesetIndex);
     });
-
-    // TODO: remove this after bug #701035 is fixed
-    function adjustBaseUrl(baseUrl: string): string {
-      return baseUrl.replace("imodels", "iModels");
-    }
   });
 });

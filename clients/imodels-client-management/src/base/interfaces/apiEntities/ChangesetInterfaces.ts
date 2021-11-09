@@ -3,6 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { CollectionResponse, Link } from "../CommonInterfaces";
+import { Checkpoint } from "./CheckpointInterfaces";
+import { NamedVersion } from "./NamedVersionInterfaces";
 
 export enum ChangesetState {
   WaitingForFile = "waitingForFile",
@@ -31,6 +33,8 @@ export interface ChangesetLinks {
   upload: Link;
   download: Link;
   complete: Link;
+  namedVersion?: Link;
+  currentOrPrecedingCheckpoint?: Link;
 }
 
 export interface MinimalChangeset {
@@ -46,23 +50,22 @@ export interface MinimalChangeset {
   briefcaseId: number;
 }
 
-export interface ChangesetLinks {
-  upload: Link;
-  complete: Link;
-  namedVersion: Link | null;
-  currentOrPrecedingCheckpoint: Link | null;
-}
-
 export interface Changeset extends MinimalChangeset {
   application: Application | null;
   synchronizationInfo: SynchronizationInfo | null;
   _links: ChangesetLinks;
+  getNamedVersion: () => Promise<NamedVersion | undefined>;
+  getCurrentOrPrecedingCheckpoint: () => Promise<Checkpoint | undefined>;
 }
 
 export interface ChangesetResponse {
   changeset: Changeset;
 }
 
-export interface ChangesetsResponse<TChangeset extends MinimalChangeset> extends CollectionResponse {
-  changesets: TChangeset[];
+export interface MinimalChangesetsResponse extends CollectionResponse {
+  changesets: MinimalChangeset[];
+}
+
+export interface ChangesetsResponse extends CollectionResponse {
+  changesets: Changeset[];
 }

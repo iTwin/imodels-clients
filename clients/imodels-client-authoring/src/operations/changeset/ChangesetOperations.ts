@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetResponse, ChangesetState, CheckpointOperations, ChangesetOperations as ManagementChangesetOperations, NamedVersionOperations, RecursiveRequired, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
 import { DownloadedChangeset, FileHandler, TargetDirectoryParam } from "../../base";
 import { iModelsClientOptions } from "../../iModelsClient";
 import { CreateChangesetParams, DownloadChangesetByIdParams, DownloadChangesetByIndexParams, DownloadChangesetListParams } from "./ChangesetOperationParams";
@@ -11,8 +11,12 @@ import { LimitedParallelQueue } from "./LimitedParallelQueue";
 export class ChangesetOperations extends ManagementChangesetOperations {
   private _fileHandler: FileHandler;
 
-  constructor(options: RecursiveRequired<iModelsClientOptions>) {
-    super(options);
+  constructor(
+    options: RecursiveRequired<iModelsClientOptions>,
+    namedVersionOperations: NamedVersionOperations,
+    checkpointOperations: CheckpointOperations
+  ) {
+    super(options, namedVersionOperations, checkpointOperations);
     this._fileHandler = options.fileHandler;
   }
 
@@ -20,7 +24,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     const { filePath: changesetFilePath, ...changesetMetadataProperties } = params.changesetProperties;
     const changesetCreateResponse = await this.sendPostRequest<ChangesetResponse>({
       authorization: params.authorization,
-      url: `${this._apiBaseUrl}/${params.imodelId}/changesets`,
+      url: this._urlFormatter.getChangesetsUrl(params),
       body: {
         ...changesetMetadataProperties,
         fileSize: this._fileHandler.getFileSize(changesetFilePath)
@@ -39,16 +43,17 @@ export class ChangesetOperations extends ManagementChangesetOperations {
         briefcaseId: params.changesetProperties.briefcaseId
       }
     });
+
     return changesetUpdateResponse.changeset;
   }
 
   public async downloadById(params: DownloadChangesetByIdParams): Promise<DownloadedChangeset> {
-    const changeset: Changeset = await this.getById(params);
+    const changeset: Changeset = await this.getByIdOrIndexInternal({ ...params, changesetIdOrIndex: params.changesetId });
     return this.downloadSingleChangeset({ ...params, changeset });
   }
 
   public async downloadByIndex(params: DownloadChangesetByIndexParams): Promise<DownloadedChangeset> {
-    const changeset: Changeset = await this.getByIndex(params);
+    const changeset: Changeset = await this.getByIdOrIndexInternal({ ...params, changesetIdOrIndex: params.changesetIndex });
     return this.downloadSingleChangeset({ ...params, changeset });
   }
 
@@ -57,7 +62,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
 
     this._fileHandler.createDirectory(params.targetDirectoryPath);
 
-    for await (const changesetPage of this.getRepresentationListInPages(params)) {
+    for await (const changesetPage of this.getRepresentationListInternal(params)) {
       const changesetsWithFilePath: DownloadedChangeset[] = changesetPage.map(
         (changeset: Changeset) => ({
           ...changeset,
@@ -67,7 +72,7 @@ export class ChangesetOperations extends ManagementChangesetOperations {
 
       // We sort the changesets by fileSize in descending order to download small
       // changesets first because their SAS tokens have a shorter lifespan.
-      changesetsWithFilePath.sort((changeset1: Changeset, changeset2: Changeset) => changeset1.fileSize - changeset2.fileSize);
+      changesetsWithFilePath.sort((changeset1: DownloadedChangeset, changeset2: DownloadedChangeset) => changeset1.fileSize - changeset2.fileSize);
 
       const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
       for (const changeset of changesetsWithFilePath)
@@ -105,10 +110,10 @@ export class ChangesetOperations extends ManagementChangesetOperations {
     try {
       await this._fileHandler.downloadFile(params.changeset._links.download.href, targetFilePath);
     } catch (error) {
-      const changeset = await this.getById({
+      const changeset = await this.getByIdOrIndexInternal({
         authorization: params.authorization,
         imodelId: params.imodelId,
-        changesetId: params.changeset.id
+        changesetIdOrIndex: params.changeset.id
       });
 
       try {
