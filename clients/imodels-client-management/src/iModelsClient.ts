@@ -23,10 +23,10 @@ export class iModelsClient {
   private _operationsOptions: OperationOptions;
 
   constructor(options?: iModelsClientOptions) {
-    const filledUserOptions = iModelsClient.fillConfiguration(options);
+    const fillediModelsClientOptions = iModelsClient.fillConfiguration(options);
     this._operationsOptions = {
-      ...filledUserOptions,
-      urlFormatter: new iModelsApiUrlFormatter(filledUserOptions.api.baseUri)
+      ...fillediModelsClientOptions,
+      urlFormatter: new iModelsApiUrlFormatter(fillediModelsClientOptions.api.baseUri)
     };
   }
 
