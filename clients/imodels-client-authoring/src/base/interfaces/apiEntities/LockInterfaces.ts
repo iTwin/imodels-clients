@@ -16,7 +16,7 @@ export interface LockSet {
 
 export interface Lock {
   briefcaseId: number;
-  acquiredLocks: LockSet;
+  acquiredLocks: LockSet[];
 }
 
 export interface LockResponse {
