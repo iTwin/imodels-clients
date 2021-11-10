@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, GetChangesetByIdParams, iModelsApiUrlFormatter, ProgressCallback, ProgressData } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, GetChangesetByIdParams, ProgressCallback, ProgressData, iModelsApiUrlFormatter } from "@itwin/imodels-client-authoring";
 import { iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, ReusableTestiModelProvider, TestAuthorizationProvider, TestChangesetFile, TestClientOptions, TestProjectProvider, TestiModelFileProvider, iModelMetadata, TestiModelCreator, ReusableiModelMetadata, TestiModelGroup, cleanupDirectory, cleanUpiModels } from "../common";
+import { Config, Constants, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestChangesetFile, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, cleanUpiModels, cleanupDirectory, iModelMetadata } from "../common";
 
 describe("AzureSdkFileHandler", () => {
   let azureSdkFileHandler: AzureSdkFileHandler;
@@ -121,7 +121,7 @@ describe("AzureSdkFileHandler", () => {
     const changesetMetadataCreateResponse = await restClient.sendPostRequest<ChangesetResponse>({
       url: urlFormatter.getChangesetsUrl({ imodelId: testiModelForWrite.id }),
       headers: {
-        Authorization: `${authorizationValue.scheme} ${authorizationValue.token}`,
+        Authorization: `${authorizationValue.scheme} ${authorizationValue.token}`
       },
       body: {
         id: testChangeset.id,
