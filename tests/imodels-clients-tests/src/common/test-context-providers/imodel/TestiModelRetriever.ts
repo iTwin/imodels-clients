@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { NamedVersion, iModel } from "@itwin/imodels-client-authoring";
-import { TestSetupError, toArray } from "../../CommonTestUtils";
+import { NamedVersion, iModel, toArray } from "@itwin/imodels-client-authoring";
+import { TestSetupError } from "../../CommonTestUtils";
 import { TestiModelCreator } from "./TestiModelCreator";
 import { TestiModelFileProvider } from "./TestiModelFileProvider";
 import { BriefcaseMetadata, NamedVersionMetadata, ReusableiModelMetadata, TestiModelSetupContext, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";

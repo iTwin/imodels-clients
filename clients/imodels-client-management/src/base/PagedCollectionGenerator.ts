@@ -29,3 +29,11 @@ export async function* flatten<TEntity>(pagedIterator: AsyncIterableIterator<TEn
     for (const entity of entityChunk)
       yield entity;
 }
+
+export async function toArray<TEntity>(iterator: AsyncIterableIterator<TEntity>): Promise<TEntity[]> {
+  const result: TEntity[] = [];
+  for await (const entity of iterator)
+    result.push(entity);
+
+  return result;
+}

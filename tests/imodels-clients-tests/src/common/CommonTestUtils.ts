@@ -37,14 +37,6 @@ export async function cleanUpiModels(params: AuthorizationParam & {
       });
 }
 
-export async function toArray<T>(iterator: AsyncIterableIterator<T>): Promise<T[]> {
-  const result: T[] = [];
-  for await (const entity of iterator)
-    result.push(entity);
-
-  return result;
-}
-
 export function cleanupDirectory(directory: string): void {
   if (fs.existsSync(directory)) {
     fs.rmdirSync(directory, { recursive: true });
