@@ -8,8 +8,8 @@ import { URL } from "url";
 import { AnonymousCredential, BlobDownloadOptions, BlobGetPropertiesResponse, BlockBlobClient, BlockBlobParallelUploadOptions } from "@azure/storage-blob";
 import { DownloadFileParams, FileHandler, ProgressCallback, UploadFileParams } from "./FileHandler";
 
-type AzureProgressData = { loadedBytes: number; };
-type AzureProgressCallback = (progress: AzureProgressData) => void;
+type AzureProgressCallbackData = { loadedBytes: number; };
+type AzureProgressCallback = (progress: AzureProgressCallbackData) => void;
 
 export class AzureSdkFileHandler implements FileHandler {
   public async uploadFile(params: UploadFileParams): Promise<void> {
@@ -22,7 +22,7 @@ export class AzureSdkFileHandler implements FileHandler {
     if (params.progressCallback) {
       const fileSize = this.getFileSize(params.sourceFilePath);
       uploadOptions = {
-        onProgress: this.transformProgressCallback(params.progressCallback, fileSize)
+        onProgress: this.adaptProgressCallback(params.progressCallback, fileSize)
       };
     }
 
@@ -40,7 +40,7 @@ export class AzureSdkFileHandler implements FileHandler {
       const blobProperties: BlobGetPropertiesResponse = await blockBlobClient.getProperties();
       const fileSize = blobProperties.contentLength!;
       downloadOptions = {
-        onProgress: this.transformProgressCallback(params.progressCallback, fileSize)
+        onProgress: this.adaptProgressCallback(params.progressCallback, fileSize)
       };
     }
 
@@ -82,7 +82,7 @@ export class AzureSdkFileHandler implements FileHandler {
     return expiryUtc <= currentUtc;
   }
 
-  private transformProgressCallback(progressCallback: ProgressCallback, fileSize: number): AzureProgressCallback {
-    return (progressData: AzureProgressData) => progressCallback({ bytesTotal: fileSize, bytesDownloaded: progressData.loadedBytes });
+  private adaptProgressCallback(progressCallback: ProgressCallback, fileSize: number): AzureProgressCallback {
+    return (progressData: AzureProgressCallbackData) => progressCallback({ bytesTotal: fileSize, bytesDownloaded: progressData.loadedBytes });
   }
 }
