@@ -5,7 +5,7 @@
 import { getCollectionIterator, OperationsBase } from "@itwin/imodels-client-management";
 import { Lock, LockResponse, LocksResponse } from "../../base/interfaces/apiEntities/LockInterfaces";
 import { OperationOptions } from "../OperationOptions";
-import { GetLockListParams, UpdateLocksParams as UpdateLockParams } from "./LockOperationParams";
+import { GetLockListParams, UpdateLockParams } from "./LockOperationParams";
 
 export class LockOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getList(params: GetLockListParams): AsyncIterableIterator<Lock> {

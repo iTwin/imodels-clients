@@ -13,7 +13,7 @@ export interface GetLockListParams extends iModelScopedOperationParams {
   urlParams?: GetLockListUrlParams;
 }
 
-export interface UpdateLocksParams extends iModelScopedOperationParams {
+export interface UpdateLockParams extends iModelScopedOperationParams {
   briefcaseId: number;
   changeset: string; // TODO: not ideal
   requestedLocks: LockSet[];
