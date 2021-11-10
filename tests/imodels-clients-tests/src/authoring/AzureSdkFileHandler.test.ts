@@ -74,7 +74,7 @@ describe("AzureSdkFileHandler", () => {
     // Changeset file is small so we expect file to be downloaded as a single chunk.
     expect(progressLogs.length).to.be.equal(1);
     const progressLog = progressLogs[0];
-    expect(progressLog.bytesTotal).to.equal(progressLog.bytesDownloaded);
+    expect(progressLog.bytesTotal).to.equal(progressLog.bytesTransferred);
     expect(progressLog.bytesTotal).to.equal(fs.statSync(testChangeset.filePath).size);
   });
 
@@ -91,10 +91,10 @@ describe("AzureSdkFileHandler", () => {
     await azureSdkFileHandler.uploadFile({ uploadUrl, sourceFilePath, progressCallback });
 
     // Assert
-    // Changeset file is small so we expect file to be downloaded as a single chunk.
+    // Changeset file is small so we expect file to be uploaded as a single chunk.
     expect(progressLogs.length).to.be.equal(1);
     const progressLog = progressLogs[0];
-    expect(progressLog.bytesTotal).to.equal(progressLog.bytesDownloaded);
+    expect(progressLog.bytesTotal).to.equal(progressLog.bytesTransferred);
     expect(progressLog.bytesTotal).to.equal(fs.statSync(testChangeset.filePath).size);
   });
 

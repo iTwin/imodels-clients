@@ -83,6 +83,6 @@ export class AzureSdkFileHandler implements FileHandler {
   }
 
   private adaptProgressCallback(progressCallback: ProgressCallback, fileSize: number): AzureProgressCallback {
-    return (progressData: AzureProgressCallbackData) => progressCallback({ bytesTotal: fileSize, bytesDownloaded: progressData.loadedBytes });
+    return (progressData: AzureProgressCallbackData) => progressCallback({ bytesTotal: fileSize, bytesTransferred: progressData.loadedBytes });
   }
 }

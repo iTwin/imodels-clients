@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 export interface ProgressData {
-  bytesDownloaded: number;
+  bytesTransferred: number;
   bytesTotal: number;
 }
 
