@@ -23,7 +23,7 @@ export class AzureSdkFileHandler implements FileHandler {
       const fileSize = this.getFileSize(params.sourceFilePath);
       uploadOptions = {
         onProgress: this.transformProgressCallback(params.progressCallback, fileSize)
-      }
+      };
     }
 
     await blockBlobClient.uploadFile(params.sourceFilePath, uploadOptions);
@@ -41,7 +41,7 @@ export class AzureSdkFileHandler implements FileHandler {
       const fileSize = blobProperties.contentLength!;
       downloadOptions = {
         onProgress: this.transformProgressCallback(params.progressCallback, fileSize)
-      }
+      };
     }
 
     await blockBlobClient.downloadToFile(params.targetFilePath, undefined, undefined, downloadOptions);

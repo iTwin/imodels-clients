@@ -3,10 +3,10 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
+import { expect } from "chai";
 import { AuthorizationCallback, AzureSdkFileHandler, GetChangesetByIdParams, ProgressCallback, ProgressData } from "@itwin/imodels-client-authoring";
 import { iModelsClient } from "@itwin/imodels-client-authoring";
-import { expect } from "chai";
-import { Config, Constants, iModelMetadata, ReusableTestiModelProvider, TestAuthorizationProvider, TestChangesetFile, TestClientOptions, TestiModelFileProvider, TestProjectProvider } from "../common";
+import { Config, Constants, ReusableTestiModelProvider, TestAuthorizationProvider, TestChangesetFile, TestClientOptions, TestProjectProvider, TestiModelFileProvider, iModelMetadata } from "../common";
 
 describe("AzureSdkFileHandler", () => {
   let azureSdkFileHandler: AzureSdkFileHandler;
@@ -37,7 +37,7 @@ describe("AzureSdkFileHandler", () => {
     const progressCallback: ProgressCallback = (data: ProgressData) => progressLogs.push(data);
 
     // Act
-    await azureSdkFileHandler.downloadFile({ downloadUrl, targetFilePath, progressCallback })
+    await azureSdkFileHandler.downloadFile({ downloadUrl, targetFilePath, progressCallback });
 
     // Assert
     // Changeset file is small so we expect file to be downloaded as a single chunk.
