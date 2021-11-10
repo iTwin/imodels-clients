@@ -6,45 +6,45 @@ import * as fs from "fs";
 import * as path from "path";
 import { URL } from "url";
 import { AnonymousCredential, BlobDownloadOptions, BlobGetPropertiesResponse, BlockBlobClient, BlockBlobParallelUploadOptions } from "@azure/storage-blob";
-import { FileHandler, ProgressCallback } from "./FileHandler";
+import { DownloadFileParams, FileHandler, ProgressCallback, UploadFileParams } from "./FileHandler";
 
 type AzureProgressData = { loadedBytes: number; };
 type AzureProgressCallback = (progress: AzureProgressData) => void;
 
 export class AzureSdkFileHandler implements FileHandler {
-  public async uploadFile(uploadUrl: string, sourceFilePath: string, progressCallback?: ProgressCallback): Promise<void> {
-    if (this.isUrlExpired(uploadUrl))
+  public async uploadFile(params: UploadFileParams): Promise<void> {
+    if (this.isUrlExpired(params.uploadUrl))
       throw new Error("AzureSdkFileHandler: cannot upload file because SAS url is expired.");
 
-    const blockBlobClient = new BlockBlobClient(uploadUrl, new AnonymousCredential());
+    const blockBlobClient = new BlockBlobClient(params.uploadUrl, new AnonymousCredential());
 
     let uploadOptions: BlockBlobParallelUploadOptions | undefined = undefined;
-    if (progressCallback) {
-      const fileSize = this.getFileSize(sourceFilePath);
+    if (params.progressCallback) {
+      const fileSize = this.getFileSize(params.sourceFilePath);
       uploadOptions = {
-        onProgress: this.transformProgressCallback(progressCallback, fileSize)
+        onProgress: this.transformProgressCallback(params.progressCallback, fileSize)
       }
     }
 
-    await blockBlobClient.uploadFile(sourceFilePath, uploadOptions);
+    await blockBlobClient.uploadFile(params.sourceFilePath, uploadOptions);
   }
 
-  public async downloadFile(downloadUrl: string, targetFilePath: string, progressCallback?: ProgressCallback): Promise<void> {
-    if (this.isUrlExpired(downloadUrl))
+  public async downloadFile(params: DownloadFileParams): Promise<void> {
+    if (this.isUrlExpired(params.downloadUrl))
       throw new Error("AzureSdkFileHandler: cannot download file because SAS url is expired.");
 
-    const blockBlobClient = new BlockBlobClient(downloadUrl, new AnonymousCredential());
+    const blockBlobClient = new BlockBlobClient(params.downloadUrl, new AnonymousCredential());
 
     let downloadOptions: BlobDownloadOptions | undefined = undefined;
-    if (progressCallback) {
+    if (params.progressCallback) {
       const blobProperties: BlobGetPropertiesResponse = await blockBlobClient.getProperties();
       const fileSize = blobProperties.contentLength!;
       downloadOptions = {
-        onProgress: this.transformProgressCallback(progressCallback, fileSize)
+        onProgress: this.transformProgressCallback(params.progressCallback, fileSize)
       }
     }
 
-    await blockBlobClient.downloadToFile(targetFilePath, undefined, undefined, downloadOptions);
+    await blockBlobClient.downloadToFile(params.targetFilePath, undefined, undefined, downloadOptions);
   }
 
   public exists(filePath: string): boolean {

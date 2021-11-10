@@ -32,7 +32,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
     });
 
     const uploadUrl = imodelCreateResponse.iModel._links.upload.href;
-    await this._options.fileHandler.uploadFile(uploadUrl, imodelFilePath);
+    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: imodelFilePath });
 
     const completeUrl = imodelCreateResponse.iModel._links.complete.href;
     await this.sendPostRequest({

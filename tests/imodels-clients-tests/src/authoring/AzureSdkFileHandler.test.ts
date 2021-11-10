@@ -37,7 +37,7 @@ describe("AzureSdkFileHandler", () => {
     const progressCallback: ProgressCallback = (data: ProgressData) => progressLogs.push(data);
 
     // Act
-    await azureSdkFileHandler.downloadFile(downloadUrl, targetFilePath, progressCallback)
+    await azureSdkFileHandler.downloadFile({ downloadUrl, targetFilePath, progressCallback })
 
     // Assert
     // Changeset file is small so we expect file to be downloaded as a single chunk.
