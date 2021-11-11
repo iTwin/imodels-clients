@@ -47,7 +47,6 @@ export async function toArray<T>(iterator: AsyncIterableIterator<T>): Promise<T[
 }
 
 export function createDirectory(directoryPath: string): void {
-  console.log("create dir", directoryPath);
   if (fs.existsSync(directoryPath))
     return;
 
