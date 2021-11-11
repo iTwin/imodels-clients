@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc 1>&2",
-    "test:integration": "npm run test:integration:copy-assets && mocha lib/**/*.test.js --color --timeout 60000",
+    "test:integration": "npm run test:integration:copy-assets && mocha lib/**/*.test.js --color --timeout 60000 --exit",
     "test:integration:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
     "cover": "nyc npm test",
     "lint": "eslint ./src/**/*.ts 1>&2",
