@@ -6,6 +6,7 @@ import { iModelsClient } from "@itwin/imodels-client-authoring";
 import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelGroup, cleanUpiModels, cleanupDirectory, createDirectory } from "./common";
 
 before(async () => {
+  console.log("global setup", Constants.TestDownloadDirectoryPath);
   await cleanupiModelsInTestProject();
   createDirectory(Constants.TestDownloadDirectoryPath);
   cleanupDirectory(Constants.TestDownloadDirectoryPath);
