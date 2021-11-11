@@ -77,10 +77,10 @@ describe("[Management] NamedVersionOperations", () => {
       };
 
       // Act
-      const namedVersions = await testCase.functionUnderTest(getNamedVersionListParams);
+      const namedVersions = testCase.functionUnderTest(getNamedVersionListParams);
 
       // Assert
-      assertCollection({
+      await assertCollection({
         asyncIterable: namedVersions,
         isEntityCountCorrect: count => count >= namedVersionCountCreatedInSetup
       });
