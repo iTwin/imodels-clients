@@ -11,7 +11,7 @@ export class LockOperations<TOptions extends OperationOptions> extends Operation
   public getList(params: GetLockListParams): AsyncIterableIterator<Lock> {
     return getCollectionIterator(() => this.getEntityCollectionPage<Lock>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getLocksUrl({ imodelId: params.imodelId }),
+      url: this._options.urlFormatter.getLocksUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
       entityCollectionAccessor: (response: unknown) => (response as LocksResponse).locks
     }));
   }
