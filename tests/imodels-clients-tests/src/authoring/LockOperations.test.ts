@@ -6,7 +6,7 @@ import { expect } from "chai";
 import { AuthorizationCallback, GetLockListParams, LockLevel, UpdateLockParams, iModelsClient, iModelsErrorCode, toArray } from "@itwin/imodels-client-authoring";
 import { Config, Constants, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, assertCollection, assertError, assertLock, iModelMetadata } from "../common";
 
-describe.only("[Authoring] LockOperations", () => {
+describe("[Authoring] LockOperations", () => {
   let imodelsClient: iModelsClient;
   let authorization: AuthorizationCallback;
   let projectId: string;
