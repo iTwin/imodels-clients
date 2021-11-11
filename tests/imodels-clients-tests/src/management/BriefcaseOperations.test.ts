@@ -77,10 +77,7 @@ describe("[Management] BriefcaseOperations", () => {
 
   it("should not return user owned briefcases if user does not own any when querying representation collection", async () => {
     // Arrange
-    console.log("get auth for user 2");
     const authorizationForUser2 = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin2FullyFeatured);
-    console.log("end get auth for user 2");
-
     const getBriefcaseListParams: GetBriefcaseListParams = {
       authorization: authorizationForUser2,
       imodelId: testiModel.id,
