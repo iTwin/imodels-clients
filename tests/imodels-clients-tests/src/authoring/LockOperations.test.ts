@@ -68,11 +68,14 @@ describe.only("[Authoring] LockOperations", () => {
     });
   });
 
-  it("should return correct values when querying collection", async () => {
+  it("should return correct values when querying collection with briefcaseId filter", async () => {
     // Arrange
     const getLockListParams: GetLockListParams = {
       authorization,
-      imodelId: testiModelForRead.id
+      imodelId: testiModelForRead.id,
+      urlParams: {
+        briefcaseId: testiModelForRead.briefcase.id
+      }
     };
 
     // Act
@@ -85,6 +88,24 @@ describe.only("[Authoring] LockOperations", () => {
       actualLock: lock,
       expectedLock: testiModelForRead.lock
     });
+  });
+
+  it("should return emtpy collection when querying locks for non-existent briefcase", async () => {
+    // Arrange
+    const getLockListParams: GetLockListParams = {
+      authorization,
+      imodelId: testiModelForRead.id,
+      urlParams: {
+        briefcaseId: 500
+      }
+    };
+
+    // Act
+    const locks = imodelsClient.Locks.getList(getLockListParams);
+
+    // Assert
+    const lockArray = await toArray(locks);
+    expect(lockArray.length).to.equal(0);
   });
 
   it("should acquire new locks", async () => {
