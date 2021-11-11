@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
+import * as path from "path";
 import { expect } from "chai";
 import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, GetChangesetByIdParams, ProgressCallback, ProgressData, iModelsApiUrlFormatter } from "@itwin/imodels-client-authoring";
 import { iModelsClient } from "@itwin/imodels-client-authoring";
@@ -58,11 +59,11 @@ describe("AzureSdkFileHandler", () => {
     await cleanUpiModels({ imodelsClient, authorization, projectId, testiModelGroup });
   });
 
-  it("should call callback when downloading file", async () => {
+  it.only("should call callback when downloading file", async () => {
     // Arrange
     const testChangeset = TestiModelFileProvider.changesets[0];
     const downloadUrl = await getTestChangesetDownloadUrl(testChangeset);
-    const targetFilePath = `${Constants.TestDownloadDirectoryPath}\\AzureSdkFileHandlerTests_download`;
+    const targetFilePath = path.join(Constants.TestDownloadDirectoryPath, "AzureSdkFileHandlerTests_download");
 
     const progressLogs: ProgressData[] = [];
     const progressCallback: ProgressCallback = (data: ProgressData) => progressLogs.push(data);
