@@ -21,7 +21,7 @@ export interface TestUserCredentials {
 export class TestAuthenticationClient {
   // cspell:disable-next-line
   private _pageLoadedEvent: puppeteer.PuppeteerLifeCycleEvent = "networkidle2";
-  private _consentPageTitle = "Request for Approval";
+  private _consentPageTitle = "Permissions";
   private _pageElementIds = {
     fields: {
       email: "#identifierInput",
@@ -30,7 +30,7 @@ export class TestAuthenticationClient {
     buttons: {
       next: "#sign-in-button",
       signIn: "#sign-in-button",
-      consent: "#bentleySubmit"
+      consent: ".iui-button.iui-large.iui-high-visibility"
     }
   }
 
@@ -38,7 +38,13 @@ export class TestAuthenticationClient {
   }
 
   public async getAccessToken(testUserCredentials: TestUserCredentials): Promise<string> {
-    const browserLaunchOptions: puppeteer.BrowserLaunchArgumentOptions = { headless: true };
+    const browserLaunchOptions: puppeteer.BrowserLaunchArgumentOptions & puppeteer.BrowserConnectOptions = {
+      headless: false,
+      defaultViewport: {
+        width: 800,
+        height: 1200
+      }
+    };
     const browser: puppeteer.Browser = await puppeteer.launch(browserLaunchOptions);
     const browserPage: puppeteer.Page = await browser.newPage();
 
