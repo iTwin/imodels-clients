@@ -21,7 +21,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     });
 
     const uploadUrl = changesetCreateResponse.changeset._links.upload.href;
-    await this._options.fileHandler.uploadFile(uploadUrl, changesetFilePath);
+    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: changesetFilePath });
 
     const completeUrl = changesetCreateResponse.changeset._links.complete.href;
     const changesetUpdateResponse = await this.sendPatchRequest<ChangesetResponse>({
@@ -97,7 +97,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       return;
 
     try {
-      await this._options.fileHandler.downloadFile(params.changeset._links.download.href, targetFilePath);
+      await this._options.fileHandler.downloadFile({ downloadUrl: params.changeset._links.download.href, targetFilePath });
     } catch (error) {
       const changeset = await this.getByIdOrIndexInternal({
         authorization: params.authorization,
@@ -106,7 +106,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       });
 
       try {
-        await this._options.fileHandler.downloadFile(changeset._links.download.href, targetFilePath);
+        await this._options.fileHandler.downloadFile({ downloadUrl: changeset._links.download.href, targetFilePath });
       } catch (errorAfterRetry) {
         throw new iModelsErrorImpl({
           code: iModelsErrorCode.ChangesetDownloadFailed,

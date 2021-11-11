@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetListParams, DownloadedChangeset, TargetDirectoryParam, iModelScopedOperationParams, iModelsClient } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetListParams, DownloadFileParams, DownloadedChangeset, TargetDirectoryParam, iModelScopedOperationParams,iModelsClient } from "@itwin/imodels-client-authoring";
 import { Config, Constants, FileTransferLog, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory, iModelMetadata } from "../common";
 
 type CommonDownloadParams = iModelScopedOperationParams & TargetDirectoryParam;
@@ -236,15 +236,15 @@ describe("[Authoring] ChangesetOperations", () => {
         const fileTransferLog = new FileTransferLog();
         const azureSdkFileHandler = new AzureSdkFileHandler();
         let hasDownloadFailed = false;
-        const downloadStub = (downloadUrl: string, targetPath: string) => {
-          fileTransferLog.recordDownload(downloadUrl);
+        const downloadStub = (params: DownloadFileParams) => {
+          fileTransferLog.recordDownload(params.downloadUrl);
 
           if (!hasDownloadFailed) {
             hasDownloadFailed = true;
             throw new Error("Download failed.");
           }
 
-          return azureSdkFileHandler.downloadFile(downloadUrl, targetPath);
+          return azureSdkFileHandler.downloadFile(params);
         };
 
         const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
@@ -278,9 +278,9 @@ describe("[Authoring] ChangesetOperations", () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
         const azureSdkFileHandler = new AzureSdkFileHandler();
-        const downloadStub = (downloadUrl: string, targetPath: string) => {
-          fileTransferLog.recordDownload(downloadUrl);
-          return azureSdkFileHandler.downloadFile(downloadUrl, targetPath);
+        const downloadStub = (params: DownloadFileParams) => {
+          fileTransferLog.recordDownload(params.downloadUrl);
+          return azureSdkFileHandler.downloadFile(params);
         };
 
         const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });

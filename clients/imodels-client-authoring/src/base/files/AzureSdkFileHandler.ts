@@ -5,24 +5,46 @@
 import * as fs from "fs";
 import * as path from "path";
 import { URL } from "url";
-import { AnonymousCredential, BlockBlobClient } from "@azure/storage-blob";
-import { FileHandler } from "./FileHandler";
+import { AnonymousCredential, BlobDownloadOptions, BlobGetPropertiesResponse, BlockBlobClient, BlockBlobParallelUploadOptions } from "@azure/storage-blob";
+import { DownloadFileParams, FileHandler, ProgressCallback, UploadFileParams } from "./FileHandler";
+
+type AzureProgressCallbackData = { loadedBytes: number; };
+type AzureProgressCallback = (progress: AzureProgressCallbackData) => void;
 
 export class AzureSdkFileHandler implements FileHandler {
-  public async uploadFile(uploadUrl: string, sourceFilePath: string): Promise<void> {
-    if (this.isUrlExpired(uploadUrl))
+  public async uploadFile(params: UploadFileParams): Promise<void> {
+    if (this.isUrlExpired(params.uploadUrl))
       throw new Error("AzureSdkFileHandler: cannot upload file because SAS url is expired.");
 
-    const blockBlobClient = new BlockBlobClient(uploadUrl, new AnonymousCredential());
-    await blockBlobClient.uploadFile(sourceFilePath);
+    const blockBlobClient = new BlockBlobClient(params.uploadUrl, new AnonymousCredential());
+
+    let uploadOptions: BlockBlobParallelUploadOptions | undefined = undefined;
+    if (params.progressCallback) {
+      const fileSize = this.getFileSize(params.sourceFilePath);
+      uploadOptions = {
+        onProgress: this.adaptProgressCallback(params.progressCallback, fileSize)
+      };
+    }
+
+    await blockBlobClient.uploadFile(params.sourceFilePath, uploadOptions);
   }
 
-  public async downloadFile(downloadUrl: string, targetFilePath: string): Promise<void> {
-    if (this.isUrlExpired(downloadUrl))
+  public async downloadFile(params: DownloadFileParams): Promise<void> {
+    if (this.isUrlExpired(params.downloadUrl))
       throw new Error("AzureSdkFileHandler: cannot download file because SAS url is expired.");
 
-    const blockBlobClient = new BlockBlobClient(downloadUrl, new AnonymousCredential());
-    await blockBlobClient.downloadToFile(targetFilePath);
+    const blockBlobClient = new BlockBlobClient(params.downloadUrl, new AnonymousCredential());
+
+    let downloadOptions: BlobDownloadOptions | undefined = undefined;
+    if (params.progressCallback) {
+      const blobProperties: BlobGetPropertiesResponse = await blockBlobClient.getProperties();
+      const fileSize = blobProperties.contentLength!;
+      downloadOptions = {
+        onProgress: this.adaptProgressCallback(params.progressCallback, fileSize)
+      };
+    }
+
+    await blockBlobClient.downloadToFile(params.targetFilePath, undefined, undefined, downloadOptions);
   }
 
   public exists(filePath: string): boolean {
@@ -58,5 +80,9 @@ export class AzureSdkFileHandler implements FileHandler {
     const expiryUtc = new Date(signedExpiryUrlParam);
     const currentUtc = new Date(new Date().toUTCString());
     return expiryUtc <= currentUtc;
+  }
+
+  private adaptProgressCallback(progressCallback: ProgressCallback, fileSize: number): AzureProgressCallback {
+    return (progressData: AzureProgressCallbackData) => progressCallback({ bytesTotal: fileSize, bytesTransferred: progressData.loadedBytes });
   }
 }
