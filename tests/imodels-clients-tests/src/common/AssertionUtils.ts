@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Briefcase, BriefcaseProperties, ChangesetPropertiesForCreate, Checkpoint, CheckpointState, DownloadedChangeset } from "@itwin/imodels-client-authoring";
+import { Briefcase, BriefcaseProperties, ChangesetPropertiesForCreate, Checkpoint, CheckpointState, DownloadedChangeset, Lock } from "@itwin/imodels-client-authoring";
 import { Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
 import { TestiModelFileProvider } from "./test-context-providers/imodel/TestiModelFileProvider";
 
@@ -124,6 +124,25 @@ export function assertCheckpoint(params: {
   expect(params.actualCheckpoint.containerAccessInfo.dbName).to.not.be.empty;
 
   expect(params.actualCheckpoint._links?.download).to.not.be.empty;
+}
+
+export function assertLock(params: {
+  actualLock: Lock,
+  expectedLock: Lock
+}): void {
+  expect(params.actualLock.briefcaseId).to.equal(params.expectedLock.briefcaseId);
+
+  expect(params.actualLock.lockedObjects.length).to.equal(params.expectedLock.lockedObjects.length);
+  for (const lockedObjects of params.actualLock.lockedObjects) {
+    const expectedLockedObjects = params.expectedLock.lockedObjects.find(l => l.lockLevel === lockedObjects.lockLevel);
+    expect(expectedLockedObjects).to.be.not.be.undefined;
+
+    expect(lockedObjects.objectIds.length).to.equal(expectedLockedObjects!.objectIds.length);
+    for (const objectId of lockedObjects.objectIds) {
+      const expectedLockedObjectId = expectedLockedObjects!.objectIds.find(id => id === objectId);
+      expect(expectedLockedObjectId).to.not.be.undefined;
+    }
+  }
 }
 
 export function assertError(params: { actualError: Error, expectedError: Partial<iModelsError> }): void {

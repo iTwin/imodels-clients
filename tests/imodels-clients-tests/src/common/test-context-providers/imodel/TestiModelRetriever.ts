@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { NamedVersion, iModel, toArray } from "@itwin/imodels-client-authoring";
+import { Lock, NamedVersion, iModel, toArray } from "@itwin/imodels-client-authoring";
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestiModelCreator } from "./TestiModelCreator";
 import { TestiModelFileProvider } from "./TestiModelFileProvider";
@@ -18,13 +18,15 @@ export class TestiModelRetriever {
     const paramsWithiModelId = { ...params, imodelId: imodel.id };
     const briefcase = await TestiModelRetriever.queryAndValidateBriefcase(paramsWithiModelId);
     const namedVersions = await TestiModelRetriever.queryAndValidateNamedVersions(paramsWithiModelId);
+    const lock = await TestiModelRetriever.queryAndValidateLock(paramsWithiModelId);
 
     return {
       id: imodel.id,
       name: imodel.name,
       description: imodel.description!,
       briefcase,
-      namedVersions
+      namedVersions,
+      lock
     };
   }
 
@@ -53,6 +55,14 @@ export class TestiModelRetriever {
       throw new TestSetupError("Reusable test iModel contains unexpected named versions.");
 
     return mappedNamedVersions;
+  }
+
+  private static async queryAndValidateLock(params: TestiModelSetupContext & iModelIdParam): Promise<Lock> {
+    const locks: Lock[] = await toArray(params.imodelsClient.Locks.getList(params));
+    if (locks.length !== 1)
+      throw new TestSetupError(`${locks.length} is an unexpected lock count for reusable test iModel.`);
+
+    return locks[0];
   }
 
   private static async findiModelByName(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<iModel | undefined> {

@@ -10,7 +10,8 @@ export class TestClientOptions implements iModelsClientOptions {
 
   constructor() {
     this.api = {
-      baseUri: Config.get().apis.imodels.baseUrl
+      baseUri: Config.get().apis.imodels.baseUrl,
+      version: "locks"
     };
   }
 }

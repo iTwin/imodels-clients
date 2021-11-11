@@ -9,14 +9,14 @@ export enum LockLevel {
   Exclusive = "exclusive"
 }
 
-export interface LockSet {
+export interface LockedObjects {
   lockLevel: LockLevel;
   objectIds: string[];
 }
 
 export interface Lock {
   briefcaseId: number;
-  acquiredLocks: LockSet[];
+  lockedObjects: LockedObjects[];
 }
 
 export interface LockResponse {

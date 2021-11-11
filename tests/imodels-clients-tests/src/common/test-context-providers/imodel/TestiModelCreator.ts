@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, CheckpointState } from "@itwin/imodels-client-authoring";
+import { Changeset, CheckpointState, Lock, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
 import { TestSetupError, sleep } from "../../CommonTestUtils";
 import { Config } from "../../Config";
 import { TestAuthorizationProvider } from "../auth/TestAuthenticationProvider";
@@ -42,14 +42,25 @@ export class TestiModelCreator {
   public static async createReusable(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<ReusableiModelMetadata> {
     const imodel = await TestiModelCreator.createEmpty(params);
     const briefcase = await TestiModelCreator.uploadChangesets({ ...params, imodelId: imodel.id });
+    const namedVersions = await TestiModelCreator.createNamedVersionsOnReusableiModel({ ...params, imodelId: imodel.id });
+    const lock = await TestiModelCreator.createLockOnReusableiModel({ ...params, imodelId: imodel.id, briefcaseId: briefcase.id });
 
+    return {
+      ...imodel,
+      briefcase,
+      namedVersions,
+      lock
+    };
+  }
+
+  private static async createNamedVersionsOnReusableiModel(params: TestiModelSetupContext & iModelIdParam): Promise<NamedVersionMetadata[]> {
     // We use this specific user that is able to generate checkpoints
     // for named version creation to mimic production environment.
     const authorizationForUser2 = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin2FullyFeatured);
     const imodelScopedRequestParams = {
       imodelsClient: params.imodelsClient,
       authorization: authorizationForUser2,
-      imodelId: imodel.id
+      imodelId: params.imodelId
     };
 
     const namedVersions: NamedVersionMetadata[] = [];
@@ -66,12 +77,29 @@ export class TestiModelCreator {
     }
 
     await Promise.all(checkpointGenerationPromises);
+    return namedVersions;
+  }
 
-    return {
-      ...imodel,
-      briefcase,
-      namedVersions
-    };
+  private static async createLockOnReusableiModel(params: TestiModelSetupContext & iModelIdParam & { briefcaseId: number }): Promise<Lock> {
+    const testiModelLocks: LockedObjects[] = [
+      {
+        lockLevel: LockLevel.Exclusive,
+        objectIds: ["0x1", "0xa"]
+      },
+      {
+        lockLevel: LockLevel.Shared,
+        objectIds: ["0x2", "0xb"]
+      }
+    ];
+
+    const acquiredLocks: Lock = await params.imodelsClient.Locks.update({
+      authorization: params.authorization,
+      imodelId: params.imodelId,
+      briefcaseId: params.briefcaseId,
+      lockedObjects: testiModelLocks
+    });
+
+    return acquiredLocks;
   }
 
   public static async uploadChangesets(params: TestiModelSetupContext & iModelIdParam): Promise<BriefcaseMetadata> {
