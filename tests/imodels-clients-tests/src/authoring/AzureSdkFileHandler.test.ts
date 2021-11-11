@@ -25,7 +25,6 @@ describe("AzureSdkFileHandler", () => {
   });
 
   before(async () => {
-    console.log("az sdk handler test");
     azureSdkFileHandler = new AzureSdkFileHandler();
 
     testClientOptions = new TestClientOptions();
