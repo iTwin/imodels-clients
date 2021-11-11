@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsClient } from "@itwin/imodels-client-authoring";
-import { cleanupDirectory, cleanUpiModels, createDirectory } from "./CommonTestUtils";
+import { cleanUpiModels, cleanupDirectory, createDirectory } from "./CommonTestUtils";
 import { Config } from "./Config";
 import { Constants } from "./Constants";
 import { TestAuthorizationProvider } from "./test-context-providers/auth/TestAuthenticationProvider";
