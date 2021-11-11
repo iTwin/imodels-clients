@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
+import * as path from "path";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
 import { AuthorizationParam, iModelsClient as ManagementiModelsClient } from "@itwin/imodels-client-management";
 import { TestiModelGroup } from "./TestiModelGroup";
@@ -43,6 +44,15 @@ export async function toArray<T>(iterator: AsyncIterableIterator<T>): Promise<T[
     result.push(entity);
 
   return result;
+}
+
+export function createDirectory(directoryPath: string): void {
+  if (fs.existsSync(directoryPath))
+    return;
+
+  const parentDirectory = path.dirname(directoryPath);
+  createDirectory(parentDirectory);
+  fs.mkdirSync(directoryPath);
 }
 
 export function cleanupDirectory(directory: string): void {

@@ -59,7 +59,7 @@ describe("AzureSdkFileHandler", () => {
     await cleanUpiModels({ imodelsClient, authorization, projectId, testiModelGroup });
   });
 
-  it.only("should call callback when downloading file", async () => {
+  it("should call callback when downloading file", async () => {
     // Arrange
     const testChangeset = TestiModelFileProvider.changesets[0];
     const downloadUrl = await getTestChangesetDownloadUrl(testChangeset);
