@@ -15,10 +15,6 @@ export class TestSetupError extends Error {
   }
 }
 
-export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 export async function cleanUpiModels(params: AuthorizationParam & {
   imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
   projectId: string,
