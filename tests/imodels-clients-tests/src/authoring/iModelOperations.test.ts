@@ -33,7 +33,7 @@ describe("[Authoring] iModelOperations", () => {
       authorization,
       imodelProperties: {
         projectId,
-        name: testiModelGroup.getPrefixediModelName("Sample iModel from baseline"),
+        name: testiModelGroup.getPrefixedUniqueiModelName("Sample iModel from baseline"),
         filePath: TestiModelFileProvider.imodel.filePath
       }
     };

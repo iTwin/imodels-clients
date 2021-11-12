@@ -45,10 +45,10 @@ describe("[Management] BriefcaseOperations", () => {
       };
 
       // Act
-      const briefcases = await testCase.functionUnderTest(getBriefcaseListParams);
+      const briefcases = testCase.functionUnderTest(getBriefcaseListParams);
 
       // Assert
-      assertCollection({
+      await assertCollection({
         asyncIterable: briefcases,
         isEntityCountCorrect: count => count === 1
       });
