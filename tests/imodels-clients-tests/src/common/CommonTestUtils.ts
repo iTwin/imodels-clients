@@ -71,6 +71,7 @@ export function getTestRunId(): string {
 
 export function createGuidValue(): string {
   // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+  // cspell:disable-next-line
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
     const r = Math.random() * 16 | 0;
     const v = c === "x" ? r : (r & 0x3 | 0x8);
