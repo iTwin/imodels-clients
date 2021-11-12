@@ -2,6 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { getTestRunId } from "./CommonTestUtils";
+
 export class TestiModelGroup {
   private _imodelNamePrefix: string;
 
@@ -11,13 +13,13 @@ export class TestiModelGroup {
       testSuite?: string,
     }
   }) {
-    this._imodelNamePrefix = `[${params.labels.package}]`;
+    this._imodelNamePrefix = `[${getTestRunId()}][${params.labels.package}]`;
     if (params.labels.testSuite)
       this._imodelNamePrefix += `[${params.labels.testSuite}]`;
   }
 
   public getPrefixedUniqueiModelName(imodelName: string): string {
-    return `${this._imodelNamePrefix} ${imodelName} ${new Date().toISOString()}`;
+    return `${this._imodelNamePrefix} ${imodelName}`;
   }
 
   public doesiModelBelongToContext(imodelName: string): boolean {
