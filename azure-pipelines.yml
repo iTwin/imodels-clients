@@ -67,4 +67,4 @@ jobs:
 
     - script: node common/scripts/install-run-rush.js publish --publish -a -b main --npm-auth-token $(System.AccessToken)
       displayName: rush publish package
-      condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'), eq(variables['Build.SourceBranch'], 'refs/heads/testing-out-pipeline-vars'), ${{ parameters.shouldPublish }} ) #TODO: testing-out-pipeline-vars -> main
+      condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'), eq(variables['Build.SourceBranch'], 'refs/heads/publishing-dev-package'), ${{ parameters.shouldPublish }} ) #TODO: publishing-dev-package -> main
