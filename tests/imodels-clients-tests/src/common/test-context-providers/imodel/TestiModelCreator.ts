@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, CheckpointState } from "@itwin/imodels-client-authoring";
-import { TestSetupError, sleep } from "../../CommonTestUtils";
+import { Changeset, CheckpointState, sleep } from "@itwin/imodels-client-authoring";
+import { TestSetupError } from "../../CommonTestUtils";
 import { Config } from "../../Config";
 import { TestAuthorizationProvider } from "../auth/TestAuthenticationProvider";
 import { TestiModelFileProvider } from "./TestiModelFileProvider";

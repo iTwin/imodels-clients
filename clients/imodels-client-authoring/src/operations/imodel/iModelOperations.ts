@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, iModelOperations as ManagementiModelOperations, iModel, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
+import { AuthorizationParam, iModelOperations as ManagementiModelOperations, iModel, iModelsErrorCode, iModelsErrorImpl, sleep } from "@itwin/imodels-client-management";
 import { iModelCreateResponse } from "../../base";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
 import { Constants } from "../../Constants";
@@ -65,6 +65,8 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
           code: iModelsErrorCode.BaselineFileInitializationFailed,
           message: `Baseline File initialization failed with state '${baselineFileState}.'`
         });
+
+      await sleep(sleepPeriodInMs);
     }
 
     throw new iModelsErrorImpl({
