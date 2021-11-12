@@ -1,14 +1,16 @@
+parameters:
+  - name: shouldPublish
+    displayName: Publish packages to public NPM registry
+    type: boolean
+    default: false
+
 name:
   $(Date:yyyy.M.d)$(Rev:.r)
 
 trigger: none
 
-pool:
-  name: iModelTechCI
-  demands: Agent.OS -equals Windows_NT
-
 jobs:
-  - job: BuildAndTestSBX
+  - job: BuildTestSBXAndPublish
     strategy:
       matrix:
         linux:
@@ -62,3 +64,7 @@ jobs:
       inputs:
         PathtoPublish: '$(Build.SourcesDirectory)/common/temp/artifacts/packages'
         ArtifactName: packages
+
+    - script: node common/scripts/install-run-rush.js publish --publish -a -b main --npm-auth-token $(System.AccessToken)
+      displayName: rush publish package
+      condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'), eq(variables['Build.SourceBranch'], 'refs/heads/testing-out-pipeline-vars'), ${{ parameters.shouldPublish }} ) #TODO: testing-out-pipeline-vars -> main
