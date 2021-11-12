@@ -16,8 +16,8 @@ export class TestiModelGroup {
       this._imodelNamePrefix += `[${params.labels.testSuite}]`;
   }
 
-  public getPrefixediModelName(imodelName: string): string {
-    return `${this._imodelNamePrefix} ${imodelName}`;
+  public getPrefixedUniqueiModelName(imodelName: string): string {
+    return `${this._imodelNamePrefix} ${imodelName} ${new Date().toISOString()}`;
   }
 
   public doesiModelBelongToContext(imodelName: string): boolean {
