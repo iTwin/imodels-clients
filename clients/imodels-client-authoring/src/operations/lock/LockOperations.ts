@@ -17,11 +17,14 @@ export class LockOperations<TOptions extends OperationOptions> extends Operation
   }
 
   public async update(params: UpdateLockParams): Promise<Lock> {
-    const { authorization, imodelId, ...lockProperties } = params;
     const response = await this.sendPatchRequest<LockResponse>({
-      authorization,
-      url: this._options.urlFormatter.getLocksUrl({ imodelId }),
-      body: lockProperties
+      authorization: params.authorization,
+      url: this._options.urlFormatter.getLocksUrl({ imodelId: params.imodelId }),
+      body: {
+        briefcaseId: params.briefcaseId,
+        changesetId: params.changesetId,
+        lockedObjects: params.lockedObjects
+      }
     });
     return response.lock;
   }
