@@ -442,6 +442,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     try {
       nativeDb.setITwinId(arg.iTwinId);
       nativeDb.saveChanges();
+      // cspell:disable-next-line
       nativeDb.deleteAllTxns(); // necessary before resetting briefcaseId
       nativeDb.resetBriefcaseId(BriefcaseIdValue.Unassigned);
       nativeDb.saveLocalValue(BriefcaseLocalValue.NoLocking, arg.noLocks ? "true" : undefined);
