@@ -15,6 +15,6 @@ export interface GetLockListParams extends iModelScopedOperationParams {
 
 export interface UpdateLockParams extends iModelScopedOperationParams {
   briefcaseId: number;
-  changeset?: string; // TODO: not ideal TODO: is optional?
+  changesetId?: string;
   lockedObjects: LockedObjects[];
 }
