@@ -42,7 +42,7 @@ describe("AzureSdkFileHandler", () => {
       authorization,
       imodelsClient,
       projectId,
-      imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
+      imodelName: testiModelGroup.getPrefixedUniqueiModelName("Test iModel for write")
     });
     testiModelForDownload = await ReusableTestiModelProvider.getOrCreate({
       authorization,

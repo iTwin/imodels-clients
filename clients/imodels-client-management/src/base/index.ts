@@ -5,6 +5,7 @@
 export * from "./OperationsBase";
 export * from "./iModelsErrorParser";
 export * from "./PagedCollectionGenerator";
+export * from "./CommonFunctions";
 export * from "./interfaces/CommonInterfaces";
 export * from "./interfaces/UtilityTypes";
 export * from "./interfaces/iModelsErrorInterfaces";

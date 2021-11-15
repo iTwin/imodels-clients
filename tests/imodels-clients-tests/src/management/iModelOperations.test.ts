@@ -29,7 +29,7 @@ describe("[Management] iModelOperations", () => {
       imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
       authorization,
       projectId,
-      imodelName: testiModelGroup.getPrefixediModelName("Test iModel for collection queries")
+      imodelName: testiModelGroup.getPrefixedUniqueiModelName("Test iModel for collection queries")
     });
   });
 
@@ -43,7 +43,7 @@ describe("[Management] iModelOperations", () => {
       authorization,
       imodelProperties: {
         projectId,
-        name: testiModelGroup.getPrefixediModelName("Empty Test iModel"),
+        name: testiModelGroup.getPrefixedUniqueiModelName("Empty Test iModel"),
         description: "Sample iModel description",
         extent: {
           southWest: { latitude: 1, longitude: 2 },
@@ -181,7 +181,7 @@ describe("[Management] iModelOperations", () => {
       authorization: () => Promise.resolve({ scheme: "Bearer", token: "invalid token" }),
       imodelProperties: {
         projectId,
-        name: testiModelGroup.getPrefixediModelName("Sample iModel (unauthorized)")
+        name: testiModelGroup.getPrefixedUniqueiModelName("Sample iModel (unauthorized)")
       }
     };
 
@@ -210,7 +210,7 @@ describe("[Management] iModelOperations", () => {
       authorization,
       imodelProperties: {
         projectId,
-        name: testiModelGroup.getPrefixediModelName("Sample iModel (invalid)"),
+        name: testiModelGroup.getPrefixedUniqueiModelName("Sample iModel (invalid)"),
         description: "x".repeat(256)
       }
     };

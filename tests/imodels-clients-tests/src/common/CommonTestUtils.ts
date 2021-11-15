@@ -15,10 +15,6 @@ export class TestSetupError extends Error {
   }
 }
 
-export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 export async function cleanUpiModels(params: AuthorizationParam & {
   imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
   projectId: string,
@@ -52,4 +48,21 @@ export function cleanupDirectory(directory: string): void {
     fs.rmdirSync(directory, { recursive: true });
     fs.mkdirSync(directory);
   }
+}
+
+let testInstanceId: string;
+export function getTestRunId(): string {
+  if (!testInstanceId)
+    testInstanceId = createGuidValue();
+  return testInstanceId;
+}
+
+export function createGuidValue(): string {
+  // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+  // cspell:disable-next-line
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0;
+    const v = c === "x" ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
 }

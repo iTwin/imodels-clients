@@ -35,7 +35,7 @@ describe("[Management] NamedVersionOperations", () => {
       imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
       authorization,
       projectId,
-      imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
+      imodelName: testiModelGroup.getPrefixedUniqueiModelName("Test iModel for write")
     });
 
     for (let i = 0; i < namedVersionCountCreatedInSetup; i++) {
@@ -77,10 +77,10 @@ describe("[Management] NamedVersionOperations", () => {
       };
 
       // Act
-      const namedVersions = await testCase.functionUnderTest(getNamedVersionListParams);
+      const namedVersions = testCase.functionUnderTest(getNamedVersionListParams);
 
       // Assert
-      assertCollection({
+      await assertCollection({
         asyncIterable: namedVersions,
         isEntityCountCorrect: count => count >= namedVersionCountCreatedInSetup
       });
