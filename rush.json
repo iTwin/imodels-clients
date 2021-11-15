@@ -38,8 +38,9 @@
     },
     {
       "packageName": "@itwin/imodels-access",
-      "projectFolder": "interop",
-      "shouldPublish": false
+      "projectFolder": "imodels-access",
+      "shouldPublish": true,
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     }
   ]
 }
