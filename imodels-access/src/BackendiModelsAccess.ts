@@ -63,7 +63,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     const downloadedChangeset: DownloadedChangeset = arg.changeset.index
       ? await this._imodelsClient.Changesets.downloadByIndex({ ...commonDownloadParams, changesetIndex: arg.changeset.index })
       : await this._imodelsClient.Changesets.downloadById({ ...commonDownloadParams, changesetId: arg.changeset.id! });
-    const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset)
+    const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset);
     return result;
   }
 
@@ -347,7 +347,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
       return;
 
     const lock: Lock = locks[0];
-    this.setLockLevelToNone(lock.lockedObjects)
+    this.setLockLevelToNone(lock.lockedObjects);
 
     const updateLockParams: UpdateLockParams = {
       ...this.getiModelScopedOperationParams(arg),
