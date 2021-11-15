@@ -1,13 +1,13 @@
 dependencies:
   '@azure/storage-blob': 12.7.0
-  '@bentley/imodelhub-client': 2.19.17_@bentley+itwin-client@2.19.17
-  '@bentley/itwin-client': 2.19.17
-  '@bentley/telemetry-client': 2.19.17_@bentley+itwin-client@2.19.17
-  '@itwin/core-backend': 3.0.0-dev.87_eee687ee41f4691bc35bf8b0e671b29f
-  '@itwin/core-bentley': 3.0.0-dev.87
-  '@itwin/core-common': 3.0.0-dev.87_881a04a501663441ddccff4a9cbdfa0f
-  '@itwin/core-geometry': 3.0.0-dev.87_@itwin+core-bentley@3.0.0-dev.87
-  '@itwin/ecschema-metadata': 3.0.0-dev.87_@itwin+core-bentley@3.0.0-dev.87
+  '@bentley/imodelhub-client': 3.0.0-extension.1_af3d34c44bb0b326974043afea2a804b
+  '@bentley/itwin-client': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
+  '@bentley/telemetry-client': 3.0.0-extension.1_0bf4f366392488fe1d90d140ed82d560
+  '@itwin/core-backend': 3.0.0-extension.1_da50f0c45216e767636a1a01a0a59de3
+  '@itwin/core-bentley': 3.0.0-extension.1
+  '@itwin/core-common': 3.0.0-extension.1_b24ed9706993872e14cc402c94924136
+  '@itwin/core-geometry': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
+  '@itwin/ecschema-metadata': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
   '@rush-temp/imodels-access': 'file:projects/imodels-access.tgz'
   '@rush-temp/imodels-client-authoring': 'file:projects/imodels-client-authoring.tgz'
   '@rush-temp/imodels-client-common-config': 'file:projects/imodels-client-common-config.tgz_typescript@4.3.5'
@@ -257,20 +257,9 @@ packages:
       '@bentley/itwin-client': ^2.19.17
     resolution:
       integrity: sha512-f3bQa4jXZoqdCE1bpmQFjD/fVRI8MHju3W/ElRvkxcGUG+UWdJ01QtRfA65J1hlcpb8v/JCCmaRuanclQv+4Pg==
-  /@bentley/context-registry-client/2.19.17_@bentley+itwin-client@2.19.17:
+  /@bentley/frontend-authorization-client/2.19.17_@bentley+itwin-client@2.19.17:
     dependencies:
       '@bentley/itwin-client': 2.19.17
-      deep-assign: 2.0.0
-    dev: false
-    peerDependencies:
-      '@bentley/bentleyjs-core': ^2.19.17
-      '@bentley/itwin-client': ^2.19.17
-    resolution:
-      integrity: sha512-f3bQa4jXZoqdCE1bpmQFjD/fVRI8MHju3W/ElRvkxcGUG+UWdJ01QtRfA65J1hlcpb8v/JCCmaRuanclQv+4Pg==
-  /@bentley/frontend-authorization-client/2.19.17_487158df0e1ac6401ab1264391e81e08:
-    dependencies:
-      '@bentley/bentleyjs-core': 2.19.17
-      '@bentley/itwin-client': 2.19.17_@bentley+bentleyjs-core@2.19.17
       oidc-client: 1.11.5
     dev: false
     peerDependencies:
@@ -300,20 +289,24 @@ packages:
       '@bentley/rbac-client': ^2.19.17
     resolution:
       integrity: sha512-vgBxEjfGig5dE+UZGv86LZ6PGjbRD7cV2Je1tDjEVjD5XYvIUK22lyWUCFPeAqJoLeXKey1LI6c7oSN+mWTvFQ==
-  /@bentley/imodelhub-client/2.19.17_@bentley+itwin-client@2.19.17:
+  /@bentley/imodelhub-client/3.0.0-extension.1_af3d34c44bb0b326974043afea2a804b:
     dependencies:
-      '@bentley/context-registry-client': 2.19.17_@bentley+itwin-client@2.19.17
-      '@bentley/itwin-client': 2.19.17
+      '@bentley/itwin-client': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
+      '@itwin/core-bentley': 3.0.0-extension.1
+      agentkeepalive: 4.1.4
       deep-assign: 2.0.0
-      js-base64: 2.6.4
+      fs-write-stream-atomic: 1.0.10
+      got: 11.8.2
+      js-base64: 3.7.2
+      lodash: 4.17.21
+      proper-lockfile: 4.1.2
+      semver: 5.7.1
     dev: false
     peerDependencies:
-      '@bentley/bentleyjs-core': ^2.19.17
-      '@bentley/frontend-authorization-client': ^2.19.17
-      '@bentley/itwin-client': ^2.19.17
-      '@bentley/rbac-client': ^2.19.17
+      '@bentley/itwin-client': ^3.0.0-extension.1
+      '@itwin/core-bentley': ^3.0.0-extension.1
     resolution:
-      integrity: sha512-vgBxEjfGig5dE+UZGv86LZ6PGjbRD7cV2Je1tDjEVjD5XYvIUK22lyWUCFPeAqJoLeXKey1LI6c7oSN+mWTvFQ==
+      integrity: sha512-6QcMhck6dNWMHzwtF21qgz0zwRxbCk135LvSdI3Rytu+enREpe2cE1GHcVd7gMmZuM6zxZllI8kqQp/d2A93vw==
   /@bentley/imodeljs-common/2.19.17_8295b61cd608fb18336060b1cf89fb80:
     dependencies:
       '@bentley/bentleyjs-core': 2.19.17
@@ -332,11 +325,11 @@ packages:
       '@bentley/rbac-client': ^2.19.17
     resolution:
       integrity: sha512-QDf3L9yS0evEakJK7HuBp6QKOZRhpQ6QKJzNmNVWTwXVPH9uYcmljJ8SeeD66GKF6fZaCMJsx4b03EmWNR3RTA==
-  /@bentley/imodeljs-native/3.0.14:
+  /@bentley/imodeljs-native/3.0.16:
     dev: false
     requiresBuild: true
     resolution:
-      integrity: sha512-uvlvJ6kxy5jAX1We37L20wnhl0Bmi7s+0jHlSZHbYOsGS/mxf9b44Kjf+++lSij7RyHC4N7HeHQeVOMCpB8Qpg==
+      integrity: sha512-GiSLaJDp490WN/sdx+FGrQIMy9qWsdzO01baY83WyWCO19Jh3xYd4uRJnyBIIhQOEAYtkDS/t9D01Jh/Ejnkow==
   /@bentley/itwin-client/2.19.17:
     dependencies:
       '@xmldom/xmldom': 0.7.5
@@ -365,15 +358,31 @@ packages:
       '@bentley/bentleyjs-core': ^2.19.17
     resolution:
       integrity: sha512-jmCVj7NK+555yMOwrzJhJyagVnLcp/Sh13DcNbWIFvAF03QyV9qYMr4p7pPGYVhFMw9Ihph+9LqXVUUYstJuoQ==
-  /@bentley/telemetry-client/2.19.17_@bentley+itwin-client@2.19.17:
+  /@bentley/itwin-client/3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4:
     dependencies:
-      '@bentley/bentleyjs-core': 2.19.17
-      '@bentley/itwin-client': 2.19.17
+      '@itwin/core-bentley': 3.0.0-extension.1
+      deep-assign: 2.0.0
+      js-base64: 3.7.2
+      lodash: 4.17.21
+      qs: 6.10.1
+      superagent: 5.3.1
+      xpath: 0.0.27
     dev: false
     peerDependencies:
-      '@bentley/itwin-client': ^2.19.17
+      '@itwin/core-bentley': ^3.0.0-extension.1
     resolution:
-      integrity: sha512-ptJHZjvVU+Z5bQcm3Qef4oKuA3DwZu0kHrzXXvzbBmsQhDKj0dGrhv4D7FVuzqdvdhDJaYkl/cg3Gx6R3fJ6lA==
+      integrity: sha512-TdC8vNcDN5Xy7x/TBFzh+/To6ibdcPK12hodO9fTvJpVEIAQGZEO1EDLE/jA1S4RqA3nWk2trU9bjqqmh1KgoQ==
+  /@bentley/telemetry-client/3.0.0-extension.1_0bf4f366392488fe1d90d140ed82d560:
+    dependencies:
+      '@bentley/itwin-client': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
+      '@itwin/core-bentley': 3.0.0-extension.1
+      '@itwin/core-common': 3.0.0-extension.1_b24ed9706993872e14cc402c94924136
+    dev: false
+    peerDependencies:
+      '@bentley/itwin-client': ^3.0.0-extension.1
+      '@itwin/core-geometry': '*'
+    resolution:
+      integrity: sha512-B4I6r9NdwB9snsmbcNueAgqAsE18B7ZFqVJb5l1s7zZVkneVwMPfpUkgX60+OisQmCr5/i8+RgME/VItNSaWzw==
   /@cspell/cspell-bundled-dicts/5.12.3:
     dependencies:
       '@cspell/dict-ada': 1.1.2
@@ -592,77 +601,71 @@ packages:
     dev: false
     resolution:
       integrity: sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
-  /@itwin/core-backend/3.0.0-dev.87_eee687ee41f4691bc35bf8b0e671b29f:
+  /@itwin/core-backend/3.0.0-extension.1_da50f0c45216e767636a1a01a0a59de3:
     dependencies:
       '@azure/storage-blob': 12.7.0
-      '@bentley/imodelhub-client': 2.19.17_@bentley+itwin-client@2.19.17
-      '@bentley/imodeljs-native': 3.0.14
-      '@bentley/itwin-client': 2.19.17
-      '@bentley/telemetry-client': 2.19.17_@bentley+itwin-client@2.19.17
-      '@itwin/core-bentley': 3.0.0-dev.87
-      '@itwin/core-common': 3.0.0-dev.87_881a04a501663441ddccff4a9cbdfa0f
-      '@itwin/core-geometry': 3.0.0-dev.87_@itwin+core-bentley@3.0.0-dev.87
-      '@itwin/ecschema-metadata': 3.0.0-dev.87_@itwin+core-bentley@3.0.0-dev.87
-      deep-assign: 2.0.0
+      '@bentley/imodeljs-native': 3.0.16
+      '@bentley/itwin-client': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
+      '@bentley/telemetry-client': 3.0.0-extension.1_0bf4f366392488fe1d90d140ed82d560
+      '@itwin/core-bentley': 3.0.0-extension.1
+      '@itwin/core-common': 3.0.0-extension.1_b24ed9706993872e14cc402c94924136
+      '@itwin/core-geometry': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
+      '@itwin/ecschema-metadata': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
       form-data: 2.5.1
       fs-extra: 8.1.0
-      glob: 7.2.0
       js-base64: 3.7.2
       multiparty: 4.2.2
       semver: 5.7.1
       ws: 7.5.5
     dev: false
     engines:
-      node: '>=10.17.0 <15.0'
+      node: '>=12.22.0 < 14.0 || >=14.17.0 <17.0'
     peerDependencies:
-      '@bentley/backend-itwin-client': ^3.0.0-dev.87
-      '@bentley/imodelhub-client': ^3.0.0-dev.87
-      '@bentley/itwin-client': ^3.0.0-dev.87
-      '@bentley/telemetry-client': ^3.0.0-dev.87
-      '@itwin/core-bentley': ^3.0.0-dev.87
-      '@itwin/core-common': ^3.0.0-dev.87
-      '@itwin/core-geometry': ^3.0.0-dev.87
-      '@itwin/ecschema-metadata': ^3.0.0-dev.87
+      '@bentley/itwin-client': ^3.0.0-extension.1
+      '@itwin/core-bentley': ^3.0.0-extension.1
+      '@itwin/core-common': ^3.0.0-extension.1
+      '@itwin/core-geometry': ^3.0.0-extension.1
+      '@itwin/ecschema-metadata': ^3.0.0-extension.1
     resolution:
-      integrity: sha512-3AiIDgjinFiDXy6WfLUYuuInpzInmkHI2/OtiVzVsWYlFP+qsQQMuF8r2/Ar5UVwWVTl9wRek9pQ9rL6YD4uXA==
-  /@itwin/core-bentley/3.0.0-dev.87:
+      integrity: sha512-53lefMLMGQTeVJxnj+/4RBKeSCscbnr6efQn56sUcBcGnVx0pirlfQA8hPq6t9NKUO9EpTeSm/pFhWhJoDfnBg==
+  /@itwin/core-bentley/3.0.0-extension.1:
     dev: false
     resolution:
-      integrity: sha512-1V49X/9789zi4j4YaplLKz1X4nf9/CgKIqsvLtDQ4Z7RE5XDXwolJ3Jm2X9XPRCAkMCoz6cg6lrvEXH5bwAp5g==
-  /@itwin/core-common/3.0.0-dev.87_881a04a501663441ddccff4a9cbdfa0f:
+      integrity: sha512-3r1aRoZp694aqP2E0M9dZiaPSAC0E/E2VTvvN9K73NnlTvO4jpaIdt520oHp7tkGYx24VS9Q8+ED1Z0CH9+RkA==
+  /@itwin/core-common/3.0.0-extension.1_b24ed9706993872e14cc402c94924136:
     dependencies:
-      '@bentley/itwin-client': 2.19.17
-      '@itwin/core-bentley': 3.0.0-dev.87
-      '@itwin/core-geometry': 3.0.0-dev.87_@itwin+core-bentley@3.0.0-dev.87
+      '@bentley/itwin-client': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
+      '@itwin/core-bentley': 3.0.0-extension.1
+      '@itwin/core-geometry': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
       '@ungap/url-search-params': 0.1.4
       flatbuffers: 1.12.0
       js-base64: 3.7.2
       semver: 5.7.1
     dev: false
     peerDependencies:
-      '@bentley/itwin-client': ^3.0.0-dev.87
-      '@itwin/core-bentley': ^3.0.0-dev.87
-      '@itwin/core-geometry': ^3.0.0-dev.87
+      '@bentley/itwin-client': ^3.0.0-extension.1
+      '@itwin/core-bentley': ^3.0.0-extension.1
+      '@itwin/core-geometry': ^3.0.0-extension.1
     resolution:
-      integrity: sha512-9hl9LmiDKkv+456Zn3ngjZOqusUnzvdaKwFAV9tSD7+2aEIVxq1xdV2bBLkc1dRNxjXJeiyC9WV0Mkpgyk+kNA==
-  /@itwin/core-geometry/3.0.0-dev.87_@itwin+core-bentley@3.0.0-dev.87:
+      integrity: sha512-IMcuAb/xJjbzvwSrZp5URmKU7h0se97DGIF1R76EMxaTvTCTa7OOkelu6t8f1mH0BXHv8WfeBfUu5ajP+RU7vg==
+  /@itwin/core-geometry/3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4:
     dependencies:
-      '@itwin/core-bentley': 3.0.0-dev.87
+      '@itwin/core-bentley': 3.0.0-extension.1
       flatbuffers: 1.12.0
     dev: false
     peerDependencies:
-      '@itwin/core-bentley': ^3.0.0-dev.87
+      '@itwin/core-bentley': ^3.0.0-extension.1
     resolution:
-      integrity: sha512-B7w7GnzsTEbz9m3DKNmGuWrSif9IYxexbZHH8/Myw05au1OTPA2Jt2ZXmk3koL/bvxa8HTKRT5/ZjB93V1esIw==
-  /@itwin/ecschema-metadata/3.0.0-dev.87_@itwin+core-bentley@3.0.0-dev.87:
+      integrity: sha512-sOx+MGehL3oS8UMFPgBUrDbPHs3ubPSIVsh7SO5FY41QKTQlaFyi/4OvcObA1S+ZvMZ1dEV6gaJu5X8FsC2FGw==
+  /@itwin/ecschema-metadata/3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4:
     dependencies:
-      '@itwin/core-bentley': 3.0.0-dev.87
+      '@itwin/core-bentley': 3.0.0-extension.1
       almost-equal: 1.1.0
     dev: false
     peerDependencies:
-      '@itwin/core-bentley': ^3.0.0-dev.87
+      '@itwin/core-bentley': ^3.0.0-extension.1
     resolution:
-      integrity: sha512-yZ6ue/8ZZIw+supEL6qjq6D+kJ3KbjDanCU3FTFqG5GHTgTP8DBT+pzsLSGROQqxNaQEVZXEHunC43OQxI1pkQ==
+      integrity: sha512-G1qUp4aJlxCjybifuV/T8J5Tg7CEuaFc7o7hjfP0ZGTNsqcRrrZgKWAPYMnR5HFSWcVpY+zy3qqN/s+7Q4EoQw==
   /@nodelib/fs.scandir/2.1.5:
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -693,10 +696,37 @@ packages:
       node: '>=8.0.0'
     resolution:
       integrity: sha512-puWxACExDe9nxbBB3lOymQFrLYml2dVOrd7USiVRnSbgXE+KwBu+HxFvxrzfqsiSda9IWsXJG1ef7C1O2/GmKQ==
+  /@sindresorhus/is/4.2.0:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-VkE3KLBmJwcCaVARtQpfuKcKv8gcBmUubrfHGF84dXuuW6jgsRYxPtzcIhPyK9WAPpRt2/xY6zkD9MnRaJzSyw==
+  /@szmarczak/http-timer/4.0.6:
+    dependencies:
+      defer-to-connect: 2.0.1
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==
+  /@types/cacheable-request/6.0.2:
+    dependencies:
+      '@types/http-cache-semantics': 4.0.1
+      '@types/keyv': 3.1.3
+      '@types/node': 16.11.0
+      '@types/responselike': 1.0.0
+    dev: false
+    resolution:
+      integrity: sha512-B3xVo+dlKM6nnKTcmm5ZtY/OL8bOAOd2Olee9M1zft65ox50OzjEHW91sDiU9j6cvW8Ejg1/Qkf4xd2kugApUA==
   /@types/chai/4.2.22:
     dev: false
     resolution:
       integrity: sha512-tFfcE+DSTzWAgifkjik9AySNqIyNoYwmR+uecPwwD/XRNfvOjmC/FjCxpiUGDkDVDphPfCUecSQVFw+lN3M3kQ==
+  /@types/http-cache-semantics/4.0.1:
+    dev: false
+    resolution:
+      integrity: sha512-SZs7ekbP8CN0txVG2xVRH6EgKmEm31BOxA07vkFaETzZz1xh+cbt8BcI0slpymvwhx5dlFnQG2rTlPVQn+iRPQ==
   /@types/json-schema/7.0.9:
     dev: false
     resolution:
@@ -705,6 +735,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
+  /@types/keyv/3.1.3:
+    dependencies:
+      '@types/node': 16.11.0
+    dev: false
+    resolution:
+      integrity: sha512-FXCJgyyN3ivVgRoml4h94G/p3kY+u/B86La+QptcqJaWtBWtmc6TtkNfS40n9bIvyLteHh7zXOtgbobORKPbDg==
   /@types/mocha/9.0.0:
     dev: false
     resolution:
@@ -724,6 +760,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
+  /@types/responselike/1.0.0:
+    dependencies:
+      '@types/node': 16.11.0
+    dev: false
+    resolution:
+      integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==
   /@types/tunnel/0.0.3:
     dependencies:
       '@types/node': 16.11.0
@@ -885,6 +927,16 @@ packages:
       node: '>= 6.0.0'
     resolution:
       integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==
+  /agentkeepalive/4.1.4:
+    dependencies:
+      debug: 4.3.2
+      depd: 1.1.2
+      humanize-ms: 1.2.1
+    dev: false
+    engines:
+      node: '>= 8.0.0'
+    resolution:
+      integrity: sha512-+V/rGa3EuU74H6wR04plBb7Ks10FbtUQgRj/FQOG7uUIEuaINI+AiqJR1k6t3SVNs7o7ZjIdus6706qqzVq8jQ==
   /ajv/6.12.6:
     dependencies:
       fast-deep-equal: 3.1.3
@@ -1221,6 +1273,26 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-AKcdTnFSWATd5/GCPRxr2ChwIJ85CeyrEyjRHlKxQ56d4XJMGym0uAiKn0xbLOGOl3+yRpOTi484dVCEc5AUzQ==
+  /cacheable-lookup/5.0.4:
+    dev: false
+    engines:
+      node: '>=10.6.0'
+    resolution:
+      integrity: sha512-2/kNscPhpcxrOigMZzbiWF7dz8ilhb/nIHU3EyZiXWXpeq/au8qJ8VhdftMkty3n7Gj6HIGalQG8oiBNB3AJgA==
+  /cacheable-request/7.0.2:
+    dependencies:
+      clone-response: 1.0.2
+      get-stream: 5.2.0
+      http-cache-semantics: 4.1.0
+      keyv: 4.0.4
+      lowercase-keys: 2.0.0
+      normalize-url: 6.1.0
+      responselike: 2.0.0
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-pouW8/FmiPQbuGpkXQ9BAPv/Mo5xDGANgSNXzTzJ8DrKGuXOssM4wIQRjfanNRh3Yu5cfYPvcorqbhg2KIJtew==
   /caching-transform/3.0.2:
     dependencies:
       hasha: 3.0.0
@@ -1365,6 +1437,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-OcRE68cOsVMXp1Yvonl/fzkQOyjLSu/8bhPDfQt0e0/Eb283TKP20Fs2MqoPsr9SwA595rRCA+QMzYc9nBP+JQ==
+  /clone-response/1.0.2:
+    dependencies:
+      mimic-response: 1.0.1
+    dev: false
+    resolution:
+      integrity: sha1-0dyXOSAxTfZ/vrlCI7TuNQI56Ws=
   /collection-visit/1.0.0:
     dependencies:
       map-visit: 1.0.0
@@ -1681,6 +1759,14 @@ packages:
       node: '>=0.10'
     resolution:
       integrity: sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
+  /decompress-response/6.0.0:
+    dependencies:
+      mimic-response: 3.1.0
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==
   /deep-assign/2.0.0:
     dependencies:
       is-obj: 1.0.1
@@ -1709,6 +1795,12 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-9fj7sYp9bVCyH2QfZJ67Uiz+JPc=
+  /defer-to-connect/2.0.1:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-4tvttepXG1VaYGrRibk5EwJd1t4udunSOVMdLSAL6mId1ix438oPwPZMALY41FCijukO1L0twNcGsdzS7dHgDg==
   /define-properties/1.1.3:
     dependencies:
       object-keys: 1.1.1
@@ -2386,6 +2478,7 @@ packages:
     resolution:
       integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
   /formidable/1.2.2:
+    deprecated: 'Please upgrade to latest, formidable@v2 or formidable@v3! Check these notes: https://bit.ly/2ZEqIau'
     dev: false
     resolution:
       integrity: sha512-V8gLm+41I/8kguQ4/o1D3RIHRmhYFG4pnNyonvua+40rqcEmT4+V71yaZ3B457xbbgCsCfjSPi65u/W6vK1U5Q==
@@ -2421,6 +2514,15 @@ packages:
       node: '>=6 <7 || >=8'
     resolution:
       integrity: sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==
+  /fs-write-stream-atomic/1.0.10:
+    dependencies:
+      graceful-fs: 4.2.8
+      iferr: 0.1.5
+      imurmurhash: 0.1.4
+      readable-stream: 2.3.7
+    dev: false
+    resolution:
+      integrity: sha1-tH31NJPvkR33VzHnCp3tAYnbQMk=
   /fs.realpath/1.0.0:
     dev: false
     resolution:
@@ -2597,6 +2699,24 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-9O4MVG9ioZJ08ffbcyVYyLOJLk5JQ688pJ4eMGLpdWLHq/Wr1D9BlriLQyL0E+jbkuePVZXYFj47QM/v093wHg==
+  /got/11.8.2:
+    dependencies:
+      '@sindresorhus/is': 4.2.0
+      '@szmarczak/http-timer': 4.0.6
+      '@types/cacheable-request': 6.0.2
+      '@types/responselike': 1.0.0
+      cacheable-lookup: 5.0.4
+      cacheable-request: 7.0.2
+      decompress-response: 6.0.0
+      http2-wrapper: 1.0.3
+      lowercase-keys: 2.0.0
+      p-cancelable: 2.1.1
+      responselike: 2.0.0
+    dev: false
+    engines:
+      node: '>=10.19.0'
+    resolution:
+      integrity: sha512-D0QywKgIe30ODs+fm8wMZiAcZjypcCodPNuMz5H9Mny7RJ+IjJ10BdmGW7OM7fHXP+O7r6ZwapQ/YQmMSvB0UQ==
   /graceful-fs/4.2.8:
     dev: false
     resolution:
@@ -2707,6 +2827,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==
+  /http-cache-semantics/4.1.0:
+    dev: false
+    resolution:
+      integrity: sha512-carPklcUh7ROWRK7Cv27RPtdhYhUsela/ue5/jKzjegVvXDqM2ILE9Q2BGn9JZJh1g87cp56su/FgQSzcWS8cQ==
   /http-errors/1.8.0:
     dependencies:
       depd: 1.1.2
@@ -2719,6 +2843,15 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha512-4I8r0C5JDhT5VkvI47QktDW75rNlGVsUf/8hzjCC/wkWI/jdTRmBb9aI7erSG82r1bjKY3F6k28WnsVxB1C73A==
+  /http2-wrapper/1.0.3:
+    dependencies:
+      quick-lru: 5.1.1
+      resolve-alpn: 1.2.1
+    dev: false
+    engines:
+      node: '>=10.19.0'
+    resolution:
+      integrity: sha512-V+23sDMr12Wnz7iTcDeJr3O6AIxlnvT/bmaAAAP/Xda35C90p9599p0F1eHR/N1KILWSoWVAiOMFjBBXaXSMxg==
   /https-proxy-agent/5.0.0:
     dependencies:
       agent-base: 6.0.2
@@ -2728,10 +2861,20 @@ packages:
       node: '>= 6'
     resolution:
       integrity: sha512-EkYm5BcKUGiduxzSt3Eppko+PiNWNEpa4ySk9vTC6wDsQJW9rHSa+UhGNJoRYp7bz6Ht1eaRIa6QaJqO5rCFbA==
+  /humanize-ms/1.2.1:
+    dependencies:
+      ms: 2.1.3
+    dev: false
+    resolution:
+      integrity: sha1-xG4xWaKT9riW2ikxbYtv6Lt5u+0=
   /ieee754/1.2.1:
     dev: false
     resolution:
       integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
+  /iferr/0.1.5:
+    dev: false
+    resolution:
+      integrity: sha1-xg7taebY/bazEEofy8ocGS3FtQE=
   /ignore/4.0.6:
     dev: false
     engines:
@@ -3214,6 +3357,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-OYu7XEzjkCQ3C5Ps3QIZsQfNpqoJyZZA99wd9aWd05NCtC5pWOkShK2mkL6HXQR6/Cy2lbNdPlZBpuQHXE63gA==
+  /json-buffer/3.0.1:
+    dev: false
+    resolution:
+      integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==
   /json-parse-better-errors/1.0.2:
     dev: false
     resolution:
@@ -3255,6 +3402,12 @@ packages:
       graceful-fs: 4.2.8
     resolution:
       integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==
+  /keyv/4.0.4:
+    dependencies:
+      json-buffer: 3.0.1
+    dev: false
+    resolution:
+      integrity: sha512-vqNHbAc8BBsxk+7QBYLW0Y219rWcClspR6WSeoHYKG5mnsSoOH+BL1pWq02DDCVdvvuUny5rkBlzMRzoqc+GIg==
   /kind-of/3.2.2:
     dependencies:
       is-buffer: 1.1.6
@@ -3370,6 +3523,12 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==
+  /lowercase-keys/2.0.0:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-tqNXrS78oMOE73NMxK4EMLQsQowWf8jKooH9g7xPavRT706R6bkQJ6DY2Te7QukaZsulxa30wQ7bk0pm4XiHmA==
   /lru-cache/4.1.5:
     dependencies:
       pseudomap: 1.0.2
@@ -3508,6 +3667,18 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-tqkh47FzKeCPD2PUiPB6pkbMzsCasjxAfC62/Wap5qrUWcb+sFasXUC5I3gYM5iBM8v/Qpn4UK0x+j0iHyFPDg==
+  /mimic-response/1.0.1:
+    dev: false
+    engines:
+      node: '>=4'
+    resolution:
+      integrity: sha512-j5EctnkH7amfV/q5Hgmoal1g2QHFJRraOtmx0JpIqkxhBhI/lJSl1nMpQ45hVarwNETOoWEimndZ4QK0RHxuxQ==
+  /mimic-response/3.1.0:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==
   /minimatch/3.0.4:
     dependencies:
       brace-expansion: 1.1.11
@@ -3664,6 +3835,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
+  /normalize-url/6.1.0:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-DlL+XwOy3NxAQ8xuC0okPgK46iuVNAK01YN7RueYBqqFeGsBjV9XmCAzAdgt+667bCl5kPh9EqKKDwnaPG1I7A==
   /nyc/14.0.0:
     dependencies:
       archy: 1.0.0
@@ -3797,6 +3974,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-/7xJiDNuDoM94MFox+8VISGqf7M=
+  /p-cancelable/2.1.1:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-BZOr3nRQHOntUjTrH8+Lh54smKHoHyur8We1V8DSMVrl5A2malOOwuJRnKRDjSnkoeBh4at6BwEnb5I7Jl31wg==
   /p-limit/1.3.0:
     dependencies:
       p-try: 1.0.0
@@ -4069,6 +4252,14 @@ packages:
       node: '>=0.4.0'
     resolution:
       integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
+  /proper-lockfile/4.1.2:
+    dependencies:
+      graceful-fs: 4.2.8
+      retry: 0.12.0
+      signal-exit: 3.0.5
+    dev: false
+    resolution:
+      integrity: sha512-TjNPblN4BwAWMXU8s9AEz4JmQxnD1NNL7bNOY/AKUzyamc379FWASUhc/K1pL2noVb+XmZKLL68cjzLsiOAMaA==
   /proxy-from-env/1.1.0:
     dev: false
     resolution:
@@ -4126,6 +4317,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
+  /quick-lru/5.1.1:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
   /random-bytes/1.0.0:
     dev: false
     engines:
@@ -4283,6 +4480,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==
+  /resolve-alpn/1.2.1:
+    dev: false
+    resolution:
+      integrity: sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g==
   /resolve-from/4.0.0:
     dev: false
     engines:
@@ -4315,12 +4516,24 @@ packages:
     dev: false
     resolution:
       integrity: sha512-wENBPt4ySzg4ybFQW2TT1zMQucPK95HSh/nq2CFTZVOGut2+pQvSsgtda4d26YrYcr067wjbmzOG8byDPBX63A==
+  /responselike/2.0.0:
+    dependencies:
+      lowercase-keys: 2.0.0
+    dev: false
+    resolution:
+      integrity: sha512-xH48u3FTB9VsZw7R+vvgaKeLKzT6jOogbQhEe/jewwnZgzPcnyWui2Av6JpoYZF/91uueC+lqhWqeURw5/qhCw==
   /ret/0.1.15:
     dev: false
     engines:
       node: '>=0.12'
     resolution:
       integrity: sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==
+  /retry/0.12.0:
+    dev: false
+    engines:
+      node: '>= 4'
+    resolution:
+      integrity: sha1-G0KmJmoh8HQh0bC1S33BZ7AcATs=
   /reusify/1.0.4:
     dev: false
     engines:
@@ -5267,23 +5480,23 @@ packages:
   'file:projects/imodels-access.tgz':
     dependencies:
       '@bentley/bentleyjs-core': 2.19.17
-      '@bentley/frontend-authorization-client': 2.19.17_487158df0e1ac6401ab1264391e81e08
+      '@bentley/frontend-authorization-client': 2.19.17_@bentley+itwin-client@2.19.17
       '@bentley/geometry-core': 2.19.17_@bentley+bentleyjs-core@2.19.17
-      '@bentley/imodelhub-client': 2.19.17_@bentley+itwin-client@2.19.17
+      '@bentley/imodelhub-client': 3.0.0-extension.1_af3d34c44bb0b326974043afea2a804b
       '@bentley/imodeljs-common': 2.19.17_8295b61cd608fb18336060b1cf89fb80
-      '@bentley/itwin-client': 2.19.17
-      '@bentley/telemetry-client': 2.19.17_@bentley+itwin-client@2.19.17
-      '@itwin/core-backend': 3.0.0-dev.87_eee687ee41f4691bc35bf8b0e671b29f
-      '@itwin/core-bentley': 3.0.0-dev.87
-      '@itwin/core-common': 3.0.0-dev.87_881a04a501663441ddccff4a9cbdfa0f
-      '@itwin/core-geometry': 3.0.0-dev.87_@itwin+core-bentley@3.0.0-dev.87
-      '@itwin/ecschema-metadata': 3.0.0-dev.87_@itwin+core-bentley@3.0.0-dev.87
+      '@bentley/itwin-client': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
+      '@bentley/telemetry-client': 3.0.0-extension.1_0bf4f366392488fe1d90d140ed82d560
+      '@itwin/core-backend': 3.0.0-extension.1_da50f0c45216e767636a1a01a0a59de3
+      '@itwin/core-bentley': 3.0.0-extension.1
+      '@itwin/core-common': 3.0.0-extension.1_b24ed9706993872e14cc402c94924136
+      '@itwin/core-geometry': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
+      '@itwin/ecschema-metadata': 3.0.0-extension.1_f2c3418fbeb77077b236020c30c9aae4
       '@types/ws': 8.2.0
       typescript: 4.3.5
     dev: false
     name: '@rush-temp/imodels-access'
     resolution:
-      integrity: sha512-a9nxP+wVi2r9gWJBMqXwSlbMo6ELLMudQxpdTKFA2deCWK5vqrj+AqqxVLnJImCKY7GaXSKkh2iCzQCUpNCGVg==
+      integrity: sha512-P58VQNs/Bhh1DwXcNJ+pL/il1WrR6c+seUVB081gLJ4nKdqBqeF5gdLKUtOYgHmsOdDIargBmLuT3/sW0gnR2g==
       tarball: 'file:projects/imodels-access.tgz'
     version: 0.0.0
   'file:projects/imodels-client-authoring.tgz':
@@ -5345,14 +5558,14 @@ packages:
 registry: ''
 specifiers:
   '@azure/storage-blob': ~12.7.0
-  '@bentley/imodelhub-client': ~2.19.17
-  '@bentley/itwin-client': ~2.19.17
-  '@bentley/telemetry-client': ~2.19.17
-  '@itwin/core-backend': ~3.0.0-dev.87
-  '@itwin/core-bentley': ~3.0.0-dev.87
-  '@itwin/core-common': ~3.0.0-dev.87
-  '@itwin/core-geometry': ~3.0.0-dev.87
-  '@itwin/ecschema-metadata': ~3.0.0-dev.87
+  '@bentley/imodelhub-client': ~3.0.0-dev.119
+  '@bentley/itwin-client': ~3.0.0-dev.119
+  '@bentley/telemetry-client': ~3.0.0-dev.119
+  '@itwin/core-backend': ~3.0.0-dev.119
+  '@itwin/core-bentley': ~3.0.0-dev.119
+  '@itwin/core-common': ~3.0.0-dev.119
+  '@itwin/core-geometry': ~3.0.0-dev.119
+  '@itwin/ecschema-metadata': ~3.0.0-dev.119
   '@rush-temp/imodels-access': 'file:./projects/imodels-access.tgz'
   '@rush-temp/imodels-client-authoring': 'file:./projects/imodels-client-authoring.tgz'
   '@rush-temp/imodels-client-common-config': 'file:./projects/imodels-client-common-config.tgz'

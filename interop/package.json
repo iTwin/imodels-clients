@@ -1,7 +1,7 @@
 {
   "name": "@itwin/imodels-access",
   "version": "0.1.0-dev.1",
-  "description": "Interoperability package between iModels API and iTwin platform",
+  "description": "Interoperability package between iModels API and iTwin platform.",
   "license": "MIT",
   "scripts": {
     "build": "tsc 1>&2",
@@ -14,17 +14,12 @@
   },
   "dependencies": {
     "@itwin/imodels-client-authoring": "~0.1.0-dev.1",
-    
-    "@itwin/core-backend": "~3.0.0-dev.87",
-    "@itwin/core-bentley": "~3.0.0-dev.87",
-    "@itwin/ecschema-metadata": "~3.0.0-dev.87",
-    "@itwin/core-geometry": "~3.0.0-dev.87",
-    "@bentley/imodelhub-client": "~2.19.17",
-    "@itwin/core-common": "~3.0.0-dev.87",
-    "@bentley/itwin-client": "~2.19.17",
-    "@bentley/telemetry-client": "~2.19.17",
-
-    "@bentley/frontend-authorization-client": "~2.19.17"
+    "@itwin/core-backend": "~3.0.0-dev.119",
+    "@bentley/itwin-client": "~3.0.0-dev.119",
+    "@itwin/core-bentley": "~3.0.0-dev.119",
+    "@itwin/core-common": "~3.0.0-dev.119",
+    "@itwin/core-geometry": "~3.0.0-dev.119",
+    "@itwin/ecschema-metadata": "~3.0.0-dev.119"
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "~0.1.0-dev.1",

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { join } from "path";
 import { UserCancelledError } from "@bentley/itwin-client";
-import { AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg, ChangesetRangeArg, CheckPointArg, CheckpointProps, CreateNewIModelProps, IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps } from "@itwin/core-backend";
+import { AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg, ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps } from "@itwin/core-backend";
 import { BriefcaseStatus, GuidString, IModelStatus, Logger, OpenMode } from "@itwin/core-bentley";
 import { BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetId, ChangesetIndex, ChangesetProps, IModelError, IModelVersion, LocalDirName } from "@itwin/core-common";
 import { AcquireBriefcaseParams, AuthorizationParam, AzureSdkFileHandler, Briefcase, Changeset, ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateiModelFromBaselineParams, DeleteiModelParams, DownloadChangesetListParams, DownloadedChangeset, GetBriefcaseListParams, GetChangesetByIdParams, GetChangesetListParams, GetCheckpointByChangesetIdParams, GetLockListParams, GetNamedVersionListParams, GetiModelListParams, Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalNamedVersion, MinimaliModel, OrderByOperator, ProgressCallback, ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, TargetDirectoryParam, UpdateLockParams, iModel, iModelScopedOperationParams, iModelsClient, iModelsError, iModelsErrorCode, toArray, AuthorizationCallback } from "@itwin/imodels-client-authoring";
@@ -190,7 +190,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     return briefcaseIds;
   }
 
-  public async downloadV1Checkpoint(arg: CheckPointArg): Promise<ChangesetId> {
+  public async downloadV1Checkpoint(arg: CheckpointArg): Promise<ChangesetId> {
     const getChangesetByIdParams: GetChangesetByIdParams = {
       authorization: this.getAuthorizationCallbackFromiModelHost(),
       imodelId: arg.checkpoint.iModelId,
@@ -245,7 +245,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     };
   }
 
-  public async downloadV2Checkpoint(arg: CheckPointArg): Promise<ChangesetId> {
+  public async downloadV2Checkpoint(arg: CheckpointArg): Promise<ChangesetId> {
     const getChangesetByIdParams: GetChangesetByIdParams = {
       authorization: this.getAuthorizationCallbackFromiModelHost(),
       imodelId: arg.checkpoint.iModelId,
