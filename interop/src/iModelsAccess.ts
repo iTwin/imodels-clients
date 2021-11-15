@@ -84,7 +84,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
   public async pushChangeset(arg: IModelIdArg & { changesetProps: ChangesetFileProps; }): Promise<ChangesetIndex> {
     let changesetDescription = arg.changesetProps.description;
     if (changesetDescription.length >= 255) {
-      Logger.logWarning("imodelhub-access", `pushChanges - Truncating description to 255 characters. ${changesetDescription}`); // TODO: maybe change the message?
+      Logger.logWarning("BackendiModelsAccess", `pushChangeset - Truncating description to 255 characters. ${changesetDescription}`);
       changesetDescription = changesetDescription.slice(0, 254);
     }
 
@@ -365,12 +365,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async createNewIModel(arg: CreateNewIModelProps): Promise<GuidString> {
-    // TODO: how do we detect that???
-    // if (this.isUsingIModelBankClient)
-    //   throw new IModelError(IModelStatus.BadRequest, "This is a iModelHub only operation");
-
     const baselineFilePath = this.prepareBaselineFile(arg);
-
     const createiModelFromBaselineParams: CreateiModelFromBaselineParams = {
       ...this.getAuthorizationParam(arg),
       imodelProperties: {
