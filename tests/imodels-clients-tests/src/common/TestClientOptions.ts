@@ -9,8 +9,10 @@ export class TestClientOptions implements iModelsClientOptions {
   public api: ApiOptions;
 
   constructor() {
+    const imodelsApiConfig = Config.get().apis.imodels;
     this.api = {
-      baseUri: Config.get().apis.imodels.baseUrl
+      baseUri: imodelsApiConfig.baseUrl,
+      version: imodelsApiConfig.version
     };
   }
 }
