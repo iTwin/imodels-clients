@@ -3,9 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { LockMap, LockState } from "@itwin/core-backend";
-import { RepositoryStatus, AccessToken } from "@itwin/core-bentley";
+import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetType, IModelError } from "@itwin/core-common";
-import { ContainingChanges, LockLevel, LockedObjects, AuthorizationCallback, Authorization } from "@itwin/imodels-client-authoring";
+import { Authorization, AuthorizationCallback, ContainingChanges, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
   public static toLockedObjects(locks: LockMap): LockedObjects[] {
@@ -14,9 +14,9 @@ export class PlatformToClientAdapter {
       const lockState: LockState = locks.get(objectId)!;
       const lockLevel: LockLevel = PlatformToClientAdapter.toLockLevel(lockState);
 
-      const existingSet: LockedObjects | undefined = result.find(set => set.lockLevel === lockLevel);
-      if (existingSet)
-        existingSet.objectIds.push(objectId);
+      const lockedObjectsForBriefcase: LockedObjects | undefined = result.find(set => set.lockLevel === lockLevel);
+      if (lockedObjectsForBriefcase)
+        lockedObjectsForBriefcase.objectIds.push(objectId);
       else
         result.push({ lockLevel, objectIds: [objectId] });
     }
@@ -57,7 +57,7 @@ export class PlatformToClientAdapter {
   }
 
   public static toAuthorizationCallback(accessToken: AccessToken): AuthorizationCallback {
-    const authorization: Authorization = PlatformToClientAdapter.toAuthorization(accessToken)
+    const authorization: Authorization = PlatformToClientAdapter.toAuthorization(accessToken);
     return () => Promise.resolve(authorization);
   }
 }

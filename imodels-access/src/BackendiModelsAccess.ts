@@ -4,10 +4,25 @@
  *--------------------------------------------------------------------------------------------*/
 import { join } from "path";
 import { UserCancelledError } from "@bentley/itwin-client";
-import { AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg, ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps } from "@itwin/core-backend";
+import {
+  AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
+  ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, IModelDb, IModelHost, IModelIdArg, IModelJsFs,
+  IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
+} from "@itwin/core-backend";
 import { BriefcaseStatus, GuidString, IModelStatus, Logger, OpenMode } from "@itwin/core-bentley";
-import { BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetId, ChangesetIndex, ChangesetProps, IModelError, IModelVersion, LocalDirName } from "@itwin/core-common";
-import { AcquireBriefcaseParams, AuthorizationParam, AzureSdkFileHandler, Briefcase, Changeset, ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateiModelFromBaselineParams, DeleteiModelParams, DownloadChangesetListParams, DownloadedChangeset, GetBriefcaseListParams, GetChangesetByIdParams, GetChangesetListParams, GetCheckpointByChangesetIdParams, GetLockListParams, GetNamedVersionListParams, GetiModelListParams, Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalNamedVersion, MinimaliModel, OrderByOperator, ProgressCallback, ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, TargetDirectoryParam, UpdateLockParams, iModel, iModelScopedOperationParams, iModelsClient, iModelsError, iModelsErrorCode, toArray, AuthorizationCallback } from "@itwin/imodels-client-authoring";
+import {
+  BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetId, ChangesetIndex, ChangesetProps, IModelError,
+  IModelVersion, LocalDirName
+} from "@itwin/core-common";
+import {
+  AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, AzureSdkFileHandler, Briefcase, Changeset,
+  ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateiModelFromBaselineParams, DeleteiModelParams,
+  DownloadChangesetListParams, DownloadedChangeset, GetBriefcaseListParams, GetChangesetByIdParams, GetChangesetListParams,
+  GetCheckpointByChangesetIdParams, GetLockListParams, GetNamedVersionListParams, GetiModelListParams, Lock, LockLevel,
+  LockedObjects, MinimalChangeset, MinimalNamedVersion, MinimaliModel, OrderByOperator, ProgressCallback, ProgressData,
+  ReleaseBriefcaseParams, SPECIAL_VALUES_ME, TargetDirectoryParam, UpdateLockParams, iModel, iModelScopedOperationParams,
+  iModelsClient, iModelsError, iModelsErrorCode, toArray
+} from "@itwin/imodels-client-authoring";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
@@ -45,38 +60,33 @@ export class BackendiModelsAccess implements BackendHubAccess {
       targetDirectoryPath: arg.targetDir
     };
 
-    let result: DownloadedChangeset;
-    if (arg.changeset.index)
-      result = await this._imodelsClient.Changesets.downloadByIndex({ ...commonDownloadParams, changesetIndex: arg.changeset.index });
-    else
-      result = await this._imodelsClient.Changesets.downloadById({ ...commonDownloadParams, changesetId: arg.changeset.id! });
-
-    return ClientToPlatformAdapter.toChangesetFileProps(result);
+    const downloadedChangeset: DownloadedChangeset = arg.changeset.index
+      ? await this._imodelsClient.Changesets.downloadByIndex({ ...commonDownloadParams, changesetIndex: arg.changeset.index })
+      : await this._imodelsClient.Changesets.downloadById({ ...commonDownloadParams, changesetId: arg.changeset.id! });
+    const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset)
+    return result;
   }
 
   public async queryChangeset(arg: ChangesetArg): Promise<ChangesetProps> {
-    const commonQueryParams: iModelScopedOperationParams = this.getiModelScopedOperationParams(arg);
+    const imodelOperationParams: iModelScopedOperationParams = this.getiModelScopedOperationParams(arg);
 
-    let result: Changeset;
-    if (arg.changeset.index)
-      result = await this._imodelsClient.Changesets.getByIndex({ ...commonQueryParams, changesetIndex: arg.changeset.index });
-    else
-      result = await this._imodelsClient.Changesets.getById({ ...commonQueryParams, changesetId: arg.changeset.id! });
-
-    return ClientToPlatformAdapter.toChangesetProps(result);
+    const changeset: Changeset = arg.changeset.index
+      ? await this._imodelsClient.Changesets.getByIndex({ ...imodelOperationParams, changesetIndex: arg.changeset.index })
+      : await this._imodelsClient.Changesets.getById({ ...imodelOperationParams, changesetId: arg.changeset.id! });
+    const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changeset);
+    return result;
   }
 
   public async queryChangesets(arg: ChangesetRangeArg): Promise<ChangesetProps[]> {
-    const getChangesetListParams: GetChangesetListParams = this.getiModelScopedOperationParams(arg);
-
+    const imodelOperationParams: GetChangesetListParams = this.getiModelScopedOperationParams(arg);
     if (arg.range) {
-      getChangesetListParams.urlParams = {
+      imodelOperationParams.urlParams = {
         afterIndex: arg.range.first - 1,
         lastIndex: arg.range.end
       };
     }
 
-    const changesets: Changeset[] = await toArray(this._imodelsClient.Changesets.getRepresentationList(getChangesetListParams));
+    const changesets: Changeset[] = await toArray(this._imodelsClient.Changesets.getRepresentationList(imodelOperationParams));
     const result: ChangesetProps[] = changesets.map(ClientToPlatformAdapter.toChangesetProps);
     return result;
   }
@@ -99,7 +109,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
         filePath: arg.changesetProps.pathname
       }
     };
-    const createdChangeset = await this._imodelsClient.Changesets.create(createChangesetParams);
+    const createdChangeset: Changeset = await this._imodelsClient.Changesets.create(createChangesetParams);
     return createdChangeset.index;
   }
 
@@ -114,12 +124,12 @@ export class BackendiModelsAccess implements BackendHubAccess {
         }
       }
     };
-    const changesetsIterator = this._imodelsClient.Changesets.getMinimalList(getChangesetListParams);
+    const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._imodelsClient.Changesets.getMinimalList(getChangesetListParams);
     const changesets: MinimalChangeset[] = await toArray(changesetsIterator);
     if (changesets.length === 0)
       return this._changeSet0;
-
-    return ClientToPlatformAdapter.toChangesetProps(changesets[0]);
+    const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changesets[0]);
+    return result;
   }
 
   public getChangesetFromVersion(arg: IModelIdArg & { version: IModelVersion; }): Promise<ChangesetProps> {
@@ -139,9 +149,9 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async getChangesetFromNamedVersion(arg: IModelIdArg & { versionName: string; }): Promise<ChangesetProps> {
-    const iModelScopedOperationParams: iModelScopedOperationParams = this.getiModelScopedOperationParams(arg);
+    const imodelOperationParams: iModelScopedOperationParams = this.getiModelScopedOperationParams(arg);
     const getNamedVersionListParams: GetNamedVersionListParams = {
-      ...iModelScopedOperationParams,
+      ...imodelOperationParams,
       urlParams: {
         name: arg.versionName
       }
@@ -152,16 +162,17 @@ export class BackendiModelsAccess implements BackendHubAccess {
       throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
 
     const getChangesetByIdParams: GetChangesetByIdParams = {
-      ...iModelScopedOperationParams,
+      ...imodelOperationParams,
       changesetId: namedVersions[0].id
     };
     const changeset: MinimalChangeset = await this._imodelsClient.Changesets.getById(getChangesetByIdParams);
-    return ClientToPlatformAdapter.toChangesetProps(changeset);
+    const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changeset);
+    return result;
   }
 
   public async acquireNewBriefcaseId(arg: AcquireNewBriefcaseIdArg): Promise<BriefcaseId> {
     const acquireBriefcaseParams: AcquireBriefcaseParams = this.getiModelScopedOperationParams(arg);
-    const briefcase = await this._imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
+    const briefcase: Briefcase = await this._imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
 
     if (!briefcase)
       throw new IModelError(BriefcaseStatus.CannotAcquire, "Could not acquire briefcase");
@@ -185,8 +196,8 @@ export class BackendiModelsAccess implements BackendHubAccess {
       }
     };
     const briefcasesIterator: AsyncIterableIterator<Briefcase> = this._imodelsClient.Briefcases.getRepresentationList(getBriefcaseListParams);
-    const briefcases = await toArray(briefcasesIterator);
-    const briefcaseIds = briefcases.map(briefcase => briefcase.briefcaseId);
+    const briefcases: Briefcase[] = await toArray(briefcasesIterator);
+    const briefcaseIds: BriefcaseId[] = briefcases.map(briefcase => briefcase.briefcaseId);
     return briefcaseIds;
   }
 
@@ -201,6 +212,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     if (!checkpoint || !checkpoint._links?.download)
       throw new IModelError(BriefcaseStatus.VersionNotFound, "no checkpoints not found");
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cancelRequest: any = {};
     const progressCallback: ProgressCallback = (progress: ProgressData) => {
       if (arg.onProgress && arg.onProgress(progress.bytesTransferred, progress.bytesTotal) !== 0)
@@ -284,7 +296,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
       }
       await downloader.downloadPromise;
       onProgress?.(total, total); // make sure we call progress func one last time when download completes
-    } catch (err: any) {
+    } catch (err) {
       throw (err.message === "cancelled") ? new UserCancelledError(BriefcaseStatus.DownloadCancelled, "download cancelled") : err;
     } finally {
       if (timer)
@@ -335,20 +347,19 @@ export class BackendiModelsAccess implements BackendHubAccess {
       return;
 
     const lock: Lock = locks[0];
-    const lockedObjectsToRelease: LockedObjects[] = lock.lockedObjects;
-    for (const lockedObjects of lockedObjectsToRelease) {
-      lockedObjects.lockLevel = LockLevel.None;
-    }
+    this.setLockLevelToNone(lock.lockedObjects)
 
     const updateLockParams: UpdateLockParams = {
       ...this.getiModelScopedOperationParams(arg),
       briefcaseId: lock.briefcaseId,
       changesetId: arg.changeset.id,
-      lockedObjects: lockedObjectsToRelease
+      lockedObjects: lock.lockedObjects
     };
 
     await this._imodelsClient.Locks.update(updateLockParams);
   }
+
+
 
   public async queryIModelByName(arg: IModelNameArg): Promise<GuidString | undefined> {
     const getiModelListParams: GetiModelListParams = {
@@ -380,6 +391,42 @@ export class BackendiModelsAccess implements BackendHubAccess {
     return imodel.id;
   }
 
+  public deleteIModel(arg: IModelIdArg & ITwinIdArg): Promise<void> {
+    const deleteiModelParams: DeleteiModelParams = this.getiModelScopedOperationParams(arg);
+    return this._imodelsClient.iModels.delete(deleteiModelParams);
+  }
+
+  private isiModelsApiError(error: unknown): error is iModelsError {
+    return (error as iModelsError)?.code !== undefined;
+  }
+
+  private getiModelScopedOperationParams(arg: IModelIdArg): iModelScopedOperationParams {
+    return {
+      ...this.getAuthorizationParam(arg),
+      imodelId: arg.iModelId
+    };
+  }
+
+  private getAuthorizationParam(tokenArg: TokenArg): AuthorizationParam {
+    const authorizationCallback: AuthorizationCallback = tokenArg.accessToken
+      ? PlatformToClientAdapter.toAuthorizationCallback(tokenArg.accessToken)
+      : this.getAuthorizationCallbackFromiModelHost();
+
+    return {
+      authorization: authorizationCallback
+    };
+  }
+
+  private getAuthorizationCallbackFromiModelHost(): AuthorizationCallback {
+    return () => IModelHost.getAccessToken().then(PlatformToClientAdapter.toAuthorization);
+  }
+
+  private setLockLevelToNone(lockedObjectsForBriefcase: LockedObjects[]): void {
+    for (const lockedObjects of lockedObjectsForBriefcase) {
+      lockedObjects.lockLevel = LockLevel.None;
+    }
+  }
+
   private prepareBaselineFile(arg: CreateNewIModelProps): string {
     const revision0 = join(IModelHost.cacheDir, "temp-revision0.bim");
     IModelJsFs.removeSync(revision0);
@@ -404,36 +451,5 @@ export class BackendiModelsAccess implements BackendHubAccess {
     }
 
     return revision0;
-  }
-
-  public deleteIModel(arg: IModelIdArg & ITwinIdArg): Promise<void> {
-    const deleteiModelParams: DeleteiModelParams = this.getiModelScopedOperationParams(arg);
-    const result = this._imodelsClient.iModels.delete(deleteiModelParams);
-    return result;
-  }
-
-  private isiModelsApiError(error: unknown): error is iModelsError {
-    return (error as iModelsError)?.code !== undefined;
-  }
-
-  private getiModelScopedOperationParams(arg: IModelIdArg): iModelScopedOperationParams {
-    return {
-      ...this.getAuthorizationParam(arg),
-      imodelId: arg.iModelId
-    };
-  }
-
-  private getAuthorizationParam(tokenArg: TokenArg): AuthorizationParam {
-    const authorizationCallback: AuthorizationCallback = tokenArg.accessToken
-      ? PlatformToClientAdapter.toAuthorizationCallback(tokenArg.accessToken)
-      : this.getAuthorizationCallbackFromiModelHost();
-
-    return {
-      authorization: authorizationCallback
-    }
-  }
-
-  private getAuthorizationCallbackFromiModelHost(): AuthorizationCallback {
-    return () => IModelHost.getAccessToken().then(PlatformToClientAdapter.toAuthorization);
   }
 }

@@ -16,7 +16,7 @@ export class ClientToPlatformAdapter {
       changesType: ClientToPlatformAdapter.toChangesetType(changeset.containingChanges),
       description: changeset.description,
       briefcaseId: changeset.briefcaseId,
-      pushDate: changeset.pushDateTime.toISOString(), // TODO: really this format?
+      pushDate: changeset.pushDateTime.toISOString(),
       userCreated: changeset.creatorId
     };
   }
@@ -30,9 +30,9 @@ export class ClientToPlatformAdapter {
 
   public static toLockProps(lock: Lock): LockProps[] {
     const result: LockProps[] = [];
-    for (const lockedObjects of lock.lockedObjects)
-      for (const objectId of lockedObjects.objectIds)
-        result.push({ id: objectId, state: ClientToPlatformAdapter.toLockState(lockedObjects.lockLevel) });
+    for (const lockedObjectsForBriefcase of lock.lockedObjects)
+      for (const objectId of lockedObjectsForBriefcase.objectIds)
+        result.push({ id: objectId, state: ClientToPlatformAdapter.toLockState(lockedObjectsForBriefcase.lockLevel) });
 
     return result;
   }
@@ -40,25 +40,25 @@ export class ClientToPlatformAdapter {
 
   private static toLockState(lockLevel: LockLevel): LockState {
     switch (lockLevel) {
-    case LockLevel.None:
-      return LockState.None;
-    case LockLevel.Shared:
-      return LockState.Shared;
-    case LockLevel.Exclusive:
-      return LockState.Exclusive;
-    default:
-      throw new IModelError(RepositoryStatus.InvalidResponse, "Unsupported LockLevel");
+      case LockLevel.None:
+        return LockState.None;
+      case LockLevel.Shared:
+        return LockState.Shared;
+      case LockLevel.Exclusive:
+        return LockState.Exclusive;
+      default:
+        throw new IModelError(RepositoryStatus.InvalidResponse, "Unsupported LockLevel");
     }
   }
 
   private static toChangesetType(containingChanges: ContainingChanges): ChangesetType {
     switch (containingChanges) {
-    case ContainingChanges.Regular:
-      return ChangesetType.Regular;
-    case ContainingChanges.Schema:
-      return ChangesetType.Schema;
-    default:
-      throw new IModelError(RepositoryStatus.InvalidResponse, "Unsupported ContainingChanges");
+      case ContainingChanges.Regular:
+        return ChangesetType.Regular;
+      case ContainingChanges.Schema:
+        return ChangesetType.Schema;
+      default:
+        throw new IModelError(RepositoryStatus.InvalidResponse, "Unsupported ContainingChanges");
     }
   }
 }

@@ -3,6 +3,8 @@
   "version": "0.1.0-dev.1",
   "description": "Interoperability package between iModels API and iTwin platform.",
   "license": "MIT",
+  "main": "lib/iModelsAccessExports.js",
+  "typings": "lib/iModelsAccessExports",
   "scripts": {
     "build": "tsc 1>&2",
     "lint": "eslint ./src/**/*.ts 1>&2",
