@@ -66,6 +66,7 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.index).to.be.greaterThan(0);
   expect(params.actualChangeset.briefcaseId).to.be.greaterThan(0);
   assertOptionalProperty(params.expectedChangesetProperties.description, params.actualChangeset.description);
+  expect(params.actualChangeset.creatorId).to.not.be.undefined;
   expect(params.actualChangeset.pushDateTime as Date).to.not.be.undefined;
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
   expect(params.actualChangeset.synchronizationInfo).to.equal(null);
