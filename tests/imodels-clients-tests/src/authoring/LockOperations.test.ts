@@ -90,7 +90,7 @@ describe("[Authoring] LockOperations", () => {
     });
   });
 
-  it("should return emtpy collection when querying locks for non-existent briefcase", async () => {
+  it("should return empty collection when querying locks for non-existent briefcase", async () => {
     // Arrange
     const getLockListParams: GetLockListParams = {
       authorization,
