@@ -36,7 +36,7 @@ describe("[Authoring] LockOperations", () => {
       imodelsClient,
       authorization,
       projectId,
-      imodelName: testiModelGroup.getPrefixediModelName("Test iModel for write")
+      imodelName: testiModelGroup.getPrefixedUniqueiModelName("Test iModel for write")
     });
   });
 
