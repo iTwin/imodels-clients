@@ -298,7 +298,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     const updateLockParams: UpdateLockParams = {
       ...this.getiModelScopedOperationParams(arg),
       briefcaseId: arg.briefcaseId,
-      changeset: arg.changeset.id,
+      changesetId: arg.changeset.id,
       lockedObjects
     };
 
@@ -343,7 +343,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     const updateLockParams: UpdateLockParams = {
       ...this.getiModelScopedOperationParams(arg),
       briefcaseId: lock.briefcaseId,
-      changeset: arg.changeset.id,
+      changesetId: arg.changeset.id,
       lockedObjects: lockedObjectsToRelease
     };
 
