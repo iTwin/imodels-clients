@@ -14,6 +14,7 @@ export interface AuthConfigValues {
 
 export interface ApiConfigValues {
   baseUrl: string;
+  version?: string;
   scopes: string;
 }
 
@@ -63,6 +64,7 @@ export class Config {
       apis: {
         imodels: {
           baseUrl: process.env.APIS_IMODELS_BASE_URL!,
+          version: process.env.APIS_IMODELS_VERSION!,
           scopes: process.env.APIS_IMODELS_SCOPES!
         },
         projects: {
@@ -93,6 +95,7 @@ export class Config {
     this.validateConfigValue("AUTH_REDIRECT_URL");
 
     this.validateConfigValue("APIS_IMODELS_BASE_URL");
+    this.validateConfigValue("APIS_IMODELS_VERSION");
     this.validateConfigValue("APIS_IMODELS_SCOPES");
 
     this.validateConfigValue("APIS_PROJECTS_BASE_URL");
