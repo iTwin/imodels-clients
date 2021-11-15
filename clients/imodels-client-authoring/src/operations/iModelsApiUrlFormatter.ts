@@ -21,8 +21,4 @@ export class iModelsApiUrlFormatter extends ManamegentiModelsApiUrlFormatter {
   public getLocksUrl(params: iModelId & UrlParams<GetLockListUrlParams>): string {
     return `${this.baseUri}/${params.imodelId}/locks${this.formQueryString({ ...params.urlParams })}`;
   }
-
-  public getLockUrl(params: iModelId): string {
-    return `${this.baseUri}/${params.imodelId}/locks`;
-  }
 }

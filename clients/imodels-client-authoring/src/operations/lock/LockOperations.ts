@@ -20,7 +20,7 @@ export class LockOperations<TOptions extends OperationOptions> extends Operation
     const { authorization, imodelId, ...lockProperties } = params;
     const response = await this.sendPatchRequest<LockResponse>({
       authorization,
-      url: this._options.urlFormatter.getLockUrl({ imodelId }),
+      url: this._options.urlFormatter.getLocksUrl({ imodelId }),
       body: lockProperties
     });
     return response.lock;
