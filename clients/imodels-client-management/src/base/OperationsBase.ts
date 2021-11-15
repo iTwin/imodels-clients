@@ -56,7 +56,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
 
   protected async getEntityCollectionPage<TEntity>(params: AuthorizationParam & {
     url: string,
-    preferReturn: PreferReturn,
+    preferReturn?: PreferReturn,
     entityCollectionAccessor: (response: unknown) => TEntity[]
   }): Promise<EntityCollectionPage<TEntity>> {
     const response = await this.sendGetRequest<CollectionResponse>(params);

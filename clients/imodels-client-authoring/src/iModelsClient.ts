@@ -10,7 +10,7 @@ import {
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 import { AzureSdkFileHandler, FileHandler } from "./base";
-import { BriefcaseOperations, ChangesetOperations, iModelOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, LockOperations, iModelOperations } from "./operations";
 import {iModelsApiUrlFormatter} from "./operations/iModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
 
@@ -47,6 +47,10 @@ export class iModelsClient {
 
   public get Checkpoints(): CheckpointOperations<OperationOptions> {
     return new CheckpointOperations(this._operationsOptions);
+  }
+
+  public get Locks(): LockOperations<OperationOptions> {
+    return new LockOperations(this._operationsOptions);
   }
 
   public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {

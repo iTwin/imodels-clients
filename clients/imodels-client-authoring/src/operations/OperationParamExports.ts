@@ -5,3 +5,4 @@
 export * from "./imodel/iModelOperationParams";
 export * from "./briefcase/BriefcaseOperationParams";
 export * from "./changeset/ChangesetOperationParams";
+export * from "./lock/LockOperationParams";

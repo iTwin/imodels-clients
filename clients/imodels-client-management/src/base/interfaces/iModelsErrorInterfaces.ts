@@ -39,6 +39,7 @@ export enum iModelsErrorCode {
   FileNotFound = "FileNotFound",
   BaselineFileNotFound = "BaselineFileNotFound",
   CheckpointNotFound = "CheckpointNotFound",
+  LockNotFound = "LockNotFound",
   NewerChangesExist = "NewerChangesExist",
   InvalidThumbnailFormat = "InvalidThumbnailFormat",
 
