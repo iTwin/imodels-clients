@@ -43,6 +43,7 @@ export interface MinimalChangeset {
   description: string;
   index: number;
   parentId: string;
+  creatorId: string;
   pushDateTime: Date;
   state: ChangesetState;
   containingChanges: ContainingChanges;
