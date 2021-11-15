@@ -1,0 +1,34 @@
+{
+  "name": "@itwin/imodels-access",
+  "version": "0.1.0-dev.1",
+  "description": "Interoperability package between iModels API and iTwin platform",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc 1>&2",
+    "lint": "eslint ./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2",
+    "spell-check": "cspell ./src/**/*.ts --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
+  },
+  "dependencies": {
+    "@itwin/imodels-client-authoring": "~0.1.0-dev.1",
+    
+    "@itwin/core-backend": "~3.0.0-dev.87",
+    "@itwin/core-bentley": "~3.0.0-dev.87",
+    "@itwin/ecschema-metadata": "~3.0.0-dev.87",
+    "@itwin/core-geometry": "~3.0.0-dev.87",
+    "@bentley/imodelhub-client": "~2.19.17",
+    "@itwin/core-common": "~3.0.0-dev.87",
+    "@bentley/itwin-client": "~2.19.17",
+    "@bentley/telemetry-client": "~2.19.17",
+
+    "@bentley/frontend-authorization-client": "~2.19.17"
+  },
+  "devDependencies": {
+    "@itwin/imodels-client-common-config": "~0.1.0-dev.1",
+    "typescript": "~4.3.5",
+    "@types/ws": "~8.2.0"
+  }
+}
