@@ -12,6 +12,6 @@ This repository contains packages that help consumption of iModels API. Please v
 
 This repository contains multiple packages:
 - `@itwin/imodels-client-management` is an API client that exposes a subset of iModels API operations and is intended to use in iModel management applications. Such applications do not edit the iModel file itself, they allow user to perform administrative tasks - create Named Versions, view Changeset metadata and such. An example of iTwin management application is the [iTwin Demo Portal](https://itwindemo.bentley.com/).
-- `@itwin/imodels-client-authoring` is an API client that extends `@itwin/imodels-client-management` and exposes additional API operations to facilitate iModel editing workflows. This client should not be used directly as the operations it exposes can only be used meaningfully via [iTwin.js]{https://www.itwinjs.org/} library.
+- `@itwin/imodels-client-authoring` is an API client that extends `@itwin/imodels-client-management` and exposes additional API operations to facilitate iModel editing workflows. This client should not be used directly as the operations it exposes can only be used meaningfully via [iTwin.js](https://www.itwinjs.org/) library.
 - `@itwin/imodels-client-common-config` package is used internally to share common configuration across the API clients.
 - `@itwin/imodels-clients-tests` package is used internally for API client testing.
