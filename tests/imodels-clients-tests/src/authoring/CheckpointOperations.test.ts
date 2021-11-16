@@ -150,7 +150,7 @@ describe("[Authoring] CheckpointOperations", () => {
         actualError: errorThrown!,
         expectedError: {
           code: iModelsErrorCode.iModelNotFound,
-          message: "Requested iModel not available."
+          message: "Requested iModel is not available."
         }
       });
     });
@@ -195,7 +195,7 @@ describe("[Authoring] CheckpointOperations", () => {
         actualError: errorThrown!,
         expectedError: {
           code: iModelsErrorCode.ChangesetNotFound,
-          message: "Requested Changeset not available."
+          message: "Requested Changeset is not available."
         }
       });
     });
@@ -223,7 +223,7 @@ describe("[Authoring] CheckpointOperations", () => {
       actualError: errorThrown!,
       expectedError: {
         code: iModelsErrorCode.NamedVersionNotFound,
-        message: "Requested Named Version not available."
+        message: "Requested Named Version is not available."
       }
     });
   });

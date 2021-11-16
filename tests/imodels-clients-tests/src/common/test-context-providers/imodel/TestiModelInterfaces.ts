@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, iModelsClient } from "@itwin/imodels-client-authoring";
+import { AuthorizationParam, Lock, iModelsClient } from "@itwin/imodels-client-authoring";
 
 export interface BriefcaseMetadata {
   id: number;
@@ -24,6 +24,7 @@ export interface iModelMetadata {
 export interface ReusableiModelMetadata extends iModelMetadata {
   briefcase: BriefcaseMetadata;
   namedVersions: NamedVersionMetadata[];
+  lock: Lock;
 }
 
 export interface TestiModelSetupContext extends AuthorizationParam {

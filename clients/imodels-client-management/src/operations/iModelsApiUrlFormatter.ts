@@ -71,7 +71,7 @@ export class iModelsApiUrlFormatter {
     };
   }
 
-  private formQueryString(urlParams: Dictionary<UrlParameterValue> | undefined): string {
+  protected formQueryString(urlParams: Dictionary<UrlParameterValue> | undefined): string {
     let queryString = "";
     for (const urlParameterKey in urlParams) {
       const urlParameterValue = urlParams[urlParameterKey];
