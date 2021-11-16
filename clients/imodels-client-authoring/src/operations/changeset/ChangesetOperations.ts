@@ -37,7 +37,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   }
 
   public async downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset> {
-    const changeset: Changeset = await this.getSingle(params);
+    const changeset: Changeset = await this.querySingleInternal(params);
     return this.downloadSingleChangeset({ ...params, changeset });
   }
 
