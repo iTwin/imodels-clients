@@ -41,13 +41,17 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   public async getSingle(params: GetSingleChangesetParams): Promise<Changeset> {
+    const changeset: Changeset = await this.querySingleInternal(params);
+    const result: Changeset  = this.appendRelatedEntityCallbacks(params.authorization, changeset);
+    return result;
+  }
+
+  protected async querySingleInternal(params: GetSingleChangesetParams): Promise<Changeset> {
     const response = await this.sendGetRequest<ChangesetResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetUrl(params)
     });
-
-    const result = this.appendRelatedEntityCallbacks(params.authorization, response.changeset);
-    return result;
+    return response.changeset;
   }
 
   protected getRepresentationListInternal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {

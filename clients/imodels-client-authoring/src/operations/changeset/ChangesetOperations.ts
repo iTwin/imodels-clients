@@ -94,7 +94,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     try {
       await this._options.fileHandler.downloadFile({ downloadUrl: params.changeset._links.download.href, targetFilePath });
     } catch (error) {
-      const changeset = await this.getSingle({
+      const changeset = await this.querySingleInternal({
         authorization: params.authorization,
         imodelId: params.imodelId,
         changesetId: params.changeset.id
