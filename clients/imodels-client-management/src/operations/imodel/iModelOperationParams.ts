@@ -18,7 +18,7 @@ export interface GetiModelListParams extends AuthorizationParam {
   urlParams: GetiModelListUrlParams;
 }
 
-export type GetSingleiModelParams = iModelScopedOperationParams
+export type GetSingleiModelParams = iModelScopedOperationParams;
 
 export interface iModelProperties {
   projectId: string;
@@ -31,4 +31,4 @@ export interface CreateEmptyiModelParams extends AuthorizationParam {
   imodelProperties: iModelProperties;
 }
 
-export type DeleteiModelParams = iModelScopedOperationParams
+export type DeleteiModelParams = iModelScopedOperationParams;

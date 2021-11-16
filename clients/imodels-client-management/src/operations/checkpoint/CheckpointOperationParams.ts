@@ -22,6 +22,6 @@ interface NamedVersionIdParam {
   namedVersionId: string;
 }
 
-export type ChangesetIdOrIndexOrNamedVersionId = ChangesetIdParam | ChangesetIndexParam | NamedVersionIdParam;
+export type CheckpointParentEntityId = ChangesetIdParam | ChangesetIndexParam | NamedVersionIdParam;
 
-export type GetSingleCheckpointParams = iModelScopedOperationParams & ChangesetIdOrIndexOrNamedVersionId;
+export type GetSingleCheckpointParams = iModelScopedOperationParams & CheckpointParentEntityId;
