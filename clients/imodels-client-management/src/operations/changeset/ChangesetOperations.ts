@@ -91,7 +91,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
       return Promise.resolve(undefined);
 
     const { imodelId, changesetIndex } = this._options.urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
-    return this._checkpointOperations.getByChangesetIndex({
+    return this._checkpointOperations.getSingle({
       authorization,
       imodelId,
       changesetIndex
