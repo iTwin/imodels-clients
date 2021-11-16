@@ -8,14 +8,14 @@ import { GetSingleCheckpointParams } from "./CheckpointOperationParams";
 
 export class CheckpointOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public async getSingle(params: GetSingleCheckpointParams): Promise<Checkpoint> {
-    const parentEntityUrlPath = params.changesetId || params.changesetIndex
-      ? `changesets/${params.changesetId ?? params.changesetIndex}`
-      : `namedversions/${params.namedVersionId}`;
+    const parentEntityUrlPath = params.namedVersionId
+      ? `namedversions/${params.namedVersionId}`
+      : `changesets/${params.changesetId ?? params.changesetIndex}`;
 
     const response = await this.sendGetRequest<CheckpointResponse>({
-        authorization: params.authorization,
-        url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/${parentEntityUrlPath}/checkpoint`
-      });
+      authorization: params.authorization,
+      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/${parentEntityUrlPath}/checkpoint`
+    });
     return response.checkpoint;
   }
 }
