@@ -8,7 +8,7 @@ import { CreateEmptyiModelParams, DeleteiModelParams, GetSingleiModelParams, Get
 
 export class iModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
-    return getCollectionIterator(() => this.getSingleCollectionPage<MinimaliModel>({
+    return getCollectionIterator(() => this.getEntityCollectionPage<MinimaliModel>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
@@ -17,7 +17,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
-    return getCollectionIterator(() => this.getSingleCollectionPage<iModel>({
+    return getCollectionIterator(() => this.getEntityCollectionPage<iModel>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,

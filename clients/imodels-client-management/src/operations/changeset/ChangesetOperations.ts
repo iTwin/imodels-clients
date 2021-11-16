@@ -19,7 +19,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
-    const getSinglePageFunc = () => this.getSingleCollectionPage<MinimalChangeset>({
+    const getSinglePageFunc = () => this.getEntityCollectionPage<MinimalChangeset>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetsUrl(params),
       preferReturn: PreferReturn.Minimal,
@@ -55,7 +55,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   protected getRepresentationListInternal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
-    const getSinglePageFunc = () => this.getSingleCollectionPage<Changeset>({
+    const getSinglePageFunc = () => this.getEntityCollectionPage<Changeset>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetsUrl(params),
       preferReturn: PreferReturn.Representation,

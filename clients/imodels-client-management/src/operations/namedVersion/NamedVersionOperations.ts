@@ -8,7 +8,7 @@ import { CreateNamedVersionParams, GetSingleNamedVersionParams, GetNamedVersionL
 
 export class NamedVersionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetNamedVersionListParams): AsyncIterableIterator<MinimalNamedVersion> {
-    return getCollectionIterator(() => this.getSingleCollectionPage<MinimalNamedVersion>({
+    return getCollectionIterator(() => this.getEntityCollectionPage<MinimalNamedVersion>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
@@ -17,7 +17,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
   }
 
   public getRepresentationList(params: GetNamedVersionListParams): AsyncIterableIterator<NamedVersion> {
-    return getCollectionIterator(() => this.getSingleCollectionPage<NamedVersion>({
+    return getCollectionIterator(() => this.getEntityCollectionPage<NamedVersion>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,

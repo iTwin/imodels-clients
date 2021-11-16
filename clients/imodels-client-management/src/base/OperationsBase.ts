@@ -54,7 +54,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     });
   }
 
-  protected async getSingleCollectionPage<TEntity>(params: AuthorizationParam & {
+  protected async getEntityCollectionPage<TEntity>(params: AuthorizationParam & {
     url: string,
     preferReturn?: PreferReturn,
     entityCollectionAccessor: (response: unknown) => TEntity[]
@@ -63,7 +63,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     return {
       entities: params.entityCollectionAccessor(response),
       next: response._links.next
-        ? () => this.getSingleCollectionPage({ ...params, url: response._links.next!.href })
+        ? () => this.getEntityCollectionPage({ ...params, url: response._links.next!.href })
         : undefined
     };
   }
