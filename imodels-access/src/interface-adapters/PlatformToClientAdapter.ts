@@ -2,12 +2,32 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { LockMap, LockState } from "@itwin/core-backend";
+import { CreateNewIModelProps, LockMap, LockState } from "@itwin/core-backend";
 import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
-import { ChangesetType, IModelError } from "@itwin/core-common";
-import { Authorization, AuthorizationCallback, ContainingChanges, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
+import { ChangesetFileProps, ChangesetType, IModelError } from "@itwin/core-common";
+import { Authorization, AuthorizationCallback, ContainingChanges, LockLevel, LockedObjects, ChangesetPropertiesForCreate, iModelPropertiesForCreateFromBaseline } from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
+  public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
+    return {
+      id: changesetFileProps.id,
+      parentId: changesetFileProps.parentId,
+      containingChanges: PlatformToClientAdapter.toContainingChanges(changesetFileProps.changesType),
+      description: changesetDescription,
+      briefcaseId: changesetFileProps.briefcaseId,
+      filePath: changesetFileProps.pathname
+    }
+  }
+
+  public static toiModelPropertiesForCreate(createNewiModelProps: CreateNewIModelProps, baselineFilePath: string): iModelPropertiesForCreateFromBaseline {
+    return {
+      projectId: createNewiModelProps.iTwinId,
+      name: createNewiModelProps.iModelName,
+      description: createNewiModelProps.description,
+      filePath: baselineFilePath
+    }
+  }
+
   public static toLockedObjects(locks: LockMap): LockedObjects[] {
     const result: LockedObjects[] = [];
     for (const objectId in locks) {

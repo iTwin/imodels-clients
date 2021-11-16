@@ -41,7 +41,6 @@ export class BackendiModelsAccess implements BackendHubAccess {
       ...this.getiModelScopedOperationParams(arg),
       targetDirectoryPath: arg.targetDir
     };
-
     if (arg.range) {
       downloadParams.urlParams = {
         afterIndex: arg.range.first - 1,
@@ -86,7 +85,8 @@ export class BackendiModelsAccess implements BackendHubAccess {
       };
     }
 
-    const changesets: Changeset[] = await toArray(this._imodelsClient.Changesets.getRepresentationList(imodelOperationParams));
+    const changesetsIterator: AsyncIterableIterator<Changeset> = this._imodelsClient.Changesets.getRepresentationList(imodelOperationParams);
+    const changesets: Changeset[] = await toArray(changesetsIterator);
     const result: ChangesetProps[] = changesets.map(ClientToPlatformAdapter.toChangesetProps);
     return result;
   }
@@ -100,15 +100,9 @@ export class BackendiModelsAccess implements BackendHubAccess {
 
     const createChangesetParams: CreateChangesetParams = {
       ...this.getiModelScopedOperationParams(arg),
-      changesetProperties: {
-        id: arg.changesetProps.id,
-        parentId: arg.changesetProps.parentId,
-        containingChanges: PlatformToClientAdapter.toContainingChanges(arg.changesetProps.changesType),
-        description: changesetDescription,
-        briefcaseId: arg.changesetProps.briefcaseId,
-        filePath: arg.changesetProps.pathname
-      }
+      changesetProperties: PlatformToClientAdapter.toChangesetPropertiesForCreate(arg.changesetProps, changesetDescription)
     };
+
     const createdChangeset: Changeset = await this._imodelsClient.Changesets.create(createChangesetParams);
     return createdChangeset.index;
   }
@@ -124,6 +118,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
         }
       }
     };
+
     const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._imodelsClient.Changesets.getMinimalList(getChangesetListParams);
     const changesets: MinimalChangeset[] = await toArray(changesetsIterator);
     if (changesets.length === 0)
@@ -172,11 +167,10 @@ export class BackendiModelsAccess implements BackendHubAccess {
 
   public async acquireNewBriefcaseId(arg: AcquireNewBriefcaseIdArg): Promise<BriefcaseId> {
     const acquireBriefcaseParams: AcquireBriefcaseParams = this.getiModelScopedOperationParams(arg);
-    const briefcase: Briefcase = await this._imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
 
+    const briefcase: Briefcase = await this._imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
     if (!briefcase)
       throw new IModelError(BriefcaseStatus.CannotAcquire, "Could not acquire briefcase");
-
     return briefcase.briefcaseId;
   }
 
@@ -185,6 +179,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
       ...this.getiModelScopedOperationParams(arg),
       briefcaseId: arg.briefcaseId
     };
+
     return this._imodelsClient.Briefcases.release(releaseBriefcaseParams);
   }
 
@@ -195,6 +190,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
         ownerId: SPECIAL_VALUES_ME
       }
     };
+
     const briefcasesIterator: AsyncIterableIterator<Briefcase> = this._imodelsClient.Briefcases.getRepresentationList(getBriefcaseListParams);
     const briefcases: Briefcase[] = await toArray(briefcasesIterator);
     const briefcaseIds: BriefcaseId[] = briefcases.map(briefcase => briefcase.briefcaseId);
@@ -207,6 +203,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
       imodelId: arg.checkpoint.iModelId,
       changesetId: arg.checkpoint.changeset.id
     };
+
     const changeset: Changeset = await this._imodelsClient.Changesets.getById(getChangesetByIdParams);
     const checkpoint: Checkpoint | undefined = await changeset.getCurrentOrPrecedingCheckpoint();
     if (!checkpoint || !checkpoint._links?.download)
@@ -263,6 +260,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
       imodelId: arg.checkpoint.iModelId,
       changesetId: arg.checkpoint.changeset.id
     };
+
     const changeset: Changeset = await this._imodelsClient.Changesets.getById(getChangesetByIdParams);
     const checkpoint: Checkpoint | undefined = await changeset.getCurrentOrPrecedingCheckpoint();
     if (!checkpoint)
@@ -306,12 +304,11 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async acquireLocks(arg: BriefcaseDbArg, locks: LockMap): Promise<void> {
-    const lockedObjects: LockedObjects[] = PlatformToClientAdapter.toLockedObjects(locks);
     const updateLockParams: UpdateLockParams = {
       ...this.getiModelScopedOperationParams(arg),
       briefcaseId: arg.briefcaseId,
       changesetId: arg.changeset.id,
-      lockedObjects
+      lockedObjects: PlatformToClientAdapter.toLockedObjects(locks)
     };
 
     await this._imodelsClient.Locks.update(updateLockParams);
@@ -341,6 +338,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
         briefcaseId: arg.briefcaseId
       }
     };
+
     const locksIterator: AsyncIterableIterator<Lock> = this._imodelsClient.Locks.getList(getLockListParams);
     const locks: Lock[] = await toArray(locksIterator);
     if (locks.length === 0)
@@ -358,8 +356,6 @@ export class BackendiModelsAccess implements BackendHubAccess {
 
     await this._imodelsClient.Locks.update(updateLockParams);
   }
-
-
 
   public async queryIModelByName(arg: IModelNameArg): Promise<GuidString | undefined> {
     const getiModelListParams: GetiModelListParams = {
@@ -379,12 +375,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     const baselineFilePath = this.prepareBaselineFile(arg);
     const createiModelFromBaselineParams: CreateiModelFromBaselineParams = {
       ...this.getAuthorizationParam(arg),
-      imodelProperties: {
-        projectId: arg.iTwinId,
-        name: arg.iModelName,
-        description: arg.description,
-        filePath: baselineFilePath
-      }
+      imodelProperties: PlatformToClientAdapter.toiModelPropertiesForCreate(arg, baselineFilePath)
     };
 
     const imodel: iModel = await this._imodelsClient.iModels.createFromBaseline(createiModelFromBaselineParams);
