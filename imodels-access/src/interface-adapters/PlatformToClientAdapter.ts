@@ -5,7 +5,7 @@
 import { CreateNewIModelProps, LockMap, LockState } from "@itwin/core-backend";
 import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetType, IModelError } from "@itwin/core-common";
-import { Authorization, AuthorizationCallback, ContainingChanges, LockLevel, LockedObjects, ChangesetPropertiesForCreate, iModelPropertiesForCreateFromBaseline } from "@itwin/imodels-client-authoring";
+import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ContainingChanges, LockLevel, LockedObjects, iModelPropertiesForCreateFromBaseline } from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
@@ -16,7 +16,7 @@ export class PlatformToClientAdapter {
       description: changesetDescription,
       briefcaseId: changesetFileProps.briefcaseId,
       filePath: changesetFileProps.pathname
-    }
+    };
   }
 
   public static toiModelPropertiesForCreate(createNewiModelProps: CreateNewIModelProps, baselineFilePath: string): iModelPropertiesForCreateFromBaseline {
@@ -25,7 +25,7 @@ export class PlatformToClientAdapter {
       name: createNewiModelProps.iModelName,
       description: createNewiModelProps.description,
       filePath: baselineFilePath
-    }
+    };
   }
 
   public static toLockedObjects(locks: LockMap): LockedObjects[] {
