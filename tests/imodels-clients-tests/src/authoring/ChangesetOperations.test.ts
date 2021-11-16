@@ -157,7 +157,7 @@ describe("[Authoring] ChangesetOperations", () => {
         label: "id",
         changesetUnderTest: TestiModelFileProvider.changesets[0],
         get functionUnderTest() {
-          return (params: CommonDownloadParams) => imodelsClient.Changesets.downloadById(
+          return (params: CommonDownloadParams) => imodelsClient.Changesets.downloadSingle(
             {
               ...params,
               changesetId: this.changesetUnderTest.id
@@ -168,7 +168,7 @@ describe("[Authoring] ChangesetOperations", () => {
         label: "index",
         changesetUnderTest: TestiModelFileProvider.changesets[0],
         get functionUnderTest() {
-          return (params: CommonDownloadParams) => imodelsClient.Changesets.downloadByIndex(
+          return (params: CommonDownloadParams) => imodelsClient.Changesets.downloadSingle(
             {
               ...params,
               changesetIndex: this.changesetUnderTest.index
@@ -207,7 +207,7 @@ describe("[Authoring] ChangesetOperations", () => {
       {
         label: "by id",
         functionUnderTest: (client: iModelsClient, params: CommonDownloadParams) =>
-          client.Changesets.downloadById({
+          client.Changesets.downloadSingle({
             ...params,
             changesetId: TestiModelFileProvider.changesets[0].id
           })
@@ -215,7 +215,7 @@ describe("[Authoring] ChangesetOperations", () => {
       {
         label: "by index",
         functionUnderTest: (client: iModelsClient, params: CommonDownloadParams) =>
-          client.Changesets.downloadByIndex({
+          client.Changesets.downloadSingle({
             ...params,
             changesetIndex: TestiModelFileProvider.changesets[0].index
           })

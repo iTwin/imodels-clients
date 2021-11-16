@@ -5,7 +5,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, GetChangesetByIdParams, ProgressCallback, ProgressData, iModelsApiUrlFormatter } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, GetSingleChangesetParams, ProgressCallback, ProgressData, iModelsApiUrlFormatter } from "@itwin/imodels-client-authoring";
 import { iModelsClient } from "@itwin/imodels-client-authoring";
 import { Config, Constants, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestChangesetFile, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, cleanUpiModels, cleanupDirectory, iModelMetadata } from "../common";
 
@@ -100,12 +100,12 @@ describe("AzureSdkFileHandler", () => {
   });
 
   async function getTestChangesetDownloadUrl(testChangeset: TestChangesetFile): Promise<string> {
-    const getChangesetByIdParams: GetChangesetByIdParams = {
+    const getChangesetByIdParams: GetSingleChangesetParams = {
       authorization,
       imodelId: testiModelForDownload.id,
       changesetId: testChangeset.id
     };
-    const changeset = await imodelsClient.Changesets.getById(getChangesetByIdParams);
+    const changeset = await imodelsClient.Changesets.getSingle(getChangesetByIdParams);
     return changeset._links.download.href;
   }
 

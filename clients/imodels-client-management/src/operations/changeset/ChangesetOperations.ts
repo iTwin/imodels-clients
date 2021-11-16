@@ -2,12 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, ChangesetResponse, Checkpoint, NamedVersion, OperationsBase, PreferReturn, flatten, getCollectionIterator, getCollectionPagesIterator, iModelScopedOperationParams, map } from "../../base";
+import { AuthorizationCallback, ChangesetResponse, Checkpoint, NamedVersion, OperationsBase, PreferReturn, flatten, getCollectionIterator, getCollectionPagesIterator, map } from "../../base";
 import { Changeset, ChangesetsResponse, MinimalChangeset, MinimalChangesetsResponse } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { CheckpointOperations } from "../checkpoint/CheckpointOperations";
 import { NamedVersionOperations } from "../namedVersion/NamedVersionOperations";
 import { OperationOptions } from "../OperationOptions";
-import { GetChangesetByIdParams, GetChangesetByIndexParams, GetChangesetListParams } from "./ChangesetOperationParams";
+import { GetChangesetListParams, GetSingleChangesetParams } from "./ChangesetOperationParams";
 
 export class ChangesetOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   constructor(
@@ -33,21 +33,21 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   public getRepresentationList(params: GetChangesetListParams): AsyncIterableIterator<Changeset> {
     const pagedCollection: AsyncIterableIterator<Changeset[]> = this.getRepresentationListInternal(params);
     const flattenedCollection: AsyncIterableIterator<Changeset> = flatten<Changeset>(pagedCollection);
-    const mappedCollection: AsyncIterableIterator<Changeset> = map<Changeset, Changeset>( // TODO:
+    const mappedCollection: AsyncIterableIterator<Changeset> = map<Changeset, Changeset>(
       flattenedCollection,
       changeset => this.appendRelatedEntityCallbacks(params.authorization, changeset)
     );
     return mappedCollection;
   }
 
-  public async getById(params: GetChangesetByIdParams): Promise<Changeset> {
-    const changeset = await this.getByIdOrIndexInternal({ ...params, changesetIdOrIndex: params.changesetId });
-    return this.appendRelatedEntityCallbacks(params.authorization, changeset);
-  }
+  public async getSingle(params: GetSingleChangesetParams): Promise<Changeset> {
+    const response = await this.sendGetRequest<ChangesetResponse>({
+      authorization: params.authorization,
+      url: this._options.urlFormatter.getChangesetUrl(params)
+    });
 
-  public async getByIndex(params: GetChangesetByIndexParams): Promise<Changeset> {
-    const changeset = await this.getByIdOrIndexInternal({ ...params, changesetIdOrIndex: params.changesetIndex });
-    return this.appendRelatedEntityCallbacks(params.authorization, changeset);
+    const result = this.appendRelatedEntityCallbacks(params.authorization, response.changeset);
+    return result;
   }
 
   protected getRepresentationListInternal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
@@ -59,14 +59,6 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     });
 
     return getCollectionPagesIterator(getSinglePageFunc);
-  }
-
-  protected async getByIdOrIndexInternal(params: iModelScopedOperationParams & { changesetIdOrIndex: string | number }): Promise<Changeset> {
-    const response = await this.sendGetRequest<ChangesetResponse>({
-      authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetUrl(params)
-    });
-    return response.changeset;
   }
 
   protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, changeset: Changeset): Changeset {

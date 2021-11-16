@@ -18,10 +18,17 @@ export interface GetChangesetListParams extends iModelScopedOperationParams {
   urlParams?: GetChangesetListUrlParams;
 }
 
-export interface GetChangesetByIdParams extends iModelScopedOperationParams {
+interface ChangesetIdParam {
   changesetId: string;
+  changesetIndex?: never;
 }
 
-export interface GetChangesetByIndexParams extends iModelScopedOperationParams {
+interface ChangesetIndexParam {
+  changesetId?: never;
   changesetIndex: number;
 }
+
+export type ChangesetIdOrIndex = ChangesetIdParam | ChangesetIndexParam;
+
+export type GetSingleChangesetParams = iModelScopedOperationParams & ChangesetIdOrIndex;
+
