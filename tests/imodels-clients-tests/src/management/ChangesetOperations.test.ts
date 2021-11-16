@@ -147,14 +147,14 @@ describe("[Management] ChangesetOperations", () => {
   it("should get changeset by id", async () => {
     // Arrange
     const expectedChangeset = TestiModelFileProvider.changesets[0];
-    const getChangesetByIdParams: GetSingleChangesetParams = {
+    const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
       imodelId: testiModel.id,
       changesetId: expectedChangeset.id
     };
 
     // Act
-    const changeset: Changeset = await imodelsClient.Changesets.getSingle(getChangesetByIdParams);
+    const changeset: Changeset = await imodelsClient.Changesets.getSingle(getSingleChangesetParams);
 
     // Assert
     assertChangeset({
@@ -202,14 +202,14 @@ describe("[Management] ChangesetOperations", () => {
 
     it("should contain a link to checkpoint when querying changeset by id", async () => {
       // Arrange
-      const getChangesetByIdParams: GetSingleChangesetParams = {
+      const getSingleChangesetParams: GetSingleChangesetParams = {
         authorization,
         imodelId: testiModel.id,
         changesetId: firstNamedVersion.changesetId
       };
 
       // Act
-      const changeset: Changeset = await imodelsClient.Changesets.getSingle(getChangesetByIdParams);
+      const changeset: Changeset = await imodelsClient.Changesets.getSingle(getSingleChangesetParams);
 
       // Assert
       const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();

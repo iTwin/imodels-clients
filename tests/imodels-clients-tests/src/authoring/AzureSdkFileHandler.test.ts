@@ -100,12 +100,12 @@ describe("AzureSdkFileHandler", () => {
   });
 
   async function getTestChangesetDownloadUrl(testChangeset: TestChangesetFile): Promise<string> {
-    const getChangesetByIdParams: GetSingleChangesetParams = {
+    const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
       imodelId: testiModelForDownload.id,
       changesetId: testChangeset.id
     };
-    const changeset = await imodelsClient.Changesets.getSingle(getChangesetByIdParams);
+    const changeset = await imodelsClient.Changesets.getSingle(getSingleChangesetParams);
     return changeset._links.download.href;
   }
 
