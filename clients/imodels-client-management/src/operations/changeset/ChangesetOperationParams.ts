@@ -31,4 +31,3 @@ interface ChangesetIndexParam {
 export type ChangesetIdOrIndex = ChangesetIdParam | ChangesetIndexParam;
 
 export type GetSingleChangesetParams = iModelScopedOperationParams & ChangesetIdOrIndex;
-

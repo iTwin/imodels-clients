@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateNamedVersionParams, GetSingleNamedVersionParams, GetNamedVersionListParams, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
+import { CreateNamedVersionParams, GetNamedVersionListParams, GetSingleNamedVersionParams, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
 
 export class NamedVersionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetNamedVersionListParams): AsyncIterableIterator<MinimalNamedVersion> {

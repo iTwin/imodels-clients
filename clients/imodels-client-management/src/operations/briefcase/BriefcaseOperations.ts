@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { Briefcase, BriefcaseResponse, BriefcasesResponse, MinimalBriefcase, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { GetSingleBriefcaseParams, GetBriefcaseListParams } from "./BriefcaseOperationParams";
+import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetBriefcaseListParams): AsyncIterableIterator<MinimalBriefcase> {

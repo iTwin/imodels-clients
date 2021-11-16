@@ -19,14 +19,14 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
-    const getSinglePageFunc = () => this.getEntityCollectionPage<MinimalChangeset>({
+    const getEntityPageFunc = () => this.getEntityCollectionPage<MinimalChangeset>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetsUrl(params),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as MinimalChangesetsResponse).changesets
     });
 
-    const collection: AsyncIterableIterator<MinimalChangeset> = getCollectionIterator(getSinglePageFunc);
+    const collection: AsyncIterableIterator<MinimalChangeset> = getCollectionIterator(getEntityPageFunc);
     return collection;
   }
 
@@ -55,14 +55,14 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   protected getRepresentationListInternal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
-    const getSinglePageFunc = () => this.getEntityCollectionPage<Changeset>({
+    const getEntityPageFunc = () => this.getEntityCollectionPage<Changeset>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetsUrl(params),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse).changesets
     });
 
-    return getCollectionPagesIterator(getSinglePageFunc);
+    return getCollectionPagesIterator(getEntityPageFunc);
   }
 
   protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, changeset: Changeset): Changeset {

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, Briefcase, GetSingleBriefcaseParams, GetBriefcaseListParams, SPECIAL_VALUES_ME, iModelsClient, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Briefcase, GetBriefcaseListParams, GetSingleBriefcaseParams, SPECIAL_VALUES_ME, iModelsClient, toArray } from "@itwin/imodels-client-management";
 import { Config, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, assertBriefcase, assertCollection } from "../common";
 
 describe("[Management] BriefcaseOperations", () => {
