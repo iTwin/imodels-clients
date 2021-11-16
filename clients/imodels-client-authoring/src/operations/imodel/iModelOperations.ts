@@ -45,7 +45,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
       authorization: params.authorization,
       imodelId: imodelCreateResponse.iModel.id
     });
-    return this.getById({
+    return this.getSingle({
       authorization: params.authorization,
       imodelId: imodelCreateResponse.iModel.id
     });

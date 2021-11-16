@@ -19,14 +19,14 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
-    const getEntityPageFunc = () => this.getEntityCollectionPage<MinimalChangeset>({
+    const getSinglePageFunc = () => this.getSingleCollectionPage<MinimalChangeset>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetsUrl(params),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as MinimalChangesetsResponse).changesets
     });
 
-    const collection: AsyncIterableIterator<MinimalChangeset> = getCollectionIterator(getEntityPageFunc);
+    const collection: AsyncIterableIterator<MinimalChangeset> = getCollectionIterator(getSinglePageFunc);
     return collection;
   }
 
@@ -51,14 +51,14 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   protected getRepresentationListInternal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
-    const getEntityPageFunc = () => this.getEntityCollectionPage<Changeset>({
+    const getSinglePageFunc = () => this.getSingleCollectionPage<Changeset>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetsUrl(params),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse).changesets
     });
 
-    return getCollectionPagesIterator(getEntityPageFunc);
+    return getCollectionPagesIterator(getSinglePageFunc);
   }
 
   protected async getByIdOrIndexInternal(params: iModelScopedOperationParams & { changesetIdOrIndex: string | number }): Promise<Changeset> {
@@ -87,7 +87,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
       return Promise.resolve(undefined);
 
     const { imodelId, namedVersionId } = this._options.urlFormatter.parseNamedVersionUrl(namedVersionLink);
-    return this._namedVersionOperations.getById({
+    return this._namedVersionOperations.getSingle({
       authorization,
       imodelId,
       namedVersionId

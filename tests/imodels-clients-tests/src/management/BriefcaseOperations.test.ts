@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, Briefcase, GetBriefcaseByIdParams, GetBriefcaseListParams, SPECIAL_VALUES_ME, iModelsClient, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Briefcase, GetSingleBriefcaseParams, GetBriefcaseListParams, SPECIAL_VALUES_ME, iModelsClient, toArray } from "@itwin/imodels-client-management";
 import { Config, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, assertBriefcase, assertCollection } from "../common";
 
 describe("[Management] BriefcaseOperations", () => {
@@ -96,14 +96,14 @@ describe("[Management] BriefcaseOperations", () => {
 
   it("should get briefcase by id", async () => {
     // Arrange
-    const getBriefcaseByIdParams: GetBriefcaseByIdParams = {
+    const getSingleBriefcaseParams: GetSingleBriefcaseParams = {
       authorization,
       imodelId: testiModel.id,
       briefcaseId: testiModel.briefcase.id
     };
 
     // Act
-    const briefcase: Briefcase = await imodelsClient.Briefcases.getById(getBriefcaseByIdParams);
+    const briefcase: Briefcase = await imodelsClient.Briefcases.getSingle(getSingleBriefcaseParams);
 
     // Assert
     assertBriefcase({

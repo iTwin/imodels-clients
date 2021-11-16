@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 import { MinimaliModel, OperationsBase, PreferReturn, getCollectionIterator, iModel, iModelResponse, iModelsResponse } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateEmptyiModelParams, DeleteiModelParams, GetiModelByIdParams, GetiModelListParams } from "./iModelOperationParams";
+import { CreateEmptyiModelParams, DeleteiModelParams, GetSingleiModelParams, GetiModelListParams } from "./iModelOperationParams";
 
 export class iModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
-    return getCollectionIterator(() => this.getEntityCollectionPage<MinimaliModel>({
+    return getCollectionIterator(() => this.getSingleCollectionPage<MinimaliModel>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
@@ -17,7 +17,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
-    return getCollectionIterator(() => this.getEntityCollectionPage<iModel>({
+    return getCollectionIterator(() => this.getSingleCollectionPage<iModel>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,
@@ -25,7 +25,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
     }));
   }
 
-  public async getById(params: GetiModelByIdParams): Promise<iModel> {
+  public async getSingle(params: GetSingleiModelParams): Promise<iModel> {
     const response = await this.sendGetRequest<iModelResponse>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}/${params.imodelId}`
