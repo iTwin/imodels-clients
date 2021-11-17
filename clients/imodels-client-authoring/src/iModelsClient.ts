@@ -11,7 +11,7 @@ import {
 } from "@itwin/imodels-client-management";
 import { AzureSdkFileHandler, FileHandler } from "./base";
 import { BriefcaseOperations, ChangesetOperations, LockOperations, iModelOperations } from "./operations";
-import {iModelsApiUrlFormatter} from "./operations/iModelsApiUrlFormatter";
+import { iModelsApiUrlFormatter } from "./operations/iModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
 
 export interface iModelsClientOptions extends ManagementiModelsClientOptions {
@@ -27,6 +27,10 @@ export class iModelsClient {
       ...fillediModelsClientOptions,
       urlFormatter: new iModelsApiUrlFormatter(fillediModelsClientOptions.api.baseUri)
     };
+  }
+
+  public get FileHandler(): FileHandler {
+    return this._operationsOptions.fileHandler;
   }
 
   public get iModels(): iModelOperations<OperationOptions> {

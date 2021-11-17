@@ -15,7 +15,7 @@ import {
   IModelVersion, LocalDirName
 } from "@itwin/core-common";
 import {
-  AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, AzureSdkFileHandler, Briefcase, Changeset,
+  AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset,
   ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateiModelFromBaselineParams, DeleteiModelParams,
   DownloadChangesetListParams, DownloadedChangeset, GetBriefcaseListParams, GetChangesetByIdParams, GetChangesetListParams,
   GetCheckpointByChangesetIdParams, GetLockListParams, GetNamedVersionListParams, GetiModelListParams, Lock, LockLevel,
@@ -27,13 +27,11 @@ import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAd
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class BackendiModelsAccess implements BackendHubAccess {
-  private readonly _azureFileHandler: AzureSdkFileHandler;
-  private readonly _imodelsClient: iModelsClient;
+  protected readonly _imodelsClient: iModelsClient;
   private readonly _changeSet0 = { id: "", changesType: 0, description: "initialChangeset", parentId: "", briefcaseId: 0, pushDate: "", userCreated: "", index: 0 };
 
-  constructor() {
-    this._azureFileHandler = new AzureSdkFileHandler();
-    this._imodelsClient = new iModelsClient({ fileHandler: this._azureFileHandler });
+  constructor(imodelsClient?: iModelsClient) {
+    this._imodelsClient = imodelsClient ?? new iModelsClient();
   }
 
   public async downloadChangesets(arg: ChangesetRangeArg & { targetDir: LocalDirName; }): Promise<ChangesetFileProps[]> {
@@ -216,7 +214,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
         cancelRequest.cancel?.();
     };
 
-    await this._azureFileHandler.downloadFile({ downloadUrl: checkpoint._links!.download.href, targetFilePath: arg.localFile, progressCallback });
+    await this._imodelsClient.FileHandler.downloadFile({ downloadUrl: checkpoint._links!.download.href, targetFilePath: arg.localFile, progressCallback });
     return checkpoint.changesetId;
   }
 
