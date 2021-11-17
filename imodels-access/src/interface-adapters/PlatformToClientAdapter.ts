@@ -47,6 +47,9 @@ export class PlatformToClientAdapter {
 
   public static toAuthorization(accessToken: AccessToken): Authorization {
     const splitAccessToken = accessToken.split(" ");
+    if (splitAccessToken.length !== 2)
+      throw new IModelError(RepositoryStatus.InvalidRequest, "Unsupported access token format");
+
     return {
       scheme: splitAccessToken[0],
       token: splitAccessToken[1]
