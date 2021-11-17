@@ -239,17 +239,8 @@ export class BackendiModelsAccess implements BackendHubAccess {
       // Means that v2 checkpoint does not exist
       return undefined;
 
-    const { container, sas, account, dbName } = checkpoint.containerAccessInfo;
-    if (!container || !sas || !account || !dbName)
-      throw new IModelError(IModelStatus.NotFound, "Invalid V2 checkpoint");
-
-    return {
-      container,
-      auth: sas,
-      user: account,
-      dbAlias: dbName,
-      storageType: "azure?sas=1"
-    };
+    const result = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
+    return result;
   }
 
   public async downloadV2Checkpoint(arg: CheckpointArg): Promise<ChangesetId> {
@@ -264,16 +255,10 @@ export class BackendiModelsAccess implements BackendHubAccess {
     if (!checkpoint)
       throw new IModelError(IModelStatus.NotFound, "V2 checkpoint not found");
 
-    const { container, sas, account, dbName } = checkpoint.containerAccessInfo;
-    if (!container || !sas || !account || !dbName)
-      throw new IModelError(IModelStatus.NotFound, "Invalid V2 checkpoint");
+    const v2CheckpointAccessProps = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
 
     const downloader = new IModelHost.platform.DownloadV2Checkpoint({
-      container,
-      auth: sas,
-      user: account,
-      dbAlias: dbName,
-      storageType: "azure?sas=1",
+      ...v2CheckpointAccessProps,
       writeable: false,
       localFile: arg.localFile
     });
