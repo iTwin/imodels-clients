@@ -16,6 +16,6 @@ export interface GetBriefcaseListParams extends iModelScopedOperationParams {
   urlParams?: GetBriefcaseListUrlParams;
 }
 
-export interface GetBriefcaseByIdParams extends iModelScopedOperationParams {
+export interface GetSingleBriefcaseParams extends iModelScopedOperationParams {
   briefcaseId: number;
 }

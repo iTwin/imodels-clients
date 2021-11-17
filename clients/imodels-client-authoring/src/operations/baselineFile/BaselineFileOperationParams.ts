@@ -4,4 +4,4 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelScopedOperationParams } from "@itwin/imodels-client-management";
 
-export type GetBaselineFileByiModelIdParams = iModelScopedOperationParams;
+export type GetSingleBaselineFileParams = iModelScopedOperationParams;

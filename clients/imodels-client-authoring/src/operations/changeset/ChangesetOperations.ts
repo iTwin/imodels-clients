@@ -5,7 +5,7 @@
 import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
 import { DownloadedChangeset, TargetDirectoryParam } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateChangesetParams, DownloadChangesetByIdParams, DownloadChangesetByIndexParams, DownloadChangesetListParams } from "./ChangesetOperationParams";
+import { CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams } from "./ChangesetOperationParams";
 import { LimitedParallelQueue } from "./LimitedParallelQueue";
 
 export class ChangesetOperations<TOptions extends OperationOptions> extends ManagementChangesetOperations<TOptions>{
@@ -36,13 +36,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     return changesetUpdateResponse.changeset;
   }
 
-  public async downloadById(params: DownloadChangesetByIdParams): Promise<DownloadedChangeset> {
-    const changeset: Changeset = await this.getByIdOrIndexInternal({ ...params, changesetIdOrIndex: params.changesetId });
-    return this.downloadSingleChangeset({ ...params, changeset });
-  }
-
-  public async downloadByIndex(params: DownloadChangesetByIndexParams): Promise<DownloadedChangeset> {
-    const changeset: Changeset = await this.getByIdOrIndexInternal({ ...params, changesetIdOrIndex: params.changesetIndex });
+  public async downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset> {
+    const changeset: Changeset = await this.querySingleInternal(params);
     return this.downloadSingleChangeset({ ...params, changeset });
   }
 
@@ -99,10 +94,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     try {
       await this._options.fileHandler.downloadFile({ downloadUrl: params.changeset._links.download.href, targetFilePath });
     } catch (error) {
-      const changeset = await this.getByIdOrIndexInternal({
+      const changeset = await this.querySingleInternal({
         authorization: params.authorization,
         imodelId: params.imodelId,
-        changesetIdOrIndex: params.changeset.id
+        changesetId: params.changeset.id
       });
 
       try {

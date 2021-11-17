@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { Briefcase, BriefcaseResponse, BriefcasesResponse, MinimalBriefcase, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { GetBriefcaseByIdParams, GetBriefcaseListParams } from "./BriefcaseOperationParams";
+import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetBriefcaseListParams): AsyncIterableIterator<MinimalBriefcase> {
@@ -25,7 +25,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
     }));
   }
 
-  public async getById(params: GetBriefcaseByIdParams): Promise<Briefcase> {
+  public async getSingle(params: GetSingleBriefcaseParams): Promise<Briefcase> {
     const response = await this.sendGetRequest<BriefcaseResponse>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/briefcases/${params.briefcaseId}`

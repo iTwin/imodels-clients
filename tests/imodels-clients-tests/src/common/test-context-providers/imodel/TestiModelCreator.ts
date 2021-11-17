@@ -164,7 +164,7 @@ export class TestiModelCreator {
     const sleepPeriodInMs = 1000;
     const timeOutInMs = 5 * 60 * 1000;
     for (let retries = timeOutInMs / sleepPeriodInMs; retries > 0; --retries) {
-      const checkpoint = await params.imodelsClient.Checkpoints.getByNamedVersionId(params);
+      const checkpoint = await params.imodelsClient.Checkpoints.getSingle(params);
 
       if (checkpoint.state === CheckpointState.Successful && checkpoint._links?.download !== undefined && checkpoint.containerAccessInfo !== null)
         return;

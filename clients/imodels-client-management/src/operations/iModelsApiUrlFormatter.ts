@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { OrderBy } from "../base/interfaces/CommonInterfaces";
 import { Dictionary } from "../base/interfaces/UtilityTypes";
-import { GetChangesetListUrlParams } from ".";
+import { ChangesetIdOrIndex, GetChangesetListUrlParams } from "./changeset/ChangesetOperationParams";
 
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
@@ -15,10 +15,6 @@ interface iModelId {
 
 interface ChangesetIndex {
   changesetIndex: number;
-}
-
-interface ChangesetIdOrIndex {
-  changesetIdOrIndex: string | number;
 }
 
 interface NamedVersionId {
@@ -48,11 +44,11 @@ export class iModelsApiUrlFormatter {
   }
 
   public getChangesetUrl(params: iModelId & ChangesetIdOrIndex): string {
-    return `${this.baseUri}/${params.imodelId}/changesets/${params.changesetIdOrIndex}`;
+    return `${this.baseUri}/${params.imodelId}/changesets/${params.changesetId ?? params.changesetIndex}`;
   }
 
   public getCheckpointUrl(params: iModelId & ChangesetIdOrIndex): string {
-    return `${this.baseUri}/${params.imodelId}/changesets/${params.changesetIdOrIndex}/checkpoint`;
+    return `${this.baseUri}/${params.imodelId}/changesets/${params.changesetId ?? params.changesetIndex}/checkpoint`;
   }
 
   public parseCheckpointUrl(url: string): iModelId & ChangesetIndex {

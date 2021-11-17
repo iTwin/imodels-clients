@@ -4,14 +4,24 @@
  *--------------------------------------------------------------------------------------------*/
 import { iModelScopedOperationParams } from "../../base";
 
-export interface GetCheckpointByChangesetIdParams extends iModelScopedOperationParams {
+interface ChangesetIdParam {
   changesetId: string;
+  changesetIndex?: never;
+  namedVersionId?: never;
 }
 
-export interface GetCheckpointByChangesetIndexParams extends iModelScopedOperationParams {
+interface ChangesetIndexParam {
+  changesetId?: never;
   changesetIndex: number;
+  namedVersionId?: never;
 }
 
-export interface GetCheckpointByNamedVersionIdParams extends iModelScopedOperationParams {
+interface NamedVersionIdParam {
+  changesetId?: never;
+  changesetIndex?: never;
   namedVersionId: string;
 }
+
+export type CheckpointParentEntityId = ChangesetIdParam | ChangesetIndexParam | NamedVersionIdParam;
+
+export type GetSingleCheckpointParams = iModelScopedOperationParams & CheckpointParentEntityId;
