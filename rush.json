@@ -37,7 +37,7 @@
       "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
-      "packageName": "@itwin/imodels-access",
+      "packageName": "@itwin/imodels-access-backend",
       "projectFolder": "imodels-access",
       "shouldPublish": true,
       "versionPolicyName": "prerelease-monorepo-lockStep"

@@ -1,5 +1,5 @@
 {
-  "name": "@itwin/imodels-access",
+  "name": "@itwin/imodels-access-backend",
   "version": "0.1.0-dev.1",
   "description": "Interoperability package between iModels API and iTwin platform.",
   "license": "MIT",
