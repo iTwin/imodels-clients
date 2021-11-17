@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateNamedVersionParams, GetNamedVersionByIdParams, GetNamedVersionListParams, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
+import { CreateNamedVersionParams, GetNamedVersionListParams, GetSingleNamedVersionParams, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
 
 export class NamedVersionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetNamedVersionListParams): AsyncIterableIterator<MinimalNamedVersion> {
@@ -25,7 +25,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
     }));
   }
 
-  public async getById(params: GetNamedVersionByIdParams): Promise<NamedVersion> {
+  public async getSingle(params: GetSingleNamedVersionParams): Promise<NamedVersion> {
     const response = await this.sendGetRequest<NamedVersionResponse>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions/${params.namedVersionId}`

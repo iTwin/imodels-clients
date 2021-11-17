@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { MinimaliModel, OperationsBase, PreferReturn, getCollectionIterator, iModel, iModelResponse, iModelsResponse } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateEmptyiModelParams, DeleteiModelParams, GetiModelByIdParams, GetiModelListParams } from "./iModelOperationParams";
+import { CreateEmptyiModelParams, DeleteiModelParams, GetSingleiModelParams, GetiModelListParams } from "./iModelOperationParams";
 
 export class iModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
@@ -25,7 +25,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
     }));
   }
 
-  public async getById(params: GetiModelByIdParams): Promise<iModel> {
+  public async getSingle(params: GetSingleiModelParams): Promise<iModel> {
     const response = await this.sendGetRequest<iModelResponse>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}/${params.imodelId}`

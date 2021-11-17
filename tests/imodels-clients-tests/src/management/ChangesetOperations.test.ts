@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetByIdParams, GetChangesetListParams, OrderByOperator, iModelsClient, iModelsClientOptions,toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetSingleChangesetParams, OrderByOperator, iModelsClient, iModelsClientOptions,toArray } from "@itwin/imodels-client-management";
 import { Config, NamedVersionMetadata, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, assertChangeset, assertCollection } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
@@ -147,14 +147,14 @@ describe("[Management] ChangesetOperations", () => {
   it("should get changeset by id", async () => {
     // Arrange
     const expectedChangeset = TestiModelFileProvider.changesets[0];
-    const getChangesetByIdParams: GetChangesetByIdParams = {
+    const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
       imodelId: testiModel.id,
       changesetId: expectedChangeset.id
     };
 
     // Act
-    const changeset: Changeset = await imodelsClient.Changesets.getById(getChangesetByIdParams);
+    const changeset: Changeset = await imodelsClient.Changesets.getSingle(getSingleChangesetParams);
 
     // Assert
     assertChangeset({
@@ -202,14 +202,14 @@ describe("[Management] ChangesetOperations", () => {
 
     it("should contain a link to checkpoint when querying changeset by id", async () => {
       // Arrange
-      const getChangesetByIdParams: GetChangesetByIdParams = {
+      const getSingleChangesetParams: GetSingleChangesetParams = {
         authorization,
         imodelId: testiModel.id,
         changesetId: firstNamedVersion.changesetId
       };
 
       // Act
-      const changeset: Changeset = await imodelsClient.Changesets.getById(getChangesetByIdParams);
+      const changeset: Changeset = await imodelsClient.Changesets.getSingle(getSingleChangesetParams);
 
       // Assert
       const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();

@@ -2,36 +2,19 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Checkpoint, CheckpointResponse, OperationsBase, iModelScopedOperationParams } from "../../base";
+import { Checkpoint, CheckpointResponse, OperationsBase } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { GetCheckpointByChangesetIdParams, GetCheckpointByChangesetIndexParams, GetCheckpointByNamedVersionIdParams } from "./CheckpointOperationParams";
+import { GetSingleCheckpointParams } from "./CheckpointOperationParams";
 
 export class CheckpointOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
-  public getByChangesetId(params: GetCheckpointByChangesetIdParams): Promise<Checkpoint> {
-    return this.getByParentEntity({
-      ...params,
-      parentEntityUrlPath: `changesets/${params.changesetId}`
-    });
-  }
+  public async getSingle(params: GetSingleCheckpointParams): Promise<Checkpoint> {
+    const parentEntityUrlPath = params.namedVersionId
+      ? `namedversions/${params.namedVersionId}`
+      : `changesets/${params.changesetId ?? params.changesetIndex}`;
 
-  public getByChangesetIndex(params: GetCheckpointByChangesetIndexParams): Promise<Checkpoint> {
-    return this.getByParentEntity({
-      ...params,
-      parentEntityUrlPath: `changesets/${params.changesetIndex}`
-    });
-  }
-
-  public getByNamedVersionId(params: GetCheckpointByNamedVersionIdParams): Promise<Checkpoint> {
-    return this.getByParentEntity({
-      ...params,
-      parentEntityUrlPath: `namedversions/${params.namedVersionId}`
-    });
-  }
-
-  private async getByParentEntity(params: iModelScopedOperationParams & { parentEntityUrlPath: string }): Promise<Checkpoint> {
     const response = await this.sendGetRequest<CheckpointResponse>({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/${params.parentEntityUrlPath}/checkpoint`
+      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/${parentEntityUrlPath}/checkpoint`
     });
     return response.checkpoint;
   }
