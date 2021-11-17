@@ -21,6 +21,11 @@ interface iModelsApiErrorDetail {
   target: string;
 }
 
+export function isiModelsApiError(error: unknown): error is iModelsError {
+  const errorCode: unknown = (error as iModelsError)?.code;
+  return errorCode !== undefined && typeof errorCode === "string";
+}
+
 export class iModelsErrorImpl extends Error implements iModelsError {
   code: iModelsErrorCode;
   details?: iModelsErrorDetail[];
@@ -34,7 +39,7 @@ export class iModelsErrorImpl extends Error implements iModelsError {
 }
 
 export class iModelsErrorParser {
-  private static readonly _defaultErrorMessage  = "Unknown error occurred";
+  private static readonly _defaultErrorMessage = "Unknown error occurred";
 
   public static parse: ParseErrorFunc = (response: { statusCode?: number, body?: unknown }) => {
     if (!response.statusCode)

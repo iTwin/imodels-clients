@@ -21,7 +21,7 @@ import {
   GetCheckpointByChangesetIdParams, GetLockListParams, GetNamedVersionListParams, GetiModelListParams, Lock, LockLevel,
   LockedObjects, MinimalChangeset, MinimalNamedVersion, MinimaliModel, OrderByOperator, ProgressCallback, ProgressData,
   ReleaseBriefcaseParams, SPECIAL_VALUES_ME, TargetDirectoryParam, UpdateLockParams, iModel, iModelScopedOperationParams,
-  iModelsClient, iModelsError, iModelsErrorCode, toArray
+  iModelsClient, iModelsErrorCode, isiModelsApiError, toArray
 } from "@itwin/imodels-client-authoring";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
@@ -229,7 +229,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
       checkpoint = await this._imodelsClient.Checkpoints.getByChangesetId(getCheckpointParams);
     } catch (error) {
       // Means that neither v1 nor v2 checkpoint exists
-      if (this.isiModelsApiError(error) && error.code === iModelsErrorCode.CheckpointNotFound)
+      if (isiModelsApiError(error) && error.code === iModelsErrorCode.CheckpointNotFound)
         return undefined;
 
       throw error;
@@ -383,10 +383,6 @@ export class BackendiModelsAccess implements BackendHubAccess {
   public deleteIModel(arg: IModelIdArg & ITwinIdArg): Promise<void> {
     const deleteiModelParams: DeleteiModelParams = this.getiModelScopedOperationParams(arg);
     return this._imodelsClient.iModels.delete(deleteiModelParams);
-  }
-
-  private isiModelsApiError(error: unknown): error is iModelsError {
-    return (error as iModelsError)?.code !== undefined;
   }
 
   private getiModelScopedOperationParams(arg: IModelIdArg): iModelScopedOperationParams {
