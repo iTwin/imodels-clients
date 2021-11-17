@@ -29,7 +29,7 @@ import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAd
 export class BackendiModelsAccess implements BackendHubAccess {
   private readonly _azureFileHandler: AzureSdkFileHandler;
   private readonly _imodelsClient: iModelsClient;
-  private readonly _changeSet0 = { id: "", changesType: 0, description: "revision0", parentId: "", briefcaseId: 0, pushDate: "", userCreated: "", index: 0 };
+  private readonly _changeSet0 = { id: "", changesType: 0, description: "initialChangeset", parentId: "", briefcaseId: 0, pushDate: "", userCreated: "", index: 0 };
 
   constructor() {
     this._azureFileHandler = new AzureSdkFileHandler();
