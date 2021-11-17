@@ -29,32 +29,9 @@ export class PlatformToClientAdapter {
   }
 
   public static toLockedObjects(locks: LockMap): LockedObjects[] {
-    const result: LockedObjects[] = [];
-    for (const objectId in locks) {
-      const lockState: LockState = locks.get(objectId)!;
-      const lockLevel: LockLevel = PlatformToClientAdapter.toLockLevel(lockState);
-
-      const lockedObjectsForBriefcase: LockedObjects | undefined = result.find(set => set.lockLevel === lockLevel);
-      if (lockedObjectsForBriefcase)
-        lockedObjectsForBriefcase.objectIds.push(objectId);
-      else
-        result.push({ lockLevel, objectIds: [objectId] });
-    }
-
+    const groupedLocks: Map<LockLevel, string[]> = PlatformToClientAdapter.groupLocksByLockLevel(locks);
+    const result: LockedObjects[] = PlatformToClientAdapter.convertGroupedLocksToLockedObjects(groupedLocks);
     return result;
-  }
-
-  private static toLockLevel(lockState: LockState): LockLevel {
-    switch (lockState) {
-      case LockState.None:
-        return LockLevel.None;
-      case LockState.Shared:
-        return LockLevel.Shared;
-      case LockState.Exclusive:
-        return LockLevel.Exclusive;
-      default:
-        throw new IModelError(RepositoryStatus.InvalidRequest, "Unsupported LockState");
-    }
   }
 
   public static toContainingChanges(changesType: ChangesetType): ContainingChanges {
@@ -79,5 +56,42 @@ export class PlatformToClientAdapter {
   public static toAuthorizationCallback(accessToken: AccessToken): AuthorizationCallback {
     const authorization: Authorization = PlatformToClientAdapter.toAuthorization(accessToken);
     return () => Promise.resolve(authorization);
+  }
+
+  private static toLockLevel(lockState: LockState): LockLevel {
+    switch (lockState) {
+      case LockState.None:
+        return LockLevel.None;
+      case LockState.Shared:
+        return LockLevel.Shared;
+      case LockState.Exclusive:
+        return LockLevel.Exclusive;
+      default:
+        throw new IModelError(RepositoryStatus.InvalidRequest, "Unsupported LockState");
+    }
+  }
+
+  private static groupLocksByLockLevel(locks: LockMap): Map<LockLevel, string[]> {
+    const result: Map<LockLevel, string[]> = new Map();
+    for (const objectId in locks) {
+      const lockState: LockState = locks.get(objectId)!;
+      const lockLevel: LockLevel = PlatformToClientAdapter.toLockLevel(lockState);
+
+      const lockedObjectsIds: string[] | undefined = result.get(lockLevel);
+      if (lockedObjectsIds)
+        lockedObjectsIds.push(objectId);
+      else
+        result.set(lockLevel, [objectId]);
+    }
+
+    return result;
+  }
+
+  private static convertGroupedLocksToLockedObjects(groupedLocks: Map<LockLevel, string[]>): LockedObjects[] {
+    const result: LockedObjects[] = [];
+    for (const lockLevel of groupedLocks.keys())
+      result.push({ lockLevel, objectIds: groupedLocks.get(lockLevel)! })
+
+    return result;
   }
 }
