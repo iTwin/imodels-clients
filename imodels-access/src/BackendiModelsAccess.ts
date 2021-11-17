@@ -207,12 +207,9 @@ export class BackendiModelsAccess implements BackendHubAccess {
     if (!checkpoint || !checkpoint._links?.download)
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cancelRequest: any = {};
-    const progressCallback: ProgressCallback = (progress: ProgressData) => {
-      if (arg.onProgress && arg.onProgress(progress.bytesTransferred, progress.bytesTotal) !== 0)
-        cancelRequest.cancel?.();
-    };
+    let progressCallback: ProgressCallback | undefined = undefined;
+    if (arg.onProgress)
+      progressCallback = (progress: ProgressData) => arg.onProgress!(progress.bytesTransferred, progress.bytesTotal);
 
     await this._imodelsClient.FileHandler.downloadFile({ downloadUrl: checkpoint._links!.download.href, targetFilePath: arg.localFile, progressCallback });
     return checkpoint.changesetId;
