@@ -23,6 +23,7 @@ jobs:
         vmImage: $(imageName)
     variables:
       - group: iModels Clients - Integration Tests - SBX
+      - group: Caleb - npmjs publish token
     workspace:
       clean: all
 
@@ -65,6 +66,6 @@ jobs:
         PathtoPublish: '$(Build.SourcesDirectory)/common/temp/artifacts/packages'
         ArtifactName: packages
 
-    - script: node common/scripts/install-run-rush.js publish --publish --include-all --set-access-level public --npm-auth-token $(System.AccessToken)
+    - script: node common/scripts/install-run-rush.js publish --publish --include-all --set-access-level public --npm-auth-token $(npmToken)
       displayName: rush publish package
       condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'), eq(variables['Build.SourceBranch'], 'refs/heads/publishing-dev-package'), ${{ parameters.shouldPublish }} ) #TODO: publishing-dev-package -> main
