@@ -207,7 +207,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     const changeset: Changeset = await this._imodelsClient.Changesets.getById(getChangesetByIdParams);
     const checkpoint: Checkpoint | undefined = await changeset.getCurrentOrPrecedingCheckpoint();
     if (!checkpoint || !checkpoint._links?.download)
-      throw new IModelError(BriefcaseStatus.VersionNotFound, `Checkpoint for changeset ${arg.checkpoint.changeset.id} not found`);
+      throw new IModelError(BriefcaseStatus.VersionNotFound, `V1 checkpoint not found`);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cancelRequest: any = {};
