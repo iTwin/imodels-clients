@@ -16,12 +16,12 @@ import {
 } from "@itwin/core-common";
 import {
   AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset,
-  ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateiModelFromBaselineParams, DeleteiModelParams,
-  DownloadChangesetListParams, DownloadedChangeset, GetBriefcaseListParams, GetChangesetByIdParams, GetChangesetListParams,
-  GetCheckpointByChangesetIdParams, GetLockListParams, GetNamedVersionListParams, GetiModelListParams, Lock, LockLevel,
-  LockedObjects, MinimalChangeset, MinimalNamedVersion, MinimaliModel, OrderByOperator, ProgressCallback, ProgressData,
-  ReleaseBriefcaseParams, SPECIAL_VALUES_ME, TargetDirectoryParam, UpdateLockParams, iModel, iModelScopedOperationParams,
-  iModelsClient, iModelsErrorCode, isiModelsApiError, toArray
+  ChangesetIdOrIndex, ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateiModelFromBaselineParams,
+  DeleteiModelParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, GetBriefcaseListParams,
+  GetChangesetListParams, GetLockListParams, GetNamedVersionListParams, GetSingleChangesetParams, GetSingleCheckpointParams, GetiModelListParams,
+  Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalNamedVersion, MinimaliModel, OrderByOperator,
+  ProgressCallback, ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams,
+  iModel, iModelScopedOperationParams, iModelsClient, iModelsErrorCode, isiModelsApiError, toArray
 } from "@itwin/imodels-client-authoring";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
@@ -52,24 +52,26 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async downloadChangeset(arg: ChangesetArg & { targetDir: LocalDirName; }): Promise<ChangesetFileProps> {
-    const commonDownloadParams: iModelScopedOperationParams & TargetDirectoryParam = {
+    const changesetIdOrIndex: ChangesetIdOrIndex = PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset);
+    const downloadSingleChangesetParams: DownloadSingleChangesetParams = {
       ...this.getiModelScopedOperationParams(arg),
+      ...changesetIdOrIndex,
       targetDirectoryPath: arg.targetDir
     };
 
-    const downloadedChangeset: DownloadedChangeset = arg.changeset.index
-      ? await this._imodelsClient.Changesets.downloadByIndex({ ...commonDownloadParams, changesetIndex: arg.changeset.index })
-      : await this._imodelsClient.Changesets.downloadById({ ...commonDownloadParams, changesetId: arg.changeset.id! });
+    const downloadedChangeset: DownloadedChangeset = await this._imodelsClient.Changesets.downloadSingle(downloadSingleChangesetParams);
     const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset);
     return result;
   }
 
   public async queryChangeset(arg: ChangesetArg): Promise<ChangesetProps> {
-    const imodelOperationParams: iModelScopedOperationParams = this.getiModelScopedOperationParams(arg);
+    const changesetIdOrIndex: ChangesetIdOrIndex = PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset);
+    const getSingleChangesetParams: GetSingleChangesetParams = {
+      ...this.getiModelScopedOperationParams(arg),
+      ...changesetIdOrIndex
+    };
 
-    const changeset: Changeset = arg.changeset.index
-      ? await this._imodelsClient.Changesets.getByIndex({ ...imodelOperationParams, changesetIndex: arg.changeset.index })
-      : await this._imodelsClient.Changesets.getById({ ...imodelOperationParams, changesetId: arg.changeset.id! });
+    const changeset: Changeset = await this._imodelsClient.Changesets.getSingle(getSingleChangesetParams);
     const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changeset);
     return result;
   }
@@ -154,11 +156,11 @@ export class BackendiModelsAccess implements BackendHubAccess {
     if (namedVersions.length === 0 || !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
 
-    const getChangesetByIdParams: GetChangesetByIdParams = {
+    const getSingleChangesetParams: GetSingleChangesetParams = {
       ...imodelOperationParams,
       changesetId: namedVersions[0].changesetId
     };
-    const changeset: MinimalChangeset = await this._imodelsClient.Changesets.getById(getChangesetByIdParams);
+    const changeset: MinimalChangeset = await this._imodelsClient.Changesets.getSingle(getSingleChangesetParams);
     const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changeset);
     return result;
   }
@@ -196,13 +198,13 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async downloadV1Checkpoint(arg: CheckpointArg): Promise<ChangesetId> {
-    const getChangesetByIdParams: GetChangesetByIdParams = {
+    const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization: this.getAuthorizationCallbackFromiModelHost(),
       imodelId: arg.checkpoint.iModelId,
       changesetId: arg.checkpoint.changeset.id
     };
 
-    const changeset: Changeset = await this._imodelsClient.Changesets.getById(getChangesetByIdParams);
+    const changeset: Changeset = await this._imodelsClient.Changesets.getSingle(getSingleChangesetParams);
     const checkpoint: Checkpoint | undefined = await changeset.getCurrentOrPrecedingCheckpoint();
     if (!checkpoint || !checkpoint._links?.download)
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
@@ -216,14 +218,14 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async queryV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
-    const getCheckpointParams: GetCheckpointByChangesetIdParams = {
+    const getSingleCheckpointParams: GetSingleCheckpointParams = {
       ...this.getiModelScopedOperationParams(arg),
       changesetId: arg.changeset.id
     };
 
     let checkpoint: Checkpoint;
     try {
-      checkpoint = await this._imodelsClient.Checkpoints.getByChangesetId(getCheckpointParams);
+      checkpoint = await this._imodelsClient.Checkpoints.getSingle(getSingleCheckpointParams);
     } catch (error) {
       // Means that neither v1 nor v2 checkpoint exists
       if (isiModelsApiError(error) && error.code === iModelsErrorCode.CheckpointNotFound)
@@ -241,13 +243,13 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async downloadV2Checkpoint(arg: CheckpointArg): Promise<ChangesetId> {
-    const getChangesetByIdParams: GetChangesetByIdParams = {
+    const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization: this.getAuthorizationCallbackFromiModelHost(),
       imodelId: arg.checkpoint.iModelId,
       changesetId: arg.checkpoint.changeset.id
     };
 
-    const changeset: Changeset = await this._imodelsClient.Changesets.getById(getChangesetByIdParams);
+    const changeset: Changeset = await this._imodelsClient.Changesets.getSingle(getSingleChangesetParams);
     const checkpoint: Checkpoint | undefined = await changeset.getCurrentOrPrecedingCheckpoint();
     if (!checkpoint)
       throw new IModelError(IModelStatus.NotFound, "V2 checkpoint not found");

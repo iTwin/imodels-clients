@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { CreateNewIModelProps, LockMap, LockState } from "@itwin/core-backend";
 import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
-import { ChangesetFileProps, ChangesetType, IModelError } from "@itwin/core-common";
-import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ContainingChanges, LockLevel, LockedObjects, iModelPropertiesForCreateFromBaseline } from "@itwin/imodels-client-authoring";
+import { ChangesetFileProps, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
+import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangeetIdOrIndex, ContainingChanges, LockLevel, LockedObjects, iModelPropertiesForCreateFromBaseline } from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
@@ -59,6 +59,15 @@ export class PlatformToClientAdapter {
   public static toAuthorizationCallback(accessToken: AccessToken): AuthorizationCallback {
     const authorization: Authorization = PlatformToClientAdapter.toAuthorization(accessToken);
     return () => Promise.resolve(authorization);
+  }
+
+  public static toChangesetIdOrIndex(changeset: PlatformChangesetIdOrIndex): ClientChangeetIdOrIndex {
+    if (changeset.id)
+      return { changesetId: changeset.id };
+    if (changeset.index)
+      return { changesetIndex: changeset.index };
+
+    throw new IModelError(RepositoryStatus.InvalidRequest, "Both changeset id and index are undefined");
   }
 
   private static toLockLevel(lockState: LockState): LockLevel {
