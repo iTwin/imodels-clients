@@ -93,7 +93,7 @@ export class PlatformToClientAdapter {
   private static convertGroupedLocksToLockedObjects(groupedLocks: Map<LockLevel, string[]>): LockedObjects[] {
     const result: LockedObjects[] = [];
     for (const lockLevel of groupedLocks.keys())
-      result.push({ lockLevel, objectIds: groupedLocks.get(lockLevel)! })
+      result.push({ lockLevel, objectIds: groupedLocks.get(lockLevel)! });
 
     return result;
   }
