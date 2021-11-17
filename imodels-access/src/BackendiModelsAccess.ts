@@ -158,7 +158,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
 
     const getChangesetByIdParams: GetChangesetByIdParams = {
       ...imodelOperationParams,
-      changesetId: namedVersions[0].id
+      changesetId: namedVersions[0].changesetId
     };
     const changeset: MinimalChangeset = await this._imodelsClient.Changesets.getById(getChangesetByIdParams);
     const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changeset);
@@ -207,7 +207,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     const changeset: Changeset = await this._imodelsClient.Changesets.getById(getChangesetByIdParams);
     const checkpoint: Checkpoint | undefined = await changeset.getCurrentOrPrecedingCheckpoint();
     if (!checkpoint || !checkpoint._links?.download)
-      throw new IModelError(BriefcaseStatus.VersionNotFound, "no checkpoints not found");
+      throw new IModelError(BriefcaseStatus.VersionNotFound, `Checkpoint for changeset ${arg.checkpoint.changeset.id} not found`);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cancelRequest: any = {};
@@ -243,7 +243,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
 
     const { container, sas, account, dbName } = checkpoint.containerAccessInfo;
     if (!container || !sas || !account || !dbName)
-      throw new IModelError(IModelStatus.NotFound, "invalid V2 checkpoint");
+      throw new IModelError(IModelStatus.NotFound, "Invalid V2 checkpoint");
 
     return {
       container,
@@ -268,7 +268,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
 
     const { container, sas, account, dbName } = checkpoint.containerAccessInfo;
     if (!container || !sas || !account || !dbName)
-      throw new IModelError(IModelStatus.NotFound, "invalid V2 checkpoint");
+      throw new IModelError(IModelStatus.NotFound, "Invalid V2 checkpoint");
 
     const downloader = new IModelHost.platform.DownloadV2Checkpoint({
       container,
