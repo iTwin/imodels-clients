@@ -15,11 +15,11 @@ import {
   IModelVersion, LocalDirName
 } from "@itwin/core-common";
 import {
-  AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset,
-  ChangesetIdOrIndex, ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateiModelFromBaselineParams,
-  DeleteiModelParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, GetBriefcaseListParams,
-  GetChangesetListParams, GetLockListParams, GetNamedVersionListParams, GetSingleChangesetParams, GetSingleCheckpointParams, GetiModelListParams,
-  Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalNamedVersion, MinimaliModel, OrderByOperator,
+  AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset, ChangesetIdOrIndex,
+  ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateiModelFromBaselineParams, DeleteiModelParams,
+  DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, GetBriefcaseListParams,
+  GetChangesetListParams, GetLockListParams, GetNamedVersionListParams, GetSingleChangesetParams, GetSingleCheckpointParams,
+  GetiModelListParams, Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalNamedVersion, MinimaliModel, OrderByOperator,
   ProgressCallback, ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams,
   iModel, iModelScopedOperationParams, iModelsClient, iModelsErrorCode, isiModelsApiError, toArray
 } from "@itwin/imodels-client-authoring";
