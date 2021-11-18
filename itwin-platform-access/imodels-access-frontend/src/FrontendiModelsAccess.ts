@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { BentleyError, BentleyStatus } from "@itwin/core-bentley";
 import { ChangesetId, IModelVersion } from "@itwin/core-common";
-import { FrontendHubAccess, IModelIdArg } from "@itwin/core-frontend";
-import { ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, MinimalChangeset, MinimalNamedVersion, OrderByOperator, iModelScopedOperationParams, iModelsClient, toArray } from "@itwin/imodels-client-management";
+import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
+import { ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, MinimalChangeset, MinimalNamedVersion, OrderByOperator, iModelScopedOperationParams, iModelsClient, toArray, AuthorizationCallback } from "@itwin/imodels-client-management";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class FrontendiModelsAccess implements FrontendHubAccess {
@@ -69,9 +69,17 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
   }
 
   private getiModelScopedOperationParams(arg: IModelIdArg): iModelScopedOperationParams {
+    const authorizationCallback: AuthorizationCallback = arg.accessToken
+      ? PlatformToClientAdapter.toAuthorizationCallback(arg.accessToken)
+      : this.getAuthorizationCallbackFromiModelApp();
+
     return {
-      authorization: PlatformToClientAdapter.toAuthorizationCallback(arg.accessToken),
+      authorization: authorizationCallback,
       imodelId: arg.iModelId
     };
+  }
+
+  private getAuthorizationCallbackFromiModelApp(): AuthorizationCallback {
+    return () => IModelApp.getAccessToken().then(PlatformToClientAdapter.toAuthorization);
   }
 }

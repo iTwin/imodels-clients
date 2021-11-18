@@ -6,12 +6,7 @@ import { AccessToken, BentleyError, BentleyStatus } from "@itwin/core-bentley";
 import { Authorization, AuthorizationCallback } from "@itwin/imodels-client-management";
 
 export class PlatformToClientAdapter {
-  public static toAuthorizationCallback(accessToken: AccessToken): AuthorizationCallback {
-    const authorization: Authorization = PlatformToClientAdapter.toAuthorization(accessToken);
-    return () => Promise.resolve(authorization);
-  }
-
-  private static toAuthorization(accessToken: AccessToken): Authorization {
+  public static toAuthorization(accessToken: AccessToken): Authorization {
     const splitAccessToken = accessToken.split(" ");
     if (splitAccessToken.length !== 2)
       throw new BentleyError(BentleyStatus.ERROR, "Unsupported access token format");
@@ -20,5 +15,10 @@ export class PlatformToClientAdapter {
       scheme: splitAccessToken[0],
       token: splitAccessToken[1]
     };
+  }
+
+  public static toAuthorizationCallback(accessToken: AccessToken): AuthorizationCallback {
+    const authorization: Authorization = PlatformToClientAdapter.toAuthorization(accessToken);
+    return () => Promise.resolve(authorization);
   }
 }
