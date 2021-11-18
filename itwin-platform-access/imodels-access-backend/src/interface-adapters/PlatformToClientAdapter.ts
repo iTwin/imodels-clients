@@ -5,7 +5,7 @@
 import { CreateNewIModelProps, LockMap, LockState } from "@itwin/core-backend";
 import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
-import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangeetIdOrIndex, ContainingChanges, LockLevel, LockedObjects, iModelPropertiesForCreateFromBaseline } from "@itwin/imodels-client-authoring";
+import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, LockLevel, LockedObjects, iModelPropertiesForCreateFromBaseline } from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
@@ -61,7 +61,7 @@ export class PlatformToClientAdapter {
     return () => Promise.resolve(authorization);
   }
 
-  public static toChangesetIdOrIndex(changeset: PlatformChangesetIdOrIndex): ClientChangeetIdOrIndex {
+  public static toChangesetIdOrIndex(changeset: PlatformChangesetIdOrIndex): ClientChangesetIdOrIndex {
     if (changeset.id)
       return { changesetId: changeset.id };
     if (changeset.index)
