@@ -5,7 +5,7 @@
 import { BentleyError, BentleyStatus } from "@itwin/core-bentley";
 import { ChangesetId, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
-import { ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, MinimalChangeset, MinimalNamedVersion, OrderByOperator, iModelScopedOperationParams, iModelsClient, toArray, AuthorizationCallback } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, MinimalChangeset, MinimalNamedVersion, OrderByOperator, iModelScopedOperationParams, iModelsClient, toArray } from "@itwin/imodels-client-management";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class FrontendiModelsAccess implements FrontendHubAccess {
@@ -14,6 +14,22 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
 
   constructor(imodelsClient?: iModelsClient) {
     this._imodelsClient = imodelsClient ?? new iModelsClient();
+  }
+
+  public getChangesetIdFromVersion(arg: IModelIdArg & { version: IModelVersion }): Promise<ChangesetId> {
+    const version = arg.version;
+    if (version.isFirst)
+      return Promise.resolve(this._emptyChangesetId);
+
+    const namedVersionChangesetId = version.getAsOfChangeSet();
+    if (namedVersionChangesetId)
+      return Promise.resolve(namedVersionChangesetId);
+
+    const namedVersionName = version.getName();
+    if (namedVersionName)
+      return this.getChangesetIdFromNamedVersion({ ...arg, versionName: namedVersionName });
+
+    return this.getLatestChangesetId(arg);
   }
 
   public async getLatestChangesetId(arg: IModelIdArg): Promise<ChangesetId> {
@@ -36,35 +52,18 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
     return result;
   }
 
-  public getChangesetIdFromVersion(arg: IModelIdArg & { version: IModelVersion }): Promise<ChangesetId> {
-    const version = arg.version;
-    if (version.isFirst)
-      return Promise.resolve(this._emptyChangesetId);
-
-    const namedVersionChangesetId = version.getAsOfChangeSet();
-    if (namedVersionChangesetId)
-      return Promise.resolve(namedVersionChangesetId);
-
-    const namedVersionName = version.getName();
-    if (namedVersionName)
-      return this.getChangesetIdFromNamedVersion({ ...arg, versionName: namedVersionName });
-
-    return this.getLatestChangesetId(arg);
-  }
-
   public async getChangesetIdFromNamedVersion(arg: IModelIdArg & { versionName: string }): Promise<ChangesetId> {
-    const imodelOperationParams: iModelScopedOperationParams = this.getiModelScopedOperationParams(arg);
     const getNamedVersionListParams: GetNamedVersionListParams = {
-      ...imodelOperationParams,
+      ...this.getiModelScopedOperationParams(arg),
       urlParams: {
         name: arg.versionName
       }
     };
+
     const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this._imodelsClient.NamedVersions.getMinimalList(getNamedVersionListParams);
     const namedVersions: MinimalNamedVersion[] = await toArray(namedVersionsIterator);
     if (namedVersions.length === 0 || !namedVersions[0].changesetId)
       throw new BentleyError(BentleyStatus.ERROR, `Named version ${arg.versionName} not found`);
-
     return namedVersions[0].changesetId;
   }
 
