@@ -35,6 +35,12 @@
       "projectFolder": "utils/imodels-client-common-config",
       "shouldPublish": true,
       "versionPolicyName": "prerelease-monorepo-lockStep"
+    },
+    {
+      "packageName": "@itwin/imodels-access-frontend",
+      "projectFolder": "itwin-platform-access/imodels-access-frontend",
+      "shouldPublish": true,
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     }
   ]
 }
