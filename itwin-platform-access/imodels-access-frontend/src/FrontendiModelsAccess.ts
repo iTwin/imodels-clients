@@ -16,14 +16,14 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
     this._imodelsClient = imodelsClient ?? new iModelsClient();
   }
 
-  public getChangesetIdFromVersion(arg: IModelIdArg & { version: IModelVersion }): Promise<ChangesetId> {
+  public async getChangesetIdFromVersion(arg: IModelIdArg & { version: IModelVersion }): Promise<ChangesetId> {
     const version = arg.version;
     if (version.isFirst)
-      return Promise.resolve(this._emptyChangesetId);
+      return this._emptyChangesetId;
 
     const namedVersionChangesetId = version.getAsOfChangeSet();
     if (namedVersionChangesetId)
-      return Promise.resolve(namedVersionChangesetId);
+      return namedVersionChangesetId;
 
     const namedVersionName = version.getName();
     if (namedVersionName)
@@ -79,6 +79,9 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
   }
 
   private getAuthorizationCallbackFromiModelApp(): AuthorizationCallback {
-    return () => IModelApp.getAccessToken().then(PlatformToClientAdapter.toAuthorization);
+    return async () => {
+      const token = await IModelApp.getAccessToken();
+      return PlatformToClientAdapter.toAuthorization(token);
+    }
   }
 }
