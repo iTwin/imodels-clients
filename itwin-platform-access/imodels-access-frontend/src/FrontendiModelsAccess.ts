@@ -82,6 +82,6 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
     return async () => {
       const token = await IModelApp.getAccessToken();
       return PlatformToClientAdapter.toAuthorization(token);
-    }
+    };
   }
 }
