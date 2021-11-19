@@ -127,10 +127,10 @@ export class BackendiModelsAccess implements BackendHubAccess {
     return result;
   }
 
-  public getChangesetFromVersion(arg: IModelIdArg & { version: IModelVersion; }): Promise<ChangesetProps> {
+  public async getChangesetFromVersion(arg: IModelIdArg & { version: IModelVersion; }): Promise<ChangesetProps> {
     const version = arg.version;
     if (version.isFirst)
-      return Promise.resolve(this._changeSet0);
+      return this._changeSet0;
 
     const namedVersionChangesetId = version.getAsOfChangeSet();
     if (namedVersionChangesetId)
@@ -387,7 +387,10 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   private getAuthorizationCallbackFromiModelHost(): AuthorizationCallback {
-    return () => IModelHost.getAccessToken().then(PlatformToClientAdapter.toAuthorization);
+    return async () => {
+      const token = await IModelHost.getAccessToken();
+      return PlatformToClientAdapter.toAuthorization(token);
+    };
   }
 
   private setLockLevelToNone(lockedObjectsForBriefcase: LockedObjects[]): void {
