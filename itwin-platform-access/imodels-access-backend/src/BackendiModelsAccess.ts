@@ -7,9 +7,9 @@ import { UserCancelledError } from "@bentley/itwin-client";
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
   ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, IModelDb, IModelHost, IModelIdArg, IModelJsFs,
-  IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
+  IModelNameArg, ITwinIdArg, LockMap, LockProps, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
-import { BriefcaseStatus, GuidString, IModelStatus, Logger, OpenMode } from "@itwin/core-bentley";
+import { BriefcaseStatus, Guid, GuidString, IModelStatus, Logger, OpenMode } from "@itwin/core-bentley";
 import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetId, ChangesetIndex, ChangesetProps, IModelError,
   IModelVersion, LocalDirName
@@ -21,10 +21,11 @@ import {
   GetChangesetListParams, GetLockListParams, GetNamedVersionListParams, GetSingleChangesetParams, GetSingleCheckpointParams,
   GetiModelListParams, Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalNamedVersion, MinimaliModel, OrderByOperator,
   ProgressCallback, ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams,
-  iModel, iModelScopedOperationParams, iModelsClient, iModelsErrorCode, isiModelsApiError, toArray
+  iModel, iModelScopedOperationParams, iModelsClient, iModelsErrorCode, isiModelsApiError, toArray, CreateEmptyiModelParams
 } from "@itwin/imodels-client-authoring";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
+import { assert } from "console";
 
 export class BackendiModelsAccess implements BackendHubAccess {
   protected readonly _imodelsClient: iModelsClient;
@@ -354,12 +355,26 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async createNewIModel(arg: CreateNewIModelProps): Promise<GuidString> {
-    const baselineFilePath = this.prepareBaselineFile(arg);
-    const createiModelFromBaselineParams: CreateiModelFromBaselineParams = {
-      ...this.getAuthorizationParam(arg),
-      imodelProperties: PlatformToClientAdapter.toiModelPropertiesForCreate(arg, baselineFilePath)
-    };
+    const authroziationParam = this.getAuthorizationParam(arg);
+    const imodelPropertiesForCreate = PlatformToClientAdapter.toiModelPropertiesForCreate(arg);
 
+    if (!arg.revision0) {
+      const createEmptyiModelParams: CreateEmptyiModelParams = {
+        ...authroziationParam,
+        imodelProperties: imodelPropertiesForCreate
+      };
+      const imodel: iModel = await this._imodelsClient.iModels.createEmpty(createEmptyiModelParams);
+      return imodel.id;
+    }
+
+    const baselineFilePath = this.prepareBaselineFile(arg.revision0, arg.iTwinId, arg.noLocks);
+    const createiModelFromBaselineParams: CreateiModelFromBaselineParams = {
+      ...authroziationParam,
+      imodelProperties: {
+        ...imodelPropertiesForCreate,
+        baselineFilePath
+      }
+    };
     const imodel: iModel = await this._imodelsClient.iModels.createFromBaseline(createiModelFromBaselineParams);
     return imodel.id;
   }
@@ -399,30 +414,24 @@ export class BackendiModelsAccess implements BackendHubAccess {
     }
   }
 
-  private prepareBaselineFile(arg: CreateNewIModelProps): string {
-    const revision0 = join(IModelHost.cacheDir, "temp-revision0.bim");
-    IModelJsFs.removeSync(revision0);
-    if (!arg.revision0) { // if they didn't supply a revision0 file, create a blank one.
-      const blank = SnapshotDb.createEmpty(revision0, { rootSubject: { name: arg.description ?? arg.iModelName } });
-      blank.saveChanges();
-      blank.close();
-    } else {
-      IModelJsFs.copySync(arg.revision0, revision0);
-    }
+  private prepareBaselineFile(baselineFilePath: string, iTwinId: string, noLocks?: boolean): string {
+    const tempBaselineFilePath = join(IModelHost.cacheDir, `temp-baseline-${Guid.createValue()}.bim`);
+    IModelJsFs.removeSync(tempBaselineFilePath);
+    IModelJsFs.copySync(baselineFilePath, tempBaselineFilePath);
 
-    const nativeDb = IModelDb.openDgnDb({ path: revision0 }, OpenMode.ReadWrite);
+    const nativeDb = IModelDb.openDgnDb({ path: tempBaselineFilePath }, OpenMode.ReadWrite);
     try {
-      nativeDb.setITwinId(arg.iTwinId);
+      nativeDb.setITwinId(iTwinId);
       nativeDb.saveChanges();
       // cspell:disable-next-line
       nativeDb.deleteAllTxns(); // necessary before resetting briefcaseId
       nativeDb.resetBriefcaseId(BriefcaseIdValue.Unassigned);
-      nativeDb.saveLocalValue(BriefcaseLocalValue.NoLocking, arg.noLocks ? "true" : undefined);
+      nativeDb.saveLocalValue(BriefcaseLocalValue.NoLocking, noLocks ? "true" : undefined);
       nativeDb.saveChanges();
     } finally {
       nativeDb.closeIModel();
     }
 
-    return revision0;
+    return tempBaselineFilePath;
   }
 }
