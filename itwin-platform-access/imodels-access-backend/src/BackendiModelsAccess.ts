@@ -354,12 +354,12 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async createNewIModel(arg: CreateNewIModelProps): Promise<GuidString> {
-    const authroziationParam = this.getAuthorizationParam(arg);
+    const authorizationParam = this.getAuthorizationParam(arg);
     const imodelProperties = PlatformToClientAdapter.toiModelProperties(arg);
 
     if (!arg.revision0) {
       const createEmptyiModelParams: CreateEmptyiModelParams = {
-        ...authroziationParam,
+        ...authorizationParam,
         imodelProperties: imodelProperties
       };
       const imodel: iModel = await this._imodelsClient.iModels.createEmpty(createEmptyiModelParams);
@@ -368,7 +368,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
 
     const baselineFilePath = this.prepareBaselineFile(arg.revision0, arg.iTwinId, arg.noLocks);
     const createiModelFromBaselineParams: CreateiModelFromBaselineParams = {
-      ...authroziationParam,
+      ...authorizationParam,
       imodelProperties: {
         ...imodelProperties,
         filePath: baselineFilePath
