@@ -61,10 +61,12 @@ export class PlatformToClientAdapter {
   }
 
   public static toChangesetIdOrIndex(changeset: PlatformChangesetIdOrIndex): ClientChangesetIdOrIndex {
-    if (changeset.id)
-      return { changesetId: changeset.id };
+    if (changeset.id === "" || changeset.index === 0)
+      return { changesetIndex: 0 };
     if (changeset.index)
       return { changesetIndex: changeset.index };
+    if (changeset.id)
+      return { changesetId: changeset.id };
 
     throw new IModelError(RepositoryStatus.InvalidRequest, "Both changeset id and index are undefined");
   }

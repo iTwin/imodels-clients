@@ -52,10 +52,9 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async downloadChangeset(arg: ChangesetArg & { targetDir: LocalDirName; }): Promise<ChangesetFileProps> {
-    const changesetIdOrIndex: ChangesetIdOrIndex = PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset);
     const downloadSingleChangesetParams: DownloadSingleChangesetParams = {
       ...this.getiModelScopedOperationParams(arg),
-      ...changesetIdOrIndex,
+      ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset),
       targetDirectoryPath: arg.targetDir
     };
 
@@ -65,10 +64,9 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async queryChangeset(arg: ChangesetArg): Promise<ChangesetProps> {
-    const changesetIdOrIndex: ChangesetIdOrIndex = PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset);
     const getSingleChangesetParams: GetSingleChangesetParams = {
       ...this.getiModelScopedOperationParams(arg),
-      ...changesetIdOrIndex
+      ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset)
     };
 
     const changeset: Changeset = await this._imodelsClient.Changesets.getSingle(getSingleChangesetParams);
@@ -198,14 +196,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async downloadV1Checkpoint(arg: CheckpointArg): Promise<ChangesetId> {
-    const getSingleChangesetParams: GetSingleChangesetParams = {
-      authorization: this.getAuthorizationCallbackFromiModelHost(),
-      imodelId: arg.checkpoint.iModelId,
-      changesetId: arg.checkpoint.changeset.id
-    };
-
-    const changeset: Changeset = await this._imodelsClient.Changesets.getSingle(getSingleChangesetParams);
-    const checkpoint: Checkpoint | undefined = await changeset.getCurrentOrPrecedingCheckpoint();
+    let checkpoint: Checkpoint | undefined = await this.queryCurrentOrPrecedingCheckpoint(arg);
     if (!checkpoint || !checkpoint._links?.download)
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
 
@@ -220,7 +211,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
   public async queryV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
     const getSingleCheckpointParams: GetSingleCheckpointParams = {
       ...this.getiModelScopedOperationParams(arg),
-      changesetId: arg.changeset.id
+      ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset)
     };
 
     let checkpoint: Checkpoint;
@@ -243,14 +234,8 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async downloadV2Checkpoint(arg: CheckpointArg): Promise<ChangesetId> {
-    const getSingleChangesetParams: GetSingleChangesetParams = {
-      authorization: this.getAuthorizationCallbackFromiModelHost(),
-      imodelId: arg.checkpoint.iModelId,
-      changesetId: arg.checkpoint.changeset.id
-    };
-
-    const changeset: Changeset = await this._imodelsClient.Changesets.getSingle(getSingleChangesetParams);
-    const checkpoint: Checkpoint | undefined = await changeset.getCurrentOrPrecedingCheckpoint();
+    // TODO: add not supported error?
+    let checkpoint: Checkpoint | undefined = await this.queryCurrentOrPrecedingCheckpoint(arg);
     if (!checkpoint)
       throw new IModelError(IModelStatus.NotFound, "V2 checkpoint not found");
 
@@ -432,5 +417,20 @@ export class BackendiModelsAccess implements BackendHubAccess {
     }
 
     return tempBaselineFilePath;
+  }
+
+  private async queryCurrentOrPrecedingCheckpoint(arg: CheckpointArg): Promise<Checkpoint | undefined> {
+    const changesetIdOrIndex: ChangesetIdOrIndex = PlatformToClientAdapter.toChangesetIdOrIndex(arg.checkpoint.changeset);
+    const getCheckpointParams: GetSingleCheckpointParams = {
+      ...this.getAuthorizationParam(arg.checkpoint),
+      imodelId: arg.checkpoint.iModelId,
+      ...changesetIdOrIndex
+    };
+
+    if (changesetIdOrIndex.changesetIndex === 0)
+      return this._imodelsClient.Checkpoints.getSingle(getCheckpointParams);
+
+    const changeset: Changeset = await this._imodelsClient.Changesets.getSingle(getCheckpointParams);
+    return changeset.getCurrentOrPrecedingCheckpoint();
   }
 }
