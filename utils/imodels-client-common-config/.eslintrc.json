@@ -19,7 +19,10 @@
   "rules": {
     "indent": [
       "error",
-      2
+      2,
+      {
+        "SwitchCase": 1
+      }
     ],
     "linebreak-style": [
       "error",
@@ -82,9 +85,6 @@
     "comma-dangle": [
       "error",
       "never"
-    ],
-    "require-await": [
-      "error"
     ],
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/naming-convention": [
