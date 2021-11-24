@@ -41,7 +41,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     };
     if (arg.range) {
       downloadParams.urlParams = {
-        afterIndex: arg.range.first - 1,
+        afterIndex: arg.range.first,
         lastIndex: arg.range.end
       };
     }
@@ -78,7 +78,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     const imodelOperationParams: GetChangesetListParams = this.getiModelScopedOperationParams(arg);
     if (arg.range) {
       imodelOperationParams.urlParams = {
-        afterIndex: arg.range.first - 1,
+        afterIndex: arg.range.first,
         lastIndex: arg.range.end
       };
     }
@@ -241,8 +241,9 @@ export class BackendiModelsAccess implements BackendHubAccess {
 
     const v2CheckpointAccessProps = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
 
-    const downloader = new IModelHost.platform.DownloadV2Checkpoint({
+    const transfer = new IModelHost.platform.CloudDbTransfer({
       ...v2CheckpointAccessProps,
+      direction: "download",
       writeable: false,
       localFile: arg.localFile
     });
@@ -252,14 +253,14 @@ export class BackendiModelsAccess implements BackendHubAccess {
       let total = 0;
       const onProgress = arg.onProgress;
       if (onProgress) {
-        timer = setInterval(() => { // set an interval timer to show progress every 250ms
-          const progress = downloader.getProgress();
+        timer = setInterval(async () => { // set an interval timer to show progress every 250ms
+          const progress = transfer.getProgress();
           total = progress.total;
           if (onProgress(progress.loaded, progress.total))
-            downloader.cancelDownload();
+            transfer.cancelTransfer();
         }, 250);
       }
-      await downloader.downloadPromise;
+      await transfer.promise;
       onProgress?.(total, total); // make sure we call progress func one last time when download completes
     } catch (err) {
       throw (err.message === "cancelled") ? new UserCancelledError(BriefcaseStatus.DownloadCancelled, "download cancelled") : err;
