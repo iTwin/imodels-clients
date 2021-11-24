@@ -21,7 +21,7 @@ import {
   GetBriefcaseListParams, GetChangesetListParams, GetLockListParams, GetNamedVersionListParams, GetSingleChangesetParams,
   GetSingleCheckpointParams, GetiModelListParams, Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalNamedVersion, MinimaliModel,
   OrderByOperator, ProgressCallback, ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME,
-  UpdateLockParams, iModel, iModelScopedOperationParams, iModelsClient, iModelsErrorCode, isiModelsApiError, toArray
+  UpdateLockParams, iModel, iModelScopedOperationParams, iModelsClient, iModelsErrorCode, isiModelsApiError, toArray, take
 } from "@itwin/imodels-client-authoring";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
@@ -118,7 +118,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     };
 
     const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._imodelsClient.Changesets.getMinimalList(getChangesetListParams);
-    const changesets: MinimalChangeset[] = await toArray(changesetsIterator);
+    const changesets: MinimalChangeset[] = await take(changesetsIterator, 1);
     if (changesets.length === 0)
       return this._changeSet0;
     const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changesets[0]);
