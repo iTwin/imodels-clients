@@ -12,7 +12,7 @@ export interface MinimalBriefcase {
 export interface Briefcase extends MinimalBriefcase {
   briefcaseId: number;
   ownerId: string;
-  acquiredDateTime: Date;
+  acquiredDateTime: string;
   fileSize: number;
   deviceName: string | null;
 }
