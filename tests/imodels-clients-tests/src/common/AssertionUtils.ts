@@ -31,7 +31,7 @@ export function assertiModel(params: {
   expect(params.actualiModel.name).to.equal(params.expectediModelProperties.name);
   assertOptionalProperty(params.expectediModelProperties.description, params.actualiModel.description);
   assertOptionalProperty(params.expectediModelProperties.extent, params.actualiModel.extent);
-  expect(params.actualiModel.createdDateTime as Date).to.not.be.undefined;
+  expect(params.actualiModel.createdDateTime).to.not.be.empty;
   expect(params.actualiModel.state).to.equal(iModelState.Initialized);
 }
 
@@ -51,7 +51,7 @@ export function assertBriefcase(params: {
 
   expect(params.actualBriefcase.fileSize).to.be.greaterThan(0);
   assertOptionalProperty(params.expectedBriefcaseProperties?.deviceName, params.actualBriefcase.deviceName);
-  expect(params.actualBriefcase.acquiredDateTime as Date).to.not.be.undefined;
+  expect(params.actualBriefcase.acquiredDateTime).to.not.be.empty;
 }
 
 export function assertChangeset(params: {
@@ -67,7 +67,7 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.briefcaseId).to.be.greaterThan(0);
   assertOptionalProperty(params.expectedChangesetProperties.description, params.actualChangeset.description);
   expect(params.actualChangeset.creatorId).to.not.be.undefined;
-  expect(params.actualChangeset.pushDateTime as Date).to.not.be.undefined;
+  expect(params.actualChangeset.pushDateTime).to.not.be.empty;
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
   expect(params.actualChangeset.synchronizationInfo).to.equal(null);
 

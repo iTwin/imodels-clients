@@ -28,7 +28,7 @@ export interface iModel extends MinimaliModel {
   name: string;
   description: string | null;
   state: iModelState;
-  createdDateTime: Date;
+  createdDateTime: string;
   projectId: string;
   extent: Extent | null;
 }

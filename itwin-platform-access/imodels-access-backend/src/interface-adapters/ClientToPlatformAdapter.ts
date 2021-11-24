@@ -16,7 +16,7 @@ export class ClientToPlatformAdapter {
       changesType: ClientToPlatformAdapter.toChangesetType(changeset.containingChanges),
       description: changeset.description,
       briefcaseId: changeset.briefcaseId,
-      pushDate: changeset.pushDateTime.toISOString(),
+      pushDate: changeset.pushDateTime,
       userCreated: changeset.creatorId
     };
   }
