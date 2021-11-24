@@ -53,14 +53,23 @@ export class iModelsErrorParser {
 
     const errorFromApi: iModelsApiErrorWrapper | undefined = response.body as iModelsApiErrorWrapper;
     const errorCode: iModelsErrorCode = iModelsErrorParser.parseCode(errorFromApi?.error?.code);
+    const errorMessage = errorFromApi?.error?.message ?? iModelsErrorParser._defaultErrorMessage;
+    const errorDetails: iModelsErrorDetail[] | undefined = errorFromApi?.error?.details
+      ? iModelsErrorParser.parseDetails(errorFromApi.error.details)
+      : undefined
 
     return new iModelsErrorImpl({
       code: errorCode,
-      message: errorFromApi?.error?.message ?? iModelsErrorParser._defaultErrorMessage,
-      details: errorFromApi?.error?.details
-        ? iModelsErrorParser.parseDetails(errorFromApi.error.details)
-        : undefined
+      message: iModelsErrorParser.formErrorMessage(errorMessage, errorDetails),
+      details: errorDetails
     });
+  }
+
+  private static formErrorMessage(message: string, errorDetails: iModelsErrorDetail[] | undefined): string {
+    if (!errorDetails || errorDetails.length === 0)
+      return message;
+
+    return `${message} Details: ${JSON.stringify(errorDetails)}`
   }
 
   private static parseDetails(details: iModelsApiErrorDetail[]): iModelsErrorDetail[] {
