@@ -341,7 +341,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
       return imodel.id;
     }
 
-    const baselineFilePath = this.prepareBaselineFile(arg.revision0, arg.iTwinId, arg.noLocks);
+    const baselineFilePath = this.copyAndPrepareBaselineFile(arg.revision0, arg.iTwinId, arg.noLocks);
     const createiModelFromBaselineParams: CreateiModelFromBaselineParams = {
       ...authorizationParam,
       imodelProperties: {
@@ -350,6 +350,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
       }
     };
     const imodel: iModel = await this._imodelsClient.iModels.createFromBaseline(createiModelFromBaselineParams);
+    IModelJsFs.removeSync(baselineFilePath);
     return imodel.id;
   }
 
@@ -388,7 +389,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     }
   }
 
-  private prepareBaselineFile(baselineFilePath: string, iTwinId: string, noLocks?: boolean): string {
+  private copyAndPrepareBaselineFile(baselineFilePath: string, iTwinId: string, noLocks?: boolean): string {
     const tempBaselineFilePath = join(IModelHost.cacheDir, `temp-baseline-${Guid.createValue()}.bim`);
     IModelJsFs.removeSync(tempBaselineFilePath);
     IModelJsFs.copySync(baselineFilePath, tempBaselineFilePath);
