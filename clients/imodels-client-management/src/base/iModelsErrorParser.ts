@@ -83,7 +83,7 @@ export class iModelsErrorParser {
     if (!errorDetails || errorDetails.length === 0)
       return result;
 
-    result += ` Details:\n`;
+    result += " Details:\n";
     for (let i = 0; i < errorDetails.length; i++) {
       result += `${i + 1}. ${errorDetails[i].code}: ${errorDetails[i].message}`;
       if (errorDetails[i].target)

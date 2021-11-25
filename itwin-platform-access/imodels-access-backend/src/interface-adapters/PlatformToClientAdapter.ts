@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { CreateNewIModelProps, LockMap, LockState } from "@itwin/core-backend";
 import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
-import { ChangesetFileProps, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex, ChangesetRange } from "@itwin/core-common";
-import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, LockLevel, LockedObjects, iModelProperties, GetChangesetListUrlParams } from "@itwin/imodels-client-authoring";
+import { ChangesetFileProps, ChangesetRange, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
+import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, LockLevel, LockedObjects, iModelProperties } from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
@@ -82,7 +82,7 @@ export class PlatformToClientAdapter {
       afterIndex: changesetRange.first === 0
         ? 0
         : changesetRange.first - 1
-    }
+    };
   }
 
   private static toLockLevel(lockState: LockState): LockLevel {

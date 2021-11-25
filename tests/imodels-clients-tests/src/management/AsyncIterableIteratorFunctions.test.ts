@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { take, toArray } from "@itwin/imodels-client-management";
 import { expect } from "chai";
+import { take, toArray } from "@itwin/imodels-client-management";
 
 class TestEntity {
   constructor(public index: number) {
