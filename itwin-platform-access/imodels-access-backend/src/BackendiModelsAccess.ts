@@ -39,12 +39,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
       ...this.getiModelScopedOperationParams(arg),
       targetDirectoryPath: arg.targetDir
     };
-    if (arg.range) {
-      downloadParams.urlParams = {
-        afterIndex: arg.range.first,
-        lastIndex: arg.range.end
-      };
-    }
+    downloadParams.urlParams = PlatformToClientAdapter.toChangesetRangeUrlParams(arg.range)
 
     const downloadedChangesets: DownloadedChangeset[] = await this._imodelsClient.Changesets.downloadList(downloadParams);
     const result: ChangesetFileProps[] = downloadedChangesets.map(ClientToPlatformAdapter.toChangesetFileProps);
@@ -76,12 +71,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
 
   public async queryChangesets(arg: ChangesetRangeArg): Promise<ChangesetProps[]> {
     const imodelOperationParams: GetChangesetListParams = this.getiModelScopedOperationParams(arg);
-    if (arg.range) {
-      imodelOperationParams.urlParams = {
-        afterIndex: arg.range.first,
-        lastIndex: arg.range.end
-      };
-    }
+    imodelOperationParams.urlParams = PlatformToClientAdapter.toChangesetRangeUrlParams(arg.range)
 
     const changesetsIterator: AsyncIterableIterator<Changeset> = this._imodelsClient.Changesets.getRepresentationList(imodelOperationParams);
     const changesets: Changeset[] = await toArray(changesetsIterator);
@@ -234,7 +224,6 @@ export class BackendiModelsAccess implements BackendHubAccess {
   }
 
   public async downloadV2Checkpoint(arg: CheckpointArg): Promise<ChangesetId> {
-    // TODO: add not supported error?
     let checkpoint: Checkpoint | undefined = await this.queryCurrentOrPrecedingCheckpoint(arg);
     if (!checkpoint)
       throw new IModelError(IModelStatus.NotFound, "V2 checkpoint not found");

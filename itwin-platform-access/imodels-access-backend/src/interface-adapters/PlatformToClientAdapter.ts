@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { CreateNewIModelProps, LockMap, LockState } from "@itwin/core-backend";
 import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
-import { ChangesetFileProps, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
-import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, LockLevel, LockedObjects, iModelProperties } from "@itwin/imodels-client-authoring";
+import { ChangesetFileProps, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex, ChangesetRange } from "@itwin/core-common";
+import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, LockLevel, LockedObjects, iModelProperties, GetChangesetListUrlParams } from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
@@ -61,6 +61,7 @@ export class PlatformToClientAdapter {
   }
 
   public static toChangesetIdOrIndex(changeset: PlatformChangesetIdOrIndex): ClientChangesetIdOrIndex {
+    // The API only supports index in the url for changeset0.
     if (changeset.id === "" || changeset.index === 0)
       return { changesetIndex: 0 };
     if (changeset.index)
@@ -69,6 +70,19 @@ export class PlatformToClientAdapter {
       return { changesetId: changeset.id };
 
     throw new IModelError(RepositoryStatus.InvalidRequest, "Both changeset id and index are undefined");
+  }
+
+  public static toChangesetRangeUrlParams(changesetRange?: ChangesetRange): Partial<GetChangesetListUrlParams> | undefined {
+    if (!changesetRange)
+      return undefined;
+
+    return {
+      lastIndex: changesetRange.end,
+      // The API never returns changeset0 so "first index = 0" and "after index = 0" are equivalent.
+      afterIndex: changesetRange.first === 0
+        ? 0
+        : changesetRange.first - 1
+    }
   }
 
   private static toLockLevel(lockState: LockState): LockLevel {
