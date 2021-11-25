@@ -13,13 +13,14 @@ class TestEntity {
 describe("AsyncIterableIterator utility functions", () => {
   it("should should convert into array", async () => {
     // Arrange
-    const testIterator = getTestIterator(5);
+    const elementCount = 5;
+    const testIterator = getTestIterator(elementCount);
 
     // Act
     const entities: TestEntity[] = await toArray(testIterator);
 
     // Assert
-    expect(entities.length).to.equal(5);
+    expect(entities.length).to.equal(elementCount);
     for (let i = 0; i < entities.length; i++)
       expect(entities[i].index).to.equal(i);
   });
@@ -27,12 +28,13 @@ describe("AsyncIterableIterator utility functions", () => {
   it("should take top n elements", async () => {
     // Arrange
     const testIterator = getTestIterator(5);
+    const elementCountToTake = 1;
 
     // Act
-    const entities: TestEntity[] = await take(testIterator, 1);
+    const entities: TestEntity[] = await take(testIterator, elementCountToTake);
 
     // Assert
-    expect(entities.length).to.equal(1);
+    expect(entities.length).to.equal(elementCountToTake);
     expect(entities[0].index).to.equal(0);
   });
 
