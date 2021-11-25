@@ -35,7 +35,7 @@ describe("iModelsErrorParser", () => {
     const parsedError: iModelsError = iModelsErrorParser.parse({ statusCode: 400, body: errorResponse }) as iModelsError;
 
     // Assert
-    const extectedErrorMessage = "Cannot create iModel. Details:\n" +
+    const expectedErrorMessage = "Cannot create iModel. Details:\n" +
       "1. InvalidValue: Provided 'extent' value is not valid. Valid 'latitude' value range is -90 to 90. Target: extent.\n" +
       "2. MissingRequiredProperty: Required property is missing. Target: name.\n" +
       "3. InvalidRequestBody: Failed to parse request body. Make sure it is a valid JSON.\n";
@@ -43,7 +43,7 @@ describe("iModelsErrorParser", () => {
       actualError: parsedError,
       expectedError: {
         code: iModelsErrorCode.InvalidiModelsRequest,
-        message: extectedErrorMessage,
+        message: expectedErrorMessage,
         details: [
           {
             code: iModelsErrorCode.InvalidValue,
