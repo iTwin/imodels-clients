@@ -41,6 +41,12 @@
       "projectFolder": "itwin-platform-access/imodels-access-frontend",
       "shouldPublish": true,
       "versionPolicyName": "prerelease-monorepo-lockStep"
+    },
+    {
+      "packageName": "@itwin/imodels-access-backend",
+      "projectFolder": "itwin-platform-access/imodels-access-backend",
+      "shouldPublish": true,
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     }
   ]
 }

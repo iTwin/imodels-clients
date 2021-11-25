@@ -44,7 +44,7 @@ export interface MinimalChangeset {
   index: number;
   parentId: string;
   creatorId: string;
-  pushDateTime: Date;
+  pushDateTime: string;
   state: ChangesetState;
   containingChanges: ContainingChanges;
   fileSize: number;
