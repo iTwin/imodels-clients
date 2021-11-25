@@ -22,6 +22,10 @@ describe("iModelsErrorParser", () => {
             code: "MissingRequiredProperty",
             message: "Required property is missing.",
             target: "name"
+          },
+          {
+            code: "InvalidRequestBody",
+            message: "Failed to parse request body. Make sure it is a valid JSON."
           }
         ]
       }
@@ -33,7 +37,8 @@ describe("iModelsErrorParser", () => {
     // Assert
     const extectedErrorMessage = "Cannot create iModel. Details:\n" +
       "1. InvalidValue: Provided 'extent' value is not valid. Valid 'latitude' value range is -90 to 90. Target: extent.\n" +
-      "2. MissingRequiredProperty: Required property is missing. Target: name.\n";
+      "2. MissingRequiredProperty: Required property is missing. Target: name.\n" +
+      "3. InvalidRequestBody: Failed to parse request body. Make sure it is a valid JSON.\n";
     assertError({
       actualError: parsedError,
       expectedError: {
@@ -49,6 +54,10 @@ describe("iModelsErrorParser", () => {
             code: iModelsErrorCode.MissingRequiredProperty,
             message: "Required property is missing.",
             target: "name"
+          },
+          {
+            code: iModelsErrorCode.InvalidRequestBody,
+            message: "Failed to parse request body. Make sure it is a valid JSON."
           }
         ]
       }
