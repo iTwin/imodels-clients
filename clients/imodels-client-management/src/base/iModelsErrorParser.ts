@@ -45,36 +45,19 @@ export class iModelsErrorParser {
     if (!response.statusCode)
       return new iModelsErrorImpl({ code: iModelsErrorCode.Unknown, message: iModelsErrorParser._defaultErrorMessage });
 
-
     // TODO: remove the special handling when APIM team fixes incorrect error body
     if (response.statusCode === 401)
       return new iModelsErrorImpl({ code: iModelsErrorCode.Unauthorized, message: "The user is unauthorized. Please provide valid authentication credentials." });
 
-
     const errorFromApi: iModelsApiErrorWrapper | undefined = response.body as iModelsApiErrorWrapper;
     const errorCode: iModelsErrorCode = iModelsErrorParser.parseCode(errorFromApi?.error?.code);
-    const errorMessage = errorFromApi?.error?.message ?? iModelsErrorParser._defaultErrorMessage;
-    const errorDetails: iModelsErrorDetail[] | undefined = errorFromApi?.error?.details
-      ? iModelsErrorParser.parseDetails(errorFromApi.error.details)
-      : undefined
+    const errorDetails: iModelsErrorDetail[] | undefined = iModelsErrorParser.parseDetails(errorFromApi.error?.details);
+    const errorMessage: string = iModelsErrorParser.parseAndFormatMessage(errorFromApi?.error?.message, errorDetails);
 
     return new iModelsErrorImpl({
       code: errorCode,
-      message: iModelsErrorParser.formErrorMessage(errorMessage, errorDetails),
+      message: errorMessage,
       details: errorDetails
-    });
-  }
-
-  private static formErrorMessage(message: string, errorDetails: iModelsErrorDetail[] | undefined): string {
-    if (!errorDetails || errorDetails.length === 0)
-      return message;
-
-    return `${message} Details: ${JSON.stringify(errorDetails)}`
-  }
-
-  private static parseDetails(details: iModelsApiErrorDetail[]): iModelsErrorDetail[] {
-    return details.map(unparsedDetail => {
-      return { ...unparsedDetail, code: this.parseCode(unparsedDetail.code) };
     });
   }
 
@@ -84,5 +67,30 @@ export class iModelsErrorParser {
       parsedCode = iModelsErrorCode.Unrecognized;
 
     return parsedCode;
+  }
+
+  private static parseDetails(details: iModelsApiErrorDetail[] | undefined): iModelsErrorDetail[] | undefined {
+    if (!details)
+      return undefined;
+
+    return details.map(unparsedDetail => {
+      return { ...unparsedDetail, code: this.parseCode(unparsedDetail.code) };
+    });
+  }
+
+  private static parseAndFormatMessage(message: string | undefined, errorDetails: iModelsErrorDetail[] | undefined): string {
+    let result = message ?? iModelsErrorParser._defaultErrorMessage;
+    if (!errorDetails || errorDetails.length === 0)
+      return result;
+
+    result += ` Details:\n`;
+    for (let i = 0; i < errorDetails.length; i++) {
+      result += `${i + 1}. ${errorDetails[i].code}: ${errorDetails[i].message}`;
+      if (errorDetails[i].target)
+        result += ` Target: ${errorDetails[i].target}.`;
+      result += "\n";
+    }
+
+    return result;
   }
 }
