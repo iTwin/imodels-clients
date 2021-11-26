@@ -55,7 +55,7 @@ export class iModelsApiUrlFormatter {
     const matchedGroups: Dictionary<string> = this._checkpointUrlRegex.exec(url)!.groups!;
     return {
       imodelId: matchedGroups[this._groupNames.imodelId],
-      changesetIndex: parseInt(matchedGroups[this._groupNames.changesetIndex])
+      changesetIndex: parseInt(matchedGroups[this._groupNames.changesetIndex], 10)
     };
   }
 
@@ -67,10 +67,13 @@ export class iModelsApiUrlFormatter {
     };
   }
 
-  protected formQueryString(urlParams: Dictionary<UrlParameterValue> | undefined): string {
+  protected formQueryString(urlParameters: Dictionary<UrlParameterValue> | undefined): string {
     let queryString = "";
-    for (const urlParameterKey in urlParams) {
-      const urlParameterValue = urlParams[urlParameterKey];
+    for (const urlParameterKey in urlParameters) {
+      if (!Object.hasOwnProperty.call(urlParameters, urlParameterKey))
+        continue;
+
+      const urlParameterValue = urlParameters[urlParameterKey];
       if (!urlParameterValue)
         continue;
 
@@ -82,7 +85,7 @@ export class iModelsApiUrlFormatter {
 
   private appendToQueryString(existingQueryString: string, parameterKey: string, parameterValue: UrlParameterValue): string {
     const separator = existingQueryString.length === 0 ? "?" : "&";
-    return existingQueryString + `${separator}${parameterKey}=${this.stringify(parameterValue)}`;
+    return `${existingQueryString}${separator}${parameterKey}=${this.stringify(parameterValue)}`;
   }
 
   private stringify(urlParameterValue: UrlParameterValue): string {

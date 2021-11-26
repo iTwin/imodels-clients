@@ -71,7 +71,7 @@ describe("[Management] iModelOperations", () => {
       label: "representation",
       functionUnderTest: (params: GetiModelListParams) => imodelsClient.iModels.getRepresentationList(params)
     }
-  ].forEach(testCase => {
+  ].forEach((testCase) => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getiModelListParams: GetiModelListParams = {
@@ -88,7 +88,7 @@ describe("[Management] iModelOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: imodels,
-        isEntityCountCorrect: count => count >= 2
+        isEntityCountCorrect: (count) => count >= 2
       });
     });
   });
@@ -109,7 +109,7 @@ describe("[Management] iModelOperations", () => {
     const imodels = imodelsClient.iModels.getRepresentationList(getiModelListParams);
 
     // Assert
-    const imodelNames = (await toArray(imodels)).map(imodel => imodel.name);
+    const imodelNames = (await toArray(imodels)).map((imodel) => imodel.name);
     for (let i = 0; i < imodelNames.length - 1; i++)
       expect(imodelNames[i] < imodelNames[i + 1]).to.be.true;
   });
@@ -131,7 +131,7 @@ describe("[Management] iModelOperations", () => {
     const imodels = imodelsClient.iModels.getRepresentationList(getiModelListParams);
 
     // Assert
-    const imodelNames = (await toArray(imodels)).map(imodel => imodel.name);
+    const imodelNames = (await toArray(imodels)).map((imodel) => imodel.name);
     for (let i = 0; i < imodelNames.length - 1; i++)
       expect(imodelNames[i] > imodelNames[i + 1]).to.be.true;
   });
@@ -178,7 +178,7 @@ describe("[Management] iModelOperations", () => {
   it("should return unauthorized error when calling API with invalid access token", async () => {
     // Arrange
     const createiModelParams: CreateEmptyiModelParams = {
-      authorization: () => Promise.resolve({ scheme: "Bearer", token: "invalid token" }),
+      authorization: async () => Promise.resolve({ scheme: "Bearer", token: "invalid token" }),
       imodelProperties: {
         projectId,
         name: testiModelGroup.getPrefixedUniqueiModelName("Sample iModel (unauthorized)")
@@ -186,7 +186,7 @@ describe("[Management] iModelOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined = undefined;
+    let errorThrown: Error | undefined;
     try {
       await imodelsClient.iModels.createEmpty(createiModelParams);
     } catch (e) {
@@ -216,7 +216,7 @@ describe("[Management] iModelOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined = undefined;
+    let errorThrown: Error | undefined;
     try {
       await imodelsClient.iModels.createEmpty(createiModelParams);
     } catch (e) {

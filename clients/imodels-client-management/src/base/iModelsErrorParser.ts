@@ -3,7 +3,6 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { iModelsError, iModelsErrorCode, iModelsErrorDetail } from "./interfaces/iModelsErrorInterfaces";
-import { ParseErrorFunc } from "./rest/RestClient";
 
 interface iModelsApiErrorWrapper {
   error: iModelsApiError;
@@ -27,8 +26,8 @@ export function isiModelsApiError(error: unknown): error is iModelsError {
 }
 
 export class iModelsErrorImpl extends Error implements iModelsError {
-  code: iModelsErrorCode;
-  details?: iModelsErrorDetail[];
+  public code: iModelsErrorCode;
+  public details?: iModelsErrorDetail[];
 
   constructor(params: { code: iModelsErrorCode, message: string, details?: iModelsErrorDetail[] }) {
     super();
@@ -41,7 +40,7 @@ export class iModelsErrorImpl extends Error implements iModelsError {
 export class iModelsErrorParser {
   private static readonly _defaultErrorMessage = "Unknown error occurred";
 
-  public static parse: ParseErrorFunc = (response: { statusCode?: number, body?: unknown }) => {
+  public static parse(response: { statusCode?: number, body?: unknown }): Error {
     if (!response.statusCode)
       return new iModelsErrorImpl({ code: iModelsErrorCode.Unknown, message: iModelsErrorParser._defaultErrorMessage });
 
@@ -73,7 +72,7 @@ export class iModelsErrorParser {
     if (!details)
       return undefined;
 
-    return details.map(unparsedDetail => {
+    return details.map((unparsedDetail) => {
       return { ...unparsedDetail, code: this.parseCode(unparsedDetail.code) };
     });
   }

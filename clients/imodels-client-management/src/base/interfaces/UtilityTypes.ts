@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { EntityCollectionPage } from "./CommonInterfaces";
 
-export type Dictionary<T> = { [key: string]: T; };
+export interface Dictionary<T> { [key: string]: T }
 
 export type RecursiveRequired<T> = Required<T> & { [P in keyof T]: RecursiveRequired<T[P]>; };
 export type EntityPageQueryFunc<TEntity> = () => Promise<EntityCollectionPage<TEntity>>;
-export type AtLeastOneProperty<T> = { [P in keyof T]: Pick<T, P> }[keyof T]
+export type AtLeastOneProperty<T> = { [P in keyof T]: Pick<T, P> }[keyof T];

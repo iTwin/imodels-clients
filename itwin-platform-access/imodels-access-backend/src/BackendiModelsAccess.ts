@@ -34,7 +34,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     this._imodelsClient = imodelsClient ?? new iModelsClient();
   }
 
-  public async downloadChangesets(arg: ChangesetRangeArg & { targetDir: LocalDirName; }): Promise<ChangesetFileProps[]> {
+  public async downloadChangesets(arg: ChangesetRangeArg & { targetDir: LocalDirName }): Promise<ChangesetFileProps[]> {
     const downloadParams: DownloadChangesetListParams = {
       ...this.getiModelScopedOperationParams(arg),
       targetDirectoryPath: arg.targetDir
@@ -46,7 +46,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     return result;
   }
 
-  public async downloadChangeset(arg: ChangesetArg & { targetDir: LocalDirName; }): Promise<ChangesetFileProps> {
+  public async downloadChangeset(arg: ChangesetArg & { targetDir: LocalDirName }): Promise<ChangesetFileProps> {
     const downloadSingleChangesetParams: DownloadSingleChangesetParams = {
       ...this.getiModelScopedOperationParams(arg),
       ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset),
@@ -79,7 +79,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     return result;
   }
 
-  public async pushChangeset(arg: IModelIdArg & { changesetProps: ChangesetFileProps; }): Promise<ChangesetIndex> {
+  public async pushChangeset(arg: IModelIdArg & { changesetProps: ChangesetFileProps }): Promise<ChangesetIndex> {
     let changesetDescription = arg.changesetProps.description;
     if (changesetDescription.length >= 255) {
       Logger.logWarning("BackendiModelsAccess", `pushChangeset - Truncating description to 255 characters. ${changesetDescription}`);
@@ -115,7 +115,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     return result;
   }
 
-  public async getChangesetFromVersion(arg: IModelIdArg & { version: IModelVersion; }): Promise<ChangesetProps> {
+  public async getChangesetFromVersion(arg: IModelIdArg & { version: IModelVersion }): Promise<ChangesetProps> {
     const version = arg.version;
     if (version.isFirst)
       return this._changeSet0;
@@ -131,7 +131,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     return this.getLatestChangeset(arg);
   }
 
-  public async getChangesetFromNamedVersion(arg: IModelIdArg & { versionName: string; }): Promise<ChangesetProps> {
+  public async getChangesetFromNamedVersion(arg: IModelIdArg & { versionName: string }): Promise<ChangesetProps> {
     const imodelOperationParams: iModelScopedOperationParams = this.getiModelScopedOperationParams(arg);
     const getNamedVersionListParams: GetNamedVersionListParams = {
       ...imodelOperationParams,
@@ -162,7 +162,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     return briefcase.briefcaseId;
   }
 
-  public releaseBriefcase(arg: BriefcaseIdArg): Promise<void> {
+  public async releaseBriefcase(arg: BriefcaseIdArg): Promise<void> {
     const releaseBriefcaseParams: ReleaseBriefcaseParams = {
       ...this.getiModelScopedOperationParams(arg),
       briefcaseId: arg.briefcaseId
@@ -181,7 +181,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
 
     const briefcasesIterator: AsyncIterableIterator<Briefcase> = this._imodelsClient.Briefcases.getRepresentationList(getBriefcaseListParams);
     const briefcases: Briefcase[] = await toArray(briefcasesIterator);
-    const briefcaseIds: BriefcaseId[] = briefcases.map(briefcase => briefcase.briefcaseId);
+    const briefcaseIds: BriefcaseId[] = briefcases.map((briefcase) => briefcase.briefcaseId);
     return briefcaseIds;
   }
 
@@ -190,11 +190,11 @@ export class BackendiModelsAccess implements BackendHubAccess {
     if (!checkpoint || !checkpoint._links?.download)
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
 
-    let progressCallback: ProgressCallback | undefined = undefined;
+    let progressCallback: ProgressCallback | undefined;
     if (arg.onProgress)
       progressCallback = (progress: ProgressData) => arg.onProgress!(progress.bytesTransferred, progress.bytesTotal);
 
-    await this._imodelsClient.FileHandler.downloadFile({ downloadUrl: checkpoint._links!.download.href, targetFilePath: arg.localFile, progressCallback });
+    await this._imodelsClient.FileHandler.downloadFile({ downloadUrl: checkpoint._links.download.href, targetFilePath: arg.localFile, progressCallback });
     return checkpoint.changesetId;
   }
 
@@ -335,10 +335,10 @@ export class BackendiModelsAccess implements BackendHubAccess {
     if (!arg.revision0) {
       const createEmptyiModelParams: CreateEmptyiModelParams = {
         ...authorizationParam,
-        imodelProperties: imodelProperties
+        imodelProperties
       };
-      const imodel: iModel = await this._imodelsClient.iModels.createEmpty(createEmptyiModelParams);
-      return imodel.id;
+      const emptyiModel: iModel = await this._imodelsClient.iModels.createEmpty(createEmptyiModelParams);
+      return emptyiModel.id;
     }
 
     const baselineFilePath = this.copyAndPrepareBaselineFile(arg.revision0, arg.iTwinId, arg.noLocks);
@@ -349,12 +349,12 @@ export class BackendiModelsAccess implements BackendHubAccess {
         filePath: baselineFilePath
       }
     };
-    const imodel: iModel = await this._imodelsClient.iModels.createFromBaseline(createiModelFromBaselineParams);
+    const imodelFromBaseline: iModel = await this._imodelsClient.iModels.createFromBaseline(createiModelFromBaselineParams);
     IModelJsFs.removeSync(baselineFilePath);
-    return imodel.id;
+    return imodelFromBaseline.id;
   }
 
-  public deleteIModel(arg: IModelIdArg & ITwinIdArg): Promise<void> {
+  public async deleteIModel(arg: IModelIdArg & ITwinIdArg): Promise<void> {
     const deleteiModelParams: DeleteiModelParams = this.getiModelScopedOperationParams(arg);
     return this._imodelsClient.iModels.delete(deleteiModelParams);
   }

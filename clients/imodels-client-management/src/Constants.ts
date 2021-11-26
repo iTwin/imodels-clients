@@ -6,7 +6,7 @@ export class Constants {
   public static api = {
     baseUrl: "https://api.bentley.com/imodels",
     version: "itwin-platform.v1"
-  }
+  };
 
   public static headers = {
     accept: "Accept",
@@ -17,5 +17,5 @@ export class Constants {
     values: {
       contentType: "application/json"
     }
-  }
+  };
 }
