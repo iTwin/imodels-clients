@@ -18,22 +18,22 @@
     "@itwin/imodels-client-authoring": "~0.1.0-dev.1"
   },
   "peerDependencies": {
-    "@itwin/core-backend": "~3.0.0-dev.122",
-    "@bentley/itwin-client": "~3.0.0-dev.122",
-    "@itwin/core-bentley": "~3.0.0-dev.122",
-    "@itwin/core-common": "~3.0.0-dev.122",
-    "@itwin/core-geometry": "~3.0.0-dev.122",
-    "@itwin/ecschema-metadata": "~3.0.0-dev.122"
+    "@bentley/itwin-client": "~3.0.0-dev.129",
+    "@itwin/core-backend": "~3.0.0-dev.129",
+    "@itwin/core-bentley": "~3.0.0-dev.129",
+    "@itwin/core-common": "~3.0.0-dev.129",
+    "@itwin/core-geometry": "~3.0.0-dev.129",
+    "@itwin/ecschema-metadata": "~3.0.0-dev.129"
   },
   "devDependencies": {
-    "@itwin/core-backend": "~3.0.0-dev.122",
-    "@bentley/itwin-client": "~3.0.0-dev.122",
-    "@itwin/core-bentley": "~3.0.0-dev.122",
-    "@itwin/core-common": "~3.0.0-dev.122",
-    "@itwin/core-geometry": "~3.0.0-dev.122",
-    "@itwin/ecschema-metadata": "~3.0.0-dev.122",
+    "@bentley/itwin-client": "~3.0.0-dev.129",
+    "@itwin/core-backend": "~3.0.0-dev.129",
+    "@itwin/core-bentley": "~3.0.0-dev.129",
+    "@itwin/core-common": "~3.0.0-dev.129",
+    "@itwin/core-geometry": "~3.0.0-dev.129",
+    "@itwin/ecschema-metadata": "~3.0.0-dev.129",
     "@itwin/imodels-client-common-config": "~0.1.0-dev.1",
-    "typescript": "~4.3.5",
-    "@types/ws": "~8.2.0"
+    "@types/ws": "~8.2.0",
+    "typescript": "~4.3.5"
   }
 }
