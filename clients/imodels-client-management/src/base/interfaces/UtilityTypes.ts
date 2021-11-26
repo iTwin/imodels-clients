@@ -5,7 +5,7 @@
 import { EntityCollectionPage } from "./CommonInterfaces";
 
 export interface Dictionary<T> {
-  [key: string]: T
+  [key: string]: T;
 }
 
 export type RecursiveRequired<T> = Required<T> & { [P in keyof T]: RecursiveRequired<T[P]>; };
