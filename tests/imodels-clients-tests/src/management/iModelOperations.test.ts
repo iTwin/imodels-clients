@@ -229,7 +229,7 @@ describe("[Management] iModelOperations", () => {
       actualError: errorThrown!,
       expectedError: {
         code: iModelsErrorCode.InvalidiModelsRequest,
-        message: "Cannot create iModel.",
+        message: "Cannot create iModel. Details:\n1. InvalidValue: Provided 'description' is not valid. The value exceeds allowed 255 characters. Target: description.\n",
         details: [{
           code: iModelsErrorCode.InvalidValue,
           message: "Provided 'description' is not valid. The value exceeds allowed 255 characters.",
