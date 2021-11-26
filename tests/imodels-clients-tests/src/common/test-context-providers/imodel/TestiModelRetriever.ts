@@ -9,8 +9,7 @@ import { TestiModelFileProvider } from "./TestiModelFileProvider";
 import { BriefcaseMetadata, NamedVersionMetadata, ReusableiModelMetadata, TestiModelSetupContext, iModelIdParam, iModelIdentificationByNameParams } from "./TestiModelInterfaces";
 
 export class TestiModelRetriever {
-  public static async queryWithRelatedData(params: TestiModelSetupContext & iModelIdentificationByNameParams)
-    : Promise<ReusableiModelMetadata | undefined> {
+  public static async queryWithRelatedData(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<ReusableiModelMetadata | undefined> {
     const imodel = await TestiModelRetriever.findiModelByName(params);
     if (!imodel)
       return undefined;
@@ -44,10 +43,10 @@ export class TestiModelRetriever {
       throw new TestSetupError(`${namedVersions.length} is an unexpected named version count for reusable test iModel.`);
 
     const mappedNamedVersions = namedVersions
-      .map(namedVersion => ({
+      .map((namedVersion) => ({
         id: namedVersion.id,
         changesetId: namedVersion.changesetId!,
-        changesetIndex: TestiModelFileProvider.changesets.find(cs => cs.id === namedVersion.changesetId)!.index
+        changesetIndex: TestiModelFileProvider.changesets.find((cs) => cs.id === namedVersion.changesetId)!.index
       }))
       .sort((nv1, nv2) => nv1.changesetIndex - nv2.changesetIndex);
 

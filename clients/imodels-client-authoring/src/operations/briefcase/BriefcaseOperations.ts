@@ -16,7 +16,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Mana
     return briefcaseAcquireResponse.briefcase;
   }
 
-  public release(params: ReleaseBriefcaseParams): Promise<void> {
+  public async release(params: ReleaseBriefcaseParams): Promise<void> {
     return this.sendDeleteRequest({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/briefcases/${params.briefcaseId}`

@@ -57,7 +57,7 @@ export class PlatformToClientAdapter {
 
   public static toAuthorizationCallback(accessToken: AccessToken): AuthorizationCallback {
     const authorization: Authorization = PlatformToClientAdapter.toAuthorization(accessToken);
-    return () => Promise.resolve(authorization);
+    return async () => authorization;
   }
 
   public static toChangesetIdOrIndex(changeset: PlatformChangesetIdOrIndex): ClientChangesetIdOrIndex {
@@ -101,6 +101,8 @@ export class PlatformToClientAdapter {
   private static groupLocksByLockLevel(locks: LockMap): Map<LockLevel, string[]> {
     const result: Map<LockLevel, string[]> = new Map();
     for (const objectId in locks) {
+      if (!Object.prototype.hasOwnProperty.call(locks, objectId))
+        continue;
       const lockState: LockState = locks.get(objectId)!;
       const lockLevel: LockLevel = PlatformToClientAdapter.toLockLevel(lockState);
 

@@ -23,6 +23,6 @@ export class ReusableTestiModelProvider {
       await TestiModelRetriever.queryWithRelatedData(paramsWithiModelName) ??
       await TestiModelCreator.createReusable(paramsWithiModelName);
 
-    return ReusableTestiModelProvider._reusableiModel!;
+    return ReusableTestiModelProvider._reusableiModel;
   }
 }

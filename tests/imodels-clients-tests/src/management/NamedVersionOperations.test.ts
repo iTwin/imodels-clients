@@ -65,7 +65,7 @@ describe("[Management] NamedVersionOperations", () => {
       label: "representation",
       functionUnderTest: (params: GetNamedVersionListParams) => imodelsClient.NamedVersions.getRepresentationList(params)
     }
-  ].forEach(testCase => {
+  ].forEach((testCase) => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getNamedVersionListParams: GetNamedVersionListParams = {
@@ -82,7 +82,7 @@ describe("[Management] NamedVersionOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: namedVersions,
-        isEntityCountCorrect: count => count >= namedVersionCountCreatedInSetup
+        isEntityCountCorrect: (count) => count >= namedVersionCountCreatedInSetup
       });
     });
   });

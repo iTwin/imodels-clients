@@ -11,7 +11,7 @@ interface Project {
 }
 
 interface ProjectsResponse {
-  projects: Project[]
+  projects: Project[];
 }
 
 interface ProjectResponse {
