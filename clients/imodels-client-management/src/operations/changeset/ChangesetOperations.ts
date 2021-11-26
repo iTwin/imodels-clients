@@ -80,7 +80,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
 
   private async getNamedVersion(authorization: AuthorizationCallback, namedVersionLink: string | undefined): Promise<NamedVersion | undefined> {
     if (!namedVersionLink)
-      return Promise.resolve(undefined);
+      return undefined;
 
     const { imodelId, namedVersionId } = this._options.urlFormatter.parseNamedVersionUrl(namedVersionLink);
     return this._namedVersionOperations.getSingle({
@@ -92,7 +92,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
 
   private async getCurrentOrPrecedingCheckpoint(authorization: AuthorizationCallback, currentOrPrecedingCheckpointLink: string | undefined): Promise<Checkpoint | undefined> {
     if (!currentOrPrecedingCheckpointLink)
-      return Promise.resolve(undefined);
+      return undefined;
 
     const { imodelId, changesetIndex } = this._options.urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
     return this._checkpointOperations.getSingle({

@@ -19,7 +19,7 @@ export class TestAuthorizationProvider {
 
   private static async initializeAndGetAuthorization(testUser: TestUserConfigValues): Promise<AuthorizationCallback> {
     const accessToken = await TestAuthorizationProvider._imodelsApiAuthClient.getAccessToken(testUser);
-    TestAuthorizationProvider._authorizations[testUser.email] = async () => Promise.resolve({ scheme: "Bearer", token: accessToken });
+    TestAuthorizationProvider._authorizations[testUser.email] = async () => ({ scheme: "Bearer", token: accessToken });
 
     return TestAuthorizationProvider._authorizations[testUser.email];
   }
