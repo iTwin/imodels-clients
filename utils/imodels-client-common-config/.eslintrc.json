@@ -43,10 +43,6 @@
       "error",
       "always"
     ],
-    "complexity": [
-      "error",
-      4
-    ],
     "import/order": [
       "error",
       {
