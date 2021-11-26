@@ -101,7 +101,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
 
   private appendToQueryString(existingQueryString: string, parameterKey: string, parameterValue: UrlParameterValue): string {
     const separator = existingQueryString.length === 0 ? "?" : "&";
-    return `${existingQueryString  }${separator}${parameterKey}=${this.stringify(parameterValue)}`;
+    return `${existingQueryString}${separator}${parameterKey}=${this.stringify(parameterValue)}`;
   }
 
   private stringify(urlParameterValue: UrlParameterValue): string {

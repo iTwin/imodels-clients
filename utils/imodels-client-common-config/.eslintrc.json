@@ -43,6 +43,7 @@
       "error",
       "always"
     ],
+    "prefer-template": "error",
     "import/order": [
       "error",
       {
