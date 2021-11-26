@@ -6,7 +6,8 @@
   "plugins": [
     "@typescript-eslint",
     "@itwin",
-    "import"
+    "import",
+    "mocha"
   ],
   "extends": [
     "eslint:recommended",
@@ -146,6 +147,7 @@
         }
       }
     ],
-    "@itwin/no-internal-barrel-imports": "off"
+    "@itwin/no-internal-barrel-imports": "off",
+    "mocha/no-exclusive-tests": "error"
   }
 }

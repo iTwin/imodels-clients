@@ -25,6 +25,7 @@ dependencies:
   dotenv: 10.0.0
   eslint: 7.31.0
   eslint-plugin-import: 2.23.4_eslint@7.31.0
+  eslint-plugin-mocha: 9.0.0_eslint@7.31.0
   fs-extra: 10.0.0
   mocha: 9.0.3
   nyc: 14.0.0
@@ -2163,6 +2164,18 @@ packages:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7
     resolution:
       integrity: sha512-0rGPJBbwHoGNPU73/QCLP/vveMlM1b1Z9PponxO87jfr6tuH5ligXbDT6nHSSzBC8ovX2Z+BQu7Bk5D/Xgq9zg==
+  /eslint-plugin-mocha/9.0.0_eslint@7.31.0:
+    dependencies:
+      eslint: 7.31.0
+      eslint-utils: 3.0.0_eslint@7.31.0
+      ramda: 0.27.1
+    dev: false
+    engines:
+      node: '>=12.0.0'
+    peerDependencies:
+      eslint: '>=7.0.0'
+    resolution:
+      integrity: sha512-d7knAcQj1jPCzZf3caeBIn3BnW6ikcvfz0kSqQpwPYcVGLoJV5sz0l0OJB2LR8I7dvTDbqq1oV6ylhSgzA10zg==
   /eslint-plugin-prefer-arrow/1.2.3_eslint@7.31.0:
     dependencies:
       eslint: 7.31.0
@@ -4458,6 +4471,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
+  /ramda/0.27.1:
+    dev: false
+    resolution:
+      integrity: sha512-PgIdVpn5y5Yns8vqb8FzBUEYn98V3xcPgawAkkgj0YJ0qDsnHCiNmZYfOGMgOvoB0eWFLpYbhxUR3mxfDIMvpw==
   /random-bytes/1.0.0:
     dev: false
     engines:
@@ -5676,13 +5693,14 @@ packages:
       cspell: 5.6.7
       eslint: 7.31.0
       eslint-plugin-import: 2.23.4_eslint@7.31.0
+      eslint-plugin-mocha: 9.0.0_eslint@7.31.0
     dev: false
     id: 'file:projects/imodels-client-common-config.tgz'
     name: '@rush-temp/imodels-client-common-config'
     peerDependencies:
       typescript: '*'
     resolution:
-      integrity: sha512-l4RjHaORqOARavrEjB3wYaQDWX5tVSvjeGYZ09po/BPINLjHvN49EOFM6Cd19FqUepEOQno6YAp4Gxlb1qOkAA==
+      integrity: sha512-/9UxcV9G993nHwVEsd1R4EnWD+hPebQygA2qJokNiFjgepyAio21y5Wkha4zaGb2DRiwg6lY6c4AexNyv1hJbA==
       tarball: 'file:projects/imodels-client-common-config.tgz'
     version: 0.0.0
   'file:projects/imodels-client-management.tgz':
@@ -5743,6 +5761,7 @@ specifiers:
   dotenv: ~10.0.0
   eslint: ~7.31.0
   eslint-plugin-import: ~2.23.4
+  eslint-plugin-mocha: ~9.0.0
   fs-extra: ~10.0.0
   mocha: ~9.0.2
   nyc: 14.0.0
