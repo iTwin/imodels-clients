@@ -21,7 +21,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
     const getEntityPageFunc = () => this.getEntityCollectionPage<MinimalChangeset>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetsUrl(params),
+      url: this._options.urlFormatter.getChangesetListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as MinimalChangesetsResponse).changesets
     });
@@ -42,14 +42,15 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
 
   public async getSingle(params: GetSingleChangesetParams): Promise<Changeset> {
     const changeset: Changeset = await this.querySingleInternal(params);
-    const result: Changeset  = this.appendRelatedEntityCallbacks(params.authorization, changeset);
+    const result: Changeset = this.appendRelatedEntityCallbacks(params.authorization, changeset);
     return result;
   }
 
   protected async querySingleInternal(params: GetSingleChangesetParams): Promise<Changeset> {
+    const { authorization, imodelId, ...changesetIdOrIndex } = params;
     const response = await this.sendGetRequest<ChangesetResponse>({
-      authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetUrl(params)
+      authorization,
+      url: this._options.urlFormatter.getSingleChangesetUrl({ imodelId, ...changesetIdOrIndex })
     });
     return response.changeset;
   }
@@ -57,7 +58,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   protected getRepresentationListInternal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
     const getEntityPageFunc = () => this.getEntityCollectionPage<Changeset>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetsUrl(params),
+      url: this._options.urlFormatter.getChangesetListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse).changesets
     });

@@ -3,12 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
-import { AuthorizationParam, CollectionResponse, EntityCollectionPage, OrderBy, PreferReturn } from "./interfaces/CommonInterfaces";
+import { AuthorizationParam, CollectionResponse, EntityCollectionPage, PreferReturn } from "./interfaces/CommonInterfaces";
 import { Dictionary } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
-
-type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
-type UrlParameterValue = string | number | OrderByForAnyEntity;
 
 type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn };
 type SendPostRequestParams = AuthorizationParam & { url: string, body: unknown };
@@ -81,39 +78,5 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
       headers[Constants.headers.contentType] = Constants.headers.values.contentType;
 
     return headers;
-  }
-
-  protected formQueryString(urlParameters: Dictionary<UrlParameterValue> | undefined): string {
-    let queryString = "";
-    for (const urlParameterKey in urlParameters) {
-      const urlParameterValue = urlParameters[urlParameterKey];
-      if (!urlParameterValue)
-        continue;
-
-      queryString = this.appendToQueryString(queryString, urlParameterKey, urlParameterValue);
-    }
-
-    return queryString;
-  }
-
-  private appendToQueryString(existingQueryString: string, parameterKey: string, parameterValue: UrlParameterValue): string {
-    const separator = existingQueryString.length === 0 ? "?" : "&";
-    return existingQueryString + `${separator}${parameterKey}=${this.stringify(parameterValue)}`;
-  }
-
-  private stringify(urlParameterValue: UrlParameterValue): string {
-    if (this.isOrderBy(urlParameterValue)) {
-      let result: string = urlParameterValue.property;
-      if (urlParameterValue.operator)
-        result += ` ${urlParameterValue.operator}`;
-
-      return result;
-    }
-
-    return urlParameterValue.toString();
-  }
-
-  private isOrderBy(parameterValue: UrlParameterValue): parameterValue is OrderByForAnyEntity {
-    return (parameterValue as OrderByForAnyEntity).property !== undefined;
   }
 }
