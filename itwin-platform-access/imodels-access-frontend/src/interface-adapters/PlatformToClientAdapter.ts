@@ -19,6 +19,6 @@ export class PlatformToClientAdapter {
 
   public static toAuthorizationCallback(accessToken: AccessToken): AuthorizationCallback {
     const authorization: Authorization = PlatformToClientAdapter.toAuthorization(accessToken);
-    return () => Promise.resolve(authorization);
+    return async () => Promise.resolve(authorization);
   }
 }
