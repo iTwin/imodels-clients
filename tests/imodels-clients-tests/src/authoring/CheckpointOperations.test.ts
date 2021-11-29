@@ -106,7 +106,7 @@ describe("[Authoring] CheckpointOperations", () => {
   [
     {
       label: "by changeset id",
-      functionUnderTest: (params: iModelScopedOperationParams) => imodelsClient.Checkpoints.getSingle(
+      functionUnderTest: async (params: iModelScopedOperationParams) => imodelsClient.Checkpoints.getSingle(
         {
           ...params,
           changesetId: testiModelNamedVersion.changesetId
@@ -114,7 +114,7 @@ describe("[Authoring] CheckpointOperations", () => {
     },
     {
       label: "by changeset index",
-      functionUnderTest: (params: iModelScopedOperationParams) => imodelsClient.Checkpoints.getSingle(
+      functionUnderTest: async (params: iModelScopedOperationParams) => imodelsClient.Checkpoints.getSingle(
         {
           ...params,
           changesetIndex: testiModelNamedVersion.changesetIndex
@@ -122,13 +122,13 @@ describe("[Authoring] CheckpointOperations", () => {
     },
     {
       label: "by named version id",
-      functionUnderTest: (params: iModelScopedOperationParams) => imodelsClient.Checkpoints.getSingle(
+      functionUnderTest: async (params: iModelScopedOperationParams) => imodelsClient.Checkpoints.getSingle(
         {
           ...params,
           namedVersionId: testiModelNamedVersion.id
         })
     }
-  ].forEach(testCase => {
+  ].forEach((testCase) => {
     it(`should not find checkpoint ${testCase.label} if iModel does not exist`, async () => {
       // Arrange
       const imodelScopedOperationParams: iModelScopedOperationParams = {
@@ -137,7 +137,7 @@ describe("[Authoring] CheckpointOperations", () => {
       };
 
       // Act
-      let errorThrown: Error | undefined = undefined;
+      let errorThrown: Error | undefined;
       try {
         await testCase.functionUnderTest(imodelScopedOperationParams);
       } catch (e) {
@@ -159,7 +159,7 @@ describe("[Authoring] CheckpointOperations", () => {
   [
     {
       label: "by changeset id",
-      functionUnderTest: (params: iModelScopedOperationParams) => imodelsClient.Checkpoints.getSingle(
+      functionUnderTest: async (params: iModelScopedOperationParams) => imodelsClient.Checkpoints.getSingle(
         {
           ...params,
           changesetId: "invalidId"
@@ -167,13 +167,13 @@ describe("[Authoring] CheckpointOperations", () => {
     },
     {
       label: "by changeset index",
-      functionUnderTest: (params: iModelScopedOperationParams) => imodelsClient.Checkpoints.getSingle(
+      functionUnderTest: async (params: iModelScopedOperationParams) => imodelsClient.Checkpoints.getSingle(
         {
           ...params,
           changesetIndex: 1000
         })
     }
-  ].forEach(testCase => {
+  ].forEach((testCase) => {
     it(`should not find checkpoint ${testCase.label} if changeset does not exist`, async () => {
       // Arrange
       const imodelScopedOperationParams: iModelScopedOperationParams = {
@@ -182,7 +182,7 @@ describe("[Authoring] CheckpointOperations", () => {
       };
 
       // Act
-      let errorThrown: Error | undefined = undefined;
+      let errorThrown: Error | undefined;
       try {
         await testCase.functionUnderTest(imodelScopedOperationParams);
       } catch (e) {
@@ -210,7 +210,7 @@ describe("[Authoring] CheckpointOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined = undefined;
+    let errorThrown: Error | undefined;
     try {
       await imodelsClient.Checkpoints.getSingle(getSingleCheckpointParams);
     } catch (e) {

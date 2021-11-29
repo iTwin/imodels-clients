@@ -55,15 +55,15 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   }
 
   protected async getEntityCollectionPage<TEntity>(params: AuthorizationParam & {
-    url: string,
-    preferReturn?: PreferReturn,
-    entityCollectionAccessor: (response: unknown) => TEntity[]
+    url: string;
+    preferReturn?: PreferReturn;
+    entityCollectionAccessor: (response: unknown) => TEntity[];
   }): Promise<EntityCollectionPage<TEntity>> {
     const response = await this.sendGetRequest<CollectionResponse>(params);
     return {
       entities: params.entityCollectionAccessor(response),
       next: response._links.next
-        ? () => this.getEntityCollectionPage({ ...params, url: response._links.next!.href })
+        ? async () => this.getEntityCollectionPage({ ...params, url: response._links.next!.href })
         : undefined
     };
   }
@@ -86,6 +86,9 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   protected formQueryString(urlParameters: Dictionary<UrlParameterValue> | undefined): string {
     let queryString = "";
     for (const urlParameterKey in urlParameters) {
+      if (!Object.prototype.hasOwnProperty.call(urlParameters, urlParameterKey))
+        continue;
+
       const urlParameterValue = urlParameters[urlParameterKey];
       if (!urlParameterValue)
         continue;
@@ -98,7 +101,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
 
   private appendToQueryString(existingQueryString: string, parameterKey: string, parameterValue: UrlParameterValue): string {
     const separator = existingQueryString.length === 0 ? "?" : "&";
-    return existingQueryString + `${separator}${parameterKey}=${this.stringify(parameterValue)}`;
+    return `${existingQueryString}${separator}${parameterKey}=${this.stringify(parameterValue)}`;
   }
 
   private stringify(urlParameterValue: UrlParameterValue): string {

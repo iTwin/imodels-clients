@@ -8,7 +8,10 @@ import { URL } from "url";
 import { AnonymousCredential, BlobDownloadOptions, BlobGetPropertiesResponse, BlockBlobClient, BlockBlobParallelUploadOptions } from "@azure/storage-blob";
 import { DownloadFileParams, FileHandler, ProgressCallback, UploadFileParams } from "./FileHandler";
 
-type AzureProgressCallbackData = { loadedBytes: number; };
+interface AzureProgressCallbackData {
+  loadedBytes: number;
+}
+
 type AzureProgressCallback = (progress: AzureProgressCallbackData) => void;
 
 export class AzureSdkFileHandler implements FileHandler {
@@ -18,7 +21,7 @@ export class AzureSdkFileHandler implements FileHandler {
 
     const blockBlobClient = new BlockBlobClient(params.uploadUrl, new AnonymousCredential());
 
-    let uploadOptions: BlockBlobParallelUploadOptions | undefined = undefined;
+    let uploadOptions: BlockBlobParallelUploadOptions | undefined;
     if (params.progressCallback) {
       const fileSize = this.getFileSize(params.sourceFilePath);
       uploadOptions = {
@@ -35,7 +38,7 @@ export class AzureSdkFileHandler implements FileHandler {
 
     const blockBlobClient = new BlockBlobClient(params.downloadUrl, new AnonymousCredential());
 
-    let downloadOptions: BlobDownloadOptions | undefined = undefined;
+    let downloadOptions: BlobDownloadOptions | undefined;
     if (params.progressCallback) {
       const blobProperties: BlobGetPropertiesResponse = await blockBlobClient.getProperties();
       const fileSize = blobProperties.contentLength!;

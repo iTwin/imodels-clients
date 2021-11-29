@@ -64,7 +64,7 @@ describe("[Authoring] LockOperations", () => {
     // Assert
     await assertCollection({
       asyncIterable: locks,
-      isEntityCountCorrect: count => count === 1
+      isEntityCountCorrect: (count) => count === 1
     });
   });
 
@@ -205,7 +205,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined = undefined;
+    let errorThrown: Error | undefined;
     try {
       await imodelsClient.Locks.update(updateLockParams);
     } catch (e) {
@@ -238,7 +238,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined = undefined;
+    let errorThrown: Error | undefined;
     try {
       await imodelsClient.Locks.update(updateLockParams);
     } catch (e) {
@@ -271,7 +271,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined = undefined;
+    let errorThrown: Error | undefined;
     try {
       await imodelsClient.Locks.update(updateLockParams);
     } catch (e) {
@@ -308,10 +308,9 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined = undefined;
+    let errorThrown: Error | undefined;
     try {
-      const resp = await imodelsClient.Locks.update(updateLockParams);
-      console.log(resp);
+      await imodelsClient.Locks.update(updateLockParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -362,7 +361,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined = undefined;
+    let errorThrown: Error | undefined;
     try {
       await imodelsClient.Locks.update(updateLockParams2);
     } catch (e) {
@@ -412,7 +411,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined = undefined;
+    let errorThrown: Error | undefined;
     try {
       await imodelsClient.Locks.update(updateLockParams2);
     } catch (e) {

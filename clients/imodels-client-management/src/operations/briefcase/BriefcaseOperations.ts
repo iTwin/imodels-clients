@@ -8,7 +8,7 @@ import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOpe
 
 export class BriefcaseOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetBriefcaseListParams): AsyncIterableIterator<MinimalBriefcase> {
-    return getCollectionIterator(() => this.getEntityCollectionPage<MinimalBriefcase>({
+    return getCollectionIterator(async () => this.getEntityCollectionPage<MinimalBriefcase>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Minimal,
@@ -17,7 +17,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   }
 
   public getRepresentationList(params: GetBriefcaseListParams): AsyncIterableIterator<Briefcase> {
-    return getCollectionIterator(() => this.getEntityCollectionPage<Briefcase>({
+    return getCollectionIterator(async () => this.getEntityCollectionPage<Briefcase>({
       authorization: params.authorization,
       url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`,
       preferReturn: PreferReturn.Representation,

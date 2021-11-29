@@ -7,7 +7,7 @@ import { Config, TestUserConfigValues } from "../../Config";
 import { TestAuthenticationClient } from "./TestAuthenticationClient";
 
 export class TestAuthorizationProvider {
-  private static _authorizations: { [key: string]: AuthorizationCallback; } = {};
+  private static _authorizations: { [key: string]: AuthorizationCallback } = {};
   private static _imodelsApiAuthClient = new TestAuthenticationClient({
     ...Config.get().auth,
     scopes: Config.get().apis.imodels.scopes
@@ -19,7 +19,7 @@ export class TestAuthorizationProvider {
 
   private static async initializeAndGetAuthorization(testUser: TestUserConfigValues): Promise<AuthorizationCallback> {
     const accessToken = await TestAuthorizationProvider._imodelsApiAuthClient.getAccessToken(testUser);
-    TestAuthorizationProvider._authorizations[testUser.email] = () => Promise.resolve({ scheme: "Bearer", token: accessToken });
+    TestAuthorizationProvider._authorizations[testUser.email] = async () => ({ scheme: "Bearer", token: accessToken });
 
     return TestAuthorizationProvider._authorizations[testUser.email];
   }

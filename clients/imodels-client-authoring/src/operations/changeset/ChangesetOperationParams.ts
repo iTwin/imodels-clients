@@ -20,4 +20,4 @@ export interface CreateChangesetParams extends iModelScopedOperationParams {
 
 export type DownloadSingleChangesetParams = GetSingleChangesetParams & TargetDirectoryParam;
 
-export type DownloadChangesetListParams = iModelScopedOperationParams & TargetDirectoryParam & { urlParams?: Omit<GetChangesetListUrlParams, "$skip">; };
+export type DownloadChangesetListParams = iModelScopedOperationParams & TargetDirectoryParam & { urlParams?: Omit<GetChangesetListUrlParams, "$skip"> };

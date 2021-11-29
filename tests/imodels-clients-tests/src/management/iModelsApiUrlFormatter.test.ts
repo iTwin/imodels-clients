@@ -34,7 +34,7 @@ describe("iModelsApiUrlFormatter", () => {
     const changesetId = "changesetId";
 
     // Act
-    const changesetUrl = imodelsApiUrlFormatter.getChangesetUrl({ imodelId, changesetId: changesetId });
+    const changesetUrl = imodelsApiUrlFormatter.getChangesetUrl({ imodelId, changesetId });
 
     // Assert
     expect(changesetUrl).to.be.equal("https://api.bentley.com/imodels/imodelId/changesets/changesetId");
@@ -46,7 +46,7 @@ describe("iModelsApiUrlFormatter", () => {
     const changesetIndex = 5;
 
     // Act
-    const changesetUrl = imodelsApiUrlFormatter.getChangesetUrl({ imodelId, changesetIndex: changesetIndex });
+    const changesetUrl = imodelsApiUrlFormatter.getChangesetUrl({ imodelId, changesetIndex });
 
     // Assert
     expect(changesetUrl).to.be.equal("https://api.bentley.com/imodels/imodelId/changesets/5");
