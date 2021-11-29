@@ -183,7 +183,7 @@ describe("[Management] iModelsApiUrlFormatter", () => {
     [
       {
         label: "null",
-        valueUndexTest: null
+        valueUnderTest: null
       },
       {
         label: "undefined",
