@@ -5,7 +5,7 @@
 import { BentleyError, BentleyStatus } from "@itwin/core-bentley";
 import { ChangesetId, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
-import { AuthorizationCallback, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, MinimalChangeset, MinimalNamedVersion, OrderByOperator, iModelScopedOperationParams, iModelsClient, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, MinimalChangeset, MinimalNamedVersion, OrderByOperator, iModelScopedOperationParams, iModelsClient, take } from "@itwin/imodels-client-management";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class FrontendiModelsAccess implements FrontendHubAccess {
@@ -45,7 +45,7 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
     };
 
     const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._imodelsClient.Changesets.getMinimalList(getChangesetListParams);
-    const changesets: MinimalChangeset[] = await toArray(changesetsIterator);
+    const changesets: MinimalChangeset[] = await take(changesetsIterator, 1);
     const result = changesets.length === 0
       ? this._emptyChangesetId
       : changesets[0].id;
@@ -61,7 +61,7 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
     };
 
     const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this._imodelsClient.NamedVersions.getMinimalList(getNamedVersionListParams);
-    const namedVersions: MinimalNamedVersion[] = await toArray(namedVersionsIterator);
+    const namedVersions: MinimalNamedVersion[] = await take(namedVersionsIterator, 1);
     if (namedVersions.length === 0 || !namedVersions[0].changesetId)
       throw new BentleyError(BentleyStatus.ERROR, `Named version ${arg.versionName} not found`);
     return namedVersions[0].changesetId;
