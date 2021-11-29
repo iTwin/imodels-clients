@@ -100,13 +100,13 @@ export class iModelsApiUrlFormatter {
   }
 
   private shouldAppendToUrl(urlParameterValue: UrlParameterValue): boolean {
-    if (urlParameterValue === 0)
-      return true;
+    if (urlParameterValue === null || urlParameterValue === undefined)
+      return false;
 
     if (typeof urlParameterValue === "string" && !urlParameterValue.trim())
       return false;
 
-    return !!urlParameterValue;
+    return true;
   }
 
   private appendToQueryString(existingQueryString: string, parameterKey: string, parameterValue: UrlParameterValue): string {
