@@ -33,7 +33,7 @@ describe("[Management] BriefcaseOperations", () => {
       label: "representation",
       functionUnderTest: (params: GetBriefcaseListParams) => imodelsClient.Briefcases.getRepresentationList(params)
     }
-  ].forEach(testCase => {
+  ].forEach((testCase) => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getBriefcaseListParams: GetBriefcaseListParams = {
@@ -50,7 +50,7 @@ describe("[Management] BriefcaseOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: briefcases,
-        isEntityCountCorrect: count => count === 1
+        isEntityCountCorrect: (count) => count === 1
       });
     });
   });

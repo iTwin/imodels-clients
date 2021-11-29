@@ -52,15 +52,15 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   }
 
   protected async getEntityCollectionPage<TEntity>(params: AuthorizationParam & {
-    url: string,
-    preferReturn?: PreferReturn,
-    entityCollectionAccessor: (response: unknown) => TEntity[]
+    url: string;
+    preferReturn?: PreferReturn;
+    entityCollectionAccessor: (response: unknown) => TEntity[];
   }): Promise<EntityCollectionPage<TEntity>> {
     const response = await this.sendGetRequest<CollectionResponse>(params);
     return {
       entities: params.entityCollectionAccessor(response),
       next: response._links.next
-        ? () => this.getEntityCollectionPage({ ...params, url: response._links.next!.href })
+        ? async () => this.getEntityCollectionPage({ ...params, url: response._links.next!.href })
         : undefined
     };
   }

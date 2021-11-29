@@ -50,7 +50,6 @@ export class ClientToPlatformAdapter {
     };
   }
 
-
   private static toLockState(lockLevel: LockLevel): LockState {
     switch (lockLevel) {
       case LockLevel.None:

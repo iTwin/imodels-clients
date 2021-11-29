@@ -13,7 +13,7 @@ export class AxiosRestClient implements RestClient {
     this._parseErrorFunc = parseErrorFunc;
   }
 
-  public sendGetRequest<TResponse>(params: HttpRequestParams): Promise<TResponse> {
+  public async sendGetRequest<TResponse>(params: HttpRequestParams): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
@@ -23,7 +23,7 @@ export class AxiosRestClient implements RestClient {
       .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
   }
 
-  public sendPostRequest<TResponse>(params: HttpRequestWithBodyParams): Promise<TResponse> {
+  public async sendPostRequest<TResponse>(params: HttpRequestWithBodyParams): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
@@ -33,7 +33,7 @@ export class AxiosRestClient implements RestClient {
       .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
   }
 
-  public sendPatchRequest<TResponse>(params: HttpRequestWithBodyParams): Promise<TResponse> {
+  public async sendPatchRequest<TResponse>(params: HttpRequestWithBodyParams): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
@@ -43,7 +43,7 @@ export class AxiosRestClient implements RestClient {
       .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
   }
 
-  public sendDeleteRequest<TResponse>(params: HttpRequestParams): Promise<TResponse> {
+  public async sendDeleteRequest<TResponse>(params: HttpRequestParams): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };

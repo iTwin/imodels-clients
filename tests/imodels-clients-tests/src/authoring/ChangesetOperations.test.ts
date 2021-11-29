@@ -101,7 +101,7 @@ describe("[Authoring] ChangesetOperations", () => {
       expect(fs.readdirSync(downloadPath).length).to.equal(TestiModelFileProvider.changesets.length);
 
       for (const changeset of changesets) {
-        const changesetMetadata = TestiModelFileProvider.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
+        const changesetMetadata = TestiModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
         assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
@@ -138,7 +138,7 @@ describe("[Authoring] ChangesetOperations", () => {
       expect(changesets.map((changeset: DownloadedChangeset) => changeset.index)).to.have.members([6, 7, 8, 9, 10]);
 
       for (const changeset of changesets) {
-        const changesetMetadata = TestiModelFileProvider.changesets.find(changesetMetadata => changesetMetadata.index === changeset.index)!;
+        const changesetMetadata = TestiModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
         assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
@@ -157,7 +157,7 @@ describe("[Authoring] ChangesetOperations", () => {
         label: "id",
         changesetUnderTest: TestiModelFileProvider.changesets[0],
         get functionUnderTest() {
-          return (params: CommonDownloadParams) => imodelsClient.Changesets.downloadSingle(
+          return async (params: CommonDownloadParams) => imodelsClient.Changesets.downloadSingle(
             {
               ...params,
               changesetId: this.changesetUnderTest.id
@@ -168,14 +168,14 @@ describe("[Authoring] ChangesetOperations", () => {
         label: "index",
         changesetUnderTest: TestiModelFileProvider.changesets[0],
         get functionUnderTest() {
-          return (params: CommonDownloadParams) => imodelsClient.Changesets.downloadSingle(
+          return async (params: CommonDownloadParams) => imodelsClient.Changesets.downloadSingle(
             {
               ...params,
               changesetIndex: this.changesetUnderTest.index
             });
         }
       }
-    ].forEach(testCase => {
+    ].forEach((testCase) => {
       it(`should download changeset by ${testCase.label}`, async () => {
         // Arrange
         const downloadPath = Constants.TestDownloadDirectoryPath;
@@ -206,7 +206,7 @@ describe("[Authoring] ChangesetOperations", () => {
     [
       {
         label: "by id",
-        functionUnderTest: (client: iModelsClient, params: CommonDownloadParams) =>
+        functionUnderTest: async (client: iModelsClient, params: CommonDownloadParams) =>
           client.Changesets.downloadSingle({
             ...params,
             changesetId: TestiModelFileProvider.changesets[0].id
@@ -214,7 +214,7 @@ describe("[Authoring] ChangesetOperations", () => {
       },
       {
         label: "by index",
-        functionUnderTest: (client: iModelsClient, params: CommonDownloadParams) =>
+        functionUnderTest: async (client: iModelsClient, params: CommonDownloadParams) =>
           client.Changesets.downloadSingle({
             ...params,
             changesetIndex: TestiModelFileProvider.changesets[0].index
@@ -222,21 +222,21 @@ describe("[Authoring] ChangesetOperations", () => {
       },
       {
         label: "list",
-        functionUnderTest: (client: iModelsClient, params: CommonDownloadParams) =>
+        functionUnderTest: async (client: iModelsClient, params: CommonDownloadParams) =>
           client.Changesets
             .downloadList({
               ...params,
               urlParams: { afterIndex: 0, lastIndex: 1 }
             })
-            .then(changesets => changesets[0])
+            .then((changesets) => changesets[0])
       }
-    ].forEach(testCase => {
+    ].forEach((testCase) => {
       it(`should should retry changeset download if it fails the first time when downloading changeset ${testCase.label}`, async () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
         const azureSdkFileHandler = new AzureSdkFileHandler();
         let hasDownloadFailed = false;
-        const downloadStub = (params: DownloadFileParams) => {
+        const downloadStub = async (params: DownloadFileParams) => {
           fileTransferLog.recordDownload(params.downloadUrl);
 
           if (!hasDownloadFailed) {
@@ -278,7 +278,7 @@ describe("[Authoring] ChangesetOperations", () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
         const azureSdkFileHandler = new AzureSdkFileHandler();
-        const downloadStub = (params: DownloadFileParams) => {
+        const downloadStub = async (params: DownloadFileParams) => {
           fileTransferLog.recordDownload(params.downloadUrl);
           return azureSdkFileHandler.downloadFile(params);
         };

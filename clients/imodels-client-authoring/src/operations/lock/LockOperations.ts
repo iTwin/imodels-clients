@@ -9,7 +9,7 @@ import { GetLockListParams, UpdateLockParams } from "./LockOperationParams";
 
 export class LockOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getList(params: GetLockListParams): AsyncIterableIterator<Lock> {
-    return getCollectionIterator(() => this.getEntityCollectionPage<Lock>({
+    return getCollectionIterator(async () => this.getEntityCollectionPage<Lock>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getLockListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
       entityCollectionAccessor: (response: unknown) => (response as LocksResponse).locks

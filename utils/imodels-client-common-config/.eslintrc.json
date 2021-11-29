@@ -3,19 +3,22 @@
     "browser": true,
     "es2021": true
   },
+  "plugins": [
+    "@typescript-eslint",
+    "@itwin",
+    "import",
+    "mocha"
+  ],
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@itwin/itwinjs-recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "import"
-  ],
   "rules": {
     "indent": [
       "error",
@@ -40,6 +43,7 @@
       "error",
       "always"
     ],
+    "prefer-template": "error",
     "import/order": [
       "error",
       {
@@ -143,6 +147,8 @@
           "match": false
         }
       }
-    ]
+    ],
+    "@itwin/no-internal-barrel-imports": "off",
+    "mocha/no-exclusive-tests": "error"
   }
 }

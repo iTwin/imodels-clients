@@ -8,7 +8,7 @@ import { CreateEmptyiModelParams, DeleteiModelParams, GetSingleiModelParams, Get
 
 export class iModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
-    return getCollectionIterator(() => this.getEntityCollectionPage<MinimaliModel>({
+    return getCollectionIterator(async () => this.getEntityCollectionPage<MinimaliModel>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getiModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
@@ -17,7 +17,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
-    return getCollectionIterator(() => this.getEntityCollectionPage<iModel>({
+    return getCollectionIterator(async () => this.getEntityCollectionPage<iModel>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getiModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
@@ -42,7 +42,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
     return response.iModel;
   }
 
-  public delete(params: DeleteiModelParams): Promise<void> {
+  public async delete(params: DeleteiModelParams): Promise<void> {
     return this.sendDeleteRequest({
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleiModelUrl({ imodelId: params.imodelId }),

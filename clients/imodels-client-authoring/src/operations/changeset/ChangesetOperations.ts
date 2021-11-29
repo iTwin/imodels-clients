@@ -60,7 +60,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
       const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
       for (const changeset of changesetsWithFilePath)
-        queue.push(() => this.downloadChangesetFileWithRetry({
+        queue.push(async () => this.downloadChangesetFileWithRetry({
           authorization: params.authorization,
           imodelId: params.imodelId,
           changeset

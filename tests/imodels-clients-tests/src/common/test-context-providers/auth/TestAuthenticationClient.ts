@@ -32,7 +32,7 @@ export class TestAuthenticationClient {
       signIn: "#sign-in-button",
       consent: ".iui-button.iui-large.iui-high-visibility"
     }
-  }
+  };
 
   constructor(private _authConfig: AuthConfigValues & { scopes: string }) {
   }
@@ -107,7 +107,7 @@ export class TestAuthenticationClient {
     const requestConfig = {
       headers: {
         "content-type": "application/x-www-form-urlencoded",
-        Authorization: `Basic ${encodedClientCredentials}`
+        "Authorization": `Basic ${encodedClientCredentials}`
       }
     };
 
@@ -115,14 +115,13 @@ export class TestAuthenticationClient {
     return response.data.access_token;
   }
 
-
   private async interceptRedirectAndGetAuthorizationCode(browserPage: puppeteer.Page): Promise<string> {
     await browserPage.setRequestInterception(true);
     return new Promise<string>((resolve) => {
       browserPage.on("request", async (interceptedRequest) => {
         const currentRequestUrl = interceptedRequest.url();
         if (!currentRequestUrl.startsWith(this._authConfig.redirectUrl))
-          interceptedRequest.continue();
+          await interceptedRequest.continue();
         else {
           await this.respondSuccess(interceptedRequest);
           resolve(this.getCodeFromUrl(currentRequestUrl));

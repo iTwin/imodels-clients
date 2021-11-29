@@ -58,9 +58,14 @@ describe("[Management] iModelsApiUrlFormatter", () => {
       expect(singleBriefcaseUrl).to.equal("https://api.bentley.com/imodels/IMODEL_ID/briefcases/2");
     });
 
+<<<<<<< HEAD
     it("should format Briefcase list url", () => {
       // Arrange
       const getBriefcaseListUrlParams = { imodelId: "IMODEL_ID" };
+=======
+    // Act
+    const changesetUrl = imodelsApiUrlFormatter.getChangesetUrl({ imodelId, changesetIndex });
+>>>>>>> f432c54f9a8b6ac30a1b06e63dabfa52f07f819c
 
       // Act
       const briefcaseListUrl = imodelsApiUrlFormatter.getBriefcaseListUrl(getBriefcaseListUrlParams);

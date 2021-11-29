@@ -115,7 +115,7 @@ export class TestiModelCreator {
           description: TestiModelFileProvider.changesets[i].description,
           containingChanges: TestiModelFileProvider.changesets[i].containingChanges,
           id: TestiModelFileProvider.changesets[i].id,
-          parentId: i == 0
+          parentId: i === 0
             ? undefined
             : TestiModelFileProvider.changesets[i - 1].id,
           filePath: TestiModelFileProvider.changesets[i].filePath
@@ -142,8 +142,7 @@ export class TestiModelCreator {
     };
   }
 
-  private static async createNamedVersionOnChangesetIndex(params: TestiModelSetupContext & iModelIdParam & { changesetIndex: number })
-    : Promise<NamedVersionMetadata> {
+  private static async createNamedVersionOnChangesetIndex(params: TestiModelSetupContext & iModelIdParam & { changesetIndex: number }): Promise<NamedVersionMetadata> {
     const changesetMetadata = TestiModelFileProvider.changesets[params.changesetIndex - 1];
     const namedVersion = await params.imodelsClient.NamedVersions.create({
       authorization: params.authorization,
