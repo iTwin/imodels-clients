@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsApiUrlFormatter } from "@itwin/imodels-client-authoring";
 import { expect } from "chai";
+import { iModelsApiUrlFormatter } from "@itwin/imodels-client-authoring";
 
 describe("[Authoring] iModelsApiUrlFormatter", () => {
   let imodelsApiUrlFormatter: iModelsApiUrlFormatter;

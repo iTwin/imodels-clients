@@ -28,7 +28,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
   public async getSingle(params: GetSingleNamedVersionParams): Promise<NamedVersion> {
     const response = await this.sendGetRequest<NamedVersionResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleNamedVersionUrl({ imodelId: params.imodelId, namedVersionId: params.namedVersionId }),
+      url: this._options.urlFormatter.getSingleNamedVersionUrl({ imodelId: params.imodelId, namedVersionId: params.namedVersionId })
     });
     return response.namedVersion;
   }

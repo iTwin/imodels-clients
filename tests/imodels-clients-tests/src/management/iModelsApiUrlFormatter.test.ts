@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { iModelOrderByProperty, iModelsApiUrlFormatter, OrderByOperator } from "@itwin/imodels-client-management";
+import { OrderByOperator, iModelOrderByProperty, iModelsApiUrlFormatter } from "@itwin/imodels-client-management";
 
 describe("[Management] iModelsApiUrlFormatter", () => {
   let imodelsApiUrlFormatter: iModelsApiUrlFormatter;
@@ -44,7 +44,7 @@ describe("[Management] iModelsApiUrlFormatter", () => {
       // Assert
       expect(imodelListUrl).to.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID");
     });
-  })
+  });
 
   describe("Briefcase urls", () => {
     it("should format single Briefcase url", () => {
@@ -58,14 +58,9 @@ describe("[Management] iModelsApiUrlFormatter", () => {
       expect(singleBriefcaseUrl).to.equal("https://api.bentley.com/imodels/IMODEL_ID/briefcases/2");
     });
 
-<<<<<<< HEAD
     it("should format Briefcase list url", () => {
       // Arrange
       const getBriefcaseListUrlParams = { imodelId: "IMODEL_ID" };
-=======
-    // Act
-    const changesetUrl = imodelsApiUrlFormatter.getChangesetUrl({ imodelId, changesetIndex });
->>>>>>> f432c54f9a8b6ac30a1b06e63dabfa52f07f819c
 
       // Act
       const briefcaseListUrl = imodelsApiUrlFormatter.getBriefcaseListUrl(getBriefcaseListUrlParams);
@@ -109,7 +104,7 @@ describe("[Management] iModelsApiUrlFormatter", () => {
       expect(imodelId).to.be.equal("IMODEL_ID");
       expect(namedVersionId).to.be.equal("NAMED_VERSION_ID");
     });
-  })
+  });
 
   describe("Changeset urls", () => {
     it("should format changeset list url", () => {
@@ -196,11 +191,11 @@ describe("[Management] iModelsApiUrlFormatter", () => {
       },
       {
         label: "empty string",
-        valueUnderTest: "",
+        valueUnderTest: ""
       },
       {
         label: "whitespace string",
-        valueUnderTest: "  ",
+        valueUnderTest: "  "
       }
     ].forEach((testCase) => {
       it(`should not append param if it is ${testCase.label}`, () => {
@@ -220,7 +215,7 @@ describe("[Management] iModelsApiUrlFormatter", () => {
       });
     });
 
-    it(`should append param if it is equal to 0`, () => {
+    it("should append param if it is equal to 0", () => {
       // Arrange
       const getiModelListUrlParams = {
         urlParams: {

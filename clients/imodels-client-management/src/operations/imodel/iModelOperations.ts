@@ -28,7 +28,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   public async getSingle(params: GetSingleiModelParams): Promise<iModel> {
     const response = await this.sendGetRequest<iModelResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleiModelUrl({ imodelId: params.imodelId }),
+      url: this._options.urlFormatter.getSingleiModelUrl({ imodelId: params.imodelId })
     });
     return response.iModel;
   }
@@ -45,7 +45,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   public async delete(params: DeleteiModelParams): Promise<void> {
     return this.sendDeleteRequest({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleiModelUrl({ imodelId: params.imodelId }),
+      url: this._options.urlFormatter.getSingleiModelUrl({ imodelId: params.imodelId })
     });
   }
 }

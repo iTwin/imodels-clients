@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CheckpointParentEntityId, GetBriefcaseListUrlParams, GetiModelListUrlParams, GetNamedVersionListUrlParams } from ".";
 import { OrderBy } from "../base/interfaces/CommonInterfaces";
 import { Dictionary } from "../base/interfaces/UtilityTypes";
 import { ChangesetIdOrIndex, GetChangesetListUrlParams } from "./changeset/ChangesetOperationParams";
+import { CheckpointParentEntityId, GetBriefcaseListUrlParams, GetNamedVersionListUrlParams, GetiModelListUrlParams } from ".";
 
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
@@ -40,7 +40,7 @@ export class iModelsApiUrlFormatter {
   }
 
   public getBriefcaseListUrl(params: { imodelId: string, urlParams?: GetBriefcaseListUrlParams }): string {
-    return `${this.baseUri}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`
+    return `${this.baseUri}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`;
   }
 
   public getSingleChangesetUrl(params: { imodelId: string } & ChangesetIdOrIndex): string {
@@ -86,6 +86,9 @@ export class iModelsApiUrlFormatter {
   protected formQueryString(urlParameters: Dictionary<UrlParameterValue> | undefined): string {
     let queryString = "";
     for (const urlParameterKey in urlParameters) {
+      if (!Object.prototype.hasOwnProperty.call(urlParameters, urlParameterKey))
+        continue;
+
       const urlParameterValue = urlParameters[urlParameterKey];
       if (!this.shouldAppendToUrl(urlParameterValue))
         continue;
