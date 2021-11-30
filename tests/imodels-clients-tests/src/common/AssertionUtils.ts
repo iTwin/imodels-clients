@@ -9,8 +9,8 @@ import { Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreat
 import { TestiModelFileProvider } from "./test-context-providers/imodel/TestiModelFileProvider";
 
 export async function assertCollection<T>(params: {
-  asyncIterable: AsyncIterableIterator<T>,
-  isEntityCountCorrect: (count: number) => boolean
+  asyncIterable: AsyncIterableIterator<T>;
+  isEntityCountCorrect: (count: number) => boolean;
 }): Promise<void> {
   let entityCount = 0;
   for await (const entity of params.asyncIterable) {
@@ -21,8 +21,8 @@ export async function assertCollection<T>(params: {
 }
 
 export function assertiModel(params: {
-  actualiModel: iModel,
-  expectediModelProperties: iModelProperties
+  actualiModel: iModel;
+  expectediModelProperties: iModelProperties;
 }): void {
   expect(params.actualiModel).to.not.be.undefined;
   expect(params.actualiModel.id).to.not.be.empty;
@@ -31,13 +31,13 @@ export function assertiModel(params: {
   expect(params.actualiModel.name).to.equal(params.expectediModelProperties.name);
   assertOptionalProperty(params.expectediModelProperties.description, params.actualiModel.description);
   assertOptionalProperty(params.expectediModelProperties.extent, params.actualiModel.extent);
-  expect(params.actualiModel.createdDateTime as Date).to.not.be.undefined;
+  expect(params.actualiModel.createdDateTime).to.not.be.empty;
   expect(params.actualiModel.state).to.equal(iModelState.Initialized);
 }
 
 export function assertBriefcase(params: {
-  actualBriefcase: Briefcase,
-  expectedBriefcaseProperties: BriefcaseProperties & { briefcaseId?: number }
+  actualBriefcase: Briefcase;
+  expectedBriefcaseProperties: BriefcaseProperties & { briefcaseId?: number };
 }): void {
   expect(params.actualBriefcase).to.not.be.undefined;
   expect(params.actualBriefcase.id).to.not.be.empty;
@@ -51,12 +51,12 @@ export function assertBriefcase(params: {
 
   expect(params.actualBriefcase.fileSize).to.be.greaterThan(0);
   assertOptionalProperty(params.expectedBriefcaseProperties?.deviceName, params.actualBriefcase.deviceName);
-  expect(params.actualBriefcase.acquiredDateTime as Date).to.not.be.undefined;
+  expect(params.actualBriefcase.acquiredDateTime).to.not.be.empty;
 }
 
 export function assertChangeset(params: {
-  actualChangeset: Changeset,
-  expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>
+  actualChangeset: Changeset;
+  expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>;
 }): void {
   expect(params.actualChangeset).to.not.be.undefined;
   expect(params.actualChangeset.id).to.not.be.empty;
@@ -67,12 +67,12 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.briefcaseId).to.be.greaterThan(0);
   assertOptionalProperty(params.expectedChangesetProperties.description, params.actualChangeset.description);
   expect(params.actualChangeset.creatorId).to.not.be.undefined;
-  expect(params.actualChangeset.pushDateTime as Date).to.not.be.undefined;
+  expect(params.actualChangeset.pushDateTime).to.not.be.empty;
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
   expect(params.actualChangeset.synchronizationInfo).to.equal(null);
 
   // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
-  const expectedChangesetMetadata = TestiModelFileProvider.changesets.find(changeset => changeset.id === params.expectedChangesetProperties.id);
+  const expectedChangesetMetadata = TestiModelFileProvider.changesets.find((cs) => cs.id === params.expectedChangesetProperties.id);
   expect(params.actualChangeset.fileSize).to.equal(fs.statSync(expectedChangesetMetadata!.filePath).size);
 
   // TODO: add correct expected value when test client is set up
@@ -80,21 +80,21 @@ export function assertChangeset(params: {
 }
 
 export function assertDownloadedChangeset(params: {
-  actualChangeset: DownloadedChangeset,
-  expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>
+  actualChangeset: DownloadedChangeset;
+  expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>;
 }): void {
   assertChangeset(params);
 
   expect(fs.existsSync(params.actualChangeset.filePath)).to.equal(true);
 
   // Check if the downloaded file size matches the size of the changeset file used for test iModel creation
-  const expectedChangesetMetadata = TestiModelFileProvider.changesets.find(changeset => changeset.id === params.expectedChangesetProperties.id);
+  const expectedChangesetMetadata = TestiModelFileProvider.changesets.find((cs) => cs.id === params.expectedChangesetProperties.id);
   expect(fs.statSync(params.actualChangeset.filePath).size).to.equal(fs.statSync(expectedChangesetMetadata!.filePath).size);
 }
 
 export function assertNamedVersion(params: {
-  actualNamedVersion: NamedVersion,
-  expectedNamedVersionProperties: NamedVersionPropertiesForCreate
+  actualNamedVersion: NamedVersion;
+  expectedNamedVersionProperties: NamedVersionPropertiesForCreate;
 }): void {
   expect(params.actualNamedVersion).to.not.be.undefined;
   expect(params.actualNamedVersion.id).to.not.be.empty;
@@ -107,12 +107,12 @@ export function assertNamedVersion(params: {
 }
 
 export function assertCheckpoint(params: {
-  actualCheckpoint: Checkpoint,
+  actualCheckpoint: Checkpoint;
   expectedCheckpointProperties: {
-    changesetId: string,
-    changesetIndex: number
-    state: CheckpointState
-  }
+    changesetId: string;
+    changesetIndex: number;
+    state: CheckpointState;
+  };
 }): void {
   expect(params.actualCheckpoint.changesetId).to.equal(params.expectedCheckpointProperties.changesetId);
   expect(params.actualCheckpoint.changesetIndex).to.equal(params.expectedCheckpointProperties.changesetIndex);
@@ -128,19 +128,19 @@ export function assertCheckpoint(params: {
 }
 
 export function assertLock(params: {
-  actualLock: Lock,
-  expectedLock: Lock
+  actualLock: Lock;
+  expectedLock: Lock;
 }): void {
   expect(params.actualLock.briefcaseId).to.equal(params.expectedLock.briefcaseId);
 
   expect(params.actualLock.lockedObjects.length).to.equal(params.expectedLock.lockedObjects.length);
   for (const lockedObjects of params.actualLock.lockedObjects) {
-    const expectedLockedObjects = params.expectedLock.lockedObjects.find(l => l.lockLevel === lockedObjects.lockLevel);
+    const expectedLockedObjects = params.expectedLock.lockedObjects.find((l) => l.lockLevel === lockedObjects.lockLevel);
     expect(expectedLockedObjects).to.be.not.be.undefined;
 
     expect(lockedObjects.objectIds.length).to.equal(expectedLockedObjects!.objectIds.length);
     for (const objectId of lockedObjects.objectIds) {
-      const expectedLockedObjectId = expectedLockedObjects!.objectIds.find(id => id === objectId);
+      const expectedLockedObjectId = expectedLockedObjects!.objectIds.find((id) => id === objectId);
       expect(expectedLockedObjectId).to.not.be.undefined;
     }
   }

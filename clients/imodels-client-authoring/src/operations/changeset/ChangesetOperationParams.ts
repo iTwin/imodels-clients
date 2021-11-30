@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ContainingChanges, GetChangesetByIdParams, GetChangesetByIndexParams, GetChangesetListUrlParams, iModelScopedOperationParams } from "@itwin/imodels-client-management";
+import { ContainingChanges, GetChangesetListUrlParams, GetSingleChangesetParams, iModelScopedOperationParams } from "@itwin/imodels-client-management";
 import { TargetDirectoryParam } from "../../base";
 
 export interface ChangesetPropertiesForCreate {
@@ -18,8 +18,6 @@ export interface CreateChangesetParams extends iModelScopedOperationParams {
   changesetProperties: ChangesetPropertiesForCreate;
 }
 
-export type DownloadChangesetByIdParams = GetChangesetByIdParams & TargetDirectoryParam;
+export type DownloadSingleChangesetParams = GetSingleChangesetParams & TargetDirectoryParam;
 
-export type DownloadChangesetByIndexParams = GetChangesetByIndexParams & TargetDirectoryParam;
-
-export type DownloadChangesetListParams = iModelScopedOperationParams & TargetDirectoryParam & { urlParams?: Omit<GetChangesetListUrlParams, "$skip">; };
+export type DownloadChangesetListParams = iModelScopedOperationParams & TargetDirectoryParam & { urlParams?: Omit<GetChangesetListUrlParams, "$skip"> };

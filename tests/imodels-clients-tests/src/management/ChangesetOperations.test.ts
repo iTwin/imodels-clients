@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetByIdParams, GetChangesetListParams, OrderByOperator, iModelsClient, iModelsClientOptions,toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetSingleChangesetParams, OrderByOperator, iModelsClient, iModelsClientOptions,toArray } from "@itwin/imodels-client-management";
 import { Config, NamedVersionMetadata, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, assertChangeset, assertCollection } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
@@ -35,7 +35,7 @@ describe("[Management] ChangesetOperations", () => {
       label: "representation",
       functionUnderTest: (params: GetChangesetListParams) => imodelsClient.Changesets.getRepresentationList(params)
     }
-  ].forEach(testCase => {
+  ].forEach((testCase) => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getChangesetListParams: GetChangesetListParams = {
@@ -52,7 +52,7 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: changesets,
-        isEntityCountCorrect: count => count === TestiModelFileProvider.changesets.length
+        isEntityCountCorrect: (count) => count === TestiModelFileProvider.changesets.length
       });
     });
 
@@ -72,7 +72,7 @@ describe("[Management] ChangesetOperations", () => {
       const changesets = testCase.functionUnderTest(getChangesetListParams);
 
       // Assert
-      const changesetIndexes = (await toArray(changesets)).map(changeset => changeset.index);
+      const changesetIndexes = (await toArray(changesets)).map((changeset) => changeset.index);
       for (let i = 0; i < changesetIndexes.length - 1; i++)
         expect(changesetIndexes[i]).to.be.lessThan(changesetIndexes[i + 1]);
     });
@@ -94,7 +94,7 @@ describe("[Management] ChangesetOperations", () => {
       const changesets = testCase.functionUnderTest(getChangesetListParams);
 
       // Assert
-      const changesetIndexes = (await toArray(changesets)).map(changeset => changeset.index);
+      const changesetIndexes = (await toArray(changesets)).map((changeset) => changeset.index);
       for (let i = 0; i < changesetIndexes.length - 1; i++)
         expect(changesetIndexes[i]).to.be.greaterThan(changesetIndexes[i + 1]);
     });
@@ -116,7 +116,7 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: changesets,
-        isEntityCountCorrect: count => count === (getChangesetListParams.urlParams!.lastIndex! - getChangesetListParams.urlParams!.afterIndex!)
+        isEntityCountCorrect: (count) => count === (getChangesetListParams.urlParams!.lastIndex! - getChangesetListParams.urlParams!.afterIndex!)
       });
     });
 
@@ -139,7 +139,7 @@ describe("[Management] ChangesetOperations", () => {
       const changesets = testCase.functionUnderTest(getChangesetListParams);
 
       // Assert
-      const changesetIndexes = (await toArray(changesets)).map(changeset => changeset.index);
+      const changesetIndexes = (await toArray(changesets)).map((changeset) => changeset.index);
       expect(changesetIndexes).to.deep.equal([10, 9, 8, 7, 6]);
     });
   });
@@ -147,14 +147,14 @@ describe("[Management] ChangesetOperations", () => {
   it("should get changeset by id", async () => {
     // Arrange
     const expectedChangeset = TestiModelFileProvider.changesets[0];
-    const getChangesetByIdParams: GetChangesetByIdParams = {
+    const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
       imodelId: testiModel.id,
       changesetId: expectedChangeset.id
     };
 
     // Act
-    const changeset: Changeset = await imodelsClient.Changesets.getById(getChangesetByIdParams);
+    const changeset: Changeset = await imodelsClient.Changesets.getSingle(getSingleChangesetParams);
 
     // Assert
     assertChangeset({
@@ -202,14 +202,14 @@ describe("[Management] ChangesetOperations", () => {
 
     it("should contain a link to checkpoint when querying changeset by id", async () => {
       // Arrange
-      const getChangesetByIdParams: GetChangesetByIdParams = {
+      const getSingleChangesetParams: GetSingleChangesetParams = {
         authorization,
         imodelId: testiModel.id,
         changesetId: firstNamedVersion.changesetId
       };
 
       // Act
-      const changeset: Changeset = await imodelsClient.Changesets.getById(getChangesetByIdParams);
+      const changeset: Changeset = await imodelsClient.Changesets.getSingle(getSingleChangesetParams);
 
       // Assert
       const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();

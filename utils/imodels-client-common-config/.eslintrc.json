@@ -3,23 +3,29 @@
     "browser": true,
     "es2021": true
   },
+  "plugins": [
+    "@typescript-eslint",
+    "@itwin",
+    "import",
+    "mocha"
+  ],
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@itwin/itwinjs-recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "import"
-  ],
   "rules": {
     "indent": [
       "error",
-      2
+      2,
+      {
+        "SwitchCase": 1
+      }
     ],
     "linebreak-style": [
       "error",
@@ -37,6 +43,7 @@
       "error",
       "always"
     ],
+    "prefer-template": "error",
     "import/order": [
       "error",
       {
@@ -82,9 +89,6 @@
     "comma-dangle": [
       "error",
       "never"
-    ],
-    "require-await": [
-      "error"
     ],
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/naming-convention": [
@@ -143,6 +147,8 @@
           "match": false
         }
       }
-    ]
+    ],
+    "@itwin/no-internal-barrel-imports": "off",
+    "mocha/no-exclusive-tests": "error"
   }
 }

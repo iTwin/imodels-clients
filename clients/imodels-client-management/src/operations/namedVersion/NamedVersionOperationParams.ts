@@ -12,7 +12,7 @@ export interface GetNamedVersionListParams extends iModelScopedOperationParams {
   urlParams?: GetNamedVersionListUrlParams;
 }
 
-export interface GetNamedVersionByIdParams extends iModelScopedOperationParams {
+export interface GetSingleNamedVersionParams extends iModelScopedOperationParams {
   namedVersionId: string;
 }
 

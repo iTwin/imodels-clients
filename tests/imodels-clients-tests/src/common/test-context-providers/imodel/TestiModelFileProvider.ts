@@ -41,7 +41,7 @@ export class TestiModelFileProvider {
 
   private static initializeBaselineFile(): TestiModelBaselineFile {
     const fileNamesInDirectory = fs.readdirSync(this._imodelDataRootPath);
-    const bimFile = fileNamesInDirectory.find(fileName => fileName.indexOf(".bim") >= 0);
+    const bimFile = fileNamesInDirectory.find((fileName) => fileName.indexOf(".bim") >= 0);
     if (!bimFile)
       throw new TestSetupError("Baseline file for test iModel not found.");
 
@@ -61,7 +61,7 @@ export class TestiModelFileProvider {
     if (!changesetDescriptorFile?.changesets)
       throw new TestSetupError("Changeset descriptor file does not contain expected data.");
 
-    this._changesetFiles = changesetDescriptorFile.changesets.map(cs => {
+    this._changesetFiles = changesetDescriptorFile.changesets.map((cs) => {
       const changesetFilePath = `${this._imodelDataRootPath}/changesets/${cs.fileName}`;
       if (!fs.existsSync(changesetFilePath))
         throw new TestSetupError("Changeset file for test iModel not found.");

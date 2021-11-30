@@ -9,9 +9,9 @@ export class TestiModelGroup {
 
   constructor(params: {
     labels: {
-      package: string,
-      testSuite?: string,
-    }
+      package: string;
+      testSuite?: string;
+    };
   }) {
     this._imodelNamePrefix = `[${getTestRunId()}][${params.labels.package}]`;
     if (params.labels.testSuite)

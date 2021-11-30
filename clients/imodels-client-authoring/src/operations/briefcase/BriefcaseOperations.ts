@@ -10,16 +10,16 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Mana
   public async acquire(params: AcquireBriefcaseParams): Promise<Briefcase> {
     const briefcaseAcquireResponse = await this.sendPostRequest<BriefcaseResponse>({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/briefcases`,
+      url: this._options.urlFormatter.getBriefcaseListUrl({ imodelId: params.imodelId }),
       body: params.briefcaseProperties
     });
     return briefcaseAcquireResponse.briefcase;
   }
 
-  public release(params: ReleaseBriefcaseParams): Promise<void> {
+  public async release(params: ReleaseBriefcaseParams): Promise<void> {
     return this.sendDeleteRequest({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/briefcases/${params.briefcaseId}`
+      url: this._options.urlFormatter.getSingleBriefcaseUrl({ imodelId: params.imodelId, briefcaseId: params.briefcaseId })
     });
   }
 }

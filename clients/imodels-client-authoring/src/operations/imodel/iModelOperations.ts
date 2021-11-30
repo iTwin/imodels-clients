@@ -22,7 +22,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
     const { filePath: imodelFilePath, ...imodelMetadataProperties } = params.imodelProperties;
     const imodelCreateResponse = await this.sendPostRequest<iModelCreateResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.baseUri,
+      url: this._options.urlFormatter.getCreateiModelUrl(),
       body: {
         ...imodelMetadataProperties,
         baselineFile: {
@@ -45,7 +45,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
       authorization: params.authorization,
       imodelId: imodelCreateResponse.iModel.id
     });
-    return this.getById({
+    return this.getSingle({
       authorization: params.authorization,
       imodelId: imodelCreateResponse.iModel.id
     });
@@ -55,7 +55,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
     const sleepPeriodInMs = Constants.time.sleepPeriodInMs;
     const timeOutInMs = params.timeOutInMs ?? Constants.time.imodelInitiazationTimeOutInMs;
     for (let retries = Math.ceil(timeOutInMs / sleepPeriodInMs); retries > 0; --retries) {
-      const baselineFileState = (await this._baselineFileOperations.getByiModelId(params)).state;
+      const baselineFileState = (await this._baselineFileOperations.getSingle(params)).state;
 
       if (baselineFileState === BaselineFileState.Initialized)
         return;
