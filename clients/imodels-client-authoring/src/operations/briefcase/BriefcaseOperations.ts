@@ -3,9 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Briefcase, BriefcaseResponse, BriefcaseOperations as ManagementBriefcaseOperations } from "@itwin/imodels-client-management";
-import { BriefcaseProperties } from "..";
 import { OperationOptions } from "../OperationOptions";
-import { AcquireBriefcaseParams, ReleaseBriefcaseParams } from "./BriefcaseOperationParams";
+import { AcquireBriefcaseParams, BriefcaseProperties, ReleaseBriefcaseParams } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<TOptions extends OperationOptions> extends ManagementBriefcaseOperations<TOptions> {
   public async acquire(params: AcquireBriefcaseParams): Promise<Briefcase> {
