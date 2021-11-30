@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { MinimaliModel, OperationsBase, PreferReturn, getCollectionIterator, iModel, iModelResponse, iModelsResponse } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateEmptyiModelParams, DeleteiModelParams, GetSingleiModelParams, GetiModelListParams } from "./iModelOperationParams";
+import { CreateEmptyiModelParams, DeleteiModelParams, GetSingleiModelParams, GetiModelListParams, iModelProperties } from "./iModelOperationParams";
 
 export class iModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
@@ -34,12 +34,13 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   public async createEmpty(params: CreateEmptyiModelParams): Promise<iModel> {
-    const response = await this.sendPostRequest<iModelResponse>({
+    const createiModelBody = this.getCreateEmptyiModelRequestBody(params.imodelProperties);
+    const createiModelResponse = await this.sendPostRequest<iModelResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getCreateiModelUrl(),
-      body: params.imodelProperties
+      body: createiModelBody
     });
-    return response.iModel;
+    return createiModelResponse.iModel;
   }
 
   public async delete(params: DeleteiModelParams): Promise<void> {
@@ -47,5 +48,14 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleiModelUrl({ imodelId: params.imodelId })
     });
+  }
+
+  protected getCreateEmptyiModelRequestBody(imodelProperties: iModelProperties): object {
+    return {
+      projectId: imodelProperties.projectId,
+      name: imodelProperties.name,
+      description: imodelProperties.description,
+      extent: imodelProperties.extent
+    };
   }
 }
