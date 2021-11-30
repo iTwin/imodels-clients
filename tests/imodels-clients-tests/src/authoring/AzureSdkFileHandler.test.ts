@@ -119,7 +119,7 @@ describe("AzureSdkFileHandler", () => {
     const urlFormatter = new iModelsApiUrlFormatter(testClientOptions.api.baseUri!);
     const authorizationValue = await authorization();
     const changesetMetadataCreateResponse = await restClient.sendPostRequest<ChangesetResponse>({
-      url: urlFormatter.getChangesetsUrl({ imodelId: testiModelForWrite.id }),
+      url: urlFormatter.getChangesetListUrl({ imodelId: testiModelForWrite.id }),
       headers: {
         Authorization: `${authorizationValue.scheme} ${authorizationValue.token}`
       },

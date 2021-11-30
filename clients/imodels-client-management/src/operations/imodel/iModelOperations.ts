@@ -10,7 +10,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
     return getCollectionIterator(async () => this.getEntityCollectionPage<MinimaliModel>({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}${this.formQueryString({ ...params.urlParams })}`,
+      url: this._options.urlFormatter.getiModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as iModelsResponse<MinimaliModel>).iModels
     }));
@@ -19,7 +19,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
     return getCollectionIterator(async () => this.getEntityCollectionPage<iModel>({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}${this.formQueryString({ ...params.urlParams })}`,
+      url: this._options.urlFormatter.getiModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as iModelsResponse<iModel>).iModels
     }));
@@ -28,7 +28,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   public async getSingle(params: GetSingleiModelParams): Promise<iModel> {
     const response = await this.sendGetRequest<iModelResponse>({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}`
+      url: this._options.urlFormatter.getSingleiModelUrl({ imodelId: params.imodelId })
     });
     return response.iModel;
   }
@@ -36,7 +36,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   public async createEmpty(params: CreateEmptyiModelParams): Promise<iModel> {
     const response = await this.sendPostRequest<iModelResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.baseUri,
+      url: this._options.urlFormatter.getCreateiModelUrl(),
       body: params.imodelProperties
     });
     return response.iModel;
@@ -45,7 +45,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   public async delete(params: DeleteiModelParams): Promise<void> {
     return this.sendDeleteRequest({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}`
+      url: this._options.urlFormatter.getSingleiModelUrl({ imodelId: params.imodelId })
     });
   }
 }

@@ -13,7 +13,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     const { filePath: changesetFilePath, ...changesetMetadataProperties } = params.changesetProperties;
     const changesetCreateResponse = await this.sendPostRequest<ChangesetResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetsUrl(params),
+      url: this._options.urlFormatter.getChangesetListUrl({ imodelId: params.imodelId }),
       body: {
         ...changesetMetadataProperties,
         fileSize: this._options.fileHandler.getFileSize(changesetFilePath)

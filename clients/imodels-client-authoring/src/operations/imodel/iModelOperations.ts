@@ -22,7 +22,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
     const { filePath: imodelFilePath, ...imodelMetadataProperties } = params.imodelProperties;
     const imodelCreateResponse = await this.sendPostRequest<iModelCreateResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.baseUri,
+      url: this._options.urlFormatter.getCreateiModelUrl(),
       body: {
         ...imodelMetadataProperties,
         baselineFile: {
