@@ -32,5 +32,5 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Mana
     return {
       deviceName: briefcaseProperties.deviceName
     };
-  };
+  }
 }

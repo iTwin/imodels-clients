@@ -62,10 +62,10 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
   }
 
   private getUpdateNamedVersionRequestBody(namedVersionProperties: NamedVersionPropertiesForUpdate): object {
-   return {
-    name: namedVersionProperties.name,
-    description: namedVersionProperties.description,
-    state: namedVersionProperties.state
-   }
+    return {
+      name: namedVersionProperties.name,
+      description: namedVersionProperties.description,
+      state: namedVersionProperties.state
+    };
   }
 }

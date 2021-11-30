@@ -52,7 +52,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
       baselineFile: {
         size: this._options.fileHandler.getFileSize(imodelProperties.filePath)
       }
-    }
+    };
   }
 
   private async waitForBaselineFileInitialization(params: AuthorizationParam & { imodelId: string, timeOutInMs?: number }): Promise<void> {
