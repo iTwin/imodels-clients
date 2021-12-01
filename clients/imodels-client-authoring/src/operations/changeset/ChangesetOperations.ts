@@ -5,35 +5,29 @@
 import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
 import { DownloadedChangeset, TargetDirectoryParam } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams } from "./ChangesetOperationParams";
+import { ChangesetPropertiesForCreate, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams } from "./ChangesetOperationParams";
 import { LimitedParallelQueue } from "./LimitedParallelQueue";
 
 export class ChangesetOperations<TOptions extends OperationOptions> extends ManagementChangesetOperations<TOptions>{
   public async create(params: CreateChangesetParams): Promise<Changeset> {
-    const { filePath: changesetFilePath, ...changesetMetadataProperties } = params.changesetProperties;
-    const changesetCreateResponse = await this.sendPostRequest<ChangesetResponse>({
+    const createChangesetBody = this.getCreateChangesetRequestBody(params.changesetProperties);
+    const createChangesetResponse = await this.sendPostRequest<ChangesetResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ imodelId: params.imodelId }),
-      body: {
-        ...changesetMetadataProperties,
-        fileSize: this._options.fileHandler.getFileSize(changesetFilePath)
-      }
+      body: createChangesetBody
     });
 
-    const uploadUrl = changesetCreateResponse.changeset._links.upload.href;
-    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: changesetFilePath });
+    const uploadUrl = createChangesetResponse.changeset._links.upload.href;
+    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.changesetProperties.filePath });
 
-    const completeUrl = changesetCreateResponse.changeset._links.complete.href;
-    const changesetUpdateResponse = await this.sendPatchRequest<ChangesetResponse>({
+    const confirmUploadBody = this.getConfirmUploadRequestBody(params.changesetProperties);
+    const confirmUploadResponse = await this.sendPatchRequest<ChangesetResponse>({
       authorization: params.authorization,
-      url: completeUrl,
-      body: {
-        state: ChangesetState.FileUploaded,
-        briefcaseId: params.changesetProperties.briefcaseId
-      }
+      url: createChangesetResponse.changeset._links.complete.href,
+      body: confirmUploadBody
     });
 
-    return changesetUpdateResponse.changeset;
+    return confirmUploadResponse.changeset;
   }
 
   public async downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset> {
@@ -69,6 +63,24 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     }
 
     return result;
+  }
+
+  private getCreateChangesetRequestBody(changesetProperties: ChangesetPropertiesForCreate): object {
+    return {
+      id: changesetProperties.id,
+      description: changesetProperties.description,
+      parentId: changesetProperties.parentId,
+      briefcaseId: changesetProperties.briefcaseId,
+      containingChanges: changesetProperties.containingChanges,
+      fileSize: this._options.fileHandler.getFileSize(changesetProperties.filePath)
+    };
+  }
+
+  private getConfirmUploadRequestBody(changesetProperties: ChangesetPropertiesForCreate): object {
+    return {
+      state: ChangesetState.FileUploaded,
+      briefcaseId: changesetProperties.briefcaseId
+    };
   }
 
   private async downloadSingleChangeset(params: iModelScopedOperationParams & TargetDirectoryParam & { changeset: Changeset }): Promise<DownloadedChangeset> {
