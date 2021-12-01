@@ -65,7 +65,7 @@ jobs:
         PathtoPublish: '$(Build.SourcesDirectory)/common/temp/artifacts/packages'
         ArtifactName: packages
 
-    - script: node common/scripts/install-run-rush.js publish --publish --include-all --set-access-level public --npm-auth-token $(npmToken)
+    - script: node common/scripts/install-run-rush.js publish --publish --include-all --set-access-level public
       displayName: rush publish package
       condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ${{ parameters.shouldPublish }} )
       env:
