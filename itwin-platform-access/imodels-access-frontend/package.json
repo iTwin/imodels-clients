@@ -19,25 +19,19 @@
   },
   "peerDependencies": {
     "@itwin/core-frontend": "~3.0.0-dev.129",
-    "@itwin/core-geometry": "~3.0.0-dev.129",
-    "@itwin/appui-abstract": "~3.0.0-dev.129",
-    "@itwin/core-orbitgt": "~3.0.0-dev.129",
-    "@itwin/core-quantity": "~3.0.0-dev.129",
-    "@bentley/itwin-client": "~3.0.0-dev.129",
-    "@itwin/webgl-compatibility": "~3.0.0-dev.129",
     "@itwin/core-bentley": "~3.0.0-dev.129",
     "@itwin/core-common": "~3.0.0-dev.129"
   },
   "devDependencies": {
     "@itwin/core-frontend": "~3.0.0-dev.129",
+    "@itwin/core-bentley": "~3.0.0-dev.129",
+    "@itwin/core-common": "~3.0.0-dev.129",
     "@itwin/core-geometry": "~3.0.0-dev.129",
     "@itwin/appui-abstract": "~3.0.0-dev.129",
     "@itwin/core-orbitgt": "~3.0.0-dev.129",
     "@itwin/core-quantity": "~3.0.0-dev.129",
     "@bentley/itwin-client": "~3.0.0-dev.129",
     "@itwin/webgl-compatibility": "~3.0.0-dev.129",
-    "@itwin/core-bentley": "~3.0.0-dev.129",
-    "@itwin/core-common": "~3.0.0-dev.129",
     "@itwin/imodels-client-common-config": "~0.1.0-dev.1",
     "typescript": "~4.3.5"
   }

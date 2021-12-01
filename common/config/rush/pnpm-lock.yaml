@@ -20,8 +20,8 @@ dependencies:
   '@rush-temp/imodels-clients-tests': 'file:projects/imodels-clients-tests.tgz'
   '@types/chai': 4.2.22
   '@types/mocha': 9.0.0
-  '@types/node': 16.11.10
-  '@types/ws': 8.2.0
+  '@types/node': 16.11.11
+  '@types/ws': 8.2.1
   '@typescript-eslint/eslint-plugin': 4.28.5_514553717ff968e20f6d1c6e521f8616
   '@typescript-eslint/parser': 4.28.5_eslint@7.31.0+typescript@4.3.5
   axios: 0.21.4
@@ -217,7 +217,7 @@ packages:
       integrity: sha512-6V0qdPUaiVHH3RtZeLIsc+6pDhbYzHR8ogA8w+f+Wc77DuXto19g2QUwveINoS34Uw+W8/hQDGJCx+i4n7xcng==
   /@babel/runtime-corejs3/7.16.3:
     dependencies:
-      core-js-pure: 3.19.1
+      core-js-pure: 3.19.2
       regenerator-runtime: 0.13.9
     dev: false
     engines:
@@ -738,34 +738,34 @@ packages:
       integrity: sha512-scN0hAWyLVAvLR9AyW7HoFF5sJZglyBsbPuHO4fv7JRvfmPBMfp1ozWqOf/e4wwPNxezBZXRfWzMb6iFLgEVRA==
   /@types/node-fetch/2.5.12:
     dependencies:
-      '@types/node': 16.11.10
+      '@types/node': 16.11.11
       form-data: 3.0.1
     dev: false
     resolution:
       integrity: sha512-MKgC4dlq4kKNa/mYrwpKfzQMB5X3ee5U6fSprkKpToBqBmX4nFZL9cW5jl6sWn+xpRJ7ypWh2yyqqr8UUCstSw==
-  /@types/node/16.11.10:
+  /@types/node/16.11.11:
     dev: false
     resolution:
-      integrity: sha512-3aRnHa1KlOEEhJ6+CvyHKK5vE9BcLGjtUpwvqYLRvYNQKMfabu3BwfJaA/SLW8dxe28LsNDjtHwePTuzn3gmOA==
+      integrity: sha512-KB0sixD67CeecHC33MYn+eYARkqTheIRNuu97y2XMjR7Wu3XibO1vaY6VBV6O/a89SPI81cEUIYT87UqUWlZNw==
   /@types/parse-json/4.0.0:
     dev: false
     resolution:
       integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
   /@types/tunnel/0.0.3:
     dependencies:
-      '@types/node': 16.11.10
+      '@types/node': 16.11.11
     dev: false
     resolution:
       integrity: sha512-sOUTGn6h1SfQ+gbgqC364jLFBw2lnFqkgF3q0WovEHRLMrVD1sd5aufqi/aJObLekJO+Aq5z646U4Oxy6shXMA==
-  /@types/ws/8.2.0:
+  /@types/ws/8.2.1:
     dependencies:
-      '@types/node': 16.11.10
+      '@types/node': 16.11.11
     dev: false
     resolution:
-      integrity: sha512-cyeefcUCgJlEk+hk2h3N+MqKKsPViQgF5boi9TTHSK+PoR9KWBb/C5ccPcDyAqgsbAYHTwulch725DV84+pSpg==
+      integrity: sha512-SqQ+LhVZaJi7c7sYVkjWALDigi/Wy7h7Iu72gkQp8Y8OWw/DddEVBrTSKu86pQftV2+Gm8lYM61hadPKqyaIeg==
   /@types/yauzl/2.9.2:
     dependencies:
-      '@types/node': 16.11.10
+      '@types/node': 16.11.11
     dev: false
     optional: true
     resolution:
@@ -1678,11 +1678,11 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
-  /core-js-pure/3.19.1:
+  /core-js-pure/3.19.2:
     dev: false
     requiresBuild: true
     resolution:
-      integrity: sha512-Q0Knr8Es84vtv62ei6/6jXH/7izKmOrtrxH9WJTHLCMAVeU+8TF8z8Nr08CsH4Ot0oJKzBzJJL9SJBYIv7WlfQ==
+      integrity: sha512-5LkcgQEy8pFeVnd/zomkUBSwnmIxuF1C8E9KrMAbOc8f34IBT9RGvTYeNDdp1PnvMJrrVhvk1hg/yVV5h/znlg==
   /core-js/2.6.12:
     deprecated: 'core-js@<3.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Please, upgrade your dependencies to the actual version of core-js.'
     dev: false
@@ -2378,7 +2378,7 @@ packages:
       semver: 7.3.5
       strip-ansi: 6.0.1
       strip-json-comments: 3.1.1
-      table: 6.7.3
+      table: 6.7.5
       text-table: 0.2.0
       v8-compile-cache: 2.3.0
     dev: false
@@ -5238,7 +5238,7 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==
-  /table/6.7.3:
+  /table/6.7.5:
     dependencies:
       ajv: 8.8.2
       lodash.truncate: 4.4.2
@@ -5249,7 +5249,7 @@ packages:
     engines:
       node: '>=10.0.0'
     resolution:
-      integrity: sha512-5DkIxeA7XERBqMwJq0aHZOdMadBx4e6eDoFRuyT5VR82J0Ycg2DwM6GfA/EQAhJ+toRTaS1lIdSQCqgrmhPnlw==
+      integrity: sha512-LFNeryOqiQHqCVKzhkymKwt6ozeRhlm8IL1mE8rNUurkir4heF6PzMyRgaTa4tlyPTGGgXuvVOF/OLWiH09Lqw==
   /tar-fs/2.0.0:
     dependencies:
       chownr: 1.1.4
@@ -5795,7 +5795,7 @@ packages:
       '@itwin/core-common': 3.0.0-dev.129_fba9adde7c8d70fed20df14ccee78233
       '@itwin/core-geometry': 3.0.0-dev.129
       '@itwin/ecschema-metadata': 3.0.0-dev.129_133b422ff0fdd83c24a0ec3b0d1e3ef4
-      '@types/ws': 8.2.0
+      '@types/ws': 8.2.1
       typescript: 4.3.5
     dev: false
     name: '@rush-temp/imodels-access-backend'
@@ -5863,7 +5863,7 @@ packages:
     dependencies:
       '@types/chai': 4.2.22
       '@types/mocha': 9.0.0
-      '@types/node': 16.11.10
+      '@types/node': 16.11.11
       axios: 0.21.4
       chai: 4.3.4
       cpx: 1.5.0
