@@ -35,7 +35,7 @@ describe("[Management] ChangesetOperations", () => {
       label: "representation",
       functionUnderTest: (params: GetChangesetListParams) => imodelsClient.Changesets.getRepresentationList(params)
     }
-  ].forEach(testCase => {
+  ].forEach((testCase) => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getChangesetListParams: GetChangesetListParams = {
@@ -52,7 +52,7 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: changesets,
-        isEntityCountCorrect: count => count === TestiModelFileProvider.changesets.length
+        isEntityCountCorrect: (count) => count === TestiModelFileProvider.changesets.length
       });
     });
 
@@ -72,7 +72,7 @@ describe("[Management] ChangesetOperations", () => {
       const changesets = testCase.functionUnderTest(getChangesetListParams);
 
       // Assert
-      const changesetIndexes = (await toArray(changesets)).map(changeset => changeset.index);
+      const changesetIndexes = (await toArray(changesets)).map((changeset) => changeset.index);
       for (let i = 0; i < changesetIndexes.length - 1; i++)
         expect(changesetIndexes[i]).to.be.lessThan(changesetIndexes[i + 1]);
     });
@@ -94,7 +94,7 @@ describe("[Management] ChangesetOperations", () => {
       const changesets = testCase.functionUnderTest(getChangesetListParams);
 
       // Assert
-      const changesetIndexes = (await toArray(changesets)).map(changeset => changeset.index);
+      const changesetIndexes = (await toArray(changesets)).map((changeset) => changeset.index);
       for (let i = 0; i < changesetIndexes.length - 1; i++)
         expect(changesetIndexes[i]).to.be.greaterThan(changesetIndexes[i + 1]);
     });
@@ -116,7 +116,7 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: changesets,
-        isEntityCountCorrect: count => count === (getChangesetListParams.urlParams!.lastIndex! - getChangesetListParams.urlParams!.afterIndex!)
+        isEntityCountCorrect: (count) => count === (getChangesetListParams.urlParams!.lastIndex! - getChangesetListParams.urlParams!.afterIndex!)
       });
     });
 
@@ -139,7 +139,7 @@ describe("[Management] ChangesetOperations", () => {
       const changesets = testCase.functionUnderTest(getChangesetListParams);
 
       // Assert
-      const changesetIndexes = (await toArray(changesets)).map(changeset => changeset.index);
+      const changesetIndexes = (await toArray(changesets)).map((changeset) => changeset.index);
       expect(changesetIndexes).to.deep.equal([10, 9, 8, 7, 6]);
     });
   });

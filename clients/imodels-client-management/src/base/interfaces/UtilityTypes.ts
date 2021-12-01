@@ -4,8 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 import { EntityCollectionPage } from "./CommonInterfaces";
 
-export type Dictionary<T> = { [key: string]: T; };
+export interface Dictionary<T> {
+  [key: string]: T;
+}
 
 export type RecursiveRequired<T> = Required<T> & { [P in keyof T]: RecursiveRequired<T[P]>; };
 export type EntityPageQueryFunc<TEntity> = () => Promise<EntityCollectionPage<TEntity>>;
-export type AtLeastOneProperty<T> = { [P in keyof T]: Pick<T, P> }[keyof T]
+export type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> & Pick<T, TRequired>;
+export type AtLeastOneProperty<T> = { [P in keyof T]: OptionalExceptFor<T, P> }[keyof T];

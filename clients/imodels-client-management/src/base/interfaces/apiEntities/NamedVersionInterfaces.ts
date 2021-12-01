@@ -18,7 +18,7 @@ export interface MinimalNamedVersion {
 export interface NamedVersion extends MinimalNamedVersion {
   name: string;
   description: string | null;
-  createdDateTime: Date;
+  createdDateTime: string;
   state: NamedVersionState;
 }
 

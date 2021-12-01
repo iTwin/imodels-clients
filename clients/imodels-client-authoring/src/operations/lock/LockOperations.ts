@@ -9,23 +9,28 @@ import { GetLockListParams, UpdateLockParams } from "./LockOperationParams";
 
 export class LockOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getList(params: GetLockListParams): AsyncIterableIterator<Lock> {
-    return getCollectionIterator(() => this.getEntityCollectionPage<Lock>({
+    return getCollectionIterator(async () => this.getEntityCollectionPage<Lock>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getLocksUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
+      url: this._options.urlFormatter.getLockListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
       entityCollectionAccessor: (response: unknown) => (response as LocksResponse).locks
     }));
   }
 
   public async update(params: UpdateLockParams): Promise<Lock> {
-    const response = await this.sendPatchRequest<LockResponse>({
+    const updateLockBody = this.getUpdateLockBody(params);
+    const updateLockResponse = await this.sendPatchRequest<LockResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getLocksUrl({ imodelId: params.imodelId }),
-      body: {
-        briefcaseId: params.briefcaseId,
-        changesetId: params.changesetId,
-        lockedObjects: params.lockedObjects
-      }
+      url: this._options.urlFormatter.getLockListUrl({ imodelId: params.imodelId }),
+      body: updateLockBody
     });
-    return response.lock;
+    return updateLockResponse.lock;
+  }
+
+  private getUpdateLockBody(params: UpdateLockParams): object {
+    return {
+      briefcaseId: params.briefcaseId,
+      changesetId: params.changesetId,
+      lockedObjects: params.lockedObjects
+    };
   }
 }

@@ -5,20 +5,12 @@
 import { iModelsApiUrlFormatter as ManamegentiModelsApiUrlFormatter } from "@itwin/imodels-client-management";
 import { GetLockListUrlParams } from "./lock/LockOperationParams";
 
-interface iModelId {
-  imodelId: string;
-}
-
-interface UrlParams<TParams> {
-  urlParams?: TParams;
-}
-
 export class iModelsApiUrlFormatter extends ManamegentiModelsApiUrlFormatter {
-  public getBaselineUrl(params: iModelId): string {
-    return `${this.baseUri}/${params.imodelId}/baselineFile`;
+  public getBaselineUrl(params: { imodelId: string }): string {
+    return `${this.baseUri}/${params.imodelId}/baselinefile`;
   }
 
-  public getLocksUrl(params: iModelId & UrlParams<GetLockListUrlParams>): string {
+  public getLockListUrl(params: { imodelId: string, urlParams?: GetLockListUrlParams }): string {
     return `${this.baseUri}/${params.imodelId}/locks${this.formQueryString({ ...params.urlParams })}`;
   }
 }

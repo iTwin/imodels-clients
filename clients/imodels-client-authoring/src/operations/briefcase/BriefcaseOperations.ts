@@ -4,22 +4,32 @@
  *--------------------------------------------------------------------------------------------*/
 import { Briefcase, BriefcaseResponse, BriefcaseOperations as ManagementBriefcaseOperations } from "@itwin/imodels-client-management";
 import { OperationOptions } from "../OperationOptions";
-import { AcquireBriefcaseParams, ReleaseBriefcaseParams } from "./BriefcaseOperationParams";
+import { AcquireBriefcaseParams, BriefcaseProperties, ReleaseBriefcaseParams } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<TOptions extends OperationOptions> extends ManagementBriefcaseOperations<TOptions> {
   public async acquire(params: AcquireBriefcaseParams): Promise<Briefcase> {
-    const briefcaseAcquireResponse = await this.sendPostRequest<BriefcaseResponse>({
+    const acquireBriefcaseBody = this.getAcquireBriefcaseRequestBody(params.briefcaseProperties);
+    const acquireBriefcaseResponse = await this.sendPostRequest<BriefcaseResponse>({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/briefcases`,
-      body: params.briefcaseProperties
+      url: this._options.urlFormatter.getBriefcaseListUrl({ imodelId: params.imodelId }),
+      body: acquireBriefcaseBody
     });
-    return briefcaseAcquireResponse.briefcase;
+    return acquireBriefcaseResponse.briefcase;
   }
 
-  public release(params: ReleaseBriefcaseParams): Promise<void> {
+  public async release(params: ReleaseBriefcaseParams): Promise<void> {
     return this.sendDeleteRequest({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/briefcases/${params.briefcaseId}`
+      url: this._options.urlFormatter.getSingleBriefcaseUrl({ imodelId: params.imodelId, briefcaseId: params.briefcaseId })
     });
+  }
+
+  private getAcquireBriefcaseRequestBody(briefcaseProperties: BriefcaseProperties | undefined): object | undefined {
+    if (!briefcaseProperties)
+      return undefined;
+
+    return {
+      deviceName: briefcaseProperties.deviceName
+    };
   }
 }

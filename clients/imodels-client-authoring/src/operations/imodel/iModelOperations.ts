@@ -8,7 +8,7 @@ import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFil
 import { Constants } from "../../Constants";
 import { BaselineFileOperations } from "../baselineFile/BaselineFileOperations";
 import { OperationOptions } from "../OperationOptions";
-import { CreateiModelFromBaselineParams } from "./iModelOperationParams";
+import { CreateiModelFromBaselineParams, iModelPropertiesForCreateFromBaseline } from "./iModelOperationParams";
 
 export class iModelOperations<TOptions extends OperationOptions> extends ManagementiModelOperations<TOptions> {
   private _baselineFileOperations: BaselineFileOperations<TOptions>;
@@ -19,36 +19,40 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
   }
 
   public async createFromBaseline(params: CreateiModelFromBaselineParams): Promise<iModel> {
-    const { filePath: imodelFilePath, ...imodelMetadataProperties } = params.imodelProperties;
-    const imodelCreateResponse = await this.sendPostRequest<iModelCreateResponse>({
+    const createiModelBody = this.getCreateiModelFromBaselineRequestBody(params.imodelProperties);
+    const createiModelResponse = await this.sendPostRequest<iModelCreateResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.baseUri,
-      body: {
-        ...imodelMetadataProperties,
-        baselineFile: {
-          size: this._options.fileHandler.getFileSize(imodelFilePath)
-        }
-      }
+      url: this._options.urlFormatter.getCreateiModelUrl(),
+      body: createiModelBody
     });
 
-    const uploadUrl = imodelCreateResponse.iModel._links.upload.href;
-    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: imodelFilePath });
+    const uploadUrl = createiModelResponse.iModel._links.upload.href;
+    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.imodelProperties.filePath });
 
-    const completeUrl = imodelCreateResponse.iModel._links.complete.href;
+    const confirmUploadUrl = createiModelResponse.iModel._links.complete.href;
     await this.sendPostRequest({
       authorization: params.authorization,
-      url: completeUrl,
+      url: confirmUploadUrl,
       body: undefined
     });
 
     await this.waitForBaselineFileInitialization({
       authorization: params.authorization,
-      imodelId: imodelCreateResponse.iModel.id
+      imodelId: createiModelResponse.iModel.id
     });
     return this.getSingle({
       authorization: params.authorization,
-      imodelId: imodelCreateResponse.iModel.id
+      imodelId: createiModelResponse.iModel.id
     });
+  }
+
+  private getCreateiModelFromBaselineRequestBody(imodelProperties: iModelPropertiesForCreateFromBaseline): object {
+    return {
+      ...this.getCreateEmptyiModelRequestBody(imodelProperties),
+      baselineFile: {
+        size: this._options.fileHandler.getFileSize(imodelProperties.filePath)
+      }
+    };
   }
 
   private async waitForBaselineFileInitialization(params: AuthorizationParam & { imodelId: string, timeOutInMs?: number }): Promise<void> {

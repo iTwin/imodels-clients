@@ -5,25 +5,10 @@
 import { OrderBy } from "../base/interfaces/CommonInterfaces";
 import { Dictionary } from "../base/interfaces/UtilityTypes";
 import { ChangesetIdOrIndex, GetChangesetListUrlParams } from "./changeset/ChangesetOperationParams";
+import { CheckpointParentEntityId, GetBriefcaseListUrlParams, GetNamedVersionListUrlParams, GetiModelListUrlParams } from ".";
 
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
-
-interface iModelId {
-  imodelId: string;
-}
-
-interface ChangesetIndex {
-  changesetIndex: number;
-}
-
-interface NamedVersionId {
-  namedVersionId: string;
-}
-
-interface UrlParams<TParams> {
-  urlParams?: TParams;
-}
 
 export class iModelsApiUrlFormatter {
   private readonly _regexIgnoreCaseOption = "i";
@@ -35,31 +20,62 @@ export class iModelsApiUrlFormatter {
   private readonly _checkpointUrlRegex = new RegExp(`/imodels/(?<${this._groupNames.imodelId}>.*?)/changesets/(?<${this._groupNames.changesetIndex}>.*?)/checkpoint`, this._regexIgnoreCaseOption);
   private readonly _namedVersionUrlRegex = new RegExp(`/imodels/(?<${this._groupNames.imodelId}>.*?)/namedversions/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
 
-  // TODO: make `apiBaseUrl` protected when all url formation is move here
-  constructor(public readonly baseUri: string) {
+  constructor(protected readonly baseUri: string) {
   }
 
-  public getChangesetsUrl(params: iModelId & UrlParams<GetChangesetListUrlParams>): string {
-    return `${this.baseUri}/${params.imodelId}/changesets${this.formQueryString({ ...params.urlParams })}`;
+  public getCreateiModelUrl(): string {
+    return this.baseUri;
   }
 
-  public getChangesetUrl(params: iModelId & ChangesetIdOrIndex): string {
+  public getSingleiModelUrl(params: { imodelId: string }): string {
+    return `${this.baseUri}/${params.imodelId}`;
+  }
+
+  public getiModelListUrl(params: { urlParams: GetiModelListUrlParams }): string {
+    return `${this.baseUri}${this.formQueryString({ ...params.urlParams })}`;
+  }
+
+  public getSingleBriefcaseUrl(params: { imodelId: string } & { briefcaseId: number }): string {
+    return `${this.baseUri}/${params.imodelId}/briefcases/${params.briefcaseId}`;
+  }
+
+  public getBriefcaseListUrl(params: { imodelId: string, urlParams?: GetBriefcaseListUrlParams }): string {
+    return `${this.baseUri}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`;
+  }
+
+  public getSingleChangesetUrl(params: { imodelId: string } & ChangesetIdOrIndex): string {
     return `${this.baseUri}/${params.imodelId}/changesets/${params.changesetId ?? params.changesetIndex}`;
   }
 
-  public getCheckpointUrl(params: iModelId & ChangesetIdOrIndex): string {
-    return `${this.baseUri}/${params.imodelId}/changesets/${params.changesetId ?? params.changesetIndex}/checkpoint`;
+  public getChangesetListUrl(params: { imodelId: string, urlParams?: GetChangesetListUrlParams }): string {
+    return `${this.baseUri}/${params.imodelId}/changesets${this.formQueryString({ ...params.urlParams })}`;
   }
 
-  public parseCheckpointUrl(url: string): iModelId & ChangesetIndex {
+  public getSingleNamedVersionUrl(params: { imodelId: string } & { namedVersionId: string }): string {
+    return `${this.baseUri}/${params.imodelId}/namedversions/${params.namedVersionId}`;
+  }
+
+  public getNamedVersionListUrl(params: { imodelId: string, urlParams?: GetNamedVersionListUrlParams }): string {
+    return `${this.baseUri}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`;
+  }
+
+  public getCheckpointUrl(params: { imodelId: string } & CheckpointParentEntityId): string {
+    const parentEntityUrlPath = params.namedVersionId
+      ? `namedversions/${params.namedVersionId}`
+      : `changesets/${params.changesetId ?? params.changesetIndex}`;
+
+    return `${this.baseUri}/${params.imodelId}/${parentEntityUrlPath}/checkpoint`;
+  }
+
+  public parseCheckpointUrl(url: string): { imodelId: string, changesetIndex: number } {
     const matchedGroups: Dictionary<string> = this._checkpointUrlRegex.exec(url)!.groups!;
     return {
       imodelId: matchedGroups[this._groupNames.imodelId],
-      changesetIndex: parseInt(matchedGroups[this._groupNames.changesetIndex])
+      changesetIndex: parseInt(matchedGroups[this._groupNames.changesetIndex], 10)
     };
   }
 
-  public parseNamedVersionUrl(url: string): iModelId & NamedVersionId {
+  public parseNamedVersionUrl(url: string): { imodelId: string, namedVersionId: string } {
     const matchedGroups: Dictionary<string> = this._namedVersionUrlRegex.exec(url)!.groups!;
     return {
       imodelId: matchedGroups[this._groupNames.imodelId],
@@ -67,11 +83,14 @@ export class iModelsApiUrlFormatter {
     };
   }
 
-  protected formQueryString(urlParams: Dictionary<UrlParameterValue> | undefined): string {
+  protected formQueryString(urlParameters: Dictionary<UrlParameterValue> | undefined): string {
     let queryString = "";
-    for (const urlParameterKey in urlParams) {
-      const urlParameterValue = urlParams[urlParameterKey];
-      if (!urlParameterValue)
+    for (const urlParameterKey in urlParameters) {
+      if (!Object.prototype.hasOwnProperty.call(urlParameters, urlParameterKey))
+        continue;
+
+      const urlParameterValue = urlParameters[urlParameterKey];
+      if (!this.shouldAppendToUrl(urlParameterValue))
         continue;
 
       queryString = this.appendToQueryString(queryString, urlParameterKey, urlParameterValue);
@@ -80,9 +99,19 @@ export class iModelsApiUrlFormatter {
     return queryString;
   }
 
+  private shouldAppendToUrl(urlParameterValue: UrlParameterValue): boolean {
+    if (urlParameterValue === null || urlParameterValue === undefined)
+      return false;
+
+    if (typeof urlParameterValue === "string" && !urlParameterValue.trim())
+      return false;
+
+    return true;
+  }
+
   private appendToQueryString(existingQueryString: string, parameterKey: string, parameterValue: UrlParameterValue): string {
     const separator = existingQueryString.length === 0 ? "?" : "&";
-    return existingQueryString + `${separator}${parameterKey}=${this.stringify(parameterValue)}`;
+    return `${existingQueryString}${separator}${parameterKey}=${this.stringify(parameterValue)}`;
   }
 
   private stringify(urlParameterValue: UrlParameterValue): string {

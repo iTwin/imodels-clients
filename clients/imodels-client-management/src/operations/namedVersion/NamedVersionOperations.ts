@@ -4,22 +4,22 @@
  *--------------------------------------------------------------------------------------------*/
 import { MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateNamedVersionParams, GetNamedVersionListParams, GetSingleNamedVersionParams, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
+import { CreateNamedVersionParams, GetNamedVersionListParams, GetSingleNamedVersionParams, NamedVersionPropertiesForCreate, NamedVersionPropertiesForUpdate, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
 
 export class NamedVersionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetNamedVersionListParams): AsyncIterableIterator<MinimalNamedVersion> {
-    return getCollectionIterator(() => this.getEntityCollectionPage<MinimalNamedVersion>({
+    return getCollectionIterator(async () => this.getEntityCollectionPage<MinimalNamedVersion>({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`,
+      url: this._options.urlFormatter.getNamedVersionListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<MinimalNamedVersion>).namedVersions
     }));
   }
 
   public getRepresentationList(params: GetNamedVersionListParams): AsyncIterableIterator<NamedVersion> {
-    return getCollectionIterator(() => this.getEntityCollectionPage<NamedVersion>({
+    return getCollectionIterator(async () => this.getEntityCollectionPage<NamedVersion>({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`,
+      url: this._options.urlFormatter.getNamedVersionListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<NamedVersion>).namedVersions
     }));
@@ -28,26 +28,44 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
   public async getSingle(params: GetSingleNamedVersionParams): Promise<NamedVersion> {
     const response = await this.sendGetRequest<NamedVersionResponse>({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions/${params.namedVersionId}`
+      url: this._options.urlFormatter.getSingleNamedVersionUrl({ imodelId: params.imodelId, namedVersionId: params.namedVersionId })
     });
     return response.namedVersion;
   }
 
   public async create(params: CreateNamedVersionParams): Promise<NamedVersion> {
-    const response = await this.sendPostRequest<NamedVersionResponse>({
+    const createNamedVersionBody = this.getCreateNamedVersionRequestBody(params.namedVersionProperties);
+    const createNamedVersionResponse = await this.sendPostRequest<NamedVersionResponse>({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions`,
-      body: params.namedVersionProperties
+      url: this._options.urlFormatter.getNamedVersionListUrl({ imodelId: params.imodelId }),
+      body: createNamedVersionBody
     });
-    return response.namedVersion;
+    return createNamedVersionResponse.namedVersion;
   }
 
   public async update(params: UpdateNamedVersionParams): Promise<NamedVersion> {
-    const response = await this.sendPatchRequest<NamedVersionResponse>({
+    const updateNamedVersionBody = this.getUpdateNamedVersionRequestBody(params.namedVersionProperties);
+    const updateNamedVersionResponse = await this.sendPatchRequest<NamedVersionResponse>({
       authorization: params.authorization,
-      url: `${this._options.urlFormatter.baseUri}/${params.imodelId}/namedversions/${params.namedVersionId}`,
-      body: params.namedVersionProperties
+      url: this._options.urlFormatter.getSingleNamedVersionUrl({ imodelId: params.imodelId, namedVersionId: params.namedVersionId }),
+      body: updateNamedVersionBody
     });
-    return response.namedVersion;
+    return updateNamedVersionResponse.namedVersion;
+  }
+
+  private getCreateNamedVersionRequestBody(namedVersionProperties: NamedVersionPropertiesForCreate): object {
+    return {
+      name: namedVersionProperties.name,
+      description: namedVersionProperties.description,
+      changesetId: namedVersionProperties.changesetId
+    };
+  }
+
+  private getUpdateNamedVersionRequestBody(namedVersionProperties: NamedVersionPropertiesForUpdate): object {
+    return {
+      name: namedVersionProperties.name,
+      description: namedVersionProperties.description,
+      state: namedVersionProperties.state
+    };
   }
 }

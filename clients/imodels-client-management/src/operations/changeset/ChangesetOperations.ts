@@ -19,9 +19,9 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
-    const getEntityPageFunc = () => this.getEntityCollectionPage<MinimalChangeset>({
+    const getEntityPageFunc = async () => this.getEntityCollectionPage<MinimalChangeset>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetsUrl(params),
+      url: this._options.urlFormatter.getChangesetListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as MinimalChangesetsResponse).changesets
     });
@@ -35,29 +35,30 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     const flattenedCollection: AsyncIterableIterator<Changeset> = flatten<Changeset>(pagedCollection);
     const mappedCollection: AsyncIterableIterator<Changeset> = map<Changeset, Changeset>(
       flattenedCollection,
-      changeset => this.appendRelatedEntityCallbacks(params.authorization, changeset)
+      (changeset) => this.appendRelatedEntityCallbacks(params.authorization, changeset)
     );
     return mappedCollection;
   }
 
   public async getSingle(params: GetSingleChangesetParams): Promise<Changeset> {
     const changeset: Changeset = await this.querySingleInternal(params);
-    const result: Changeset  = this.appendRelatedEntityCallbacks(params.authorization, changeset);
+    const result: Changeset = this.appendRelatedEntityCallbacks(params.authorization, changeset);
     return result;
   }
 
   protected async querySingleInternal(params: GetSingleChangesetParams): Promise<Changeset> {
+    const { authorization, imodelId, ...changesetIdOrIndex } = params;
     const response = await this.sendGetRequest<ChangesetResponse>({
-      authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetUrl(params)
+      authorization,
+      url: this._options.urlFormatter.getSingleChangesetUrl({ imodelId, ...changesetIdOrIndex })
     });
     return response.changeset;
   }
 
   protected getRepresentationListInternal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
-    const getEntityPageFunc = () => this.getEntityCollectionPage<Changeset>({
+    const getEntityPageFunc = async () => this.getEntityCollectionPage<Changeset>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetsUrl(params),
+      url: this._options.urlFormatter.getChangesetListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse).changesets
     });
@@ -66,8 +67,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, changeset: Changeset): Changeset {
-    const getNamedVersion = () => this.getNamedVersion(authorization, changeset._links.namedVersion?.href);
-    const getCurrentOrPrecedingCheckpoint = () => this.getCurrentOrPrecedingCheckpoint(authorization, changeset._links.currentOrPrecedingCheckpoint?.href);
+    const getNamedVersion = async () => this.getNamedVersion(authorization, changeset._links.namedVersion?.href);
+    const getCurrentOrPrecedingCheckpoint = async () => this.getCurrentOrPrecedingCheckpoint(authorization, changeset._links.currentOrPrecedingCheckpoint?.href);
 
     const result: Changeset = {
       ...changeset,
@@ -78,9 +79,9 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     return result;
   }
 
-  private getNamedVersion(authorization: AuthorizationCallback, namedVersionLink: string | undefined): Promise<NamedVersion | undefined> {
+  private async getNamedVersion(authorization: AuthorizationCallback, namedVersionLink: string | undefined): Promise<NamedVersion | undefined> {
     if (!namedVersionLink)
-      return Promise.resolve(undefined);
+      return undefined;
 
     const { imodelId, namedVersionId } = this._options.urlFormatter.parseNamedVersionUrl(namedVersionLink);
     return this._namedVersionOperations.getSingle({
@@ -90,9 +91,9 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     });
   }
 
-  private getCurrentOrPrecedingCheckpoint(authorization: AuthorizationCallback, currentOrPrecedingCheckpointLink: string | undefined): Promise<Checkpoint | undefined> {
+  private async getCurrentOrPrecedingCheckpoint(authorization: AuthorizationCallback, currentOrPrecedingCheckpointLink: string | undefined): Promise<Checkpoint | undefined> {
     if (!currentOrPrecedingCheckpointLink)
-      return Promise.resolve(undefined);
+      return undefined;
 
     const { imodelId, changesetIndex } = this._options.urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
     return this._checkpointOperations.getSingle({

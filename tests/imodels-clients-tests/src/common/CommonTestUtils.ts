@@ -16,9 +16,9 @@ export class TestSetupError extends Error {
 }
 
 export async function cleanUpiModels(params: AuthorizationParam & {
-  imodelsClient: ManagementiModelsClient | AuthoringiModelsClient,
-  projectId: string,
-  testiModelGroup: TestiModelGroup,
+  imodelsClient: ManagementiModelsClient | AuthoringiModelsClient;
+  projectId: string;
+  testiModelGroup: TestiModelGroup;
 }): Promise<void> {
   const imodels = params.imodelsClient.iModels.getMinimalList({
     authorization: params.authorization,
