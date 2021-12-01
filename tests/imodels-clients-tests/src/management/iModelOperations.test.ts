@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, CreateEmptyiModelParams, GetiModelListParams, OrderByOperator, iModel, iModelOrderByProperty, iModelsClient, iModelsErrorCode, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, CreateEmptyiModelParams, GetiModelListParams, OrderByOperator, iModel, iModelOrderByProperty, iModelsClient, iModelsErrorCode, toArray, GetSingleiModelParams } from "@itwin/imodels-client-management";
 import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelGroup, assertCollection, assertError, assertiModel, cleanUpiModels, iModelMetadata } from "../common";
 
 describe("[Management] iModelOperations", () => {
@@ -90,6 +90,27 @@ describe("[Management] iModelOperations", () => {
         asyncIterable: imodels,
         isEntityCountCorrect: (count) => count >= 2
       });
+    });
+  });
+
+  it("should return an iModel by id", async () => {
+    // Arrange
+    const getSingleiModelParams: GetSingleiModelParams = {
+      authorization,
+      imodelId: testiModel.id
+    };
+
+    // Act
+    const imodel: iModel = await imodelsClient.iModels.getSingle(getSingleiModelParams);
+
+    // Arrange
+    assertiModel({
+      actualiModel: imodel,
+      expectediModelProperties: {
+        projectId,
+        name: testiModel.name,
+        description: testiModel.description
+      }
     });
   });
 
