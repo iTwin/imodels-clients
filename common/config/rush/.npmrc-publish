@@ -9,6 +9,5 @@
 # to configure registry sources.
 
 registry=https://registry.npmjs.org/
-@bentley:registry=https://registry.npmjs.org/
 always-auth=true
 //registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}
