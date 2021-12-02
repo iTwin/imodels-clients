@@ -1,0 +1,33 @@
+parameters:
+  - name: shouldPublish
+    displayName: Publish packages to public NPM registry
+    type: boolean
+    default: false
+
+name:
+  $(Date:yyyy.M.d)$(Rev:.r)
+
+trigger: none
+
+jobs:
+  - job: BuildTestSBXAndPublish
+    strategy:
+      matrix:
+        linux:
+          imageName: 'ubuntu-latest'
+        mac:
+          imageName: 'macos-latest'
+        windows:
+          imageName: 'windows-latest'
+    pool:
+        vmImage: $(imageName)
+    variables:
+      - group: iModels Clients - Integration Tests - SBX
+    workspace:
+      clean: all
+
+    steps:
+    - template: templates/build-test.yml
+    - template: templates/publish.yml
+      parameters:
+        shouldPublish: ${{ parameters.shouldPublish }}
