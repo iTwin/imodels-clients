@@ -4,7 +4,7 @@ name:
 trigger: none
 
 jobs:
-  - job: BuildTestSBXAndPublish
+  - job: BuildTestSBX
     strategy:
       matrix:
         linux:
