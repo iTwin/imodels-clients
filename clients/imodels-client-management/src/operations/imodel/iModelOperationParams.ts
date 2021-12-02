@@ -22,13 +22,13 @@ export interface GetiModelListUrlParams extends CollectionRequestParams {
   name?: string;
 }
 
-/** Parameters for iModels list query operation. */
+/** Parameters for get iModels list operation. */
 export interface GetiModelListParams extends AuthorizationParam {
   /** Parameters that will be appended to the entity list request url that will narrow down or alter the results. */
   urlParams: GetiModelListUrlParams;
 }
 
-/** Parameters for single iModel query operation. */
+/** Parameters for get single iModel operation. */
 export type GetSingleiModelParams = iModelScopedOperationParams;
 
 /** Properties that should be specified when creating a new iModel. */
@@ -46,11 +46,11 @@ export interface iModelProperties {
   extent?: Extent;
 }
 
-/** Parameters for iModel create operation. */
+/** Parameters for create iModel operation. */
 export interface CreateEmptyiModelParams extends AuthorizationParam {
   /** Properties for the new iModel. */
   imodelProperties: iModelProperties;
 }
 
-/** Parameters for iModel delete operation. */
+/** Parameters for delete iModel operation. */
 export type DeleteiModelParams = iModelScopedOperationParams;
