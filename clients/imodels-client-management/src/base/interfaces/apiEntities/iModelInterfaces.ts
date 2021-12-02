@@ -6,21 +6,28 @@ import { CollectionResponse } from "../CommonInterfaces";
 
 /** Possible iModel states. */
 export enum iModelState {
-  /** Not initialized iModel. It means that iModel is not yet initialized and the server-side background initialization process is still running. Initialization usually takes several minutes. */
+  /**
+   * Not initialized iModel. It means that iModel is not yet initialized and the server-side background initialization
+   * process is still running. Initialization usually takes several minutes.
+   */
   NotInitialized = "notInitialized",
-  /** Initialized iModel. It means that iModel initialization has completed and iModel is ready use. */
+  /** Initialized iModel. It means that iModel initialization has completed and iModel is ready to use. */
   Initialized = "initialized"
 }
 
 /** A point on the Earth's surface denoted by coordinates. Used to specify {@link Extent}. */
 export interface Point {
-  /** Latitude. */
+  /** Latitude. Values range from -90 to 90. */
   latitude: number;
-  /** Longitude. */
+  /** Longitude. Value range from -180 to 180. */
   longitude: number;
 }
 
-/** The maximum rectangular area on the Earth which encloses the iModel. The maximum extent is used to help keep your iModel clean. When new elements are imported, those outside the extent will be flagged for further processing. This extent will also help to zoom to the area of interest in web viewers. */
+/**
+ * The maximum rectangular area on the Earth which encloses the iModel. The maximum extent is used to help keep your
+ * iModel clean. When new elements are imported, those outside the extent will be flagged for further processing. This
+ * extent will also help to zoom to the area of interest in web viewers.
+ */
 export interface Extent {
   /** South Latitude, West Longitude. */
   southWest: Point;

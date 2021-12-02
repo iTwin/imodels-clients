@@ -8,8 +8,9 @@ import { CreateEmptyiModelParams, DeleteiModelParams, GetSingleiModelParams, Get
 
 export class iModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**
-   * Gets iModels for a specific project. This method returns iModels in their minimal representation. The returned iterator internally queries entities in pages.
-   * Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels} operation from iModels API.
+   * Gets iModels for a specific project. This method returns iModels in their minimal representation. The returned iterator
+   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}
+   * operation from iModels API.
    * @param {GetiModelListParams} params parameters for this operation. See {@link GetiModelListParams}.
    * @returns {AsyncIterableIterator<MinimaliModel>} iterator for iModels collection. See {@link MinimaliModel}.
    */
@@ -23,8 +24,9 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   /**
-   * Gets iModels for a specific project. This method returns iModels in their full representation. The returned iterator internally queries entities in pages.
-   * Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels} operation from iModels API.
+   * Gets iModels for a specific project. This method returns iModels in their full representation. The returned iterator
+   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}
+   * operation from iModels API.
    * @param {GetiModelListParams} params parameters for this operation. See {@link GetiModelListParams}.
    * @returns {AsyncIterableIterator<iModel>} iterator for iModels collection. See {@link iModel}.
    */
@@ -38,8 +40,8 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   /**
-   * Gets a single iModel by id. This method returns an iModel in its full representation.
-   * Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-details/ Get iModel} operation from iModels API.
+   * Gets a single iModel by id. This method returns an iModel in its full representation. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-details/ Get iModel} operation from iModels API.
    * @param {GetSingleiModelParams} params parameters for this operation. See {@link GetSingleiModelParams}.
    * @returns {Promise<iModel>} an iModel with specified id. See {@link iModel}.
    */
@@ -52,8 +54,8 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   }
   
   /**
-   * Creates an empty iModel with specified properties.
-   * Wraps the {@link https://developer.bentley.com/apis/imodels/operations/create-imodel/ Create iModel} operation from iModels API.
+   * Creates an empty iModel with specified properties. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels/operations/create-imodel/ Create iModel} operation from iModels API.
    * @param {CreateEmptyiModelParams} params parameters for this operation. See {@link CreateEmptyiModelParams}.
    * @returns {Promise<iModel>} newly created iModel. See {@link iModel}.
    */
@@ -68,8 +70,8 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   /**
-   * Deletes an iModel with specified id.
-   * Wraps the {@link https://developer.bentley.com/apis/imodels/operations/delete-imodel/ Delete iModel} operation from iModels API.
+   * Deletes an iModel with specified id. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/delete-imodel/ Delete iModel}
+   * operation from iModels API.
    * @param {DeleteiModelParams} params parameters for this operation. See {@link DeleteiModelParams}.
    * @returns {Promise<void>} a promise that resolves after operation completes.
    */

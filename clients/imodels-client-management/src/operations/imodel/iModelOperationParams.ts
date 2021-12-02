@@ -21,7 +21,7 @@ export interface GetiModelListUrlParams extends CollectionRequestParams {
 
 /** Parameters for iModels list query operation. */
 export interface GetiModelListParams extends AuthorizationParam {
-  /** Parameters that will be appended to the collection request url that will narrow down or alter the results. */
+  /** Parameters that will be appended to the entity list request url that will narrow down or alter the results. */
   urlParams: GetiModelListUrlParams;
 }
 
@@ -30,7 +30,7 @@ export type GetSingleiModelParams = iModelScopedOperationParams;
 
 /** Properties that should be specified when creating a new iModel. */
 export interface iModelProperties {
-  /** Project for which the iModel belongs. */
+  /** Project for which the iModel belongs. Project id must not be empty or whitespace string. */
   projectId: string;
   /** iModel name. iModel name must be unique within the project, not exceed allowed 255 characters and not be an empty or whitespace string. */
   name: string;
