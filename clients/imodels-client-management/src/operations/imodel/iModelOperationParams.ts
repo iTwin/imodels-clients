@@ -4,14 +4,17 @@
  *--------------------------------------------------------------------------------------------*/
 import { AuthorizationParam, CollectionRequestParams, Extent, OrderBy, iModel, iModelScopedOperationParams } from "../../base";
 
-/** iModel entity properties that are supported in $orderBy url parameter which specifies by what property items are ordered in a collection. */
+/**
+ * iModel entity properties that are supported in $orderBy url parameter which specifies by what property
+ * entities are ordered in a collection.
+ */
 export enum iModelOrderByProperty {
   Name = "name"
 }
 
 /** Url parameters supported in iModels list query. */
 export interface GetiModelListUrlParams extends CollectionRequestParams {
-  /** Specifies in what order should the items be returned. See {@link OrderBy}. */
+  /** Specifies in what order should entities be returned. See {@link OrderBy}. */
   $orderBy?: OrderBy<iModel, iModelOrderByProperty>;
   /** Filters iModels for a specific project. */
   projectId: string;
@@ -32,7 +35,10 @@ export type GetSingleiModelParams = iModelScopedOperationParams;
 export interface iModelProperties {
   /** Project for which the iModel belongs. Project id must not be empty or whitespace string. */
   projectId: string;
-  /** iModel name. iModel name must be unique within the project, not exceed allowed 255 characters and not be an empty or whitespace string. */
+  /**
+   * iModel name. iModel name must be unique within the project, not exceed allowed 255 characters and not be an
+   * empty or whitespace string.
+   */
   name: string;
   /** iModel description. iModel description must not exceed allowed 255 characters. */
   description?: string;

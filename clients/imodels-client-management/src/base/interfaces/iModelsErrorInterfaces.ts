@@ -62,6 +62,6 @@ export interface iModelsErrorDetail {
 export interface iModelsError extends Error {
   /** Error code. See {@link iModelsErrorCode}. */
   code: iModelsErrorCode;
-  /** Information that describes the error in more detail. See {@link iModelsErrorDetail}. */
+  /** Data that describes the error in more detail. See {@link iModelsErrorDetail}. */
   details?: iModelsErrorDetail[];
 }

@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 /** 
- * Request authorization data. This data is sent to the server in `Authorization` request header, the header value
- * formatted by joining `scheme` and `token` properties with a single space.
+ * Request authorization data. This data is sent to the server in `Authorization` request header, the header value is
+ * formatted by joining `scheme` and `token` property values with a single space.
  */
 export interface Authorization {
   /** Authentication scheme. Currently the iModels API supports only `Bearer` authentication scheme. */
@@ -16,13 +16,13 @@ export interface Authorization {
 
 /**
  * Interface for a function that returns authorization data. It is up to the user of this library to implement
- * authentication data retrieval and pass that function as an argument into all specific operation functions.
- * This function will be called everytime a request is sent to the API meaning that it can be called more than
+ * user authentication and pass that function as an argument into all specific operation functions.
+ * This function will be called every time a request is sent to the API meaning that it can be called more than
  * once during a single operation execution. See {@link Authorization}.
  */
 export type AuthorizationCallback = () => Promise<Authorization>;
 
-/** Authorization information parameter. This interface is extended by all other specific operation parameter interfaces. */
+/** Authorization data parameter. This interface is extended by all other specific operation parameter interfaces. */
 export interface AuthorizationParam {
   /** Function that returns valid authorization data. See {@link AuthorizationCallback}. */
   authorization: AuthorizationCallback;
@@ -39,32 +39,39 @@ export interface iModelScopedOperationParams extends AuthorizationParam {
 
 /** Common url parameters that are supported for all entity list requests. */
 export interface CollectionRequestParams {
-  /** Specifies how many items should be skipped in the entity page. The value must not exceed 1000. The default value is 100. */
+  /** Specifies how many entities should be skipped in an entity page. The value must not exceed 1000. */
   $skip?: number;
-  /** Specifies how many items should be in the entity page. The value must not exceed 1000. The default value is 100.*/
+  /**
+   * Specifies how many entities should be returned in an entity page. The value must not exceed 1000.
+   * If not specified 100 entities per page will be returned.
+   */
   $top?: number;
 }
 
 /** Entity list ordering operators that are supported in $orderBy url parameter. */
 export enum OrderByOperator {
-  /**  */
+  /** Ascending, meaning that entities will be returned in ascending order. */
   Ascending = "asc",
+  /** Descending, meaning that entities will be returned in descending order. */
   Descending = "desc"
 }
 
 /**
  * Generic interface for $orderBy url parameter. This url parameter is supported in some of the entity list requests
  * and describes in what order should the items be returned. This structured object is later formatted into a string
- * when appending it to url by joining `property` and `operator` with a single space.
+ * when appending it to url by joining `property` and `operator` property values with a single space.
  */
 export interface OrderBy<TEntity, TProperties extends keyof TEntity> {
   /** Entity property that should be compared when ordering elements. */
   property: TProperties;
-  /** Operator that should be used for ordering. If not specified the API will return items in ascending order. See {@link OrderByOperator}. */
+  /**
+   * Operator that should be used for ordering. If not specified the API will return entities in ascending order.
+   * See {@link OrderByOperator}.
+   */
   operator?: OrderByOperator;
 }
 
-/** Link to some other entity or entity list that is related to the main entity in API response. */
+/** Link to some other entity or entity list that is related to the main entity in the API response. */
 export interface Link {
   /** Url to access the related entity. */
   href: string;
@@ -78,9 +85,9 @@ export interface Link {
 export interface CollectionLinks {
   /** Link to the current page. */
   self: Link;
-  /** Link to the previous page. If null it means that the previous page is emtpy. */
+  /** Link to the previous page. If null it means that the previous page is empty. */
   prev: Link | null;
-  /** Link to the next page. If null it means that the next page is emtpy. */
+  /** Link to the next page. If null it means that the next page is empty. */
   next: Link | null;
 }
 
@@ -92,7 +99,7 @@ export interface CollectionResponse {
 
 /**
  * Partial `Prefer` request header value. The value is sent to the server in `Prefer` request header,
- * the header value is formed by joinin `return=` and the enum value.
+ * the header value is formed by joining `return=` and the enum value.
  */
 export enum PreferReturn {
   /** Instructs the server to return minimal entity representation. */
