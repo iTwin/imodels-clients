@@ -10,7 +10,6 @@
     ],
     "noUnusedLocals": true,
     "declaration": true,
-    "strict": true,
-    "removeComments": false
+    "strict": true
   }
 }
