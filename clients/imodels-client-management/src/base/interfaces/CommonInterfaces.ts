@@ -49,27 +49,32 @@ export interface OrderBy<TEntity, TProperties extends keyof TEntity> {
   operator?: OrderByOperator;
 }
 
-/**  */
+/** Link to some other entity or entity collection that is related to the main entity in API response. */
 export interface Link {
+  /** Url to access the related entity. */
   href: string;
 }
 
+/** Links that are included in all collection page responses. They simplify pagination implementation because users can send requests using these urls that already include pagination url parameters without having to manually keep track of queried entity count. */
 export interface CollectionLinks {
+  /** Link to the current page. */
   self: Link;
-  prev?: Link;
-  next?: Link;
+  /** Link to the previous page. If null it means that the previous page is emtpy. */
+  prev: Link | null;
+  /** Link to the next page. If null it means that the next page is emtpy. */
+  next: Link | null;
 }
 
+/** Common properties for all collection page responses. */
 export interface CollectionResponse {
+  /** Common collection page response links. See {@link CollectionLinks}. */
   _links: CollectionLinks;
 }
 
-export interface EntityCollectionPage<TEntity> {
-  entities: TEntity[];
-  next?: () => Promise<EntityCollectionPage<TEntity>>;
-}
-
+/** Partial `Prefer` request header value. The value is sent to the server in `Prefer` request header, the header value is formed by joinin `return=` and the enum value. */
 export enum PreferReturn {
+  /** Instructs the server to return minimal entity representation. */
   Minimal = "minimal",
+  /** Instructs the server to return full entity representation. */
   Representation = "representation"
 }

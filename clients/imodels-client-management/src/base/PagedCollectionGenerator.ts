@@ -2,8 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityCollectionPage } from "./interfaces/CommonInterfaces";
-import { EntityPageQueryFunc } from "./interfaces/UtilityTypes";
+import { EntityCollectionPage, EntityPageQueryFunc } from "./interfaces/UtilityTypes";
 
 export function getCollectionIterator<TEntity>(pageQueryFunc: EntityPageQueryFunc<TEntity>): AsyncIterableIterator<TEntity> {
   return flatten(getCollectionPagesIterator(pageQueryFunc));

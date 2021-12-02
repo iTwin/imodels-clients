@@ -2,10 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityCollectionPage } from "./CommonInterfaces";
-
 export interface Dictionary<T> {
   [key: string]: T;
+}
+
+export interface EntityCollectionPage<TEntity> {
+  entities: TEntity[];
+  next?: () => Promise<EntityCollectionPage<TEntity>>;
 }
 
 export type RecursiveRequired<T> = Required<T> & { [P in keyof T]: RecursiveRequired<T[P]>; };

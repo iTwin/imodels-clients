@@ -2,10 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+
+/** Possible error codes. */
 export enum iModelsErrorCode {
   Unrecognized = "Unrecognized",
 
-  // Errors returned by API
   Unknown = "Unknown",
   Unauthorized = "Unauthorized",
   InsufficientPermissions = "InsufficientPermissions",
@@ -31,7 +32,7 @@ export enum iModelsErrorCode {
   NamedVersionOnChangesetExists = "NamedVersionOnChangesetExists",
   ProjectNotFound = "ProjectNotFound",
   iModelNotFound = "iModelNotFound",
-  NamedVersionNotFound  = "NamedVersionNotFound",
+  NamedVersionNotFound = "NamedVersionNotFound",
   ChangesetNotFound = "ChangesetNotFound",
   UserNotFound = "UserNotFound",
   BriefcaseNotFound = "BriefcaseNotFound",
@@ -43,18 +44,24 @@ export enum iModelsErrorCode {
   NewerChangesExist = "NewerChangesExist",
   InvalidThumbnailFormat = "InvalidThumbnailFormat",
 
-  // Operation specific errors thrown by the client library
   BaselineFileInitializationFailed = "BaselineFileInitializationFailed",
   ChangesetDownloadFailed = "ChangesetDownloadFailed"
 }
 
-export interface iModelsError extends Error {
+/** Error detail information. */
+export interface iModelsErrorDetail {
+  /** Error detail code. See {@link iModelsErrorCode}. */
   code: iModelsErrorCode;
-  details?: iModelsErrorDetail[];
+  /** Message that describes the error detail. */
+  message: string;
+  /** Name of the property or parameter which is related to the issue. */
+  target?: string;
 }
 
-export interface iModelsErrorDetail {
+/** Interface for the errors thrown by this library. */
+export interface iModelsError extends Error {
+  /** Error code. See {@link iModelsErrorCode}. */
   code: iModelsErrorCode;
-  message: string;
-  target?: string;
+  /** Information that describes the error in more detail. See {@link iModelsErrorDetail}. */
+  details?: iModelsErrorDetail[];
 }
