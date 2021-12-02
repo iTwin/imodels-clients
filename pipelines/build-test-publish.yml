@@ -1,9 +1,3 @@
-parameters:
-  - name: shouldPublish
-    displayName: Publish packages to public NPM registry
-    type: boolean
-    default: false
-
 name:
   $(Date:yyyy.M.d)$(Rev:.r)
 
@@ -29,5 +23,3 @@ jobs:
     steps:
     - template: templates/build-test.yml
     - template: templates/publish.yml
-      parameters:
-        shouldPublish: ${{ parameters.shouldPublish }}
