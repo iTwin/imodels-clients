@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BentleyError, BentleyStatus } from "@itwin/core-bentley";
-import { ChangesetId, IModelVersion } from "@itwin/core-common";
+import { IModelStatus } from "@itwin/core-bentley";
+import { ChangesetId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
 import { AuthorizationCallback, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, MinimalChangeset, MinimalNamedVersion, OrderByOperator, iModelScopedOperationParams, iModelsClient, take } from "@itwin/imodels-client-management";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
@@ -63,7 +63,7 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
     const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this._imodelsClient.NamedVersions.getMinimalList(getNamedVersionListParams);
     const namedVersions: MinimalNamedVersion[] = await take(namedVersionsIterator, 1);
     if (namedVersions.length === 0 || !namedVersions[0].changesetId)
-      throw new BentleyError(BentleyStatus.ERROR, `Named version ${arg.versionName} not found`);
+      throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
     return namedVersions[0].changesetId;
   }
 

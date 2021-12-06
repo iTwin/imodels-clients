@@ -18,19 +18,14 @@
     "@itwin/imodels-client-authoring": "~0.1.0-dev.1"
   },
   "peerDependencies": {
-    "@bentley/itwin-client": "~3.0.0-dev.129",
     "@itwin/core-backend": "~3.0.0-dev.129",
     "@itwin/core-bentley": "~3.0.0-dev.129",
-    "@itwin/core-common": "~3.0.0-dev.129",
-    "@itwin/core-geometry": "~3.0.0-dev.129",
-    "@itwin/ecschema-metadata": "~3.0.0-dev.129"
+    "@itwin/core-common": "~3.0.0-dev.129"
   },
   "devDependencies": {
-    "@bentley/itwin-client": "~3.0.0-dev.129",
     "@itwin/core-backend": "~3.0.0-dev.129",
     "@itwin/core-bentley": "~3.0.0-dev.129",
     "@itwin/core-common": "~3.0.0-dev.129",
-    "@itwin/core-geometry": "~3.0.0-dev.129",
     "@itwin/ecschema-metadata": "~3.0.0-dev.129",
     "@itwin/imodels-client-common-config": "~0.1.0-dev.1",
     "@types/ws": "~8.2.0",
