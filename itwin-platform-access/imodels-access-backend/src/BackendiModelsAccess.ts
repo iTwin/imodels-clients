@@ -382,7 +382,7 @@ export class BackendiModelsAccess implements BackendHubAccess {
     const tempBaselineFilePath = join(IModelHost.cacheDir, `temp-baseline-${Guid.createValue()}.bim`);
     IModelJsFs.removeSync(tempBaselineFilePath);
 
-    const baselineFilePath = arg.revision0;
+    const baselineFilePath = arg.version0;
     if (!baselineFilePath) { // if they didn't supply a baseline file, create a blank one.
       const emptyBaseline = SnapshotDb.createEmpty(tempBaselineFilePath, { rootSubject: { name: arg.description ?? arg.iModelName } });
       emptyBaseline.saveChanges();
