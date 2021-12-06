@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc 1>&2",
     "lint": "eslint ./src/**/*.ts 1>&2",
-    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell ./src/**/*.ts --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
   },
   "eslintConfig": {
@@ -17,22 +17,22 @@
   "dependencies": {
     "@itwin/imodels-client-management": "~0.1.0-dev.1"
   },
-  "peerDependencies": {
-    "@itwin/core-frontend": "~3.0.0-dev.141",
-    "@itwin/core-bentley": "~3.0.0-dev.141",
-    "@itwin/core-common": "~3.0.0-dev.141"
-  },
   "devDependencies": {
-    "@itwin/core-frontend": "~3.0.0-dev.141",
+    "@bentley/itwin-client": "~3.0.0-dev.141",
+    "@itwin/appui-abstract": "~3.0.0-dev.141",
     "@itwin/core-bentley": "~3.0.0-dev.141",
     "@itwin/core-common": "~3.0.0-dev.141",
+    "@itwin/core-frontend": "~3.0.0-dev.141",
     "@itwin/core-geometry": "~3.0.0-dev.141",
-    "@itwin/appui-abstract": "~3.0.0-dev.141",
     "@itwin/core-orbitgt": "~3.0.0-dev.141",
     "@itwin/core-quantity": "~3.0.0-dev.141",
-    "@bentley/itwin-client": "~3.0.0-dev.141",
-    "@itwin/webgl-compatibility": "~3.0.0-dev.141",
     "@itwin/imodels-client-common-config": "~0.1.0-dev.1",
+    "@itwin/webgl-compatibility": "~3.0.0-dev.141",
     "typescript": "~4.3.5"
+  },
+  "peerDependencies": {
+    "@itwin/core-bentley": "~3.0.0-dev.141",
+    "@itwin/core-common": "~3.0.0-dev.141",
+    "@itwin/core-frontend": "~3.0.0-dev.141"
   }
 }
