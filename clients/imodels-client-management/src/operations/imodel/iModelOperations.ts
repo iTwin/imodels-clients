@@ -52,7 +52,7 @@ export class iModelOperations<TOptions extends OperationOptions> extends Operati
     });
     return response.iModel;
   }
-  
+
   /**
    * Creates an empty iModel with specified properties. Wraps the
    * {@link https://developer.bentley.com/apis/imodels/operations/create-imodel/ Create iModel} operation from iModels API.

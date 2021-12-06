@@ -19,7 +19,7 @@ export interface ApiOptions {
 
 /** User-configurable iModels client options. */
 export interface iModelsClientOptions {
-  /** 
+  /**
    * Rest client that is used for making HTTP requests. If `undefined` the default client is used which is implemented
    * using `axios` library. See {@link AxiosRestClient}.
    */
@@ -35,8 +35,8 @@ export interface iModelsClientOptions {
 export class iModelsClient {
   private _operationsOptions: OperationOptions;
 
-  /** 
-   * Class constructor. 
+  /**
+   * Class constructor.
    * @param {iModelsClientOptions} options client options. If `options` are `undefined` or if some of the properties
    * are `undefined` the client uses defaults. See {@link iModelsClientOptions}.
    */
@@ -73,7 +73,7 @@ export class iModelsClient {
     return new CheckpointOperations(this._operationsOptions);
   }
 
-  /** 
+  /**
    * Creates a configuration from user-specified properties and default values. See {@link iModelsClientOptions}.
    * @param {iModelsClientOptions} options user-passed client options.
    * @returns {RecursiveRequired<iModelsClientOptions>} options with all the gaps filled with default values.

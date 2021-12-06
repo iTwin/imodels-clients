@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 
-/** 
+/**
  * Request authorization data. This data is sent to the server in `Authorization` request header, the header value is
  * formatted by joining `scheme` and `token` property values with a single space.
  */
