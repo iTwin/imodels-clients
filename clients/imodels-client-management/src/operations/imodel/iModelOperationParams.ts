@@ -33,7 +33,7 @@ export type GetSingleiModelParams = iModelScopedOperationParams;
 
 /** Properties that should be specified when creating a new iModel. */
 export interface iModelProperties {
-  /** Project for which the iModel belongs. Project id must not be empty or whitespace string. */
+  /** Project for which the iModel belongs. Project id must not be an empty or whitespace string. */
   projectId: string;
   /**
    * iModel name. iModel name must be unique within the project, not exceed allowed 255 characters and not be an

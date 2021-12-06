@@ -12,7 +12,7 @@ export interface iModelPropertiesForCreateFromBaseline extends iModelProperties 
 
 /** Parameters for create iModel from baseline file operation. */
 export interface CreateiModelFromBaselineParams extends CreateEmptyiModelParams {
-  /** Properties for the new iModel. */
+  /** Properties for the new iModel. See {@link iModelPropertiesForCreateFromBaseline}. */
   imodelProperties: iModelPropertiesForCreateFromBaseline;
   /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */
   timeOutInMs?: number;
