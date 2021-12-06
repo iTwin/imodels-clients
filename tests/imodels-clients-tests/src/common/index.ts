@@ -7,6 +7,7 @@ export * from "./Constants";
 export * from "./TestClientOptions";
 export * from "./TestiModelGroup";
 export * from "./TrackableTestFileHandler";
+export * from "./GlobalSetup.test"; // TODO: deal somehow
 
 export * from "./AssertionUtils";
 export * from "./CommonTestUtils";

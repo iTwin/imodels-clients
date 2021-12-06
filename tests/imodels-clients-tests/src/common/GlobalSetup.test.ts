@@ -11,16 +11,19 @@ import { TestProjectProvider } from "./test-context-providers/project/TestProjec
 import { TestClientOptions } from "./TestClientOptions";
 import { TestiModelGroup } from "./TestiModelGroup";
 
-before(async () => {
+before(setupTestEnvironment);
+after(teardownTestEnvironment);
+
+export async function setupTestEnvironment(): Promise<void> {
   await cleanupiModelsInTestProject();
   createDirectory(Constants.TestDownloadDirectoryPath);
   cleanupDirectory(Constants.TestDownloadDirectoryPath);
-});
+}
 
-after(async () => {
+export async function teardownTestEnvironment(): Promise<void> {
   await cleanupiModelsInTestProject();
   cleanupDirectory(Constants.TestDownloadDirectoryPath);
-});
+}
 
 async function cleanupiModelsInTestProject(): Promise<void> {
   const imodelsClient = new iModelsClient(new TestClientOptions());

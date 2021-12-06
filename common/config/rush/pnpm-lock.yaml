@@ -13,6 +13,7 @@ dependencies:
   '@itwin/eslint-plugin': 3.0.0-dev.72_eslint@7.31.0+typescript@4.3.5
   '@itwin/webgl-compatibility': 3.0.0-dev.129
   '@rush-temp/imodels-access-backend': 'file:projects/imodels-access-backend.tgz_1d8db0abf32c22dab12ae5369a05b23d'
+  '@rush-temp/imodels-access-backend-tests': 'file:projects/imodels-access-backend-tests.tgz'
   '@rush-temp/imodels-access-frontend': 'file:projects/imodels-access-frontend.tgz'
   '@rush-temp/imodels-client-authoring': 'file:projects/imodels-client-authoring.tgz'
   '@rush-temp/imodels-client-common-config': 'file:projects/imodels-client-common-config.tgz_typescript@4.3.5'
@@ -5787,6 +5788,20 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+  'file:projects/imodels-access-backend-tests.tgz':
+    dependencies:
+      '@types/chai': 4.2.22
+      '@types/mocha': 9.0.0
+      '@types/node': 16.11.11
+      cpx: 1.5.0
+      nyc: 14.0.0
+      typescript: 4.3.5
+    dev: false
+    name: '@rush-temp/imodels-access-backend-tests'
+    resolution:
+      integrity: sha512-NUBcZh5Cp2FWf34EJ89TWGnd5nZg3X0oIULxOZtJflvbDHRLNo5X1ENqIdh7Ui3YZBu+LFnXasr9bBchrf7Gvw==
+      tarball: 'file:projects/imodels-access-backend-tests.tgz'
+    version: 0.0.0
   'file:projects/imodels-access-backend.tgz_1d8db0abf32c22dab12ae5369a05b23d':
     dependencies:
       '@itwin/core-backend': 3.0.0-dev.129_3ae91377cf2ed08598e449b844a407a0
@@ -5802,7 +5817,7 @@ packages:
       '@bentley/itwin-client': '*'
       '@itwin/core-geometry': '*'
     resolution:
-      integrity: sha512-KFPENTgGrGPJTadsH6KGdtG5WpaoYIw/IN6IdtmE+HtC20w8ccWzWe2itBKfaCWHToIaht2vSjmgXXmCA+LzGA==
+      integrity: sha512-JJjm2Yw3sZsTXAxhYzw0fjWr/qx6b9SrEmNR6wx7hAxeJAQLSrtjERUnIEiPGrM76JRgtTq9fAAKRIuH89LADw==
       tarball: 'file:projects/imodels-access-backend.tgz'
     version: 0.0.0
   'file:projects/imodels-access-frontend.tgz':
@@ -5820,7 +5835,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-access-frontend'
     resolution:
-      integrity: sha512-6Bi/beF9Lx1uecU5mlTAd2Tgc4lsrsLDTAthbdFf75UziCuhyZe0cSU20OQn+YK7uTp1vLnVXyD0RBuUNlO1HA==
+      integrity: sha512-W1zMuT1yatdredEAv49vpxQNKmEk5ufcWABgdTPvR+eq4H47BNz0FnRW0p2zYjY9I1cQvyrGXwmpdozEQjJSZg==
       tarball: 'file:projects/imodels-access-frontend.tgz'
     version: 0.0.0
   'file:projects/imodels-client-authoring.tgz':
@@ -5881,21 +5896,23 @@ packages:
       integrity: sha512-IAFtb3lIk/s54fgdF7zyXLyaf2sEuVY4zZrPBB+mPOLfPZN11HA9pGa+djxlbzSmANgL3GETmYi+E9ZyoumRPQ==
       tarball: 'file:projects/imodels-clients-tests.tgz'
     version: 0.0.0
+registry: ''
 specifiers:
   '@azure/storage-blob': ~12.7.0
-  '@bentley/itwin-client': 3.0.0-dev.129
-  '@itwin/appui-abstract': 3.0.0-dev.129
-  '@itwin/core-backend': 3.0.0-dev.129
-  '@itwin/core-bentley': 3.0.0-dev.129
-  '@itwin/core-common': 3.0.0-dev.129
-  '@itwin/core-frontend': 3.0.0-dev.129
-  '@itwin/core-geometry': 3.0.0-dev.129
-  '@itwin/core-orbitgt': 3.0.0-dev.129
-  '@itwin/core-quantity': 3.0.0-dev.129
-  '@itwin/ecschema-metadata': 3.0.0-dev.129
+  '@bentley/itwin-client': ~3.0.0-dev.129
+  '@itwin/appui-abstract': ~3.0.0-dev.129
+  '@itwin/core-backend': ~3.0.0-dev.129
+  '@itwin/core-bentley': ~3.0.0-dev.129
+  '@itwin/core-common': ~3.0.0-dev.129
+  '@itwin/core-frontend': ~3.0.0-dev.129
+  '@itwin/core-geometry': ~3.0.0-dev.129
+  '@itwin/core-orbitgt': ~3.0.0-dev.129
+  '@itwin/core-quantity': ~3.0.0-dev.129
+  '@itwin/ecschema-metadata': ~3.0.0-dev.129
   '@itwin/eslint-plugin': ~3.0.0-dev.72
-  '@itwin/webgl-compatibility': 3.0.0-dev.129
+  '@itwin/webgl-compatibility': ~3.0.0-dev.129
   '@rush-temp/imodels-access-backend': 'file:./projects/imodels-access-backend.tgz'
+  '@rush-temp/imodels-access-backend-tests': 'file:./projects/imodels-access-backend-tests.tgz'
   '@rush-temp/imodels-access-frontend': 'file:./projects/imodels-access-frontend.tgz'
   '@rush-temp/imodels-client-authoring': 'file:./projects/imodels-client-authoring.tgz'
   '@rush-temp/imodels-client-common-config': 'file:./projects/imodels-client-common-config.tgz'
