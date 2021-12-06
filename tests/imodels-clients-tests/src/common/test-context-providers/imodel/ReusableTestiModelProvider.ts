@@ -3,26 +3,26 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Config } from "../../Config";
-import { TestiModelCreator } from "./TestiModelCreator";
-import { ReusableiModelMetadata, TestiModelSetupContext } from "./TestiModelInterfaces";
-import { TestiModelRetriever } from "./TestiModelRetriever";
+import { TestIModelCreator } from "./TestIModelCreator";
+import { ReusableIModelMetadata, TestIModelSetupContext } from "./TestIModelInterfaces";
+import { TestIModelRetriever } from "./TestIModelRetriever";
 
-export class ReusableTestiModelProvider {
-  private static _reusableiModel: ReusableiModelMetadata | undefined;
+export class ReusableTestIModelProvider {
+  private static _reusableIModel: ReusableIModelMetadata | undefined;
 
-  public static async getOrCreate(params: TestiModelSetupContext & { projectId: string }): Promise<ReusableiModelMetadata> {
-    if (ReusableTestiModelProvider._reusableiModel)
-      return ReusableTestiModelProvider._reusableiModel;
+  public static async getOrCreate(params: TestIModelSetupContext & { projectId: string }): Promise<ReusableIModelMetadata> {
+    if (ReusableTestIModelProvider._reusableIModel)
+      return ReusableTestIModelProvider._reusableIModel;
 
-    const paramsWithiModelName = {
+    const paramsWithIModelName = {
       ...params,
-      imodelName: Config.get().testiModelName
+      iModelName: Config.get().testIModelName
     };
 
-    ReusableTestiModelProvider._reusableiModel =
-      await TestiModelRetriever.queryWithRelatedData(paramsWithiModelName) ??
-      await TestiModelCreator.createReusable(paramsWithiModelName);
+    ReusableTestIModelProvider._reusableIModel =
+      await TestIModelRetriever.queryWithRelatedData(paramsWithIModelName) ??
+      await TestIModelCreator.createReusable(paramsWithIModelName);
 
-    return ReusableTestiModelProvider._reusableiModel;
+    return ReusableTestIModelProvider._reusableIModel;
   }
 }

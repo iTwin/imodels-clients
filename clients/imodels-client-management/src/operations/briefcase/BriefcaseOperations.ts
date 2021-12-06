@@ -10,7 +10,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   public getMinimalList(params: GetBriefcaseListParams): AsyncIterableIterator<MinimalBriefcase> {
     return getCollectionIterator(async () => this.getEntityCollectionPage<MinimalBriefcase>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getBriefcaseListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
+      url: this._options.urlFormatter.getBriefcaseListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as BriefcasesResponse<MinimalBriefcase>).briefcases
     }));
@@ -19,7 +19,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   public getRepresentationList(params: GetBriefcaseListParams): AsyncIterableIterator<Briefcase> {
     return getCollectionIterator(async () => this.getEntityCollectionPage<Briefcase>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getBriefcaseListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
+      url: this._options.urlFormatter.getBriefcaseListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as BriefcasesResponse<Briefcase>).briefcases
     }));
@@ -28,7 +28,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   public async getSingle(params: GetSingleBriefcaseParams): Promise<Briefcase> {
     const response = await this.sendGetRequest<BriefcaseResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleBriefcaseUrl({ imodelId: params.imodelId, briefcaseId: params.briefcaseId })
+      url: this._options.urlFormatter.getSingleBriefcaseUrl({ iModelId: params.iModelId, briefcaseId: params.briefcaseId })
     });
     return response.briefcase;
   }

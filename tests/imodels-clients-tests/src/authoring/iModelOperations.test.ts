@@ -2,49 +2,49 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, CreateiModelFromBaselineParams, iModel, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, TestiModelGroup, assertiModel, cleanUpiModels } from "../common";
+import { AuthorizationCallback, CreateIModelFromBaselineParams, IModel, IModelsClient } from "@itwin/imodels-client-authoring";
+import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestIModelFileProvider, TestIModelGroup, assertIModel, cleanUpIModels } from "../common";
 
-describe("[Authoring] iModelOperations", () => {
-  let imodelsClient: iModelsClient;
+describe("[Authoring] IModelOperations", () => {
+  let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let projectId: string;
-  let testiModelGroup: TestiModelGroup;
+  let testIModelGroup: TestIModelGroup;
 
   before(async () => {
-    imodelsClient = new iModelsClient(new TestClientOptions());
+    iModelsClient = new IModelsClient(new TestClientOptions());
     authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
-    testiModelGroup = new TestiModelGroup({
+    testIModelGroup = new TestIModelGroup({
       labels: {
         package: Constants.PackagePrefix,
-        testSuite: "AuthoringiModelOperations"
+        testSuite: "AuthoringIModelOperations"
       }
     });
   });
 
   after(async () => {
-    await cleanUpiModels({ imodelsClient, authorization, projectId, testiModelGroup });
+    await cleanUpIModels({ iModelsClient, authorization, projectId, testIModelGroup });
   });
 
   it("should create an iModel from baseline", async () => {
     // Arrange
-    const createiModelParams: CreateiModelFromBaselineParams = {
+    const createIModelParams: CreateIModelFromBaselineParams = {
       authorization,
-      imodelProperties: {
+      iModelProperties: {
         projectId,
-        name: testiModelGroup.getPrefixedUniqueiModelName("Sample iModel from baseline"),
-        filePath: TestiModelFileProvider.imodel.filePath
+        name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel from baseline"),
+        filePath: TestIModelFileProvider.iModel.filePath
       }
     };
 
     // Act
-    const imodel: iModel = await imodelsClient.iModels.createFromBaseline(createiModelParams);
+    const iModel: IModel = await iModelsClient.IModels.createFromBaseline(createIModelParams);
 
     // Assert
-    assertiModel({
-      actualiModel: imodel,
-      expectediModelProperties: createiModelParams.imodelProperties
+    assertIModel({
+      actualIModel: iModel,
+      expectedIModelProperties: createIModelParams.iModelProperties
     });
   });
 });

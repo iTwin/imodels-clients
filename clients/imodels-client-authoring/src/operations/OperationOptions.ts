@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import { OperationOptions as ManagementOperationOptions } from "@itwin/imodels-client-management";
 import { FileHandler } from "../base";
-import { iModelsApiUrlFormatter } from "./iModelsApiUrlFormatter";
+import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
 
 export interface OperationOptions extends ManagementOperationOptions {
-  urlFormatter: iModelsApiUrlFormatter;
+  urlFormatter: IModelsApiUrlFormatter;
   fileHandler: FileHandler;
 }

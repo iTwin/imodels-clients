@@ -20,7 +20,7 @@ export interface ApiConfigValues {
 
 export interface ApisConfigValues {
   projects: ApiConfigValues;
-  imodels: ApiConfigValues;
+  iModels: ApiConfigValues;
 }
 
 export interface TestUserConfigValues {
@@ -35,7 +35,7 @@ export interface TestUsersConfigValues {
 
 export interface ConfigValues {
   testProjectName: string;
-  testiModelName: string;
+  testIModelName: string;
   auth: AuthConfigValues;
   apis: ApisConfigValues;
   testUsers: TestUsersConfigValues;
@@ -54,7 +54,7 @@ export class Config {
 
     return {
       testProjectName: process.env.TEST_PROJECT_NAME!,
-      testiModelName: process.env.TEST_IMODEL_NAME!,
+      testIModelName: process.env.TEST_IMODEL_NAME!,
       auth: {
         authority: process.env.AUTH_AUTHORITY!,
         clientId: process.env.AUTH_CLIENT_ID!,
@@ -62,7 +62,7 @@ export class Config {
         redirectUrl: process.env.AUTH_REDIRECT_URL!
       },
       apis: {
-        imodels: {
+        iModels: {
           baseUrl: process.env.APIS_IMODELS_BASE_URL!,
           version: process.env.APIS_IMODELS_VERSION!,
           scopes: process.env.APIS_IMODELS_SCOPES!

@@ -6,73 +6,73 @@ import { Changeset, CheckpointState, Lock, LockLevel, LockedObjects, sleep } fro
 import { TestSetupError } from "../../CommonTestUtils";
 import { Config } from "../../Config";
 import { TestAuthorizationProvider } from "../auth/TestAuthenticationProvider";
-import { TestiModelFileProvider } from "./TestiModelFileProvider";
-import { BriefcaseMetadata, NamedVersionMetadata, ReusableiModelMetadata, TestiModelSetupContext, iModelIdParam, iModelIdentificationByNameParams, iModelMetadata } from "./TestiModelInterfaces";
+import { TestIModelFileProvider } from "./TestIModelFileProvider";
+import { BriefcaseMetadata, NamedVersionMetadata, ReusableIModelMetadata, TestIModelSetupContext, IModelIdParam, IModelIdentificationByNameParams, IModelMetadata } from "./TestIModelInterfaces";
 
-export class TestiModelCreator {
+export class TestIModelCreator {
   public static namedVersionIndexes = [5, 10];
 
-  private static readonly _imodelDescription = "Some description";
+  private static readonly _iModelDescription = "Some description";
   private static readonly _briefcaseDeviceName = "Some device name";
 
-  public static async createEmpty(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<iModelMetadata> {
-    const imodel = await params.imodelsClient.iModels.createEmpty({
+  public static async createEmpty(params: TestIModelSetupContext & IModelIdentificationByNameParams): Promise<IModelMetadata> {
+    const iModel = await params.iModelsClient.IModels.createEmpty({
       authorization: params.authorization,
-      imodelProperties: {
+      iModelProperties: {
         projectId: params.projectId,
-        name: params.imodelName,
-        description: TestiModelCreator._imodelDescription
+        name: params.iModelName,
+        description: TestIModelCreator._iModelDescription
       }
     });
 
     return {
-      id: imodel.id,
-      name: imodel.name,
-      description: imodel.description!
+      id: iModel.id,
+      name: iModel.name,
+      description: iModel.description!
     };
   }
 
-  public static async createEmptyAndUploadChangesets(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<iModelMetadata> {
-    const imodel = await TestiModelCreator.createEmpty(params);
-    await TestiModelCreator.uploadChangesets({ ...params, imodelId: imodel.id });
+  public static async createEmptyAndUploadChangesets(params: TestIModelSetupContext & IModelIdentificationByNameParams): Promise<IModelMetadata> {
+    const iModel = await TestIModelCreator.createEmpty(params);
+    await TestIModelCreator.uploadChangesets({ ...params, iModelId: iModel.id });
 
-    return imodel;
+    return iModel;
   }
 
-  public static async createReusable(params: TestiModelSetupContext & iModelIdentificationByNameParams): Promise<ReusableiModelMetadata> {
-    const imodel = await TestiModelCreator.createEmpty(params);
-    const briefcase = await TestiModelCreator.uploadChangesets({ ...params, imodelId: imodel.id });
-    const namedVersions = await TestiModelCreator.createNamedVersionsOnReusableiModel({ ...params, imodelId: imodel.id });
-    const lock = await TestiModelCreator.createLockOnReusableiModel({ ...params, imodelId: imodel.id, briefcaseId: briefcase.id });
+  public static async createReusable(params: TestIModelSetupContext & IModelIdentificationByNameParams): Promise<ReusableIModelMetadata> {
+    const iModel = await TestIModelCreator.createEmpty(params);
+    const briefcase = await TestIModelCreator.uploadChangesets({ ...params, iModelId: iModel.id });
+    const namedVersions = await TestIModelCreator.createNamedVersionsOnReusableIModel({ ...params, iModelId: iModel.id });
+    const lock = await TestIModelCreator.createLockOnReusableIModel({ ...params, iModelId: iModel.id, briefcaseId: briefcase.id });
 
     return {
-      ...imodel,
+      ...iModel,
       briefcase,
       namedVersions,
       lock
     };
   }
 
-  private static async createNamedVersionsOnReusableiModel(params: TestiModelSetupContext & iModelIdParam): Promise<NamedVersionMetadata[]> {
+  private static async createNamedVersionsOnReusableIModel(params: TestIModelSetupContext & IModelIdParam): Promise<NamedVersionMetadata[]> {
     // We use this specific user that is able to generate checkpoints
     // for named version creation to mimic production environment.
     const authorizationForUser2 = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin2FullyFeatured);
-    const imodelScopedRequestParams = {
-      imodelsClient: params.imodelsClient,
+    const iModelScopedRequestParams = {
+      iModelsClient: params.iModelsClient,
       authorization: authorizationForUser2,
-      imodelId: params.imodelId
+      iModelId: params.iModelId
     };
 
     const namedVersions: NamedVersionMetadata[] = [];
     const checkpointGenerationPromises: Promise<void>[] = [];
-    for (const index of TestiModelCreator.namedVersionIndexes) {
-      const namedVersion: NamedVersionMetadata = await TestiModelCreator.createNamedVersionOnChangesetIndex({
-        ...imodelScopedRequestParams,
+    for (const index of TestIModelCreator.namedVersionIndexes) {
+      const namedVersion: NamedVersionMetadata = await TestIModelCreator.createNamedVersionOnChangesetIndex({
+        ...iModelScopedRequestParams,
         changesetIndex: index
       });
       namedVersions.push(namedVersion);
       checkpointGenerationPromises.push(
-        TestiModelCreator.waitForNamedVersionCheckpointGenerated({ ...imodelScopedRequestParams, namedVersionId: namedVersion.id })
+        TestIModelCreator.waitForNamedVersionCheckpointGenerated({ ...iModelScopedRequestParams, namedVersionId: namedVersion.id })
       );
     }
 
@@ -80,8 +80,8 @@ export class TestiModelCreator {
     return namedVersions;
   }
 
-  private static async createLockOnReusableiModel(params: TestiModelSetupContext & iModelIdParam & { briefcaseId: number }): Promise<Lock> {
-    const testiModelLocks: LockedObjects[] = [
+  private static async createLockOnReusableIModel(params: TestIModelSetupContext & IModelIdParam & { briefcaseId: number }): Promise<Lock> {
+    const testIModelLocks: LockedObjects[] = [
       {
         lockLevel: LockLevel.Exclusive,
         objectIds: ["0x1", "0xa"]
@@ -92,33 +92,33 @@ export class TestiModelCreator {
       }
     ];
 
-    const acquiredLocks: Lock = await params.imodelsClient.Locks.update({
+    const acquiredLocks: Lock = await params.iModelsClient.Locks.update({
       authorization: params.authorization,
-      imodelId: params.imodelId,
+      iModelId: params.iModelId,
       briefcaseId: params.briefcaseId,
-      lockedObjects: testiModelLocks
+      lockedObjects: testIModelLocks
     });
 
     return acquiredLocks;
   }
 
-  public static async uploadChangesets(params: TestiModelSetupContext & iModelIdParam): Promise<BriefcaseMetadata> {
-    const briefcase = await TestiModelCreator.acquireBriefcase(params);
+  public static async uploadChangesets(params: TestIModelSetupContext & IModelIdParam): Promise<BriefcaseMetadata> {
+    const briefcase = await TestIModelCreator.acquireBriefcase(params);
 
     const changesets: Changeset[] = [];
-    for (let i = 0; i < TestiModelFileProvider.changesets.length; i++) {
-      const createdChangeset = await params.imodelsClient.Changesets.create({
+    for (let i = 0; i < TestIModelFileProvider.changesets.length; i++) {
+      const createdChangeset = await params.iModelsClient.Changesets.create({
         authorization: params.authorization,
-        imodelId: params.imodelId,
+        iModelId: params.iModelId,
         changesetProperties: {
           briefcaseId: briefcase.id,
-          description: TestiModelFileProvider.changesets[i].description,
-          containingChanges: TestiModelFileProvider.changesets[i].containingChanges,
-          id: TestiModelFileProvider.changesets[i].id,
+          description: TestIModelFileProvider.changesets[i].description,
+          containingChanges: TestIModelFileProvider.changesets[i].containingChanges,
+          id: TestIModelFileProvider.changesets[i].id,
           parentId: i === 0
             ? undefined
-            : TestiModelFileProvider.changesets[i - 1].id,
-          filePath: TestiModelFileProvider.changesets[i].filePath
+            : TestIModelFileProvider.changesets[i - 1].id,
+          filePath: TestIModelFileProvider.changesets[i].filePath
         }
       });
       changesets.push(createdChangeset);
@@ -127,12 +127,12 @@ export class TestiModelCreator {
     return briefcase;
   }
 
-  private static async acquireBriefcase(params: TestiModelSetupContext & iModelIdParam): Promise<BriefcaseMetadata> {
-    const briefcase = await params.imodelsClient.Briefcases.acquire({
+  private static async acquireBriefcase(params: TestIModelSetupContext & IModelIdParam): Promise<BriefcaseMetadata> {
+    const briefcase = await params.iModelsClient.Briefcases.acquire({
       authorization: params.authorization,
-      imodelId: params.imodelId,
+      iModelId: params.iModelId,
       briefcaseProperties: {
-        deviceName: TestiModelCreator._briefcaseDeviceName
+        deviceName: TestIModelCreator._briefcaseDeviceName
       }
     });
 
@@ -142,11 +142,11 @@ export class TestiModelCreator {
     };
   }
 
-  private static async createNamedVersionOnChangesetIndex(params: TestiModelSetupContext & iModelIdParam & { changesetIndex: number }): Promise<NamedVersionMetadata> {
-    const changesetMetadata = TestiModelFileProvider.changesets[params.changesetIndex - 1];
-    const namedVersion = await params.imodelsClient.NamedVersions.create({
+  private static async createNamedVersionOnChangesetIndex(params: TestIModelSetupContext & IModelIdParam & { changesetIndex: number }): Promise<NamedVersionMetadata> {
+    const changesetMetadata = TestIModelFileProvider.changesets[params.changesetIndex - 1];
+    const namedVersion = await params.iModelsClient.NamedVersions.create({
       authorization: params.authorization,
-      imodelId: params.imodelId,
+      iModelId: params.iModelId,
       namedVersionProperties: {
         name: `Named version ${changesetMetadata.index}`,
         changesetId: changesetMetadata.id
@@ -159,11 +159,11 @@ export class TestiModelCreator {
     };
   }
 
-  private static async waitForNamedVersionCheckpointGenerated(params: TestiModelSetupContext & iModelIdParam & { namedVersionId: string }): Promise<void> {
+  private static async waitForNamedVersionCheckpointGenerated(params: TestIModelSetupContext & IModelIdParam & { namedVersionId: string }): Promise<void> {
     const sleepPeriodInMs = 1000;
     const timeOutInMs = 5 * 60 * 1000;
     for (let retries = timeOutInMs / sleepPeriodInMs; retries > 0; --retries) {
-      const checkpoint = await params.imodelsClient.Checkpoints.getSingle(params);
+      const checkpoint = await params.iModelsClient.Checkpoints.getSingle(params);
 
       if (checkpoint.state === CheckpointState.Successful && checkpoint._links?.download !== undefined && checkpoint.containerAccessInfo !== null)
         return;

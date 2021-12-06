@@ -3,24 +3,24 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { iModelsApiUrlFormatter } from "@itwin/imodels-client-authoring";
+import { IModelsApiUrlFormatter } from "@itwin/imodels-client-authoring";
 
-describe("[Authoring] iModelsApiUrlFormatter", () => {
-  let imodelsApiUrlFormatter: iModelsApiUrlFormatter;
-  let imodelsApiBaseUri: string;
+describe("[Authoring] IModelsApiUrlFormatter", () => {
+  let iModelsApiUrlFormatter: IModelsApiUrlFormatter;
+  let iModelsApiBaseUri: string;
 
   before(() => {
-    imodelsApiBaseUri = "https://api.bentley.com/imodels";
-    imodelsApiUrlFormatter = new iModelsApiUrlFormatter(imodelsApiBaseUri);
+    iModelsApiBaseUri = "https://api.bentley.com/imodels";
+    iModelsApiUrlFormatter = new IModelsApiUrlFormatter(iModelsApiBaseUri);
   });
 
   describe("Baseline urls", () => {
     it("should format baseline url", () => {
       // Arrange
-      const getBaselineUrlParams = { imodelId: "IMODEL_ID" };
+      const getBaselineUrlParams = { iModelId: "IMODEL_ID" };
 
       // Act
-      const baselineUrl = imodelsApiUrlFormatter.getBaselineUrl(getBaselineUrlParams);
+      const baselineUrl = iModelsApiUrlFormatter.getBaselineUrl(getBaselineUrlParams);
 
       // Assert
       expect(baselineUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/baselinefile");
@@ -30,10 +30,10 @@ describe("[Authoring] iModelsApiUrlFormatter", () => {
   describe("Lock urls", () => {
     it("should format lock list url", () => {
       // Arrange
-      const getLockListUrlParams = { imodelId: "IMODEL_ID" };
+      const getLockListUrlParams = { iModelId: "IMODEL_ID" };
 
       // Act
-      const lockListUrl = imodelsApiUrlFormatter.getLockListUrl(getLockListUrlParams);
+      const lockListUrl = iModelsApiUrlFormatter.getLockListUrl(getLockListUrlParams);
 
       // Assert
       expect(lockListUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/locks");

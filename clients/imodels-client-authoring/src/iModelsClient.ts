@@ -4,28 +4,28 @@
  *--------------------------------------------------------------------------------------------*/
 import {
   CheckpointOperations,
-  iModelsClient as ManagementiModelsClient,
-  iModelsClientOptions as ManagementiModelsClientOptions,
+  IModelsClient as ManagementIModelsClient,
+  IModelsClientOptions as ManagementIModelsClientOptions,
   NamedVersionOperations,
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 import { AzureSdkFileHandler, FileHandler } from "./base";
-import { BriefcaseOperations, ChangesetOperations, LockOperations, iModelOperations } from "./operations";
-import { iModelsApiUrlFormatter } from "./operations/iModelsApiUrlFormatter";
+import { BriefcaseOperations, ChangesetOperations, LockOperations, IModelOperations } from "./operations";
+import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
 
-export interface iModelsClientOptions extends ManagementiModelsClientOptions {
+export interface IModelsClientOptions extends ManagementIModelsClientOptions {
   fileHandler?: FileHandler;
 }
 
-export class iModelsClient {
+export class IModelsClient {
   private _operationsOptions: OperationOptions;
 
-  constructor(options?: iModelsClientOptions) {
-    const fillediModelsClientOptions = iModelsClient.fillConfiguration(options);
+  constructor(options?: IModelsClientOptions) {
+    const filledIModelsClientOptions = IModelsClient.fillConfiguration(options);
     this._operationsOptions = {
-      ...fillediModelsClientOptions,
-      urlFormatter: new iModelsApiUrlFormatter(fillediModelsClientOptions.api.baseUri)
+      ...filledIModelsClientOptions,
+      urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUri)
     };
   }
 
@@ -33,8 +33,8 @@ export class iModelsClient {
     return this._operationsOptions.fileHandler;
   }
 
-  public get iModels(): iModelOperations<OperationOptions> {
-    return new iModelOperations(this._operationsOptions);
+  public get IModels(): IModelOperations<OperationOptions> {
+    return new IModelOperations(this._operationsOptions);
   }
 
   public get Briefcases(): BriefcaseOperations<OperationOptions> {
@@ -57,9 +57,9 @@ export class iModelsClient {
     return new LockOperations(this._operationsOptions);
   }
 
-  public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
+  public static fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
     return {
-      ...ManagementiModelsClient.fillConfiguration(options),
+      ...ManagementIModelsClient.fillConfiguration(options),
       fileHandler: options?.fileHandler ?? new AzureSdkFileHandler()
     };
   }

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { CollectionResponse } from "../CommonInterfaces";
 
-export enum iModelState {
+export enum IModelState {
   Initialized = "initialized",
   NotInitialized = "notInitialized",
 }
@@ -19,24 +19,24 @@ export interface Extent {
   northEast: Point;
 }
 
-export interface MinimaliModel {
+export interface MinimalIModel {
   id: string;
   displayName: string;
 }
 
-export interface iModel extends MinimaliModel {
+export interface IModel extends MinimalIModel {
   name: string;
   description: string | null;
-  state: iModelState;
+  state: IModelState;
   createdDateTime: string;
   projectId: string;
   extent: Extent | null;
 }
 
-export interface iModelResponse {
-  iModel: iModel;
+export interface IModelResponse {
+  IModel: IModel;
 }
 
-export interface iModelsResponse<TiModel extends MinimaliModel> extends CollectionResponse {
-  iModels: TiModel[];
+export interface IModelsResponse<TIModel extends MinimalIModel> extends CollectionResponse {
+  IModels: TIModel[];
 }

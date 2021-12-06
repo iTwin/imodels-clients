@@ -3,22 +3,22 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, Briefcase, GetBriefcaseListParams, GetSingleBriefcaseParams, SPECIAL_VALUES_ME, iModelsClient, toArray } from "@itwin/imodels-client-management";
-import { Config, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, assertBriefcase, assertCollection } from "../common";
+import { IModelsClient as AuthoringIModelsClient } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, Briefcase, GetBriefcaseListParams, GetSingleBriefcaseParams, SPECIAL_VALUES_ME, IModelsClient, toArray } from "@itwin/imodels-client-management";
+import { Config, ReusableTestIModelProvider, ReusableIModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, assertBriefcase, assertCollection } from "../common";
 
 describe("[Management] BriefcaseOperations", () => {
-  let imodelsClient: iModelsClient;
+  let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let projectId: string;
-  let testiModel: ReusableiModelMetadata;
+  let testIModel: ReusableIModelMetadata;
 
   before(async () => {
-    imodelsClient = new iModelsClient(new TestClientOptions());
+    iModelsClient = new IModelsClient(new TestClientOptions());
     authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
-    testiModel = await ReusableTestiModelProvider.getOrCreate({
-      imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
+    testIModel = await ReusableTestIModelProvider.getOrCreate({
+      iModelsClient: new AuthoringIModelsClient(new TestClientOptions()),
       authorization,
       projectId
     });
@@ -27,18 +27,18 @@ describe("[Management] BriefcaseOperations", () => {
   [
     {
       label: "minimal",
-      functionUnderTest: (params: GetBriefcaseListParams) => imodelsClient.Briefcases.getMinimalList(params)
+      functionUnderTest: (params: GetBriefcaseListParams) => iModelsClient.Briefcases.getMinimalList(params)
     },
     {
       label: "representation",
-      functionUnderTest: (params: GetBriefcaseListParams) => imodelsClient.Briefcases.getRepresentationList(params)
+      functionUnderTest: (params: GetBriefcaseListParams) => iModelsClient.Briefcases.getRepresentationList(params)
     }
   ].forEach((testCase) => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getBriefcaseListParams: GetBriefcaseListParams = {
         authorization,
-        imodelId: testiModel.id,
+        iModelId: testIModel.id,
         urlParams: {
           $top: 5
         }
@@ -59,20 +59,20 @@ describe("[Management] BriefcaseOperations", () => {
     // Arrange
     const getBriefcaseListParams: GetBriefcaseListParams = {
       authorization,
-      imodelId: testiModel.id,
+      iModelId: testIModel.id,
       urlParams: {
         ownerId: SPECIAL_VALUES_ME
       }
     };
 
     // Act
-    const briefcases = imodelsClient.Briefcases.getRepresentationList(getBriefcaseListParams);
+    const briefcases = iModelsClient.Briefcases.getRepresentationList(getBriefcaseListParams);
 
     // Assert
     const briefcasesArray = await toArray(briefcases);
     expect(briefcasesArray.length).to.equal(1);
     const briefcase = briefcasesArray[0];
-    expect(briefcase.briefcaseId).to.equal(testiModel.briefcase.id);
+    expect(briefcase.briefcaseId).to.equal(testIModel.briefcase.id);
   });
 
   it("should not return user owned briefcases if user does not own any when querying representation collection", async () => {
@@ -80,14 +80,14 @@ describe("[Management] BriefcaseOperations", () => {
     const authorizationForUser2 = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin2FullyFeatured);
     const getBriefcaseListParams: GetBriefcaseListParams = {
       authorization: authorizationForUser2,
-      imodelId: testiModel.id,
+      iModelId: testIModel.id,
       urlParams: {
         ownerId: SPECIAL_VALUES_ME
       }
     };
 
     // Act
-    const briefcases = imodelsClient.Briefcases.getRepresentationList(getBriefcaseListParams);
+    const briefcases = iModelsClient.Briefcases.getRepresentationList(getBriefcaseListParams);
 
     // Assert
     const briefcasesArray = await toArray(briefcases);
@@ -98,19 +98,19 @@ describe("[Management] BriefcaseOperations", () => {
     // Arrange
     const getSingleBriefcaseParams: GetSingleBriefcaseParams = {
       authorization,
-      imodelId: testiModel.id,
-      briefcaseId: testiModel.briefcase.id
+      iModelId: testIModel.id,
+      briefcaseId: testIModel.briefcase.id
     };
 
     // Act
-    const briefcase: Briefcase = await imodelsClient.Briefcases.getSingle(getSingleBriefcaseParams);
+    const briefcase: Briefcase = await iModelsClient.Briefcases.getSingle(getSingleBriefcaseParams);
 
     // Assert
     assertBriefcase({
       actualBriefcase: briefcase,
       expectedBriefcaseProperties: {
-        briefcaseId: testiModel.briefcase.id,
-        deviceName: testiModel.briefcase.deviceName
+        briefcaseId: testIModel.briefcase.id,
+        deviceName: testIModel.briefcase.deviceName
       }
     });
   });

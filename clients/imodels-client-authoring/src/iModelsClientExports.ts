@@ -7,4 +7,4 @@ export * from "@itwin/imodels-client-management/lib/operations/OperationParamExp
 export * from "./base";
 export * from "./operations";
 export * from "./Constants";
-export * from "./iModelsClient";
+export * from "./IModelsClient";

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, iModelScopedOperationParams, iModelsErrorCode, iModelsErrorImpl } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, IModelScopedOperationParams, IModelsErrorCode, IModelsErrorImpl } from "@itwin/imodels-client-management";
 import { DownloadedChangeset, TargetDirectoryParam } from "../../base";
 import { OperationOptions } from "../OperationOptions";
 import { ChangesetPropertiesForCreate, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams } from "./ChangesetOperationParams";
@@ -13,7 +13,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     const createChangesetBody = this.getCreateChangesetRequestBody(params.changesetProperties);
     const createChangesetResponse = await this.sendPostRequest<ChangesetResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetListUrl({ imodelId: params.imodelId }),
+      url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId }),
       body: createChangesetBody
     });
 
@@ -56,7 +56,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       for (const changeset of changesetsWithFilePath)
         queue.push(async () => this.downloadChangesetFileWithRetry({
           authorization: params.authorization,
-          imodelId: params.imodelId,
+          iModelId: params.iModelId,
           changeset
         }));
       await queue.waitAll();
@@ -83,7 +83,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     };
   }
 
-  private async downloadSingleChangeset(params: iModelScopedOperationParams & TargetDirectoryParam & { changeset: Changeset }): Promise<DownloadedChangeset> {
+  private async downloadSingleChangeset(params: IModelScopedOperationParams & TargetDirectoryParam & { changeset: Changeset }): Promise<DownloadedChangeset> {
     const changesetWithPath: DownloadedChangeset = {
       ...params.changeset,
       filePath: this._options.fileHandler.join(params.targetDirectoryPath, this.createFileName(params.changeset.id))
@@ -91,14 +91,14 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
     await this.downloadChangesetFileWithRetry({
       authorization: params.authorization,
-      imodelId: params.imodelId,
+      iModelId: params.iModelId,
       changeset: changesetWithPath
     });
 
     return changesetWithPath;
   }
 
-  private async downloadChangesetFileWithRetry(params: iModelScopedOperationParams & { changeset: DownloadedChangeset }): Promise<void> {
+  private async downloadChangesetFileWithRetry(params: IModelScopedOperationParams & { changeset: DownloadedChangeset }): Promise<void> {
     const targetFilePath = params.changeset.filePath;
     if (this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
       return;
@@ -108,15 +108,15 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     } catch (error) {
       const changeset = await this.querySingleInternal({
         authorization: params.authorization,
-        imodelId: params.imodelId,
+        iModelId: params.iModelId,
         changesetId: params.changeset.id
       });
 
       try {
         await this._options.fileHandler.downloadFile({ downloadUrl: changeset._links.download.href, targetFilePath });
       } catch (errorAfterRetry) {
-        throw new iModelsErrorImpl({
-          code: iModelsErrorCode.ChangesetDownloadFailed,
+        throw new IModelsErrorImpl({
+          code: IModelsErrorCode.ChangesetDownloadFailed,
           message: `Failed to download changeset. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}, error: ${JSON.stringify(errorAfterRetry)}.`
         });
       }

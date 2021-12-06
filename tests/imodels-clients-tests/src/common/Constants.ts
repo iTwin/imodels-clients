@@ -6,6 +6,6 @@ import * as path from "path";
 
 export class Constants {
   public static TestDownloadDirectoryPath = path.join(__dirname, "../testDownloads");
-  public static PackagePrefix = "iModelsClientsTests";
+  public static PackagePrefix = "IModelsClientsTests";
   public static TestDeviceName = "Test device";
 }

@@ -21,7 +21,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
     const getEntityPageFunc = async () => this.getEntityCollectionPage<MinimalChangeset>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
+      url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as MinimalChangesetsResponse).changesets
     });
@@ -47,10 +47,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   protected async querySingleInternal(params: GetSingleChangesetParams): Promise<Changeset> {
-    const { authorization, imodelId, ...changesetIdOrIndex } = params;
+    const { authorization, iModelId, ...changesetIdOrIndex } = params;
     const response = await this.sendGetRequest<ChangesetResponse>({
       authorization,
-      url: this._options.urlFormatter.getSingleChangesetUrl({ imodelId, ...changesetIdOrIndex })
+      url: this._options.urlFormatter.getSingleChangesetUrl({ iModelId, ...changesetIdOrIndex })
     });
     return response.changeset;
   }
@@ -58,7 +58,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   protected getRepresentationListInternal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
     const getEntityPageFunc = async () => this.getEntityCollectionPage<Changeset>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetListUrl({ imodelId: params.imodelId, urlParams: params.urlParams }),
+      url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse).changesets
     });
@@ -83,10 +83,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     if (!namedVersionLink)
       return undefined;
 
-    const { imodelId, namedVersionId } = this._options.urlFormatter.parseNamedVersionUrl(namedVersionLink);
+    const { iModelId, namedVersionId } = this._options.urlFormatter.parseNamedVersionUrl(namedVersionLink);
     return this._namedVersionOperations.getSingle({
       authorization,
-      imodelId,
+      iModelId,
       namedVersionId
     });
   }
@@ -95,10 +95,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     if (!currentOrPrecedingCheckpointLink)
       return undefined;
 
-    const { imodelId, changesetIndex } = this._options.urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
+    const { iModelId, changesetIndex } = this._options.urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
     return this._checkpointOperations.getSingle({
       authorization,
-      imodelId,
+      iModelId,
       changesetIndex
     });
   }

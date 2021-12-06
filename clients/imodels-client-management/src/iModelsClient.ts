@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import { AxiosRestClient, RecursiveRequired, RestClient } from "./base";
 import { Constants } from "./Constants";
-import { BriefcaseOperations, ChangesetOperations, NamedVersionOperations, iModelOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, NamedVersionOperations, IModelOperations } from "./operations";
 import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
-import { iModelsApiUrlFormatter } from "./operations/iModelsApiUrlFormatter";
+import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
 
 export interface ApiOptions {
@@ -14,24 +14,24 @@ export interface ApiOptions {
   version?: string;
 }
 
-export interface iModelsClientOptions {
+export interface IModelsClientOptions {
   restClient?: RestClient;
   api?: ApiOptions;
 }
 
-export class iModelsClient {
+export class IModelsClient {
   private _operationsOptions: OperationOptions;
 
-  constructor(options?: iModelsClientOptions) {
-    const fillediModelsClientOptions = iModelsClient.fillConfiguration(options);
+  constructor(options?: IModelsClientOptions) {
+    const filledIModelsClientOptions = IModelsClient.fillConfiguration(options);
     this._operationsOptions = {
-      ...fillediModelsClientOptions,
-      urlFormatter: new iModelsApiUrlFormatter(fillediModelsClientOptions.api.baseUri)
+      ...filledIModelsClientOptions,
+      urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUri)
     };
   }
 
-  public get iModels(): iModelOperations<OperationOptions> {
-    return new iModelOperations(this._operationsOptions);
+  public get IModels(): IModelOperations<OperationOptions> {
+    return new IModelOperations(this._operationsOptions);
   }
 
   public get Briefcases(): BriefcaseOperations<OperationOptions> {
@@ -50,7 +50,7 @@ export class iModelsClient {
     return new CheckpointOperations(this._operationsOptions);
   }
 
-  public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
+  public static fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
     return {
       restClient: options?.restClient ?? new AxiosRestClient(),
       api: {

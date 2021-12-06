@@ -2,60 +2,60 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { MinimaliModel, OperationsBase, PreferReturn, getCollectionIterator, iModel, iModelResponse, iModelsResponse } from "../../base";
+import { MinimalIModel, OperationsBase, PreferReturn, getCollectionIterator, IModel, IModelResponse, IModelsResponse } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateEmptyiModelParams, DeleteiModelParams, GetSingleiModelParams, GetiModelListParams, iModelProperties } from "./iModelOperationParams";
+import { CreateEmptyIModelParams, DeleteIModelParams, GetSingleIModelParams, GetIModelListParams, IModelProperties } from "./IModelOperationParams";
 
-export class iModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
-  public getMinimalList(params: GetiModelListParams): AsyncIterableIterator<MinimaliModel> {
-    return getCollectionIterator(async () => this.getEntityCollectionPage<MinimaliModel>({
+export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
+  public getMinimalList(params: GetIModelListParams): AsyncIterableIterator<MinimalIModel> {
+    return getCollectionIterator(async () => this.getEntityCollectionPage<MinimalIModel>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getiModelListUrl({ urlParams: params.urlParams }),
+      url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: unknown) => (response as iModelsResponse<MinimaliModel>).iModels
+      entityCollectionAccessor: (response: unknown) => (response as IModelsResponse<MinimalIModel>).IModels
     }));
   }
 
-  public getRepresentationList(params: GetiModelListParams): AsyncIterableIterator<iModel> {
-    return getCollectionIterator(async () => this.getEntityCollectionPage<iModel>({
+  public getRepresentationList(params: GetIModelListParams): AsyncIterableIterator<IModel> {
+    return getCollectionIterator(async () => this.getEntityCollectionPage<IModel>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getiModelListUrl({ urlParams: params.urlParams }),
+      url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: unknown) => (response as iModelsResponse<iModel>).iModels
+      entityCollectionAccessor: (response: unknown) => (response as IModelsResponse<IModel>).IModels
     }));
   }
 
-  public async getSingle(params: GetSingleiModelParams): Promise<iModel> {
-    const response = await this.sendGetRequest<iModelResponse>({
+  public async getSingle(params: GetSingleIModelParams): Promise<IModel> {
+    const response = await this.sendGetRequest<IModelResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleiModelUrl({ imodelId: params.imodelId })
+      url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId })
     });
-    return response.iModel;
+    return response.IModel;
   }
 
-  public async createEmpty(params: CreateEmptyiModelParams): Promise<iModel> {
-    const createiModelBody = this.getCreateEmptyiModelRequestBody(params.imodelProperties);
-    const createiModelResponse = await this.sendPostRequest<iModelResponse>({
+  public async createEmpty(params: CreateEmptyIModelParams): Promise<IModel> {
+    const createIModelBody = this.getCreateEmptyIModelRequestBody(params.iModelProperties);
+    const createIModelResponse = await this.sendPostRequest<IModelResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getCreateiModelUrl(),
-      body: createiModelBody
+      url: this._options.urlFormatter.getCreateIModelUrl(),
+      body: createIModelBody
     });
-    return createiModelResponse.iModel;
+    return createIModelResponse.IModel;
   }
 
-  public async delete(params: DeleteiModelParams): Promise<void> {
+  public async delete(params: DeleteIModelParams): Promise<void> {
     return this.sendDeleteRequest({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleiModelUrl({ imodelId: params.imodelId })
+      url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId })
     });
   }
 
-  protected getCreateEmptyiModelRequestBody(imodelProperties: iModelProperties): object {
+  protected getCreateEmptyIModelRequestBody(iModelProperties: IModelProperties): object {
     return {
-      projectId: imodelProperties.projectId,
-      name: imodelProperties.name,
-      description: imodelProperties.description,
-      extent: imodelProperties.extent
+      projectId: iModelProperties.projectId,
+      name: iModelProperties.name,
+      description: iModelProperties.description,
+      extent: iModelProperties.extent
     };
   }
 }

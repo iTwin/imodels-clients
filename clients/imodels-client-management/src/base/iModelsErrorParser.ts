@@ -2,34 +2,34 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsError, iModelsErrorCode, iModelsErrorDetail } from "./interfaces/iModelsErrorInterfaces";
+import { IModelsError, IModelsErrorCode, IModelsErrorDetail } from "./interfaces/IModelsErrorInterfaces";
 
-interface iModelsApiErrorWrapper {
-  error: iModelsApiError;
+interface IModelsApiErrorWrapper {
+  error: IModelsApiError;
 }
 
-interface iModelsApiError {
+interface IModelsApiError {
   code: string;
   message?: string;
-  details?: iModelsApiErrorDetail[];
+  details?: IModelsApiErrorDetail[];
 }
 
-interface iModelsApiErrorDetail {
+interface IModelsApiErrorDetail {
   code: string;
   message: string;
   target: string;
 }
 
-export function isiModelsApiError(error: unknown): error is iModelsError {
-  const errorCode: unknown = (error as iModelsError)?.code;
+export function isIModelsApiError(error: unknown): error is IModelsError {
+  const errorCode: unknown = (error as IModelsError)?.code;
   return errorCode !== undefined && typeof errorCode === "string";
 }
 
-export class iModelsErrorImpl extends Error implements iModelsError {
-  public code: iModelsErrorCode;
-  public details?: iModelsErrorDetail[];
+export class IModelsErrorImpl extends Error implements IModelsError {
+  public code: IModelsErrorCode;
+  public details?: IModelsErrorDetail[];
 
-  constructor(params: { code: iModelsErrorCode, message: string, details?: iModelsErrorDetail[] }) {
+  constructor(params: { code: IModelsErrorCode, message: string, details?: IModelsErrorDetail[] }) {
     super();
     this.name = this.code = params.code;
     this.message = params.message;
@@ -37,38 +37,38 @@ export class iModelsErrorImpl extends Error implements iModelsError {
   }
 }
 
-export class iModelsErrorParser {
+export class IModelsErrorParser {
   private static readonly _defaultErrorMessage = "Unknown error occurred";
 
   public static parse(response: { statusCode?: number, body?: unknown }): Error {
     if (!response.statusCode)
-      return new iModelsErrorImpl({ code: iModelsErrorCode.Unknown, message: iModelsErrorParser._defaultErrorMessage });
+      return new IModelsErrorImpl({ code: IModelsErrorCode.Unknown, message: IModelsErrorParser._defaultErrorMessage });
 
     // TODO: remove the special handling when APIM team fixes incorrect error body
     if (response.statusCode === 401)
-      return new iModelsErrorImpl({ code: iModelsErrorCode.Unauthorized, message: "The user is unauthorized. Please provide valid authentication credentials." });
+      return new IModelsErrorImpl({ code: IModelsErrorCode.Unauthorized, message: "The user is unauthorized. Please provide valid authentication credentials." });
 
-    const errorFromApi: iModelsApiErrorWrapper | undefined = response.body as iModelsApiErrorWrapper;
-    const errorCode: iModelsErrorCode = iModelsErrorParser.parseCode(errorFromApi?.error?.code);
-    const errorDetails: iModelsErrorDetail[] | undefined = iModelsErrorParser.parseDetails(errorFromApi.error?.details);
-    const errorMessage: string = iModelsErrorParser.parseAndFormatMessage(errorFromApi?.error?.message, errorDetails);
+    const errorFromApi: IModelsApiErrorWrapper | undefined = response.body as IModelsApiErrorWrapper;
+    const errorCode: IModelsErrorCode = IModelsErrorParser.parseCode(errorFromApi?.error?.code);
+    const errorDetails: IModelsErrorDetail[] | undefined = IModelsErrorParser.parseDetails(errorFromApi.error?.details);
+    const errorMessage: string = IModelsErrorParser.parseAndFormatMessage(errorFromApi?.error?.message, errorDetails);
 
-    return new iModelsErrorImpl({
+    return new IModelsErrorImpl({
       code: errorCode,
       message: errorMessage,
       details: errorDetails
     });
   }
 
-  private static parseCode(errorCode: string): iModelsErrorCode {
-    let parsedCode: iModelsErrorCode | undefined = iModelsErrorCode[errorCode as keyof typeof iModelsErrorCode];
+  private static parseCode(errorCode: string): IModelsErrorCode {
+    let parsedCode: IModelsErrorCode | undefined = IModelsErrorCode[errorCode as keyof typeof IModelsErrorCode];
     if (!parsedCode)
-      parsedCode = iModelsErrorCode.Unrecognized;
+      parsedCode = IModelsErrorCode.Unrecognized;
 
     return parsedCode;
   }
 
-  private static parseDetails(details: iModelsApiErrorDetail[] | undefined): iModelsErrorDetail[] | undefined {
+  private static parseDetails(details: IModelsApiErrorDetail[] | undefined): IModelsErrorDetail[] | undefined {
     if (!details)
       return undefined;
 
@@ -77,8 +77,8 @@ export class iModelsErrorParser {
     });
   }
 
-  private static parseAndFormatMessage(message: string | undefined, errorDetails: iModelsErrorDetail[] | undefined): string {
-    let result = message ?? iModelsErrorParser._defaultErrorMessage;
+  private static parseAndFormatMessage(message: string | undefined, errorDetails: IModelsErrorDetail[] | undefined): string {
+    let result = message ?? IModelsErrorParser._defaultErrorMessage;
     if (!errorDetails || errorDetails.length === 0)
       return result;
 

@@ -5,8 +5,8 @@
 import * as fs from "fs";
 import { expect } from "chai";
 import { Briefcase, BriefcaseProperties, ChangesetPropertiesForCreate, Checkpoint, CheckpointState, DownloadedChangeset, Lock } from "@itwin/imodels-client-authoring";
-import { Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, iModel, iModelProperties, iModelState, iModelsError, iModelsErrorDetail } from "@itwin/imodels-client-management";
-import { TestiModelFileProvider } from "./test-context-providers/imodel/TestiModelFileProvider";
+import { Changeset, ChangesetState, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail } from "@itwin/imodels-client-management";
+import { TestIModelFileProvider } from "./test-context-providers/iModel/TestIModelFileProvider";
 
 export async function assertCollection<T>(params: {
   asyncIterable: AsyncIterableIterator<T>;
@@ -20,19 +20,19 @@ export async function assertCollection<T>(params: {
   expect(params.isEntityCountCorrect(entityCount)).to.equal(true);
 }
 
-export function assertiModel(params: {
-  actualiModel: iModel;
-  expectediModelProperties: iModelProperties;
+export function assertIModel(params: {
+  actualIModel: IModel;
+  expectedIModelProperties: IModelProperties;
 }): void {
-  expect(params.actualiModel).to.not.be.undefined;
-  expect(params.actualiModel.id).to.not.be.empty;
-  expect(params.actualiModel.displayName).to.not.be.empty;
+  expect(params.actualIModel).to.not.be.undefined;
+  expect(params.actualIModel.id).to.not.be.empty;
+  expect(params.actualIModel.displayName).to.not.be.empty;
 
-  expect(params.actualiModel.name).to.equal(params.expectediModelProperties.name);
-  assertOptionalProperty(params.expectediModelProperties.description, params.actualiModel.description);
-  assertOptionalProperty(params.expectediModelProperties.extent, params.actualiModel.extent);
-  expect(params.actualiModel.createdDateTime).to.not.be.empty;
-  expect(params.actualiModel.state).to.equal(iModelState.Initialized);
+  expect(params.actualIModel.name).to.equal(params.expectedIModelProperties.name);
+  assertOptionalProperty(params.expectedIModelProperties.description, params.actualIModel.description);
+  assertOptionalProperty(params.expectedIModelProperties.extent, params.actualIModel.extent);
+  expect(params.actualIModel.createdDateTime).to.not.be.empty;
+  expect(params.actualIModel.state).to.equal(IModelState.Initialized);
 }
 
 export function assertBriefcase(params: {
@@ -72,7 +72,7 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.synchronizationInfo).to.equal(null);
 
   // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
-  const expectedChangesetMetadata = TestiModelFileProvider.changesets.find((cs) => cs.id === params.expectedChangesetProperties.id);
+  const expectedChangesetMetadata = TestIModelFileProvider.changesets.find((cs) => cs.id === params.expectedChangesetProperties.id);
   expect(params.actualChangeset.fileSize).to.equal(fs.statSync(expectedChangesetMetadata!.filePath).size);
 
   // TODO: add correct expected value when test client is set up
@@ -88,7 +88,7 @@ export function assertDownloadedChangeset(params: {
   expect(fs.existsSync(params.actualChangeset.filePath)).to.equal(true);
 
   // Check if the downloaded file size matches the size of the changeset file used for test iModel creation
-  const expectedChangesetMetadata = TestiModelFileProvider.changesets.find((cs) => cs.id === params.expectedChangesetProperties.id);
+  const expectedChangesetMetadata = TestIModelFileProvider.changesets.find((cs) => cs.id === params.expectedChangesetProperties.id);
   expect(fs.statSync(params.actualChangeset.filePath).size).to.equal(fs.statSync(expectedChangesetMetadata!.filePath).size);
 }
 
@@ -146,27 +146,27 @@ export function assertLock(params: {
   }
 }
 
-export function assertError(params: { actualError: Error, expectedError: Partial<iModelsError> }): void {
-  const imodelsError = params.actualError as iModelsError;
+export function assertError(params: { actualError: Error, expectedError: Partial<IModelsError> }): void {
+  const iModelsError = params.actualError as IModelsError;
 
-  expect(imodelsError).to.not.be.undefined;
-  expect(imodelsError.code).to.equal(params.expectedError.code);
-  expect(imodelsError.name).to.equal(params.expectedError.code);
-  expect(imodelsError.message).to.equal(params.expectedError.message);
+  expect(iModelsError).to.not.be.undefined;
+  expect(iModelsError.code).to.equal(params.expectedError.code);
+  expect(iModelsError.name).to.equal(params.expectedError.code);
+  expect(iModelsError.message).to.equal(params.expectedError.message);
 
   if (params.expectedError.details) {
-    expect(imodelsError.details).to.not.be.undefined;
-    expect(imodelsError.details!.length).to.equal(params.expectedError.details.length);
+    expect(iModelsError.details).to.not.be.undefined;
+    expect(iModelsError.details!.length).to.equal(params.expectedError.details.length);
 
     for (const expectedDetail of params.expectedError.details) {
-      const detailVerificationFunc = (detail: iModelsErrorDetail) =>
+      const detailVerificationFunc = (detail: IModelsErrorDetail) =>
         detail.code === expectedDetail.code &&
         detail.message === expectedDetail.message &&
         detail.target === expectedDetail.target;
-      expect(imodelsError.details!.find(detailVerificationFunc)).to.not.be.undefined;
+      expect(iModelsError.details!.find(detailVerificationFunc)).to.not.be.undefined;
     }
   } else {
-    expect(imodelsError.details).to.be.undefined;
+    expect(iModelsError.details).to.be.undefined;
   }
 }
 

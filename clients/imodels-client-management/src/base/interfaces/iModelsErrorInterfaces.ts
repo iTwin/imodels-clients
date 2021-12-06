@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-export enum iModelsErrorCode {
+export enum IModelsErrorCode {
   Unrecognized = "Unrecognized",
 
   // Errors returned by API
@@ -11,7 +11,7 @@ export enum iModelsErrorCode {
   InsufficientPermissions = "InsufficientPermissions",
   RateLimitExceeded = "RateLimitExceeded",
   TooManyRequests = "TooManyRequests",
-  InvalidiModelsRequest = "InvalidiModelsRequest",
+  InvalidIModelsRequest = "InvalidiModelsRequest",
   RequestTooLarge = "RequestTooLarge",
   ResourceQuotaExceeded = "ResourceQuotaExceeded",
   DataConflict = "DataConflict",
@@ -25,12 +25,12 @@ export enum iModelsErrorCode {
   MissingRequestBody = "MissingRequestBody",
   ConflictWithAnotherUser = "ConflictWithAnotherUser",
   InvalidChange = "InvalidChange",
-  iModelExists = "iModelExists",
+  IModelExists = "iModelExists",
   VersionExists = "NamedVersionExists",
   ChangesetExists = "ChangesetExists",
   NamedVersionOnChangesetExists = "NamedVersionOnChangesetExists",
   ProjectNotFound = "ProjectNotFound",
-  iModelNotFound = "iModelNotFound",
+  IModelNotFound = "iModelNotFound",
   NamedVersionNotFound  = "NamedVersionNotFound",
   ChangesetNotFound = "ChangesetNotFound",
   UserNotFound = "UserNotFound",
@@ -48,13 +48,13 @@ export enum iModelsErrorCode {
   ChangesetDownloadFailed = "ChangesetDownloadFailed"
 }
 
-export interface iModelsError extends Error {
-  code: iModelsErrorCode;
-  details?: iModelsErrorDetail[];
+export interface IModelsError extends Error {
+  code: IModelsErrorCode;
+  details?: IModelsErrorDetail[];
 }
 
-export interface iModelsErrorDetail {
-  code: iModelsErrorCode;
+export interface IModelsErrorDetail {
+  code: IModelsErrorCode;
   message: string;
   target?: string;
 }

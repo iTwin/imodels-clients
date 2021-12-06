@@ -5,7 +5,7 @@
 export * from "./Config";
 export * from "./Constants";
 export * from "./TestClientOptions";
-export * from "./TestiModelGroup";
+export * from "./TestIModelGroup";
 export * from "./TrackableTestFileHandler";
 
 export * from "./AssertionUtils";
@@ -13,7 +13,7 @@ export * from "./CommonTestUtils";
 
 export * from "./test-context-providers/auth/TestAuthenticationProvider";
 export * from "./test-context-providers/project/TestProjectProvider";
-export * from "./test-context-providers/imodel/TestiModelFileProvider";
-export * from "./test-context-providers/imodel/TestiModelInterfaces";
-export * from "./test-context-providers/imodel/ReusableTestiModelProvider";
-export * from "./test-context-providers/imodel/TestiModelCreator";
+export * from "./test-context-providers/iModel/TestIModelFileProvider";
+export * from "./test-context-providers/iModel/TestIModelInterfaces";
+export * from "./test-context-providers/iModel/ReusableTestIModelProvider";
+export * from "./test-context-providers/iModel/TestIModelCreator";

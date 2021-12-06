@@ -2,13 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Link, iModel } from "@itwin/imodels-client-management";
+import { Link, IModel } from "@itwin/imodels-client-management";
 
-export interface iModelLinks {
+export interface IModelLinks {
   upload: Link;
   complete: Link;
 }
 
-export interface iModelCreateResponse {
-  iModel: iModel & { _links: iModelLinks };
+export interface IModelCreateResponse {
+  IModel: IModel & { _links: IModelLinks };
 }

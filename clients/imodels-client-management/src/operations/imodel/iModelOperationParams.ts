@@ -2,33 +2,33 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, CollectionRequestParams, Extent, OrderBy, iModel, iModelScopedOperationParams } from "../../base";
+import { AuthorizationParam, CollectionRequestParams, Extent, OrderBy, IModel, IModelScopedOperationParams } from "../../base";
 
-export enum iModelOrderByProperty {
+export enum IModelOrderByProperty {
   Name = "name"
 }
 
-export interface GetiModelListUrlParams extends CollectionRequestParams {
-  $orderBy?: OrderBy<iModel, iModelOrderByProperty>;
+export interface GetIModelListUrlParams extends CollectionRequestParams {
+  $orderBy?: OrderBy<IModel, IModelOrderByProperty>;
   projectId: string;
   name?: string;
 }
 
-export interface GetiModelListParams extends AuthorizationParam {
-  urlParams: GetiModelListUrlParams;
+export interface GetIModelListParams extends AuthorizationParam {
+  urlParams: GetIModelListUrlParams;
 }
 
-export type GetSingleiModelParams = iModelScopedOperationParams;
+export type GetSingleIModelParams = IModelScopedOperationParams;
 
-export interface iModelProperties {
+export interface IModelProperties {
   projectId: string;
   name: string;
   description?: string;
   extent?: Extent;
 }
 
-export interface CreateEmptyiModelParams extends AuthorizationParam {
-  imodelProperties: iModelProperties;
+export interface CreateEmptyIModelParams extends AuthorizationParam {
+  iModelProperties: IModelProperties;
 }
 
-export type DeleteiModelParams = iModelScopedOperationParams;
+export type DeleteIModelParams = IModelScopedOperationParams;
