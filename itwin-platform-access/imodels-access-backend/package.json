@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-backend",
-  "version": "0.1.0-dev.1",
+  "version": "0.1.0",
   "description": "Interoperability package between iModels API and iTwin platform.",
   "license": "MIT",
   "main": "lib/iModelsAccessBackendExports.js",
@@ -15,14 +15,14 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-client-authoring": "~0.1.0-dev.1"
+    "@itwin/imodels-client-authoring": "~0.1.0"
   },
   "devDependencies": {
     "@itwin/core-backend": "~3.0.0-dev.141",
     "@itwin/core-bentley": "~3.0.0-dev.141",
     "@itwin/core-common": "~3.0.0-dev.141",
     "@itwin/ecschema-metadata": "~3.0.0-dev.141",
-    "@itwin/imodels-client-common-config": "~0.1.0-dev.1",
+    "@itwin/imodels-client-common-config": "~0.1.0",
     "@types/ws": "~8.2.0",
     "typescript": "~4.3.5"
   },
