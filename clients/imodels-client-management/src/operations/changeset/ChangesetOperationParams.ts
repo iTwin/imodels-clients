@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, CollectionRequestParams, OrderBy, IModelScopedOperationParams } from "../../base";
+import { Changeset, CollectionRequestParams, IModelScopedOperationParams, OrderBy } from "../../base";
 
 export enum ChangesetOrderByProperty {
   Index = "index"

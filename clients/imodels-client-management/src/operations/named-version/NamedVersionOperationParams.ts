@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AtLeastOneProperty, CollectionRequestParams, NamedVersionState, IModelScopedOperationParams } from "../../base";
+import { AtLeastOneProperty, CollectionRequestParams, IModelScopedOperationParams, NamedVersionState } from "../../base";
 
 export interface GetNamedVersionListUrlParams extends CollectionRequestParams {
   name?: string;

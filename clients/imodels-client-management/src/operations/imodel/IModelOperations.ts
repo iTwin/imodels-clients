@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { MinimalIModel, OperationsBase, PreferReturn, getCollectionIterator, IModel, IModelResponse, IModelsResponse } from "../../base";
+import { IModel, IModelResponse, IModelsResponse, MinimalIModel, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateEmptyIModelParams, DeleteIModelParams, GetSingleIModelParams, GetIModelListParams, IModelProperties } from "./IModelOperationParams";
+import { CreateEmptyIModelParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties } from "./IModelOperationParams";
 
 export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public getMinimalList(params: GetIModelListParams): AsyncIterableIterator<MinimalIModel> {
