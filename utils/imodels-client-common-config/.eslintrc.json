@@ -94,58 +94,15 @@
     "@typescript-eslint/naming-convention": [
       "error",
       {
-        "selector": "variable",
-        "modifiers": [
-          "exported",
-          "const"
-        ],
-        "format": [
-          "UPPER_CASE"
-        ]
-      },
-      {
         "selector": "property",
-        "modifiers": [
-          "private"
-        ],
+        "filter": {
+          "regex": "_links",
+          "match": true
+        },
         "format": [
           "camelCase"
         ],
         "leadingUnderscore": "require"
-      },
-      {
-        "selector": "typeParameter",
-        "format": [
-          "PascalCase"
-        ],
-        "filter": {
-          "regex": "TiModel",
-          "match": false
-        },
-        "prefix": [
-          "T"
-        ]
-      },
-      {
-        "selector": [
-          "variableLike"
-        ],
-        "format": [
-          "strictCamelCase"
-        ],
-        "leadingUnderscore": "allow"
-      },
-      {
-        "selector": [
-          "typeLike"
-        ],
-        "format": [
-          "StrictPascalCase"
-        ],
-        "filter": {
-          "regex": "^(iModel.*)$",
-          "match": false
-        }
       }
     ],
     "@itwin/no-internal-barrel-imports": "off",

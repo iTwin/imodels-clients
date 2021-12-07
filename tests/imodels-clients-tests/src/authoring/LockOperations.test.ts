@@ -3,63 +3,63 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { AuthorizationCallback, GetLockListParams, LockLevel, UpdateLockParams, iModelsClient, iModelsErrorCode, toArray } from "@itwin/imodels-client-authoring";
-import { Config, Constants, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, assertCollection, assertError, assertLock, iModelMetadata } from "../common";
+import { AuthorizationCallback, GetLockListParams, IModelsClient, IModelsErrorCode, LockLevel, UpdateLockParams, toArray } from "@itwin/imodels-client-authoring";
+import { Config, Constants, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestProjectProvider, assertCollection, assertError, assertLock } from "../common";
 
 describe("[Authoring] LockOperations", () => {
-  let imodelsClient: iModelsClient;
+  let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let projectId: string;
-  let testiModelGroup: TestiModelGroup;
+  let testIModelGroup: TestIModelGroup;
 
-  let testiModelForRead: ReusableiModelMetadata;
-  let testiModelForWrite: iModelMetadata;
-  let testiModelForWriteBriefcaseIds: number[] = [];
+  let testIModelForRead: ReusableIModelMetadata;
+  let testIModelForWrite: IModelMetadata;
+  let testIModelForWriteBriefcaseIds: number[] = [];
 
   before(async () => {
-    imodelsClient = new iModelsClient(new TestClientOptions());
+    iModelsClient = new IModelsClient(new TestClientOptions());
     authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
-    testiModelGroup = new TestiModelGroup({
+    testIModelGroup = new TestIModelGroup({
       labels: {
         package: Constants.PackagePrefix,
         testSuite: "AuthoringLockOperations"
       }
     });
 
-    testiModelForRead = await ReusableTestiModelProvider.getOrCreate({
+    testIModelForRead = await ReusableTestIModelProvider.getOrCreate({
       authorization,
-      imodelsClient,
+      iModelsClient,
       projectId
     });
-    testiModelForWrite = await TestiModelCreator.createEmptyAndUploadChangesets({
-      imodelsClient,
+    testIModelForWrite = await TestIModelCreator.createEmptyAndUploadChangesets({
+      iModelsClient,
       authorization,
       projectId,
-      imodelName: testiModelGroup.getPrefixedUniqueiModelName("Test iModel for write")
+      iModelName: testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
     });
   });
 
   afterEach(async () => {
-    for (const briefcaseId of testiModelForWriteBriefcaseIds) {
-      await imodelsClient.Briefcases.release({
+    for (const briefcaseId of testIModelForWriteBriefcaseIds) {
+      await iModelsClient.briefcases.release({
         authorization,
-        imodelId: testiModelForWrite.id,
+        iModelId: testIModelForWrite.id,
         briefcaseId
       });
     }
-    testiModelForWriteBriefcaseIds = [];
+    testIModelForWriteBriefcaseIds = [];
   });
 
   it("should return all items when querying collection", async () => {
     // Arrange
     const getLockListParams: GetLockListParams = {
       authorization,
-      imodelId: testiModelForRead.id
+      iModelId: testIModelForRead.id
     };
 
     // Act
-    const locks = imodelsClient.Locks.getList(getLockListParams);
+    const locks = iModelsClient.locks.getList(getLockListParams);
 
     // Assert
     await assertCollection({
@@ -72,21 +72,21 @@ describe("[Authoring] LockOperations", () => {
     // Arrange
     const getLockListParams: GetLockListParams = {
       authorization,
-      imodelId: testiModelForRead.id,
+      iModelId: testIModelForRead.id,
       urlParams: {
-        briefcaseId: testiModelForRead.briefcase.id
+        briefcaseId: testIModelForRead.briefcase.id
       }
     };
 
     // Act
-    const locks = imodelsClient.Locks.getList(getLockListParams);
+    const locks = iModelsClient.locks.getList(getLockListParams);
 
     // Assert
     const lockArray = await toArray(locks);
     const lock = lockArray[0];
     assertLock({
       actualLock: lock,
-      expectedLock: testiModelForRead.lock
+      expectedLock: testIModelForRead.lock
     });
   });
 
@@ -94,14 +94,14 @@ describe("[Authoring] LockOperations", () => {
     // Arrange
     const getLockListParams: GetLockListParams = {
       authorization,
-      imodelId: testiModelForRead.id,
+      iModelId: testIModelForRead.id,
       urlParams: {
         briefcaseId: 500
       }
     };
 
     // Act
-    const locks = imodelsClient.Locks.getList(getLockListParams);
+    const locks = iModelsClient.locks.getList(getLockListParams);
 
     // Assert
     const lockArray = await toArray(locks);
@@ -110,12 +110,12 @@ describe("[Authoring] LockOperations", () => {
 
   it("should acquire new locks", async () => {
     // Arrange
-    const briefcase = await imodelsClient.Briefcases.acquire({ authorization, imodelId: testiModelForWrite.id });
-    testiModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
+    const briefcase = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    testIModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
 
     const updateLockParams: UpdateLockParams = {
       authorization,
-      imodelId: testiModelForWrite.id,
+      iModelId: testIModelForWrite.id,
       briefcaseId: briefcase.briefcaseId,
       lockedObjects: [
         {
@@ -130,7 +130,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    const acquiredLock = await imodelsClient.Locks.update(updateLockParams);
+    const acquiredLock = await iModelsClient.locks.update(updateLockParams);
 
     // Assert
     assertLock({
@@ -144,12 +144,12 @@ describe("[Authoring] LockOperations", () => {
 
   it("should release locks", async () => {
     // Arrange
-    const briefcase = await imodelsClient.Briefcases.acquire({ authorization, imodelId: testiModelForWrite.id });
-    testiModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
+    const briefcase = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    testIModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
 
     const updateLockParams1: UpdateLockParams = {
       authorization,
-      imodelId: testiModelForWrite.id,
+      iModelId: testIModelForWrite.id,
       briefcaseId: briefcase.briefcaseId,
       lockedObjects: [
         {
@@ -159,13 +159,13 @@ describe("[Authoring] LockOperations", () => {
       ]
     };
 
-    await imodelsClient.Locks.update(updateLockParams1);
+    await iModelsClient.locks.update(updateLockParams1);
 
     const updateLockParams2: UpdateLockParams = {
       authorization,
-      imodelId: testiModelForWrite.id,
+      iModelId: testIModelForWrite.id,
       briefcaseId: briefcase.briefcaseId,
-      changesetId: TestiModelFileProvider.changesets[0].id,
+      changesetId: TestIModelFileProvider.changesets[0].id,
       lockedObjects: [
         {
           lockLevel: LockLevel.None,
@@ -175,7 +175,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    const releasedLock = await imodelsClient.Locks.update(updateLockParams2);
+    const releasedLock = await iModelsClient.locks.update(updateLockParams2);
 
     // Assert
     assertLock({
@@ -189,12 +189,12 @@ describe("[Authoring] LockOperations", () => {
 
   it("should return error when trying to update non-existing lock to LockLevel.None", async () => {
     // Arrange
-    const briefcase = await imodelsClient.Briefcases.acquire({ authorization, imodelId: testiModelForWrite.id });
-    testiModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
+    const briefcase = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    testIModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
 
     const updateLockParams: UpdateLockParams = {
       authorization,
-      imodelId: testiModelForWrite.id,
+      iModelId: testIModelForWrite.id,
       briefcaseId: briefcase.briefcaseId,
       lockedObjects: [
         {
@@ -207,7 +207,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await imodelsClient.Locks.update(updateLockParams);
+      await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -217,17 +217,17 @@ describe("[Authoring] LockOperations", () => {
     assertError({
       actualError: errorThrown!,
       expectedError: {
-        code: iModelsErrorCode.LockNotFound,
+        code: IModelsErrorCode.LockNotFound,
         message: "Requested Lock(s) is not available."
       }
     });
   });
 
-  it("should return error when trying to update lock on non-existing imodel", async () => {
+  it("should return error when trying to update lock on non-existing iModel", async () => {
     // Arrange
     const updateLockParams: UpdateLockParams = {
       authorization,
-      imodelId: "invalid imodel id",
+      iModelId: "invalid iModel id",
       briefcaseId: 0,
       lockedObjects: [
         {
@@ -240,7 +240,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await imodelsClient.Locks.update(updateLockParams);
+      await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -250,7 +250,7 @@ describe("[Authoring] LockOperations", () => {
     assertError({
       actualError: errorThrown!,
       expectedError: {
-        code: iModelsErrorCode.iModelNotFound,
+        code: IModelsErrorCode.IModelNotFound,
         message: "Requested iModel is not available."
       }
     });
@@ -260,7 +260,7 @@ describe("[Authoring] LockOperations", () => {
     // Arrange
     const updateLockParams: UpdateLockParams = {
       authorization,
-      imodelId: testiModelForWrite.id,
+      iModelId: testIModelForWrite.id,
       briefcaseId: 0,
       lockedObjects: [
         {
@@ -273,7 +273,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await imodelsClient.Locks.update(updateLockParams);
+      await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -283,7 +283,7 @@ describe("[Authoring] LockOperations", () => {
     assertError({
       actualError: errorThrown!,
       expectedError: {
-        code: iModelsErrorCode.BriefcaseNotFound,
+        code: IModelsErrorCode.BriefcaseNotFound,
         message: "Requested Briefcase is not available."
       }
     });
@@ -291,12 +291,12 @@ describe("[Authoring] LockOperations", () => {
 
   it("should return error when trying to update lock with non-existing changeset specified", async () => {
     // Arrange
-    const briefcase = await imodelsClient.Briefcases.acquire({ authorization, imodelId: testiModelForWrite.id });
-    testiModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
+    const briefcase = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    testIModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
 
     const updateLockParams: UpdateLockParams = {
       authorization,
-      imodelId: testiModelForWrite.id,
+      iModelId: testIModelForWrite.id,
       briefcaseId: briefcase.briefcaseId,
       changesetId: "invalid changeset id",
       lockedObjects: [
@@ -310,7 +310,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await imodelsClient.Locks.update(updateLockParams);
+      await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -320,7 +320,7 @@ describe("[Authoring] LockOperations", () => {
     assertError({
       actualError: errorThrown!,
       expectedError: {
-        code: iModelsErrorCode.ChangesetNotFound,
+        code: IModelsErrorCode.ChangesetNotFound,
         message: "Requested Changeset is not available."
       }
     });
@@ -328,12 +328,12 @@ describe("[Authoring] LockOperations", () => {
 
   it("should return error when trying to acquire exclusive lock on an object that is already locked by another briefcase", async () => {
     // Arrange
-    const briefcase1 = await imodelsClient.Briefcases.acquire({ authorization, imodelId: testiModelForWrite.id });
-    testiModelForWriteBriefcaseIds.push(briefcase1.briefcaseId);
+    const briefcase1 = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    testIModelForWriteBriefcaseIds.push(briefcase1.briefcaseId);
 
     const updateLockParams1: UpdateLockParams = {
       authorization,
-      imodelId: testiModelForWrite.id,
+      iModelId: testIModelForWrite.id,
       briefcaseId: briefcase1.briefcaseId,
       lockedObjects: [
         {
@@ -343,14 +343,14 @@ describe("[Authoring] LockOperations", () => {
       ]
     };
 
-    await imodelsClient.Locks.update(updateLockParams1);
+    await iModelsClient.locks.update(updateLockParams1);
 
-    const briefcase2 = await imodelsClient.Briefcases.acquire({ authorization, imodelId: testiModelForWrite.id });
-    testiModelForWriteBriefcaseIds.push(briefcase2.briefcaseId);
+    const briefcase2 = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    testIModelForWriteBriefcaseIds.push(briefcase2.briefcaseId);
 
     const updateLockParams2: UpdateLockParams = {
       authorization,
-      imodelId: testiModelForWrite.id,
+      iModelId: testIModelForWrite.id,
       briefcaseId: briefcase2.briefcaseId,
       lockedObjects: [
         {
@@ -363,7 +363,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await imodelsClient.Locks.update(updateLockParams2);
+      await iModelsClient.locks.update(updateLockParams2);
     } catch (e) {
       errorThrown = e;
     }
@@ -373,7 +373,7 @@ describe("[Authoring] LockOperations", () => {
     assertError({
       actualError: errorThrown!,
       expectedError: {
-        code: iModelsErrorCode.ConflictWithAnotherUser,
+        code: IModelsErrorCode.ConflictWithAnotherUser,
         message: "Lock(s) is owned by another briefcase."
       }
     });
@@ -381,13 +381,13 @@ describe("[Authoring] LockOperations", () => {
 
   it("should return error when trying to acquire lock on an object that has been locked by a more recent changeset", async () => {
     // Arrange
-    const briefcase1 = await imodelsClient.Briefcases.acquire({ authorization, imodelId: testiModelForWrite.id });
-    testiModelForWriteBriefcaseIds.push(briefcase1.briefcaseId);
+    const briefcase1 = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    testIModelForWriteBriefcaseIds.push(briefcase1.briefcaseId);
 
     const updateLockParams1: UpdateLockParams = {
       authorization,
-      imodelId: testiModelForWrite.id,
-      changesetId: TestiModelFileProvider.changesets[5].id,
+      iModelId: testIModelForWrite.id,
+      changesetId: TestIModelFileProvider.changesets[5].id,
       briefcaseId: briefcase1.briefcaseId,
       lockedObjects: [
         {
@@ -397,15 +397,15 @@ describe("[Authoring] LockOperations", () => {
       ]
     };
 
-    await imodelsClient.Locks.update(updateLockParams1);
+    await iModelsClient.locks.update(updateLockParams1);
 
-    const briefcase2 = await imodelsClient.Briefcases.acquire({ authorization, imodelId: testiModelForWrite.id });
-    testiModelForWriteBriefcaseIds.push(briefcase2.briefcaseId);
+    const briefcase2 = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    testIModelForWriteBriefcaseIds.push(briefcase2.briefcaseId);
 
     const updateLockParams2: UpdateLockParams = {
       authorization,
-      imodelId: testiModelForWrite.id,
-      changesetId: TestiModelFileProvider.changesets[4].id,
+      iModelId: testIModelForWrite.id,
+      changesetId: TestIModelFileProvider.changesets[4].id,
       briefcaseId: briefcase2.briefcaseId,
       lockedObjects: updateLockParams1.lockedObjects
     };
@@ -413,7 +413,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await imodelsClient.Locks.update(updateLockParams2);
+      await iModelsClient.locks.update(updateLockParams2);
     } catch (e) {
       errorThrown = e;
     }
@@ -423,7 +423,7 @@ describe("[Authoring] LockOperations", () => {
     assertError({
       actualError: errorThrown!,
       expectedError: {
-        code: iModelsErrorCode.NewerChangesExist,
+        code: IModelsErrorCode.NewerChangesExist,
         message: "One or more objects have been locked in a newer Changeset."
       }
     });

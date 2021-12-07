@@ -4,44 +4,44 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetListParams, DownloadFileParams, DownloadedChangeset, TargetDirectoryParam, iModelScopedOperationParams,iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, FileTransferLog, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelFileProvider, TestiModelGroup, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpiModels, cleanupDirectory, iModelMetadata } from "../common";
+import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetListParams, DownloadFileParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient,TargetDirectoryParam } from "@itwin/imodels-client-authoring";
+import { Config, Constants, FileTransferLog, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestProjectProvider, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpIModels, cleanupDirectory } from "../common";
 
-type CommonDownloadParams = iModelScopedOperationParams & TargetDirectoryParam;
+type CommonDownloadParams = IModelScopedOperationParams & TargetDirectoryParam;
 
 describe("[Authoring] ChangesetOperations", () => {
-  let imodelsClient: iModelsClient;
+  let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let projectId: string;
-  let testiModelGroup: TestiModelGroup;
+  let testIModelGroup: TestIModelGroup;
 
-  let testiModelForWrite: iModelMetadata;
-  let testiModelForDownload: ReusableiModelMetadata;
+  let testIModelForWrite: IModelMetadata;
+  let testIModelForDownload: ReusableIModelMetadata;
 
   beforeEach(() => {
     cleanupDirectory(Constants.TestDownloadDirectoryPath);
   });
 
   before(async () => {
-    imodelsClient = new iModelsClient(new TestClientOptions());
+    iModelsClient = new IModelsClient(new TestClientOptions());
     authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
-    testiModelGroup = new TestiModelGroup({
+    testIModelGroup = new TestIModelGroup({
       labels: {
         package: Constants.PackagePrefix,
         testSuite: "AuthoringChangesetOperations"
       }
     });
 
-    testiModelForWrite = await TestiModelCreator.createEmpty({
+    testIModelForWrite = await TestIModelCreator.createEmpty({
       authorization,
-      imodelsClient,
+      iModelsClient,
       projectId,
-      imodelName: testiModelGroup.getPrefixedUniqueiModelName("Test iModel for write")
+      iModelName: testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
     });
-    testiModelForDownload = await ReusableTestiModelProvider.getOrCreate({
+    testIModelForDownload = await ReusableTestIModelProvider.getOrCreate({
       authorization,
-      imodelsClient,
+      iModelsClient,
       projectId
     });
   });
@@ -51,21 +51,21 @@ describe("[Authoring] ChangesetOperations", () => {
   });
 
   after(async () => {
-    await cleanUpiModels({ imodelsClient, authorization, projectId, testiModelGroup });
+    await cleanUpIModels({ iModelsClient, authorization, projectId, testIModelGroup });
   });
 
   it("should create changeset", async () => {
     // Arrange
     const acquireBriefcaseParams: AcquireBriefcaseParams = {
       authorization,
-      imodelId: testiModelForWrite.id
+      iModelId: testIModelForWrite.id
     };
-    const briefcase = await imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
+    const briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
 
-    const changesetMetadata = TestiModelFileProvider.changesets[0];
+    const changesetMetadata = TestIModelFileProvider.changesets[0];
     const createChangesetParams: CreateChangesetParams = {
       authorization,
-      imodelId: testiModelForWrite.id,
+      iModelId: testIModelForWrite.id,
       changesetProperties: {
         briefcaseId: briefcase.briefcaseId,
         id: changesetMetadata.id,
@@ -74,7 +74,7 @@ describe("[Authoring] ChangesetOperations", () => {
     };
 
     // Act
-    const changeset = await imodelsClient.Changesets.create(createChangesetParams);
+    const changeset = await iModelsClient.changesets.create(createChangesetParams);
 
     // Assert
     assertChangeset({
@@ -89,24 +89,24 @@ describe("[Authoring] ChangesetOperations", () => {
       const downloadPath = Constants.TestDownloadDirectoryPath;
       const downloadChangesetListParams: DownloadChangesetListParams = {
         authorization,
-        imodelId: testiModelForDownload.id,
+        iModelId: testIModelForDownload.id,
         targetDirectoryPath: downloadPath
       };
 
       // Act
-      const changesets = await imodelsClient.Changesets.downloadList(downloadChangesetListParams);
+      const changesets = await iModelsClient.changesets.downloadList(downloadChangesetListParams);
 
       // Assert
-      expect(changesets.length).to.equal(TestiModelFileProvider.changesets.length);
-      expect(fs.readdirSync(downloadPath).length).to.equal(TestiModelFileProvider.changesets.length);
+      expect(changesets.length).to.equal(TestIModelFileProvider.changesets.length);
+      expect(fs.readdirSync(downloadPath).length).to.equal(TestIModelFileProvider.changesets.length);
 
       for (const changeset of changesets) {
-        const changesetMetadata = TestiModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
+        const changesetMetadata = TestIModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
         assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
             id: changesetMetadata.id,
-            briefcaseId: testiModelForDownload.briefcase.id,
+            briefcaseId: testIModelForDownload.briefcase.id,
             parentId: changesetMetadata.parentId,
             description: changesetMetadata.description,
             containingChanges: changesetMetadata.containingChanges
@@ -120,7 +120,7 @@ describe("[Authoring] ChangesetOperations", () => {
       const downloadPath = Constants.TestDownloadDirectoryPath;
       const downloadChangesetListParams: DownloadChangesetListParams = {
         authorization,
-        imodelId: testiModelForDownload.id,
+        iModelId: testIModelForDownload.id,
         urlParams: {
           afterIndex: 5,
           lastIndex: 10
@@ -129,7 +129,7 @@ describe("[Authoring] ChangesetOperations", () => {
       };
 
       // Act
-      const changesets = await imodelsClient.Changesets.downloadList(downloadChangesetListParams);
+      const changesets = await iModelsClient.changesets.downloadList(downloadChangesetListParams);
 
       // Assert
       const expectedChangesetCount = downloadChangesetListParams.urlParams!.lastIndex! - downloadChangesetListParams.urlParams!.afterIndex!;
@@ -138,12 +138,12 @@ describe("[Authoring] ChangesetOperations", () => {
       expect(changesets.map((changeset: DownloadedChangeset) => changeset.index)).to.have.members([6, 7, 8, 9, 10]);
 
       for (const changeset of changesets) {
-        const changesetMetadata = TestiModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
+        const changesetMetadata = TestIModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
         assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
             id: changesetMetadata.id,
-            briefcaseId: testiModelForDownload.briefcase.id,
+            briefcaseId: testIModelForDownload.briefcase.id,
             parentId: changesetMetadata.parentId,
             description: changesetMetadata.description,
             containingChanges: changesetMetadata.containingChanges
@@ -155,9 +155,9 @@ describe("[Authoring] ChangesetOperations", () => {
     [
       {
         label: "id",
-        changesetUnderTest: TestiModelFileProvider.changesets[0],
+        changesetUnderTest: TestIModelFileProvider.changesets[0],
         get functionUnderTest() {
-          return async (params: CommonDownloadParams) => imodelsClient.Changesets.downloadSingle(
+          return async (params: CommonDownloadParams) => iModelsClient.changesets.downloadSingle(
             {
               ...params,
               changesetId: this.changesetUnderTest.id
@@ -166,9 +166,9 @@ describe("[Authoring] ChangesetOperations", () => {
       },
       {
         label: "index",
-        changesetUnderTest: TestiModelFileProvider.changesets[0],
+        changesetUnderTest: TestIModelFileProvider.changesets[0],
         get functionUnderTest() {
-          return async (params: CommonDownloadParams) => imodelsClient.Changesets.downloadSingle(
+          return async (params: CommonDownloadParams) => iModelsClient.changesets.downloadSingle(
             {
               ...params,
               changesetIndex: this.changesetUnderTest.index
@@ -181,7 +181,7 @@ describe("[Authoring] ChangesetOperations", () => {
         const downloadPath = Constants.TestDownloadDirectoryPath;
         const partialDownloadChangesetParams: CommonDownloadParams = {
           authorization,
-          imodelId: testiModelForDownload.id,
+          iModelId: testIModelForDownload.id,
           targetDirectoryPath: downloadPath
         };
 
@@ -194,7 +194,7 @@ describe("[Authoring] ChangesetOperations", () => {
           actualChangeset: changeset,
           expectedChangesetProperties: {
             id: changesetMetadata.id,
-            briefcaseId: testiModelForDownload.briefcase.id,
+            briefcaseId: testIModelForDownload.briefcase.id,
             parentId: changesetMetadata.parentId,
             description: changesetMetadata.description,
             containingChanges: changesetMetadata.containingChanges
@@ -206,24 +206,24 @@ describe("[Authoring] ChangesetOperations", () => {
     [
       {
         label: "by id",
-        functionUnderTest: async (client: iModelsClient, params: CommonDownloadParams) =>
-          client.Changesets.downloadSingle({
+        functionUnderTest: async (client: IModelsClient, params: CommonDownloadParams) =>
+          client.changesets.downloadSingle({
             ...params,
-            changesetId: TestiModelFileProvider.changesets[0].id
+            changesetId: TestIModelFileProvider.changesets[0].id
           })
       },
       {
         label: "by index",
-        functionUnderTest: async (client: iModelsClient, params: CommonDownloadParams) =>
-          client.Changesets.downloadSingle({
+        functionUnderTest: async (client: IModelsClient, params: CommonDownloadParams) =>
+          client.changesets.downloadSingle({
             ...params,
-            changesetIndex: TestiModelFileProvider.changesets[0].index
+            changesetIndex: TestIModelFileProvider.changesets[0].index
           })
       },
       {
         label: "list",
-        functionUnderTest: async (client: iModelsClient, params: CommonDownloadParams) =>
-          client.Changesets
+        functionUnderTest: async (client: IModelsClient, params: CommonDownloadParams) =>
+          client.changesets
             .downloadList({
               ...params,
               urlParams: { afterIndex: 0, lastIndex: 1 }
@@ -248,17 +248,17 @@ describe("[Authoring] ChangesetOperations", () => {
         };
 
         const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
-        const imodelsClientWithTrackedFileTransfer = new iModelsClient({ ...new TestClientOptions(), fileHandler: trackedFileHandler });
+        const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...new TestClientOptions(), fileHandler: trackedFileHandler });
 
         const downloadPath = Constants.TestDownloadDirectoryPath;
         const partialDownloadChangesetParams: CommonDownloadParams = {
           authorization,
-          imodelId: testiModelForDownload.id,
+          iModelId: testIModelForDownload.id,
           targetDirectoryPath: downloadPath
         };
 
         // Act
-        const changeset: DownloadedChangeset = await testCase.functionUnderTest(imodelsClientWithTrackedFileTransfer, partialDownloadChangesetParams);
+        const changeset: DownloadedChangeset = await testCase.functionUnderTest(iModelsClientWithTrackedFileTransfer, partialDownloadChangesetParams);
 
         // Assert
         expect(changeset).to.be.not.be.undefined;
@@ -284,19 +284,19 @@ describe("[Authoring] ChangesetOperations", () => {
         };
 
         const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
-        const imodelsClientWithTrackedFileTransfer = new iModelsClient({ ...new TestClientOptions(), fileHandler: trackedFileHandler });
+        const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...new TestClientOptions(), fileHandler: trackedFileHandler });
 
         const downloadPath = Constants.TestDownloadDirectoryPath;
         const partialDownloadChangesetParams: CommonDownloadParams = {
           authorization,
-          imodelId: testiModelForDownload.id,
+          iModelId: testIModelForDownload.id,
           targetDirectoryPath: downloadPath
         };
 
-        await testCase.functionUnderTest(imodelsClientWithTrackedFileTransfer, partialDownloadChangesetParams);
+        await testCase.functionUnderTest(iModelsClientWithTrackedFileTransfer, partialDownloadChangesetParams);
 
         // Act
-        const changeset = await testCase.functionUnderTest(imodelsClientWithTrackedFileTransfer, partialDownloadChangesetParams);
+        const changeset = await testCase.functionUnderTest(iModelsClientWithTrackedFileTransfer, partialDownloadChangesetParams);
 
         // Assert
         expect(changeset).to.be.not.be.undefined;

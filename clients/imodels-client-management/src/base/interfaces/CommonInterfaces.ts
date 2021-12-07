@@ -13,8 +13,8 @@ export interface AuthorizationParam {
   authorization: AuthorizationCallback;
 }
 
-export interface iModelScopedOperationParams extends AuthorizationParam {
-  imodelId: string;
+export interface IModelScopedOperationParams extends AuthorizationParam {
+  iModelId: string;
 }
 
 export interface CollectionRequestParams {
