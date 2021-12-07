@@ -2,51 +2,51 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AcquireBriefcaseParams, AuthorizationCallback, Briefcase, iModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelCreator, TestiModelGroup, assertBriefcase, cleanUpiModels, iModelMetadata } from "../common";
+import { AcquireBriefcaseParams, AuthorizationCallback, Briefcase, IModelsClient } from "@itwin/imodels-client-authoring";
+import { Config, Constants, IModelMetadata, TestAuthorizationProvider, TestClientOptions, TestIModelCreator, TestIModelGroup, TestProjectProvider, assertBriefcase, cleanUpIModels } from "../common";
 
 describe("[Authoring] BriefcaseOperations", () => {
-  let imodelsClient: iModelsClient;
+  let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let projectId: string;
-  let testiModelGroup: TestiModelGroup;
-  let testiModel: iModelMetadata;
+  let testIModelGroup: TestIModelGroup;
+  let testIModel: IModelMetadata;
 
   before(async () => {
-    imodelsClient = new iModelsClient(new TestClientOptions());
+    iModelsClient = new IModelsClient(new TestClientOptions());
     authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
-    testiModelGroup = new TestiModelGroup({
+    testIModelGroup = new TestIModelGroup({
       labels: {
         package: Constants.PackagePrefix,
         testSuite: "AuthoringBriefcaseOperations"
       }
     });
 
-    testiModel = await TestiModelCreator.createEmpty({
-      imodelsClient,
+    testIModel = await TestIModelCreator.createEmpty({
+      iModelsClient,
       authorization,
       projectId,
-      imodelName: testiModelGroup.getPrefixedUniqueiModelName("Test iModel for write")
+      iModelName: testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
     });
   });
 
   after(async () => {
-    await cleanUpiModels({ imodelsClient, authorization, projectId, testiModelGroup });
+    await cleanUpIModels({ iModelsClient, authorization, projectId, testIModelGroup });
   });
 
   it("should acquire briefcase", async () => {
     // Arrange
     const acquireBriefcaseParams: AcquireBriefcaseParams = {
       authorization,
-      imodelId: testiModel.id,
+      iModelId: testIModel.id,
       briefcaseProperties: {
         deviceName: "some device name"
       }
     };
 
     // Act
-    const briefcase: Briefcase = await imodelsClient.Briefcases.acquire(acquireBriefcaseParams);
+    const briefcase: Briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
 
     // Assert
     assertBriefcase({

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelScopedOperationParams } from "../../base";
+import { IModelScopedOperationParams } from "../../base";
 
 interface ChangesetIdParam {
   changesetId: string;
@@ -24,4 +24,4 @@ interface NamedVersionIdParam {
 
 export type CheckpointParentEntityId = ChangesetIdParam | ChangesetIndexParam | NamedVersionIdParam;
 
-export type GetSingleCheckpointParams = iModelScopedOperationParams & CheckpointParentEntityId;
+export type GetSingleCheckpointParams = IModelScopedOperationParams & CheckpointParentEntityId;

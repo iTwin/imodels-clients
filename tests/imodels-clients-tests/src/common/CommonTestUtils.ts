@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import * as path from "path";
-import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationParam, iModelsClient as ManagementiModelsClient } from "@itwin/imodels-client-management";
-import { TestiModelGroup } from "./TestiModelGroup";
+import { IModelsClient as AuthoringIModelsClient } from "@itwin/imodels-client-authoring";
+import { AuthorizationParam, IModelsClient as ManagementIModelsClient } from "@itwin/imodels-client-management";
+import { TestIModelGroup } from "./TestIModelGroup";
 
 export class TestSetupError extends Error {
   constructor(message: string) {
@@ -15,22 +15,22 @@ export class TestSetupError extends Error {
   }
 }
 
-export async function cleanUpiModels(params: AuthorizationParam & {
-  imodelsClient: ManagementiModelsClient | AuthoringiModelsClient;
+export async function cleanUpIModels(params: AuthorizationParam & {
+  iModelsClient: ManagementIModelsClient | AuthoringIModelsClient;
   projectId: string;
-  testiModelGroup: TestiModelGroup;
+  testIModelGroup: TestIModelGroup;
 }): Promise<void> {
-  const imodels = params.imodelsClient.iModels.getMinimalList({
+  const iModels = params.iModelsClient.iModels.getMinimalList({
     authorization: params.authorization,
     urlParams: {
       projectId: params.projectId
     }
   });
-  for await (const imodel of imodels)
-    if (params.testiModelGroup.doesiModelBelongToContext(imodel.displayName))
-      await params.imodelsClient.iModels.delete({
+  for await (const iModel of iModels)
+    if (params.testIModelGroup.doesIModelBelongToContext(iModel.displayName))
+      await params.iModelsClient.iModels.delete({
         authorization: params.authorization,
-        imodelId: imodel.id
+        iModelId: iModel.id
       });
 }
 
