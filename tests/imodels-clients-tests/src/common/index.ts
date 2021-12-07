@@ -13,7 +13,7 @@ export * from "./CommonTestUtils";
 
 export * from "./test-context-providers/auth/TestAuthenticationProvider";
 export * from "./test-context-providers/project/TestProjectProvider";
-export * from "./test-context-providers/iModel/TestIModelFileProvider";
-export * from "./test-context-providers/iModel/TestIModelInterfaces";
-export * from "./test-context-providers/iModel/ReusableTestIModelProvider";
-export * from "./test-context-providers/iModel/TestIModelCreator";
+export * from "./test-context-providers/imodel/TestIModelFileProvider";
+export * from "./test-context-providers/imodel/TestIModelInterfaces";
+export * from "./test-context-providers/imodel/ReusableTestIModelProvider";
+export * from "./test-context-providers/imodel/TestIModelCreator";
