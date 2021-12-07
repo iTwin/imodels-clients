@@ -5,7 +5,7 @@
 import { AuthorizationCallback, ChangesetResponse, Checkpoint, NamedVersion, OperationsBase, PreferReturn, flatten, getCollectionIterator, getCollectionPagesIterator, map } from "../../base";
 import { Changeset, ChangesetsResponse, MinimalChangeset, MinimalChangesetsResponse } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { CheckpointOperations } from "../checkpoint/CheckpointOperations";
-import { NamedVersionOperations } from "../namedVersion/NamedVersionOperations";
+import { NamedVersionOperations } from "../named-version/NamedVersionOperations";
 import { OperationOptions } from "../OperationOptions";
 import { GetChangesetListParams, GetSingleChangesetParams } from "./ChangesetOperationParams";
 
