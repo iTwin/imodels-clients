@@ -61,11 +61,16 @@ export class IModelsErrorParser {
   }
 
   private static parseCode(errorCode: string): IModelsErrorCode {
-    let parsedCode: IModelsErrorCode | undefined = IModelsErrorCode[errorCode as keyof typeof IModelsErrorCode];
+    const adjustedErrorCode = IModelsErrorParser.adjustErrorCodeCaseToMatchEnum(errorCode);
+    let parsedCode: IModelsErrorCode | undefined = IModelsErrorCode[adjustedErrorCode as keyof typeof IModelsErrorCode];
     if (!parsedCode)
       parsedCode = IModelsErrorCode.Unrecognized;
 
     return parsedCode;
+  }
+
+  private static adjustErrorCodeCaseToMatchEnum(errorCode: string): string {
+    return errorCode.replace("iModel", "IModel");
   }
 
   private static parseDetails(details: IModelsApiErrorDetail[] | undefined): IModelsErrorDetail[] | undefined {
