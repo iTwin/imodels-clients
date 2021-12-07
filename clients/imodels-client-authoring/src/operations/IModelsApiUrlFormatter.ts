@@ -7,10 +7,10 @@ import { GetLockListUrlParams } from "./lock/LockOperationParams";
 
 export class IModelsApiUrlFormatter extends ManamegentIModelsApiUrlFormatter {
   public getBaselineUrl(params: { iModelId: string }): string {
-    return `${this.baseUri}/${params.iModelId}/baselinefile`;
+    return `${this.baseUrl}/${params.iModelId}/baselinefile`;
   }
 
   public getLockListUrl(params: { iModelId: string, urlParams?: GetLockListUrlParams }): string {
-    return `${this.baseUri}/${params.iModelId}/locks${this.formQueryString({ ...params.urlParams })}`;
+    return `${this.baseUrl}/${params.iModelId}/locks${this.formQueryString({ ...params.urlParams })}`;
   }
 }

@@ -7,11 +7,11 @@ import { IModelsApiUrlFormatter } from "@itwin/imodels-client-authoring";
 
 describe("[Authoring] IModelsApiUrlFormatter", () => {
   let iModelsApiUrlFormatter: IModelsApiUrlFormatter;
-  let iModelsApiBaseUri: string;
+  let iModelsApibaseUrl: string;
 
   before(() => {
-    iModelsApiBaseUri = "https://api.bentley.com/imodels";
-    iModelsApiUrlFormatter = new IModelsApiUrlFormatter(iModelsApiBaseUri);
+    iModelsApibaseUrl = "https://api.bentley.com/imodels";
+    iModelsApiUrlFormatter = new IModelsApiUrlFormatter(iModelsApibaseUrl);
   });
 
   describe("Baseline urls", () => {

@@ -25,7 +25,7 @@ export class IModelsClient {
     const filledIModelsClientOptions = IModelsClient.fillConfiguration(options);
     this._operationsOptions = {
       ...filledIModelsClientOptions,
-      urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUri)
+      urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
     };
   }
 

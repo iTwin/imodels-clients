@@ -20,43 +20,43 @@ export class IModelsApiUrlFormatter {
   private readonly _checkpointUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*?)/changesets/(?<${this._groupNames.changesetIndex}>.*?)/checkpoint`, this._regexIgnoreCaseOption);
   private readonly _namedVersionUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*?)/namedversions/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
 
-  constructor(protected readonly baseUri: string) {
+  constructor(protected readonly baseUrl: string) {
   }
 
   public getCreateIModelUrl(): string {
-    return this.baseUri;
+    return this.baseUrl;
   }
 
   public getSingleIModelUrl(params: { iModelId: string }): string {
-    return `${this.baseUri}/${params.iModelId}`;
+    return `${this.baseUrl}/${params.iModelId}`;
   }
 
   public getIModelListUrl(params: { urlParams: GetIModelListUrlParams }): string {
-    return `${this.baseUri}${this.formQueryString({ ...params.urlParams })}`;
+    return `${this.baseUrl}${this.formQueryString({ ...params.urlParams })}`;
   }
 
   public getSingleBriefcaseUrl(params: { iModelId: string } & { briefcaseId: number }): string {
-    return `${this.baseUri}/${params.iModelId}/briefcases/${params.briefcaseId}`;
+    return `${this.baseUrl}/${params.iModelId}/briefcases/${params.briefcaseId}`;
   }
 
   public getBriefcaseListUrl(params: { iModelId: string, urlParams?: GetBriefcaseListUrlParams }): string {
-    return `${this.baseUri}/${params.iModelId}/briefcases${this.formQueryString({ ...params.urlParams })}`;
+    return `${this.baseUrl}/${params.iModelId}/briefcases${this.formQueryString({ ...params.urlParams })}`;
   }
 
   public getSingleChangesetUrl(params: { iModelId: string } & ChangesetIdOrIndex): string {
-    return `${this.baseUri}/${params.iModelId}/changesets/${params.changesetId ?? params.changesetIndex}`;
+    return `${this.baseUrl}/${params.iModelId}/changesets/${params.changesetId ?? params.changesetIndex}`;
   }
 
   public getChangesetListUrl(params: { iModelId: string, urlParams?: GetChangesetListUrlParams }): string {
-    return `${this.baseUri}/${params.iModelId}/changesets${this.formQueryString({ ...params.urlParams })}`;
+    return `${this.baseUrl}/${params.iModelId}/changesets${this.formQueryString({ ...params.urlParams })}`;
   }
 
   public getSingleNamedVersionUrl(params: { iModelId: string } & { namedVersionId: string }): string {
-    return `${this.baseUri}/${params.iModelId}/namedversions/${params.namedVersionId}`;
+    return `${this.baseUrl}/${params.iModelId}/namedversions/${params.namedVersionId}`;
   }
 
   public getNamedVersionListUrl(params: { iModelId: string, urlParams?: GetNamedVersionListUrlParams }): string {
-    return `${this.baseUri}/${params.iModelId}/namedversions${this.formQueryString({ ...params.urlParams })}`;
+    return `${this.baseUrl}/${params.iModelId}/namedversions${this.formQueryString({ ...params.urlParams })}`;
   }
 
   public getCheckpointUrl(params: { iModelId: string } & CheckpointParentEntityId): string {
@@ -64,7 +64,7 @@ export class IModelsApiUrlFormatter {
       ? `namedversions/${params.namedVersionId}`
       : `changesets/${params.changesetId ?? params.changesetIndex}`;
 
-    return `${this.baseUri}/${params.iModelId}/${parentEntityUrlPath}/checkpoint`;
+    return `${this.baseUrl}/${params.iModelId}/${parentEntityUrlPath}/checkpoint`;
   }
 
   public parseCheckpointUrl(url: string): { iModelId: string, changesetIndex: number } {

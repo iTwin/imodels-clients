@@ -116,7 +116,7 @@ describe("AzureSdkFileHandler", () => {
     const briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
 
     const restClient = new AxiosRestClient();
-    const urlFormatter = new IModelsApiUrlFormatter(testClientOptions.api.baseUri!);
+    const urlFormatter = new IModelsApiUrlFormatter(testClientOptions.api.baseUrl!);
     const authorizationValue = await authorization();
     const changesetMetadataCreateResponse = await restClient.sendPostRequest<ChangesetResponse>({
       url: urlFormatter.getChangesetListUrl({ iModelId: testIModelForWrite.id }),

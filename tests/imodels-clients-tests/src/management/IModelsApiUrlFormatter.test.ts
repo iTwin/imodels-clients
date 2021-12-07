@@ -7,11 +7,11 @@ import { IModelOrderByProperty, IModelsApiUrlFormatter, OrderByOperator } from "
 
 describe("[Management] IModelsApiUrlFormatter", () => {
   let iModelsApiUrlFormatter: IModelsApiUrlFormatter;
-  let iModelsApiBaseUri: string;
+  let iModelsApiBaseUrl: string;
 
   before(() => {
-    iModelsApiBaseUri = "https://api.bentley.com/imodels";
-    iModelsApiUrlFormatter = new IModelsApiUrlFormatter(iModelsApiBaseUri);
+    iModelsApiBaseUrl = "https://api.bentley.com/imodels";
+    iModelsApiUrlFormatter = new IModelsApiUrlFormatter(iModelsApiBaseUrl);
   });
 
   describe("iModel urls", () => {

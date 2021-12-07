@@ -10,7 +10,7 @@ import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
 
 export interface ApiOptions {
-  baseUri?: string;
+  baseUrl?: string;
   version?: string;
 }
 
@@ -26,7 +26,7 @@ export class IModelsClient {
     const filledIModelsClientOptions = IModelsClient.fillConfiguration(options);
     this._operationsOptions = {
       ...filledIModelsClientOptions,
-      urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUri)
+      urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
     };
   }
 
@@ -54,7 +54,7 @@ export class IModelsClient {
     return {
       restClient: options?.restClient ?? new AxiosRestClient(),
       api: {
-        baseUri: options?.api?.baseUri ?? Constants.api.baseUrl,
+        baseUrl: options?.api?.baseUrl ?? Constants.api.baseUrl,
         version: options?.api?.version ?? Constants.api.version
       }
     };
