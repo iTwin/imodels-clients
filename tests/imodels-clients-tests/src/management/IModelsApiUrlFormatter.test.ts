@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { OrderByOperator, IModelOrderByProperty, IModelsApiUrlFormatter } from "@itwin/imodels-client-management";
+import { IModelOrderByProperty, IModelsApiUrlFormatter, OrderByOperator } from "@itwin/imodels-client-management";
 
 describe("[Management] IModelsApiUrlFormatter", () => {
   let iModelsApiUrlFormatter: IModelsApiUrlFormatter;

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { AuthorizationCallback, CheckpointState, GetSingleCheckpointParams, IModelScopedOperationParams, IModelsClient, IModelsErrorCode } from "@itwin/imodels-client-authoring";
-import { Config, Constants, NamedVersionMetadata, ReusableTestIModelProvider, ReusableIModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestIModelGroup, assertCheckpoint, assertError, cleanUpIModels } from "../common";
+import { Config, Constants, NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelGroup, TestProjectProvider, assertCheckpoint, assertError, cleanUpIModels } from "../common";
 
 describe("[Authoring] CheckpointOperations", () => {
   let iModelsClient: IModelsClient;

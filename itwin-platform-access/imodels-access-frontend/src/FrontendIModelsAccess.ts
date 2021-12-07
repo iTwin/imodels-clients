@@ -5,7 +5,7 @@
 import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
-import { AuthorizationCallback, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, MinimalChangeset, MinimalNamedVersion, OrderByOperator, IModelScopedOperationParams, IModelsClient, take } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, OrderByOperator, take } from "@itwin/imodels-client-management";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class FrontendIModelsAccess implements FrontendHubAccess {

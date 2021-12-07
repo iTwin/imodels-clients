@@ -5,8 +5,8 @@
 import * as fs from "fs";
 import * as path from "path";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, GetSingleChangesetParams, ProgressCallback, ProgressData, IModelsApiUrlFormatter, IModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, ReusableTestIModelProvider, ReusableIModelMetadata, TestAuthorizationProvider, TestChangesetFile, TestClientOptions, TestProjectProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, cleanUpIModels, cleanupDirectory, IModelMetadata } from "../common";
+import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, GetSingleChangesetParams, IModelsApiUrlFormatter, IModelsClient, ProgressCallback, ProgressData } from "@itwin/imodels-client-authoring";
+import { Config, Constants, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestChangesetFile, TestClientOptions, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestProjectProvider, cleanUpIModels, cleanupDirectory } from "../common";
 
 describe("AzureSdkFileHandler", () => {
   let azureSdkFileHandler: AzureSdkFileHandler;

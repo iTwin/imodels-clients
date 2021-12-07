@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { AuthorizationCallback, GetLockListParams, LockLevel, UpdateLockParams, IModelsClient, IModelsErrorCode, toArray } from "@itwin/imodels-client-authoring";
-import { Config, Constants, ReusableTestIModelProvider, ReusableIModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, assertCollection, assertError, assertLock, IModelMetadata } from "../common";
+import { AuthorizationCallback, GetLockListParams, IModelsClient, IModelsErrorCode, LockLevel, UpdateLockParams, toArray } from "@itwin/imodels-client-authoring";
+import { Config, Constants, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestProjectProvider, assertCollection, assertError, assertLock } from "../common";
 
 describe("[Authoring] LockOperations", () => {
   let iModelsClient: IModelsClient;

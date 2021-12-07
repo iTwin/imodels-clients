@@ -10,7 +10,7 @@ import {
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 import { AzureSdkFileHandler, FileHandler } from "./base";
-import { BriefcaseOperations, ChangesetOperations, LockOperations, IModelOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations } from "./operations";
 import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
 

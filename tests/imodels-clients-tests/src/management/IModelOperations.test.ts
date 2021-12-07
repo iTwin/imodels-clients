@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { IModelsClient as AuthoringIModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, CreateEmptyIModelParams, GetIModelListParams, OrderByOperator, IModel, IModelOrderByProperty, IModelsClient, IModelsErrorCode, toArray } from "@itwin/imodels-client-management";
-import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestIModelCreator, TestIModelGroup, assertCollection, assertError, assertIModel, cleanUpIModels, IModelMetadata } from "../common";
+import { AuthorizationCallback, CreateEmptyIModelParams, GetIModelListParams, IModel, IModelOrderByProperty, IModelsClient, IModelsErrorCode, OrderByOperator, toArray } from "@itwin/imodels-client-management";
+import { Config, Constants, IModelMetadata, TestAuthorizationProvider, TestClientOptions, TestIModelCreator, TestIModelGroup, TestProjectProvider, assertCollection, assertError, assertIModel, cleanUpIModels } from "../common";
 
 describe("[Management] IModelOperations", () => {
   let iModelsClient: IModelsClient;

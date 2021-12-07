@@ -91,6 +91,20 @@
       "never"
     ],
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "property",
+        "filter": {
+          "regex": "_links",
+          "match": true
+        },
+        "format": [
+          "camelCase"
+        ],
+        "leadingUnderscore": "require"
+      }
+    ],
     "@itwin/no-internal-barrel-imports": "off",
     "mocha/no-exclusive-tests": "error"
   }

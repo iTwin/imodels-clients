@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { IModelsClient as AuthoringIModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, CreateNamedVersionParams, GetNamedVersionListParams, NamedVersion, NamedVersionState, UpdateNamedVersionParams, IModelScopedOperationParams, IModelsClient, toArray } from "@itwin/imodels-client-management";
-import { Config, Constants, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestSetupError, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, assertCollection, assertNamedVersion, cleanUpIModels, IModelMetadata } from "../common";
+import { AuthorizationCallback, CreateNamedVersionParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, NamedVersion, NamedVersionState, UpdateNamedVersionParams, toArray } from "@itwin/imodels-client-management";
+import { Config, Constants, IModelMetadata, TestAuthorizationProvider, TestClientOptions, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestProjectProvider, TestSetupError, assertCollection, assertNamedVersion, cleanUpIModels } from "../common";
 
 describe("[Management] NamedVersionOperations", () => {
   let iModelsClient: IModelsClient;

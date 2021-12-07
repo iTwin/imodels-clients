@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, ChangesetResponse, ChangesetState, ChangesetOperations as ManagementChangesetOperations, IModelScopedOperationParams, IModelsErrorCode, IModelsErrorImpl } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetResponse, ChangesetState, IModelScopedOperationParams, IModelsErrorCode, IModelsErrorImpl, ChangesetOperations as ManagementChangesetOperations } from "@itwin/imodels-client-management";
 import { DownloadedChangeset, TargetDirectoryParam } from "../../base";
 import { OperationOptions } from "../OperationOptions";
 import { ChangesetPropertiesForCreate, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams } from "./ChangesetOperationParams";

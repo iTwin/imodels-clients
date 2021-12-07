@@ -5,7 +5,7 @@
 import { CreateNewIModelProps, LockMap, LockState } from "@itwin/core-backend";
 import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetRange, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
-import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, LockLevel, LockedObjects, IModelProperties } from "@itwin/imodels-client-authoring";
+import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {

@@ -2,11 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Lock, NamedVersion, IModel, toArray } from "@itwin/imodels-client-authoring";
+import { IModel, Lock, NamedVersion, toArray } from "@itwin/imodels-client-authoring";
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestIModelCreator } from "./TestIModelCreator";
 import { TestIModelFileProvider } from "./TestIModelFileProvider";
-import { BriefcaseMetadata, NamedVersionMetadata, ReusableIModelMetadata, TestIModelSetupContext, IModelIdParam, IModelIdentificationByNameParams } from "./TestIModelInterfaces";
+import { BriefcaseMetadata, IModelIdParam, IModelIdentificationByNameParams, NamedVersionMetadata, ReusableIModelMetadata, TestIModelSetupContext } from "./TestIModelInterfaces";
 
 export class TestIModelRetriever {
   public static async queryWithRelatedData(params: TestIModelSetupContext & IModelIdentificationByNameParams): Promise<ReusableIModelMetadata | undefined> {

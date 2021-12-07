@@ -7,7 +7,7 @@ import { TestSetupError } from "../../CommonTestUtils";
 import { Config } from "../../Config";
 import { TestAuthorizationProvider } from "../auth/TestAuthenticationProvider";
 import { TestIModelFileProvider } from "./TestIModelFileProvider";
-import { BriefcaseMetadata, NamedVersionMetadata, ReusableIModelMetadata, TestIModelSetupContext, IModelIdParam, IModelIdentificationByNameParams, IModelMetadata } from "./TestIModelInterfaces";
+import { BriefcaseMetadata, IModelIdParam, IModelIdentificationByNameParams, IModelMetadata, NamedVersionMetadata, ReusableIModelMetadata, TestIModelSetupContext } from "./TestIModelInterfaces";
 
 export class TestIModelCreator {
   public static namedVersionIndexes = [5, 10];

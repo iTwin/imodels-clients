@@ -17,10 +17,10 @@ import {
   AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset, ChangesetIdOrIndex,
   ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams, DeleteIModelParams,
   DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, GetBriefcaseListParams,
-  GetChangesetListParams, GetLockListParams, GetNamedVersionListParams, GetSingleChangesetParams, GetSingleCheckpointParams,
-  GetIModelListParams, Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalNamedVersion, MinimalIModel,
-  OrderByOperator, ProgressCallback, ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams,
-  IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, isIModelsApiError, take, toArray
+  GetChangesetListParams, GetIModelListParams, GetLockListParams, GetNamedVersionListParams, GetSingleChangesetParams,
+  GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, Lock, LockLevel,
+  LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion, OrderByOperator, ProgressCallback,
+  ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";

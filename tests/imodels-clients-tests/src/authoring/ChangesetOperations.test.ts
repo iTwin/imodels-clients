@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetListParams, DownloadFileParams, DownloadedChangeset, TargetDirectoryParam, IModelScopedOperationParams,IModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, Constants, FileTransferLog, ReusableTestIModelProvider, ReusableIModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpIModels, cleanupDirectory, IModelMetadata } from "../common";
+import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetListParams, DownloadFileParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient,TargetDirectoryParam } from "@itwin/imodels-client-authoring";
+import { Config, Constants, FileTransferLog, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestProjectProvider, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanUpIModels, cleanupDirectory } from "../common";
 
 type CommonDownloadParams = IModelScopedOperationParams & TargetDirectoryParam;
 
