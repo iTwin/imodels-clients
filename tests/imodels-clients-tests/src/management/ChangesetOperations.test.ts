@@ -29,11 +29,11 @@ describe("[Management] ChangesetOperations", () => {
   [
     {
       label: "minimal",
-      functionUnderTest: (params: GetChangesetListParams) => iModelsClient.Changesets.getMinimalList(params)
+      functionUnderTest: (params: GetChangesetListParams) => iModelsClient.changesets.getMinimalList(params)
     },
     {
       label: "representation",
-      functionUnderTest: (params: GetChangesetListParams) => iModelsClient.Changesets.getRepresentationList(params)
+      functionUnderTest: (params: GetChangesetListParams) => iModelsClient.changesets.getRepresentationList(params)
     }
   ].forEach((testCase) => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
@@ -154,7 +154,7 @@ describe("[Management] ChangesetOperations", () => {
     };
 
     // Act
-    const changeset: Changeset = await iModelsClient.Changesets.getSingle(getSingleChangesetParams);
+    const changeset: Changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
 
     // Assert
     assertChangeset({
@@ -187,7 +187,7 @@ describe("[Management] ChangesetOperations", () => {
       };
 
       // Act
-      const changesets = iModelsClient.Changesets.getRepresentationList(getChangesetListParams);
+      const changesets = iModelsClient.changesets.getRepresentationList(getChangesetListParams);
 
       // Assert
       for await (const changeset of changesets) {
@@ -209,7 +209,7 @@ describe("[Management] ChangesetOperations", () => {
       };
 
       // Act
-      const changeset: Changeset = await iModelsClient.Changesets.getSingle(getSingleChangesetParams);
+      const changeset: Changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
 
       // Assert
       const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();

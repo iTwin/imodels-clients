@@ -53,7 +53,7 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.IModels.createEmpty(createIModelParams);
+    const iModel: IModel = await iModelsClient.iModels.createEmpty(createIModelParams);
 
     // Assert
     assertIModel({
@@ -65,11 +65,11 @@ describe("[Management] IModelOperations", () => {
   [
     {
       label: "minimal",
-      functionUnderTest: (params: GetIModelListParams) => iModelsClient.IModels.getMinimalList(params)
+      functionUnderTest: (params: GetIModelListParams) => iModelsClient.iModels.getMinimalList(params)
     },
     {
       label: "representation",
-      functionUnderTest: (params: GetIModelListParams) => iModelsClient.IModels.getRepresentationList(params)
+      functionUnderTest: (params: GetIModelListParams) => iModelsClient.iModels.getRepresentationList(params)
     }
   ].forEach((testCase) => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
@@ -106,7 +106,7 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModels = iModelsClient.IModels.getRepresentationList(getIModelListParams);
+    const iModels = iModelsClient.iModels.getRepresentationList(getIModelListParams);
 
     // Assert
     const iModelNames = (await toArray(iModels)).map((iModel) => iModel.name);
@@ -128,7 +128,7 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModels = iModelsClient.IModels.getRepresentationList(getIModelListParams);
+    const iModels = iModelsClient.iModels.getRepresentationList(getIModelListParams);
 
     // Assert
     const iModelNames = (await toArray(iModels)).map((iModel) => iModel.name);
@@ -147,7 +147,7 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModels = iModelsClient.IModels.getRepresentationList(getIModelListParams);
+    const iModels = iModelsClient.iModels.getRepresentationList(getIModelListParams);
 
     // Assert
     const iModelArray = await toArray(iModels);
@@ -168,7 +168,7 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModels = iModelsClient.IModels.getRepresentationList(getIModelListParams);
+    const iModels = iModelsClient.iModels.getRepresentationList(getIModelListParams);
 
     // Assert
     const iModelArray = await toArray(iModels);
@@ -188,7 +188,7 @@ describe("[Management] IModelOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await iModelsClient.IModels.createEmpty(createIModelParams);
+      await iModelsClient.iModels.createEmpty(createIModelParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -218,7 +218,7 @@ describe("[Management] IModelOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await iModelsClient.IModels.createEmpty(createIModelParams);
+      await iModelsClient.iModels.createEmpty(createIModelParams);
     } catch (e) {
       errorThrown = e;
     }

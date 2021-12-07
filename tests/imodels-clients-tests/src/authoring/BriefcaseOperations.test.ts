@@ -46,7 +46,7 @@ describe("[Authoring] BriefcaseOperations", () => {
     };
 
     // Act
-    const briefcase: Briefcase = await iModelsClient.Briefcases.acquire(acquireBriefcaseParams);
+    const briefcase: Briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
 
     // Assert
     assertBriefcase({

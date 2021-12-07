@@ -60,7 +60,7 @@ describe("[Authoring] ChangesetOperations", () => {
       authorization,
       iModelId: testIModelForWrite.id
     };
-    const briefcase = await iModelsClient.Briefcases.acquire(acquireBriefcaseParams);
+    const briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
 
     const changesetMetadata = TestIModelFileProvider.changesets[0];
     const createChangesetParams: CreateChangesetParams = {
@@ -74,7 +74,7 @@ describe("[Authoring] ChangesetOperations", () => {
     };
 
     // Act
-    const changeset = await iModelsClient.Changesets.create(createChangesetParams);
+    const changeset = await iModelsClient.changesets.create(createChangesetParams);
 
     // Assert
     assertChangeset({
@@ -94,7 +94,7 @@ describe("[Authoring] ChangesetOperations", () => {
       };
 
       // Act
-      const changesets = await iModelsClient.Changesets.downloadList(downloadChangesetListParams);
+      const changesets = await iModelsClient.changesets.downloadList(downloadChangesetListParams);
 
       // Assert
       expect(changesets.length).to.equal(TestIModelFileProvider.changesets.length);
@@ -129,7 +129,7 @@ describe("[Authoring] ChangesetOperations", () => {
       };
 
       // Act
-      const changesets = await iModelsClient.Changesets.downloadList(downloadChangesetListParams);
+      const changesets = await iModelsClient.changesets.downloadList(downloadChangesetListParams);
 
       // Assert
       const expectedChangesetCount = downloadChangesetListParams.urlParams!.lastIndex! - downloadChangesetListParams.urlParams!.afterIndex!;
@@ -157,7 +157,7 @@ describe("[Authoring] ChangesetOperations", () => {
         label: "id",
         changesetUnderTest: TestIModelFileProvider.changesets[0],
         get functionUnderTest() {
-          return async (params: CommonDownloadParams) => iModelsClient.Changesets.downloadSingle(
+          return async (params: CommonDownloadParams) => iModelsClient.changesets.downloadSingle(
             {
               ...params,
               changesetId: this.changesetUnderTest.id
@@ -168,7 +168,7 @@ describe("[Authoring] ChangesetOperations", () => {
         label: "index",
         changesetUnderTest: TestIModelFileProvider.changesets[0],
         get functionUnderTest() {
-          return async (params: CommonDownloadParams) => iModelsClient.Changesets.downloadSingle(
+          return async (params: CommonDownloadParams) => iModelsClient.changesets.downloadSingle(
             {
               ...params,
               changesetIndex: this.changesetUnderTest.index
@@ -207,7 +207,7 @@ describe("[Authoring] ChangesetOperations", () => {
       {
         label: "by id",
         functionUnderTest: async (client: IModelsClient, params: CommonDownloadParams) =>
-          client.Changesets.downloadSingle({
+          client.changesets.downloadSingle({
             ...params,
             changesetId: TestIModelFileProvider.changesets[0].id
           })
@@ -215,7 +215,7 @@ describe("[Authoring] ChangesetOperations", () => {
       {
         label: "by index",
         functionUnderTest: async (client: IModelsClient, params: CommonDownloadParams) =>
-          client.Changesets.downloadSingle({
+          client.changesets.downloadSingle({
             ...params,
             changesetIndex: TestIModelFileProvider.changesets[0].index
           })
@@ -223,7 +223,7 @@ describe("[Authoring] ChangesetOperations", () => {
       {
         label: "list",
         functionUnderTest: async (client: IModelsClient, params: CommonDownloadParams) =>
-          client.Changesets
+          client.changesets
             .downloadList({
               ...params,
               urlParams: { afterIndex: 0, lastIndex: 1 }

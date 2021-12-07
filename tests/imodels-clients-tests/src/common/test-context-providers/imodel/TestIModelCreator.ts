@@ -16,7 +16,7 @@ export class TestIModelCreator {
   private static readonly _briefcaseDeviceName = "Some device name";
 
   public static async createEmpty(params: TestIModelSetupContext & IModelIdentificationByNameParams): Promise<IModelMetadata> {
-    const iModel = await params.iModelsClient.IModels.createEmpty({
+    const iModel = await params.iModelsClient.iModels.createEmpty({
       authorization: params.authorization,
       iModelProperties: {
         projectId: params.projectId,
@@ -92,7 +92,7 @@ export class TestIModelCreator {
       }
     ];
 
-    const acquiredLocks: Lock = await params.iModelsClient.Locks.update({
+    const acquiredLocks: Lock = await params.iModelsClient.locks.update({
       authorization: params.authorization,
       iModelId: params.iModelId,
       briefcaseId: params.briefcaseId,
@@ -107,7 +107,7 @@ export class TestIModelCreator {
 
     const changesets: Changeset[] = [];
     for (let i = 0; i < TestIModelFileProvider.changesets.length; i++) {
-      const createdChangeset = await params.iModelsClient.Changesets.create({
+      const createdChangeset = await params.iModelsClient.changesets.create({
         authorization: params.authorization,
         iModelId: params.iModelId,
         changesetProperties: {
@@ -128,7 +128,7 @@ export class TestIModelCreator {
   }
 
   private static async acquireBriefcase(params: TestIModelSetupContext & IModelIdParam): Promise<BriefcaseMetadata> {
-    const briefcase = await params.iModelsClient.Briefcases.acquire({
+    const briefcase = await params.iModelsClient.briefcases.acquire({
       authorization: params.authorization,
       iModelId: params.iModelId,
       briefcaseProperties: {
@@ -144,7 +144,7 @@ export class TestIModelCreator {
 
   private static async createNamedVersionOnChangesetIndex(params: TestIModelSetupContext & IModelIdParam & { changesetIndex: number }): Promise<NamedVersionMetadata> {
     const changesetMetadata = TestIModelFileProvider.changesets[params.changesetIndex - 1];
-    const namedVersion = await params.iModelsClient.NamedVersions.create({
+    const namedVersion = await params.iModelsClient.namedVersions.create({
       authorization: params.authorization,
       iModelId: params.iModelId,
       namedVersionProperties: {
@@ -163,7 +163,7 @@ export class TestIModelCreator {
     const sleepPeriodInMs = 1000;
     const timeOutInMs = 5 * 60 * 1000;
     for (let retries = timeOutInMs / sleepPeriodInMs; retries > 0; --retries) {
-      const checkpoint = await params.iModelsClient.Checkpoints.getSingle(params);
+      const checkpoint = await params.iModelsClient.checkpoints.getSingle(params);
 
       if (checkpoint.state === CheckpointState.Successful && checkpoint._links?.download !== undefined && checkpoint.containerAccessInfo !== null)
         return;

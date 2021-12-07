@@ -44,7 +44,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
       }
     };
 
-    const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._iModelsClient.Changesets.getMinimalList(getChangesetListParams);
+    const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._iModelsClient.changesets.getMinimalList(getChangesetListParams);
     const changesets: MinimalChangeset[] = await take(changesetsIterator, 1);
     const result = changesets.length === 0
       ? this._emptyChangesetId
@@ -60,7 +60,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
       }
     };
 
-    const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this._iModelsClient.NamedVersions.getMinimalList(getNamedVersionListParams);
+    const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
     const namedVersions: MinimalNamedVersion[] = await take(namedVersionsIterator, 1);
     if (namedVersions.length === 0 || !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);

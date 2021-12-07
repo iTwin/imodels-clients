@@ -42,7 +42,7 @@ describe("[Authoring] LockOperations", () => {
 
   afterEach(async () => {
     for (const briefcaseId of testIModelForWriteBriefcaseIds) {
-      await iModelsClient.Briefcases.release({
+      await iModelsClient.briefcases.release({
         authorization,
         iModelId: testIModelForWrite.id,
         briefcaseId
@@ -59,7 +59,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    const locks = iModelsClient.Locks.getList(getLockListParams);
+    const locks = iModelsClient.locks.getList(getLockListParams);
 
     // Assert
     await assertCollection({
@@ -79,7 +79,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    const locks = iModelsClient.Locks.getList(getLockListParams);
+    const locks = iModelsClient.locks.getList(getLockListParams);
 
     // Assert
     const lockArray = await toArray(locks);
@@ -101,7 +101,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    const locks = iModelsClient.Locks.getList(getLockListParams);
+    const locks = iModelsClient.locks.getList(getLockListParams);
 
     // Assert
     const lockArray = await toArray(locks);
@@ -110,7 +110,7 @@ describe("[Authoring] LockOperations", () => {
 
   it("should acquire new locks", async () => {
     // Arrange
-    const briefcase = await iModelsClient.Briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    const briefcase = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
     testIModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
 
     const updateLockParams: UpdateLockParams = {
@@ -130,7 +130,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    const acquiredLock = await iModelsClient.Locks.update(updateLockParams);
+    const acquiredLock = await iModelsClient.locks.update(updateLockParams);
 
     // Assert
     assertLock({
@@ -144,7 +144,7 @@ describe("[Authoring] LockOperations", () => {
 
   it("should release locks", async () => {
     // Arrange
-    const briefcase = await iModelsClient.Briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    const briefcase = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
     testIModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
 
     const updateLockParams1: UpdateLockParams = {
@@ -159,7 +159,7 @@ describe("[Authoring] LockOperations", () => {
       ]
     };
 
-    await iModelsClient.Locks.update(updateLockParams1);
+    await iModelsClient.locks.update(updateLockParams1);
 
     const updateLockParams2: UpdateLockParams = {
       authorization,
@@ -175,7 +175,7 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    const releasedLock = await iModelsClient.Locks.update(updateLockParams2);
+    const releasedLock = await iModelsClient.locks.update(updateLockParams2);
 
     // Assert
     assertLock({
@@ -189,7 +189,7 @@ describe("[Authoring] LockOperations", () => {
 
   it("should return error when trying to update non-existing lock to LockLevel.None", async () => {
     // Arrange
-    const briefcase = await iModelsClient.Briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    const briefcase = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
     testIModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
 
     const updateLockParams: UpdateLockParams = {
@@ -207,7 +207,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await iModelsClient.Locks.update(updateLockParams);
+      await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -240,7 +240,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await iModelsClient.Locks.update(updateLockParams);
+      await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -273,7 +273,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await iModelsClient.Locks.update(updateLockParams);
+      await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -291,7 +291,7 @@ describe("[Authoring] LockOperations", () => {
 
   it("should return error when trying to update lock with non-existing changeset specified", async () => {
     // Arrange
-    const briefcase = await iModelsClient.Briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    const briefcase = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
     testIModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
 
     const updateLockParams: UpdateLockParams = {
@@ -310,7 +310,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await iModelsClient.Locks.update(updateLockParams);
+      await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
       errorThrown = e;
     }
@@ -328,7 +328,7 @@ describe("[Authoring] LockOperations", () => {
 
   it("should return error when trying to acquire exclusive lock on an object that is already locked by another briefcase", async () => {
     // Arrange
-    const briefcase1 = await iModelsClient.Briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    const briefcase1 = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
     testIModelForWriteBriefcaseIds.push(briefcase1.briefcaseId);
 
     const updateLockParams1: UpdateLockParams = {
@@ -343,9 +343,9 @@ describe("[Authoring] LockOperations", () => {
       ]
     };
 
-    await iModelsClient.Locks.update(updateLockParams1);
+    await iModelsClient.locks.update(updateLockParams1);
 
-    const briefcase2 = await iModelsClient.Briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    const briefcase2 = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
     testIModelForWriteBriefcaseIds.push(briefcase2.briefcaseId);
 
     const updateLockParams2: UpdateLockParams = {
@@ -363,7 +363,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await iModelsClient.Locks.update(updateLockParams2);
+      await iModelsClient.locks.update(updateLockParams2);
     } catch (e) {
       errorThrown = e;
     }
@@ -381,7 +381,7 @@ describe("[Authoring] LockOperations", () => {
 
   it("should return error when trying to acquire lock on an object that has been locked by a more recent changeset", async () => {
     // Arrange
-    const briefcase1 = await iModelsClient.Briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    const briefcase1 = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
     testIModelForWriteBriefcaseIds.push(briefcase1.briefcaseId);
 
     const updateLockParams1: UpdateLockParams = {
@@ -397,9 +397,9 @@ describe("[Authoring] LockOperations", () => {
       ]
     };
 
-    await iModelsClient.Locks.update(updateLockParams1);
+    await iModelsClient.locks.update(updateLockParams1);
 
-    const briefcase2 = await iModelsClient.Briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
+    const briefcase2 = await iModelsClient.briefcases.acquire({ authorization, iModelId: testIModelForWrite.id });
     testIModelForWriteBriefcaseIds.push(briefcase2.briefcaseId);
 
     const updateLockParams2: UpdateLockParams = {
@@ -413,7 +413,7 @@ describe("[Authoring] LockOperations", () => {
     // Act
     let errorThrown: Error | undefined;
     try {
-      await iModelsClient.Locks.update(updateLockParams2);
+      await iModelsClient.locks.update(updateLockParams2);
     } catch (e) {
       errorThrown = e;
     }

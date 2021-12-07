@@ -27,11 +27,11 @@ describe("[Management] BriefcaseOperations", () => {
   [
     {
       label: "minimal",
-      functionUnderTest: (params: GetBriefcaseListParams) => iModelsClient.Briefcases.getMinimalList(params)
+      functionUnderTest: (params: GetBriefcaseListParams) => iModelsClient.briefcases.getMinimalList(params)
     },
     {
       label: "representation",
-      functionUnderTest: (params: GetBriefcaseListParams) => iModelsClient.Briefcases.getRepresentationList(params)
+      functionUnderTest: (params: GetBriefcaseListParams) => iModelsClient.briefcases.getRepresentationList(params)
     }
   ].forEach((testCase) => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
@@ -66,7 +66,7 @@ describe("[Management] BriefcaseOperations", () => {
     };
 
     // Act
-    const briefcases = iModelsClient.Briefcases.getRepresentationList(getBriefcaseListParams);
+    const briefcases = iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams);
 
     // Assert
     const briefcasesArray = await toArray(briefcases);
@@ -87,7 +87,7 @@ describe("[Management] BriefcaseOperations", () => {
     };
 
     // Act
-    const briefcases = iModelsClient.Briefcases.getRepresentationList(getBriefcaseListParams);
+    const briefcases = iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams);
 
     // Assert
     const briefcasesArray = await toArray(briefcases);
@@ -103,7 +103,7 @@ describe("[Management] BriefcaseOperations", () => {
     };
 
     // Act
-    const briefcase: Briefcase = await iModelsClient.Briefcases.getSingle(getSingleBriefcaseParams);
+    const briefcase: Briefcase = await iModelsClient.briefcases.getSingle(getSingleBriefcaseParams);
 
     // Assert
     assertBriefcase({

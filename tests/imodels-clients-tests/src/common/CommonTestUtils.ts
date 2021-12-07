@@ -20,7 +20,7 @@ export async function cleanUpIModels(params: AuthorizationParam & {
   projectId: string;
   testIModelGroup: TestIModelGroup;
 }): Promise<void> {
-  const iModels = params.iModelsClient.IModels.getMinimalList({
+  const iModels = params.iModelsClient.iModels.getMinimalList({
     authorization: params.authorization,
     urlParams: {
       projectId: params.projectId
@@ -28,7 +28,7 @@ export async function cleanUpIModels(params: AuthorizationParam & {
   });
   for await (const iModel of iModels)
     if (params.testIModelGroup.doesIModelBelongToContext(iModel.displayName))
-      await params.iModelsClient.IModels.delete({
+      await params.iModelsClient.iModels.delete({
         authorization: params.authorization,
         iModelId: iModel.id
       });

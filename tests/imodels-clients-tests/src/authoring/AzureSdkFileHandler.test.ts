@@ -104,7 +104,7 @@ describe("AzureSdkFileHandler", () => {
       iModelId: testIModelForDownload.id,
       changesetId: testChangeset.id
     };
-    const changeset = await iModelsClient.Changesets.getSingle(getSingleChangesetParams);
+    const changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
     return changeset._links.download.href;
   }
 
@@ -113,7 +113,7 @@ describe("AzureSdkFileHandler", () => {
       authorization,
       iModelId: testIModelForWrite.id
     };
-    const briefcase = await iModelsClient.Briefcases.acquire(acquireBriefcaseParams);
+    const briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
 
     const restClient = new AxiosRestClient();
     const urlFormatter = new IModelsApiUrlFormatter(testClientOptions.api.baseUri!);

@@ -30,7 +30,7 @@ export class TestIModelRetriever {
   }
 
   private static async queryAndValidateBriefcase(params: TestIModelSetupContext & IModelIdParam): Promise<BriefcaseMetadata> {
-    const briefcases = await toArray(params.iModelsClient.Briefcases.getRepresentationList(params));
+    const briefcases = await toArray(params.iModelsClient.briefcases.getRepresentationList(params));
     if (briefcases.length !== 1)
       throw new TestSetupError(`${briefcases.length} is an unexpected briefcase count for reusable test IModel.`);
 
@@ -38,7 +38,7 @@ export class TestIModelRetriever {
   }
 
   private static async queryAndValidateNamedVersions(params: TestIModelSetupContext & IModelIdParam): Promise<NamedVersionMetadata[]> {
-    const namedVersions: NamedVersion[] = await toArray(params.iModelsClient.NamedVersions.getRepresentationList(params));
+    const namedVersions: NamedVersion[] = await toArray(params.iModelsClient.namedVersions.getRepresentationList(params));
     if (namedVersions.length !== TestIModelCreator.namedVersionIndexes.length)
       throw new TestSetupError(`${namedVersions.length} is an unexpected named version count for reusable test iModel.`);
 
@@ -57,7 +57,7 @@ export class TestIModelRetriever {
   }
 
   private static async queryAndValidateLock(params: TestIModelSetupContext & IModelIdParam): Promise<Lock> {
-    const locks: Lock[] = await toArray(params.iModelsClient.Locks.getList(params));
+    const locks: Lock[] = await toArray(params.iModelsClient.locks.getList(params));
     if (locks.length !== 1)
       throw new TestSetupError(`${locks.length} is an unexpected lock count for reusable test iModel.`);
 
@@ -65,7 +65,7 @@ export class TestIModelRetriever {
   }
 
   private static async findIModelByName(params: TestIModelSetupContext & IModelIdentificationByNameParams): Promise<IModel | undefined> {
-    const iModels = params.iModelsClient.IModels.getRepresentationList({
+    const iModels = params.iModelsClient.iModels.getRepresentationList({
       authorization: params.authorization,
       urlParams: {
         projectId: params.projectId
