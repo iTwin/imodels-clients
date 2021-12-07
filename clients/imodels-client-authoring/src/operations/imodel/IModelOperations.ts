@@ -26,10 +26,10 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
       body: createIModelBody
     });
 
-    const uploadUrl = createIModelResponse.IModel._links.upload.href;
+    const uploadUrl = createIModelResponse.iModel._links.upload.href;
     await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.iModelProperties.filePath });
 
-    const confirmUploadUrl = createIModelResponse.IModel._links.complete.href;
+    const confirmUploadUrl = createIModelResponse.iModel._links.complete.href;
     await this.sendPostRequest({
       authorization: params.authorization,
       url: confirmUploadUrl,
@@ -38,11 +38,11 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
 
     await this.waitForBaselineFileInitialization({
       authorization: params.authorization,
-      iModelId: createIModelResponse.IModel.id
+      iModelId: createIModelResponse.iModel.id
     });
     return this.getSingle({
       authorization: params.authorization,
-      iModelId: createIModelResponse.IModel.id
+      iModelId: createIModelResponse.iModel.id
     });
   }
 
