@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { AxiosRestClient, RecursiveRequired, RestClient } from "./base";
 import { Constants } from "./Constants";
-import { BriefcaseOperations, ChangesetOperations, NamedVersionOperations, IModelOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations } from "./operations";
 import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
 import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
@@ -30,23 +30,23 @@ export class IModelsClient {
     };
   }
 
-  public get IModels(): IModelOperations<OperationOptions> {
+  public get iModels(): IModelOperations<OperationOptions> {
     return new IModelOperations(this._operationsOptions);
   }
 
-  public get Briefcases(): BriefcaseOperations<OperationOptions> {
+  public get briefcases(): BriefcaseOperations<OperationOptions> {
     return new BriefcaseOperations(this._operationsOptions);
   }
 
-  public get Changesets(): ChangesetOperations<OperationOptions> {
-    return new ChangesetOperations(this._operationsOptions, this.NamedVersions, this.Checkpoints);
+  public get changesets(): ChangesetOperations<OperationOptions> {
+    return new ChangesetOperations(this._operationsOptions, this.namedVersions, this.checkpoints);
   }
 
-  public get NamedVersions(): NamedVersionOperations<OperationOptions> {
+  public get namedVersions(): NamedVersionOperations<OperationOptions> {
     return new NamedVersionOperations(this._operationsOptions);
   }
 
-  public get Checkpoints(): CheckpointOperations<OperationOptions> {
+  public get checkpoints(): CheckpointOperations<OperationOptions> {
     return new CheckpointOperations(this._operationsOptions);
   }
 
