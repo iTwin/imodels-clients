@@ -12,7 +12,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       authorization: params.authorization,
       url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: unknown) => (response as IModelsResponse<MinimalIModel>).IModels
+      entityCollectionAccessor: (response: unknown) => (response as IModelsResponse<MinimalIModel>).iModels
     }));
   }
 
@@ -21,7 +21,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       authorization: params.authorization,
       url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: unknown) => (response as IModelsResponse<IModel>).IModels
+      entityCollectionAccessor: (response: unknown) => (response as IModelsResponse<IModel>).iModels
     }));
   }
 
@@ -30,7 +30,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId })
     });
-    return response.IModel;
+    return response.iModel;
   }
 
   public async createEmpty(params: CreateEmptyIModelParams): Promise<IModel> {
@@ -40,7 +40,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       url: this._options.urlFormatter.getCreateIModelUrl(),
       body: createIModelBody
     });
-    return createIModelResponse.IModel;
+    return createIModelResponse.iModel;
   }
 
   public async delete(params: DeleteIModelParams): Promise<void> {
