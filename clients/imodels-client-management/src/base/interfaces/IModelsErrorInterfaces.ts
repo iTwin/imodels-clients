@@ -2,9 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+<<<<<<< HEAD:clients/imodels-client-management/src/base/interfaces/iModelsErrorInterfaces.ts
 
 /** Possible error codes. */
 export enum iModelsErrorCode {
+=======
+export enum IModelsErrorCode {
+>>>>>>> 9e2fb6fa2ab090e211c16fccc7da86c3ebfb9542:clients/imodels-client-management/src/base/interfaces/IModelsErrorInterfaces.ts
   Unrecognized = "Unrecognized",
 
   Unknown = "Unknown",
@@ -12,7 +16,7 @@ export enum iModelsErrorCode {
   InsufficientPermissions = "InsufficientPermissions",
   RateLimitExceeded = "RateLimitExceeded",
   TooManyRequests = "TooManyRequests",
-  InvalidiModelsRequest = "InvalidiModelsRequest",
+  InvalidIModelsRequest = "InvalidiModelsRequest",
   RequestTooLarge = "RequestTooLarge",
   ResourceQuotaExceeded = "ResourceQuotaExceeded",
   DataConflict = "DataConflict",
@@ -26,13 +30,18 @@ export enum iModelsErrorCode {
   MissingRequestBody = "MissingRequestBody",
   ConflictWithAnotherUser = "ConflictWithAnotherUser",
   InvalidChange = "InvalidChange",
-  iModelExists = "iModelExists",
+  IModelExists = "iModelExists",
   VersionExists = "NamedVersionExists",
   ChangesetExists = "ChangesetExists",
   NamedVersionOnChangesetExists = "NamedVersionOnChangesetExists",
   ProjectNotFound = "ProjectNotFound",
+<<<<<<< HEAD:clients/imodels-client-management/src/base/interfaces/iModelsErrorInterfaces.ts
   iModelNotFound = "iModelNotFound",
   NamedVersionNotFound = "NamedVersionNotFound",
+=======
+  IModelNotFound = "iModelNotFound",
+  NamedVersionNotFound  = "NamedVersionNotFound",
+>>>>>>> 9e2fb6fa2ab090e211c16fccc7da86c3ebfb9542:clients/imodels-client-management/src/base/interfaces/IModelsErrorInterfaces.ts
   ChangesetNotFound = "ChangesetNotFound",
   UserNotFound = "UserNotFound",
   BriefcaseNotFound = "BriefcaseNotFound",
@@ -48,11 +57,21 @@ export enum iModelsErrorCode {
   ChangesetDownloadFailed = "ChangesetDownloadFailed"
 }
 
+<<<<<<< HEAD:clients/imodels-client-management/src/base/interfaces/iModelsErrorInterfaces.ts
 /** Error detail information. */
 export interface iModelsErrorDetail {
   /** Error detail code. See {@link iModelsErrorCode}. */
   code: iModelsErrorCode;
   /** Message that describes the error detail. */
+=======
+export interface IModelsError extends Error {
+  code: IModelsErrorCode;
+  details?: IModelsErrorDetail[];
+}
+
+export interface IModelsErrorDetail {
+  code: IModelsErrorCode;
+>>>>>>> 9e2fb6fa2ab090e211c16fccc7da86c3ebfb9542:clients/imodels-client-management/src/base/interfaces/IModelsErrorInterfaces.ts
   message: string;
   /** Name of the property or parameter which is related to the issue. */
   target?: string;

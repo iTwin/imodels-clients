@@ -4,15 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 import { AxiosRestClient, RecursiveRequired, RestClient } from "./base";
 import { Constants } from "./Constants";
-import { BriefcaseOperations, ChangesetOperations, NamedVersionOperations, iModelOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations } from "./operations";
 import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
-import { iModelsApiUrlFormatter } from "./operations/iModelsApiUrlFormatter";
+import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
 
 /** iModels API endpoint options. */
 export interface ApiOptions {
   /** iModels API base url. Default value is `https://api.bentley.com/imodels`. */
-  baseUri?: string;
+  baseUrl?: string;
   /** iModels API version. Default value is `itwin-platform.v1`. */
   version?: string;
 }
@@ -41,35 +41,35 @@ export class iModelsClient {
    * are `undefined` the client uses defaults. See {@link iModelsClientOptions}.
    */
   constructor(options?: iModelsClientOptions) {
-    const fillediModelsClientOptions = iModelsClient.fillConfiguration(options);
+    const filledIModelsClientOptions = iModelsClient.fillConfiguration(options);
     this._operationsOptions = {
-      ...fillediModelsClientOptions,
-      urlFormatter: new iModelsApiUrlFormatter(fillediModelsClientOptions.api.baseUri)
+      ...filledIModelsClientOptions,
+      urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
     };
   }
 
   /** iModel operations. See {@link iModelOperations}. */
-  public get iModels(): iModelOperations<OperationOptions> {
-    return new iModelOperations(this._operationsOptions);
+  public get iModels(): IModelOperations<OperationOptions> {
+    return new IModelOperations(this._operationsOptions);
   }
 
   /** Briefcase operations. See {@link BriefcaseOperations}. */
-  public get Briefcases(): BriefcaseOperations<OperationOptions> {
+  public get briefcases(): BriefcaseOperations<OperationOptions> {
     return new BriefcaseOperations(this._operationsOptions);
   }
 
   /** Changeset operations. See {@link ChangesetOperations}. */
-  public get Changesets(): ChangesetOperations<OperationOptions> {
-    return new ChangesetOperations(this._operationsOptions, this.NamedVersions, this.Checkpoints);
+  public get changesets(): ChangesetOperations<OperationOptions> {
+    return new ChangesetOperations(this._operationsOptions, this.namedVersions, this.checkpoints);
   }
 
   /** Named version operations. See {@link NamedVersionOperations}. */
-  public get NamedVersions(): NamedVersionOperations<OperationOptions> {
+  public get namedVersions(): NamedVersionOperations<OperationOptions> {
     return new NamedVersionOperations(this._operationsOptions);
   }
 
   /** Checkpoint operations. See {@link CheckpointOperations}. */
-  public get Checkpoints(): CheckpointOperations<OperationOptions> {
+  public get checkpoints(): CheckpointOperations<OperationOptions> {
     return new CheckpointOperations(this._operationsOptions);
   }
 
@@ -82,7 +82,7 @@ export class iModelsClient {
     return {
       restClient: options?.restClient ?? new AxiosRestClient(),
       api: {
-        baseUri: options?.api?.baseUri ?? Constants.api.baseUrl,
+        baseUrl: options?.api?.baseUrl ?? Constants.api.baseUrl,
         version: options?.api?.version ?? Constants.api.version
       }
     };

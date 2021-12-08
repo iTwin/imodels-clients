@@ -5,7 +5,7 @@
 import { CollectionResponse } from "../CommonInterfaces";
 
 /** Possible iModel states. */
-export enum iModelState {
+export enum IModelState {
   /**
    * Not initialized iModel. It means that iModel is not yet initialized and the server-side background initialization
    * process is still running. Initialization usually takes several minutes.
@@ -36,20 +36,20 @@ export interface Extent {
 }
 
 /** Minimal representation of an iModel. */
-export interface MinimaliModel {
+export interface MinimalIModel {
   /** iModel id. */
   id: string;
-  /** iModel display name. Corresponds to {@link iModel.name} property. */
+  /** iModel display name. Corresponds to {@link IModel.name} property. */
   displayName: string;
 }
 
-export interface iModel extends MinimaliModel {
+export interface IModel extends MinimalIModel {
   /** iModel name. */
   name: string;
   /** iModel description. */
   description: string | null;
   /** iModel state. See {@link iModelState}.*/
-  state: iModelState;
+  state: IModelState;
   /** Datetime string of when the iModel was created. */
   createdDateTime: string;
   /** Project id that the iModel belongs to. */
@@ -59,11 +59,11 @@ export interface iModel extends MinimaliModel {
 }
 
 /** DTO for single iModel API response. */
-export interface iModelResponse {
-  iModel: iModel;
+export interface IModelResponse {
+  iModel: IModel;
 }
 
 /** DTO for iModel list API response. */
-export interface iModelsResponse<TiModel extends MinimaliModel> extends CollectionResponse {
-  iModels: TiModel[];
+export interface IModelsResponse<TIModel extends MinimalIModel> extends CollectionResponse {
+  iModels: TIModel[];
 }

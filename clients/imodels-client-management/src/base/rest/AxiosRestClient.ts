@@ -3,13 +3,13 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { iModelsErrorParser } from "../iModelsErrorParser";
+import { IModelsErrorParser } from "../IModelsErrorParser";
 import { HttpRequestParams, HttpRequestWithBodyParams, ParseErrorFunc, RestClient } from "./RestClient";
 
 export class AxiosRestClient implements RestClient {
   private _parseErrorFunc: ParseErrorFunc;
 
-  constructor(parseErrorFunc: ParseErrorFunc = iModelsErrorParser.parse) {
+  constructor(parseErrorFunc: ParseErrorFunc = IModelsErrorParser.parse) {
     this._parseErrorFunc = parseErrorFunc;
   }
 

@@ -3,12 +3,12 @@
   "version": "0.1.0-dev.1",
   "description": "iModels API client wrapper for applications that manage iModels.",
   "license": "MIT",
-  "main": "lib/iModelsClientExports.js",
-  "typings": "lib/iModelsClientExports",
+  "main": "lib/IModelsClientExports.js",
+  "typings": "lib/IModelsClientExports",
   "scripts": {
     "build": "tsc 1>&2",
     "lint": "eslint ./src/**/*.ts 1>&2",
-    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell ./src/**/*.ts --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
   },
   "eslintConfig": {

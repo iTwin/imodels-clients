@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { iModelsError, iModelsErrorCode, iModelsErrorParser } from "@itwin/imodels-client-management";
+import { IModelsError, IModelsErrorCode, IModelsErrorParser } from "@itwin/imodels-client-management";
 import { assertError } from "../common";
 
-describe("iModelsErrorParser", () => {
+describe("IModelsErrorParser", () => {
   it("should parse error", () => {
     // Arrange
     const errorResponse: unknown = {
@@ -32,7 +32,7 @@ describe("iModelsErrorParser", () => {
     };
 
     // Act
-    const parsedError: iModelsError = iModelsErrorParser.parse({ statusCode: 400, body: errorResponse }) as iModelsError;
+    const parsedError: IModelsError = IModelsErrorParser.parse({ statusCode: 400, body: errorResponse }) as IModelsError;
 
     // Assert
     const expectedErrorMessage = "Cannot create iModel. Details:\n" +
@@ -42,21 +42,21 @@ describe("iModelsErrorParser", () => {
     assertError({
       actualError: parsedError,
       expectedError: {
-        code: iModelsErrorCode.InvalidiModelsRequest,
+        code: IModelsErrorCode.InvalidIModelsRequest,
         message: expectedErrorMessage,
         details: [
           {
-            code: iModelsErrorCode.InvalidValue,
+            code: IModelsErrorCode.InvalidValue,
             message: "Provided 'extent' value is not valid. Valid 'latitude' value range is -90 to 90.",
             target: "extent"
           },
           {
-            code: iModelsErrorCode.MissingRequiredProperty,
+            code: IModelsErrorCode.MissingRequiredProperty,
             message: "Required property is missing.",
             target: "name"
           },
           {
-            code: iModelsErrorCode.InvalidRequestBody,
+            code: IModelsErrorCode.InvalidRequestBody,
             message: "Failed to parse request body. Make sure it is a valid JSON."
           }
         ]

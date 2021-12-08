@@ -5,80 +5,80 @@
 import { OrderBy } from "../base/interfaces/CommonInterfaces";
 import { Dictionary } from "../base/interfaces/UtilityTypes";
 import { ChangesetIdOrIndex, GetChangesetListUrlParams } from "./changeset/ChangesetOperationParams";
-import { CheckpointParentEntityId, GetBriefcaseListUrlParams, GetNamedVersionListUrlParams, GetiModelListUrlParams } from ".";
+import { CheckpointParentEntityId, GetBriefcaseListUrlParams, GetIModelListUrlParams, GetNamedVersionListUrlParams } from ".";
 
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
 
-export class iModelsApiUrlFormatter {
+export class IModelsApiUrlFormatter {
   private readonly _regexIgnoreCaseOption = "i";
   private readonly _groupNames = {
-    imodelId: "imodelId",
+    iModelId: "iModelId",
     changesetIndex: "changesetIndex",
     namedVersionId: "namedVersionId"
   };
-  private readonly _checkpointUrlRegex = new RegExp(`/imodels/(?<${this._groupNames.imodelId}>.*?)/changesets/(?<${this._groupNames.changesetIndex}>.*?)/checkpoint`, this._regexIgnoreCaseOption);
-  private readonly _namedVersionUrlRegex = new RegExp(`/imodels/(?<${this._groupNames.imodelId}>.*?)/namedversions/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
+  private readonly _checkpointUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*?)/changesets/(?<${this._groupNames.changesetIndex}>.*?)/checkpoint`, this._regexIgnoreCaseOption);
+  private readonly _namedVersionUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*?)/namedversions/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
 
-  constructor(protected readonly baseUri: string) {
+  constructor(protected readonly baseUrl: string) {
   }
 
-  public getCreateiModelUrl(): string {
-    return this.baseUri;
+  public getCreateIModelUrl(): string {
+    return this.baseUrl;
   }
 
-  public getSingleiModelUrl(params: { imodelId: string }): string {
-    return `${this.baseUri}/${params.imodelId}`;
+  public getSingleIModelUrl(params: { iModelId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}`;
   }
 
-  public getiModelListUrl(params: { urlParams: GetiModelListUrlParams }): string {
-    return `${this.baseUri}${this.formQueryString({ ...params.urlParams })}`;
+  public getIModelListUrl(params: { urlParams: GetIModelListUrlParams }): string {
+    return `${this.baseUrl}${this.formQueryString({ ...params.urlParams })}`;
   }
 
-  public getSingleBriefcaseUrl(params: { imodelId: string } & { briefcaseId: number }): string {
-    return `${this.baseUri}/${params.imodelId}/briefcases/${params.briefcaseId}`;
+  public getSingleBriefcaseUrl(params: { iModelId: string } & { briefcaseId: number }): string {
+    return `${this.baseUrl}/${params.iModelId}/briefcases/${params.briefcaseId}`;
   }
 
-  public getBriefcaseListUrl(params: { imodelId: string, urlParams?: GetBriefcaseListUrlParams }): string {
-    return `${this.baseUri}/${params.imodelId}/briefcases${this.formQueryString({ ...params.urlParams })}`;
+  public getBriefcaseListUrl(params: { iModelId: string, urlParams?: GetBriefcaseListUrlParams }): string {
+    return `${this.baseUrl}/${params.iModelId}/briefcases${this.formQueryString({ ...params.urlParams })}`;
   }
 
-  public getSingleChangesetUrl(params: { imodelId: string } & ChangesetIdOrIndex): string {
-    return `${this.baseUri}/${params.imodelId}/changesets/${params.changesetId ?? params.changesetIndex}`;
+  public getSingleChangesetUrl(params: { iModelId: string } & ChangesetIdOrIndex): string {
+    return `${this.baseUrl}/${params.iModelId}/changesets/${params.changesetId ?? params.changesetIndex}`;
   }
 
-  public getChangesetListUrl(params: { imodelId: string, urlParams?: GetChangesetListUrlParams }): string {
-    return `${this.baseUri}/${params.imodelId}/changesets${this.formQueryString({ ...params.urlParams })}`;
+  public getChangesetListUrl(params: { iModelId: string, urlParams?: GetChangesetListUrlParams }): string {
+    return `${this.baseUrl}/${params.iModelId}/changesets${this.formQueryString({ ...params.urlParams })}`;
   }
 
-  public getSingleNamedVersionUrl(params: { imodelId: string } & { namedVersionId: string }): string {
-    return `${this.baseUri}/${params.imodelId}/namedversions/${params.namedVersionId}`;
+  public getSingleNamedVersionUrl(params: { iModelId: string } & { namedVersionId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}/namedversions/${params.namedVersionId}`;
   }
 
-  public getNamedVersionListUrl(params: { imodelId: string, urlParams?: GetNamedVersionListUrlParams }): string {
-    return `${this.baseUri}/${params.imodelId}/namedversions${this.formQueryString({ ...params.urlParams })}`;
+  public getNamedVersionListUrl(params: { iModelId: string, urlParams?: GetNamedVersionListUrlParams }): string {
+    return `${this.baseUrl}/${params.iModelId}/namedversions${this.formQueryString({ ...params.urlParams })}`;
   }
 
-  public getCheckpointUrl(params: { imodelId: string } & CheckpointParentEntityId): string {
+  public getCheckpointUrl(params: { iModelId: string } & CheckpointParentEntityId): string {
     const parentEntityUrlPath = params.namedVersionId
       ? `namedversions/${params.namedVersionId}`
       : `changesets/${params.changesetId ?? params.changesetIndex}`;
 
-    return `${this.baseUri}/${params.imodelId}/${parentEntityUrlPath}/checkpoint`;
+    return `${this.baseUrl}/${params.iModelId}/${parentEntityUrlPath}/checkpoint`;
   }
 
-  public parseCheckpointUrl(url: string): { imodelId: string, changesetIndex: number } {
+  public parseCheckpointUrl(url: string): { iModelId: string, changesetIndex: number } {
     const matchedGroups: Dictionary<string> = this._checkpointUrlRegex.exec(url)!.groups!;
     return {
-      imodelId: matchedGroups[this._groupNames.imodelId],
+      iModelId: matchedGroups[this._groupNames.iModelId],
       changesetIndex: parseInt(matchedGroups[this._groupNames.changesetIndex], 10)
     };
   }
 
-  public parseNamedVersionUrl(url: string): { imodelId: string, namedVersionId: string } {
+  public parseNamedVersionUrl(url: string): { iModelId: string, namedVersionId: string } {
     const matchedGroups: Dictionary<string> = this._namedVersionUrlRegex.exec(url)!.groups!;
     return {
-      imodelId: matchedGroups[this._groupNames.imodelId],
+      iModelId: matchedGroups[this._groupNames.iModelId],
       namedVersionId: matchedGroups[this._groupNames.namedVersionId]
     };
   }

@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { getTestRunId } from "./CommonTestUtils";
 
-export class TestiModelGroup {
-  private _imodelNamePrefix: string;
+export class TestIModelGroup {
+  private _iModelNamePrefix: string;
 
   constructor(params: {
     labels: {
@@ -13,16 +13,16 @@ export class TestiModelGroup {
       testSuite?: string;
     };
   }) {
-    this._imodelNamePrefix = `[${getTestRunId()}][${params.labels.package}]`;
+    this._iModelNamePrefix = `[${getTestRunId()}][${params.labels.package}]`;
     if (params.labels.testSuite)
-      this._imodelNamePrefix += `[${params.labels.testSuite}]`;
+      this._iModelNamePrefix += `[${params.labels.testSuite}]`;
   }
 
-  public getPrefixedUniqueiModelName(imodelName: string): string {
-    return `${this._imodelNamePrefix} ${imodelName}`;
+  public getPrefixedUniqueIModelName(iModelName: string): string {
+    return `${this._iModelNamePrefix} ${iModelName}`;
   }
 
-  public doesiModelBelongToContext(imodelName: string): boolean {
-    return imodelName.startsWith(this._imodelNamePrefix);
+  public doesIModelBelongToContext(iModelName: string): boolean {
+    return iModelName.startsWith(this._iModelNamePrefix);
   }
 }

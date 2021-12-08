@@ -5,15 +5,15 @@
 import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
-import { AuthorizationCallback, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, MinimalChangeset, MinimalNamedVersion, OrderByOperator, iModelScopedOperationParams, iModelsClient, take } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, OrderByOperator, take } from "@itwin/imodels-client-management";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
-export class FrontendiModelsAccess implements FrontendHubAccess {
+export class FrontendIModelsAccess implements FrontendHubAccess {
   private readonly _emptyChangesetId = "";
-  protected readonly _imodelsClient: iModelsClient;
+  protected readonly _iModelsClient: IModelsClient;
 
-  constructor(imodelsClient?: iModelsClient) {
-    this._imodelsClient = imodelsClient ?? new iModelsClient();
+  constructor(iModelsClient?: IModelsClient) {
+    this._iModelsClient = iModelsClient ?? new IModelsClient();
   }
 
   public async getChangesetIdFromVersion(arg: IModelIdArg & { version: IModelVersion }): Promise<ChangesetId> {
@@ -34,7 +34,7 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
 
   public async getLatestChangesetId(arg: IModelIdArg): Promise<ChangesetId> {
     const getChangesetListParams: GetChangesetListParams = {
-      ...this.getiModelScopedOperationParams(arg),
+      ...this.getIModelScopedOperationParams(arg),
       urlParams: {
         $top: 1,
         $orderBy: {
@@ -44,7 +44,7 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
       }
     };
 
-    const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._imodelsClient.Changesets.getMinimalList(getChangesetListParams);
+    const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._iModelsClient.changesets.getMinimalList(getChangesetListParams);
     const changesets: MinimalChangeset[] = await take(changesetsIterator, 1);
     const result = changesets.length === 0
       ? this._emptyChangesetId
@@ -54,31 +54,31 @@ export class FrontendiModelsAccess implements FrontendHubAccess {
 
   public async getChangesetIdFromNamedVersion(arg: IModelIdArg & { versionName: string }): Promise<ChangesetId> {
     const getNamedVersionListParams: GetNamedVersionListParams = {
-      ...this.getiModelScopedOperationParams(arg),
+      ...this.getIModelScopedOperationParams(arg),
       urlParams: {
         name: arg.versionName
       }
     };
 
-    const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this._imodelsClient.NamedVersions.getMinimalList(getNamedVersionListParams);
+    const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
     const namedVersions: MinimalNamedVersion[] = await take(namedVersionsIterator, 1);
     if (namedVersions.length === 0 || !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
     return namedVersions[0].changesetId;
   }
 
-  private getiModelScopedOperationParams(arg: IModelIdArg): iModelScopedOperationParams {
+  private getIModelScopedOperationParams(arg: IModelIdArg): IModelScopedOperationParams {
     const authorizationCallback: AuthorizationCallback = arg.accessToken
       ? PlatformToClientAdapter.toAuthorizationCallback(arg.accessToken)
-      : this.getAuthorizationCallbackFromiModelApp();
+      : this.getAuthorizationCallbackFromIModelApp();
 
     return {
       authorization: authorizationCallback,
-      imodelId: arg.iModelId
+      iModelId: arg.iModelId
     };
   }
 
-  private getAuthorizationCallbackFromiModelApp(): AuthorizationCallback {
+  private getAuthorizationCallbackFromIModelApp(): AuthorizationCallback {
     return async () => {
       const token = await IModelApp.getAccessToken();
       return PlatformToClientAdapter.toAuthorization(token);

@@ -2,20 +2,20 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, CollectionRequestParams, Extent, OrderBy, iModel, iModelScopedOperationParams } from "../../base";
+import { AuthorizationParam, CollectionRequestParams, Extent, IModel, IModelScopedOperationParams, OrderBy } from "../../base";
 
 /**
  * iModel entity properties that are supported in $orderBy url parameter which specifies by what property
  * entities are ordered in a collection.
  */
-export enum iModelOrderByProperty {
+export enum IModelOrderByProperty {
   Name = "name"
 }
 
 /** Url parameters supported in iModels list query. */
-export interface GetiModelListUrlParams extends CollectionRequestParams {
+export interface GetIModelListUrlParams extends CollectionRequestParams {
   /** Specifies in what order should entities be returned. See {@link OrderBy}. */
-  $orderBy?: OrderBy<iModel, iModelOrderByProperty>;
+  $orderBy?: OrderBy<IModel, IModelOrderByProperty>;
   /** Filters iModels for a specific project. */
   projectId: string;
   /** Filters iModels with a specific name. */
@@ -23,16 +23,16 @@ export interface GetiModelListUrlParams extends CollectionRequestParams {
 }
 
 /** Parameters for get iModels list operation. */
-export interface GetiModelListParams extends AuthorizationParam {
+export interface GetIModelListParams extends AuthorizationParam {
   /** Parameters that will be appended to the entity list request url that will narrow down or alter the results. */
-  urlParams: GetiModelListUrlParams;
+  urlParams: GetIModelListUrlParams;
 }
 
 /** Parameters for get single iModel operation. */
-export type GetSingleiModelParams = iModelScopedOperationParams;
+export type GetSingleIModelParams = IModelScopedOperationParams;
 
 /** Properties that should be specified when creating a new iModel. */
-export interface iModelProperties {
+export interface IModelProperties {
   /** Project for which the iModel belongs. Project id must not be an empty or whitespace string. */
   projectId: string;
   /**
@@ -47,10 +47,10 @@ export interface iModelProperties {
 }
 
 /** Parameters for create iModel operation. */
-export interface CreateEmptyiModelParams extends AuthorizationParam {
+export interface CreateEmptyIModelParams extends AuthorizationParam {
   /** Properties for the new iModel. */
-  imodelProperties: iModelProperties;
+  iModelProperties: IModelProperties;
 }
 
 /** Parameters for delete iModel operation. */
-export type DeleteiModelParams = iModelScopedOperationParams;
+export type DeleteIModelParams = IModelScopedOperationParams;

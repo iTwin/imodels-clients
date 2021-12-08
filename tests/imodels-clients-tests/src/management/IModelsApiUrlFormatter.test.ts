@@ -3,56 +3,56 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { OrderByOperator, iModelOrderByProperty, iModelsApiUrlFormatter } from "@itwin/imodels-client-management";
+import { IModelOrderByProperty, IModelsApiUrlFormatter, OrderByOperator } from "@itwin/imodels-client-management";
 
-describe("[Management] iModelsApiUrlFormatter", () => {
-  let imodelsApiUrlFormatter: iModelsApiUrlFormatter;
-  let imodelsApiBaseUri: string;
+describe("[Management] IModelsApiUrlFormatter", () => {
+  let iModelsApiUrlFormatter: IModelsApiUrlFormatter;
+  let iModelsApiBaseUrl: string;
 
   before(() => {
-    imodelsApiBaseUri = "https://api.bentley.com/imodels";
-    imodelsApiUrlFormatter = new iModelsApiUrlFormatter(imodelsApiBaseUri);
+    iModelsApiBaseUrl = "https://api.bentley.com/imodels";
+    iModelsApiUrlFormatter = new IModelsApiUrlFormatter(iModelsApiBaseUrl);
   });
 
   describe("iModel urls", () => {
     it("should format create iModel url", () => {
       // Act
-      const createiModelUrl = imodelsApiUrlFormatter.getCreateiModelUrl();
+      const createIModelUrl = iModelsApiUrlFormatter.getCreateIModelUrl();
 
       // Assert
-      expect(createiModelUrl).to.be.equal("https://api.bentley.com/imodels");
+      expect(createIModelUrl).to.be.equal("https://api.bentley.com/imodels");
     });
 
     it("should format single iModel url", () => {
       // Arrange
-      const getSingleiModelUrlParams = { imodelId: "IMODEL_ID" };
+      const getSingleIModelUrlParams = { iModelId: "IMODEL_ID" };
 
       // Act
-      const singleiModelUrl = imodelsApiUrlFormatter.getSingleiModelUrl(getSingleiModelUrlParams);
+      const singleIModelUrl = iModelsApiUrlFormatter.getSingleIModelUrl(getSingleIModelUrlParams);
 
       // Assert
-      expect(singleiModelUrl).to.equal("https://api.bentley.com/imodels/IMODEL_ID");
+      expect(singleIModelUrl).to.equal("https://api.bentley.com/imodels/IMODEL_ID");
     });
 
     it("should format iModel list url", () => {
       // Arrange
-      const getiModelListUrlParams = { imodelId: "IMODEL_ID", urlParams: { projectId: "PROJECT_ID" } };
+      const getIModelListUrlParams = { iModelId: "IMODEL_ID", urlParams: { projectId: "PROJECT_ID" } };
 
       // Act
-      const imodelListUrl = imodelsApiUrlFormatter.getiModelListUrl(getiModelListUrlParams);
+      const iModelListUrl = iModelsApiUrlFormatter.getIModelListUrl(getIModelListUrlParams);
 
       // Assert
-      expect(imodelListUrl).to.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID");
+      expect(iModelListUrl).to.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID");
     });
   });
 
   describe("Briefcase urls", () => {
     it("should format single Briefcase url", () => {
       // Arrange
-      const getSingleBriefcaseUrlParams = { imodelId: "IMODEL_ID", briefcaseId: 2 };
+      const getSingleBriefcaseUrlParams = { iModelId: "IMODEL_ID", briefcaseId: 2 };
 
       // Act
-      const singleBriefcaseUrl = imodelsApiUrlFormatter.getSingleBriefcaseUrl(getSingleBriefcaseUrlParams);
+      const singleBriefcaseUrl = iModelsApiUrlFormatter.getSingleBriefcaseUrl(getSingleBriefcaseUrlParams);
 
       // Assert
       expect(singleBriefcaseUrl).to.equal("https://api.bentley.com/imodels/IMODEL_ID/briefcases/2");
@@ -60,10 +60,10 @@ describe("[Management] iModelsApiUrlFormatter", () => {
 
     it("should format Briefcase list url", () => {
       // Arrange
-      const getBriefcaseListUrlParams = { imodelId: "IMODEL_ID" };
+      const getBriefcaseListUrlParams = { iModelId: "IMODEL_ID" };
 
       // Act
-      const briefcaseListUrl = imodelsApiUrlFormatter.getBriefcaseListUrl(getBriefcaseListUrlParams);
+      const briefcaseListUrl = iModelsApiUrlFormatter.getBriefcaseListUrl(getBriefcaseListUrlParams);
 
       // Assert
       expect(briefcaseListUrl).to.equal("https://api.bentley.com/imodels/IMODEL_ID/briefcases");
@@ -73,10 +73,10 @@ describe("[Management] iModelsApiUrlFormatter", () => {
   describe("Named Version urls", () => {
     it("should format single Named Version url", () => {
       // Arrange
-      const getSingleNamedVersionUrl = { imodelId: "IMODEL_ID", namedVersionId: "NAMED_VERSION_ID" };
+      const getSingleNamedVersionUrl = { iModelId: "IMODEL_ID", namedVersionId: "NAMED_VERSION_ID" };
 
       // Act
-      const singleNamedVersionUrl = imodelsApiUrlFormatter.getSingleNamedVersionUrl(getSingleNamedVersionUrl);
+      const singleNamedVersionUrl = iModelsApiUrlFormatter.getSingleNamedVersionUrl(getSingleNamedVersionUrl);
 
       // Assert
       expect(singleNamedVersionUrl).to.equal("https://api.bentley.com/imodels/IMODEL_ID/namedversions/NAMED_VERSION_ID");
@@ -84,10 +84,10 @@ describe("[Management] iModelsApiUrlFormatter", () => {
 
     it("should format Named Version list url", () => {
       // Arrange
-      const getNamedVersionListUrlParams = { imodelId: "IMODEL_ID" };
+      const getNamedVersionListUrlParams = { iModelId: "IMODEL_ID" };
 
       // Act
-      const namedVersionListUrl = imodelsApiUrlFormatter.getNamedVersionListUrl(getNamedVersionListUrlParams);
+      const namedVersionListUrl = iModelsApiUrlFormatter.getNamedVersionListUrl(getNamedVersionListUrlParams);
 
       // Assert
       expect(namedVersionListUrl).to.equal("https://api.bentley.com/imodels/IMODEL_ID/namedversions");
@@ -98,10 +98,10 @@ describe("[Management] iModelsApiUrlFormatter", () => {
       const namedVersionUrl = "https://api.bentley.com/imodels/IMODEL_ID/namedversions/NAMED_VERSION_ID";
 
       // Act
-      const { imodelId, namedVersionId } = imodelsApiUrlFormatter.parseNamedVersionUrl(namedVersionUrl);
+      const { iModelId, namedVersionId } = iModelsApiUrlFormatter.parseNamedVersionUrl(namedVersionUrl);
 
       // Assert
-      expect(imodelId).to.be.equal("IMODEL_ID");
+      expect(iModelId).to.be.equal("IMODEL_ID");
       expect(namedVersionId).to.be.equal("NAMED_VERSION_ID");
     });
   });
@@ -109,10 +109,10 @@ describe("[Management] iModelsApiUrlFormatter", () => {
   describe("Changeset urls", () => {
     it("should format changeset list url", () => {
       // Arrange
-      const getChangesetListUrlParams = { imodelId: "IMODEL_ID" };
+      const getChangesetListUrlParams = { iModelId: "IMODEL_ID" };
 
       // Act
-      const changesetListUrl = imodelsApiUrlFormatter.getChangesetListUrl(getChangesetListUrlParams);
+      const changesetListUrl = iModelsApiUrlFormatter.getChangesetListUrl(getChangesetListUrlParams);
 
       // Assert
       expect(changesetListUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/changesets");
@@ -120,10 +120,10 @@ describe("[Management] iModelsApiUrlFormatter", () => {
 
     it("should format single changeset url with id", () => {
       // Arrange
-      const getSingleChangesetUrlParams = { imodelId: "IMODEL_ID", changesetId: "CHANGESET_ID" };
+      const getSingleChangesetUrlParams = { iModelId: "IMODEL_ID", changesetId: "CHANGESET_ID" };
 
       // Act
-      const singleChangesetUrl = imodelsApiUrlFormatter.getSingleChangesetUrl(getSingleChangesetUrlParams);
+      const singleChangesetUrl = iModelsApiUrlFormatter.getSingleChangesetUrl(getSingleChangesetUrlParams);
 
       // Assert
       expect(singleChangesetUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/changesets/CHANGESET_ID");
@@ -131,10 +131,10 @@ describe("[Management] iModelsApiUrlFormatter", () => {
 
     it("should format single changeset url with index", () => {
       // Arrange
-      const getSingleChangesetUrlParams = { imodelId: "IMODEL_ID", changesetIndex: 5 };
+      const getSingleChangesetUrlParams = { iModelId: "IMODEL_ID", changesetIndex: 5 };
 
       // Act
-      const singleChangesetUrl = imodelsApiUrlFormatter.getSingleChangesetUrl(getSingleChangesetUrlParams);
+      const singleChangesetUrl = iModelsApiUrlFormatter.getSingleChangesetUrl(getSingleChangesetUrlParams);
 
       // Assert
       expect(singleChangesetUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/changesets/5");
@@ -147,10 +147,10 @@ describe("[Management] iModelsApiUrlFormatter", () => {
       const checkpointUrl = "https://api.bentley.com/imodels/IMODEL_ID/changesets/5/checkpoint";
 
       // Act
-      const { imodelId, changesetIndex } = imodelsApiUrlFormatter.parseCheckpointUrl(checkpointUrl);
+      const { iModelId, changesetIndex } = iModelsApiUrlFormatter.parseCheckpointUrl(checkpointUrl);
 
       // Assert
-      expect(imodelId).to.be.equal("IMODEL_ID");
+      expect(iModelId).to.be.equal("IMODEL_ID");
       expect(changesetIndex).to.be.equal(5);
     });
   });
@@ -158,14 +158,14 @@ describe("[Management] iModelsApiUrlFormatter", () => {
   describe("Url parameter forming", () => {
     it("should append all url params", () => {
       // Arrange
-      const getiModelListUrlParams = {
+      const getIModelListUrlParams = {
         urlParams: {
           projectId: "PROJECT_ID",
           name: "IMODEL_NAME",
           $skip: 1,
           $top: 2,
           $orderBy: {
-            property: iModelOrderByProperty.Name,
+            property: IModelOrderByProperty.Name,
             operator: OrderByOperator.Ascending
           },
           testParam1: 1,
@@ -174,10 +174,10 @@ describe("[Management] iModelsApiUrlFormatter", () => {
       };
 
       // Act
-      const imodelListUrl = imodelsApiUrlFormatter.getiModelListUrl(getiModelListUrlParams);
+      const iModelListUrl = iModelsApiUrlFormatter.getIModelListUrl(getIModelListUrlParams);
 
       // Assert
-      expect(imodelListUrl).to.be.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID&name=IMODEL_NAME&$skip=1&$top=2&$orderBy=name asc&testParam1=1&testParam2=param2");
+      expect(iModelListUrl).to.be.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID&name=IMODEL_NAME&$skip=1&$top=2&$orderBy=name asc&testParam1=1&testParam2=param2");
     });
 
     [
@@ -200,7 +200,7 @@ describe("[Management] iModelsApiUrlFormatter", () => {
     ].forEach((testCase) => {
       it(`should not append param if it is ${testCase.label}`, () => {
         // Arrange
-        const getiModelListUrlParams = {
+        const getIModelListUrlParams = {
           urlParams: {
             projectId: "PROJECT_ID",
             testValue: testCase.valueUnderTest
@@ -208,16 +208,16 @@ describe("[Management] iModelsApiUrlFormatter", () => {
         };
 
         // Act
-        const imodelListUrl = imodelsApiUrlFormatter.getiModelListUrl(getiModelListUrlParams);
+        const iModelListUrl = iModelsApiUrlFormatter.getIModelListUrl(getIModelListUrlParams);
 
         // Assert
-        expect(imodelListUrl).to.be.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID");
+        expect(iModelListUrl).to.be.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID");
       });
     });
 
     it("should append param if it is equal to 0", () => {
       // Arrange
-      const getiModelListUrlParams = {
+      const getIModelListUrlParams = {
         urlParams: {
           projectId: "PROJECT_ID",
           testValue: 0
@@ -225,10 +225,10 @@ describe("[Management] iModelsApiUrlFormatter", () => {
       };
 
       // Act
-      const imodelListUrl = imodelsApiUrlFormatter.getiModelListUrl(getiModelListUrlParams);
+      const iModelListUrl = iModelsApiUrlFormatter.getIModelListUrl(getIModelListUrlParams);
 
       // Assert
-      expect(imodelListUrl).to.be.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID&testValue=0");
+      expect(iModelListUrl).to.be.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID&testValue=0");
     });
   });
 });

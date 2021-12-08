@@ -28,6 +28,7 @@ export interface AuthorizationParam {
   authorization: AuthorizationCallback;
 }
 
+<<<<<<< HEAD
 /**
  * Common parameters for iModel scoped operations. All operations exposed in this client are iModel scoped
  * except for {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}.
@@ -35,6 +36,10 @@ export interface AuthorizationParam {
 export interface iModelScopedOperationParams extends AuthorizationParam {
   /** iModel id. */
   imodelId: string;
+=======
+export interface IModelScopedOperationParams extends AuthorizationParam {
+  iModelId: string;
+>>>>>>> 9e2fb6fa2ab090e211c16fccc7da86c3ebfb9542
 }
 
 /** Common url parameters that are supported for all entity list requests. */

@@ -2,15 +2,15 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, iModelOperations as ManagementiModelOperations, iModel, iModelsErrorCode, iModelsErrorImpl, sleep } from "@itwin/imodels-client-management";
-import { iModelCreateResponse } from "../../base";
+import { AuthorizationParam, IModel, IModelsErrorCode, IModelsErrorImpl, IModelOperations as ManagementIModelOperations, sleep } from "@itwin/imodels-client-management";
+import { IModelCreateResponse } from "../../base";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
 import { Constants } from "../../Constants";
 import { BaselineFileOperations } from "../baselineFile/BaselineFileOperations";
 import { OperationOptions } from "../OperationOptions";
-import { CreateiModelFromBaselineParams, iModelPropertiesForCreateFromBaseline } from "./iModelOperationParams";
+import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline } from "./IModelOperationParams";
 
-export class iModelOperations<TOptions extends OperationOptions> extends ManagementiModelOperations<TOptions> {
+export class IModelOperations<TOptions extends OperationOptions> extends ManagementIModelOperations<TOptions> {
   private _baselineFileOperations: BaselineFileOperations<TOptions>;
 
   constructor(options: TOptions) {
@@ -29,18 +29,18 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
   * @throws an error that implements `iModelsError` interface with code `iModelsErrorCode.BaselineFileInitializationFailed` if Baseline file initialization failed
   * or did not complete in time. See {@link iModelsErrorCode}.
   */
-  public async createFromBaseline(params: CreateiModelFromBaselineParams): Promise<iModel> {
-    const createiModelBody = this.getCreateiModelFromBaselineRequestBody(params.imodelProperties);
-    const createiModelResponse = await this.sendPostRequest<iModelCreateResponse>({
+  public async createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel> {
+    const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.imodelProperties);
+    const createIModelResponse = await this.sendPostRequest<IModelCreateResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getCreateiModelUrl(),
-      body: createiModelBody
+      url: this._options.urlFormatter.getCreateIModelUrl(),
+      body: createIModelBody
     });
 
-    const uploadUrl = createiModelResponse.iModel._links.upload.href;
-    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.imodelProperties.filePath });
+    const uploadUrl = createIModelResponse.iModel._links.upload.href;
+    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.iModelProperties.filePath });
 
-    const confirmUploadUrl = createiModelResponse.iModel._links.complete.href;
+    const confirmUploadUrl = createIModelResponse.iModel._links.complete.href;
     await this.sendPostRequest({
       authorization: params.authorization,
       url: confirmUploadUrl,
@@ -49,26 +49,26 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
 
     await this.waitForBaselineFileInitialization({
       authorization: params.authorization,
-      imodelId: createiModelResponse.iModel.id
+      iModelId: createIModelResponse.iModel.id
     });
     return this.getSingle({
       authorization: params.authorization,
-      imodelId: createiModelResponse.iModel.id
+      iModelId: createIModelResponse.iModel.id
     });
   }
 
-  private getCreateiModelFromBaselineRequestBody(imodelProperties: iModelPropertiesForCreateFromBaseline): object {
+  private getCreateIModelFromBaselineRequestBody(iModelProperties: IModelPropertiesForCreateFromBaseline): object {
     return {
-      ...this.getCreateEmptyiModelRequestBody(imodelProperties),
+      ...this.getCreateEmptyIModelRequestBody(iModelProperties),
       baselineFile: {
-        size: this._options.fileHandler.getFileSize(imodelProperties.filePath)
+        size: this._options.fileHandler.getFileSize(iModelProperties.filePath)
       }
     };
   }
 
-  private async waitForBaselineFileInitialization(params: AuthorizationParam & { imodelId: string, timeOutInMs?: number }): Promise<void> {
+  private async waitForBaselineFileInitialization(params: AuthorizationParam & { iModelId: string, timeOutInMs?: number }): Promise<void> {
     const sleepPeriodInMs = Constants.time.sleepPeriodInMs;
-    const timeOutInMs = params.timeOutInMs ?? Constants.time.imodelInitiazationTimeOutInMs;
+    const timeOutInMs = params.timeOutInMs ?? Constants.time.iModelInitiazationTimeOutInMs;
     for (let retries = Math.ceil(timeOutInMs / sleepPeriodInMs); retries > 0; --retries) {
       const baselineFileState = (await this._baselineFileOperations.getSingle(params)).state;
 
@@ -76,16 +76,16 @@ export class iModelOperations<TOptions extends OperationOptions> extends Managem
         return;
 
       if (baselineFileState !== BaselineFileState.WaitingForFile && baselineFileState !== BaselineFileState.InitializationScheduled)
-        throw new iModelsErrorImpl({
-          code: iModelsErrorCode.BaselineFileInitializationFailed,
+        throw new IModelsErrorImpl({
+          code: IModelsErrorCode.BaselineFileInitializationFailed,
           message: `Baseline File initialization failed with state '${baselineFileState}.'`
         });
 
       await sleep(sleepPeriodInMs);
     }
 
-    throw new iModelsErrorImpl({
-      code: iModelsErrorCode.BaselineFileInitializationFailed,
+    throw new IModelsErrorImpl({
+      code: IModelsErrorCode.BaselineFileInitializationFailed,
       message: "Timed out waiting for Baseline File initialization."
     });
   }
