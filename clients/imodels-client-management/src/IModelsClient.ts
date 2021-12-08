@@ -18,7 +18,7 @@ export interface ApiOptions {
 }
 
 /** User-configurable iModels client options. */
-export interface iModelsClientOptions {
+export interface IModelsClientOptions {
   /**
    * Rest client that is used for making HTTP requests. If `undefined` the default client is used which is implemented
    * using `axios` library. See {@link AxiosRestClient}.
@@ -32,7 +32,7 @@ export interface iModelsClientOptions {
  * iModels API client for iModel management workflows. For more information on the API visit the
  * {@link https://developer.bentley.com/apis/imodels/ iModels API documentation page}.
  */
-export class iModelsClient {
+export class IModelsClient {
   private _operationsOptions: OperationOptions;
 
   /**
@@ -40,8 +40,8 @@ export class iModelsClient {
    * @param {iModelsClientOptions} options client options. If `options` are `undefined` or if some of the properties
    * are `undefined` the client uses defaults. See {@link iModelsClientOptions}.
    */
-  constructor(options?: iModelsClientOptions) {
-    const filledIModelsClientOptions = iModelsClient.fillConfiguration(options);
+  constructor(options?: IModelsClientOptions) {
+    const filledIModelsClientOptions = IModelsClient.fillConfiguration(options);
     this._operationsOptions = {
       ...filledIModelsClientOptions,
       urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
@@ -74,12 +74,12 @@ export class iModelsClient {
   }
 
   /**
-   * Creates a required configuration instance from user provided options and applying default ones for not specified 
+   * Creates a required configuration instance from user provided options and applying default ones for not specified
    * options. See {@link iModelsClientOptions}.
    * @param {iModelsClientOptions} options user-passed client options.
    * @returns {RecursiveRequired<iModelsClientOptions>} required iModels client configuration options.
    */
-  public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
+  public static fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
     return {
       restClient: options?.restClient ?? new AxiosRestClient(),
       api: {

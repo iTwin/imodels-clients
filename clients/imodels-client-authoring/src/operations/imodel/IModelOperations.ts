@@ -30,7 +30,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   * or did not complete in time. See {@link iModelsErrorCode}.
   */
   public async createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel> {
-    const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.imodelProperties);
+    const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties);
     const createIModelResponse = await this.sendPostRequest<IModelCreateResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getCreateIModelUrl(),

@@ -83,7 +83,7 @@ export class IModelsClient {
   }
 
   /**
-   * Creates a required configuration instance from user provided options and applying default ones for not specified 
+   * Creates a required configuration instance from user provided options and applying default ones for not specified
    * options. See {@link iModelsClientOptions}.
    * @param {iModelsClientOptions} options user-passed client options.
    * @returns {RecursiveRequired<iModelsClientOptions>} required iModels client configuration options.

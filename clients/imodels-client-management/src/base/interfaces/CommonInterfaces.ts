@@ -102,7 +102,7 @@ export interface CollectionResponse {
 }
 
 /**
- * Values for return preference used in `Prefer` header. The header value is formed by joining 
+ * Values for return preference used in `Prefer` header. The header value is formed by joining
  * `return=` and the enum value.
  */
 export enum PreferReturn {
