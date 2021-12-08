@@ -22,7 +22,7 @@ after(async () => {
   cleanupDirectory(Constants.TestDownloadDirectoryPath);
 });
 
-export async function cleanupIModelsInTestProject(): Promise<void> {
+async function cleanupIModelsInTestProject(): Promise<void> {
   const iModelsClient = new IModelsClient(new TestClientOptions());
   const authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
   const projectId = await TestProjectProvider.getProjectId();
