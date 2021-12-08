@@ -74,9 +74,10 @@ export class iModelsClient {
   }
 
   /**
-   * Creates a configuration from user-specified properties and default values. See {@link iModelsClientOptions}.
+   * Creates a required configuration instance from user provided options and applying default ones for not specified 
+   * options. See {@link iModelsClientOptions}.
    * @param {iModelsClientOptions} options user-passed client options.
-   * @returns {RecursiveRequired<iModelsClientOptions>} options with all the gaps filled with default values.
+   * @returns {RecursiveRequired<iModelsClientOptions>} required iModels client configuration options.
    */
   public static fillConfiguration(options?: iModelsClientOptions): RecursiveRequired<iModelsClientOptions> {
     return {

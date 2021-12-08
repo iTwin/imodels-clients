@@ -103,7 +103,7 @@ describe("[Management] IModelOperations", () => {
     // Act
     const iModel: IModel = await iModelsClient.iModels.getSingle(getSingleiModelParams);
 
-    // Arrange
+    // Assert
     assertIModel({
       actualIModel: iModel,
       expectedIModelProperties: {

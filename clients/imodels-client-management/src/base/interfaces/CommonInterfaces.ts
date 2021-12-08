@@ -8,17 +8,21 @@
  * formatted by joining `scheme` and `token` property values with a single space.
  */
 export interface Authorization {
-  /** Authentication scheme. Currently the iModels API supports only `Bearer` authentication scheme. */
+  /**
+   * Authentication scheme. For information on supported authentication schemes see
+   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-details/#authentication iModels API documenation}.
+   */
   scheme: string;
-  /** User access token. */
+  /** Access token. */
   token: string;
 }
 
 /**
- * Interface for a function that returns authorization data. It is up to the user of this library to implement
+ * Interface for a function that returns authorization data. It is up to the consumer of this library to implement
  * user authentication and pass that function as an argument into all specific operation functions.
  * This function will be called every time a request is sent to the API meaning that it can be called more than
- * once during a single operation execution. See {@link Authorization}.
+ * once during a single operation execution. Authorization retrieval should be performant and utilize caching when
+ * appropriate. See {@link Authorization}.
  */
 export type AuthorizationCallback = () => Promise<Authorization>;
 
@@ -28,18 +32,13 @@ export interface AuthorizationParam {
   authorization: AuthorizationCallback;
 }
 
-<<<<<<< HEAD
 /**
  * Common parameters for iModel scoped operations. All operations exposed in this client are iModel scoped
  * except for {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}.
  */
-export interface iModelScopedOperationParams extends AuthorizationParam {
-  /** iModel id. */
-  imodelId: string;
-=======
 export interface IModelScopedOperationParams extends AuthorizationParam {
+  /** iModel id. */
   iModelId: string;
->>>>>>> 9e2fb6fa2ab090e211c16fccc7da86c3ebfb9542
 }
 
 /** Common url parameters that are supported for all entity list requests. */
@@ -55,9 +54,9 @@ export interface CollectionRequestParams {
 
 /** Entity list ordering operators that are supported in $orderBy url parameter. */
 export enum OrderByOperator {
-  /** Ascending, meaning that entities will be returned in ascending order. */
+  /** Ascending. Entities will be returned in ascending order. */
   Ascending = "asc",
-  /** Descending, meaning that entities will be returned in descending order. */
+  /** Descending. Entities will be returned in descending order. */
   Descending = "desc"
 }
 
@@ -103,8 +102,8 @@ export interface CollectionResponse {
 }
 
 /**
- * Partial `Prefer` request header value. The value is sent to the server in `Prefer` request header,
- * the header value is formed by joining `return=` and the enum value.
+ * Values for return preference used in `Prefer` header. The header value is formed by joining 
+ * `return=` and the enum value.
  */
 export enum PreferReturn {
   /** Instructs the server to return minimal entity representation. */

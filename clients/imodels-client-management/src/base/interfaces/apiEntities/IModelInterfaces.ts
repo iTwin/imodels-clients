@@ -7,8 +7,8 @@ import { CollectionResponse } from "../CommonInterfaces";
 /** Possible iModel states. */
 export enum IModelState {
   /**
-   * Not initialized iModel. It means that iModel is not yet initialized and the server-side background initialization
-   * process is still running. Initialization usually takes several minutes.
+   * Not initialized iModel. iModel is not yet initialized and the server-side background initialization
+   * process is still running. Initialization could take several minutes.
    */
   NotInitialized = "notInitialized",
   /** Initialized iModel. It means that iModel initialization has completed and iModel is ready to use. */
@@ -43,6 +43,7 @@ export interface MinimalIModel {
   displayName: string;
 }
 
+/** Full representation of an iModel. */
 export interface IModel extends MinimalIModel {
   /** iModel name. */
   name: string;
