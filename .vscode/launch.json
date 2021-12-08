@@ -1,8 +1,25 @@
 {
   "configurations": [
     {
-      "name": "Tests",
+      "name": "iModels Clients Tests",
       "cwd": "${workspaceFolder}/tests/imodels-clients-tests",
+      "type": "pwa-node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "test:integration"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/*/*/lib/**/*.js"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Backend iModels Access Tests",
+      "cwd": "${workspaceFolder}/tests/imodels-access-backend-tests",
       "type": "pwa-node",
       "request": "launch",
       "runtimeExecutable": "npm",

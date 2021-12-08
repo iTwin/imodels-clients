@@ -18,7 +18,12 @@
   "dependencies": {
     "@itwin/imodels-access-backend": "~0.1.0",
     "@itwin/imodels-clients-tests": "~0.1.0",
-    "@itwin/imodels-client-authoring": "~0.1.0"
+    "@itwin/imodels-client-authoring": "~0.1.0",
+    "@itwin/core-backend": "~3.0.0-dev.141",
+    "@itwin/core-bentley": "~3.0.0-dev.141",
+    "@itwin/core-common": "~3.0.0-dev.141",
+    "@itwin/ecschema-metadata": "~3.0.0-dev.141",
+    "mocha": "~9.0.2"
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "~0.1.0",

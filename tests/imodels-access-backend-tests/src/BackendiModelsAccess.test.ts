@@ -2,30 +2,46 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BackendiModelsAccess } from "@itwin/imodels-access-backend";
-import { iModelMetadata, TestProjectProvider, TestAuthorizationProvider, Config, ReusableTestiModelProvider, TestClientOptions } from "@itwin/imodels-clients-tests";
-import { iModelsClient } from "@itwin/imodels-client-authoring";
+import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
+import { TestProjectProvider, TestAuthorizationProvider, Config, ReusableTestIModelProvider, TestClientOptions, ReusableIModelMetadata } from "@itwin/imodels-clients-tests";
+import { IModelsClient } from "@itwin/imodels-client-authoring";
+import { BriefcaseId } from "@itwin/core-common";
+import { IModelIdArg } from "@itwin/core-backend";
+import { expect } from "chai";
 
 describe("BackendiModelsAccess", () => {
-  let backendiModelsAccess: BackendiModelsAccess;
+  let backendIModelsAccess: BackendIModelsAccess;
   let accessToken: string;
   let projectId: string;
-  let testiModel: iModelMetadata;
+  let testIModel: ReusableIModelMetadata;
 
   before(async () => {
-    const authorizationCallback = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
-    const authorization = await authorizationCallback();
-    accessToken = `${authorization.scheme} ${authorization.token}`;
+    const iModelsClient = new IModelsClient(new TestClientOptions());
+    const authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
 
+    backendIModelsAccess = new BackendIModelsAccess(iModelsClient);
+    accessToken = `${(await authorization()).scheme} ${(await authorization()).token}`;
     projectId = await TestProjectProvider.getProjectId();
-    testiModel = await ReusableTestiModelProvider.getOrCreate({
-      imodelsClient: new iModelsClient(new TestClientOptions()),
-      authorization: authorizationCallback,
+    testIModel = await ReusableTestIModelProvider.getOrCreate({
+      iModelsClient,
+      authorization,
       projectId
     });
   });
 
-  it("shoud", async () => {
-    backendiModelsAccess.getMyBriefcaseIds({ iModelId: testiModel.id });
+  it("should get current user briefcase ids", async () => {
+    // Arrange
+    const getMyBriefcaseIdsParams: IModelIdArg = {
+      accessToken,
+      iModelId: testIModel.id
+    };
+
+    // Act
+    const briefcaseIds: BriefcaseId[] = await backendIModelsAccess.getMyBriefcaseIds(getMyBriefcaseIdsParams);
+
+    // Assert
+    expect(briefcaseIds.length).to.equal(1);
+    const briefcaseId = briefcaseIds[0];
+    expect(briefcaseId).to.equal(testIModel.briefcase.id);
   });
 });

@@ -11,24 +11,21 @@ import { TestProjectProvider } from "./test-context-providers/project/TestProjec
 import { TestClientOptions } from "./TestClientOptions";
 import { TestIModelGroup } from "./TestIModelGroup";
 
-before(setupTestEnvironment);
-after(teardownTestEnvironment);
-
-export async function setupTestEnvironment(): Promise<void> {
-  await cleanupIModelsInTestProject();
+before(async () => {
+  await cleanupIModelsInTestProject(Constants.PackagePrefix);
   createDirectory(Constants.TestDownloadDirectoryPath);
   cleanupDirectory(Constants.TestDownloadDirectoryPath);
-}
+});
 
-export async function teardownTestEnvironment(): Promise<void> {
-  await cleanupIModelsInTestProject();
+after(async () => {
+  await cleanupIModelsInTestProject(Constants.PackagePrefix);
   cleanupDirectory(Constants.TestDownloadDirectoryPath);
-}
+});
 
-async function cleanupIModelsInTestProject(): Promise<void> {
+export async function cleanupIModelsInTestProject(packagePrefix: string): Promise<void> {
   const iModelsClient = new IModelsClient(new TestClientOptions());
   const authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
   const projectId = await TestProjectProvider.getProjectId();
-  const testIModelGroup = new TestIModelGroup({ labels: { package: Constants.PackagePrefix } });
+  const testIModelGroup = new TestIModelGroup({ labels: { package: packagePrefix } });
   await cleanUpIModels({ iModelsClient, authorization, projectId, testIModelGroup });
 }
