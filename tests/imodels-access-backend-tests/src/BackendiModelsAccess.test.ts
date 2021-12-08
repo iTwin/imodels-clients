@@ -2,12 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
-import { TestProjectProvider, TestAuthorizationProvider, Config, ReusableTestIModelProvider, TestClientOptions, ReusableIModelMetadata } from "@itwin/imodels-clients-tests";
-import { IModelsClient } from "@itwin/imodels-client-authoring";
-import { BriefcaseId } from "@itwin/core-common";
 import { IModelIdArg } from "@itwin/core-backend";
+import { BriefcaseId } from "@itwin/core-common";
+import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
+import { IModelsClient } from "@itwin/imodels-client-authoring";
+import { Config, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestProjectProvider } from "@itwin/imodels-clients-tests";
 
 describe("BackendiModelsAccess", () => {
   let backendIModelsAccess: BackendIModelsAccess;
