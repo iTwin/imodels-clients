@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { OperationsBaseOptions } from "../base/OperationsBase";
-import { iModelsApiUrlFormatter } from "./iModelsApiUrlFormatter";
+import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
 
 export interface OperationOptions extends OperationsBaseOptions {
-  urlFormatter: iModelsApiUrlFormatter;
+  urlFormatter: IModelsApiUrlFormatter;
 }

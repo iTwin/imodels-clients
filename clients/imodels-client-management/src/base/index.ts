@@ -3,13 +3,13 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 export * from "./OperationsBase";
-export * from "./iModelsErrorParser";
+export * from "./IModelsErrorParser";
 export * from "./PagedCollectionGenerator";
 export * from "./CommonFunctions";
 export * from "./interfaces/CommonInterfaces";
 export * from "./interfaces/UtilityTypes";
-export * from "./interfaces/iModelsErrorInterfaces";
-export * from "./interfaces/apiEntities/iModelInterfaces";
+export * from "./interfaces/IModelsErrorInterfaces";
+export * from "./interfaces/apiEntities/IModelInterfaces";
 export * from "./interfaces/apiEntities/BriefcaseInterfaces";
 export * from "./interfaces/apiEntities/ChangesetInterfaces";
 export * from "./interfaces/apiEntities/NamedVersionInterfaces";

@@ -3,24 +3,24 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { iModelsClient as AuthoringiModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetSingleChangesetParams, OrderByOperator, iModelsClient, iModelsClientOptions,toArray } from "@itwin/imodels-client-management";
-import { Config, NamedVersionMetadata, ReusableTestiModelProvider, ReusableiModelMetadata, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, TestiModelFileProvider, assertChangeset, assertCollection } from "../common";
+import { IModelsClient as AuthoringIModelsClient } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetSingleChangesetParams, IModelsClient, IModelsClientOptions, OrderByOperator,toArray } from "@itwin/imodels-client-management";
+import { Config, NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelFileProvider, TestProjectProvider, assertChangeset, assertCollection } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
-  let imodelsClientOptions: iModelsClientOptions;
-  let imodelsClient: iModelsClient;
+  let iModelsClientOptions: IModelsClientOptions;
+  let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let projectId: string;
-  let testiModel: ReusableiModelMetadata;
+  let testIModel: ReusableIModelMetadata;
 
   before(async () => {
-    imodelsClientOptions = new TestClientOptions();
-    imodelsClient = new iModelsClient(imodelsClientOptions);
+    iModelsClientOptions = new TestClientOptions();
+    iModelsClient = new IModelsClient(iModelsClientOptions);
     authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
     projectId = await TestProjectProvider.getProjectId();
-    testiModel = await ReusableTestiModelProvider.getOrCreate({
-      imodelsClient: new AuthoringiModelsClient(new TestClientOptions()),
+    testIModel = await ReusableTestIModelProvider.getOrCreate({
+      iModelsClient: new AuthoringIModelsClient(new TestClientOptions()),
       authorization,
       projectId
     });
@@ -29,18 +29,18 @@ describe("[Management] ChangesetOperations", () => {
   [
     {
       label: "minimal",
-      functionUnderTest: (params: GetChangesetListParams) => imodelsClient.Changesets.getMinimalList(params)
+      functionUnderTest: (params: GetChangesetListParams) => iModelsClient.changesets.getMinimalList(params)
     },
     {
       label: "representation",
-      functionUnderTest: (params: GetChangesetListParams) => imodelsClient.Changesets.getRepresentationList(params)
+      functionUnderTest: (params: GetChangesetListParams) => iModelsClient.changesets.getRepresentationList(params)
     }
   ].forEach((testCase) => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
       const getChangesetListParams: GetChangesetListParams = {
         authorization,
-        imodelId: testiModel.id,
+        iModelId: testIModel.id,
         urlParams: {
           $top: 5
         }
@@ -52,7 +52,7 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: changesets,
-        isEntityCountCorrect: (count) => count === TestiModelFileProvider.changesets.length
+        isEntityCountCorrect: (count) => count === TestIModelFileProvider.changesets.length
       });
     });
 
@@ -60,7 +60,7 @@ describe("[Management] ChangesetOperations", () => {
       // Arrange
       const getChangesetListParams: GetChangesetListParams = {
         authorization,
-        imodelId: testiModel.id,
+        iModelId: testIModel.id,
         urlParams: {
           $orderBy: {
             property: ChangesetOrderByProperty.Index
@@ -81,7 +81,7 @@ describe("[Management] ChangesetOperations", () => {
       // Arrange
       const getChangesetListParams: GetChangesetListParams = {
         authorization,
-        imodelId: testiModel.id,
+        iModelId: testIModel.id,
         urlParams: {
           $orderBy: {
             property: ChangesetOrderByProperty.Index,
@@ -103,7 +103,7 @@ describe("[Management] ChangesetOperations", () => {
       // Arrange
       const getChangesetListParams: GetChangesetListParams = {
         authorization,
-        imodelId: testiModel.id,
+        iModelId: testIModel.id,
         urlParams: {
           afterIndex: 5,
           lastIndex: 10
@@ -124,7 +124,7 @@ describe("[Management] ChangesetOperations", () => {
       // Arrange
       const getChangesetListParams: GetChangesetListParams = {
         authorization,
-        imodelId: testiModel.id,
+        iModelId: testIModel.id,
         urlParams: {
           afterIndex: 5,
           lastIndex: 10,
@@ -146,22 +146,22 @@ describe("[Management] ChangesetOperations", () => {
 
   it("should get changeset by id", async () => {
     // Arrange
-    const expectedChangeset = TestiModelFileProvider.changesets[0];
+    const expectedChangeset = TestIModelFileProvider.changesets[0];
     const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
-      imodelId: testiModel.id,
+      iModelId: testIModel.id,
       changesetId: expectedChangeset.id
     };
 
     // Act
-    const changeset: Changeset = await imodelsClient.Changesets.getSingle(getSingleChangesetParams);
+    const changeset: Changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
 
     // Assert
     assertChangeset({
       actualChangeset: changeset,
       expectedChangesetProperties: {
         id: expectedChangeset.id,
-        briefcaseId: testiModel.briefcase.id,
+        briefcaseId: testIModel.briefcase.id,
         parentId: expectedChangeset.parentId,
         description: expectedChangeset.description,
         containingChanges: expectedChangeset.containingChanges
@@ -173,21 +173,21 @@ describe("[Management] ChangesetOperations", () => {
     let firstNamedVersion: NamedVersionMetadata;
 
     before(() => {
-      firstNamedVersion = testiModel.namedVersions[0];
+      firstNamedVersion = testIModel.namedVersions[0];
     });
 
     it("should contain a link to checkpoint when querying representation collection", async () => {
       // Arrange
       const getChangesetListParams: GetChangesetListParams = {
         authorization,
-        imodelId: testiModel.id,
+        iModelId: testIModel.id,
         urlParams: {
           lastIndex: firstNamedVersion.changesetIndex
         }
       };
 
       // Act
-      const changesets = imodelsClient.Changesets.getRepresentationList(getChangesetListParams);
+      const changesets = iModelsClient.changesets.getRepresentationList(getChangesetListParams);
 
       // Assert
       for await (const changeset of changesets) {
@@ -204,12 +204,12 @@ describe("[Management] ChangesetOperations", () => {
       // Arrange
       const getSingleChangesetParams: GetSingleChangesetParams = {
         authorization,
-        imodelId: testiModel.id,
+        iModelId: testIModel.id,
         changesetId: firstNamedVersion.changesetId
       };
 
       // Act
-      const changeset: Changeset = await imodelsClient.Changesets.getSingle(getSingleChangesetParams);
+      const changeset: Changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
 
       // Assert
       const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();

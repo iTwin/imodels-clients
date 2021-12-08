@@ -8,9 +8,9 @@ import { TestAuthenticationClient } from "./TestAuthenticationClient";
 
 export class TestAuthorizationProvider {
   private static _authorizations: { [key: string]: AuthorizationCallback } = {};
-  private static _imodelsApiAuthClient = new TestAuthenticationClient({
+  private static _iModelsApiAuthClient = new TestAuthenticationClient({
     ...Config.get().auth,
-    scopes: Config.get().apis.imodels.scopes
+    scopes: Config.get().apis.iModels.scopes
   });
 
   public static async getAuthorization(testUser: TestUserConfigValues): Promise<AuthorizationCallback> {
@@ -18,7 +18,7 @@ export class TestAuthorizationProvider {
   }
 
   private static async initializeAndGetAuthorization(testUser: TestUserConfigValues): Promise<AuthorizationCallback> {
-    const accessToken = await TestAuthorizationProvider._imodelsApiAuthClient.getAccessToken(testUser);
+    const accessToken = await TestAuthorizationProvider._iModelsApiAuthClient.getAccessToken(testUser);
     TestAuthorizationProvider._authorizations[testUser.email] = async () => ({ scheme: "Bearer", token: accessToken });
 
     return TestAuthorizationProvider._authorizations[testUser.email];

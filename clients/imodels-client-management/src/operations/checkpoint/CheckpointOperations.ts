@@ -8,10 +8,10 @@ import { GetSingleCheckpointParams } from "./CheckpointOperationParams";
 
 export class CheckpointOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   public async getSingle(params: GetSingleCheckpointParams): Promise<Checkpoint> {
-    const { authorization, imodelId, ...parentEntityId } = params;
+    const { authorization, iModelId, ...parentEntityId } = params;
     const response = await this.sendGetRequest<CheckpointResponse>({
       authorization,
-      url: this._options.urlFormatter.getCheckpointUrl({ imodelId, ...parentEntityId })
+      url: this._options.urlFormatter.getCheckpointUrl({ iModelId, ...parentEntityId })
     });
     return response.checkpoint;
   }

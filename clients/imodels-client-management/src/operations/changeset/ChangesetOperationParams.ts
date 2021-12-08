@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, CollectionRequestParams, OrderBy, iModelScopedOperationParams } from "../../base";
+import { Changeset, CollectionRequestParams, IModelScopedOperationParams, OrderBy } from "../../base";
 
 export enum ChangesetOrderByProperty {
   Index = "index"
@@ -14,7 +14,7 @@ export interface GetChangesetListUrlParams extends CollectionRequestParams {
   lastIndex?: number;
 }
 
-export interface GetChangesetListParams extends iModelScopedOperationParams {
+export interface GetChangesetListParams extends IModelScopedOperationParams {
   urlParams?: GetChangesetListUrlParams;
 }
 
@@ -30,4 +30,4 @@ interface ChangesetIndexParam {
 
 export type ChangesetIdOrIndex = ChangesetIdParam | ChangesetIndexParam;
 
-export type GetSingleChangesetParams = iModelScopedOperationParams & ChangesetIdOrIndex;
+export type GetSingleChangesetParams = IModelScopedOperationParams & ChangesetIdOrIndex;

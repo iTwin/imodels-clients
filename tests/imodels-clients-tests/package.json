@@ -1,34 +1,34 @@
 {
   "name": "@itwin/imodels-clients-tests",
-  "version": "0.1.0-dev.1",
+  "version": "0.1.0",
   "description": "Tests for iModels API client wrappers",
   "license": "MIT",
   "main": "lib/iModelsClientsTestsExports.js",
   "typings": "lib/iModelsClientsTestsExports",
   "scripts": {
     "build": "tsc 1>&2",
-    "test:integration": "npm run test:integration:copy-assets && mocha lib/**/*.test.js --color --timeout 180000 --exit",
-    "test:integration:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
     "cover": "nyc npm test",
     "lint": "eslint ./src/**/*.ts 1>&2",
-    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2",
-    "spell-check": "cspell ./src/**/*.ts --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
+    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
+    "spell-check": "cspell ./src/**/*.ts --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
+    "test:integration": "npm run test:integration:copy-assets && mocha lib/**/*.test.js --color --timeout 180000 --exit",
+    "test:integration:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets"
   },
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-client-authoring": "~0.1.0-dev.1",
-    "@itwin/imodels-client-management": "~0.1.0-dev.1",
+    "@itwin/imodels-client-authoring": "~0.1.0",
+    "@itwin/imodels-client-management": "~0.1.0",
+    "axios": "~0.21.1",
     "chai": "~4.3.4",
+    "dotenv": "~10.0.0",
     "fs-extra": "~10.0.0",
     "mocha": "~9.0.2",
-    "dotenv": "~10.0.0",
-    "puppeteer": "~10.2.0",
-    "axios": "~0.21.1"
+    "puppeteer": "~10.2.0"
   },
   "devDependencies": {
-    "@itwin/imodels-client-common-config": "~0.1.0-dev.1",
+    "@itwin/imodels-client-common-config": "~0.1.0",
     "@types/chai": "~4.2.21",
     "@types/mocha": "~9.0.0",
     "@types/node": "^16.4.6",
