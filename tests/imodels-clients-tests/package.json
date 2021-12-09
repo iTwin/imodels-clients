@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "description": "Tests for iModels API client wrappers",
   "license": "MIT",
+  "main": "lib/iModelsClientsTestsExports.js",
+  "typings": "lib/iModelsClientsTestsExports",
   "scripts": {
     "build": "tsc 1>&2",
     "cover": "nyc npm test",
