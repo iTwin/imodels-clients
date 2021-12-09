@@ -2,6 +2,10 @@
   "name": "@itwin/imodels-client-authoring",
   "version": "0.1.0",
   "description": "iModels API client wrapper for applications that author iModels.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iTwin/imodels-clients/tree/main/clients/imodels-client-authoring"
+  },
   "license": "MIT",
   "main": "lib/IModelsClientExports.js",
   "typings": "lib/IModelsClientExports",

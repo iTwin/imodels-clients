@@ -14,6 +14,10 @@
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iTwin/imodels-clients/tree/main/tests/imodels-access-backend-tests"
+  },
   "dependencies": {
     "@itwin/imodels-access-backend": "~0.1.0",
     "@itwin/imodels-clients-tests": "~0.1.0",
