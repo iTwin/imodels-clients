@@ -18,7 +18,7 @@ steps:
     displayName: rush spell-check
 
   - script: npm run test:integration
-    displayName: npm run test:integration (iModels clients tests)
+    displayName: npm run test:integration (@itwin/imodels-client-management and @itwin/imodels-client-authoring tests)
     workingDirectory: tests/imodels-clients-tests
     env:
       AUTH_CLIENT_ID: $(AUTH_CLIENT_ID)
