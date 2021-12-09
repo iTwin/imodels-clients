@@ -4,11 +4,11 @@ Copyright © Bentley Systems, Incorporated. All rights reserved. See [LICENSE.md
 
 ## About this package
 
-This package contains an API client that exposes a subset of [iModels API](https://developer.bentley.com/apis/imodels/) operations - it extends the client from [`@itwin/imodels-client-management`](../imodels-client-management/README.md) package and adds more operations that enable applications to author iModels - acquire Birefcases, manage Locks, etc. This library also adds the ability to perform iModel operations that include file transfer - create or download Changesets, create iModel from Baseline file.
+This package contains an API client that exposes a subset of [iModels API](https://developer.bentley.com/apis/imodels/) operations - it extends the client from the [`@itwin/imodels-client-management`](../imodels-client-management/README.md) package and adds more operations that enable applications to author iModels - acquire Birefcases, manage Locks, etc. This library also adds the ability to perform iModel operations that include file transfer - create or download Changesets, create iModel from Baseline file.
 
 ## Usage examples
 
-**Note:** Since the `@itwin/imodels-client-authoring` package extends the [`@itwin/imodels-client-management`](../imodels-client-management/README.md) package all usage examples presented for `@itwin/imodels-client-management` package are valid for this one as well.
+**Note:** Since the `@itwin/imodels-client-authoring` package extends the [`@itwin/imodels-client-management`](../imodels-client-management/README.md) package all usage examples presented for the `@itwin/imodels-client-management` package are valid for this one as well.
 
 ### Create iModel from Baseline File
 ```typescript
