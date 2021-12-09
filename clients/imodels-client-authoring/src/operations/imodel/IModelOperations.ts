@@ -18,6 +18,17 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     this._baselineFileOperations = new BaselineFileOperations<TOptions>(options);
   }
 
+  /**
+  * Creates an iModel from Baseline file with specified properties. Wraps the
+  * {@link https://developer.bentley.com/apis/imodels/operations/create-imodel/ Create iModel} operation from iModels API.
+  * Internally it creates the iModel instace, uploads the Baseline file, confirms Baseline
+  * file upload and then repeatedly queries the Baseline file state until the iModel is initialized. The execution of this method
+  * can take up to several minutes due to waiting for initialization to complete.
+  * @param {CreateiModelFromBaselineParams} params parameters for this operation. See {@link CreateiModelFromBaselineParams}.
+  * @returns {Promise<iModel>} newly created iModel. See {@link iModel}.
+  * @throws an error that implements `iModelsError` interface with code `iModelsErrorCode.BaselineFileInitializationFailed` if Baseline file initialization failed
+  * or did not complete in time. See {@link iModelsErrorCode}.
+  */
   public async createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel> {
     const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties);
     const createIModelResponse = await this.sendPostRequest<IModelCreateResponse>({

@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../Constants";
-import { AuthorizationParam, CollectionResponse, EntityCollectionPage, PreferReturn } from "./interfaces/CommonInterfaces";
-import { Dictionary } from "./interfaces/UtilityTypes";
+import { AuthorizationParam, CollectionResponse, PreferReturn } from "./interfaces/CommonInterfaces";
+import { Dictionary, EntityCollectionPage } from "./interfaces/UtilityTypes";
 import { RestClient } from "./rest/RestClient";
 
 type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn };

@@ -2,10 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+
+/** Possible error codes. */
 export enum IModelsErrorCode {
   Unrecognized = "Unrecognized",
 
-  // Errors returned by API
   Unknown = "Unknown",
   Unauthorized = "Unauthorized",
   InsufficientPermissions = "InsufficientPermissions",
@@ -43,18 +44,24 @@ export enum IModelsErrorCode {
   NewerChangesExist = "NewerChangesExist",
   InvalidThumbnailFormat = "InvalidThumbnailFormat",
 
-  // Operation specific errors thrown by the client library
   BaselineFileInitializationFailed = "BaselineFileInitializationFailed",
   ChangesetDownloadFailed = "ChangesetDownloadFailed"
 }
 
-export interface IModelsError extends Error {
+/** Error detail information. */
+export interface IModelsErrorDetail {
+  /** Error detail code. See {@link IModelsErrorCode}. */
   code: IModelsErrorCode;
-  details?: IModelsErrorDetail[];
+  /** Message that describes the error detail. */
+  message: string;
+  /** Name of the property or parameter which is related to the issue. */
+  target?: string;
 }
 
-export interface IModelsErrorDetail {
+/** Interface for the errors thrown by this library. */
+export interface IModelsError extends Error {
+  /** Error code. See {@link iModelsErrorCode}. */
   code: IModelsErrorCode;
-  message: string;
-  target?: string;
+  /** Data that describes the error in more detail. See {@link iModelsErrorDetail}. */
+  details?: IModelsErrorDetail[];
 }
