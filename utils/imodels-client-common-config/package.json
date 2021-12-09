@@ -2,11 +2,21 @@
   "name": "@itwin/imodels-client-common-config",
   "version": "0.1.0",
   "description": "Common configuration for iModels API client wrappers.",
+  "keywords": [
+    "Bentley",
+    "iModel",
+    "iTwin",
+    "iTwin.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/iTwin/imodels-clients/tree/main/utils/imodels-client-common-config"
   },
   "license": "MIT",
+  "author": {
+    "name": "Bentley Systems, Inc.",
+    "url": "http://www.bentley.com"
+  },
   "scripts": {
     "build": "",
     "lint": "",

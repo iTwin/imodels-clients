@@ -2,11 +2,21 @@
   "name": "@itwin/imodels-access-frontend",
   "version": "0.1.0",
   "description": "Interoperability package between iModels API and iTwin platform for frontend.",
+  "keywords": [
+    "Bentley",
+    "iModel",
+    "iTwin",
+    "iTwin.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/iTwin/imodels-clients/tree/main/itwin-platform-access/imodels-access-frontend"
   },
   "license": "MIT",
+  "author": {
+    "name": "Bentley Systems, Inc.",
+    "url": "http://www.bentley.com"
+  },
   "main": "lib/IModelsAccessFrontendExports.js",
   "typings": "lib/IModelsAccessFrontendExports",
   "scripts": {

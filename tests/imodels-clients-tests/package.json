@@ -2,11 +2,22 @@
   "name": "@itwin/imodels-clients-tests",
   "version": "0.1.0",
   "description": "Tests for iModels API client wrappers",
+  "keywords": [
+    "Bentley",
+    "iModel",
+    "iTwin",
+    "iTwin.js",
+    "Tests"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/iTwin/imodels-clients/tree/main/tests/imodels-clients-tests"
   },
   "license": "MIT",
+  "author": {
+    "name": "Bentley Systems, Inc.",
+    "url": "http://www.bentley.com"
+  },
   "main": "lib/iModelsClientsTestsExports.js",
   "typings": "lib/iModelsClientsTestsExports",
   "scripts": {

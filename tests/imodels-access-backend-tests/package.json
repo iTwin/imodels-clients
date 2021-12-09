@@ -36,5 +36,16 @@
     "cpx": "~1.5.0",
     "nyc": "14.0.0",
     "typescript": "~4.3.5"
+  },
+  "keywords": [
+    "Bentley",
+    "iModel",
+    "iTwin",
+    "iTwin.js",
+    "Tests"
+  ],
+  "author": {
+    "name": "Bentley Systems, Inc.",
+    "url": "http://www.bentley.com"
   }
 }

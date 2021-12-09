@@ -2,11 +2,22 @@
   "name": "@itwin/imodels-client-management",
   "version": "0.1.0",
   "description": "iModels API client wrapper for applications that manage iModels.",
+  "keywords": [
+    "Bentley",
+    "iModel",
+    "iTwin",
+    "iTwin.js",
+    "iModels API Client"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/iTwin/imodels-clients/tree/main/clients/imodels-client-management"
   },
   "license": "MIT",
+  "author": {
+    "name": "Bentley Systems, Inc.",
+    "url": "http://www.bentley.com"
+  },
   "main": "lib/IModelsClientExports.js",
   "typings": "lib/IModelsClientExports",
   "scripts": {
