@@ -6,7 +6,7 @@ Copyright © Bentley Systems, Incorporated. All rights reserved. See [LICENSE.md
 
 This repository contains packages that help consumption of iModels API. Please visit the [iModels API documentation page](https://developer.bentley.com/apis/imodels/) on iTwin developer portal to learn more about the iModels service and its APIs. API clients contain methods that either act as a thin wrapper for sending a single request to the API or combine several requests to execute a more complex operation.
 
-iModels API is a part of [iTwin Platform](http://www.itwinjs.org). It is an open source platform for creating, querying, modifying, and displaying Infrastructure Digital Twins. To learn more about the iTwin Platform and its APIs, visit the [iTwin developer portal](https://developer.bentley.com/).
+iModels API is a part of [iTwin Platform](https://developer.bentley.com/). iTwin platform together with an open source [iTwin.js](https://www.itwinjs.org/) library provides capabilities for creating, querying, modifying, and displaying Infrastructure Digital Twins.
 
 This repository contains multiple packages:
 - [`@itwin/imodels-client-management`](clients/imodels-client-management/README.md) is an API client that exposes a subset of iModels API operations and is intended to use in iModel management applications. Such applications do not edit the iModel file itself, they allow user to perform administrative tasks - create Named Versions, view Changeset metadata and such. An example of iTwin management application is the [iTwin Demo Portal](https://itwindemo.bentley.com/).
