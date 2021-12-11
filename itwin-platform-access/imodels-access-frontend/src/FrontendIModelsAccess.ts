@@ -77,8 +77,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
     const namedVersions: MinimalNamedVersion[] = await take(namedVersionsIterator, 1);
     if (namedVersions.length === 0 || !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
-    // return namedVersions[0].changesetId;
-    return this._emptyChangeset;
+    return { index: namedVersions[0].changesetIndex, id: namedVersions[0].changesetId };
   }
 
   private getIModelScopedOperationParams(arg: IModelIdArg): IModelScopedOperationParams {
