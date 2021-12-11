@@ -5,7 +5,7 @@
 import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
-import { AuthorizationCallback, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, OrderByOperator, take, GetSingleChangesetParams, Changeset } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams,IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, OrderByOperator, take } from "@itwin/imodels-client-management";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class FrontendIModelsAccess implements FrontendHubAccess {
@@ -43,7 +43,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
     const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._iModelsClient.changesets.getMinimalList(getChangesetListParams);
     const changesets: MinimalChangeset[] = await take(changesetsIterator, 1);
     if (!changesets.length)
-      return this._emptyChangeset
+      return this._emptyChangeset;
     return { index: changesets[0].index, id: changesets[0].id };
   }
 
@@ -62,8 +62,6 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
 
     return this.getLatestChangeset(arg);
   }
-
-
 
   public async getChangesetFromNamedVersion(arg: IModelIdArg & { versionName?: string }): Promise<ChangesetIndexAndId> {
     const getNamedVersionListParams: GetNamedVersionListParams = {
