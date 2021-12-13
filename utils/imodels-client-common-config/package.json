@@ -25,7 +25,7 @@
     "spell-check": ""
   },
   "devDependencies": {
-    "@itwin/eslint-plugin": "~3.0.0-dev.72",
+    "@itwin/eslint-plugin": "rc",
     "@typescript-eslint/eslint-plugin": "~4.28.4",
     "@typescript-eslint/parser": "~4.28.4",
     "cspell": "~5.6.6",

@@ -94,7 +94,7 @@ export function assertDownloadedChangeset(params: {
 
 export function assertNamedVersion(params: {
   actualNamedVersion: NamedVersion;
-  expectedNamedVersionProperties: NamedVersionPropertiesForCreate;
+  expectedNamedVersionProperties: NamedVersionPropertiesForCreate & { changesetIndex: number };
 }): void {
   expect(params.actualNamedVersion).to.not.be.undefined;
   expect(params.actualNamedVersion.id).to.not.be.empty;
@@ -103,6 +103,7 @@ export function assertNamedVersion(params: {
   expect(params.actualNamedVersion.name).to.equal(params.expectedNamedVersionProperties.name);
   assertOptionalProperty(params.expectedNamedVersionProperties.description, params.actualNamedVersion.description);
   assertOptionalProperty(params.expectedNamedVersionProperties.changesetId, params.actualNamedVersion.changesetId);
+  expect(params.actualNamedVersion.changesetIndex).to.equal(params.expectedNamedVersionProperties.changesetIndex);
   expect(params.actualNamedVersion.state).to.equal(NamedVersionState.Visible);
 }
 

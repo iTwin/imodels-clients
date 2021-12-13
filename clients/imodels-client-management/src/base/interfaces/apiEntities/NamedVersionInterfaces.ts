@@ -13,6 +13,7 @@ export interface MinimalNamedVersion {
   id: string;
   displayName: string;
   changesetId: string | null;
+  changesetIndex: number;
 }
 
 export interface NamedVersion extends MinimalNamedVersion {
