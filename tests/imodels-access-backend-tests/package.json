@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-backend-tests",
-  "version": "0.1.0-dev.1",
+  "version": "1.0.0-dev.1",
   "description": "Tests for iTwin platform and iModels API interoperability package - @itwin/imodels-access-backend.",
   "keywords": [
     "Bentley",
@@ -35,13 +35,13 @@
     "@itwin/core-bentley": "~3.0.0-dev.141",
     "@itwin/core-common": "~3.0.0-dev.141",
     "@itwin/ecschema-metadata": "~3.0.0-dev.141",
-    "@itwin/imodels-access-backend": "~0.1.0",
-    "@itwin/imodels-client-authoring": "~0.1.0",
-    "@itwin/imodels-clients-tests": "~0.1.0",
+    "@itwin/imodels-access-backend": "~1.0.0",
+    "@itwin/imodels-client-authoring": "~1.0.0",
+    "@itwin/imodels-clients-tests": "~1.0.0",
     "mocha": "~9.0.2"
   },
   "devDependencies": {
-    "@itwin/imodels-client-common-config": "~0.1.0",
+    "@itwin/imodels-client-common-config": "~1.0.0",
     "@types/chai": "~4.2.21",
     "@types/mocha": "~9.0.0",
     "@types/node": "^16.4.6",

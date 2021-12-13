@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-clients-tests",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Tests for iModels API client wrappers",
   "keywords": [
     "Bentley",
@@ -34,8 +34,8 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-client-authoring": "~0.1.0",
-    "@itwin/imodels-client-management": "~0.1.0",
+    "@itwin/imodels-client-authoring": "~1.0.0",
+    "@itwin/imodels-client-management": "~1.0.0",
     "axios": "~0.21.1",
     "chai": "~4.3.4",
     "dotenv": "~10.0.0",
@@ -44,7 +44,7 @@
     "puppeteer": "~10.2.0"
   },
   "devDependencies": {
-    "@itwin/imodels-client-common-config": "~0.1.0",
+    "@itwin/imodels-client-common-config": "~1.0.0",
     "@types/chai": "~4.2.21",
     "@types/mocha": "~9.0.0",
     "@types/node": "^16.4.6",
