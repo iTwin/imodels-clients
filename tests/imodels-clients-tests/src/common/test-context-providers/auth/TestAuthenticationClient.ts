@@ -30,7 +30,7 @@ export class TestAuthenticationClient {
     buttons: {
       next: "#sign-in-button",
       signIn: "#sign-in-button",
-      consent: ".iui-button.iui-large.iui-high-visibility"
+      consent: ".ping.button.normal.allow"
     }
   };
 
