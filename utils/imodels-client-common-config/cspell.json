@@ -1,6 +1,14 @@
 {
   "version": "0.1",
   "language": "en",
+  "ignorePaths": [
+    "node_modules/**",
+    "src/assets/**",
+    "lib/**",
+    "*.log",
+    "package.json",
+    "tsconfig.json"
+  ],
   "words": [
     "imodel",
     "itwin",
