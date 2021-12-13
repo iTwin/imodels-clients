@@ -30,7 +30,7 @@ export class TestAuthenticationClient {
     buttons: {
       next: "#sign-in-button",
       signIn: "#sign-in-button",
-      consent: ".iui-button.iui-large.iui-high-visibility"
+      consent: ".ping.button.normal.allow"
     }
   };
 
@@ -39,7 +39,7 @@ export class TestAuthenticationClient {
 
   public async getAccessToken(testUserCredentials: TestUserCredentials): Promise<string> {
     const browserLaunchOptions: puppeteer.BrowserLaunchArgumentOptions & puppeteer.BrowserConnectOptions = {
-      headless: true,
+      headless: false,
       defaultViewport: {
         width: 800,
         height: 1200
