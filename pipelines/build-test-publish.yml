@@ -4,7 +4,7 @@ name:
 trigger: none
 
 jobs:
-  - job: BuildTestDEVAndPublish
+  - job: BuildTestSBXAndPublish
     strategy:
       matrix:
         linux:
@@ -16,7 +16,7 @@ jobs:
     pool:
         vmImage: $(imageName)
     variables:
-      - group: iModels Clients - Integration Tests - DEV
+      - group: iModels Clients - Integration Tests - SBX
     workspace:
       clean: all
 
