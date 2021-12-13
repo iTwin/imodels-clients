@@ -16,7 +16,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
     this._iModelsClient = iModelsClient ?? new IModelsClient();
   }
 
-  private async _getChangesetFromId(arg: IModelIdArg & { changeSetId: string }): Promise<ChangesetIndexAndId> {
+  private async getChangesetFromId(arg: IModelIdArg & { changeSetId: string }): Promise<ChangesetIndexAndId> {
     const getSingleChangesetParams: GetSingleChangesetParams = {
       ...this.getIModelScopedOperationParams(arg),
       changesetId: arg.changeSetId
@@ -24,7 +24,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
 
     const changeset: Changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
     if (!changeset)
-      throw new IModelError(IModelStatus.NotFound, `ChangeSet ${arg.changeSetId} not found`);
+      throw new IModelError(IModelStatus.NotFound, `Changeset ${arg.changeSetId} not found`);
     return { index: changeset.index, id: changeset.id };
   }
 
@@ -54,7 +54,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
 
     const namedVersionChangesetId = version.getAsOfChangeSet();
     if (namedVersionChangesetId)
-      return this._getChangesetFromId({ ...arg, changeSetId: namedVersionChangesetId });
+      return this.getChangesetFromId({ ...arg, changeSetId: namedVersionChangesetId });
 
     const namedVersionName = version.getName();
     if (namedVersionName)
@@ -65,7 +65,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
 
   public async getChangesetFromNamedVersion(arg: IModelIdArg & { versionName?: string }): Promise<ChangesetIndexAndId> {
     if (!arg.versionName)
-      return this._getChangesetFromLatestNamedVersion(arg);
+      return this.getChangesetFromLatestNamedVersion(arg);
 
     const getNamedVersionListParams: GetNamedVersionListParams = {
       ...this.getIModelScopedOperationParams(arg),
@@ -76,7 +76,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
 
     const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
     const namedVersions: MinimalNamedVersion[] = await take(namedVersionsIterator, 1);
-    if (!namedVersions.length || !namedVersions[0].changesetId)
+    if (namedVersions.length === 0|| !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
     return { index: namedVersions[0].changesetIndex, id: namedVersions[0].changesetId };
   }
@@ -99,11 +99,8 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
     };
   }
 
-  private async _getChangesetFromLatestNamedVersion(arg: IModelIdArg): Promise<ChangesetIndexAndId> {
-    const getNamedVersionListParams: GetNamedVersionListParams = {
-      ...this.getIModelScopedOperationParams(arg)
-    };
-
+  private async getChangesetFromLatestNamedVersion(arg: IModelIdArg): Promise<ChangesetIndexAndId> {
+    const getNamedVersionListParams: GetNamedVersionListParams = this.getIModelScopedOperationParams(arg);
     const namedVersionsIterator: AsyncIterableIterator<NamedVersion> = this._iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
     const namedVersions = await toArray(namedVersionsIterator);
 
@@ -119,7 +116,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
         (a, b) => b.createdDateTime.getTime() - a.createdDateTime.getTime()
       );
 
-    if (!sortedNamedVersions.length || !sortedNamedVersions[0].changesetIndex || !sortedNamedVersions[0].changesetId)
+    if (sortedNamedVersions.length === 0 || !sortedNamedVersions[0].changesetIndex || !sortedNamedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, "No named versions found");
 
     return { index: sortedNamedVersions[0].changesetIndex, id: sortedNamedVersions[0].changesetId };
