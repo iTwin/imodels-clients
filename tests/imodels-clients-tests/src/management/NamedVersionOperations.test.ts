@@ -144,7 +144,10 @@ describe("[Management] NamedVersionOperations", () => {
     // Assert
     assertNamedVersion({
       actualNamedVersion: namedVersion,
-      expectedNamedVersionProperties: createNamedVersionParams.namedVersionProperties
+      expectedNamedVersionProperties: {
+        ...createNamedVersionParams.namedVersionProperties,
+        changesetIndex: 0
+      }
     });
   });
 
@@ -167,7 +170,10 @@ describe("[Management] NamedVersionOperations", () => {
     // Assert
     assertNamedVersion({
       actualNamedVersion: namedVersion,
-      expectedNamedVersionProperties: createNamedVersionParams.namedVersionProperties
+      expectedNamedVersionProperties: {
+        ...createNamedVersionParams.namedVersionProperties,
+        changesetIndex
+      }
     });
   });
 

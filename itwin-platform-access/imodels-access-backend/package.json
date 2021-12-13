@@ -33,17 +33,17 @@
     "@itwin/imodels-client-authoring": "~0.1.0"
   },
   "devDependencies": {
-    "@itwin/core-backend": "~3.0.0-dev.141",
-    "@itwin/core-bentley": "~3.0.0-dev.141",
-    "@itwin/core-common": "~3.0.0-dev.141",
-    "@itwin/ecschema-metadata": "~3.0.0-dev.141",
+    "@itwin/core-backend": "rc",
+    "@itwin/core-bentley": "rc",
+    "@itwin/core-common": "rc",
+    "@itwin/ecschema-metadata": "rc",
     "@itwin/imodels-client-common-config": "~0.1.0",
     "@types/ws": "~8.2.0",
     "typescript": "~4.3.5"
   },
   "peerDependencies": {
-    "@itwin/core-backend": "~3.0.0-dev.141",
-    "@itwin/core-bentley": "~3.0.0-dev.141",
-    "@itwin/core-common": "~3.0.0-dev.141"
+    "@itwin/core-backend": "rc",
+    "@itwin/core-bentley": "rc",
+    "@itwin/core-common": "rc"
   }
 }

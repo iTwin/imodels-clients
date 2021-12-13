@@ -10,7 +10,7 @@ import {
 } from "@itwin/core-backend";
 import { BriefcaseStatus, Guid, GuidString, IModelStatus, Logger, OpenMode } from "@itwin/core-bentley";
 import {
-  BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetId, ChangesetIndex, ChangesetProps, IModelError,
+  BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion, LocalDirName
 } from "@itwin/core-common";
 import {
@@ -184,7 +184,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return briefcaseIds;
   }
 
-  public async downloadV1Checkpoint(arg: CheckpointArg): Promise<ChangesetId> {
+  public async downloadV1Checkpoint(arg: CheckpointArg): Promise<ChangesetIndexAndId> {
     const checkpoint: Checkpoint | undefined = await this.queryCurrentOrPrecedingCheckpoint(arg);
     if (!checkpoint || !checkpoint._links?.download)
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
@@ -194,7 +194,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       progressCallback = (progress: ProgressData) => arg.onProgress!(progress.bytesTransferred, progress.bytesTotal);
 
     await this._iModelsClient.fileHandler.downloadFile({ downloadUrl: checkpoint._links.download.href, targetFilePath: arg.localFile, progressCallback });
-    return checkpoint.changesetId;
+    return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
   }
 
   public async queryV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
@@ -222,7 +222,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return result;
   }
 
-  public async downloadV2Checkpoint(arg: CheckpointArg): Promise<ChangesetId> {
+  public async downloadV2Checkpoint(arg: CheckpointArg): Promise<ChangesetIndexAndId> {
     const checkpoint: Checkpoint | undefined = await this.queryCurrentOrPrecedingCheckpoint(arg);
     if (!checkpoint)
       throw new IModelError(IModelStatus.NotFound, "V2 checkpoint not found");
@@ -256,7 +256,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       if (timer)
         clearInterval(timer);
     }
-    return checkpoint.changesetId;
+    return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
   }
 
   public async acquireLocks(arg: BriefcaseDbArg, locks: LockMap): Promise<void> {
