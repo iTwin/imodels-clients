@@ -5,7 +5,7 @@
 import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
-import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams,IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, OrderByOperator, take } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams,IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, NamedVersion, OrderByOperator, take, toArray } from "@itwin/imodels-client-management";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class FrontendIModelsAccess implements FrontendHubAccess {
@@ -64,6 +64,9 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
   }
 
   public async getChangesetFromNamedVersion(arg: IModelIdArg & { versionName?: string }): Promise<ChangesetIndexAndId> {
+    if (!arg.versionName) 
+      return this._getChangesetFromLatestNamedVersion(arg);
+      
     const getNamedVersionListParams: GetNamedVersionListParams = {
       ...this.getIModelScopedOperationParams(arg),
       urlParams: {
@@ -73,7 +76,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
 
     const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
     const namedVersions: MinimalNamedVersion[] = await take(namedVersionsIterator, 1);
-    if (namedVersions.length === 0 || !namedVersions[0].changesetId)
+    if (!namedVersions.length || !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
     return { index: namedVersions[0].changesetIndex, id: namedVersions[0].changesetId };
   }
@@ -94,5 +97,31 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
       const token = await IModelApp.getAccessToken();
       return PlatformToClientAdapter.toAuthorization(token);
     };
+  }
+
+  private async _getChangesetFromLatestNamedVersion(arg: IModelIdArg): Promise<ChangesetIndexAndId> {
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      ...this.getIModelScopedOperationParams(arg),
+    };
+
+    const namedVersionsIterator: AsyncIterableIterator<NamedVersion> = this._iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams)
+    const namedVersions = await toArray(namedVersionsIterator);
+
+    const sortedNamedVersions = namedVersions
+      .map((namedVer: NamedVersion) => {
+        return {
+          changesetId: namedVer.changesetId,
+          changesetIndex: namedVer.changesetIndex,
+          createdDateTime: new Date(namedVer.createdDateTime),
+        };
+      })
+      .sort(
+        (a, b) => b.createdDateTime.getTime() - a.createdDateTime.getTime()
+      );
+
+    if (!sortedNamedVersions.length || !sortedNamedVersions[0].changesetIndex || !sortedNamedVersions[0].changesetId)
+      throw new IModelError(IModelStatus.NotFound, "No named versions found");
+
+    return { index: sortedNamedVersions[0].changesetIndex, id: sortedNamedVersions[0].changesetId };
   }
 }
