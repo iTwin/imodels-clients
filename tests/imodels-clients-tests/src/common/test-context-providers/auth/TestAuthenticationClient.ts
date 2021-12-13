@@ -39,7 +39,7 @@ export class TestAuthenticationClient {
 
   public async getAccessToken(testUserCredentials: TestUserCredentials): Promise<string> {
     const browserLaunchOptions: puppeteer.BrowserLaunchArgumentOptions & puppeteer.BrowserConnectOptions = {
-      headless: false,
+      headless: true,
       defaultViewport: {
         width: 800,
         height: 1200
