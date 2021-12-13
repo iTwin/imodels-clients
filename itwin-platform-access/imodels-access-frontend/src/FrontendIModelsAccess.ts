@@ -64,9 +64,9 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
   }
 
   public async getChangesetFromNamedVersion(arg: IModelIdArg & { versionName?: string }): Promise<ChangesetIndexAndId> {
-    if (!arg.versionName) 
+    if (!arg.versionName)
       return this._getChangesetFromLatestNamedVersion(arg);
-      
+
     const getNamedVersionListParams: GetNamedVersionListParams = {
       ...this.getIModelScopedOperationParams(arg),
       urlParams: {
@@ -101,10 +101,10 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
 
   private async _getChangesetFromLatestNamedVersion(arg: IModelIdArg): Promise<ChangesetIndexAndId> {
     const getNamedVersionListParams: GetNamedVersionListParams = {
-      ...this.getIModelScopedOperationParams(arg),
+      ...this.getIModelScopedOperationParams(arg)
     };
 
-    const namedVersionsIterator: AsyncIterableIterator<NamedVersion> = this._iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams)
+    const namedVersionsIterator: AsyncIterableIterator<NamedVersion> = this._iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
     const namedVersions = await toArray(namedVersionsIterator);
 
     const sortedNamedVersions = namedVersions
@@ -112,7 +112,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
         return {
           changesetId: namedVer.changesetId,
           changesetIndex: namedVer.changesetIndex,
-          createdDateTime: new Date(namedVer.createdDateTime),
+          createdDateTime: new Date(namedVer.createdDateTime)
         };
       })
       .sort(
