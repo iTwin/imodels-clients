@@ -26,7 +26,7 @@
     "cover": "nyc npm test",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
-    "spell-check": "cspell ./src/**/*.ts --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
+    "spell-check": "cspell ** --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
     "test:integration": "npm run test:integration:copy-assets && mocha lib/**/*.test.js --color --timeout 180000 --exit",
     "test:integration:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets"
   },
