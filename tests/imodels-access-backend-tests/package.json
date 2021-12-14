@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/iTwin/imodels-clients/tree/main/tests/imodels-access-backend-tests"
+    "url": "https://github.com/iTwin/imodels-clients"
   },
   "license": "MIT",
   "author": {
