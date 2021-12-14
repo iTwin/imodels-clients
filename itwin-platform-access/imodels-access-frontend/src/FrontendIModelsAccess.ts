@@ -3,36 +3,32 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { IModelStatus } from "@itwin/core-bentley";
-import { ChangesetId, IModelError, IModelVersion } from "@itwin/core-common";
+import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
-import { AuthorizationCallback, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, OrderByOperator, take } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams,IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, NamedVersion, OrderByOperator, take, toArray } from "@itwin/imodels-client-management";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class FrontendIModelsAccess implements FrontendHubAccess {
-  private readonly _emptyChangesetId = "";
+  private readonly _emptyChangeset: ChangesetIndexAndId = { index: 0, id: "" };
   protected readonly _iModelsClient: IModelsClient;
 
   constructor(iModelsClient?: IModelsClient) {
     this._iModelsClient = iModelsClient ?? new IModelsClient();
   }
 
-  public async getChangesetIdFromVersion(arg: IModelIdArg & { version: IModelVersion }): Promise<ChangesetId> {
-    const version = arg.version;
-    if (version.isFirst)
-      return this._emptyChangesetId;
+  private async getChangesetFromId(arg: IModelIdArg & { changeSetId: string }): Promise<ChangesetIndexAndId> {
+    const getSingleChangesetParams: GetSingleChangesetParams = {
+      ...this.getIModelScopedOperationParams(arg),
+      changesetId: arg.changeSetId
+    };
 
-    const namedVersionChangesetId = version.getAsOfChangeSet();
-    if (namedVersionChangesetId)
-      return namedVersionChangesetId;
-
-    const namedVersionName = version.getName();
-    if (namedVersionName)
-      return this.getChangesetIdFromNamedVersion({ ...arg, versionName: namedVersionName });
-
-    return this.getLatestChangesetId(arg);
+    const changeset: Changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
+    if (!changeset)
+      throw new IModelError(IModelStatus.NotFound, `Changeset ${arg.changeSetId} not found`);
+    return { index: changeset.index, id: changeset.id };
   }
 
-  public async getLatestChangesetId(arg: IModelIdArg): Promise<ChangesetId> {
+  public async getLatestChangeset(arg: IModelIdArg): Promise<ChangesetIndexAndId> {
     const getChangesetListParams: GetChangesetListParams = {
       ...this.getIModelScopedOperationParams(arg),
       urlParams: {
@@ -46,13 +42,31 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
 
     const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._iModelsClient.changesets.getMinimalList(getChangesetListParams);
     const changesets: MinimalChangeset[] = await take(changesetsIterator, 1);
-    const result = changesets.length === 0
-      ? this._emptyChangesetId
-      : changesets[0].id;
-    return result;
+    if (!changesets.length)
+      return this._emptyChangeset;
+    return { index: changesets[0].index, id: changesets[0].id };
   }
 
-  public async getChangesetIdFromNamedVersion(arg: IModelIdArg & { versionName: string }): Promise<ChangesetId> {
+  public async getChangesetFromVersion(arg: IModelIdArg & { version: IModelVersion }): Promise<ChangesetIndexAndId> {
+    const version = arg.version;
+    if (version.isFirst)
+      return this._emptyChangeset;
+
+    const namedVersionChangesetId = version.getAsOfChangeSet();
+    if (namedVersionChangesetId)
+      return this.getChangesetFromId({ ...arg, changeSetId: namedVersionChangesetId });
+
+    const namedVersionName = version.getName();
+    if (namedVersionName)
+      return this.getChangesetFromNamedVersion({ ...arg, versionName: namedVersionName });
+
+    return this.getLatestChangeset(arg);
+  }
+
+  public async getChangesetFromNamedVersion(arg: IModelIdArg & { versionName?: string }): Promise<ChangesetIndexAndId> {
+    if (!arg.versionName)
+      return this.getChangesetFromLatestNamedVersion(arg);
+
     const getNamedVersionListParams: GetNamedVersionListParams = {
       ...this.getIModelScopedOperationParams(arg),
       urlParams: {
@@ -64,7 +78,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
     const namedVersions: MinimalNamedVersion[] = await take(namedVersionsIterator, 1);
     if (namedVersions.length === 0 || !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
-    return namedVersions[0].changesetId;
+    return { index: namedVersions[0].changesetIndex, id: namedVersions[0].changesetId };
   }
 
   private getIModelScopedOperationParams(arg: IModelIdArg): IModelScopedOperationParams {
@@ -83,5 +97,28 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
       const token = await IModelApp.getAccessToken();
       return PlatformToClientAdapter.toAuthorization(token);
     };
+  }
+
+  private async getChangesetFromLatestNamedVersion(arg: IModelIdArg): Promise<ChangesetIndexAndId> {
+    const getNamedVersionListParams: GetNamedVersionListParams = this.getIModelScopedOperationParams(arg);
+    const namedVersionsIterator: AsyncIterableIterator<NamedVersion> = this._iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
+    const namedVersions = await toArray(namedVersionsIterator);
+
+    const sortedNamedVersions = namedVersions
+      .map((namedVer: NamedVersion) => {
+        return {
+          changesetId: namedVer.changesetId,
+          changesetIndex: namedVer.changesetIndex,
+          createdDateTime: new Date(namedVer.createdDateTime)
+        };
+      })
+      .sort(
+        (a, b) => b.createdDateTime.getTime() - a.createdDateTime.getTime()
+      );
+
+    if (sortedNamedVersions.length === 0 || !sortedNamedVersions[0].changesetIndex || !sortedNamedVersions[0].changesetId)
+      throw new IModelError(IModelStatus.NotFound, "No named versions found");
+
+    return { index: sortedNamedVersions[0].changesetIndex, id: sortedNamedVersions[0].changesetId };
   }
 }

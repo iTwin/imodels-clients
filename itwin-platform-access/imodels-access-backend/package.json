@@ -24,7 +24,7 @@
     "build": "tsc 1>&2",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
-    "spell-check": "cspell ./src/**/*.ts --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
+    "spell-check": "cspell ** --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
   },
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
@@ -33,17 +33,17 @@
     "@itwin/imodels-client-authoring": "~1.0.0"
   },
   "devDependencies": {
-    "@itwin/core-backend": "~3.0.0-dev.141",
-    "@itwin/core-bentley": "~3.0.0-dev.141",
-    "@itwin/core-common": "~3.0.0-dev.141",
-    "@itwin/ecschema-metadata": "~3.0.0-dev.141",
+    "@itwin/core-backend": "rc",
+    "@itwin/core-bentley": "rc",
+    "@itwin/core-common": "rc",
+    "@itwin/ecschema-metadata": "rc",
     "@itwin/imodels-client-common-config": "~1.0.0",
     "@types/ws": "~8.2.0",
     "typescript": "~4.3.5"
   },
   "peerDependencies": {
-    "@itwin/core-backend": "~3.0.0-dev.141",
-    "@itwin/core-bentley": "~3.0.0-dev.141",
-    "@itwin/core-common": "~3.0.0-dev.141"
+    "@itwin/core-backend": "rc",
+    "@itwin/core-bentley": "rc",
+    "@itwin/core-common": "rc"
   }
 }

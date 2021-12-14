@@ -24,17 +24,17 @@
     "cover": "nyc npm test",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
-    "spell-check": "cspell ./src/**/*.ts --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
+    "spell-check": "cspell ** --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
     "test:integration": "mocha lib/**/*.test.js --color --timeout 180000 --exit"
   },
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/core-backend": "~3.0.0-dev.141",
-    "@itwin/core-bentley": "~3.0.0-dev.141",
-    "@itwin/core-common": "~3.0.0-dev.141",
-    "@itwin/ecschema-metadata": "~3.0.0-dev.141",
+    "@itwin/core-backend": "rc",
+    "@itwin/core-bentley": "rc",
+    "@itwin/core-common": "rc",
+    "@itwin/ecschema-metadata": "rc",
     "@itwin/imodels-access-backend": "~1.0.0",
     "@itwin/imodels-client-authoring": "~1.0.0",
     "@itwin/imodels-clients-tests": "~1.0.0",
