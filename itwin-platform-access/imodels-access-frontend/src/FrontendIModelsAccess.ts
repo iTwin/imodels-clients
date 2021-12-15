@@ -5,15 +5,15 @@
 import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
-import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams,IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, NamedVersion, OrderByOperator, take, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, NamedVersion, OrderByOperator, take, toArray } from "@itwin/imodels-client-management";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class FrontendIModelsAccess implements FrontendHubAccess {
   private readonly _emptyChangeset: ChangesetIndexAndId = { index: 0, id: "" };
-  protected readonly _iModelsClient: IModelsClient;
+  public readonly IModelsClient: IModelsClient;
 
   constructor(iModelsClient?: IModelsClient) {
-    this._iModelsClient = iModelsClient ?? new IModelsClient();
+    this.IModelsClient = iModelsClient ?? new IModelsClient();
   }
 
   private async getChangesetFromId(arg: IModelIdArg & { changeSetId: string }): Promise<ChangesetIndexAndId> {
@@ -22,7 +22,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
       changesetId: arg.changeSetId
     };
 
-    const changeset: Changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
+    const changeset: Changeset = await this.IModelsClient.changesets.getSingle(getSingleChangesetParams);
     if (!changeset)
       throw new IModelError(IModelStatus.NotFound, `Changeset ${arg.changeSetId} not found`);
     return { index: changeset.index, id: changeset.id };
@@ -40,7 +40,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
       }
     };
 
-    const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._iModelsClient.changesets.getMinimalList(getChangesetListParams);
+    const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this.IModelsClient.changesets.getMinimalList(getChangesetListParams);
     const changesets: MinimalChangeset[] = await take(changesetsIterator, 1);
     if (!changesets.length)
       return this._emptyChangeset;
@@ -74,17 +74,24 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
       }
     };
 
-    const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
+    const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this.IModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
     const namedVersions: MinimalNamedVersion[] = await take(namedVersionsIterator, 1);
     if (namedVersions.length === 0 || !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
     return { index: namedVersions[0].changesetIndex, id: namedVersions[0].changesetId };
   }
 
+  public static getAuthorizationCallbackFromIModelApp(): AuthorizationCallback {
+    return async () => {
+      const token = await IModelApp.getAccessToken();
+      return PlatformToClientAdapter.toAuthorization(token);
+    };
+  }
+
   private getIModelScopedOperationParams(arg: IModelIdArg): IModelScopedOperationParams {
     const authorizationCallback: AuthorizationCallback = arg.accessToken
       ? PlatformToClientAdapter.toAuthorizationCallback(arg.accessToken)
-      : this.getAuthorizationCallbackFromIModelApp();
+      : FrontendIModelsAccess.getAuthorizationCallbackFromIModelApp();
 
     return {
       authorization: authorizationCallback,
@@ -92,16 +99,9 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
     };
   }
 
-  private getAuthorizationCallbackFromIModelApp(): AuthorizationCallback {
-    return async () => {
-      const token = await IModelApp.getAccessToken();
-      return PlatformToClientAdapter.toAuthorization(token);
-    };
-  }
-
   private async getChangesetFromLatestNamedVersion(arg: IModelIdArg): Promise<ChangesetIndexAndId> {
     const getNamedVersionListParams: GetNamedVersionListParams = this.getIModelScopedOperationParams(arg);
-    const namedVersionsIterator: AsyncIterableIterator<NamedVersion> = this._iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
+    const namedVersionsIterator: AsyncIterableIterator<NamedVersion> = this.IModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
     const namedVersions = await toArray(namedVersionsIterator);
 
     const sortedNamedVersions = namedVersions
