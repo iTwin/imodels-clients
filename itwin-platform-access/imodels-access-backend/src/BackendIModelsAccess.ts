@@ -372,8 +372,6 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
   }
 
-
-
   private setLockLevelToNone(lockedObjectsForBriefcase: LockedObjects[]): void {
     for (const lockedObjects of lockedObjectsForBriefcase) {
       lockedObjects.lockLevel = LockLevel.None;
