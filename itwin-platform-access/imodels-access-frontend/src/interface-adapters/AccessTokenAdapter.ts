@@ -6,7 +6,7 @@ import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
 import { IModelError } from "@itwin/core-common";
 import { Authorization, AuthorizationCallback } from "@itwin/imodels-client-management";
 
-export class PlatformToClientAdapter {
+export class AccessTokenAdapter {
   public static toAuthorization(accessToken: AccessToken): Authorization {
     const splitAccessToken = accessToken.split(" ");
     if (splitAccessToken.length !== 2)
@@ -19,7 +19,7 @@ export class PlatformToClientAdapter {
   }
 
   public static toAuthorizationCallback(accessToken: AccessToken): AuthorizationCallback {
-    const authorization: Authorization = PlatformToClientAdapter.toAuthorization(accessToken);
-    return async () => Promise.resolve(authorization);
+    const authorization: Authorization = AccessTokenAdapter.toAuthorization(accessToken);
+    return async () => authorization;
   }
 }

@@ -24,6 +24,7 @@ import {
 } from "@itwin/imodels-client-authoring";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
+import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
@@ -357,7 +358,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
   private getAuthorizationParam(tokenArg: TokenArg): AuthorizationParam {
     const authorizationCallback: AuthorizationCallback = tokenArg.accessToken
-      ? PlatformToClientAdapter.toAuthorizationCallback(tokenArg.accessToken)
+      ? AccessTokenAdapter.toAuthorizationCallback(tokenArg.accessToken)
       : this.getAuthorizationCallbackFromIModelHost();
 
     return {
@@ -368,7 +369,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   private getAuthorizationCallbackFromIModelHost(): AuthorizationCallback {
     return async () => {
       const token = await IModelHost.getAccessToken();
-      return PlatformToClientAdapter.toAuthorization(token);
+      return AccessTokenAdapter.toAuthorization(token);
     };
   }
 

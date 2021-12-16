@@ -3,9 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { CreateNewIModelProps, LockMap, LockState } from "@itwin/core-backend";
-import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
+import { RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetRange, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
-import { Authorization, AuthorizationCallback, ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
+import { ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
@@ -42,22 +42,6 @@ export class PlatformToClientAdapter {
       default:
         throw new IModelError(RepositoryStatus.InvalidRequest, "Unsupported ContainingChanges");
     }
-  }
-
-  public static toAuthorization(accessToken: AccessToken): Authorization {
-    const splitAccessToken = accessToken.split(" ");
-    if (splitAccessToken.length !== 2)
-      throw new IModelError(RepositoryStatus.InvalidRequest, "Unsupported access token format");
-
-    return {
-      scheme: splitAccessToken[0],
-      token: splitAccessToken[1]
-    };
-  }
-
-  public static toAuthorizationCallback(accessToken: AccessToken): AuthorizationCallback {
-    const authorization: Authorization = PlatformToClientAdapter.toAuthorization(accessToken);
-    return async () => authorization;
   }
 
   public static toChangesetIdOrIndex(changeset: PlatformChangesetIdOrIndex): ClientChangesetIdOrIndex {
