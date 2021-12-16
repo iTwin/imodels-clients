@@ -11,7 +11,7 @@ export class ReusableTestIModelProviderConfig {
   public testIModelName: string;
 
   constructor(
-    @inject(TestUtilTypes.BaseIntegrationTestsConfig)
+  @inject(TestUtilTypes.BaseIntegrationTestsConfig)
     config: BaseIntegrationTestsConfig
   ) {
     this.testIModelName = config.testIModelName;

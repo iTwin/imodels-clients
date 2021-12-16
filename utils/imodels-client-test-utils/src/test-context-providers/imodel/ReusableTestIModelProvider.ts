@@ -3,10 +3,10 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { inject, injectable } from "inversify";
+import { ReusableTestIModelProviderConfig } from "./ReusableTestIModelProviderConfig";
 import { TestIModelCreator } from "./TestIModelCreator";
 import { ReusableIModelMetadata } from "./TestIModelInterfaces";
 import { TestIModelRetriever } from "./TestIModelRetriever";
-import { ReusableTestIModelProviderConfig } from "./ReusableTestIModelProviderConfig";
 
 @injectable()
 export class ReusableTestIModelProvider {

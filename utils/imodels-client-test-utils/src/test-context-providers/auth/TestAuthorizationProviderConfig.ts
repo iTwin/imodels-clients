@@ -9,17 +9,17 @@ interface ApiScopes {
 
 @injectable()
 export class TestAuthorizationProviderConfig {
-  testUsers: TestUsersConfigValues;
-  apiScopes: ApiScopes;
+  public testUsers: TestUsersConfigValues;
+  public apiScopes: ApiScopes;
 
   constructor(
-    @inject(TestUtilTypes.BaseIntegrationTestsConfig)
+  @inject(TestUtilTypes.BaseIntegrationTestsConfig)
     config: BaseIntegrationTestsConfig
   ) {
     this.testUsers = config.testUsers;
     this.apiScopes = {
       iModels: config.apis.iModels.scopes,
-      projects: config.apis.projects.scopes,
-    }
+      projects: config.apis.projects.scopes
+    };
   }
 }

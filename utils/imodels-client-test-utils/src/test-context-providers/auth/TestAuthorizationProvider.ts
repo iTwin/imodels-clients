@@ -15,7 +15,7 @@ export class TestAuthorizationProvider {
     @inject(TestAuthorizationProviderConfig)
     private readonly _config: TestAuthorizationProviderConfig,
     @inject(TestAuthorizationClient)
-    private readonly _testiModelsAuthClient: TestAuthorizationClient,
+    private readonly _testiModelsAuthClient: TestAuthorizationClient
   ) { }
 
   public getAdmin1Authorization(): AuthorizationCallback {

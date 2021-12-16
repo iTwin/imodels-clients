@@ -5,9 +5,9 @@
 import { Container } from "inversify";
 import { IModelsClientOptions } from "@itwin/imodels-client-authoring";
 import { ProjectsClient, ProjectsClientConfig, ReusableTestIModelProvider, ReusableTestIModelProviderConfig, TestAuthorizationClient, TestAuthorizationClientConfig, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelRetriever, TestIModelsClient, TestIModelsClientOptions, TestProjectProvider, TestProjectProviderConfig } from "./test-context-providers";
+import { TestAuthorizationProviderConfig } from "./test-context-providers/auth/TestAuthorizationProviderConfig";
 import { TestIModelGroupFactory } from "./test-imodel-group/TestIModelGroupFactory";
 import { TestUtilTypes } from "./TestUtilTypes";
-import { TestAuthorizationProviderConfig } from "./test-context-providers/auth/TestAuthorizationProviderConfig";
 
 export class TestUtilBootstrapper {
   public static bind(container: Container): void {

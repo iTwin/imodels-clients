@@ -11,7 +11,7 @@ export class ProjectsClientConfig {
   public baseUrl: string;
 
   constructor(
-    @inject(TestUtilTypes.BaseIntegrationTestsConfig)
+  @inject(TestUtilTypes.BaseIntegrationTestsConfig)
     config: BaseIntegrationTestsConfig
   ) {
     this.baseUrl = config.apis.projects.baseUrl;

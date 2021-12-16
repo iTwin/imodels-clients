@@ -10,7 +10,7 @@ export class TestAuthorizationClientConfig {
   public redirectUrl: string;
 
   constructor(
-    @inject(TestUtilTypes.BaseIntegrationTestsConfig)
+  @inject(TestUtilTypes.BaseIntegrationTestsConfig)
     config: BaseIntegrationTestsConfig
   ) {
     this.authority = config.auth.authority;
