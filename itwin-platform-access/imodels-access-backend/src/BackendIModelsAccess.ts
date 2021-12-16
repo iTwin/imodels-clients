@@ -22,9 +22,9 @@ import {
   LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion, OrderByOperator, ProgressCallback,
   ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
+import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
-import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
