@@ -155,84 +155,94 @@ describe("[Authoring] ChangesetOperations", () => {
       }
     });
 
-    // [
-    //   {
-    //     label: "id",
-    //     changesetUnderTest: testIModelFileProvider.changesets[0],
-    //     get functionUnderTest() {
-    //       return async (params: CommonDownloadParams) => iModelsClient.changesets.downloadSingle(
-    //         {
-    //           ...params,
-    //           changesetId: this.changesetUnderTest.id
-    //         });
-    //     }
-    //   },
-    //   {
-    //     label: "index",
-    //     changesetUnderTest: testIModelFileProvider.changesets[0],
-    //     get functionUnderTest() {
-    //       return async (params: CommonDownloadParams) => iModelsClient.changesets.downloadSingle(
-    //         {
-    //           ...params,
-    //           changesetIndex: this.changesetUnderTest.index
-    //         });
-    //     }
-    //   }
-    // ].forEach((testCase) => {
-    //   it(`should download changeset by ${testCase.label}`, async () => {
-    //     // Arrange
-    //     const downloadPath = Constants.TestDownloadDirectoryPath;
-    //     const partialDownloadChangesetParams: CommonDownloadParams = {
-    //       authorization,
-    //       iModelId: testIModelForRead.id,
-    //       targetDirectoryPath: downloadPath
-    //     };
+    [
+      {
+        label: "id",
+        get changesetUnderTest() {
+          return testIModelFileProvider.changesets[0];
+        },
+        get functionUnderTest() {
+          return async (params: CommonDownloadParams) => iModelsClient.changesets.downloadSingle(
+            {
+              ...params,
+              changesetId: this.changesetUnderTest.id
+            });
+        }
+      },
+      {
+        label: "index",
+        get changesetUnderTest() {
+          return testIModelFileProvider.changesets[0];
+        },
+        get functionUnderTest() {
+          return async (params: CommonDownloadParams) => iModelsClient.changesets.downloadSingle(
+            {
+              ...params,
+              changesetIndex: this.changesetUnderTest.index
+            });
+        }
+      }
+    ].forEach((testCase) => {
+      it(`should download changeset by ${testCase.label}`, async () => {
+        // Arrange
+        const downloadPath = Constants.TestDownloadDirectoryPath;
+        const partialDownloadChangesetParams: CommonDownloadParams = {
+          authorization,
+          iModelId: testIModelForRead.id,
+          targetDirectoryPath: downloadPath
+        };
 
-    //     // Act
-    //     const changeset = await testCase.functionUnderTest(partialDownloadChangesetParams);
+        // Act
+        const changeset = await testCase.functionUnderTest(partialDownloadChangesetParams);
 
-    //     // Assert
-    //     const testChangesetFile = testCase.changesetUnderTest;
-    //     assertDownloadedChangeset({
-    //       actualChangeset: changeset,
-    //       expectedChangesetProperties: {
-    //         id: testChangesetFile.id,
-    //         briefcaseId: testIModelForRead.briefcase.id,
-    //         parentId: testChangesetFile.parentId,
-    //         description: testChangesetFile.description,
-    //         containingChanges: testChangesetFile.containingChanges
-    //       },
-    //       expectedTestChangesetFile: testChangesetFile
-    //     });
-    //   });
-    // });
+        // Assert
+        const testChangesetFile = testCase.changesetUnderTest;
+        assertDownloadedChangeset({
+          actualChangeset: changeset,
+          expectedChangesetProperties: {
+            id: testChangesetFile.id,
+            briefcaseId: testIModelForRead.briefcase.id,
+            parentId: testChangesetFile.parentId,
+            description: testChangesetFile.description,
+            containingChanges: testChangesetFile.containingChanges
+          },
+          expectedTestChangesetFile: testChangesetFile
+        });
+      });
+    });
 
     [
-      // {
-      //   label: "by id",
-      //   functionUnderTest: async (client: IModelsClient, params: CommonDownloadParams) =>
-      //     client.changesets.downloadSingle({
-      //       ...params,
-      //       changesetId: testIModelFileProvider.changesets[0].id
-      //     })
-      // },
+      {
+        label: "by id",
+        get functionUnderTest() {
+          return async (client: IModelsClient, params: CommonDownloadParams) =>
+            client.changesets.downloadSingle({
+              ...params,
+              changesetId: testIModelFileProvider.changesets[0].id
+            });
+        }
+      },
       {
         label: "by index",
-        functionUnderTest: async (client: IModelsClient, params: CommonDownloadParams) =>
-          client.changesets.downloadSingle({
-            ...params,
-            changesetIndex: 1
-          })
+        get functionUnderTest() {
+          return async (client: IModelsClient, params: CommonDownloadParams) =>
+            client.changesets.downloadSingle({
+              ...params,
+              changesetIndex: 1
+            });
+        }
       },
       {
         label: "list",
-        functionUnderTest: async (client: IModelsClient, params: CommonDownloadParams) =>
-          client.changesets
-            .downloadList({
-              ...params,
-              urlParams: { afterIndex: 0, lastIndex: 1 }
-            })
-            .then((changesets) => changesets[0])
+        get functionUnderTest() {
+          return async (client: IModelsClient, params: CommonDownloadParams) =>
+            client.changesets
+              .downloadList({
+                ...params,
+                urlParams: { afterIndex: 0, lastIndex: 1 }
+              })
+              .then((changesets) => changesets[0]);
+        }
       }
     ].forEach((testCase) => {
       it(`should should retry changeset download if it fails the first time when downloading changeset ${testCase.label}`, async () => {
