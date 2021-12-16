@@ -22,6 +22,7 @@ import {
   LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion, OrderByOperator, ProgressCallback,
   ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
+import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
@@ -357,7 +358,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
   private getAuthorizationParam(tokenArg: TokenArg): AuthorizationParam {
     const authorizationCallback: AuthorizationCallback = tokenArg.accessToken
-      ? PlatformToClientAdapter.toAuthorizationCallback(tokenArg.accessToken)
+      ? AccessTokenAdapter.toAuthorizationCallback(tokenArg.accessToken)
       : this.getAuthorizationCallbackFromIModelHost();
 
     return {
@@ -368,7 +369,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   private getAuthorizationCallbackFromIModelHost(): AuthorizationCallback {
     return async () => {
       const token = await IModelHost.getAccessToken();
-      return PlatformToClientAdapter.toAuthorization(token);
+      return AccessTokenAdapter.toAuthorization(token);
     };
   }
 

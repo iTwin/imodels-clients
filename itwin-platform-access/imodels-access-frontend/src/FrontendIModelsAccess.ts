@@ -6,7 +6,7 @@ import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
 import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams,IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, NamedVersion, OrderByOperator, take, toArray } from "@itwin/imodels-client-management";
-import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
+import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 
 export class FrontendIModelsAccess implements FrontendHubAccess {
   private readonly _emptyChangeset: ChangesetIndexAndId = { index: 0, id: "" };
@@ -83,7 +83,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
 
   private getIModelScopedOperationParams(arg: IModelIdArg): IModelScopedOperationParams {
     const authorizationCallback: AuthorizationCallback = arg.accessToken
-      ? PlatformToClientAdapter.toAuthorizationCallback(arg.accessToken)
+      ? AccessTokenAdapter.toAuthorizationCallback(arg.accessToken)
       : this.getAuthorizationCallbackFromIModelApp();
 
     return {
@@ -95,7 +95,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
   private getAuthorizationCallbackFromIModelApp(): AuthorizationCallback {
     return async () => {
       const token = await IModelApp.getAccessToken();
-      return PlatformToClientAdapter.toAuthorization(token);
+      return AccessTokenAdapter.toAuthorization(token);
     };
   }
 
