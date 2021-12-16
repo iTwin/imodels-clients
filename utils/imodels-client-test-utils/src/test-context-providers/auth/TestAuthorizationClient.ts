@@ -8,7 +8,6 @@ import axios, { AxiosResponse } from "axios";
 import { inject, injectable } from "inversify";
 import * as puppeteer from "puppeteer";
 import { TestSetupError } from "../../CommonTestUtils";
-import "reflect-metadata";
 import { TestAuthorizationClientConfig } from "./TestAuthorizationClientConfigImpl";
 
 export interface TestUserCredentials {

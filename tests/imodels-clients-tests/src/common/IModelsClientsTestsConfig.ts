@@ -5,7 +5,6 @@
 import * as dotenv from "dotenv";
 import { injectable } from "inversify";
 import { ApisConfigValues, AuthConfigValues, BaseIntegrationTestsConfig, TestSetupError, TestUsersConfigValues } from "@itwin/imodels-client-test-utils";
-import "reflect-metadata";
 
 @injectable()
 export class IModelsClientsTestsConfig implements BaseIntegrationTestsConfig {
