@@ -6,27 +6,28 @@ import { IModelIdArg } from "@itwin/core-backend";
 import { BriefcaseId } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
-import { IModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestProjectProvider } from "@itwin/imodels-clients-tests";
+import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes } from "@itwin/imodels-client-test-utils";
+import { getTestDIContainer } from "./TestDiContainerProvider";
 
 describe("BackendiModelsAccess", () => {
   let backendIModelsAccess: BackendIModelsAccess;
   let accessToken: string;
-  let projectId: string;
   let testIModel: ReusableIModelMetadata;
 
   before(async () => {
-    const iModelsClient = new IModelsClient(new TestClientOptions());
-    const authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
+    const container = getTestDIContainer();
 
+    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    const iModelsClient = new IModelsClient(iModelsClientOptions);
     backendIModelsAccess = new BackendIModelsAccess(iModelsClient);
+
+    const authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    const authorization = authorizationProvider.getAdmin1Authorization();
     accessToken = `${(await authorization()).scheme} ${(await authorization()).token}`;
-    projectId = await TestProjectProvider.getOrCreate();
-    testIModel = await ReusableTestIModelProvider.getOrCreate({
-      iModelsClient,
-      authorization,
-      projectId
-    });
+
+    const reusableTestIModelProvider = container.get<ReusableTestIModelProvider>(ReusableTestIModelProvider);
+    testIModel = await reusableTestIModelProvider.getOrCreate();
   });
 
   it("should get current user briefcase ids", async () => {
