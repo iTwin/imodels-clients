@@ -348,13 +348,6 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return this._iModelsClient.iModels.delete(deleteIModelParams);
   }
 
-  public static getAuthorizationCallbackFromIModelHost(): AuthorizationCallback {
-    return async () => {
-      const token = await IModelHost.getAccessToken();
-      return PlatformToClientAdapter.toAuthorization(token);
-    };
-  }
-
   private getIModelScopedOperationParams(arg: IModelIdArg): IModelScopedOperationParams {
     return {
       ...this.getAuthorizationParam(arg),
@@ -365,10 +358,17 @@ export class BackendIModelsAccess implements BackendHubAccess {
   private getAuthorizationParam(tokenArg: TokenArg): AuthorizationParam {
     const authorizationCallback: AuthorizationCallback = tokenArg.accessToken
       ? PlatformToClientAdapter.toAuthorizationCallback(tokenArg.accessToken)
-      : BackendIModelsAccess.getAuthorizationCallbackFromIModelHost();
+      : this.getAuthorizationCallbackFromIModelHost();
 
     return {
       authorization: authorizationCallback
+    };
+  }
+
+  private getAuthorizationCallbackFromIModelHost(): AuthorizationCallback {
+    return async () => {
+      const token = await IModelHost.getAccessToken();
+      return PlatformToClientAdapter.toAuthorization(token);
     };
   }
 
