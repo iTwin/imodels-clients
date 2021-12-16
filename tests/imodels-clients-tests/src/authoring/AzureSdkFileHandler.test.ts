@@ -5,17 +5,19 @@
 import * as fs from "fs";
 import * as path from "path";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, GetSingleChangesetParams, IModelsApiUrlFormatter, IModelsClient, ProgressCallback, ProgressData } from "@itwin/imodels-client-authoring";
-import { Config, Constants, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestChangesetFile, TestClientOptions, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestProjectProvider, cleanUpIModels, cleanupDirectory } from "../common";
+import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, GetSingleChangesetParams, IModelsApiUrlFormatter, IModelsClient, IModelsClientOptions, ProgressCallback, ProgressData } from "@itwin/imodels-client-authoring";
+import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestChangesetFile, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, cleanupDirectory } from "@itwin/imodels-client-test-utils";
+import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 describe("AzureSdkFileHandler", () => {
   let azureSdkFileHandler: AzureSdkFileHandler;
-  let testClientOptions: TestClientOptions;
+
+  let iModelsClientOptions: IModelsClientOptions;
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
-  let projectId: string;
-  let testIModelGroup: TestIModelGroup;
 
+  let testIModelFileProvider: TestIModelFileProvider;
+  let testIModelGroup: TestIModelGroup;
   let testIModelForWrite: IModelMetadata;
   let testIModelForDownload: ReusableIModelMetadata;
 
@@ -24,30 +26,26 @@ describe("AzureSdkFileHandler", () => {
   });
 
   before(async () => {
+    const container = getTestDIContainer();
+
     azureSdkFileHandler = new AzureSdkFileHandler();
 
-    testClientOptions = new TestClientOptions();
-    iModelsClient = new IModelsClient(new TestClientOptions());
-    authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
-    projectId = await TestProjectProvider.getProjectId();
-    testIModelGroup = new TestIModelGroup({
-      labels: {
-        package: Constants.PackagePrefix,
-        testSuite: "AzureSdkFileHandler"
-      }
-    });
+    iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    iModelsClient = new IModelsClient(iModelsClientOptions);
 
-    testIModelForWrite = await TestIModelCreator.createEmpty({
-      authorization,
-      iModelsClient,
-      projectId,
-      iModelName: testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
-    });
-    testIModelForDownload = await ReusableTestIModelProvider.getOrCreate({
-      authorization,
-      iModelsClient,
-      projectId
-    });
+    const authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    authorization = authorizationProvider.getAdmin1Authorization();
+
+    testIModelFileProvider = container.get<TestIModelFileProvider>(TestIModelFileProvider);
+
+    const testIModelGroupFactory = container.get<TestIModelGroupFactory>(TestIModelGroupFactory);
+    testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "AzureSdkFileHandler" });
+
+    const testIModelCreator = container.get<TestIModelCreator>(TestIModelCreator);
+    testIModelForWrite = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
+
+    const reusableTestIModelProvider = container.get<ReusableTestIModelProvider>(ReusableTestIModelProvider);
+    testIModelForDownload = await reusableTestIModelProvider.getOrCreate();
   });
 
   afterEach(() => {
@@ -55,12 +53,12 @@ describe("AzureSdkFileHandler", () => {
   });
 
   after(async () => {
-    await cleanUpIModels({ iModelsClient, authorization, projectId, testIModelGroup });
+    await testIModelGroup.cleanupIModels();
   });
 
   it("should call callback when downloading file", async () => {
     // Arrange
-    const testChangeset = TestIModelFileProvider.changesets[0];
+    const testChangeset = testIModelFileProvider.changesets[0];
     const downloadUrl = await getTestChangesetDownloadUrl(testChangeset);
     const targetFilePath = path.join(Constants.TestDownloadDirectoryPath, "AzureSdkFileHandlerTests_download");
 
@@ -80,7 +78,7 @@ describe("AzureSdkFileHandler", () => {
 
   it("should call callback when uploading file", async () => {
     // Arrange
-    const testChangeset = TestIModelFileProvider.changesets[0];
+    const testChangeset = testIModelFileProvider.changesets[0];
     const uploadUrl = await getTestChangesetUploadUrl(testChangeset);
     const sourceFilePath = testChangeset.filePath;
 
@@ -116,7 +114,7 @@ describe("AzureSdkFileHandler", () => {
     const briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
 
     const restClient = new AxiosRestClient();
-    const urlFormatter = new IModelsApiUrlFormatter(testClientOptions.api.baseUrl!);
+    const urlFormatter = new IModelsApiUrlFormatter(iModelsClientOptions.api!.baseUrl!);
     const authorizationValue = await authorization();
     const changesetMetadataCreateResponse = await restClient.sendPostRequest<ChangesetResponse>({
       url: urlFormatter.getChangesetListUrl({ iModelId: testIModelForWrite.id }),

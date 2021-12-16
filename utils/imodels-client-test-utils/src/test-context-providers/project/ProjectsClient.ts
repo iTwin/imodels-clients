@@ -3,8 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosResponse } from "axios";
-import { AuthorizationParam } from "@itwin/imodels-client-management";
-import { Config } from "../../Config";
+import { inject, injectable } from "inversify";
+import { AuthorizationParam } from "@itwin/imodels-client-authoring";
+import { ProjectsClientConfig } from "./ProjectsClientConfig";
 
 interface Project {
   id: string;
@@ -18,7 +19,13 @@ interface ProjectResponse {
   project: Project;
 }
 
+@injectable()
 export class ProjectsClient {
+  constructor(
+    @inject(ProjectsClientConfig)
+    private _config: ProjectsClientConfig
+  ) { }
+
   public async getOrCreateProject(params: AuthorizationParam & { projectName: string }): Promise<string> {
     const authorizationInfo = await params.authorization();
     const requestConfig = {
@@ -27,12 +34,12 @@ export class ProjectsClient {
       }
     };
 
-    const getProjectsWithNameUrl = `${Config.get().apis.projects.baseUrl}?displayName=${params.projectName}`;
+    const getProjectsWithNameUrl = `${this._config.baseUrl}?displayName=${params.projectName}`;
     const getProjectsWithNameResponse: AxiosResponse<ProjectsResponse> = await axios.get(getProjectsWithNameUrl, requestConfig);
     if (getProjectsWithNameResponse.data.projects.length > 0)
       return getProjectsWithNameResponse.data.projects[0].id;
 
-    const createProjectUrl = Config.get().apis.projects.baseUrl;
+    const createProjectUrl = this._config.baseUrl;
     const createProjectBody = {
       displayName: params.projectName,
       projectNumber: `${params.projectName} ${new Date()}`

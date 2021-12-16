@@ -21,7 +21,7 @@ describe("BackendiModelsAccess", () => {
 
     backendIModelsAccess = new BackendIModelsAccess(iModelsClient);
     accessToken = `${(await authorization()).scheme} ${(await authorization()).token}`;
-    projectId = await TestProjectProvider.getProjectId();
+    projectId = await TestProjectProvider.getOrCreate();
     testIModel = await ReusableTestIModelProvider.getOrCreate({
       iModelsClient,
       authorization,

@@ -5,20 +5,24 @@
 import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
 import axios, { AxiosResponse } from "axios";
+import { inject, injectable } from "inversify";
 import * as puppeteer from "puppeteer";
 import { TestSetupError } from "../../CommonTestUtils";
-import { AuthConfigValues } from "../../Config";
+import "reflect-metadata";
+import { TestAuthorizationClientConfig } from "./TestAuthorizationClientConfigImpl";
+
+export interface TestUserCredentials {
+  email: string;
+  password: string;
+  scopes: string;
+}
 
 interface AccessTokenResponse {
   access_token: string;
 }
 
-export interface TestUserCredentials {
-  email: string;
-  password: string;
-}
-
-export class TestAuthenticationClient {
+@injectable()
+export class TestAuthorizationClient {
   // cspell:disable-next-line
   private _pageLoadedEvent: puppeteer.PuppeteerLifeCycleEvent = "networkidle2";
   private _consentPageTitle = "Permissions";
@@ -34,8 +38,10 @@ export class TestAuthenticationClient {
     }
   };
 
-  constructor(private _authConfig: AuthConfigValues & { scopes: string }) {
-  }
+  constructor(
+    @inject(TestAuthorizationClientConfig)
+    private readonly _authConfig: TestAuthorizationClientConfig
+  ) { }
 
   public async getAccessToken(testUserCredentials: TestUserCredentials): Promise<string> {
     const browserLaunchOptions: puppeteer.BrowserLaunchArgumentOptions & puppeteer.BrowserConnectOptions = {
@@ -50,7 +56,7 @@ export class TestAuthenticationClient {
 
     const authorizationCodePromise = this.interceptRedirectAndGetAuthorizationCode(browserPage);
 
-    await browserPage.goto(this.getAuthenticationUrl(), { waitUntil: this._pageLoadedEvent });
+    await browserPage.goto(this.getAuthorizationUrl(testUserCredentials), { waitUntil: this._pageLoadedEvent });
     await this.fillCredentials(browserPage, testUserCredentials);
     await this.consentIfNeeded(browserPage);
     const accessToken = await this.exchangeAuthorizationCodeForAccessToken(await authorizationCodePromise);
@@ -59,10 +65,10 @@ export class TestAuthenticationClient {
     return accessToken;
   }
 
-  private getAuthenticationUrl(): string {
+  private getAuthorizationUrl(testUserCredentials: TestUserCredentials): string {
     return `${this._authConfig.authority}/connect/authorize?` +
       `client_id=${encodeURIComponent(this._authConfig.clientId)}&` +
-      `scope=${encodeURIComponent(this._authConfig.scopes)}&` +
+      `scope=${encodeURIComponent(testUserCredentials.scopes)}&` +
       "response_type=code&" +
       `redirect_uri=${encodeURIComponent(this._authConfig.redirectUrl)}`;
   }

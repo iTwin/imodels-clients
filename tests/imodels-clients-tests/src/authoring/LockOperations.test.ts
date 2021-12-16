@@ -3,41 +3,39 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { AuthorizationCallback, GetLockListParams, IModelsClient, IModelsErrorCode, LockLevel, UpdateLockParams, toArray } from "@itwin/imodels-client-authoring";
-import { Config, Constants, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestProjectProvider, assertCollection, assertError, assertLock } from "../common";
+import { AuthorizationCallback, GetLockListParams, IModelsClient, IModelsClientOptions, IModelsErrorCode, LockLevel, UpdateLockParams, toArray } from "@itwin/imodels-client-authoring";
+import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertCollection, assertError, assertLock } from "@itwin/imodels-client-test-utils";
+import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 describe("[Authoring] LockOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
-  let projectId: string;
-  let testIModelGroup: TestIModelGroup;
 
+  let testIModelFileProvider: TestIModelFileProvider;
+  let testIModelGroup: TestIModelGroup;
   let testIModelForRead: ReusableIModelMetadata;
   let testIModelForWrite: IModelMetadata;
   let testIModelForWriteBriefcaseIds: number[] = [];
 
   before(async () => {
-    iModelsClient = new IModelsClient(new TestClientOptions());
-    authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
-    projectId = await TestProjectProvider.getProjectId();
-    testIModelGroup = new TestIModelGroup({
-      labels: {
-        package: Constants.PackagePrefix,
-        testSuite: "AuthoringLockOperations"
-      }
-    });
+    const container = getTestDIContainer();
 
-    testIModelForRead = await ReusableTestIModelProvider.getOrCreate({
-      authorization,
-      iModelsClient,
-      projectId
-    });
-    testIModelForWrite = await TestIModelCreator.createEmptyAndUploadChangesets({
-      iModelsClient,
-      authorization,
-      projectId,
-      iModelName: testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
-    });
+    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    iModelsClient = new IModelsClient(iModelsClientOptions);
+
+    const authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    authorization = authorizationProvider.getAdmin1Authorization();
+
+    testIModelFileProvider = container.get<TestIModelFileProvider>(TestIModelFileProvider);
+
+    const testIModelGroupFactory = container.get<TestIModelGroupFactory>(TestIModelGroupFactory);
+    testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "AuthoringLockOperations" });
+
+    const reusableTestIModelProvider = container.get<ReusableTestIModelProvider>(ReusableTestIModelProvider);
+    testIModelForRead = await reusableTestIModelProvider.getOrCreate();
+
+    const testIModelCreator = container.get<TestIModelCreator>(TestIModelCreator);
+    testIModelForWrite = await testIModelCreator.createEmptyAndUploadChangesets(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
   });
 
   afterEach(async () => {
@@ -49,6 +47,10 @@ describe("[Authoring] LockOperations", () => {
       });
     }
     testIModelForWriteBriefcaseIds = [];
+  });
+
+  after(async () => {
+    await testIModelGroup.cleanupIModels();
   });
 
   it("should return all items when querying collection", async () => {
@@ -165,7 +167,7 @@ describe("[Authoring] LockOperations", () => {
       authorization,
       iModelId: testIModelForWrite.id,
       briefcaseId: briefcase.briefcaseId,
-      changesetId: TestIModelFileProvider.changesets[0].id,
+      changesetId: testIModelFileProvider.changesets[0].id,
       lockedObjects: [
         {
           lockLevel: LockLevel.None,
@@ -387,7 +389,7 @@ describe("[Authoring] LockOperations", () => {
     const updateLockParams1: UpdateLockParams = {
       authorization,
       iModelId: testIModelForWrite.id,
-      changesetId: TestIModelFileProvider.changesets[5].id,
+      changesetId: testIModelFileProvider.changesets[5].id,
       briefcaseId: briefcase1.briefcaseId,
       lockedObjects: [
         {
@@ -405,7 +407,7 @@ describe("[Authoring] LockOperations", () => {
     const updateLockParams2: UpdateLockParams = {
       authorization,
       iModelId: testIModelForWrite.id,
-      changesetId: TestIModelFileProvider.changesets[4].id,
+      changesetId: testIModelFileProvider.changesets[4].id,
       briefcaseId: briefcase2.briefcaseId,
       lockedObjects: updateLockParams1.lockedObjects
     };

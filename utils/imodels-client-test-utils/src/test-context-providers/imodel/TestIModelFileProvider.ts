@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
+import { injectable } from "inversify";
 import { TestSetupError } from "../../CommonTestUtils";
 
 export interface TestIModelBaselineFile {
@@ -26,20 +27,21 @@ interface ChangesetDescriptorFileItem extends TestChangesetFile {
   fileName: string;
 }
 
+@injectable()
 export class TestIModelFileProvider {
-  private static readonly _iModelDataRootPath = `${__dirname}/../../../assets/test-imodel`;
-  private static _baselineFile: TestIModelBaselineFile;
-  private static _changesetFiles: TestChangesetFile[];
+  private readonly _iModelDataRootPath = `${__dirname}/../../assets/test-imodel`;
+  private _baselineFile: TestIModelBaselineFile | undefined;
+  private _changesetFiles: TestChangesetFile[] | undefined;
 
-  public static get iModel(): TestIModelBaselineFile {
+  public get iModel(): TestIModelBaselineFile {
     return this._baselineFile ?? this.initializeBaselineFile();
   }
 
-  public static get changesets(): TestChangesetFile[] {
+  public get changesets(): TestChangesetFile[] {
     return this._changesetFiles ?? this.initializeChangesetFiles();
   }
 
-  private static initializeBaselineFile(): TestIModelBaselineFile {
+  private initializeBaselineFile(): TestIModelBaselineFile {
     const fileNamesInDirectory = fs.readdirSync(this._iModelDataRootPath);
     const bimFile = fileNamesInDirectory.find((fileName) => fileName.indexOf(".bim") >= 0);
     if (!bimFile)
@@ -51,7 +53,7 @@ export class TestIModelFileProvider {
     return this._baselineFile;
   }
 
-  private static initializeChangesetFiles(): TestChangesetFile[] {
+  private initializeChangesetFiles(): TestChangesetFile[] {
     const changesetDescriptorFilePath = `${this._iModelDataRootPath}/changesets.json`;
     if (!fs.existsSync(changesetDescriptorFilePath))
       throw new TestSetupError("Changeset descriptor file for test iModel not found.");

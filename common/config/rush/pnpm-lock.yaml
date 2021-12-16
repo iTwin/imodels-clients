@@ -18,6 +18,7 @@ dependencies:
   '@rush-temp/imodels-client-authoring': 'file:projects/imodels-client-authoring.tgz'
   '@rush-temp/imodels-client-common-config': 'file:projects/imodels-client-common-config.tgz_typescript@4.3.5'
   '@rush-temp/imodels-client-management': 'file:projects/imodels-client-management.tgz'
+  '@rush-temp/imodels-client-test-utils': 'file:projects/imodels-client-test-utils.tgz'
   '@rush-temp/imodels-clients-tests': 'file:projects/imodels-clients-tests.tgz'
   '@types/chai': 4.2.22
   '@types/mocha': 9.0.0
@@ -34,9 +35,11 @@ dependencies:
   eslint-plugin-import: 2.23.4_eslint@7.31.0
   eslint-plugin-mocha: 9.0.0_eslint@7.31.0
   fs-extra: 10.0.0
+  inversify: 5.0.5
   mocha: 9.0.3
   nyc: 14.0.0
   puppeteer: 10.2.0
+  reflect-metadata: 0.1.13
   sort-package-json: 1.53.1
   typescript: 4.3.5
 lockfileVersion: 5.1
@@ -150,7 +153,7 @@ packages:
       node: '>=6.9.0'
     resolution:
       integrity: sha512-IF4EOMEV+bfYwOmNxGzSnjR2EmQod7f1UXOpZM3l4i4o4QNwzjtJAu/HxdjHq0aYBvdqMuQEY1eg0nqW9ZPORA==
-  /@babel/generator/7.16.0:
+  /@babel/generator/7.16.5:
     dependencies:
       '@babel/types': 7.16.0
       jsesc: 2.5.2
@@ -159,7 +162,15 @@ packages:
     engines:
       node: '>=6.9.0'
     resolution:
-      integrity: sha512-RR8hUCfRQn9j9RPKEVXo9LiwoxLPYn6hNZlvUOR8tSnaxlD0p0+la00ZP9/SnRt6HchKr+X0fO2r8vrETiJGew==
+      integrity: sha512-kIvCdjZqcdKqoDbVVdt5R99icaRtrtYhYK/xux5qiWCBmfdvEYMFZ68QCrpE5cbFM1JsuArUNs1ZkuKtTtUcZA==
+  /@babel/helper-environment-visitor/7.16.5:
+    dependencies:
+      '@babel/types': 7.16.0
+    dev: false
+    engines:
+      node: '>=6.9.0'
+    resolution:
+      integrity: sha512-ODQyc5AnxmZWm/R2W7fzhamOk1ey8gSguo5SGvF0zcB3uUzRpTRmM/jmLSm9bDMyPlvbyJ+PwPEK0BWIoZ9wjg==
   /@babel/helper-function-name/7.16.0:
     dependencies:
       '@babel/helper-get-function-arity': 7.16.0
@@ -210,14 +221,14 @@ packages:
       node: '>=6.9.0'
     resolution:
       integrity: sha512-t8MH41kUQylBtu2+4IQA3atqevA2lRgqA2wyVB/YiWmsDSuylZZuXOUy9ric30hfzauEFfdsuk/eXTRrGrfd0g==
-  /@babel/parser/7.16.4:
+  /@babel/parser/7.16.5:
     dev: false
     engines:
       node: '>=6.0.0'
     hasBin: true
     resolution:
-      integrity: sha512-6V0qdPUaiVHH3RtZeLIsc+6pDhbYzHR8ogA8w+f+Wc77DuXto19g2QUwveINoS34Uw+W8/hQDGJCx+i4n7xcng==
-  /@babel/runtime-corejs3/7.16.3:
+      integrity: sha512-+Ce7T5iPNWzfu9C1aB5tN3Lyafs5xb3Ic7vBWyZL2KXT3QSdD1dD3CvgOzPmQKoNNRt6uauc0XwNJTQtXC2/Mw==
+  /@babel/runtime-corejs3/7.16.5:
     dependencies:
       core-js-pure: 3.19.3
       regenerator-runtime: 0.13.9
@@ -225,33 +236,34 @@ packages:
     engines:
       node: '>=6.9.0'
     resolution:
-      integrity: sha512-IAdDC7T0+wEB4y2gbIL0uOXEYpiZEeuFUTVbdGq+UwCcF35T/tS8KrmMomEwEc5wBbyfH3PJVpTSUqrhPDXFcQ==
-  /@babel/runtime/7.16.3:
+      integrity: sha512-F1pMwvTiUNSAM8mc45kccMQxj31x3y3P+tA/X8hKNWp3/hUsxdGxZ3D3H8JIkxtfA8qGkaBTKvcmvStaYseAFw==
+  /@babel/runtime/7.16.5:
     dependencies:
       regenerator-runtime: 0.13.9
     dev: false
     engines:
       node: '>=6.9.0'
     resolution:
-      integrity: sha512-WBwekcqacdY2e9AF/Q7WLFUWmdJGJTkbjqTjoMDgXkVZ3ZRUvOPsLb5KdwISoQVsbP+DQzVZW4Zhci0DvpbNTQ==
+      integrity: sha512-TXWihFIS3Pyv5hzR7j6ihmeLkZfrXGxAr5UfSl8CHf+6q/wpiYDkUau0czckpYG8QmnCIuPpdLtuA9VmuGGyMA==
   /@babel/template/7.16.0:
     dependencies:
       '@babel/code-frame': 7.16.0
-      '@babel/parser': 7.16.4
+      '@babel/parser': 7.16.5
       '@babel/types': 7.16.0
     dev: false
     engines:
       node: '>=6.9.0'
     resolution:
       integrity: sha512-MnZdpFD/ZdYhXwiunMqqgyZyucaYsbL0IrjoGjaVhGilz+x8YB++kRfygSOIj1yOtWKPlx7NBp+9I1RQSgsd5A==
-  /@babel/traverse/7.16.3:
+  /@babel/traverse/7.16.5:
     dependencies:
       '@babel/code-frame': 7.16.0
-      '@babel/generator': 7.16.0
+      '@babel/generator': 7.16.5
+      '@babel/helper-environment-visitor': 7.16.5
       '@babel/helper-function-name': 7.16.0
       '@babel/helper-hoist-variables': 7.16.0
       '@babel/helper-split-export-declaration': 7.16.0
-      '@babel/parser': 7.16.4
+      '@babel/parser': 7.16.5
       '@babel/types': 7.16.0
       debug: 4.3.3
       globals: 11.12.0
@@ -259,7 +271,7 @@ packages:
     engines:
       node: '>=6.9.0'
     resolution:
-      integrity: sha512-eolumr1vVMjqevCpwVO99yN/LoGL0EyHiLO5I043aYQvwOJ9eR5UsZSClHVCzfhBduMAsSzgA/6AyqPjNayJag==
+      integrity: sha512-FOCODAzqUMROikDYLYxl4nmwiLlu85rNqBML/A5hKRVXG2LV8d0iMqgPzdYTcIpjZEBB7D6UDU9vxRZiriASdQ==
   /@babel/types/7.16.0:
     dependencies:
       '@babel/helper-validator-identifier': 7.15.7
@@ -292,7 +304,7 @@ packages:
       '@itwin/core-bentley': ^3.0.0-dev.135
     resolution:
       integrity: sha512-facpvfpiOsyvNxrOUP47Qn1T/9uUp2pxF9EweNg18HpcgdRZvfQtqGAdYoiR4qdvCVZJEqpoCz7p6t1DFFjAuA==
-  /@cspell/cspell-bundled-dicts/5.13.2:
+  /@cspell/cspell-bundled-dicts/5.13.3:
     dependencies:
       '@cspell/dict-ada': 1.1.2
       '@cspell/dict-aws': 1.0.14
@@ -335,13 +347,13 @@ packages:
     engines:
       node: '>=12.13.0'
     resolution:
-      integrity: sha512-1UKx5oFbFjIf+f2W1YrOlRVULaPyFO2ugV5RpT+ezFqcC3E1nfqeFiFUcJOJk9not/0xr+rR9eqxyL/IDXKhEg==
-  /@cspell/cspell-types/5.13.2:
+      integrity: sha512-IfjMBNA0M9QsZQW68rGNfWGawAAw5gkjDstuvsEuJfFoOHBT6NB8T5asGmMPJcRdfLvLSaVSG5IYnYWxL0wu/A==
+  /@cspell/cspell-types/5.13.3:
     dev: false
     engines:
       node: '>=12.13.0'
     resolution:
-      integrity: sha512-gfQO4n7ro8ZfGapDp+yBgH3GchN9KfeiMQiisfkkQZ/+AUX0iJAUZkKU9IOy3ovPPBvR6kPqa/EgJR7GEMnvmg==
+      integrity: sha512-T70PvJQ5GV8BW7U2Q5mnrIB5poPnF7bNk7Cp95piYUcv/jlrPdWanDvdp+2gJLM+h0GUDRXscoX3Air4BmAwng==
   /@cspell/dict-ada/1.1.2:
     dev: false
     resolution:
@@ -1176,8 +1188,8 @@ packages:
       integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
   /aria-query/4.2.2:
     dependencies:
-      '@babel/runtime': 7.16.3
-      '@babel/runtime-corejs3': 7.16.3
+      '@babel/runtime': 7.16.5
+      '@babel/runtime-corejs3': 7.16.5
     dev: false
     engines:
       node: '>=6.0'
@@ -1776,31 +1788,31 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==
-  /cspell-glob/5.13.2:
+  /cspell-glob/5.13.3:
     dependencies:
       micromatch: 4.0.4
     dev: false
     engines:
       node: '>=12.13.0'
     resolution:
-      integrity: sha512-DLW9nhBW6fxwLl3OEGfgBv9G1UQkXNuh5S6QSIhVgRBj/K+xYokxASu2HHJvUmnauAY8HqWxJ7j33FZE/FoDEg==
-  /cspell-io/5.13.2:
+      integrity: sha512-9g1/AJs7ws1tLDXFJwcePhmab3wxrWbxEZVfmJIHhawp9rWc+cU6BZFdxJJ52EHClKa+DuKJxYsyohE1ctD9rA==
+  /cspell-io/5.13.3:
     dev: false
     engines:
       node: '>=12.13.0'
     resolution:
-      integrity: sha512-0/h8i02mIQGkDoYy4LUoMH4WVL8u55iCNnE+/qMTIO8Dld87qqKdhnHASPsvVyb0AHpkEOzOyR62ehpNfqqGeQ==
-  /cspell-lib/5.13.2:
+      integrity: sha512-4OwpSprgaUc8yZGWHUBiy5Uv528gmk7wMai6c2ZQOd8HEOkIoxWIjCVnOEYHsXBflhcrvSPxirwcsLOcGU2bkQ==
+  /cspell-lib/5.13.3:
     dependencies:
-      '@cspell/cspell-bundled-dicts': 5.13.2
-      '@cspell/cspell-types': 5.13.2
+      '@cspell/cspell-bundled-dicts': 5.13.3
+      '@cspell/cspell-types': 5.13.3
       clear-module: 4.1.2
       comment-json: 4.1.1
       configstore: 5.0.1
       cosmiconfig: 7.0.1
-      cspell-glob: 5.13.2
-      cspell-io: 5.13.2
-      cspell-trie-lib: 5.13.2
+      cspell-glob: 5.13.3
+      cspell-io: 5.13.3
+      cspell-trie-lib: 5.13.3
       find-up: 5.0.0
       fs-extra: 10.0.0
       gensequence: 3.1.1
@@ -1812,8 +1824,8 @@ packages:
     engines:
       node: '>=12.13.0'
     resolution:
-      integrity: sha512-n7o59nwoIxrftfyd7Zhnx0NsPT1kuTDrjRojsCgJZzfAxi5o+MCJ0a1a6JFbpf4yK2EWwUUkpsFPmibkK4kbqQ==
-  /cspell-trie-lib/5.13.2:
+      integrity: sha512-X4GkrxhMkNTH+H+irHHL2GluwQHhR3G0/5+bF/KOYtZ4Ypi2iVYkzcxB3xPmaeM82+NHyoNu/TU5I1jspt4GSg==
+  /cspell-trie-lib/5.13.3:
     dependencies:
       fs-extra: 10.0.0
       gensequence: 3.1.1
@@ -1821,15 +1833,15 @@ packages:
     engines:
       node: '>=12.13.0'
     resolution:
-      integrity: sha512-kEodSYfoSnpdXIJPBj7CJouube7GE/Aj4pD/HZplPbMt786I7ZraKEQ2bDP7xU9+N4xSIyj2D9IP3zb0BEl6kQ==
+      integrity: sha512-CbydOTo7u/XxBn2tyWwIkl/KQ8ikLT4TSBM2M/3e7pZMtbAKGlV2L8P0M77mHbz5HrlL+pqrU/Ywk7TwoXmKNQ==
   /cspell/5.6.7:
     dependencies:
-      '@cspell/cspell-types': 5.13.2
+      '@cspell/cspell-types': 5.13.3
       chalk: 4.1.2
       commander: 8.3.0
       comment-json: 4.1.1
-      cspell-glob: 5.13.2
-      cspell-lib: 5.13.2
+      cspell-glob: 5.13.3
+      cspell-lib: 5.13.3
       fs-extra: 10.0.0
       get-stdin: 8.0.0
       glob: 7.2.0
@@ -2253,7 +2265,7 @@ packages:
       integrity: sha512-9AVpCssb7+cfEx3GJtnhJ8yLOVsHDKGMgngcfvwFBxdcOVPFhLENReL5aX1R2gNiG3psqIWFVBpSPnPQTrMZUA==
   /eslint-plugin-jsx-a11y/6.4.1_eslint@7.31.0:
     dependencies:
-      '@babel/runtime': 7.16.3
+      '@babel/runtime': 7.16.5
       aria-query: 4.2.2
       array-includes: 3.1.4
       ast-types-flow: 0.0.7
@@ -3145,7 +3157,7 @@ packages:
       integrity: sha512-EkYm5BcKUGiduxzSt3Eppko+PiNWNEpa4ySk9vTC6wDsQJW9rHSa+UhGNJoRYp7bz6Ht1eaRIa6QaJqO5rCFbA==
   /i18next-browser-languagedetector/6.1.2:
     dependencies:
-      '@babel/runtime': 7.16.3
+      '@babel/runtime': 7.16.5
     dev: false
     resolution:
       integrity: sha512-YDzIGHhMRvr7M+c8B3EQUKyiMBhfqox4o1qkFvt4QXuu5V2cxf74+NCr+VEkUuU0y+RwcupA238eeolW1Yn80g==
@@ -3157,14 +3169,14 @@ packages:
       integrity: sha512-o79n4GBBRpl20hByC+ne/S1UaSZ4iGAn59Hu2TEZGjN0WLB72L7WrM39Cshziyrssp6MQfdI8wjToU2Q6kpSvA==
   /i18next-xhr-backend/3.2.2:
     dependencies:
-      '@babel/runtime': 7.16.3
+      '@babel/runtime': 7.16.5
     deprecated: replaced by i18next-http-backend
     dev: false
     resolution:
       integrity: sha512-OtRf2Vo3IqAxsttQbpjYnmMML12IMB5e0fc5B7qKJFLScitYaXa1OhMX0n0X/3vrfFlpHL9Ro/H+ps4Ej2j7QQ==
   /i18next/21.6.0:
     dependencies:
-      '@babel/runtime': 7.16.3
+      '@babel/runtime': 7.16.5
     dev: false
     resolution:
       integrity: sha512-RjNuACL35wWZgtkyMcjcCmK7R72u3P6jTNbGKzrvHGI9M0iK5Vn1DsBIwOByppaXLIbe0viJ79Nz2h8w1UwPoQ==
@@ -3224,6 +3236,10 @@ packages:
       node: '>= 0.4'
     resolution:
       integrity: sha512-O0DB1JC/sPyZl7cIo78n5dR7eUSwwpYPiXRhTzNxZVAMUuB8vlnRFyLxdrVToks6XPLVnFfbzaVd5WLjhgg+vA==
+  /inversify/5.0.5:
+    dev: false
+    resolution:
+      integrity: sha512-60QsfPz8NAU/GZqXu8hJ+BhNf/C/c+Hp0eDc6XMIJTxBiP36AQyyQKpBkOVTLWBFDQWYVHpbbEuIsHu9dLuJDA==
   /is-accessor-descriptor/0.1.6:
     dependencies:
       kind-of: 3.2.2
@@ -3578,10 +3594,10 @@ packages:
       integrity: sha512-vrRztU9VRRFDyC+aklfLoeXyNdTfga2EI3udDGn4cZ6fpSXpHLV9X6CHvfoMCPtggg8zvDDmC4b9xfu0z6/llA==
   /istanbul-lib-instrument/3.3.0:
     dependencies:
-      '@babel/generator': 7.16.0
-      '@babel/parser': 7.16.4
+      '@babel/generator': 7.16.5
+      '@babel/parser': 7.16.5
       '@babel/template': 7.16.0
-      '@babel/traverse': 7.16.3
+      '@babel/traverse': 7.16.5
       '@babel/types': 7.16.0
       istanbul-lib-coverage: 2.0.5
       semver: 6.3.0
@@ -4727,6 +4743,10 @@ packages:
       node: '>=8.10.0'
     resolution:
       integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==
+  /reflect-metadata/0.1.13:
+    dev: false
+    resolution:
+      integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
   /regenerator-runtime/0.11.1:
     dev: false
     resolution:
@@ -5867,7 +5887,7 @@ packages:
       '@bentley/itwin-client': '*'
       '@itwin/core-geometry': '*'
     resolution:
-      integrity: sha512-SPkGjk0ukrYJQZYaHODI59f4wGimbgxQzO8PtafNWEZ6UoAgoJZmIWCETdF4ZwTMiKN3ZT/7brKqihGSfftKvA==
+      integrity: sha512-Rkwxic/7oeTaYwl/ndKBuzjIjBtUbe+FiXRDCQE9mpq0MEZz5fsRpy2d2biFGb9Kd1+S+8Q/ySg03TIKdSd8yw==
       tarball: 'file:projects/imodels-access-backend-tests.tgz'
     version: 0.0.0
   'file:projects/imodels-access-backend.tgz_4bd45436c7446ce6f2c68b792e01fc06':
@@ -5885,7 +5905,7 @@ packages:
       '@bentley/itwin-client': '*'
       '@itwin/core-geometry': '*'
     resolution:
-      integrity: sha512-OReR76xJb6RwbWaWXnLc9huykyd3CGFlQ1WQfuooSKuE/1v0OHuiVUr9gIS94tkgygmMgUq4l4EpDoXybeUxRw==
+      integrity: sha512-HEdCaPuLDOKltwoQs1ew+75DGVRBpgDb4cgIO84tHfqcrXuKTpRX/xar5N7DUpEyUYFk5V157Ku+gSDhDPFf2Q==
       tarball: 'file:projects/imodels-access-backend.tgz'
     version: 0.0.0
   'file:projects/imodels-access-frontend.tgz':
@@ -5903,7 +5923,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-access-frontend'
     resolution:
-      integrity: sha512-MDT2+9ZzZ08VDU61ylK1ELg/XkSrV0OFWwAWGolIFyjGyaeO40WZp9Ca+Oks9OWWfCxQYkHgB7Lc1o6idOWgVQ==
+      integrity: sha512-FGU0tHRFzPthlKN5eog0d8jPrxAAcpjw3rK55xPacdQFdhIb98+GxU5OjSxn/NgDKZ9QfEP+ePPXjX/s0Bzl4g==
       tarball: 'file:projects/imodels-access-frontend.tgz'
     version: 0.0.0
   'file:projects/imodels-client-authoring.tgz':
@@ -5913,7 +5933,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-client-authoring'
     resolution:
-      integrity: sha512-c3SjyVbYXPX2qFvgjoU1AtU+/FbeFWmZxJNxrIJEmfhdTdljl8WMwsvDSqtEl/T2VqygsnUlyvM+P6Mmy3VZJw==
+      integrity: sha512-aEJxYKXsGRl7iosTA4rbw7pX24W+Yl//HGPuM+e2fzG4yXZUNm8Ttcz983WxHg1MsYgY0ZSrYT3ZDvK/kDOiAQ==
       tarball: 'file:projects/imodels-client-authoring.tgz'
     version: 0.0.0
   'file:projects/imodels-client-common-config.tgz_typescript@4.3.5':
@@ -5942,8 +5962,25 @@ packages:
     dev: false
     name: '@rush-temp/imodels-client-management'
     resolution:
-      integrity: sha512-eS93EQKUc+tiDppCh4sM0BwgGA/d7W9phMfUHbCmmvJJ1mFx/a6RBLDShYWMorL6OgnQx+DS37H+RsnJrv8I2A==
+      integrity: sha512-AGuYRIKPMD0egoGHZ1CvlrXbdVS4SpAzxPTshnsU0ZK25FkL2TJi4LBxK0588g+LiXNI+pKhfJG6/jhJ/5us2g==
       tarball: 'file:projects/imodels-client-management.tgz'
+    version: 0.0.0
+  'file:projects/imodels-client-test-utils.tgz':
+    dependencies:
+      '@types/chai': 4.2.22
+      '@types/node': 16.11.12
+      axios: 0.21.4
+      chai: 4.3.4
+      fs-extra: 10.0.0
+      inversify: 5.0.5
+      puppeteer: 10.2.0
+      reflect-metadata: 0.1.13
+      typescript: 4.3.5
+    dev: false
+    name: '@rush-temp/imodels-client-test-utils'
+    resolution:
+      integrity: sha512-GGIDDJb/mkzm6JKaCnwrE946vE7yS6UEKD7jPi/m2usSv7mP6dO+hFMZppnFAjbbZA0Wve72Xqkgdoy861LuHA==
+      tarball: 'file:projects/imodels-client-test-utils.tgz'
     version: 0.0.0
   'file:projects/imodels-clients-tests.tgz':
     dependencies:
@@ -5955,14 +5992,16 @@ packages:
       cpx: 1.5.0
       dotenv: 10.0.0
       fs-extra: 10.0.0
+      inversify: 5.0.5
       mocha: 9.0.3
       nyc: 14.0.0
       puppeteer: 10.2.0
+      reflect-metadata: 0.1.13
       typescript: 4.3.5
     dev: false
     name: '@rush-temp/imodels-clients-tests'
     resolution:
-      integrity: sha512-VwGtoSWrLJ1fnHTrAfOBAKfnCZErB08Ws8sQxZiLxI2ZxMrpZ+nbWjiA873hi0n4FeGTQXzJHuXMQ1KAyTsURQ==
+      integrity: sha512-4nmgPJYprpbhl2M+9FV6IZbTKcy9oTmm7mVXRyqWUU5Qv7nP78ZYXhzkfh+WaGI4YCVne26vDrKRi+q8KwxZRQ==
       tarball: 'file:projects/imodels-clients-tests.tgz'
     version: 0.0.0
 specifiers:
@@ -5985,6 +6024,7 @@ specifiers:
   '@rush-temp/imodels-client-authoring': 'file:./projects/imodels-client-authoring.tgz'
   '@rush-temp/imodels-client-common-config': 'file:./projects/imodels-client-common-config.tgz'
   '@rush-temp/imodels-client-management': 'file:./projects/imodels-client-management.tgz'
+  '@rush-temp/imodels-client-test-utils': 'file:./projects/imodels-client-test-utils.tgz'
   '@rush-temp/imodels-clients-tests': 'file:./projects/imodels-clients-tests.tgz'
   '@types/chai': ~4.2.21
   '@types/mocha': ~9.0.0
@@ -6001,8 +6041,10 @@ specifiers:
   eslint-plugin-import: ~2.23.4
   eslint-plugin-mocha: ~9.0.0
   fs-extra: ~10.0.0
+  inversify: ~5.0.1
   mocha: ~9.0.2
   nyc: 14.0.0
   puppeteer: ~10.2.0
+  reflect-metadata: ~0.1.13
   sort-package-json: ~1.53.1
   typescript: ~4.3.5

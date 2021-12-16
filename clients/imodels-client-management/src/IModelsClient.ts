@@ -2,20 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, RecursiveRequired, RestClient } from "./base";
+import { ApiOptions, AxiosRestClient, RecursiveRequired, RestClient } from "./base";
 import { Constants } from "./Constants";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations } from "./operations";
 import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
 import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
-
-/** iModels API endpoint options. */
-export interface ApiOptions {
-  /** iModels API base url. Default value is `https://api.bentley.com/imodels`. */
-  baseUrl?: string;
-  /** iModels API version. Default value is `itwin-platform.v1`. */
-  version?: string;
-}
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions {

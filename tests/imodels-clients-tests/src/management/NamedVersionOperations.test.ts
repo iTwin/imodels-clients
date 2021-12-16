@@ -3,16 +3,16 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { IModelsClient as AuthoringIModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, CreateNamedVersionParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, NamedVersion, NamedVersionState, UpdateNamedVersionParams, toArray } from "@itwin/imodels-client-management";
-import { Config, Constants, IModelMetadata, TestAuthorizationProvider, TestClientOptions, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestProjectProvider, TestSetupError, assertCollection, assertNamedVersion, cleanUpIModels } from "../common";
+import { AuthorizationCallback, CreateNamedVersionParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, NamedVersion, NamedVersionState, UpdateNamedVersionParams, toArray } from "@itwin/imodels-client-management";
+import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestSetupError, TestUtilTypes, assertCollection, assertNamedVersion } from "@itwin/imodels-client-test-utils";
+import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 describe("[Management] NamedVersionOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
-  let projectId: string;
   let testIModelGroup: TestIModelGroup;
   let testIModel: IModelMetadata;
+  let testIModelFileProvider: TestIModelFileProvider;
 
   // We create several named versions in setup to have some entities for collection
   // query tests and persist them to use in entity update tests.
@@ -21,22 +21,21 @@ describe("[Management] NamedVersionOperations", () => {
   let updatedNamedVersions = 0;
 
   before(async () => {
-    iModelsClient = new IModelsClient(new TestClientOptions());
-    authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
-    projectId = await TestProjectProvider.getProjectId();
-    testIModelGroup = new TestIModelGroup({
-      labels: {
-        package: Constants.PackagePrefix,
-        testSuite: "ManagementNamedVersionOperations"
-      }
-    });
+    const container = getTestDIContainer();
 
-    testIModel = await TestIModelCreator.createEmptyAndUploadChangesets({
-      iModelsClient: new AuthoringIModelsClient(new TestClientOptions()),
-      authorization,
-      projectId,
-      iModelName: testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
-    });
+    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    iModelsClient = new IModelsClient(iModelsClientOptions);
+
+    const authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    authorization = authorizationProvider.getAdmin1Authorization();
+
+    testIModelFileProvider = container.get<TestIModelFileProvider>(TestIModelFileProvider);
+
+    const testIModelGroupFactory = container.get<TestIModelGroupFactory>(TestIModelGroupFactory);
+    testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "ManagementNamedVersionOperations" });
+
+    const testIModelCreator = container.get<TestIModelCreator>(TestIModelCreator);
+    testIModel = await testIModelCreator.createEmptyAndUploadChangesets(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
 
     for (let i = 0; i < namedVersionCountCreatedInSetup; i++) {
       const changesetIndex = await getChangesetIndexForNewNamedVersion({ authorization, iModelId: testIModel.id });
@@ -46,14 +45,14 @@ describe("[Management] NamedVersionOperations", () => {
         namedVersionProperties: {
           name: `Milestone ${changesetIndex}`,
           description: `Description for milestone ${changesetIndex}`,
-          changesetId: TestIModelFileProvider.changesets[changesetIndex - 1].id
+          changesetId: testIModelFileProvider.changesets[changesetIndex - 1].id
         }
       }));
     }
   });
 
   after(async () => {
-    await cleanUpIModels({ iModelsClient, authorization, projectId, testIModelGroup });
+    await testIModelGroup.cleanupIModels();
   });
 
   [
@@ -160,7 +159,7 @@ describe("[Management] NamedVersionOperations", () => {
       namedVersionProperties: {
         name: `Named Version ${changesetIndex}`,
         description: `Some description for Named Version ${changesetIndex}`,
-        changesetId: TestIModelFileProvider.changesets[changesetIndex - 1].id
+        changesetId: testIModelFileProvider.changesets[changesetIndex - 1].id
       }
     };
 
