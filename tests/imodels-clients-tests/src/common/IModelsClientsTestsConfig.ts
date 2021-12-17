@@ -80,4 +80,3 @@ export class IModelsClientsTestsConfig implements BaseIntegrationTestsConfig {
       throw new TestSetupError(`Invalid configuration: missing ${key} value.`);
   }
 }
-

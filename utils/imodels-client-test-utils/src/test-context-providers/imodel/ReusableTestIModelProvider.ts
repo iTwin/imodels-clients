@@ -22,12 +22,10 @@ export class ReusableTestIModelProvider {
   ) { }
 
   public async getOrCreate(): Promise<ReusableIModelMetadata> {
-    if (this._reusableIModel)
-      return this._reusableIModel;
-
-    this._reusableIModel =
-      await this._testIModelRetriever.queryWithRelatedData(this._config.testIModelName) ??
-      await this._testIModelCreator.createReusable(this._config.testIModelName);
+    if (!this._reusableIModel)
+      this._reusableIModel =
+        await this._testIModelRetriever.queryWithRelatedData(this._config.testIModelName) ??
+        await this._testIModelCreator.createReusable(this._config.testIModelName);
 
     return this._reusableIModel;
   }

@@ -12,7 +12,7 @@ export class TestIModelsClientOptions implements IModelsClientOptions {
   public api: ApiOptions;
 
   constructor(
-  @inject(TestUtilTypes.BaseIntegrationTestsConfig)
+    @inject(TestUtilTypes.BaseIntegrationTestsConfig)
     config: BaseIntegrationTestsConfig
   ) {
     this.api = { baseUrl: config.apis.iModels.baseUrl };

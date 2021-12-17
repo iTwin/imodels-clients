@@ -6,11 +6,11 @@ import { TestIModelGroupFactory, cleanupDirectory, createDirectory, createGuidVa
 import { Constants } from "./Constants";
 import { getTestDIContainer } from "./TestDiContainerProvider";
 
-let testInstanceId: string;
+let testRunId: string;
 export function getTestRunId(): string {
-  if (!testInstanceId)
-    testInstanceId = createGuidValue();
-  return testInstanceId;
+  if (!testRunId)
+    testRunId = createGuidValue();
+  return testRunId;
 }
 
 before(async () => {

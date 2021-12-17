@@ -9,9 +9,12 @@ import { TestIModelGroup } from "./TestIModelGroup";
 @injectable()
 export class TestIModelGroupFactory {
   constructor(
-    @inject(TestIModelsClient) private readonly _iModelsClient: TestIModelsClient,
-    @inject(TestAuthorizationProvider) private readonly _testAuthorizationProvider: TestAuthorizationProvider,
-    @inject(TestProjectProvider) private readonly _testProjectProvider: TestProjectProvider
+    @inject(TestIModelsClient)
+    private readonly _iModelsClient: TestIModelsClient,
+    @inject(TestAuthorizationProvider)
+    private readonly _testAuthorizationProvider: TestAuthorizationProvider,
+    @inject(TestProjectProvider)
+    private readonly _testProjectProvider: TestProjectProvider
   ) { }
 
   public create(testRunContext: {

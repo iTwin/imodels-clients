@@ -19,25 +19,25 @@ export class TestAuthorizationProvider {
   ) { }
 
   public getAdmin1Authorization(): AuthorizationCallback {
-    return this.getAuthorization2({ ...this._config.testUsers.admin1, scopes: this._config.apiScopes.iModels });
+    return this.getAuthorization({ ...this._config.testUsers.admin1, scopes: this._config.apiScopes.iModels });
   }
 
   public getFullyFeaturedAdmin2Authorization(): AuthorizationCallback {
-    return this.getAuthorization2({ ...this._config.testUsers.admin2FullyFeatured, scopes: this._config.apiScopes.iModels });
+    return this.getAuthorization({ ...this._config.testUsers.admin2FullyFeatured, scopes: this._config.apiScopes.iModels });
   }
 
   public getAdmin1AuthorizationForProjects(): AuthorizationCallback {
-    return this.getAuthorization2({ ...this._config.testUsers.admin1, scopes: this._config.apiScopes.projects });
+    return this.getAuthorization({ ...this._config.testUsers.admin1, scopes: this._config.apiScopes.projects });
   }
 
-  private getAuthorization2(testUser: { email: string, password: string, scopes: string }): AuthorizationCallback {
+  private getAuthorization(testUser: { email: string, password: string, scopes: string }): AuthorizationCallback {
     return async () => {
       const userKey = this.getKey(testUser);
-      if (this._authorizations[userKey])
-        return this._authorizations[userKey];
+      if (!this._authorizations[userKey]) {
+        const accessToken = await this._testiModelsAuthClient.getAccessToken(testUser);
+        this._authorizations[userKey] = { scheme: "Bearer", token: accessToken };
+      }
 
-      const accessToken = await this._testiModelsAuthClient.getAccessToken(testUser);
-      this._authorizations[userKey] = { scheme: "Bearer", token: accessToken };
       return this._authorizations[userKey];
     };
   }
