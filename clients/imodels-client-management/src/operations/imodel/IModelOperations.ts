@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModel, IModelResponse, IModelsResponse, MinimalIModel, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
+import { IModel, IModelResponse, IModelsResponse, MinimalIModel, OperationsBase, PreferReturn, EntityListIteratorImpl, EntityListIterator } from "../../base";
 import { OperationOptions } from "../OperationOptions";
 import { CreateEmptyIModelParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties } from "./IModelOperationParams";
 
@@ -14,8 +14,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * @param {GetiModelListParams} params parameters for this operation. See {@link GetiModelListParams}.
    * @returns {AsyncIterableIterator<MinimaliModel>} iterator for iModels collection. See {@link MinimaliModel}.
    */
-  public getMinimalList(params: GetIModelListParams): AsyncIterableIterator<MinimalIModel> {
-    return getCollectionIterator(async () => this.getEntityCollectionPage<MinimalIModel>({
+  public getMinimalList(params: GetIModelListParams): EntityListIterator<MinimalIModel> {
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalIModel>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
@@ -30,8 +30,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * @param {GetiModelListParams} params parameters for this operation. See {@link GetiModelListParams}.
    * @returns {AsyncIterableIterator<iModel>} iterator for iModels collection. See {@link iModel}.
    */
-  public getRepresentationList(params: GetIModelListParams): AsyncIterableIterator<IModel> {
-    return getCollectionIterator(async () => this.getEntityCollectionPage<IModel>({
+  public getRepresentationList(params: GetIModelListParams): EntityListIterator<IModel> {
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<IModel>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,

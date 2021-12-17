@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, ChangesetResponse, Checkpoint, NamedVersion, OperationsBase, PreferReturn, flatten, getCollectionIterator, getCollectionPagesIterator, map } from "../../base";
+import { AuthorizationCallback, ChangesetResponse, Checkpoint, NamedVersion, OperationsBase, PreferReturn, EntityListIteratorImpl, EntityListIterator } from "../../base";
 import { Changeset, ChangesetsResponse, MinimalChangeset, MinimalChangesetsResponse } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { CheckpointOperations } from "../checkpoint/CheckpointOperations";
 import { NamedVersionOperations } from "../named-version/NamedVersionOperations";
@@ -18,26 +18,22 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     super(options);
   }
 
-  public getMinimalList(params: GetChangesetListParams): AsyncIterableIterator<MinimalChangeset> {
-    const getEntityPageFunc = async () => this.getEntityCollectionPage<MinimalChangeset>({
+  public getMinimalList(params: GetChangesetListParams): EntityListIterator<MinimalChangeset> {
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalChangeset>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as MinimalChangesetsResponse).changesets
-    });
-
-    const collection: AsyncIterableIterator<MinimalChangeset> = getCollectionIterator(getEntityPageFunc);
-    return collection;
+    }));
   }
 
-  public getRepresentationList(params: GetChangesetListParams): AsyncIterableIterator<Changeset> {
-    const pagedCollection: AsyncIterableIterator<Changeset[]> = this.getRepresentationListInternal(params);
-    const flattenedCollection: AsyncIterableIterator<Changeset> = flatten<Changeset>(pagedCollection);
-    const mappedCollection: AsyncIterableIterator<Changeset> = map<Changeset, Changeset>(
-      flattenedCollection,
-      (changeset) => this.appendRelatedEntityCallbacks(params.authorization, changeset)
-    );
-    return mappedCollection;
+  public getRepresentationList(params: GetChangesetListParams): EntityListIterator<Changeset> {
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<Changeset>({
+      authorization: params.authorization,
+      url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
+      preferReturn: PreferReturn.Representation,
+      entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse).changesets
+    }));
   }
 
   public async getSingle(params: GetSingleChangesetParams): Promise<Changeset> {
@@ -53,17 +49,6 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
       url: this._options.urlFormatter.getSingleChangesetUrl({ iModelId, ...changesetIdOrIndex })
     });
     return response.changeset;
-  }
-
-  protected getRepresentationListInternal(params: GetChangesetListParams): AsyncIterableIterator<Changeset[]> {
-    const getEntityPageFunc = async () => this.getEntityCollectionPage<Changeset>({
-      authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
-      preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: unknown) => (response as ChangesetsResponse).changesets
-    });
-
-    return getCollectionPagesIterator(getEntityPageFunc);
   }
 
   protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, changeset: Changeset): Changeset {

@@ -40,7 +40,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
     this._options.fileHandler.createDirectory(params.targetDirectoryPath);
 
-    for await (const changesetPage of this.getRepresentationListInternal(params)) {
+    for await (const changesetPage of this.getRepresentationList(params).byPage()) {
       const changesetsWithFilePath: DownloadedChangeset[] = changesetPage.map(
         (changeset: Changeset) => ({
           ...changeset,
