@@ -10,7 +10,7 @@ import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-autho
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes } from "@itwin/imodels-client-test-utils";
 import { getTestDIContainer } from "./TestDiContainerProvider";
 
-describe("BackendiModelsAccess", () => {
+describe("BackendIModelsAccess", () => {
   let backendIModelsAccess: BackendIModelsAccess;
   let accessToken: string;
   let testIModel: ReusableIModelMetadata;
@@ -23,8 +23,9 @@ describe("BackendiModelsAccess", () => {
     backendIModelsAccess = new BackendIModelsAccess(iModelsClient);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
-    const authorization = authorizationProvider.getAdmin1Authorization();
-    accessToken = `${(await authorization()).scheme} ${(await authorization()).token}`;
+    const authorizationCallback = authorizationProvider.getAdmin1Authorization();
+    const authorization = await authorizationCallback();
+    accessToken = `${authorization.scheme} ${authorization.token}`;
 
     const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
     testIModel = await reusableTestIModelProvider.getOrCreate();
