@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { EntityListIterator, EntityListIteratorImpl } from "@itwin/imodels-client-management";
 import { expect } from "chai";
-import { getTestEntityPageQueryFunc, TestEntity } from "./EntityPageListIterator.test";
+import { TestEntity, getEntityPageQueryFunc } from "./TestEntityPageFunctions";
 
 describe("EntityListIteratorImpl", () => {
   it("should return entities", async () => {
     // Arrange
-    const testIterator: EntityListIterator<TestEntity> = new EntityListIteratorImpl(getTestEntityPageQueryFunc(2, 2));
+    const testIterator: EntityListIterator<TestEntity> = new EntityListIteratorImpl(getEntityPageQueryFunc(2, 2));
     const entities: TestEntity[] = [];
 
     // Act
@@ -18,11 +18,13 @@ describe("EntityListIteratorImpl", () => {
 
     // Assert
     expect(entities.length).to.be.equal(4);
+    for (let i = 0; i < entities.length; i++)
+      expect(entities[i].entityIndex).to.be.equal(i);
   });
 
-  it.only("should allow to get raw pages", async () => {
+  it("should allow to get raw entity pages", async () => {
     // Arrange
-    const testIterator: EntityListIterator<TestEntity> = new EntityListIteratorImpl(getTestEntityPageQueryFunc(2, 2));
+    const testIterator: EntityListIterator<TestEntity> = new EntityListIteratorImpl(getEntityPageQueryFunc(2, 2));
     const entityPages: TestEntity[][] = [];
 
     // Act
@@ -31,22 +33,13 @@ describe("EntityListIteratorImpl", () => {
 
     // Assert
     expect(entityPages.length).to.be.equal(2);
-    expect(entityPages[0].length).to.be.equal(2);
-    expect(entityPages[1].length).to.be.equal(2);
+    for (let i = 0; i < entityPages.length; i++)
+      for (let j = 0; j < entityPages[i].length; j++)
+        expect(entityPages[i][j].pageIndex).to.be.equal(i);
 
-    let currentPageIndex = 0;
-    let currentEntityIndex = 0;
-
-    expect(entityPages.length).to.be.equal(2);
-    for (const entityPage of entityPages) {
-      expect(entityPage.length).to.equal(2);
-      for (const entity of entityPage) {
-        expect(entity.pageIndex).to.be.equal(currentPageIndex);
-        expect(entity.entityIndex).to.be.equal(currentEntityIndex);
-
-        currentEntityIndex++;
-      }
-      currentPageIndex++;
-    }
+    const entities = entityPages.flatMap(value => value);
+    expect(entities.length).to.be.equal(4);
+    for (let i = 0; i < entities.length; i++)
+      expect(entities[i].entityIndex).to.be.equal(i);
   });
 });
