@@ -20,7 +20,7 @@ export class EntityListIteratorImpl<TEntity> implements EntityListIterator<TEnti
   }
 
   public [Symbol.asyncIterator](): AsyncIterableIterator<TEntity> {
-    return this._entities;
+    return this;
   }
 
   public async next(): Promise<IteratorResult<TEntity>> {

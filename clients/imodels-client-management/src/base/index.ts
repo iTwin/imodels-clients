@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 export * from "./OperationsBase";
 export * from "./IModelsErrorParser";
-export * from "./iterators/IteratorUtilFunctions";
 export * from "./CommonFunctions";
 export * from "./interfaces/CommonInterfaces";
 export * from "./interfaces/UtilityTypes";

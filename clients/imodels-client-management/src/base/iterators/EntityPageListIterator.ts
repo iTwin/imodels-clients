@@ -12,7 +12,7 @@ export class EntityPageListIterator<TEntity> implements AsyncIterableIterator<TE
   }
 
   public [Symbol.asyncIterator](): AsyncIterableIterator<TEntity[]> {
-    return this._entityPages;
+    return this;
   }
 
   public async next(): Promise<IteratorResult<TEntity[]>> {
