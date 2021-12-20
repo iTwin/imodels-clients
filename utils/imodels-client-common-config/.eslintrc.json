@@ -24,8 +24,14 @@
       "error",
       2,
       {
-        "SwitchCase": 1
+        "SwitchCase": 1,
+        "ignoredNodes": [
+          "FunctionExpression > .params[decorators.length > 0]"
+        ]
       }
+    ],
+    "@typescript-eslint/indent": [
+      "off"
     ],
     "linebreak-style": [
       "error",
