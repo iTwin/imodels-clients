@@ -30,9 +30,9 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   public getRepresentationList(params: GetChangesetListParams): EntityListIterator<Changeset> {
     const entityCollectionAccessor = (response: unknown) => {
       const changesets = (response as ChangesetsResponse).changesets;
-      const mappedChangesets = changesets.map(changeset => this.appendRelatedEntityCallbacks(params.authorization, changeset));
+      const mappedChangesets = changesets.map((changeset) => this.appendRelatedEntityCallbacks(params.authorization, changeset));
       return mappedChangesets;
-    }
+    };
 
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<Changeset>({
       authorization: params.authorization,
