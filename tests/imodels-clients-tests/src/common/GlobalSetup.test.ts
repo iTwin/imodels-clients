@@ -26,7 +26,7 @@ after(async () => {
 
 async function cleanupIModelsInTestProject(): Promise<void> {
   const container = getTestDIContainer();
-  const testIModelGroupFactory = container.get<TestIModelGroupFactory>(TestIModelGroupFactory);
+  const testIModelGroupFactory = container.get(TestIModelGroupFactory);
   const testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix });
   await testIModelGroup.cleanupIModels();
 }

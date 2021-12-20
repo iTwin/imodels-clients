@@ -20,10 +20,10 @@ describe("[Management] BriefcaseOperations", () => {
     const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
-    authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
-    const reusableTestIModelProvider = container.get<ReusableTestIModelProvider>(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
     testIModel = await reusableTestIModelProvider.getOrCreate();
   });
 

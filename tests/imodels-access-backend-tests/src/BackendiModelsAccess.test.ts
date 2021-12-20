@@ -22,11 +22,11 @@ describe("BackendiModelsAccess", () => {
     const iModelsClient = new IModelsClient(iModelsClientOptions);
     backendIModelsAccess = new BackendIModelsAccess(iModelsClient);
 
-    const authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    const authorizationProvider = container.get(TestAuthorizationProvider);
     const authorization = authorizationProvider.getAdmin1Authorization();
     accessToken = `${(await authorization()).scheme} ${(await authorization()).token}`;
 
-    const reusableTestIModelProvider = container.get<ReusableTestIModelProvider>(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
     testIModel = await reusableTestIModelProvider.getOrCreate();
   });
 

@@ -19,13 +19,13 @@ describe("[Authoring] BriefcaseOperations", () => {
     const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
-    const authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
-    const testIModelGroupFactory = container.get<TestIModelGroupFactory>(TestIModelGroupFactory);
+    const testIModelGroupFactory = container.get(TestIModelGroupFactory);
     testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "AuthoringBriefcaseOperations" });
 
-    const testIModelCreator = container.get<TestIModelCreator>(TestIModelCreator);
+    const testIModelCreator = container.get(TestIModelCreator);
     testIModel = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
   });
 

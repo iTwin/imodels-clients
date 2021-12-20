@@ -20,10 +20,10 @@ describe("[Authoring] CheckpointOperations", () => {
     const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
-    const authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
-    const reusableTestIModelProvider = container.get<ReusableTestIModelProvider>(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
     testIModel = await reusableTestIModelProvider.getOrCreate();
     testIModelNamedVersion = testIModel.namedVersions[0];
   });

@@ -30,18 +30,18 @@ describe("[Authoring] ChangesetOperations", () => {
     iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
-    const authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
-    testIModelFileProvider = container.get<TestIModelFileProvider>(TestIModelFileProvider);
+    testIModelFileProvider = container.get(TestIModelFileProvider);
 
-    const testIModelGroupFactory = container.get<TestIModelGroupFactory>(TestIModelGroupFactory);
+    const testIModelGroupFactory = container.get(TestIModelGroupFactory);
     testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "AuthoringChangesetOperations" });
 
-    const reusableTestIModelProvider = container.get<ReusableTestIModelProvider>(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
 
-    const testIModelCreator = container.get<TestIModelCreator>(TestIModelCreator);
+    const testIModelCreator = container.get(TestIModelCreator);
     testIModelForWrite = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
   });
 

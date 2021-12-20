@@ -19,12 +19,12 @@ describe("[Management] ChangesetOperations", () => {
     const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
-    const authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
-    testIModelFileProvider = container.get<TestIModelFileProvider>(TestIModelFileProvider);
+    testIModelFileProvider = container.get(TestIModelFileProvider);
 
-    const reusableTestIModelProvider = container.get<ReusableTestIModelProvider>(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
     testIModel = await reusableTestIModelProvider.getOrCreate();
   });
 

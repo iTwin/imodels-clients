@@ -20,15 +20,15 @@ describe("[Authoring] IModelOperations", () => {
     const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
-    const authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
-    const testProjectProvider = container.get<TestProjectProvider>(TestProjectProvider);
+    const testProjectProvider = container.get(TestProjectProvider);
     projectId = await testProjectProvider.getOrCreate();
 
-    testIModelFileProvider = container.get<TestIModelFileProvider>(TestIModelFileProvider);
+    testIModelFileProvider = container.get(TestIModelFileProvider);
 
-    const testIModelGroupFactory = container.get<TestIModelGroupFactory>(TestIModelGroupFactory);
+    const testIModelGroupFactory = container.get(TestIModelGroupFactory);
     testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "AuthoringIModelOperations" });
   });
 

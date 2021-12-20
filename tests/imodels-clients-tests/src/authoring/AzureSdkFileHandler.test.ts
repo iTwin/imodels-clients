@@ -8,6 +8,7 @@ import { expect } from "chai";
 import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, GetSingleChangesetParams, IModelsApiUrlFormatter, IModelsClient, IModelsClientOptions, ProgressCallback, ProgressData } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestChangesetFile, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, cleanupDirectory } from "@itwin/imodels-client-test-utils";
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
+import { Container } from "inversify";
 
 describe("AzureSdkFileHandler", () => {
   let azureSdkFileHandler: AzureSdkFileHandler;
@@ -33,18 +34,18 @@ describe("AzureSdkFileHandler", () => {
     iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
-    const authorizationProvider = container.get<TestAuthorizationProvider>(TestAuthorizationProvider);
+    const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
-    testIModelFileProvider = container.get<TestIModelFileProvider>(TestIModelFileProvider);
+    testIModelFileProvider = container.get(TestIModelFileProvider);
 
-    const testIModelGroupFactory = container.get<TestIModelGroupFactory>(TestIModelGroupFactory);
+    const testIModelGroupFactory = container.get(TestIModelGroupFactory);
     testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "AzureSdkFileHandler" });
 
-    const testIModelCreator = container.get<TestIModelCreator>(TestIModelCreator);
+    const testIModelCreator = container.get(TestIModelCreator);
     testIModelForWrite = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
 
-    const reusableTestIModelProvider = container.get<ReusableTestIModelProvider>(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
     testIModelForDownload = await reusableTestIModelProvider.getOrCreate();
   });
 
