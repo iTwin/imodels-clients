@@ -92,19 +92,17 @@ export class TestIModelRetriever {
   }
 
   private async findIModelByName(iModelName: string): Promise<IModel | undefined> {
-    const projectId = await this._testProjectProvider.getOrCreate(); // TODO: rename to getOrCreate
-    const iModels = this._iModelsClient.iModels.getRepresentationList({
+    const projectId = await this._testProjectProvider.getOrCreate();
+    const iModelIterator = this._iModelsClient.iModels.getRepresentationList({
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       urlParams: {
-        projectId
+        projectId,
+        name: iModelName
       }
     });
-
-    for await (const iModel of iModels) {
-      if (iModel.displayName === iModelName)
-        return iModel;
-    }
-
-    return undefined;
+    const iModels = await toArray(iModelIterator);
+    return iModels.length === 0
+      ? undefined
+      : iModels[0];
   }
 }
