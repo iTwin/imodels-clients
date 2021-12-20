@@ -3,11 +3,11 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { EntityPageQueryFunc } from "../interfaces/UtilityTypes";
-import { flatten } from "./IteratorUtilFunctions";
 import { EntityPageListIterator } from "./EntityPageListIterator";
+import { flatten } from "./IteratorUtilFunctions";
 
 export interface EntityListIterator<TEntity> extends AsyncIterableIterator<TEntity> {
-  byPage(): AsyncIterableIterator<TEntity[]>
+  byPage(): AsyncIterableIterator<TEntity[]>;
 }
 
 export class EntityListIteratorImpl<TEntity> implements EntityListIterator<TEntity> {

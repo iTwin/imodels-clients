@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIterator, EntityListIteratorImpl } from "@itwin/imodels-client-management";
 import { expect } from "chai";
+import { EntityListIterator, EntityListIteratorImpl } from "@itwin/imodels-client-management";
 import { TestEntity, getEntityPageQueryFunc } from "./TestEntityPageFunctions";
 
 describe("EntityListIteratorImpl", () => {
@@ -34,10 +34,10 @@ describe("EntityListIteratorImpl", () => {
     // Assert
     expect(entityPages.length).to.be.equal(2);
     for (let i = 0; i < entityPages.length; i++)
-      for (let j = 0; j < entityPages[i].length; j++)
-        expect(entityPages[i][j].pageIndex).to.be.equal(i);
+      for (const entity of entityPages[i])
+        expect(entity.pageIndex).to.be.equal(i);
 
-    const entities = entityPages.flatMap(value => value);
+    const entities = entityPages.flatMap((value) => value);
     expect(entities.length).to.be.equal(4);
     for (let i = 0; i < entities.length; i++)
       expect(entities[i].entityIndex).to.be.equal(i);

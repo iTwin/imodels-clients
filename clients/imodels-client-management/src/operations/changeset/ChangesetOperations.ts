@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, ChangesetResponse, Checkpoint, NamedVersion, OperationsBase, PreferReturn, EntityListIteratorImpl, EntityListIterator } from "../../base";
+import { AuthorizationCallback, ChangesetResponse, Checkpoint, EntityListIterator, EntityListIteratorImpl, NamedVersion, OperationsBase, PreferReturn } from "../../base";
 import { Changeset, ChangesetsResponse, MinimalChangeset, MinimalChangesetsResponse } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { CheckpointOperations } from "../checkpoint/CheckpointOperations";
 import { NamedVersionOperations } from "../named-version/NamedVersionOperations";

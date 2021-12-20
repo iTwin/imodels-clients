@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Briefcase, BriefcaseResponse, BriefcasesResponse, MinimalBriefcase, OperationsBase, PreferReturn, EntityListIteratorImpl } from "../../base";
+import { Briefcase, BriefcaseResponse, BriefcasesResponse, EntityListIteratorImpl, MinimalBriefcase, OperationsBase, PreferReturn } from "../../base";
 import { OperationOptions } from "../OperationOptions";
 import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOperationParams";
 

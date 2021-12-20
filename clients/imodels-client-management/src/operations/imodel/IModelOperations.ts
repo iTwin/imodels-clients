@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModel, IModelResponse, IModelsResponse, MinimalIModel, OperationsBase, PreferReturn, EntityListIteratorImpl, EntityListIterator } from "../../base";
+import { EntityListIterator, EntityListIteratorImpl, IModel, IModelResponse, IModelsResponse, MinimalIModel, OperationsBase, PreferReturn } from "../../base";
 import { OperationOptions } from "../OperationOptions";
 import { CreateEmptyIModelParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties } from "./IModelOperationParams";
 
