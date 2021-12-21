@@ -2,22 +2,6 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityCollectionPage, EntityPageQueryFunc } from "./interfaces/UtilityTypes";
-
-export function getCollectionIterator<TEntity>(pageQueryFunc: EntityPageQueryFunc<TEntity>): AsyncIterableIterator<TEntity> {
-  return flatten(getCollectionPagesIterator(pageQueryFunc));
-}
-
-export async function* getCollectionPagesIterator<TEntity>(pageQueryFunc: EntityPageQueryFunc<TEntity>): AsyncIterableIterator<TEntity[]> {
-  let nextPageQueryFunc: EntityPageQueryFunc<TEntity> | undefined = pageQueryFunc;
-
-  while (nextPageQueryFunc) {
-    const entityPage: EntityCollectionPage<TEntity> = await nextPageQueryFunc();
-    nextPageQueryFunc = entityPage.next;
-    yield entityPage.entities;
-  }
-}
-
 export async function* map<TSource, TTarget>(iterator: AsyncIterableIterator<TSource>, mapFunc: (entity: TSource) => TTarget): AsyncIterableIterator<TTarget> {
   for await (const entity of iterator)
     yield mapFunc(entity);

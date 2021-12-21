@@ -10,12 +10,12 @@ This package contains an API client that exposes a subset of [iModels API](https
 
 ### Get all project iModels
 ```typescript
-import { Authorization, IModelsClient, MinimalIModel } from "@itwin/imodels-client-management";
+import { Authorization, EntityListIterator, IModelsClient, MinimalIModel } from "@itwin/imodels-client-management";
 
 /** Function that queries all iModels for a particular project and prints their ids to the console. */
 async function printiModelIds(): Promise<void> {
   const iModelsClient: IModelsClient = new IModelsClient();
-  const iModelIterator: AsyncIterableIterator<MinimalIModel> = iModelsClient.iModels.getMinimalList({
+  const iModelIterator: EntityListIterator<MinimalIModel> = iModelsClient.iModels.getMinimalList({
     authorization: () => getAuthorization(),
     urlParams: {
       projectId: "8a1fcd73-8c23-460d-a392-8b4afc00affc"
@@ -34,12 +34,12 @@ async function getAuthorization(): Promise<Authorization> {
 
 ### Get all iModel Changesets
 ```typescript
-import { Authorization, IModelsClient, MinimalChangeset } from "@itwin/imodels-client-management";
+import { Authorization, EntityListIterator, IModelsClient, MinimalChangeset } from "@itwin/imodels-client-management";
 
 /** Function that queries all Changesets for a particular iModel and prints their ids to the console. */
 async function printChangesetIds(): Promise<void> {
   const iModelsClient: IModelsClient = new IModelsClient();
-  const changesetIterator: AsyncIterableIterator<MinimalChangeset> = iModelsClient.changesets.getMinimalList({
+  const changesetIterator: EntityListIterator<MinimalChangeset> = iModelsClient.changesets.getMinimalList({
     authorization: () => getAuthorization(),
     iModelId: "30c8505e-fa7a-4b53-a13f-e6a193da8ffc"
   });

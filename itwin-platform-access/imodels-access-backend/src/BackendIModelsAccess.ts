@@ -16,11 +16,11 @@ import {
 import {
   AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset, ChangesetIdOrIndex,
   ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams, DeleteIModelParams,
-  DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, GetBriefcaseListParams,
-  GetChangesetListParams, GetIModelListParams, GetLockListParams, GetNamedVersionListParams, GetSingleChangesetParams,
-  GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, Lock, LockLevel,
-  LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion, OrderByOperator, ProgressCallback,
-  ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
+  DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, EntityListIterator,
+  GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetLockListParams, GetNamedVersionListParams,
+  GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, Lock,
+  LockLevel, LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion, OrderByOperator,
+  ProgressCallback, ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
@@ -73,7 +73,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     const iModelOperationParams: GetChangesetListParams = this.getIModelScopedOperationParams(arg);
     iModelOperationParams.urlParams = PlatformToClientAdapter.toChangesetRangeUrlParams(arg.range);
 
-    const changesetsIterator: AsyncIterableIterator<Changeset> = this._iModelsClient.changesets.getRepresentationList(iModelOperationParams);
+    const changesetsIterator: EntityListIterator<Changeset> = this._iModelsClient.changesets.getRepresentationList(iModelOperationParams);
     const changesets: Changeset[] = await toArray(changesetsIterator);
     const result: ChangesetProps[] = changesets.map(ClientToPlatformAdapter.toChangesetProps);
     return result;
@@ -107,7 +107,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       }
     };
 
-    const changesetsIterator: AsyncIterableIterator<MinimalChangeset> = this._iModelsClient.changesets.getMinimalList(getChangesetListParams);
+    const changesetsIterator: EntityListIterator<MinimalChangeset> = this._iModelsClient.changesets.getMinimalList(getChangesetListParams);
     const changesets: MinimalChangeset[] = await take(changesetsIterator, 1);
     if (changesets.length === 0)
       return this._changeSet0;
@@ -139,7 +139,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
         name: arg.versionName
       }
     };
-    const namedVersionsIterator: AsyncIterableIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
+    const namedVersionsIterator: EntityListIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
     const namedVersions: MinimalNamedVersion[] = await toArray(namedVersionsIterator);
     if (namedVersions.length === 0 || !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
@@ -179,7 +179,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       }
     };
 
-    const briefcasesIterator: AsyncIterableIterator<Briefcase> = this._iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams);
+    const briefcasesIterator: EntityListIterator<Briefcase> = this._iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams);
     const briefcases: Briefcase[] = await toArray(briefcasesIterator);
     const briefcaseIds: BriefcaseId[] = briefcases.map((briefcase) => briefcase.briefcaseId);
     return briefcaseIds;
@@ -279,7 +279,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       }
     };
 
-    const locksIterator: AsyncIterableIterator<Lock> = this._iModelsClient.locks.getList(getLockListParams);
+    const locksIterator: EntityListIterator<Lock> = this._iModelsClient.locks.getList(getLockListParams);
     const locks: Lock[] = await toArray(locksIterator);
     if (locks.length === 0)
       return [];
@@ -296,7 +296,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       }
     };
 
-    const locksIterator: AsyncIterableIterator<Lock> = this._iModelsClient.locks.getList(getLockListParams);
+    const locksIterator: EntityListIterator<Lock> = this._iModelsClient.locks.getList(getLockListParams);
     const locks: Lock[] = await toArray(locksIterator);
     if (locks.length === 0)
       return;
@@ -323,7 +323,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       }
     };
 
-    const iModelsIterator: AsyncIterableIterator<MinimalIModel> = this._iModelsClient.iModels.getMinimalList(getIModelListParams);
+    const iModelsIterator: EntityListIterator<MinimalIModel> = this._iModelsClient.iModels.getMinimalList(getIModelListParams);
     const iModels = await toArray(iModelsIterator);
     return iModels.length === 0 ? undefined : iModels[0].id;
   }

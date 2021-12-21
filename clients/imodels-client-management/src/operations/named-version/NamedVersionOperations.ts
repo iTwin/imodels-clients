@@ -2,13 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn, getCollectionIterator } from "../../base";
+import { EntityListIterator, EntityListIteratorImpl, MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn } from "../../base";
 import { OperationOptions } from "../OperationOptions";
 import { CreateNamedVersionParams, GetNamedVersionListParams, GetSingleNamedVersionParams, NamedVersionPropertiesForCreate, NamedVersionPropertiesForUpdate, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
 
 export class NamedVersionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
-  public getMinimalList(params: GetNamedVersionListParams): AsyncIterableIterator<MinimalNamedVersion> {
-    return getCollectionIterator(async () => this.getEntityCollectionPage<MinimalNamedVersion>({
+  public getMinimalList(params: GetNamedVersionListParams): EntityListIterator<MinimalNamedVersion> {
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalNamedVersion>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getNamedVersionListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
@@ -16,8 +16,8 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
     }));
   }
 
-  public getRepresentationList(params: GetNamedVersionListParams): AsyncIterableIterator<NamedVersion> {
-    return getCollectionIterator(async () => this.getEntityCollectionPage<NamedVersion>({
+  public getRepresentationList(params: GetNamedVersionListParams): EntityListIterator<NamedVersion> {
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<NamedVersion>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getNamedVersionListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
