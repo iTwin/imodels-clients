@@ -32,6 +32,10 @@ describe("BackendiModelsAccess", () => {
     });
   });
 
+  beforeEach(() => {
+    cleanupDirectory(testDownloadPath);
+  });
+
   afterEach(() => {
     cleanupDirectory(testDownloadPath);
   });
