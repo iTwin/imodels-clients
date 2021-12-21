@@ -17,7 +17,8 @@ export class ClientToPlatformAdapter {
       description: changeset.description,
       briefcaseId: changeset.briefcaseId,
       pushDate: changeset.pushDateTime,
-      userCreated: changeset.creatorId
+      userCreated: changeset.creatorId,
+      size: changeset.fileSize
     };
   }
 
