@@ -3,38 +3,29 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { AuthorizationCallback, CheckpointState, GetSingleCheckpointParams, IModelScopedOperationParams, IModelsClient, IModelsErrorCode } from "@itwin/imodels-client-authoring";
-import { Config, Constants, NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelGroup, TestProjectProvider, assertCheckpoint, assertError, cleanUpIModels } from "../common";
+import { AuthorizationCallback, CheckpointState, GetSingleCheckpointParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, IModelsErrorCode } from "@itwin/imodels-client-authoring";
+import { NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertCheckpoint, assertError } from "@itwin/imodels-client-test-utils";
+import { getTestDIContainer } from "../common";
 
 describe("[Authoring] CheckpointOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
-  let projectId: string;
-  let testIModelGroup: TestIModelGroup;
+
   let testIModel: ReusableIModelMetadata;
   let testIModelNamedVersion: NamedVersionMetadata;
 
   before(async () => {
-    iModelsClient = new IModelsClient(new TestClientOptions());
-    authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
-    projectId = await TestProjectProvider.getProjectId();
-    testIModelGroup = new TestIModelGroup({
-      labels: {
-        package: Constants.PackagePrefix,
-        testSuite: "AuthoringCheckpointOperations"
-      }
-    });
+    const container = getTestDIContainer();
 
-    testIModel = await ReusableTestIModelProvider.getOrCreate({
-      authorization,
-      iModelsClient,
-      projectId
-    });
+    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    iModelsClient = new IModelsClient(iModelsClientOptions);
+
+    const authorizationProvider = container.get(TestAuthorizationProvider);
+    authorization = authorizationProvider.getAdmin1Authorization();
+
+    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
+    testIModel = await reusableTestIModelProvider.getOrCreate();
     testIModelNamedVersion = testIModel.namedVersions[0];
-  });
-
-  after(async () => {
-    await cleanUpIModels({ iModelsClient, authorization, projectId, testIModelGroup });
   });
 
   it("should get by changeset id", async () => {

@@ -3,25 +3,28 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { IModelsClient as AuthoringIModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, Briefcase, GetBriefcaseListParams, GetSingleBriefcaseParams, IModelsClient, SPECIAL_VALUES_ME, toArray } from "@itwin/imodels-client-management";
-import { Config, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestProjectProvider, assertBriefcase, assertCollection } from "../common";
+import { AuthorizationCallback, Briefcase, GetBriefcaseListParams, GetSingleBriefcaseParams, IModelsClient, IModelsClientOptions, SPECIAL_VALUES_ME, toArray } from "@itwin/imodels-client-management";
+import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertBriefcase, assertCollection } from "@itwin/imodels-client-test-utils";
+import { getTestDIContainer } from "../common";
 
 describe("[Management] BriefcaseOperations", () => {
   let iModelsClient: IModelsClient;
+  let authorizationProvider: TestAuthorizationProvider;
   let authorization: AuthorizationCallback;
-  let projectId: string;
+
   let testIModel: ReusableIModelMetadata;
 
   before(async () => {
-    iModelsClient = new IModelsClient(new TestClientOptions());
-    authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
-    projectId = await TestProjectProvider.getProjectId();
-    testIModel = await ReusableTestIModelProvider.getOrCreate({
-      iModelsClient: new AuthoringIModelsClient(new TestClientOptions()),
-      authorization,
-      projectId
-    });
+    const container = getTestDIContainer();
+
+    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    iModelsClient = new IModelsClient(iModelsClientOptions);
+
+    authorizationProvider = container.get(TestAuthorizationProvider);
+    authorization = authorizationProvider.getAdmin1Authorization();
+
+    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
+    testIModel = await reusableTestIModelProvider.getOrCreate();
   });
 
   [
@@ -77,7 +80,7 @@ describe("[Management] BriefcaseOperations", () => {
 
   it("should not return user owned briefcases if user does not own any when querying representation collection", async () => {
     // Arrange
-    const authorizationForUser2 = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin2FullyFeatured);
+    const authorizationForUser2 = authorizationProvider.getFullyFeaturedAdmin2Authorization();
     const getBriefcaseListParams: GetBriefcaseListParams = {
       authorization: authorizationForUser2,
       iModelId: testIModel.id,

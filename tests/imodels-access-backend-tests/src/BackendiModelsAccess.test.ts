@@ -8,28 +8,33 @@ import { ChangesetRangeArg, IModelIdArg } from "@itwin/core-backend";
 import { BriefcaseId, ChangesetFileProps, ChangesetType, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
-import { ContainingChanges, IModelsClient } from "@itwin/imodels-client-authoring";
-import { Config, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelFileProvider, TestProjectProvider, cleanupDirectory } from "@itwin/imodels-clients-tests";
+import { ContainingChanges, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, cleanupDirectory } from "@itwin/imodels-client-test-utils";
+import { getTestDIContainer } from "./TestDiContainerProvider";
 
-describe("BackendiModelsAccess", () => {
+describe("BackendIModelsAccess", () => {
   let backendIModelsAccess: BackendIModelsAccess;
   let accessToken: string;
-  let projectId: string;
+  let testIModelFileProvider: TestIModelFileProvider;
   let testIModelForRead: ReusableIModelMetadata;
   const testDownloadPath = path.join(__dirname, "../lib/testDownloads");
 
   before(async () => {
-    const iModelsClient = new IModelsClient(new TestClientOptions());
-    const authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
+    const container = getTestDIContainer();
 
+    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    const iModelsClient = new IModelsClient(iModelsClientOptions);
     backendIModelsAccess = new BackendIModelsAccess(iModelsClient);
-    accessToken = `${(await authorization()).scheme} ${(await authorization()).token}`;
-    projectId = await TestProjectProvider.getProjectId();
-    testIModelForRead = await ReusableTestIModelProvider.getOrCreate({
-      iModelsClient,
-      authorization,
-      projectId
-    });
+
+    const authorizationProvider = container.get(TestAuthorizationProvider);
+    const authorizationCallback = authorizationProvider.getAdmin1Authorization();
+    const authorization = await authorizationCallback();
+    accessToken = `${authorization.scheme} ${authorization.token}`;
+
+    testIModelFileProvider = container.get(TestIModelFileProvider);
+
+    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
+    testIModelForRead = await reusableTestIModelProvider.getOrCreate();
   });
 
   beforeEach(() => {
@@ -68,10 +73,10 @@ describe("BackendiModelsAccess", () => {
     const downloadedChangesets: ChangesetFileProps[] = await backendIModelsAccess.downloadChangesets(downloadChangesetsParams);
 
     // Assert
-    expect(downloadedChangesets.length).to.be.equal(TestIModelFileProvider.changesets.length);
+    expect(downloadedChangesets.length).to.be.equal(testIModelFileProvider.changesets.length);
     for (let i = 0; i < downloadedChangesets.length; i++) {
       const downloadedChangeset = downloadedChangesets[i];
-      const expectedChangesetFile = TestIModelFileProvider.changesets[i];
+      const expectedChangesetFile = testIModelFileProvider.changesets[i];
 
       expect(fs.existsSync(downloadedChangeset.pathname)).to.equal(true);
       expect(downloadedChangeset.id).to.be.equal(expectedChangesetFile.id);

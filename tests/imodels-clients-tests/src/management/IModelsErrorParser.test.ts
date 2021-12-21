@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { IModelsError, IModelsErrorCode, IModelsErrorParser } from "@itwin/imodels-client-management";
-import { assertError } from "../common";
+import { assertError } from "@itwin/imodels-client-test-utils";
 
 describe("IModelsErrorParser", () => {
   it("should parse error", () => {

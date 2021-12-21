@@ -15,7 +15,9 @@
     "apim",
     "changesets",
     "namedversions",
-    "datetime"
+    "datetime",
+    "inversify",
+    "bootstrapper"
   ],
   "ignoreRegExpList": [
     "/imodel.*/i"

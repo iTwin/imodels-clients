@@ -4,6 +4,9 @@
     "outDir": "./lib",
     "experimentalDecorators": true
   },
+  "types": [
+    "reflect-metadata"
+  ],
   "include": [
     "./src/**/*.ts"
   ],

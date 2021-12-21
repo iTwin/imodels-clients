@@ -3,6 +3,14 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 
+/** iModels API endpoint options. */
+export interface ApiOptions {
+  /** iModels API base url. Default value is `https://api.bentley.com/imodels`. */
+  baseUrl?: string;
+  /** iModels API version. Default value is `itwin-platform.v1`. */
+  version?: string;
+}
+
 /**
  * Request authorization data. This data is sent to the server in `Authorization` request header, the header value is
  * formatted by joining `scheme` and `token` property values with a single space.

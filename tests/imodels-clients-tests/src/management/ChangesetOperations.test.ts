@@ -3,27 +3,29 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { IModelsClient as AuthoringIModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetSingleChangesetParams, IModelsClient, IModelsClientOptions, OrderByOperator,toArray } from "@itwin/imodels-client-management";
-import { Config, NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelFileProvider, TestProjectProvider, assertChangeset, assertCollection } from "../common";
+import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetSingleChangesetParams, IModelsClient, IModelsClientOptions, OrderByOperator, toArray } from "@itwin/imodels-client-management";
+import { NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertChangeset, assertCollection } from "@itwin/imodels-client-test-utils";
+import { getTestDIContainer } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
-  let iModelsClientOptions: IModelsClientOptions;
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
-  let projectId: string;
   let testIModel: ReusableIModelMetadata;
+  let testIModelFileProvider: TestIModelFileProvider;
 
   before(async () => {
-    iModelsClientOptions = new TestClientOptions();
+    const container = getTestDIContainer();
+
+    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
     iModelsClient = new IModelsClient(iModelsClientOptions);
-    authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
-    projectId = await TestProjectProvider.getProjectId();
-    testIModel = await ReusableTestIModelProvider.getOrCreate({
-      iModelsClient: new AuthoringIModelsClient(new TestClientOptions()),
-      authorization,
-      projectId
-    });
+
+    const authorizationProvider = container.get(TestAuthorizationProvider);
+    authorization = authorizationProvider.getAdmin1Authorization();
+
+    testIModelFileProvider = container.get(TestIModelFileProvider);
+
+    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
+    testIModel = await reusableTestIModelProvider.getOrCreate();
   });
 
   [
@@ -52,7 +54,7 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: changesets,
-        isEntityCountCorrect: (count) => count === TestIModelFileProvider.changesets.length
+        isEntityCountCorrect: (count) => count === testIModelFileProvider.changesets.length
       });
     });
 
@@ -146,11 +148,11 @@ describe("[Management] ChangesetOperations", () => {
 
   it("should get changeset by id", async () => {
     // Arrange
-    const expectedChangeset = TestIModelFileProvider.changesets[0];
+    const testChangesetFile = testIModelFileProvider.changesets[0];
     const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
       iModelId: testIModel.id,
-      changesetId: expectedChangeset.id
+      changesetId: testChangesetFile.id
     };
 
     // Act
@@ -160,12 +162,13 @@ describe("[Management] ChangesetOperations", () => {
     assertChangeset({
       actualChangeset: changeset,
       expectedChangesetProperties: {
-        id: expectedChangeset.id,
+        id: testChangesetFile.id,
         briefcaseId: testIModel.briefcase.id,
-        parentId: expectedChangeset.parentId,
-        description: expectedChangeset.description,
-        containingChanges: expectedChangeset.containingChanges
-      }
+        parentId: testChangesetFile.parentId,
+        description: testChangesetFile.description,
+        containingChanges: testChangesetFile.containingChanges
+      },
+      expectedTestChangesetFile: testChangesetFile
     });
   });
 

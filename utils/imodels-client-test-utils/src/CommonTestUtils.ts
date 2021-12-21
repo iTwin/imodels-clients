@@ -4,34 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import * as path from "path";
-import { IModelsClient as AuthoringIModelsClient } from "@itwin/imodels-client-authoring";
-import { AuthorizationParam, IModelsClient as ManagementIModelsClient } from "@itwin/imodels-client-management";
-import { TestIModelGroup } from "./TestIModelGroup";
 
 export class TestSetupError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "TestSetupFailed";
   }
-}
-
-export async function cleanUpIModels(params: AuthorizationParam & {
-  iModelsClient: ManagementIModelsClient | AuthoringIModelsClient;
-  projectId: string;
-  testIModelGroup: TestIModelGroup;
-}): Promise<void> {
-  const iModels = params.iModelsClient.iModels.getMinimalList({
-    authorization: params.authorization,
-    urlParams: {
-      projectId: params.projectId
-    }
-  });
-  for await (const iModel of iModels)
-    if (params.testIModelGroup.doesIModelBelongToContext(iModel.displayName))
-      await params.iModelsClient.iModels.delete({
-        authorization: params.authorization,
-        iModelId: iModel.id
-      });
 }
 
 export function createDirectory(directoryPath: string): void {
@@ -48,13 +26,6 @@ export function cleanupDirectory(directory: string): void {
     fs.rmdirSync(directory, { recursive: true });
     fs.mkdirSync(directory);
   }
-}
-
-let testInstanceId: string;
-export function getTestRunId(): string {
-  if (!testInstanceId)
-    testInstanceId = createGuidValue();
-  return testInstanceId;
 }
 
 export function createGuidValue(): string {

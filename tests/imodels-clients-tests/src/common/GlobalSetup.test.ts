@@ -2,14 +2,16 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsClient } from "@itwin/imodels-client-authoring";
-import { cleanUpIModels, cleanupDirectory, createDirectory } from "./CommonTestUtils";
-import { Config } from "./Config";
+import { TestIModelGroupFactory, cleanupDirectory, createDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 import { Constants } from "./Constants";
-import { TestAuthorizationProvider } from "./test-context-providers/auth/TestAuthenticationProvider";
-import { TestProjectProvider } from "./test-context-providers/project/TestProjectProvider";
-import { TestClientOptions } from "./TestClientOptions";
-import { TestIModelGroup } from "./TestIModelGroup";
+import { getTestDIContainer } from "./TestDiContainerProvider";
+
+let testRunId: string;
+export function getTestRunId(): string {
+  if (!testRunId)
+    testRunId = createGuidValue();
+  return testRunId;
+}
 
 before(async () => {
   await cleanupIModelsInTestProject();
@@ -23,9 +25,8 @@ after(async () => {
 });
 
 async function cleanupIModelsInTestProject(): Promise<void> {
-  const iModelsClient = new IModelsClient(new TestClientOptions());
-  const authorization = await TestAuthorizationProvider.getAuthorization(Config.get().testUsers.admin1);
-  const projectId = await TestProjectProvider.getProjectId();
-  const testIModelGroup = new TestIModelGroup({ labels: { package: Constants.PackagePrefix } });
-  await cleanUpIModels({ iModelsClient, authorization, projectId, testIModelGroup });
+  const container = getTestDIContainer();
+  const testIModelGroupFactory = container.get(TestIModelGroupFactory);
+  const testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix });
+  await testIModelGroup.cleanupIModels();
 }

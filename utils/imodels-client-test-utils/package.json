@@ -1,7 +1,7 @@
 {
-  "name": "@itwin/imodels-clients-tests",
+  "name": "@itwin/imodels-client-test-utils",
   "version": "0.2.1",
-  "description": "Tests for iModels API client wrappers",
+  "description": "Common utilities for iModels API client wrappers tests.",
   "keywords": [
     "Bentley",
     "iModel",
@@ -15,43 +15,32 @@
     "url": "https://github.com/iTwin/imodels-clients"
   },
   "license": "MIT",
-  "author": {
-    "name": "Bentley Systems, Inc.",
-    "url": "http://www.bentley.com"
-  },
-  "main": "lib/iModelsClientsTestsExports.js",
-  "typings": "lib/iModelsClientsTestsExports",
+  "main": "lib/iModelsClientTestUtilsExports.js",
+  "typings": "lib/iModelsClientTestUtilsExports",
   "scripts": {
-    "build": "tsc 1>&2",
+    "build": "tsc 1>&2 && npm run build:copy-assets",
+    "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
     "cover": "nyc npm test",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
-    "spell-check": "cspell ** --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
-    "test:integration": "mocha lib/**/*.test.js --color --timeout 180000 --exit"
+    "spell-check": "cspell ./src/**/*.ts --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
   },
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
     "@itwin/imodels-client-authoring": "~0.2.1",
-    "@itwin/imodels-client-management": "~0.2.1",
-    "@itwin/imodels-client-test-utils": "~0.2.1",
     "axios": "~0.21.1",
     "chai": "~4.3.4",
-    "dotenv": "~10.0.0",
     "fs-extra": "~10.0.0",
     "inversify": "~5.0.1",
-    "mocha": "~9.0.2",
     "puppeteer": "~10.2.0",
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "~0.2.1",
     "@types/chai": "~4.2.21",
-    "@types/mocha": "~9.0.0",
     "@types/node": "^16.4.6",
-    "cpx": "~1.5.0",
-    "nyc": "14.0.0",
     "typescript": "~4.3.5"
   }
 }
