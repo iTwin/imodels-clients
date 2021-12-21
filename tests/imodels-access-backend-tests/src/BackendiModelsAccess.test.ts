@@ -9,14 +9,14 @@ import { BriefcaseId, ChangesetFileProps, ChangesetType, LocalDirName } from "@i
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 import { ContainingChanges, IModelsClient } from "@itwin/imodels-client-authoring";
-import { cleanupDirectory, Config, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelFileProvider, TestProjectProvider } from "@itwin/imodels-clients-tests";
+import { Config, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestClientOptions, TestIModelFileProvider, TestProjectProvider, cleanupDirectory } from "@itwin/imodels-clients-tests";
 
 describe("BackendiModelsAccess", () => {
   let backendIModelsAccess: BackendIModelsAccess;
   let accessToken: string;
   let projectId: string;
   let testIModelForRead: ReusableIModelMetadata;
-  let testDownloadPath = path.join(__dirname, "../lib/testDownloads");
+  const testDownloadPath = path.join(__dirname, "../lib/testDownloads");
 
   before(async () => {
     const iModelsClient = new IModelsClient(new TestClientOptions());
