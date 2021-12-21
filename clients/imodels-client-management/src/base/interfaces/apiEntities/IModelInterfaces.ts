@@ -64,7 +64,7 @@ export interface IModelResponse {
   iModel: IModel;
 }
 
-/** DTO for iModel list API response. */
+/** DTO for iModels list API response. */
 export interface IModelsResponse<TIModel extends MinimalIModel> extends CollectionResponse {
   iModels: TIModel[];
 }
