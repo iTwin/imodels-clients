@@ -16,13 +16,13 @@ export enum ChangesetState {
 
 /** Flags that describe Changeset contents. */
 export enum ContainingChanges {
-  Regular = 0,
-  Schema = 1 << 0,
-  Definition = 1 << 1,
-  SpatialData = 1 << 2,
+  Regular           = 0,
+  Schema            = 1 << 0,
+  Definition        = 1 << 1,
+  SpatialData       = 1 << 2,
   SheetsAndDrawings = 1 << 3,
-  ViewsAndModels = 1 << 4,
-  GlobalProperties = 1 << 5
+  ViewsAndModels    = 1 << 4,
+  GlobalProperties  = 1 << 5
 }
 
 /** Application information. */
