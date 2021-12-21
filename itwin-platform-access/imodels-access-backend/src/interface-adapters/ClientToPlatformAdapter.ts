@@ -65,12 +65,10 @@ export class ClientToPlatformAdapter {
 
   private static toChangesetType(containingChanges: ContainingChanges): ChangesetType {
     switch (containingChanges) {
-      case ContainingChanges.Regular:
-        return ChangesetType.Regular;
       case ContainingChanges.Schema:
         return ChangesetType.Schema;
       default:
-        throw new IModelError(RepositoryStatus.InvalidResponse, "Unsupported ContainingChanges");
+        return ChangesetType.Regular;
     }
   }
 }
