@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 export * from "./OperationsBase";
 export * from "./IModelsErrorParser";
-export * from "./PagedCollectionGenerator";
 export * from "./CommonFunctions";
 export * from "./interfaces/CommonInterfaces";
 export * from "./interfaces/UtilityTypes";
@@ -14,5 +13,8 @@ export * from "./interfaces/apiEntities/BriefcaseInterfaces";
 export * from "./interfaces/apiEntities/ChangesetInterfaces";
 export * from "./interfaces/apiEntities/NamedVersionInterfaces";
 export * from "./interfaces/apiEntities/CheckpointInterfaces";
+export * from "./iterators/EntityListIterator";
+export * from "./iterators/EntityPageListIterator";
+export * from "./iterators/IteratorUtilFunctions";
 export * from "./rest/RestClient";
 export * from "./rest/AxiosRestClient";

@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState } from "@itwin/imodels-client-authoring";
+import { Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState } from "@itwin/imodels-client-authoring";
 import { TestChangesetFile } from "./test-context-providers";
 
 export async function assertCollection<T>(params: {
-  asyncIterable: AsyncIterableIterator<T>;
+  asyncIterable: EntityListIterator<T>;
   isEntityCountCorrect: (count: number) => boolean;
 }): Promise<void> {
   let entityCount = 0;

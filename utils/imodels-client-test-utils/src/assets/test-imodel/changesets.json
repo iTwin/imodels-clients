@@ -14,7 +14,7 @@
       "fileName": "7caef8ab5afcd99c9e618fb37978c3a03d0409c7.cs",
       "index": 2,
       "parentId": "a1ecbdc8c4f6173004f9f881914a57c5511a362b",
-      "containingChanges": 0
+      "containingChanges": 1
     },
     {
       "id": "a587345859410ce5c2811c7c558d4578938efa00",
@@ -22,7 +22,7 @@
       "fileName": "a587345859410ce5c2811c7c558d4578938efa00.cs",
       "index": 3,
       "parentId": "7caef8ab5afcd99c9e618fb37978c3a03d0409c7",
-      "containingChanges": 0
+      "containingChanges": 2
     },
     {
       "id": "13a61888798b687d41f7c748d7414b428766281f",
@@ -30,7 +30,7 @@
       "fileName": "13a61888798b687d41f7c748d7414b428766281f.cs",
       "index": 4,
       "parentId": "a587345859410ce5c2811c7c558d4578938efa00",
-      "containingChanges": 0
+      "containingChanges": 4
     },
     {
       "id": "ff89478c753c451bfa87c1fd83815531ad9ddbd3",
@@ -38,7 +38,7 @@
       "fileName": "ff89478c753c451bfa87c1fd83815531ad9ddbd3.cs",
       "index": 5,
       "parentId": "13a61888798b687d41f7c748d7414b428766281f",
-      "containingChanges": 0
+      "containingChanges": 6
     },
     {
       "id": "e306ddb1fa77b666b8623f9a3410a3dc6edfaac5",
@@ -46,7 +46,7 @@
       "fileName": "e306ddb1fa77b666b8623f9a3410a3dc6edfaac5.cs",
       "index": 6,
       "parentId": "ff89478c753c451bfa87c1fd83815531ad9ddbd3",
-      "containingChanges": 0
+      "containingChanges": 8
     },
     {
       "id": "fe693b7840de83bfa9b325c08740a9ea2b8512ae",
@@ -54,7 +54,7 @@
       "fileName": "fe693b7840de83bfa9b325c08740a9ea2b8512ae.cs",
       "index": 7,
       "parentId": "e306ddb1fa77b666b8623f9a3410a3dc6edfaac5",
-      "containingChanges": 0
+      "containingChanges": 10
     },
     {
       "id": "16de92c44ea1b8c984b55414e90d68ff98846f25",
@@ -62,7 +62,7 @@
       "fileName": "16de92c44ea1b8c984b55414e90d68ff98846f25.cs",
       "index": 8,
       "parentId": "fe693b7840de83bfa9b325c08740a9ea2b8512ae",
-      "containingChanges": 0
+      "containingChanges": 12
     },
     {
       "id": "9913e22a00eb1086c6be0ed3d09e692738fdfe9d",
@@ -70,7 +70,7 @@
       "fileName": "9913e22a00eb1086c6be0ed3d09e692738fdfe9d.cs",
       "index": 9,
       "parentId": "16de92c44ea1b8c984b55414e90d68ff98846f25",
-      "containingChanges": 0
+      "containingChanges": 14
     },
     {
       "id": "199ea0554609681955a9bccbe4bcd8c89eafefdf",
@@ -78,7 +78,7 @@
       "fileName": "199ea0554609681955a9bccbe4bcd8c89eafefdf.cs",
       "index": 10,
       "parentId": "9913e22a00eb1086c6be0ed3d09e692738fdfe9d",
-      "containingChanges": 0
+      "containingChanges": 16
     }
   ]
 }
