@@ -17,7 +17,8 @@ export class ClientToPlatformAdapter {
       description: changeset.description,
       briefcaseId: changeset.briefcaseId,
       pushDate: changeset.pushDateTime,
-      userCreated: changeset.creatorId
+      userCreated: changeset.creatorId,
+      size: changeset.fileSize
     };
   }
 
@@ -65,12 +66,10 @@ export class ClientToPlatformAdapter {
 
   private static toChangesetType(containingChanges: ContainingChanges): ChangesetType {
     switch (containingChanges) {
-      case ContainingChanges.Regular:
-        return ChangesetType.Regular;
       case ContainingChanges.Schema:
         return ChangesetType.Schema;
       default:
-        throw new IModelError(RepositoryStatus.InvalidResponse, "Unsupported ContainingChanges");
+        return ChangesetType.Regular;
     }
   }
 }
