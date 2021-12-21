@@ -13,13 +13,13 @@ export const SPECIAL_VALUES_ME = "me";
  */
 export type ValidOwnerIdValue = typeof SPECIAL_VALUES_ME;
 
-/** Url parameters supported in Briefcases list query. */
+/** Url parameters supported in Briefcase list query. */
 export interface GetBriefcaseListUrlParams extends CollectionRequestParams {
   /** Filters Briefcases with a specific owner. See {@link ValidOwnerIdValue}. */
   ownerId?: ValidOwnerIdValue;
 }
 
-/** Parameters for get Briefcases list operation. */
+/** Parameters for get Briefcase list operation. */
 export interface GetBriefcaseListParams extends IModelScopedOperationParams {
   /** Parameters that will be appended to the entity list request url that will narrow down or alter the results. */
   urlParams?: GetBriefcaseListUrlParams;

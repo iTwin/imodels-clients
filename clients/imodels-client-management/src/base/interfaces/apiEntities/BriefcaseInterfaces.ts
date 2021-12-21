@@ -30,7 +30,7 @@ export interface BriefcaseResponse {
   briefcase: Briefcase;
 }
 
-/** DTO for Briefcases list API response. */
+/** DTO for Briefcase list API response. */
 export interface BriefcasesResponse<TBriefcase extends MinimalBriefcase> extends CollectionResponse {
   briefcases: TBriefcase[];
 }
