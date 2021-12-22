@@ -34,5 +34,22 @@
         "<node_internals>/**"
       ]
     },
+    {
+      "name": "Frontend iModels Access Tests",
+      "cwd": "${workspaceFolder}/tests/imodels-access-frontend-tests",
+      "type": "pwa-node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "test:integration"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/*/*/lib/**/*.js"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
   ]
 }

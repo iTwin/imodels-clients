@@ -11,6 +11,7 @@ export interface BriefcaseMetadata {
 
 export interface NamedVersionMetadata {
   id: string;
+  name: string;
   changesetId: string;
   changesetIndex: number;
 }
