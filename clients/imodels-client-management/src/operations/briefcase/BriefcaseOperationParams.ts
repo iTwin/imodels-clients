@@ -8,14 +8,14 @@ import { CollectionRequestParams, IModelScopedOperationParams } from "../../base
 export const SPECIAL_VALUES_ME = "me";
 
 /**
- * Valid values for Briefcase owner id filter. Currently the only supported value is `@me` which allows to query
+ * Valid values for Briefcase owner id filter. Currently the only supported value is `me` which allows to query
  * Briefcases owned by the current user making the request.
  */
 export type ValidOwnerIdValue = typeof SPECIAL_VALUES_ME;
 
 /** Url parameters supported in Briefcase list query. */
 export interface GetBriefcaseListUrlParams extends CollectionRequestParams {
-  /** Filters Briefcases with a specific owner. See {@link ValidOwnerIdValue}. */
+  /** Filters Briefcases with specific owner. See {@link ValidOwnerIdValue}. */
   ownerId?: ValidOwnerIdValue;
 }
 

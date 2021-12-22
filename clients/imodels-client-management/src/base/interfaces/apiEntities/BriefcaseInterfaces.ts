@@ -6,14 +6,14 @@ import { CollectionResponse } from "../CommonInterfaces";
 
 /** Minimal representation of a Briefcase. */
 export interface MinimalBriefcase {
-  /** Briefcase id in a string format. The value corresponds to {@link Briefcase.briefcaseId} property. */
+  /** Briefcase id in a string format. Value corresponds to {@link Briefcase.briefcaseId} property. */
   id: string;
   /** Briefcase display name. */
   displayName: string;
 }
 
 export interface Briefcase extends MinimalBriefcase {
-  /** Briefcase id in a number format. The value corresponds to {@link MinimalBriefcase.id} property. */
+  /** Briefcase id in a number format. Value corresponds to {@link MinimalBriefcase.id} property. */
   briefcaseId: number;
   /** Id of the user which acquired the Briefcase. */
   ownerId: string;

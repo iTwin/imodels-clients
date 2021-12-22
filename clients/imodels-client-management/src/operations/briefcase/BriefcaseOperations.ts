@@ -9,10 +9,12 @@ import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOpe
 export class BriefcaseOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**
    * Gets Briefcases for a specific iModel. This method returns Briefcases in their minimal representation. The returned iterator
-   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcases/ Get iModel Briefcases}
+   * internally queries entities in pages. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcases/ Get iModel Briefcases}
    * operation from iModels API.
    * @param {GetBriefcaseListParams} params parameters for this operation. See {@link GetBriefcaseListParams}.
-   * @returns {EntityListIterator<MinimalBriefcase>} iterator for Briefcase list. See {@link MinimalBriefcase}.
+   * @returns {EntityListIterator<MinimalBriefcase>} iterator for Briefcase list. See {@link EntityListIterator},
+   * {@link MinimalBriefcase}.
    */
   public getMinimalList(params: GetBriefcaseListParams): EntityListIterator<MinimalBriefcase> {
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalBriefcase>({
@@ -25,10 +27,11 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
 
   /**
    * Gets Briefcases for a specific iModel. This method returns Briefcases in their full representation. The returned iterator
-   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcases/ Get iModel Briefcases}
+   * internally queries entities in pages. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcases/ Get iModel Briefcases}
    * operation from iModels API.
    * @param {GetBriefcaseListParams} params parameters for this operation. See {@link GetBriefcaseListParams}.
-   * @returns {EntityListIterator<Briefcase>} iterator for Briefcase list. See {@link Briefcase}.
+   * @returns {EntityListIterator<Briefcase>} iterator for Briefcase list. See {@link EntityListIterator}, {@link Briefcase}.
    */
   public getRepresentationList(params: GetBriefcaseListParams): EntityListIterator<Briefcase> {
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<Briefcase>({
@@ -41,7 +44,8 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
 
   /**
    * Gets a single Briefcase by id. This method returns a Briefcase in its full representation. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcase-details/ Get iModel Briefcase} operation from iModels API.
+   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcase-details/ Get iModel Briefcase}
+   * operation from iModels API.
    * @param {GetSingleBriefcaseParams} params parameters for this operation. See {@link GetSingleBriefcaseParams}.
    * @returns {Promise<Briefcase>} an Briefcase with specified id. See {@link iModel}.
    */
