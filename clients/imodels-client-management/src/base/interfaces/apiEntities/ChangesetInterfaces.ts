@@ -48,7 +48,7 @@ export interface ChangesetLinks {
    * Changeset in iModels API.
    */
   complete: Link;
-  /** Link to a Named Version created on the Chageset. Points to a specific Named Version in iModels API. */
+  /** Link to a Named Version created on the Changeset. Points to a specific Named Version in iModels API. */
   namedVersion?: Link;
   /**
    * Link to a Checkpoint that is created on a current or preceding Changeset. Points to a specific Checkpoint

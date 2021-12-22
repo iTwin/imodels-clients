@@ -59,7 +59,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   /**
-   * Gets a single Changeset idetified by either index or id. This method returns a Changeset in its full
+   * Gets a single Changeset identified by either index or id. This method returns a Changeset in its full
    * representation. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-changeset-details/
    * Get iModel Changeset} operation from iModels API.
    * @param {GetSingleChangesetParams} params parameters for this operation. See {@link GetSingleChangesetParams}.

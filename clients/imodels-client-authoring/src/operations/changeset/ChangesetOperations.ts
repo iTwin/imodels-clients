@@ -39,7 +39,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   }
 
   /**
-   * Downloads a single Changeset idetified by either index or id. If an error occurs when downloading a Changeset
+   * Downloads a single Changeset identified by either index or id. If an error occurs when downloading a Changeset
    * this operation queries the failed Changeset by id and retries the download once. If the Changeset file with
    * the expected name already exists in the target directory and the file size matches the one expected the Changeset
    * is not downloaded again.
