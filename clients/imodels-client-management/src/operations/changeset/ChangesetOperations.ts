@@ -24,7 +24,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-changesets/ Get iModel Changesets}
    * operation from iModels API.
    * @param {GetChangesetListParams} params parameters for this operation. See {@link GetChangesetListParams}.
-   * @returns {EntityListIterator<MinimalChangeset>} iterator for Changeset list. See {@link MinimalChangeset}.
+   * @returns {EntityListIterator<MinimalChangeset>} iterator for Changeset list. See {@link EntityListIterator},
+   * {@link MinimalChangeset}.
    */
   public getMinimalList(params: GetChangesetListParams): EntityListIterator<MinimalChangeset> {
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalChangeset>({
@@ -41,7 +42,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-changesets/ Get iModel Changesets}
    * operation from iModels API.
    * @param {GetChangesetListParams} params parameters for this operation. See {@link GetChangesetListParams}.
-   * @returns {EntityListIterator<Changeset>} iterator for Changeset list. See {@link Changeset}.
+   * @returns {EntityListIterator<Changeset>} iterator for Changeset list. See {@link EntityListIterator},
+   * {@link Changeset}.
    */
   public getRepresentationList(params: GetChangesetListParams): EntityListIterator<Changeset> {
     const entityCollectionAccessor = (response: unknown) => {

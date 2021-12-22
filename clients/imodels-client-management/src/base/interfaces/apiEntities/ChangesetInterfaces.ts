@@ -33,7 +33,7 @@ export interface Application {
 
 /** Synchronization information. */
 export interface SynchronizationInfo {
-  /** List of files that were processed by the synchronization process. */
+  /** List of files that were processed by the synchronization. */
   changedFiles: string[];
 }
 
@@ -71,7 +71,7 @@ export interface MinimalChangeset {
   parentId: string;
   /** Id of the user who created the Changeset. */
   creatorId: string;
-  /** Datetime string of when the Changeset was created, more specifically - when the Changeset instance was created. */
+  /** Datetime string of when the Changeset was created. */
   pushDateTime: string;
   /** Changeset state. See {@link ChangesetState}. */
   state: ChangesetState;
