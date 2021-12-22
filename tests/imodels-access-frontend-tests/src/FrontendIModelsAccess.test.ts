@@ -2,12 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelVersion, ChangesetIndexAndId } from "@itwin/core-common";
+import { ChangesetIndexAndId, IModelVersion } from "@itwin/core-common";
 import { IModelIdArg } from "@itwin/core-frontend";
 import { FrontendIModelsAccess } from "@itwin/imodels-access-frontend";
+import { expect } from "chai";
 import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes } from "@itwin/imodels-client-test-utils";
-import { expect } from "chai";
 import { getTestDIContainer } from "./TestDiContainerProvider";
 
 describe("FrontendIModelsAccess", () => {
