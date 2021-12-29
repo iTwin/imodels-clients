@@ -12,7 +12,7 @@ export enum NamedVersionState {
   Hidden = "hidden"
 }
 
-/** Minimal representation of an iModel. */
+/** Minimal representation of a Named Version. */
 export interface MinimalNamedVersion {
   /** Named Version id. */
   id: string;
@@ -30,7 +30,7 @@ export interface MinimalNamedVersion {
   changesetIndex: number;
 }
 
-/** Full representation of an iModel. */
+/** Full representation of a Named Version. */
 export interface NamedVersion extends MinimalNamedVersion {
   /** Named Version name. Value corresponds to {@link MinimalNamedVersion.displayName} property. */
   name: string;
@@ -40,7 +40,7 @@ export interface NamedVersion extends MinimalNamedVersion {
   createdDateTime: string;
   /**
    * Named Version state. This property indicates whether or not this Named Version should be displayed in
-   * applications that show full Named Version list to end user. Named Versions with state equal to
+   * applications that show full Named Version list to end users. Named Versions with state equal to
    * `NamedVersionState.Hidden` are present in the Named Version list returned by the API. See {@link NamedVersionState}.
    */
   state: NamedVersionState;

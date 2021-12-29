@@ -24,7 +24,7 @@ interface NamedVersionIdParam {
 
 /**
  * Supported Checkpoint parent entity (Changeset, Named Version) identifiers. Only one of the following properties can
- * be specified to identify a single Changeset: `changesetId`, `changesetIndex`, `namedVersionId`.
+ * be specified to reference a single Checkpoint by its parent entity: `changesetId`, `changesetIndex`, `namedVersionId`.
  */
 export type CheckpointParentEntityId = ChangesetIdParam | ChangesetIndexParam | NamedVersionIdParam;
 

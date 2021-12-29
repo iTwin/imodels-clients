@@ -8,8 +8,8 @@ import { GetSingleCheckpointParams } from "./CheckpointOperationParams";
 
 export class CheckpointOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**
-   * Gets a single Changeset generated either on a specific Changeset or for a specific Named Version. This method
-   * returns a Changeset in its full representation. Wraps 
+   * Gets a single Checkpoint generated either on a specific Changeset or for a specific Named Version. This method
+   * returns a Checkpoint in its full representation. Wraps 
    * {@link https://developer.bentley.com/apis/imodels/operations/get-changeset-checkpoint/ Get Changeset Checkpoint}
    * and {@link https://developer.bentley.com/apis/imodels/operations/get-named-version-checkpoint/
    * Get Named Version Checkpoint} operations from iModels API.

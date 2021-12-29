@@ -55,7 +55,7 @@ export interface EditableNamedVersionProperties {
   description: string;
   /**
    * Named Version state. This property indicates whether or not this Named Version should be displayed in
-   * applications that show full Named Version list to end user. Setting the value to `NamedVersionState.Hidden` does
+   * applications that show full Named Version list to end users. Setting the value to `NamedVersionState.Hidden` does
    * not remove this Named Version from the Named Version list returned by the API. See {@link NamedVersionState}.
    */
   state: NamedVersionState;
