@@ -40,7 +40,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   /**
-   * Gets a single iModel by id. This method returns an iModel in its full representation. Wraps the
+   * Gets a single iModel by its id. This method returns an iModel in its full representation. Wraps the
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-details/ Get iModel} operation from iModels API.
    * @param {GetSingleiModelParams} params parameters for this operation. See {@link GetSingleiModelParams}.
    * @returns {Promise<iModel>} an iModel with specified id. See {@link iModel}.
