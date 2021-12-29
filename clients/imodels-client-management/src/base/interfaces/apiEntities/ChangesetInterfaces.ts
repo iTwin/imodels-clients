@@ -37,7 +37,7 @@ export interface SynchronizationInfo {
   changedFiles: string[];
 }
 
-/** DTO for links that belong to Changeset entity returned from iModels API. */
+/** DTO to hold links that belong to Changeset entity returned from iModels API. */
 export interface ChangesetLinks {
   /** Link to upload the Changeset file. Points to file storage. */
   upload: Link;
@@ -105,17 +105,17 @@ export interface Changeset extends MinimalChangeset {
   getCurrentOrPrecedingCheckpoint: () => Promise<Checkpoint | undefined>;
 }
 
-/** DTO for single Changeset API response. */
+/** DTO to hold a single Changeset API response. */
 export interface ChangesetResponse {
   changeset: Changeset;
 }
 
-/** DTO for minimal Changeset list API response. */
+/** DTO to hold minimal Changeset list API response. */
 export interface MinimalChangesetsResponse extends CollectionResponse {
   changesets: MinimalChangeset[];
 }
 
-/** DTO for representation Changeset list API response. */
+/** DTO to hold representation Changeset list API response. */
 export interface ChangesetsResponse extends CollectionResponse {
   changesets: Changeset[];
 }
