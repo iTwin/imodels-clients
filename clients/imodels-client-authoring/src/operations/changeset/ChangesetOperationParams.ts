@@ -7,12 +7,12 @@ import { TargetDirectoryParam } from "../../base";
 
 /** Properties that should be specified when creating a new Changeset. */
 export interface ChangesetPropertiesForCreate {
-  /** Changeset id. Changeset id must not be an empty or whitespace string. */
+  /** Id of the Changeset. Changeset id must not be an empty or whitespace string. */
   id: string;
   /** Changeset description. Changeset description must not exceed allowed 255 characters. */
   description?: string;
   /**
-   * Parent Changeset id. Parent Changeset id must not be an empty or whitespace string except for when creating the
+   * Id of the parent Changeset. Parent Changeset id must not be an empty or whitespace string except for when creating the
    * first Changeset - in such case it can be `undefined`.
    */
   parentId?: string;

@@ -39,9 +39,9 @@ export interface SynchronizationInfo {
 
 /** DTO to hold links that belong to Changeset entity returned from iModels API. */
 export interface ChangesetLinks {
-  /** Link to upload the Changeset file. Points to file storage. */
+  /** Link where to upload the Changeset file. Link points to a remote storage. */
   upload: Link;
-  /** Link to download the Changeset file. Points to file storage. */
+  /** Link from where to download the Changeset file. Link points to a remote storage. */
   download: Link;
   /**
    * Link to confirm the Changeset file upload and complete the creation process. Points to a specific
@@ -59,15 +59,15 @@ export interface ChangesetLinks {
 
 /** Minimal representation of a Changeset. */
 export interface MinimalChangeset {
-  /** Changeset id. */
+  /** Id of the Changeset. */
   id: string;
   /** Changeset display name. */
   displayName: string;
   /** Changeset description. */
   description: string;
-  /** Changeset index. */
+  /** Index of the Changeset. */
   index: number;
-  /** Changeset parent id. Equals to empty string if the Changeset is first in sequence. */
+  /** Id of the parent Changeset. Equals to empty string if the Changeset is first in sequence. */
   parentId: string;
   /** Id of the user who created the Changeset. */
   creatorId: string;
