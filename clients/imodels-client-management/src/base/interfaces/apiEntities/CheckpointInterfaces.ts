@@ -50,7 +50,7 @@ export interface Checkpoint {
   state: CheckpointState;
   /** Information to access storage container which stores the Checkpoint in blocks. See {@link ContainerAccessInfo}. */
   containerAccessInfo: ContainerAccessInfo | null;
-  /** Checkpoint links. */
+  /** Checkpoint links. See {@link CheckpointLinks}. */
   _links: CheckpointLinks | null;
 }
 
