@@ -43,7 +43,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   }
 
   /**
-   * Gets a single Briefcase by id. This method returns a Briefcase in its full representation. Wraps the
+   * Gets a single Briefcase by its id. This method returns a Briefcase in its full representation. Wraps the
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcase-details/ Get iModel Briefcase}
    * operation from iModels API.
    * @param {GetSingleBriefcaseParams} params parameters for this operation. See {@link GetSingleBriefcaseParams}.

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { CollectionRequestParams, IModelScopedOperationParams } from "../../base";
 
-/** Special value which is an alias for the current user id. */
+/** Special value to indicate the id of current user who is making the request. */
 export const SPECIAL_VALUES_ME = "me";
 
 /**
@@ -21,7 +21,7 @@ export interface GetBriefcaseListUrlParams extends CollectionRequestParams {
 
 /** Parameters for get Briefcase list operation. */
 export interface GetBriefcaseListParams extends IModelScopedOperationParams {
-  /** Parameters that will be appended to the entity list request url that will narrow down or alter the results. */
+  /** Parameters that will be appended to the entity list request url that will narrow down the results. */
   urlParams?: GetBriefcaseListUrlParams;
 }
 
