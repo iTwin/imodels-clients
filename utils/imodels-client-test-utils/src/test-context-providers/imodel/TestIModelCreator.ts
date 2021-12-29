@@ -13,7 +13,10 @@ import { TestIModelsClient } from "./TestIModelsClient";
 
 @injectable()
 export class TestIModelCreator {
-  public static namedVersionIndexes = [5, 10];
+  public static namedVersions = [
+    { name: "Named version 5", changesetIndex: 5 },
+    { name: "Named version 10", changesetIndex: 10 }
+  ];
 
   private readonly _iModelDescription = "Some description";
   private readonly _briefcaseDeviceName = "Some device name";
@@ -72,8 +75,12 @@ export class TestIModelCreator {
   private async createNamedVersionsOnReusableIModel(iModelId: string): Promise<NamedVersionMetadata[]> {
     const namedVersions: NamedVersionMetadata[] = [];
     const checkpointGenerationPromises: Promise<void>[] = [];
-    for (const index of TestIModelCreator.namedVersionIndexes) {
-      const namedVersion: NamedVersionMetadata = await this.createNamedVersionOnChangesetIndex(iModelId, index);
+    for (const namedVersionMetadata of TestIModelCreator.namedVersions) {
+      const namedVersion: NamedVersionMetadata = await this.createNamedVersionOnChangesetIndex(
+        iModelId,
+        namedVersionMetadata.name,
+        namedVersionMetadata.changesetIndex
+      );
       namedVersions.push(namedVersion);
       checkpointGenerationPromises.push(
         this.waitForNamedVersionCheckpointGenerated(iModelId, namedVersion.id)
@@ -140,7 +147,7 @@ export class TestIModelCreator {
     };
   }
 
-  private async createNamedVersionOnChangesetIndex(iModelId: string, changesetIndex: number): Promise<NamedVersionMetadata> {
+  private async createNamedVersionOnChangesetIndex(iModelId: string, namedVersionName: string, changesetIndex: number): Promise<NamedVersionMetadata> {
     // We use this specific user that is able to generate checkpoints
     // for named version creation to mimic production environment.
     const authorizationForFullyFeaturedUser = this._testAuthorizationProvider.getFullyFeaturedAdmin2Authorization();
@@ -150,12 +157,13 @@ export class TestIModelCreator {
       authorization: authorizationForFullyFeaturedUser,
       iModelId,
       namedVersionProperties: {
-        name: `Named version ${changesetMetadata.index}`,
+        name: namedVersionName,
         changesetId: changesetMetadata.id
       }
     });
     return {
       id: namedVersion.id,
+      name: namedVersion.name,
       changesetId: changesetMetadata.id,
       changesetIndex: changesetMetadata.index
     };
