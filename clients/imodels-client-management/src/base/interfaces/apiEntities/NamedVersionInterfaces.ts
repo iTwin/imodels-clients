@@ -8,7 +8,7 @@ import { CollectionResponse } from "../CommonInterfaces";
 export enum NamedVersionState {
   /** Visible. Named Version should be present in displayed Named Version lists. */
   Visible = "visible",
-  /** Hidden. Named Version is intedned to be hidded in displayed Named Version lists. */
+  /** Hidden. Named Version is intended to be hidden in displayed Named Version lists. */
   Hidden = "hidden"
 }
 
