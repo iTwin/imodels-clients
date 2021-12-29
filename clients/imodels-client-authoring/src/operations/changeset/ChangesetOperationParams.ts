@@ -13,7 +13,7 @@ export interface ChangesetPropertiesForCreate {
   description?: string;
   /**
    * Parent Changeset id. Parent Changeset id must not be an empty or whitespace string except for when creating the
-   * first Changeset - in such case it can be skipped or set to an empty string.
+   * first Changeset - in such case it can be `undefined`.
    */
   parentId?: string;
   /** Briefcase id that is creating the Changeset. Briefcase id must be greater than 0. */
