@@ -22,6 +22,11 @@ interface NamedVersionIdParam {
   namedVersionId: string;
 }
 
+/**
+ * Supported Checkpoint parent entity (Changeset, Named Version) identifiers. Only one of the following properties can
+ * be specified to identify a single Changeset: `changesetId`, `changesetIndex`, `namedVersionId`.
+ */
 export type CheckpointParentEntityId = ChangesetIdParam | ChangesetIndexParam | NamedVersionIdParam;
 
+/** Parameters for get single Checkpoint operation. */
 export type GetSingleCheckpointParams = IModelScopedOperationParams & CheckpointParentEntityId;
