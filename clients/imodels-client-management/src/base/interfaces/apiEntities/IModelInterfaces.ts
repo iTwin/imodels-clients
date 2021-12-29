@@ -59,12 +59,12 @@ export interface IModel extends MinimalIModel {
   extent: Extent | null;
 }
 
-/** DTO for single iModel API response. */
+/** DTO to hold a single iModel API response. */
 export interface IModelResponse {
   iModel: IModel;
 }
 
-/** DTO for iModel list API response. */
+/** DTO to hold iModel list API response. */
 export interface IModelsResponse<TIModel extends MinimalIModel> extends CollectionResponse {
   iModels: TIModel[];
 }

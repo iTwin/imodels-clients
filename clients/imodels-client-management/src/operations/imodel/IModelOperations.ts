@@ -12,7 +12,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}
    * operation from iModels API.
    * @param {GetiModelListParams} params parameters for this operation. See {@link GetiModelListParams}.
-   * @returns {EntityListIterator<MinimaliModel>} iterator for iModels collection. See {@link MinimaliModel}.
+   * @returns {EntityListIterator<MinimaliModel>} iterator for iModel list. See {@link EntityListIterator}, {@link MinimaliModel}.
    */
   public getMinimalList(params: GetIModelListParams): EntityListIterator<MinimalIModel> {
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalIModel>({
@@ -28,7 +28,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}
    * operation from iModels API.
    * @param {GetiModelListParams} params parameters for this operation. See {@link GetiModelListParams}.
-   * @returns {EntityListIterator<iModel>} iterator for iModels collection. See {@link iModel}.
+   * @returns {EntityListIterator<iModel>} iterator for iModel list. See {@link EntityListIterator}, {@link iModel}.
    */
   public getRepresentationList(params: GetIModelListParams): EntityListIterator<IModel> {
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<IModel>({
@@ -40,7 +40,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   /**
-   * Gets a single iModel by id. This method returns an iModel in its full representation. Wraps the
+   * Gets a single iModel by its id. This method returns an iModel in its full representation. Wraps the
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-details/ Get iModel} operation from iModels API.
    * @param {GetSingleiModelParams} params parameters for this operation. See {@link GetSingleiModelParams}.
    * @returns {Promise<iModel>} an iModel with specified id. See {@link iModel}.
