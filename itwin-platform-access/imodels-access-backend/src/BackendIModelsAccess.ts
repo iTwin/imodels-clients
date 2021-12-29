@@ -225,7 +225,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
   public async downloadV2Checkpoint(arg: CheckpointArg): Promise<ChangesetIndexAndId> {
     const checkpoint: Checkpoint | undefined = await this.queryCurrentOrPrecedingCheckpoint(arg);
-    if (!checkpoint)
+    if (!checkpoint || !checkpoint.containerAccessInfo)
       throw new IModelError(IModelStatus.NotFound, "V2 checkpoint not found");
 
     const v2CheckpointAccessProps = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
