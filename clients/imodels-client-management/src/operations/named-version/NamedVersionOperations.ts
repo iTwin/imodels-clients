@@ -8,7 +8,7 @@ import { CreateNamedVersionParams, GetNamedVersionListParams, GetSingleNamedVers
 
 export class NamedVersionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**
-   * Gets Named Versions for a specific iModel. This method returns Named Versions in their minimal representation. The
+   * Gets Named Versions of a specific iModel. This method returns Named Versions in their minimal representation. The
    * returned iterator internally queries entities in pages. Wraps the
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-named-versions/ Get iModel Named Versions}
    * operation from iModels API.
@@ -26,7 +26,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
   }
 
   /**
-   * Gets Named Versions for a specific iModel. This method returns Named Versions in their full representation. The
+   * Gets Named Versions of a specific iModel. This method returns Named Versions in their full representation. The
    * returned iterator internally queries entities in pages. Wraps the
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-named-versions/
    * Get iModel Named Versions} operation from iModels API.
@@ -44,7 +44,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
   }
 
   /**
-   * Gets a single Named Version by id. This method returns a Named Version in its full representation. Wraps the
+   * Gets a single Named Version by its id. This method returns a Named Version in its full representation. Wraps the
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-named-version-details/
    * Get iModel Named Version} operation from iModels API.
    * @param {GetSingleNamedVersionParams} params parameters for this operation. See {@link GetSingleNamedVersionParams}.
