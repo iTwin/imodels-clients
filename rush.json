@@ -55,6 +55,12 @@
       "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
+      "packageName": "@itwin/imodels-access-frontend-tests",
+      "projectFolder": "tests/imodels-access-frontend-tests",
+      "shouldPublish": true,
+      "versionPolicyName": "prerelease-monorepo-lockStep"
+    },
+    {
       "packageName": "@itwin/imodels-access-backend-tests",
       "projectFolder": "tests/imodels-access-backend-tests",
       "shouldPublish": true,

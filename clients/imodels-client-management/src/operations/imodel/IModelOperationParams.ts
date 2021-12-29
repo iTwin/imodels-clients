@@ -12,7 +12,7 @@ export enum IModelOrderByProperty {
   Name = "name"
 }
 
-/** Url parameters supported in iModels list query. */
+/** Url parameters supported in iModel list query. */
 export interface GetIModelListUrlParams extends CollectionRequestParams {
   /** Specifies in what order should entities be returned. See {@link OrderBy}. */
   $orderBy?: OrderBy<IModel, IModelOrderByProperty>;
@@ -22,7 +22,7 @@ export interface GetIModelListUrlParams extends CollectionRequestParams {
   name?: string;
 }
 
-/** Parameters for get iModels list operation. */
+/** Parameters for get iModel list operation. */
 export interface GetIModelListParams extends AuthorizationParam {
   /** Parameters that will be appended to the entity list request url that will narrow down the results. */
   urlParams: GetIModelListUrlParams;

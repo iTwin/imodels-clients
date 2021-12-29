@@ -1,5 +1,7 @@
 lib/
 
+*.env
+
 *.log
 npm-debug.log*
 
