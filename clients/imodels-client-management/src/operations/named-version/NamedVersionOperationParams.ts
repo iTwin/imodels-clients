@@ -18,7 +18,7 @@ export interface GetNamedVersionListParams extends IModelScopedOperationParams {
 
 /** Parameters for get single Named Version operation. */
 export interface GetSingleNamedVersionParams extends IModelScopedOperationParams {
-  /** Named Version id. */
+  /** Id of the Named Version. */
   namedVersionId: string;
 }
 

@@ -14,7 +14,7 @@ export enum NamedVersionState {
 
 /** Minimal representation of a Named Version. */
 export interface MinimalNamedVersion {
-  /** Named Version id. */
+  /** Id of the Named Version. */
   id: string;
   /** Named Version display name. Value corresponds to {@link NamedVersion.name} property. */
   displayName: string;
