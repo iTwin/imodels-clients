@@ -5,4 +5,5 @@
 import { Changeset } from "@itwin/imodels-client-management";
 import { DownloadedFileProps } from "../CommonInterfaces";
 
+/** Changeset metadata along with the downloaded file path. */
 export type DownloadedChangeset = Changeset & DownloadedFileProps;

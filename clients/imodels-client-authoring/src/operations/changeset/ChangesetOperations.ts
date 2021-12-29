@@ -9,6 +9,14 @@ import { ChangesetPropertiesForCreate, CreateChangesetParams, DownloadChangesetL
 import { LimitedParallelQueue } from "./LimitedParallelQueue";
 
 export class ChangesetOperations<TOptions extends OperationOptions> extends ManagementChangesetOperations<TOptions>{
+  /**
+   * Creates a Changeset. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/create-imodel-changeset/
+   * Create iModel Changeset} operation from iModels API. Internally it creates a Changeset instance, uploads the Changeset
+   * file and confirms Changeset file upload. The execution of this method depends on the Changeset file size - the larger
+   * the file, the longer the upload will take.
+   * @param {CreateChangesetParams} params parameters for this operation. See {@link CreateChangesetParams}.
+   * @returns newly created Changeset. See {@link Changeset}.
+   */
   public async create(params: CreateChangesetParams): Promise<Changeset> {
     const createChangesetBody = this.getCreateChangesetRequestBody(params.changesetProperties);
     const createChangesetResponse = await this.sendPostRequest<ChangesetResponse>({
@@ -30,11 +38,29 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     return confirmUploadResponse.changeset;
   }
 
+  /**
+   * Downloads a single Changeset identified by either index or id. If an error occurs when downloading a Changeset
+   * this operation queries the failed Changeset by id and retries the download once. If the Changeset file with
+   * the expected name already exists in the target directory and the file size matches the one expected the Changeset
+   * is not downloaded again.
+   * @param {DownloadSingleChangesetParams} params parameters for this operation. See {@link DownloadSingleChangesetParams}.
+   * @returns downloaded Changeset. See {@link DownloadedChangeset}.
+   */
   public async downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset> {
     const changeset: Changeset = await this.querySingleInternal(params);
     return this.downloadSingleChangeset({ ...params, changeset });
   }
 
+  /**
+   * Downloads Changeset list. Internally the method uses {@link ChangesetOperations.getRepresentationList} to query the
+   * Changeset collection so this operation supports most of the the same url parameters to specify what Changesets to
+   * download. One of the most common properties used are `afterIndex` and `lastIndex` to download Changeset range. This
+   * operation downloads Changesets in parallel. If an error occurs when downloading a Changeset this operation queries
+   * the failed Changeset by id and retries the download once. If the Changeset file with the expected name already
+   * exists in the target directory and the file size matches the one expected the Changeset is not downloaded again.
+   * @param {DownloadChangesetListParams} params parameters for this operation. See {@link DownloadChangesetListParams}.
+   * @returns downloaded Changeset metadata along with the downloaded file path. See {@link DownloadedChangeset}.
+   */
   public async downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]> {
     let result: DownloadedChangeset[] = [];
 
