@@ -48,7 +48,7 @@ export interface IModelProperties {
 
 /** Parameters for create iModel operation. */
 export interface CreateEmptyIModelParams extends AuthorizationParam {
-  /** Properties for the new iModel. */
+  /** Properties of the new iModel. */
   iModelProperties: IModelProperties;
 }
 

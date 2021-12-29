@@ -103,7 +103,7 @@ export interface CollectionLinks {
   next: Link | null;
 }
 
-/** Common properties for all entity list page responses. */
+/** Common properties of all entity list page responses. */
 export interface CollectionResponse {
   /** Common entity list page response links. See {@link CollectionLinks}. */
   _links: CollectionLinks;
