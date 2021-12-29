@@ -15,6 +15,7 @@ dependencies:
   '@rush-temp/imodels-access-backend': 'file:projects/imodels-access-backend.tgz_4bd45436c7446ce6f2c68b792e01fc06'
   '@rush-temp/imodels-access-backend-tests': 'file:projects/imodels-access-backend-tests.tgz_4bd45436c7446ce6f2c68b792e01fc06'
   '@rush-temp/imodels-access-frontend': 'file:projects/imodels-access-frontend.tgz'
+  '@rush-temp/imodels-access-frontend-tests': 'file:projects/imodels-access-frontend-tests.tgz_d3d027a5f0cf45c7672147e69d31b9e7'
   '@rush-temp/imodels-client-authoring': 'file:projects/imodels-client-authoring.tgz'
   '@rush-temp/imodels-client-common-config': 'file:projects/imodels-client-common-config.tgz_typescript@4.3.5'
   '@rush-temp/imodels-client-management': 'file:projects/imodels-client-management.tgz'
@@ -5877,8 +5878,11 @@ packages:
       '@types/mocha': 9.0.0
       '@types/node': 16.11.12
       cpx: 1.5.0
+      dotenv: 10.0.0
+      inversify: 5.0.5
       mocha: 9.0.3
       nyc: 14.0.0
+      reflect-metadata: 0.1.13
       typescript: 4.3.5
     dev: false
     id: 'file:projects/imodels-access-backend-tests.tgz'
@@ -5887,7 +5891,7 @@ packages:
       '@bentley/itwin-client': '*'
       '@itwin/core-geometry': '*'
     resolution:
-      integrity: sha512-Rkwxic/7oeTaYwl/ndKBuzjIjBtUbe+FiXRDCQE9mpq0MEZz5fsRpy2d2biFGb9Kd1+S+8Q/ySg03TIKdSd8yw==
+      integrity: sha512-btKoGImimMuK5jxNKIUdEEuIiZmDL9CfHlimE9gk2uK8RHs0xsdeh4KJ/HK6mUX+BEJ6A18DLxUVsLc+YLjPlA==
       tarball: 'file:projects/imodels-access-backend-tests.tgz'
     version: 0.0.0
   'file:projects/imodels-access-backend.tgz_4bd45436c7446ce6f2c68b792e01fc06':
@@ -5905,8 +5909,37 @@ packages:
       '@bentley/itwin-client': '*'
       '@itwin/core-geometry': '*'
     resolution:
-      integrity: sha512-HEdCaPuLDOKltwoQs1ew+75DGVRBpgDb4cgIO84tHfqcrXuKTpRX/xar5N7DUpEyUYFk5V157Ku+gSDhDPFf2Q==
+      integrity: sha512-Sx25F+0jUnASXr27uUjDck9t4T55t/NC/LX0qofRm+1IFcjnTeFTCkW8Hqv78fKOSqVwaMvmf86X0zq0BwpuOQ==
       tarball: 'file:projects/imodels-access-backend.tgz'
+    version: 0.0.0
+  'file:projects/imodels-access-frontend-tests.tgz_d3d027a5f0cf45c7672147e69d31b9e7':
+    dependencies:
+      '@itwin/core-common': 3.0.0-dev.148_2cea9fa5747d2125eec0388ef83db838
+      '@itwin/core-frontend': 3.0.0-dev.148_54235d032abb96d437206068bf58c49f
+      '@types/chai': 4.2.22
+      '@types/mocha': 9.0.0
+      '@types/node': 16.11.12
+      cpx: 1.5.0
+      dotenv: 10.0.0
+      inversify: 5.0.5
+      mocha: 9.0.3
+      nyc: 14.0.0
+      reflect-metadata: 0.1.13
+      typescript: 4.3.5
+    dev: false
+    id: 'file:projects/imodels-access-frontend-tests.tgz'
+    name: '@rush-temp/imodels-access-frontend-tests'
+    peerDependencies:
+      '@bentley/itwin-client': '*'
+      '@itwin/appui-abstract': '*'
+      '@itwin/core-bentley': '*'
+      '@itwin/core-geometry': '*'
+      '@itwin/core-orbitgt': '*'
+      '@itwin/core-quantity': '*'
+      '@itwin/webgl-compatibility': '*'
+    resolution:
+      integrity: sha512-crYk6CyquOoC0TLHuXa/wwQR3Ro/2bGmqXcK95AGRNup6iYADuGcB5fC60M+6gS2K9GBn29gt8n1P+qa0y4krg==
+      tarball: 'file:projects/imodels-access-frontend-tests.tgz'
     version: 0.0.0
   'file:projects/imodels-access-frontend.tgz':
     dependencies:
@@ -5923,7 +5956,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-access-frontend'
     resolution:
-      integrity: sha512-FGU0tHRFzPthlKN5eog0d8jPrxAAcpjw3rK55xPacdQFdhIb98+GxU5OjSxn/NgDKZ9QfEP+ePPXjX/s0Bzl4g==
+      integrity: sha512-dYAhlAD9zG9HiHeD18g4aygETX7yQw4gYI8Evdh6YMzMKC1keY1GkfTfMftF+vMTQgkMoiIqn2PSvm5vfgEofQ==
       tarball: 'file:projects/imodels-access-frontend.tgz'
     version: 0.0.0
   'file:projects/imodels-client-authoring.tgz':
@@ -5933,7 +5966,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-client-authoring'
     resolution:
-      integrity: sha512-aEJxYKXsGRl7iosTA4rbw7pX24W+Yl//HGPuM+e2fzG4yXZUNm8Ttcz983WxHg1MsYgY0ZSrYT3ZDvK/kDOiAQ==
+      integrity: sha512-Dm8JkKspPLx+ptkW5Mzg+1yPBglp040CoKaChc0BWwl49iKYSlgKDTrnE4sw8hBAZjZh5Ctq26KxS656Zh+hZg==
       tarball: 'file:projects/imodels-client-authoring.tgz'
     version: 0.0.0
   'file:projects/imodels-client-common-config.tgz_typescript@4.3.5':
@@ -5962,7 +5995,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-client-management'
     resolution:
-      integrity: sha512-AGuYRIKPMD0egoGHZ1CvlrXbdVS4SpAzxPTshnsU0ZK25FkL2TJi4LBxK0588g+LiXNI+pKhfJG6/jhJ/5us2g==
+      integrity: sha512-sgOcgr7iR3s0RGKnwXzqPoHmuY0TNYHmdkYmN1Pq3/y2eHNd4g+9yFNRgBcxdcb4NcNG9NJ0Wb/JBgbm41vSjg==
       tarball: 'file:projects/imodels-client-management.tgz'
     version: 0.0.0
   'file:projects/imodels-client-test-utils.tgz':
@@ -5979,7 +6012,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-client-test-utils'
     resolution:
-      integrity: sha512-GGIDDJb/mkzm6JKaCnwrE946vE7yS6UEKD7jPi/m2usSv7mP6dO+hFMZppnFAjbbZA0Wve72Xqkgdoy861LuHA==
+      integrity: sha512-WvASlEJ31tvf70LLmT03+tm9JXhB8zW5avpNfiYHNTbnZy9xlcyW6URfm49CUsxmw6qkshDTS9TjhBFv0s35Sw==
       tarball: 'file:projects/imodels-client-test-utils.tgz'
     version: 0.0.0
   'file:projects/imodels-clients-tests.tgz':
@@ -6001,9 +6034,10 @@ packages:
     dev: false
     name: '@rush-temp/imodels-clients-tests'
     resolution:
-      integrity: sha512-4nmgPJYprpbhl2M+9FV6IZbTKcy9oTmm7mVXRyqWUU5Qv7nP78ZYXhzkfh+WaGI4YCVne26vDrKRi+q8KwxZRQ==
+      integrity: sha512-pNP0Qp7juKGTV3pQVJNQsJbTktYz5J6D8o4ARNidieMVYAtwSvZJd375WtjaIXPOlLYP0SEDVH9L+WkDQ3NLKQ==
       tarball: 'file:projects/imodels-clients-tests.tgz'
     version: 0.0.0
+registry: ''
 specifiers:
   '@azure/storage-blob': ~12.7.0
   '@bentley/itwin-client': rc
@@ -6021,6 +6055,7 @@ specifiers:
   '@rush-temp/imodels-access-backend': 'file:./projects/imodels-access-backend.tgz'
   '@rush-temp/imodels-access-backend-tests': 'file:./projects/imodels-access-backend-tests.tgz'
   '@rush-temp/imodels-access-frontend': 'file:./projects/imodels-access-frontend.tgz'
+  '@rush-temp/imodels-access-frontend-tests': 'file:./projects/imodels-access-frontend-tests.tgz'
   '@rush-temp/imodels-client-authoring': 'file:./projects/imodels-client-authoring.tgz'
   '@rush-temp/imodels-client-common-config': 'file:./projects/imodels-client-common-config.tgz'
   '@rush-temp/imodels-client-management': 'file:./projects/imodels-client-management.tgz'
