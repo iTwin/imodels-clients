@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 
-/** Common properties for all downloaded files. */
+/** Common properties of all downloaded files. */
 export interface DownloadedFileProps {
   /** Absolute path of the downloaded file. */
   filePath: string;

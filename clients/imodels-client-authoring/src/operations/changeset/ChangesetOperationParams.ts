@@ -29,7 +29,7 @@ export interface ChangesetPropertiesForCreate {
 
 /** Parameters for create Changeset operation. */
 export interface CreateChangesetParams extends IModelScopedOperationParams {
-  /** Properties for the new Changeset. */
+  /** Properties of the new Changeset. */
   changesetProperties: ChangesetPropertiesForCreate;
 }
 
