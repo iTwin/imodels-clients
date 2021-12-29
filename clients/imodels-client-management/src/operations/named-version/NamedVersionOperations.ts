@@ -26,7 +26,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
   }
 
   /**
-   * Gets Named Versions for a specific iModel. This method returns Named Versions in their full representation. The 
+   * Gets Named Versions for a specific iModel. This method returns Named Versions in their full representation. The
    * returned iterator internally queries entities in pages. Wraps the
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-named-versions/
    * Get iModel Named Versions} operation from iModels API.
