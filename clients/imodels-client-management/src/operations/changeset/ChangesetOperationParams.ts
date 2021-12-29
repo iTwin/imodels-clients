@@ -31,7 +31,7 @@ export interface GetChangesetListUrlParams extends CollectionRequestParams {
 
 /** Parameters for get Changeset list operation. */
 export interface GetChangesetListParams extends IModelScopedOperationParams {
-  /** Parameters that will be appended to the entity list request url that will narrow down or alter the results. */
+  /** Parameters that will be appended to the entity list request url that will narrow down the results. */
   urlParams?: GetChangesetListUrlParams;
 }
 
