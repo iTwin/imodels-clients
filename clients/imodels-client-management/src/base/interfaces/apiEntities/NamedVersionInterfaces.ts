@@ -46,12 +46,12 @@ export interface NamedVersion extends MinimalNamedVersion {
   state: NamedVersionState;
 }
 
-/** DTO for single Named Version API response. */
+/** DTO to hold a single Named Version API response. */
 export interface NamedVersionResponse {
   namedVersion: NamedVersion;
 }
 
-/** DTO for Named Version list API response. */
+/** DTO to hold Named Version list API response. */
 export interface NamedVersionsResponse<TNamedVersion extends MinimalNamedVersion> extends CollectionResponse {
   namedVersions: TNamedVersion[];
 }

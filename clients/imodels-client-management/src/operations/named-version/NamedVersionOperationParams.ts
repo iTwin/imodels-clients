@@ -12,7 +12,7 @@ export interface GetNamedVersionListUrlParams extends CollectionRequestParams {
 
 /** Parameters for get Named Version list operation. */
 export interface GetNamedVersionListParams extends IModelScopedOperationParams {
-  /** Parameters that will be appended to the entity list request url that will narrow down or alter the results. */
+  /** Parameters that will be appended to the entity list request url that will narrow down the results. */
   urlParams?: GetNamedVersionListUrlParams;
 }
 
@@ -40,11 +40,11 @@ export interface NamedVersionPropertiesForCreate {
 
 /** Parameters for create Named Version operation. */
 export interface CreateNamedVersionParams extends IModelScopedOperationParams {
-  /** Properties for the new Named Version. */
+  /** Properties of the Named Version. */
   namedVersionProperties: NamedVersionPropertiesForCreate;
 }
 
-/** Properties that can be updated for a Named Version. */
+/** Named Version properties that can be updated. */
 export interface EditableNamedVersionProperties {
   /**
    * Named Version name. Named Version name must be unique within the iModel, not exceed allowed 255 characters and not

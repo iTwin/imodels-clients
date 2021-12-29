@@ -24,7 +24,7 @@ export interface GetIModelListUrlParams extends CollectionRequestParams {
 
 /** Parameters for get iModels list operation. */
 export interface GetIModelListParams extends AuthorizationParam {
-  /** Parameters that will be appended to the entity list request url that will narrow down or alter the results. */
+  /** Parameters that will be appended to the entity list request url that will narrow down the results. */
   urlParams: GetIModelListUrlParams;
 }
 
@@ -48,7 +48,7 @@ export interface IModelProperties {
 
 /** Parameters for create iModel operation. */
 export interface CreateEmptyIModelParams extends AuthorizationParam {
-  /** Properties for the new iModel. */
+  /** Properties of the new iModel. */
   iModelProperties: IModelProperties;
 }
 

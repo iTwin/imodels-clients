@@ -54,7 +54,7 @@ export interface Checkpoint {
   _links: CheckpointLinks | null;
 }
 
-/** DTO for single Checkpoint API response. */
+/** DTO to hold a single Checkpoint API response. */
 export interface CheckpointResponse {
   checkpoint: Checkpoint;
 }
