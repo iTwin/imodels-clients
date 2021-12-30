@@ -47,6 +47,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns downloaded Changeset. See {@link DownloadedChangeset}.
    */
   public async downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset> {
+    this._options.fileHandler.createDirectory(params.targetDirectoryPath);
     const changeset: Changeset = await this.querySingleInternal(params);
     return this.downloadSingleChangeset({ ...params, changeset });
   }
@@ -62,10 +63,9 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns downloaded Changeset metadata along with the downloaded file path. See {@link DownloadedChangeset}.
    */
   public async downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]> {
-    let result: DownloadedChangeset[] = [];
-
     this._options.fileHandler.createDirectory(params.targetDirectoryPath);
 
+    let result: DownloadedChangeset[] = [];
     for await (const changesetPage of this.getRepresentationList(params).byPage()) {
       const changesetsWithFilePath: DownloadedChangeset[] = changesetPage.map(
         (changeset: Changeset) => ({

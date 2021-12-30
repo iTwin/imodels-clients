@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
+import * as path from "path";
 import { expect } from "chai";
 import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetListParams, DownloadFileParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, TargetDirectoryParam } from "@itwin/imodels-client-authoring";
 import { FileTransferLog, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanupDirectory } from "@itwin/imodels-client-test-utils";
@@ -10,7 +11,7 @@ import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 type CommonDownloadParams = IModelScopedOperationParams & TargetDirectoryParam;
 
-describe("[Authoring] ChangesetOperations", () => {
+describe.only("[Authoring] ChangesetOperations", () => {
   let iModelsClient: IModelsClient;
   let iModelsClientOptions: IModelsClientOptions;
   let authorization: AuthorizationCallback;
@@ -87,7 +88,7 @@ describe("[Authoring] ChangesetOperations", () => {
   describe("download operations", () => {
     it("should download all changesets", async () => {
       // Arrange
-      const downloadPath = Constants.TestDownloadDirectoryPath;
+      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "download all changesets test");
       const downloadChangesetListParams: DownloadChangesetListParams = {
         authorization,
         iModelId: testIModelForRead.id,
@@ -119,7 +120,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
     it("should download some changesets based on range", async () => {
       // Arrange
-      const downloadPath = Constants.TestDownloadDirectoryPath;
+      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "download range test");
       const downloadChangesetListParams: DownloadChangesetListParams = {
         authorization,
         iModelId: testIModelForRead.id,
@@ -185,7 +186,7 @@ describe("[Authoring] ChangesetOperations", () => {
     ].forEach((testCase) => {
       it(`should download changeset by ${testCase.label}`, async () => {
         // Arrange
-        const downloadPath = Constants.TestDownloadDirectoryPath;
+        const downloadPath = path.join(Constants.TestDownloadDirectoryPath, `download by ${testCase.label} test`);
         const partialDownloadChangesetParams: CommonDownloadParams = {
           authorization,
           iModelId: testIModelForRead.id,
@@ -264,7 +265,7 @@ describe("[Authoring] ChangesetOperations", () => {
         const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
         const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, fileHandler: trackedFileHandler });
 
-        const downloadPath = Constants.TestDownloadDirectoryPath;
+        const downloadPath = path.join(Constants.TestDownloadDirectoryPath, `download ${testCase.label} retry test`);
         const partialDownloadChangesetParams: CommonDownloadParams = {
           authorization,
           iModelId: testIModelForRead.id,
@@ -300,7 +301,7 @@ describe("[Authoring] ChangesetOperations", () => {
         const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
         const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, fileHandler: trackedFileHandler });
 
-        const downloadPath = Constants.TestDownloadDirectoryPath;
+        const downloadPath = path.join(Constants.TestDownloadDirectoryPath, `download ${testCase.label} reuse test`);
         const partialDownloadChangesetParams: CommonDownloadParams = {
           authorization,
           iModelId: testIModelForRead.id,
