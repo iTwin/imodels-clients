@@ -53,7 +53,7 @@ export interface IModel extends MinimalIModel {
   state: IModelState;
   /** Datetime string of when the iModel was created. */
   createdDateTime: string;
-  /** Project id that the iModel belongs to. */
+  /** Id of the Project that the iModel belongs to. */
   projectId: string;
   /** iModel extent. See {@link Extent}. */
   extent: Extent | null;

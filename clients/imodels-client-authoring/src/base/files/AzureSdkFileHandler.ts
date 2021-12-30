@@ -14,6 +14,10 @@ interface AzureProgressCallbackData {
 
 type AzureProgressCallback = (progress: AzureProgressCallbackData) => void;
 
+/**
+ * Default implementation for {@link FileHandler} interface that uses Azure SDK for file transfer operations and
+ * Node.js `fs` module for local file storage operations.
+ */
 export class AzureSdkFileHandler implements FileHandler {
   public async uploadFile(params: UploadFileParams): Promise<void> {
     if (this.isUrlExpired(params.uploadUrl))

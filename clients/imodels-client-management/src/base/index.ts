@@ -14,6 +14,7 @@ export * from "./interfaces/apiEntities/ChangesetInterfaces";
 export * from "./interfaces/apiEntities/NamedVersionInterfaces";
 export * from "./interfaces/apiEntities/CheckpointInterfaces";
 export * from "./iterators/EntityListIterator";
+export * from "./iterators/EntityListIteratorImpl";
 export * from "./iterators/EntityPageListIterator";
 export * from "./iterators/IteratorUtilFunctions";
 export * from "./rest/RestClient";

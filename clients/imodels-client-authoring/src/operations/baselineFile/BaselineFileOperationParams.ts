@@ -4,4 +4,5 @@
  *--------------------------------------------------------------------------------------------*/
 import { IModelScopedOperationParams } from "@itwin/imodels-client-management";
 
+/** Parameters for get single Baseline file operation. */
 export type GetSingleBaselineFileParams = IModelScopedOperationParams;
