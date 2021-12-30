@@ -11,7 +11,7 @@ import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 type CommonDownloadParams = IModelScopedOperationParams & TargetDirectoryParam;
 
-describe.only("[Authoring] ChangesetOperations", () => {
+describe("[Authoring] ChangesetOperations", () => {
   let iModelsClient: IModelsClient;
   let iModelsClientOptions: IModelsClientOptions;
   let authorization: AuthorizationCallback;
