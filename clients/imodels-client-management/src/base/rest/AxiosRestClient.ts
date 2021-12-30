@@ -6,6 +6,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { IModelsErrorParser } from "../IModelsErrorParser";
 import { HttpRequestParams, HttpRequestWithBodyParams, ParseErrorFunc, RestClient } from "./RestClient";
 
+/** Default implementation for {@link RestClient} interface that uses `axios` library for sending the requests. */
 export class AxiosRestClient implements RestClient {
   private _parseErrorFunc: ParseErrorFunc;
 

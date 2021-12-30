@@ -34,53 +34,53 @@ export interface DownloadFileParams {
 }
 
 /**
- * Interface that acts as an abstraction for the file system. It contains methods used by operations that transfer
+ * Handler for file system operations. It contains methods used by operations that transfer
  * files, for example, Changeset download.
  */
 export interface FileHandler {
   /**
    * Uploads file from the local source to the remote target and reports progress via the user-passed progress callback.
-   * @param params parameters for this operation. See {@link UploadFileParams}.
+   * @param {UploadFileParams} params parameters for this operation. See {@link UploadFileParams}.
    * @returns a promise that resolves after operation completes.
    */
   uploadFile(params: UploadFileParams): Promise<void>;
 
   /**
    * Downloads file from the remote target to the local source and reports progress via the user-passed progress callback.
-   * @param params parameters for this operation. See {@link DownloadFileParams}.
+   * @param {DownloadFileParams} params parameters for this operation. See {@link DownloadFileParams}.
    * @returns a promise that resolves after operation completes.
    */
   downloadFile(params: DownloadFileParams): Promise<void>;
 
   /**
    * Determines if a file with the specified path exists in the file system.
-   * @param filePath path of the file.
+   * @param {string} filePath path of the file.
    * @returns `true` if the file exists, `false` otherwise.
    */
   exists(filePath: string): boolean;
 
   /**
    * Determines size of the specified file.
-   * @param filePath path of the file.
+   * @param {string} filePath path of the file.
    * @returns file size in bytes.
    */
   getFileSize(filePath: string): number;
 
   /**
    * Deletes the specified file.
-   * @param filePath path of the file.
+   * @param {string} filePath path of the file.
    */
   unlink(filePath: string): void;
 
   /**
    * Creates specified directory recursively.
-   * @param directoryPath directory to create.
+   * @param {string} directoryPath directory to create.
    */
   createDirectory(directoryPath: string): void;
 
   /**
    * Joins all path segments together into a normalized path.
-   * @param paths path segments to join.
+   * @param {string[]} paths path segments to join.
    * @returns normalized path.
    */
   join(...paths: string[]): string;

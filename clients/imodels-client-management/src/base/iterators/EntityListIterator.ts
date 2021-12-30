@@ -2,32 +2,19 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityPageQueryFunc } from "../interfaces/UtilityTypes";
-import { EntityPageListIterator } from "./EntityPageListIterator";
-import { flatten } from "./IteratorUtilFunctions";
 
+/**
+ * Async iterator for a list of entities of type `TEntity`. This interface allows to iterate over all the entities
+ * without having to manage individual pages - a request for a new page is sent after the consumer has already
+ * iterated over all of the previous entities.
+ */
 export interface EntityListIterator<TEntity> extends AsyncIterableIterator<TEntity> {
+  /**
+   * Exposes internal entity pages. This method allows to operate on entity pages instead of a flattened list. Sincle
+   * all entities in the API response are returned as a single page a new request to the API is sent on every iteration
+   * so the consumer can act accordingly, for example, show a spinning wheel in the UI while waiting for the page to
+   * load. 
+   * @returns {AsyncIterableIterator<TEntity[]>} an async iterator for entity pages instead of individual entities.
+   */
   byPage(): AsyncIterableIterator<TEntity[]>;
-}
-
-export class EntityListIteratorImpl<TEntity> implements EntityListIterator<TEntity> {
-  private _entityPages: EntityPageListIterator<TEntity>;
-  private _entities: AsyncIterableIterator<TEntity>;
-
-  constructor(pageQueryFunc: EntityPageQueryFunc<TEntity>) {
-    this._entityPages = new EntityPageListIterator(pageQueryFunc);
-    this._entities = flatten(this._entityPages);
-  }
-
-  public [Symbol.asyncIterator](): AsyncIterableIterator<TEntity> {
-    return this;
-  }
-
-  public async next(): Promise<IteratorResult<TEntity>> {
-    return this._entities.next();
-  }
-
-  public byPage(): AsyncIterableIterator<TEntity[]> {
-    return this._entityPages;
-  }
 }
