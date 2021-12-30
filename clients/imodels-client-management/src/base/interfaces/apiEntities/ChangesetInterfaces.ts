@@ -59,13 +59,13 @@ export interface ChangesetLinks {
 
 /** Minimal representation of a Changeset. */
 export interface MinimalChangeset {
-  /** Id of the Changeset. */
+  /** Changeset id. */
   id: string;
   /** Changeset display name. */
   displayName: string;
   /** Changeset description. */
   description: string;
-  /** Index of the Changeset. */
+  /** Changeset index. */
   index: number;
   /** Id of the parent Changeset. Equals to empty string if the Changeset is first in sequence. */
   parentId: string;
@@ -79,7 +79,7 @@ export interface MinimalChangeset {
   containingChanges: ContainingChanges;
   /** Size of the Changeset file in bytes. */
   fileSize: number;
-  /** Briefcase id that was used to create the Changeset. */
+  /** Id of the Briefcase that was used to create the Changeset. */
   briefcaseId: number;
 }
 

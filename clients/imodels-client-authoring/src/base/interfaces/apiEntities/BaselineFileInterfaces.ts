@@ -19,7 +19,7 @@ export enum BaselineFileState {
 
 /** Full representation of a Baseline file. */
 export interface BaselineFile {
-  /** Id of the Baseline file. */
+  /** Baseline file id. */
   id: string;
   /** Baseline file display name. */
   displayName: string;
