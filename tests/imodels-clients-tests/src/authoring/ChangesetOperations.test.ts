@@ -88,7 +88,7 @@ describe("[Authoring] ChangesetOperations", () => {
   describe("download operations", () => {
     it("should download all changesets", async () => {
       // Arrange
-      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "download all changesets test");
+      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "download all changesets test");
       const downloadChangesetListParams: DownloadChangesetListParams = {
         authorization,
         iModelId: testIModelForRead.id,
@@ -120,7 +120,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
     it("should download some changesets based on range", async () => {
       // Arrange
-      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "download range test");
+      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "download range test");
       const downloadChangesetListParams: DownloadChangesetListParams = {
         authorization,
         iModelId: testIModelForRead.id,
@@ -186,7 +186,7 @@ describe("[Authoring] ChangesetOperations", () => {
     ].forEach((testCase) => {
       it(`should download changeset by ${testCase.label}`, async () => {
         // Arrange
-        const downloadPath = path.join(Constants.TestDownloadDirectoryPath, `download by ${testCase.label} test`);
+        const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", `download by ${testCase.label} test`);
         const partialDownloadChangesetParams: CommonDownloadParams = {
           authorization,
           iModelId: testIModelForRead.id,
@@ -265,7 +265,7 @@ describe("[Authoring] ChangesetOperations", () => {
         const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
         const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, fileHandler: trackedFileHandler });
 
-        const downloadPath = path.join(Constants.TestDownloadDirectoryPath, `download ${testCase.label} retry test`);
+        const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", `download ${testCase.label} retry test`);
         const partialDownloadChangesetParams: CommonDownloadParams = {
           authorization,
           iModelId: testIModelForRead.id,
@@ -301,7 +301,7 @@ describe("[Authoring] ChangesetOperations", () => {
         const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
         const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, fileHandler: trackedFileHandler });
 
-        const downloadPath = path.join(Constants.TestDownloadDirectoryPath, `download ${testCase.label} reuse test`);
+        const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", `download ${testCase.label} reuse test`);
         const partialDownloadChangesetParams: CommonDownloadParams = {
           authorization,
           iModelId: testIModelForRead.id,
