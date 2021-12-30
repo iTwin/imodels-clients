@@ -7,7 +7,7 @@ import { LockedObjects } from "../../base";
 
 /** Url parameters supported in Lock list query. */
 export interface GetLockListUrlParams extends CollectionRequestParams {
-  /** Filters Locks for a specific Briefcase. */
+  /** Filters Locks by a specific Briefcase. */
   briefcaseId?: number;
 }
 

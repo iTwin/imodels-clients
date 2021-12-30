@@ -5,29 +5,30 @@
 
 /** Data reported on each file transfer iteration. */
 export interface ProgressData {
-  /** Bytes that are already transferred. */
+  /** Bytes that have been transferred. */
   bytesTransferred: number;
   /** Total size in bytes of the file being transferred. */
   bytesTotal: number;
 }
 
-/** Function that can be called to report file transfer progress. */
+/** Function to call to report file transfer progress. */
 export type ProgressCallback = (progressData: ProgressData) => void;
 
 /** Parameters for upload file operation. */
 export interface UploadFileParams {
   /** Remote storage url where to upload the file. */
   uploadUrl: string;
-  /** Path of the local file to be uploaded. */
+  /** Path to the local file to be uploaded. */
   sourceFilePath: string;
   /** Function to be called to report progress on each transfer iteration. See {@link ProgressCallback}. */
   progressCallback?: ProgressCallback;
 }
 
+/** Parameters for download file operation. */
 export interface DownloadFileParams {
   /** Remote storage url from where to download the file. */
   downloadUrl: string;
-  /** Path of the local file to download to. */
+  /** Path to the local file to download to. */
   targetFilePath: string;
   /** Function to be called to report progress on each transfer iteration. See {@link ProgressCallback}. */
   progressCallback?: ProgressCallback;
