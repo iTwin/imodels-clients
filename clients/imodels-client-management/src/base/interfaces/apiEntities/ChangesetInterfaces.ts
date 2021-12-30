@@ -37,7 +37,7 @@ export interface SynchronizationInfo {
   changedFiles: string[];
 }
 
-/** DTO to hold links that belong to Changeset entity returned from iModels API. */
+/** Links that belong to Changeset entity returned from iModels API. */
 export interface ChangesetLinks {
   /** Link where to upload the Changeset file. Link points to a remote storage. */
   upload: Link;

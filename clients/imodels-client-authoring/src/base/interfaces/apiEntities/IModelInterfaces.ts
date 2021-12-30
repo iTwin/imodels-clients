@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { IModel, Link } from "@itwin/imodels-client-management";
 
-/** DTO to hold links that belong to iModel entity returned from iModels API. */
+/** Links that belong to iModel entity returned from iModels API. */
 export interface IModelLinks {
   /** Link where to upload the iModel Baseline file. Link points to a remote storage. */
   upload: Link;
