@@ -119,10 +119,10 @@ export function assertCheckpoint(params: {
   expect(params.actualCheckpoint.state).to.equal(params.expectedCheckpointProperties.state);
 
   expect(params.actualCheckpoint.containerAccessInfo).to.not.be.null;
-  expect(params.actualCheckpoint.containerAccessInfo.account).to.not.be.empty;
-  expect(params.actualCheckpoint.containerAccessInfo.sas).to.not.be.empty;
-  expect(params.actualCheckpoint.containerAccessInfo.container).to.not.be.empty;
-  expect(params.actualCheckpoint.containerAccessInfo.dbName).to.not.be.empty;
+  expect(params.actualCheckpoint.containerAccessInfo!.account).to.not.be.empty;
+  expect(params.actualCheckpoint.containerAccessInfo!.sas).to.not.be.empty;
+  expect(params.actualCheckpoint.containerAccessInfo!.container).to.not.be.empty;
+  expect(params.actualCheckpoint.containerAccessInfo!.dbName).to.not.be.empty;
 
   expect(params.actualCheckpoint._links?.download).to.not.be.empty;
 }

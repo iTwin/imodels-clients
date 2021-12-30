@@ -8,7 +8,7 @@ import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOpe
 
 export class BriefcaseOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**
-   * Gets Briefcases for a specific iModel. This method returns Briefcases in their minimal representation. The returned iterator
+   * Gets Briefcases of a specific iModel. This method returns Briefcases in their minimal representation. The returned iterator
    * internally queries entities in pages. Wraps the
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcases/ Get iModel Briefcases}
    * operation from iModels API.
@@ -26,7 +26,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   }
 
   /**
-   * Gets Briefcases for a specific iModel. This method returns Briefcases in their full representation. The returned iterator
+   * Gets Briefcases of a specific iModel. This method returns Briefcases in their full representation. The returned iterator
    * internally queries entities in pages. Wraps the
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcases/ Get iModel Briefcases}
    * operation from iModels API.

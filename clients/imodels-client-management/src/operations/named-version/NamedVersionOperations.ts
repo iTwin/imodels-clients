@@ -7,6 +7,15 @@ import { OperationOptions } from "../OperationOptions";
 import { CreateNamedVersionParams, GetNamedVersionListParams, GetSingleNamedVersionParams, NamedVersionPropertiesForCreate, NamedVersionPropertiesForUpdate, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
 
 export class NamedVersionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
+  /**
+   * Gets Named Versions of a specific iModel. This method returns Named Versions in their minimal representation. The
+   * returned iterator internally queries entities in pages. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-named-versions/ Get iModel Named Versions}
+   * operation from iModels API.
+   * @param {GetNamedVersionListParams} params parameters for this operation. See {@link GetNamedVersionListParams}.
+   * @returns {EntityListIterator<MinimalNamedVersion>} iterator for Named Version list. See {@link EntityListIterator},
+   * {@link MinimalNamedVersion}.
+   */
   public getMinimalList(params: GetNamedVersionListParams): EntityListIterator<MinimalNamedVersion> {
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalNamedVersion>({
       authorization: params.authorization,
@@ -16,6 +25,15 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
     }));
   }
 
+  /**
+   * Gets Named Versions of a specific iModel. This method returns Named Versions in their full representation. The
+   * returned iterator internally queries entities in pages. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-named-versions/
+   * Get iModel Named Versions} operation from iModels API.
+   * @param {GetNamedVersionListParams} params parameters for this operation. See {@link GetNamedVersionListParams}.
+   * @returns {EntityListIterator<NamedVersion>} iterator for Named Version list. See {@link EntityListIterator},
+   * {@link NamedVersion}.
+   */
   public getRepresentationList(params: GetNamedVersionListParams): EntityListIterator<NamedVersion> {
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<NamedVersion>({
       authorization: params.authorization,
@@ -25,6 +43,13 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
     }));
   }
 
+  /**
+   * Gets a single Named Version by its id. This method returns a Named Version in its full representation. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-named-version-details/
+   * Get iModel Named Version} operation from iModels API.
+   * @param {GetSingleNamedVersionParams} params parameters for this operation. See {@link GetSingleNamedVersionParams}.
+   * @returns {Promise<NamedVersion>} a Named Version with specified id. See {@link NamedVersion}.
+   */
   public async getSingle(params: GetSingleNamedVersionParams): Promise<NamedVersion> {
     const response = await this.sendGetRequest<NamedVersionResponse>({
       authorization: params.authorization,
@@ -33,6 +58,13 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
     return response.namedVersion;
   }
 
+  /**
+   * Creates a Named Version with specified properties. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels/operations/create-imodel-named-version/
+   * Create iModel Named Version} operation from iModels API.
+   * @param {CreateNamedVersionParams} params parameters for this operation. See {@link CreateNamedVersionParams}.
+   * @returns {Promise<NamedVersion>} newly created Named Version. See {@link NamedVersion}.
+   */
   public async create(params: CreateNamedVersionParams): Promise<NamedVersion> {
     const createNamedVersionBody = this.getCreateNamedVersionRequestBody(params.namedVersionProperties);
     const createNamedVersionResponse = await this.sendPostRequest<NamedVersionResponse>({
@@ -43,6 +75,13 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
     return createNamedVersionResponse.namedVersion;
   }
 
+  /**
+   * Updates Named Version with specified properties. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels/operations/update-imodel-named-version/
+   * Update iModel Named Version} operation from iModels API.
+   * @param {UpdateNamedVersionParams} params parameters for this operation. See {@link UpdateNamedVersionParams}.
+   * @returns {Promise<NamedVersion>} updated Named Version. See {@link NamedVersion}.
+   */
   public async update(params: UpdateNamedVersionParams): Promise<NamedVersion> {
     const updateNamedVersionBody = this.getUpdateNamedVersionRequestBody(params.namedVersionProperties);
     const updateNamedVersionResponse = await this.sendPatchRequest<NamedVersionResponse>({
