@@ -10,7 +10,7 @@ export interface IModelLinks {
   upload: Link;
   /**
    * Link to confirm the Baseline file upload and complete the iModel creation process. Points to a specific
-   * iModel Baseline instance in iModels API.
+   * iModel Baseline in iModels API.
    */
   complete: Link;
 }
