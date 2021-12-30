@@ -45,7 +45,7 @@ export async function toArray<TEntity>(iterator: AsyncIterableIterator<TEntity>)
  * Loads top n entities from an iterator into an array.
  * @param {AsyncIterableIterator<TSource>} iterator source entity iterator.
  * @param {number} entityCount number of entities to load.
- * @returns {Promise<TEntity[]>} entity array that contains a number of top elements speicified. If iterator contains
+ * @returns {Promise<TEntity[]>} entity array that contains a number of top elements specified. If iterator contains
  * less items than specified in `entityCount` length of the array will be less than `entityCount`. If
  * iterator contains no entities the array will be empty.
  */

@@ -10,7 +10,7 @@
  */
 export interface EntityListIterator<TEntity> extends AsyncIterableIterator<TEntity> {
   /**
-   * Exposes internal entity pages. This method allows to operate on entity pages instead of a flattened list. Sincle
+   * Exposes internal entity pages. This method allows to operate on entity pages instead of a flattened list. Since
    * all entities in the API response are returned as a single page a new request to the API is sent on every iteration
    * so the consumer can act accordingly, for example, show a spinning wheel in the UI while waiting for the page to
    * load.

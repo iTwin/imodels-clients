@@ -5,7 +5,7 @@
 
 /** Supported Lock levels. */
 export enum LockLevel {
-  /** Objects are not locked. This level is used for realeasing already acquired locks. */
+  /** Objects are not locked. This level is used for releasing already acquired locks. */
   None = "none",
   /** Multiple Briefcases can acquire a shared lock on the same object. */
   Shared = "shared",
