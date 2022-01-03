@@ -113,7 +113,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
         };
       })
       .sort(
-        (a, b) => b.createdDateTime.getTime() - a.createdDateTime.getTime()
+        (a, b) => b.changesetIndex - a.changesetIndex
       );
 
     if (sortedNamedVersions.length === 0 || !sortedNamedVersions[0].changesetIndex || !sortedNamedVersions[0].changesetId)
