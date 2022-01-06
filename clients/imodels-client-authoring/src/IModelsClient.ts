@@ -29,7 +29,7 @@ export interface IModelsClientOptions extends ManagementIModelsClientOptions {
  * {@link https://developer.bentley.com/apis/imodels/ iModels API documentation page}.
  */
 export class IModelsClient {
-  private _operationsOptions: OperationOptions;
+  protected _operationsOptions: OperationOptions;
 
   /**
    * Class constructor.
