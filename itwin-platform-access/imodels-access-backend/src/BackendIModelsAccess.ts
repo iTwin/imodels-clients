@@ -230,9 +230,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const v2CheckpointAccessProps = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
 
-    const transfer = new IModelHost.platform.CloudDbTransfer({
+    const transfer = new IModelHost.platform.CloudDbTransfer("download", {
       ...v2CheckpointAccessProps,
-      direction: "download",
       writeable: false,
       localFile: arg.localFile
     });
@@ -251,8 +250,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
       }
       await transfer.promise;
       onProgress?.(total, total); // make sure we call progress func one last time when download completes
-    } catch (err) {
-      throw (err.message === "cancelled") ? new IModelError(BriefcaseStatus.DownloadCancelled, "download cancelled") : err;
+    } catch (err: unknown) {
+      throw ((err as Error)?.message === "cancelled") ? new IModelError(BriefcaseStatus.DownloadCancelled, "download cancelled") : err;
     } finally {
       if (timer)
         clearInterval(timer);

@@ -43,10 +43,10 @@ export class ClientToPlatformAdapter {
       throw new IModelError(IModelStatus.NotFound, "Invalid V2 checkpoint");
 
     return {
-      container: containerAccessInfo.container,
-      auth: containerAccessInfo.sas,
-      user: containerAccessInfo.account,
-      dbAlias: containerAccessInfo.dbName,
+      containerId: containerAccessInfo.container,
+      sasToken: containerAccessInfo.sas,
+      accountName: containerAccessInfo.account,
+      dbName: containerAccessInfo.dbName,
       storageType: "azure?sas=1"
     };
   }
