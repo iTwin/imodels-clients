@@ -67,11 +67,13 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
     let result: DownloadedChangeset[] = [];
     for await (const changesetPage of this.getRepresentationList(params).byPage()) {
-      const changesetsWithFilePath: DownloadedChangeset[] = changesetPage.map(
-        (changeset: Changeset) => ({
+      const changesetsWithFilePath: DownloadedChangeset[] = [];
+      for (const changeset of changesetPage)
+        changesetsWithFilePath.push({
           ...changeset,
-          filePath: this._options.fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id))
-        }));
+          filePath: await this._options.fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id))
+        });
+
       result = result.concat(changesetsWithFilePath);
 
       // We sort the changesets by fileSize in descending order to download small
@@ -112,7 +114,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   private async downloadSingleChangeset(params: IModelScopedOperationParams & TargetDirectoryParam & { changeset: Changeset }): Promise<DownloadedChangeset> {
     const changesetWithPath: DownloadedChangeset = {
       ...params.changeset,
-      filePath: this._options.fileHandler.join(params.targetDirectoryPath, this.createFileName(params.changeset.id))
+      filePath: await this._options.fileHandler.join(params.targetDirectoryPath, this.createFileName(params.changeset.id))
     };
 
     await this.downloadChangesetFileWithRetry({
@@ -126,7 +128,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
   private async downloadChangesetFileWithRetry(params: IModelScopedOperationParams & { changeset: DownloadedChangeset }): Promise<void> {
     const targetFilePath = params.changeset.filePath;
-    if (this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
+    const isChangesetAlreadyDownloaded = await this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize);
+    if (isChangesetAlreadyDownloaded)
       return;
 
     try {
@@ -149,11 +152,11 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     }
   }
 
-  private isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): boolean {
+  private async isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): Promise<boolean> {
     if (!this._options.fileHandler.exists(targetFilePath))
       return false;
 
-    const existingFileSize = this._options.fileHandler.getFileSize(targetFilePath);
+    const existingFileSize = await this._options.fileHandler.getFileSize(targetFilePath);
     if (existingFileSize === expectedFileSize)
       return true;
 

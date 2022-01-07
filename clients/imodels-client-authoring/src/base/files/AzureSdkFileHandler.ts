@@ -27,7 +27,7 @@ export class AzureSdkFileHandler implements FileHandler {
 
     let uploadOptions: BlockBlobParallelUploadOptions | undefined;
     if (params.progressCallback) {
-      const fileSize = this.getFileSize(params.sourceFilePath);
+      const fileSize = await this.getFileSize(params.sourceFilePath);
       uploadOptions = {
         onProgress: this.adaptProgressCallback(params.progressCallback, fileSize)
       };
@@ -54,19 +54,19 @@ export class AzureSdkFileHandler implements FileHandler {
     await blockBlobClient.downloadToFile(params.targetFilePath, undefined, undefined, downloadOptions);
   }
 
-  public exists(filePath: string): boolean {
+  public async exists(filePath: string): Promise<boolean> {
     return fs.existsSync(filePath);
   }
 
-  public getFileSize(filePath: string): number {
+  public async getFileSize(filePath: string): Promise<number> {
     return fs.statSync(filePath).size;
   }
 
-  public unlink(filePath: string): void {
+  public async unlink(filePath: string): Promise<void> {
     return fs.unlinkSync(filePath);
   }
 
-  public createDirectory(directoryPath: string): void {
+  public async createDirectory(directoryPath: string): Promise<void> {
     if (fs.existsSync(directoryPath))
       return;
 
@@ -75,7 +75,7 @@ export class AzureSdkFileHandler implements FileHandler {
     fs.mkdirSync(directoryPath);
   }
 
-  public join(...paths: string[]): string {
+  public async join(...paths: string[]): Promise<string> {
     return path.join(...paths);
   }
 

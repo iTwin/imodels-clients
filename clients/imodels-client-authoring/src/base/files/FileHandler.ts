@@ -58,31 +58,31 @@ export interface FileHandler {
    * @param {string} filePath path of the file.
    * @returns `true` if the file exists, `false` otherwise.
    */
-  exists(filePath: string): boolean;
+  exists(filePath: string): Promise<boolean>;
 
   /**
    * Determines size of the specified file.
    * @param {string} filePath path of the file.
    * @returns file size in bytes.
    */
-  getFileSize(filePath: string): number;
+  getFileSize(filePath: string): Promise<number>;
 
   /**
    * Deletes the specified file.
    * @param {string} filePath path of the file.
    */
-  unlink(filePath: string): void;
+  unlink(filePath: string): Promise<void>;
 
   /**
    * Creates specified directory recursively.
    * @param {string} directoryPath directory to create.
    */
-  createDirectory(directoryPath: string): void;
+  createDirectory(directoryPath: string): Promise<void>;
 
   /**
    * Joins all path segments together into a normalized path.
    * @param {string[]} paths path segments to join.
    * @returns normalized path.
    */
-  join(...paths: string[]): string;
+  join(...paths: string[]): Promise<string>;
 }

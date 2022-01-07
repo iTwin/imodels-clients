@@ -34,23 +34,23 @@ export class TrackableTestFileHandler implements FileHandler {
     return this._underlyingHandler.downloadFile(params);
   }
 
-  public exists(filePath: string): boolean {
+  public async exists(filePath: string): Promise<boolean> {
     return this._underlyingHandler.exists(filePath);
   }
 
-  public getFileSize(filePath: string): number {
+  public async getFileSize(filePath: string): Promise<number> {
     return this._underlyingHandler.getFileSize(filePath);
   }
 
-  public unlink(filePath: string): void {
+  public async unlink(filePath: string): Promise<void> {
     this._underlyingHandler.unlink(filePath);
   }
 
-  public createDirectory(directoryPath: string): void {
+  public async createDirectory(directoryPath: string): Promise<void> {
     return this._underlyingHandler.createDirectory(directoryPath);
   }
 
-  public  join(...paths: string[]): string {
+  public async  join(...paths: string[]): Promise<string> {
     return this._underlyingHandler.join(...paths);
   }
 }
