@@ -30,7 +30,7 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-client-management": "~0.2.2"
+    "@itwin/imodels-client-management": "~0.3.0"
   },
   "devDependencies": {
     "@bentley/itwin-client": "rc",
@@ -41,7 +41,7 @@
     "@itwin/core-geometry": "rc",
     "@itwin/core-orbitgt": "rc",
     "@itwin/core-quantity": "rc",
-    "@itwin/imodels-client-common-config": "~0.2.2",
+    "@itwin/imodels-client-common-config": "~0.3.0",
     "@itwin/webgl-compatibility": "rc",
     "typescript": "~4.4.0"
   },
