@@ -43,7 +43,7 @@
     "@itwin/core-quantity": "rc",
     "@itwin/imodels-client-common-config": "~0.2.2",
     "@itwin/webgl-compatibility": "rc",
-    "typescript": "~4.3.5"
+    "typescript": "~4.4.0"
   },
   "peerDependencies": {
     "@itwin/core-bentley": "rc",

@@ -2,7 +2,6 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { expect } from "chai";
 import { AuthorizationCallback, CheckpointState, GetSingleCheckpointParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, IModelsErrorCode } from "@itwin/imodels-client-authoring";
 import { NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertCheckpoint, assertError } from "@itwin/imodels-client-test-utils";
 import { getTestDIContainer } from "../common";
@@ -128,17 +127,16 @@ describe("[Authoring] CheckpointOperations", () => {
       };
 
       // Act
-      let errorThrown: Error | undefined;
+      let objectThrown: unknown;
       try {
         await testCase.functionUnderTest(iModelScopedOperationParams);
       } catch (e) {
-        errorThrown = e;
+        objectThrown = e;
       }
 
       // Assert
-      expect(errorThrown).to.not.be.undefined;
       assertError({
-        actualError: errorThrown!,
+        objectThrown,
         expectedError: {
           code: IModelsErrorCode.IModelNotFound,
           message: "Requested iModel is not available."
@@ -173,17 +171,16 @@ describe("[Authoring] CheckpointOperations", () => {
       };
 
       // Act
-      let errorThrown: Error | undefined;
+      let objectThrown: unknown;
       try {
         await testCase.functionUnderTest(iModelScopedOperationParams);
       } catch (e) {
-        errorThrown = e;
+        objectThrown = e;
       }
 
       // Assert
-      expect(errorThrown).to.not.be.undefined;
       assertError({
-        actualError: errorThrown!,
+        objectThrown,
         expectedError: {
           code: IModelsErrorCode.ChangesetNotFound,
           message: "Requested Changeset is not available."
@@ -201,17 +198,16 @@ describe("[Authoring] CheckpointOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined;
+    let objectThrown: unknown;
     try {
       await iModelsClient.checkpoints.getSingle(getSingleCheckpointParams);
     } catch (e) {
-      errorThrown = e;
+      objectThrown = e;
     }
 
     // Assert
-    expect(errorThrown).to.not.be.undefined;
     assertError({
-      actualError: errorThrown!,
+      objectThrown,
       expectedError: {
         code: IModelsErrorCode.NamedVersionNotFound,
         message: "Requested Named Version is not available."
