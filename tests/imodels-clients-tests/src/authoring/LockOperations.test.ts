@@ -207,17 +207,16 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined;
+    let objectThrown: unknown;
     try {
       await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
-      errorThrown = e;
+      objectThrown = e;
     }
 
     // Assert
-    expect(errorThrown).to.not.be.undefined;
     assertError({
-      actualError: errorThrown!,
+      objectThrown,
       expectedError: {
         code: IModelsErrorCode.LockNotFound,
         message: "Requested Lock(s) is not available."
@@ -240,17 +239,16 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined;
+    let objectThrown: unknown;
     try {
       await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
-      errorThrown = e;
+      objectThrown = e;
     }
 
     // Assert
-    expect(errorThrown).to.not.be.undefined;
     assertError({
-      actualError: errorThrown!,
+      objectThrown,
       expectedError: {
         code: IModelsErrorCode.IModelNotFound,
         message: "Requested iModel is not available."
@@ -273,17 +271,16 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined;
+    let objectThrown: unknown;
     try {
       await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
-      errorThrown = e;
+      objectThrown = e;
     }
 
     // Assert
-    expect(errorThrown).to.not.be.undefined;
     assertError({
-      actualError: errorThrown!,
+      objectThrown,
       expectedError: {
         code: IModelsErrorCode.BriefcaseNotFound,
         message: "Requested Briefcase is not available."
@@ -310,17 +307,16 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined;
+    let objectThrown: unknown;
     try {
       await iModelsClient.locks.update(updateLockParams);
     } catch (e) {
-      errorThrown = e;
+      objectThrown = e;
     }
 
     // Assert
-    expect(errorThrown).to.not.be.undefined;
     assertError({
-      actualError: errorThrown!,
+      objectThrown,
       expectedError: {
         code: IModelsErrorCode.ChangesetNotFound,
         message: "Requested Changeset is not available."
@@ -363,17 +359,16 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined;
+    let objectThrown: unknown;
     try {
       await iModelsClient.locks.update(updateLockParams2);
     } catch (e) {
-      errorThrown = e;
+      objectThrown = e;
     }
 
     // Assert
-    expect(errorThrown).to.not.be.undefined;
     assertError({
-      actualError: errorThrown!,
+      objectThrown,
       expectedError: {
         code: IModelsErrorCode.ConflictWithAnotherUser,
         message: "Lock(s) is owned by another briefcase."
@@ -413,17 +408,16 @@ describe("[Authoring] LockOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined;
+    let objectThrown: unknown;
     try {
       await iModelsClient.locks.update(updateLockParams2);
     } catch (e) {
-      errorThrown = e;
+      objectThrown = e;
     }
 
     // Assert
-    expect(errorThrown).to.not.be.undefined;
     assertError({
-      actualError: errorThrown!,
+      objectThrown,
       expectedError: {
         code: IModelsErrorCode.NewerChangesExist,
         message: "One or more objects have been locked in a newer Changeset."

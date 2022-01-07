@@ -208,17 +208,16 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined;
+    let objectThrown: unknown;
     try {
       await iModelsClient.iModels.createEmpty(createIModelParams);
     } catch (e) {
-      errorThrown = e;
+      objectThrown = e;
     }
 
     // Assert
-    expect(errorThrown).to.not.be.undefined;
     assertError({
-      actualError: errorThrown!,
+      objectThrown,
       expectedError: {
         code: IModelsErrorCode.Unauthorized,
         message: "The user is unauthorized. Please provide valid authentication credentials."
@@ -238,17 +237,16 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    let errorThrown: Error | undefined;
+    let objectThrown: unknown;
     try {
       await iModelsClient.iModels.createEmpty(createIModelParams);
     } catch (e) {
-      errorThrown = e;
+      objectThrown = e;
     }
 
     // Assert
-    expect(errorThrown).to.not.be.undefined;
     assertError({
-      actualError: errorThrown!,
+      objectThrown,
       expectedError: {
         code: IModelsErrorCode.InvalidIModelsRequest,
         message: "Cannot create iModel. Details:\n1. InvalidValue: Provided 'description' is not valid. The value exceeds allowed 255 characters. Target: description.\n",

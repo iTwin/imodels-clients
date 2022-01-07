@@ -40,7 +40,7 @@ describe("IModelsErrorParser", () => {
       "2. MissingRequiredProperty: Required property is missing. Target: name.\n" +
       "3. InvalidRequestBody: Failed to parse request body. Make sure it is a valid JSON.\n";
     assertError({
-      actualError: parsedError,
+      objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.InvalidIModelsRequest,
         message: expectedErrorMessage,

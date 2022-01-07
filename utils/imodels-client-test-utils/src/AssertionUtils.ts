@@ -146,9 +146,11 @@ export function assertLock(params: {
   }
 }
 
-export function assertError(params: { actualError: Error, expectedError: Partial<IModelsError> }): void {
-  const iModelsError = params.actualError as IModelsError;
+export function assertError(params: { objectThrown: unknown, expectedError: Partial<IModelsError> }): void {
+  expect(params.objectThrown).is.not.undefined;
+  expect(params.objectThrown instanceof Error);
 
+  const iModelsError = params.objectThrown as IModelsError;
   expect(iModelsError).to.not.be.undefined;
   expect(iModelsError.code).to.equal(params.expectedError.code);
   expect(iModelsError.name).to.equal(params.expectedError.code);
