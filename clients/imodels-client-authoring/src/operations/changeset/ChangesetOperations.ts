@@ -18,7 +18,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns newly created Changeset. See {@link Changeset}.
    */
   public async create(params: CreateChangesetParams): Promise<Changeset> {
-    const createChangesetBody = this.getCreateChangesetRequestBody(params.changesetProperties);
+    const createChangesetBody = await this.getCreateChangesetRequestBody(params.changesetProperties);
     const createChangesetResponse = await this.sendPostRequest<ChangesetResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId }),
@@ -47,7 +47,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns downloaded Changeset. See {@link DownloadedChangeset}.
    */
   public async downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset> {
-    this._options.fileHandler.createDirectory(params.targetDirectoryPath);
+    await this._options.fileHandler.createDirectory(params.targetDirectoryPath);
     const changeset: Changeset = await this.querySingleInternal(params);
     return this.downloadSingleChangeset({ ...params, changeset });
   }
@@ -63,7 +63,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns downloaded Changeset metadata along with the downloaded file path. See {@link DownloadedChangeset}.
    */
   public async downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]> {
-    this._options.fileHandler.createDirectory(params.targetDirectoryPath);
+    await this._options.fileHandler.createDirectory(params.targetDirectoryPath);
 
     let result: DownloadedChangeset[] = [];
     for await (const changesetPage of this.getRepresentationList(params).byPage()) {
@@ -93,14 +93,14 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     return result;
   }
 
-  private getCreateChangesetRequestBody(changesetProperties: ChangesetPropertiesForCreate): object {
+  private async getCreateChangesetRequestBody(changesetProperties: ChangesetPropertiesForCreate): Promise<object> {
     return {
       id: changesetProperties.id,
       description: changesetProperties.description,
       parentId: changesetProperties.parentId,
       briefcaseId: changesetProperties.briefcaseId,
       containingChanges: changesetProperties.containingChanges,
-      fileSize: this._options.fileHandler.getFileSize(changesetProperties.filePath)
+      fileSize: await this._options.fileHandler.getFileSize(changesetProperties.filePath)
     };
   }
 
@@ -153,14 +153,15 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   }
 
   private async isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): Promise<boolean> {
-    if (!this._options.fileHandler.exists(targetFilePath))
+    const doesFileExist = await this._options.fileHandler.exists(targetFilePath);
+    if (!doesFileExist)
       return false;
 
     const existingFileSize = await this._options.fileHandler.getFileSize(targetFilePath);
     if (existingFileSize === expectedFileSize)
       return true;
 
-    this._options.fileHandler.unlink(targetFilePath);
+    await this._options.fileHandler.unlink(targetFilePath);
     return false;
   }
 

@@ -43,7 +43,7 @@ export class TrackableTestFileHandler implements FileHandler {
   }
 
   public async unlink(filePath: string): Promise<void> {
-    this._underlyingHandler.unlink(filePath);
+    return this._underlyingHandler.unlink(filePath);
   }
 
   public async createDirectory(directoryPath: string): Promise<void> {

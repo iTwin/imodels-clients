@@ -71,7 +71,7 @@ export class AzureSdkFileHandler implements FileHandler {
       return;
 
     const parentDirectory = path.dirname(directoryPath);
-    this.createDirectory(parentDirectory);
+    await this.createDirectory(parentDirectory);
     fs.mkdirSync(directoryPath);
   }
 
