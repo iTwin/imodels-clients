@@ -5,7 +5,7 @@
 import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
-import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, NamedVersion, NamedVersionOrderByProperty, OrderByOperator, take } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, NamedVersionOrderByProperty,OrderByOperator, take } from "@itwin/imodels-client-management";
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 
 export class FrontendIModelsAccess implements FrontendHubAccess {
@@ -110,7 +110,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
         }
       }
     };
-    const namedVersionsIterator: EntityListIterator<NamedVersion> = this._iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
+    const namedVersionsIterator: EntityListIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
     const namedVersions = await take(namedVersionsIterator, 1);
 
     if (namedVersions.length === 0 || !namedVersions[0].changesetIndex || !namedVersions[0].changesetId)
