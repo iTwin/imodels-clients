@@ -36,22 +36,16 @@ export class ProjectsClient {
     };
 
     const getProjectsWithNameUrl = `${this._config.baseUrl}?displayName=${params.projectName}`;
-    try {
-      const getProjectsWithNameResponse: AxiosResponse<ProjectsResponse> = await axios.get(getProjectsWithNameUrl, requestConfig);
-      if (getProjectsWithNameResponse.data.projects.length > 0)
-        return getProjectsWithNameResponse.data.projects[0].id;
-  
-      const createProjectUrl = this._config.baseUrl;
-      const createProjectBody = {
-        displayName: params.projectName,
-        projectNumber: `${params.projectName} ${new Date()}`
-      };
-      const createProjectResponse: AxiosResponse<ProjectResponse> = await axios.post(createProjectUrl, createProjectBody, requestConfig);
-      return createProjectResponse.data.project.id;
-    } catch(e) {
-      console.log(e);
-      throw e;
-    }
-   
+    const getProjectsWithNameResponse: AxiosResponse<ProjectsResponse> = await axios.get(getProjectsWithNameUrl, requestConfig);
+    if (getProjectsWithNameResponse.data.projects.length > 0)
+      return getProjectsWithNameResponse.data.projects[0].id;
+
+    const createProjectUrl = this._config.baseUrl;
+    const createProjectBody = {
+      displayName: params.projectName,
+      projectNumber: `${params.projectName} ${new Date()}`
+    };
+    const createProjectResponse: AxiosResponse<ProjectResponse> = await axios.post(createProjectUrl, createProjectBody, requestConfig);
+    return createProjectResponse.data.project.id;
   }
 }
