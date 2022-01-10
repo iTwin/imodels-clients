@@ -30,8 +30,7 @@ export class ProjectsClient {
     const authorizationInfo = await params.authorization();
     const requestConfig = {
       headers: {
-        Authorization: `${authorizationInfo.scheme} ${authorizationInfo.token}`,
-        Accept: "application/vnd.bentley.v1+json"
+        Authorization: `${authorizationInfo.scheme} ${authorizationInfo.token}`
       }
     };
 
