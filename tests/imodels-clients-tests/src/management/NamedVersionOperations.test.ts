@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { AuthorizationCallback, CreateNamedVersionParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, NamedVersion, NamedVersionState, UpdateNamedVersionParams, toArray, EntityListIterator, MinimalNamedVersion, NamedVersionOrderByProperty, OrderByOperator } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, CreateNamedVersionParams, EntityListIterator, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, MinimalNamedVersion, NamedVersion, NamedVersionOrderByProperty, NamedVersionState, OrderByOperator, UpdateNamedVersionParams, toArray } from "@itwin/imodels-client-management";
 import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestSetupError, TestUtilTypes, assertCollection, assertNamedVersion } from "@itwin/imodels-client-test-utils";
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 

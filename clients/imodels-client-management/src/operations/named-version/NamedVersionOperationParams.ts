@@ -8,7 +8,7 @@ import { AtLeastOneProperty, CollectionRequestParams, IModelScopedOperationParam
  * Named Versions entity properties that are supported in $orderBy url parameter which specifies by what property
  * entities are ordered in a collection.
  */
- export enum NamedVersionOrderByProperty {
+export enum NamedVersionOrderByProperty {
   ChangesetIndex = "changesetIndex"
 }
 
