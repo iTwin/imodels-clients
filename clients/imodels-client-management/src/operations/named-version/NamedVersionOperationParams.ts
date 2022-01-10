@@ -2,10 +2,20 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AtLeastOneProperty, CollectionRequestParams, IModelScopedOperationParams, NamedVersionState } from "../../base";
+import { AtLeastOneProperty, CollectionRequestParams, IModelScopedOperationParams, NamedVersion, NamedVersionState, OrderBy } from "../../base";
+
+/**
+ * Named Versions entity properties that are supported in $orderBy url parameter which specifies by what property
+ * entities are ordered in a collection.
+ */
+ export enum NamedVersionOrderByProperty {
+  ChangesetIndex = "changesetIndex"
+}
 
 /** Url parameters supported in Named Version list query. */
 export interface GetNamedVersionListUrlParams extends CollectionRequestParams {
+  /** Specifies in what order should entities be returned. See {@link OrderBy}. */
+  $orderBy?: OrderBy<NamedVersion, NamedVersionOrderByProperty>;
   /** Filters Named Versions with a specific name. */
   name?: string;
 }

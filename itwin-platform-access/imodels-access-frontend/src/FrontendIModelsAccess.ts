@@ -5,7 +5,7 @@
 import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
-import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetNamedVersionListParams,GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, NamedVersion, OrderByOperator, take, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, NamedVersion, OrderByOperator, take, NamedVersionOrderByProperty } from "@itwin/imodels-client-management";
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 
 export class FrontendIModelsAccess implements FrontendHubAccess {
@@ -100,25 +100,22 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
   }
 
   private async getChangesetFromLatestNamedVersion(arg: IModelIdArg): Promise<ChangesetIndexAndId> {
-    const getNamedVersionListParams: GetNamedVersionListParams = this.getIModelScopedOperationParams(arg);
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      ...this.getIModelScopedOperationParams(arg),
+      urlParams: {
+        $top: 1,
+        $orderBy: {
+          property: NamedVersionOrderByProperty.ChangesetIndex,
+          operator: OrderByOperator.Descending
+        }
+      }
+    };
     const namedVersionsIterator: EntityListIterator<NamedVersion> = this._iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
-    const namedVersions = await toArray(namedVersionsIterator);
+    const namedVersions = await take(namedVersionsIterator, 1);
 
-    const sortedNamedVersions = namedVersions
-      .map((namedVer: NamedVersion) => {
-        return {
-          changesetId: namedVer.changesetId,
-          changesetIndex: namedVer.changesetIndex,
-          createdDateTime: new Date(namedVer.createdDateTime)
-        };
-      })
-      .sort(
-        (a, b) => b.changesetIndex - a.changesetIndex
-      );
-
-    if (sortedNamedVersions.length === 0 || !sortedNamedVersions[0].changesetIndex || !sortedNamedVersions[0].changesetId)
+    if (namedVersions.length === 0 || !namedVersions[0].changesetIndex || !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, "No named versions found");
 
-    return { index: sortedNamedVersions[0].changesetIndex, id: sortedNamedVersions[0].changesetId };
+    return { index: namedVersions[0].changesetIndex, id: namedVersions[0].changesetId };
   }
 }
