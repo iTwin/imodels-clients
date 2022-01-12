@@ -117,6 +117,19 @@ describe("BackendIModelsAccess", () => {
   });
 
   describe("locks", () => {
+    let testIModelForWriteBriefcaseIds: BriefcaseId[] = [];
+
+    afterEach(async () => {
+      for (const briefcaseId of testIModelForWriteBriefcaseIds) {
+        await backendIModelsAccess.releaseBriefcase({
+          accessToken,
+          iModelId: testIModelForWrite.id,
+          briefcaseId
+        });
+      }
+      testIModelForWriteBriefcaseIds = [];
+    });
+
     it("should successfully acquire new locks", async () => {
       // Arrange
       const acquireNewBriefcaseIdParams: AcquireNewBriefcaseIdArg = {
@@ -124,6 +137,7 @@ describe("BackendIModelsAccess", () => {
         iModelId: testIModelForWrite.id
       };
       const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId(acquireNewBriefcaseIdParams);
+      testIModelForWriteBriefcaseIds.push(briefcaseId);
 
       const briefcaseDbParams: BriefcaseDbArg = {
         accessToken,
@@ -154,6 +168,7 @@ describe("BackendIModelsAccess", () => {
         iModelId: testIModelForWrite.id
       };
       const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId(acquireNewBriefcaseIdParams);
+      testIModelForWriteBriefcaseIds.push(briefcaseId);
 
       const briefcaseDbParams: BriefcaseDbArg = {
         accessToken,
