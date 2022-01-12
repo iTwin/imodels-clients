@@ -9,7 +9,7 @@ import { BriefcaseId, ChangesetFileProps, ChangesetType, LocalDirName } from "@i
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 import { ContainingChanges, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, cleanupDirectory, TestIModelGroup, TestIModelGroupFactory, createGuidValue, IModelMetadata, TestIModelCreator } from "@itwin/imodels-client-test-utils";
+import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 import { getTestDIContainer } from "./TestDiContainerProvider";
 
 describe("BackendIModelsAccess", () => {
@@ -121,7 +121,7 @@ describe("BackendIModelsAccess", () => {
       // Arrange
       const acquireNewBriefcaseIdParams: AcquireNewBriefcaseIdArg = {
         accessToken,
-        iModelId: testIModelForWrite.id,
+        iModelId: testIModelForWrite.id
       };
       const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId(acquireNewBriefcaseIdParams);
 
@@ -134,25 +134,24 @@ describe("BackendIModelsAccess", () => {
       const locksToAcquire: LockMap = new Map<string, LockState>([
         ["0x1", LockState.Exclusive],
         ["0x2", LockState.Exclusive],
-        ["0x3", LockState.Shared],
+        ["0x3", LockState.Shared]
       ]);
 
       // Act
-      await backendIModelsAccess.acquireLocks(briefcaseDbParams, locksToAcquire)
+      await backendIModelsAccess.acquireLocks(briefcaseDbParams, locksToAcquire);
 
       // Assert
-      assertLocks({
+      await assertLocks({
         lockQueryParams: briefcaseDbParams,
         expectedLocks: locksToAcquire
       });
     });
 
-
     it("should successfully release locks", async () => {
       // Arrange
       const acquireNewBriefcaseIdParams: AcquireNewBriefcaseIdArg = {
         accessToken,
-        iModelId: testIModelForWrite.id,
+        iModelId: testIModelForWrite.id
       };
       const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId(acquireNewBriefcaseIdParams);
 
@@ -165,11 +164,11 @@ describe("BackendIModelsAccess", () => {
       const locksToAcquire: LockMap = new Map<string, LockState>([
         ["0x1", LockState.Exclusive],
         ["0x2", LockState.Exclusive],
-        ["0x3", LockState.Shared],
+        ["0x3", LockState.Shared]
       ]);
 
-      await backendIModelsAccess.acquireLocks(briefcaseDbParams, locksToAcquire)
-      assertLocks({
+      await backendIModelsAccess.acquireLocks(briefcaseDbParams, locksToAcquire);
+      await assertLocks({
         lockQueryParams: briefcaseDbParams,
         expectedLocks: locksToAcquire
       });
@@ -185,10 +184,10 @@ describe("BackendIModelsAccess", () => {
     async function assertLocks(params: { lockQueryParams: BriefcaseDbArg, expectedLocks: LockMap }): Promise<void> {
       const actualLocks: LockProps[] = await backendIModelsAccess.queryAllLocks(params.lockQueryParams);
       expect(actualLocks.length).to.equal(params.expectedLocks.size);
-      for (let [expectedObjectId, expectedLockState] of params.expectedLocks) {
-        const actualLock = actualLocks.find(lock => lock.id === expectedObjectId && lock.state === expectedLockState);
+      for (const [expectedObjectId, expectedLockState] of params.expectedLocks) {
+        const actualLock = actualLocks.find((lock) => lock.id === expectedObjectId && lock.state === expectedLockState);
         expect(actualLock).to.not.be.undefined;
       }
     }
-  })
+  });
 });

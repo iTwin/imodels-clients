@@ -84,7 +84,7 @@ export class PlatformToClientAdapter {
 
   private static groupLocksByLockLevel(locks: LockMap): Map<LockLevel, string[]> {
     const result: Map<LockLevel, string[]> = new Map();
-    for (let [objectId, lockState] of locks) {
+    for (const [objectId, lockState] of locks) {
       const lockLevel: LockLevel = PlatformToClientAdapter.toLockLevel(lockState);
       const lockedObjectsIds: string[] | undefined = result.get(lockLevel);
       if (lockedObjectsIds)
