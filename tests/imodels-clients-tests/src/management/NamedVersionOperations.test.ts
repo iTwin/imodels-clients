@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { AuthorizationCallback, CreateNamedVersionParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, NamedVersion, NamedVersionState, UpdateNamedVersionParams, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, CreateNamedVersionParams, EntityListIterator, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, MinimalNamedVersion, NamedVersion, NamedVersionOrderByProperty, NamedVersionState, OrderByOperator, UpdateNamedVersionParams, toArray } from "@itwin/imodels-client-management";
 import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestSetupError, TestUtilTypes, assertCollection, assertNamedVersion } from "@itwin/imodels-client-test-utils";
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
@@ -84,6 +84,49 @@ describe("[Management] NamedVersionOperations", () => {
         isEntityCountCorrect: (count) => count >= namedVersionCountCreatedInSetup
       });
     });
+  });
+
+  it("should order items by changeset index when querying minimal collection (ascending order)", async () => {
+    // Arrange
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $orderBy: {
+          property: NamedVersionOrderByProperty.ChangesetIndex
+        }
+      }
+    };
+
+    // Act
+    const namedVersions: EntityListIterator<MinimalNamedVersion> = iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
+
+    // Assert
+    const namedVersionChangesetIndexes = (await toArray(namedVersions)).map((namedVersion) => namedVersion.changesetIndex);
+    for (let i = 0; i < namedVersionChangesetIndexes.length - 1; i++)
+      expect(namedVersionChangesetIndexes[i]).to.be.lessThan(namedVersionChangesetIndexes[i + 1]);
+  });
+
+  it("should order items by changeset index when querying minimal collection (descending order)", async () => {
+    // Arrange
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $orderBy: {
+          property: NamedVersionOrderByProperty.ChangesetIndex,
+          operator: OrderByOperator.Descending
+        }
+      }
+    };
+
+    // Act
+    const namedVersions: EntityListIterator<MinimalNamedVersion> = iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
+
+    // Assert
+    const namedVersionChangesetIndexes = (await toArray(namedVersions)).map((namedVersion) => namedVersion.changesetIndex);
+    for (let i = 0; i < namedVersionChangesetIndexes.length - 1; i++)
+      expect(namedVersionChangesetIndexes[i]).to.be.greaterThan(namedVersionChangesetIndexes[i + 1]);
   });
 
   it("should return versions that match the name filter when querying representation collection", async () => {
