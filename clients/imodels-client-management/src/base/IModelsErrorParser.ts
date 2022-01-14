@@ -60,7 +60,10 @@ export class IModelsErrorParser {
     });
   }
 
-  private static parseCode(errorCode: string): IModelsErrorCode {
+  private static parseCode(errorCode: string | undefined): IModelsErrorCode {
+    if (!errorCode)
+      return IModelsErrorCode.Unrecognized;
+
     const adjustedErrorCode = IModelsErrorParser.adjustErrorCodeCaseToMatchEnum(errorCode);
     let parsedCode: IModelsErrorCode | undefined = IModelsErrorCode[adjustedErrorCode as keyof typeof IModelsErrorCode];
     if (!parsedCode)
