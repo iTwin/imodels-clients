@@ -1,6 +1,8 @@
 [
   {
-    "policyName": "individual-versioning",
-    "definitionName": "individualVersion"
+    "policyName": "prerelease-monorepo-lockStep",
+    "definitionName": "lockStepVersion",
+    "version": "1.0.0",
+    "nextBump": "prerelease"
   }
 ]

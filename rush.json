@@ -16,55 +16,55 @@
       "packageName": "@itwin/imodels-client-common-config",
       "projectFolder": "utils/imodels-client-common-config",
       "shouldPublish": true,
-      "versionPolicyName": "individual-versioning"
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
       "packageName": "@itwin/imodels-client-test-utils",
       "projectFolder": "utils/imodels-client-test-utils",
       "shouldPublish": true,
-      "versionPolicyName": "individual-versioning"
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
       "packageName": "@itwin/imodels-client-management",
       "projectFolder": "clients/imodels-client-management",
       "shouldPublish": true,
-      "versionPolicyName": "individual-versioning"
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
       "packageName": "@itwin/imodels-client-authoring",
       "projectFolder": "clients/imodels-client-authoring",
       "shouldPublish": true,
-      "versionPolicyName": "individual-versioning"
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
       "packageName": "@itwin/imodels-access-frontend",
       "projectFolder": "itwin-platform-access/imodels-access-frontend",
       "shouldPublish": true,
-      "versionPolicyName": "individual-versioning"
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
       "packageName": "@itwin/imodels-access-backend",
       "projectFolder": "itwin-platform-access/imodels-access-backend",
       "shouldPublish": true,
-      "versionPolicyName": "individual-versioning"
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
       "packageName": "@itwin/imodels-clients-tests",
       "projectFolder": "tests/imodels-clients-tests",
       "shouldPublish": true,
-      "versionPolicyName": "individual-versioning"
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
       "packageName": "@itwin/imodels-access-frontend-tests",
       "projectFolder": "tests/imodels-access-frontend-tests",
       "shouldPublish": true,
-      "versionPolicyName": "individual-versioning"
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
       "packageName": "@itwin/imodels-access-backend-tests",
       "projectFolder": "tests/imodels-access-backend-tests",
       "shouldPublish": true,
-      "versionPolicyName": "individual-versioning"
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     }
   ]
 }
