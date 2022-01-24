@@ -3,7 +3,7 @@
     {
       "packageName": "@itwin/imodels-access-backend",
       "comment": "Update to use official iTwin.js 3.0 release",
-      "type": "none"
+      "type": "patch"
     }
   ],
   "packageName": "@itwin/imodels-access-backend",
