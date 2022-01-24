@@ -31,10 +31,10 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/core-backend": "rc",
-    "@itwin/core-bentley": "rc",
-    "@itwin/core-common": "rc",
-    "@itwin/ecschema-metadata": "rc",
+    "@itwin/core-backend": "^3.0.0",
+    "@itwin/core-bentley": "^3.0.0",
+    "@itwin/core-common": "^3.0.0",
+    "@itwin/ecschema-metadata": "^3.0.0",
     "@itwin/imodels-access-backend": "~1.0.0",
     "@itwin/imodels-client-authoring": "~1.0.0",
     "@itwin/imodels-client-test-utils": "~1.0.0",

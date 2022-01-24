@@ -33,21 +33,20 @@
     "@itwin/imodels-client-management": "~1.0.0"
   },
   "devDependencies": {
-    "@bentley/itwin-client": "rc",
-    "@itwin/appui-abstract": "rc",
-    "@itwin/core-bentley": "rc",
-    "@itwin/core-common": "rc",
-    "@itwin/core-frontend": "rc",
-    "@itwin/core-geometry": "rc",
-    "@itwin/core-orbitgt": "rc",
-    "@itwin/core-quantity": "rc",
+    "@itwin/appui-abstract": "^3.0.0",
+    "@itwin/core-bentley": "^3.0.0",
+    "@itwin/core-common": "^3.0.0",
+    "@itwin/core-frontend": "^3.0.0",
+    "@itwin/core-geometry": "^3.0.0",
+    "@itwin/core-orbitgt": "^3.0.0",
+    "@itwin/core-quantity": "^3.0.0",
     "@itwin/imodels-client-common-config": "~1.0.0",
-    "@itwin/webgl-compatibility": "rc",
+    "@itwin/webgl-compatibility": "^3.0.0",
     "typescript": "~4.4.0"
   },
   "peerDependencies": {
-    "@itwin/core-bentley": "rc",
-    "@itwin/core-common": "rc",
-    "@itwin/core-frontend": "rc"
+    "@itwin/core-bentley": "^3.0.0",
+    "@itwin/core-common": "^3.0.0",
+    "@itwin/core-frontend": "^3.0.0"
   }
 }

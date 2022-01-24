@@ -31,8 +31,8 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/core-common": "rc",
-    "@itwin/core-frontend": "rc",
+    "@itwin/core-common": "^3.0.0",
+    "@itwin/core-frontend": "^3.0.0",
     "@itwin/imodels-access-frontend": "~1.0.0",
     "@itwin/imodels-client-management": "~1.0.0",
     "@itwin/imodels-client-test-utils": "~1.0.0",
