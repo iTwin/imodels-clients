@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-access-frontend",
+      "comment": "Update to use official iTwin.js 3.0 release",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-frontend",
+  "email": "aruniverse@users.noreply.github.com"
+}

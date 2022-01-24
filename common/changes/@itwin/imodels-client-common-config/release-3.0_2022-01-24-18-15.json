@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-common-config",
+      "comment": "Update to use official iTwin.js 3.0 release",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-common-config",
+  "email": "aruniverse@users.noreply.github.com"
+}
