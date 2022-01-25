@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-client-common-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Common configuration for iModels API client wrappers.",
   "keywords": [
     "Bentley",
@@ -25,7 +25,7 @@
     "spell-check": ""
   },
   "devDependencies": {
-    "@itwin/eslint-plugin": "rc",
+    "@itwin/eslint-plugin": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "~4.28.4",
     "@typescript-eslint/parser": "~4.28.4",
     "cspell": "~5.6.6",

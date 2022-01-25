@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-frontend-tests",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tests for iTwin platform and iModels API interoperability package - @itwin/imodels-access-frontend.",
   "keywords": [
     "Bentley",
@@ -31,18 +31,18 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/core-common": "rc",
-    "@itwin/core-frontend": "rc",
-    "@itwin/imodels-access-frontend": "~1.0.0",
-    "@itwin/imodels-client-management": "~1.0.0",
-    "@itwin/imodels-client-test-utils": "~1.0.0",
+    "@itwin/core-common": "^3.0.0",
+    "@itwin/core-frontend": "^3.0.0",
+    "@itwin/imodels-access-frontend": "~1.0.1",
+    "@itwin/imodels-client-management": "~1.0.1",
+    "@itwin/imodels-client-test-utils": "~1.0.1",
     "dotenv": "~10.0.0",
     "inversify": "~5.0.1",
     "mocha": "~9.0.2",
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
-    "@itwin/imodels-client-common-config": "~1.0.0",
+    "@itwin/imodels-client-common-config": "~1.0.1",
     "@types/chai": "~4.2.21",
     "@types/mocha": "~9.0.0",
     "@types/node": "^16.4.6",
