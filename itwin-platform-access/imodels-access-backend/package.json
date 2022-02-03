@@ -36,6 +36,7 @@
     "@itwin/core-backend": "^3.0.0",
     "@itwin/core-bentley": "^3.0.0",
     "@itwin/core-common": "^3.0.0",
+    "@itwin/core-geometry": "^3.0.0",
     "@itwin/ecschema-metadata": "^3.0.0",
     "@itwin/imodels-client-common-config": "~1.0.1",
     "typescript": "~4.4.0"
