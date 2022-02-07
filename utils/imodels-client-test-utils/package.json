@@ -41,6 +41,7 @@
     "@itwin/imodels-client-common-config": "~1.0.1",
     "@types/chai": "~4.2.21",
     "@types/node": "^16.4.6",
+    "cpx2": "^3.0.0",
     "typescript": "~4.4.0"
   }
 }
