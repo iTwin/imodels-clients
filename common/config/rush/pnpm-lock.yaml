@@ -11,7 +11,7 @@ dependencies:
   '@itwin/ecschema-metadata': 3.0.0_@itwin+core-bentley@3.0.0
   '@itwin/eslint-plugin': 3.0.0_eslint@7.31.0+typescript@4.4.4
   '@itwin/webgl-compatibility': 3.0.0
-  '@rush-temp/imodels-access-backend': 'file:projects/imodels-access-backend.tgz_@itwin+core-geometry@3.0.0'
+  '@rush-temp/imodels-access-backend': 'file:projects/imodels-access-backend.tgz'
   '@rush-temp/imodels-access-backend-tests': 'file:projects/imodels-access-backend-tests.tgz_@itwin+core-geometry@3.0.0'
   '@rush-temp/imodels-access-frontend': 'file:projects/imodels-access-frontend.tgz'
   '@rush-temp/imodels-access-frontend-tests': 'file:projects/imodels-access-frontend-tests.tgz_e25951177ffa96dd156de3b9188b883a'
@@ -23,12 +23,12 @@ dependencies:
   '@types/chai': 4.2.22
   '@types/mocha': 9.0.0
   '@types/node': 16.11.19
-  '@types/ws': 8.2.2
   '@typescript-eslint/eslint-plugin': 4.28.5_2d27c79b551e458fb3b3f741bd766f57
   '@typescript-eslint/parser': 4.28.5_eslint@7.31.0+typescript@4.4.4
   axios: 0.21.4
   chai: 4.3.4
   cpx: 1.5.0
+  cpx2: 3.0.2
   cspell: 5.6.7
   dotenv: 10.0.0
   eslint: 7.31.0
@@ -786,12 +786,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-sOUTGn6h1SfQ+gbgqC364jLFBw2lnFqkgF3q0WovEHRLMrVD1sd5aufqi/aJObLekJO+Aq5z646U4Oxy6shXMA==
-  /@types/ws/8.2.2:
-    dependencies:
-      '@types/node': 16.11.19
-    dev: false
-    resolution:
-      integrity: sha512-NOn5eIcgWLOo6qW8AcuLZ7G8PycXu0xTxxkS6Q18VWFxgPUSOwV0pBj2a/4viNZVu25i7RIB7GttdkAIUUXOOg==
   /@types/yauzl/2.9.2:
     dependencies:
       '@types/node': 16.11.19
@@ -1607,6 +1601,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-OcRE68cOsVMXp1Yvonl/fzkQOyjLSu/8bhPDfQt0e0/Eb283TKP20Fs2MqoPsr9SwA595rRCA+QMzYc9nBP+JQ==
+  /co/4.6.0:
+    dev: false
+    engines:
+      iojs: '>= 1.0.0'
+      node: '>= 0.12.0'
+    resolution:
+      integrity: sha1-bqa989hTrlTMuOR7+gvz+QMfsYQ=
   /collection-visit/1.0.0:
     dependencies:
       map-visit: 1.0.0
@@ -1767,6 +1768,26 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-GFvgGFEdhycN7czCkxceN2VauI8=
+  /cpx2/3.0.2:
+    dependencies:
+      co: 4.6.0
+      debounce: 1.2.1
+      debug: 4.3.3
+      duplexer: 0.1.2
+      fs-extra: 10.0.0
+      glob: 7.2.0
+      glob2base: 0.0.12
+      minimatch: 3.0.4
+      resolve: 1.21.0
+      safe-buffer: 5.2.1
+      shell-quote: 1.7.3
+      subarg: 1.0.0
+    dev: false
+    engines:
+      node: '>=6.5'
+    hasBin: true
+    resolution:
+      integrity: sha512-xVmdulZJVGSV+c8KkZ9IQY+RgyL9sGeVqScI2e7NtsEY9SVKcQXM4v0/9OLU0W0YtL9nmmqrtWjs5rpvgHn9Hg==
   /cross-fetch/3.1.4:
     dependencies:
       node-fetch: 2.6.1
@@ -1865,6 +1886,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==
+  /debounce/1.2.1:
+    dev: false
+    resolution:
+      integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==
   /debug/2.6.9:
     dependencies:
       ms: 2.0.0
@@ -5943,24 +5968,21 @@ packages:
     peerDependencies:
       '@itwin/core-geometry': '*'
     resolution:
-      integrity: sha512-52ZsGl1M6zNur4MOx2dsDkno/CLVJt3g5VpIkkHYn7nH96dSyD710GlIT8c0su8rZ+SpC60ykavVfjxgDN/9Mg==
+      integrity: sha512-VW5TmJIzY0DrqrvTmbirnR4ZMuVCNWkSeDGQVErcNT1UddAaWFcW65ujgnyXwJV1diN5kLlKDeMI8XwTvqNaAQ==
       tarball: 'file:projects/imodels-access-backend-tests.tgz'
     version: 0.0.0
-  'file:projects/imodels-access-backend.tgz_@itwin+core-geometry@3.0.0':
+  'file:projects/imodels-access-backend.tgz':
     dependencies:
       '@itwin/core-backend': 3.0.0_b51cb391cd5e67e0937732529cca94e4
       '@itwin/core-bentley': 3.0.0
       '@itwin/core-common': 3.0.0_162f3d5152e7671a08a264c69178e997
+      '@itwin/core-geometry': 3.0.0
       '@itwin/ecschema-metadata': 3.0.0_@itwin+core-bentley@3.0.0
-      '@types/ws': 8.2.2
       typescript: 4.4.4
     dev: false
-    id: 'file:projects/imodels-access-backend.tgz'
     name: '@rush-temp/imodels-access-backend'
-    peerDependencies:
-      '@itwin/core-geometry': '*'
     resolution:
-      integrity: sha512-voYz8g0xyDTKD5eQakkcd2MWNLohHXHu7+5WvSyvk9PTUnfVHiuFaqs+RfcULahLGB9jfsW2p8ttK83sqd42ug==
+      integrity: sha512-RM9Sh2EuK+m6f44s3keMGvvy7y5NF8tJdKALAzAPPqdMjtnVw5a+8aBpmvT4iXrCj+sQt7oYLJQZz0b9rvy6jA==
       tarball: 'file:projects/imodels-access-backend.tgz'
     version: 0.0.0
   'file:projects/imodels-access-frontend-tests.tgz_e25951177ffa96dd156de3b9188b883a':
@@ -5988,7 +6010,7 @@ packages:
       '@itwin/core-quantity': '*'
       '@itwin/webgl-compatibility': '*'
     resolution:
-      integrity: sha512-CsUH+zvAAuKmqea3fhZlbkiEWuGNESrSwwAFe8EqC7oaQcAmR/tW0s42eltnldg+vZ40imhpCYg4vvx7bi9qvA==
+      integrity: sha512-mfYbZ4WC4+SVKoHG6P7ugM03pBNuQLyjG3BvEi79VkEh16e3C6H+jpg2K2q9W+cClg04uDVbRBYG8nAuAl7H/A==
       tarball: 'file:projects/imodels-access-frontend-tests.tgz'
     version: 0.0.0
   'file:projects/imodels-access-frontend.tgz':
@@ -6006,7 +6028,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-access-frontend'
     resolution:
-      integrity: sha512-EEEnWA4coil3gFGJE3bG6FeXIdd8a8LOOMUqMYBDojrU7u+4HGBQj6kBo10/aG7+T5uYJsDT9FzW+y8gnAoSaQ==
+      integrity: sha512-UG5A81d7TV4Y46DNdxMvLKgp8RDdKGi7CdP3qe/vjKbuVkN6oss1YnGxglxypnZJT/N1s4/Y6pYOD3NP6LmPUw==
       tarball: 'file:projects/imodels-access-frontend.tgz'
     version: 0.0.0
   'file:projects/imodels-client-authoring.tgz':
@@ -6016,7 +6038,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-client-authoring'
     resolution:
-      integrity: sha512-M7B1TiCke6NMfYYzPQyKtIKM5f1/vLtmmd2WIhUY1OvmxNOPNWEsXLCnA531YeRGsuZwLYhSWTKLzR5s8T1HEg==
+      integrity: sha512-dwnvhZoVDyRHoW7gjsuyrxCHPIcHHWu8usFCHCM8rGxPXjaAXsmXU2Qyo0QSOwKxlf0h/ImNPJvcjVj2/Pl2Iw==
       tarball: 'file:projects/imodels-client-authoring.tgz'
     version: 0.0.0
   'file:projects/imodels-client-common-config.tgz_typescript@4.4.4':
@@ -6045,7 +6067,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-client-management'
     resolution:
-      integrity: sha512-pOTXVAiKblnS+wOxWDRVabaXmxLNJO4F4b+EEv0Oba5fpcing9+1i8ckH+r2ug/s36SOgHISIEu6emFKSHddUQ==
+      integrity: sha512-anmbBEUPhiu88ySTaP6Wro5Rez6xpc80zpf/RcSJono1AJ/HU8lEJP0FDazav/RGyHyldGp9V6YQL0G+5jj+IA==
       tarball: 'file:projects/imodels-client-management.tgz'
     version: 0.0.0
   'file:projects/imodels-client-test-utils.tgz':
@@ -6054,6 +6076,7 @@ packages:
       '@types/node': 16.11.19
       axios: 0.21.4
       chai: 4.3.4
+      cpx2: 3.0.2
       fs-extra: 10.0.0
       inversify: 5.0.5
       puppeteer: 10.2.0
@@ -6062,7 +6085,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-client-test-utils'
     resolution:
-      integrity: sha512-w2AP4YcjO1xxDYTwk+lcLa5UpUP6cXUggdwxjXtmRDeCQEU3SbfD2A+/ZqJ/9Enr8XB7SxcjTNv/XybDluqbzw==
+      integrity: sha512-xB9n9XJX9Ev9U50AZpjNLE+zshyeYDeiFYzQDjn9xZ0CjBnv+GbMPL6KxEdFFttFKLNuqOOFH7DQtdBAZhJFGA==
       tarball: 'file:projects/imodels-client-test-utils.tgz'
     version: 0.0.0
   'file:projects/imodels-clients-tests.tgz':
@@ -6084,7 +6107,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-clients-tests'
     resolution:
-      integrity: sha512-ugfi9RUcXS6pGGqPSH9wx/+LMjHBgBzFup1qDQgRCZycOaUhLFS3tFoIQnHA+Yn3ZMOHSsf3a21ZSfABXU8j7A==
+      integrity: sha512-805fg+cd+FRFS95g87/Ucc/2f59POGA7Qmwe5WHXzdrfV2C94oykb18Zw15h/9kMekCYkPViS8zQe5JshUCLqg==
       tarball: 'file:projects/imodels-clients-tests.tgz'
     version: 0.0.0
 registry: ''
@@ -6113,12 +6136,12 @@ specifiers:
   '@types/chai': ~4.2.21
   '@types/mocha': ~9.0.0
   '@types/node': ^16.4.6
-  '@types/ws': ~8.2.0
   '@typescript-eslint/eslint-plugin': ~4.28.4
   '@typescript-eslint/parser': ~4.28.4
   axios: ~0.21.1
   chai: ~4.3.4
   cpx: ~1.5.0
+  cpx2: ^3.0.0
   cspell: ~5.6.6
   dotenv: ~10.0.0
   eslint: ~7.31.0
