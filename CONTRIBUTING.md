@@ -1,8 +1,8 @@
-# Contributing to object-storage
+# Contributing to imodels-clients
 
 ## Reporting Issues
 
-If you have any feature requests or noticed potential issues please use the [Issues](https://github.com/iTwin/object-storage/issues) page for reporting new issues or adding to existing ones.
+If you have any feature requests or noticed potential issues please use the [Issues](https://github.com/iTwin/imodels-clients/issues) page for reporting new issues or adding to existing ones.
 
 ## Contributions
 
