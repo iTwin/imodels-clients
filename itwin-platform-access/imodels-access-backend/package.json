@@ -30,7 +30,8 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-client-authoring": "~1.0.1"
+    "@itwin/imodels-client-authoring": "~1.0.1",
+    "axios": "~0.21.1"
   },
   "devDependencies": {
     "@itwin/core-backend": "^3.0.0",

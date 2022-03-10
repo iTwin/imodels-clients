@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import * as fs from "fs";
 import { AuthorizationParam, IModel, IModelsErrorCode, IModelsErrorImpl, IModelOperations as ManagementIModelOperations, sleep } from "@itwin/imodels-client-management";
 import { IModelCreateResponse } from "../../base";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
@@ -39,7 +40,10 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     });
 
     const uploadUrl = createIModelResponse.iModel._links.upload.href;
-    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.iModelProperties.filePath });
+    await this._options.storage.upload({
+      url: uploadUrl,
+      data: params.iModelProperties.filePath
+    });
 
     const confirmUploadUrl = createIModelResponse.iModel._links.complete.href;
     await this.sendPostRequest({
@@ -62,7 +66,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     return {
       ...this.getCreateEmptyIModelRequestBody(iModelProperties),
       baselineFile: {
-        size: this._options.fileHandler.getFileSize(iModelProperties.filePath)
+        size: fs.statSync(iModelProperties.filePath).size
       }
     };
   }

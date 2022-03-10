@@ -15,4 +15,4 @@ export * from "./BaseIntegrationTestsConfig";
 export * from "./AssertionUtils";
 export * from "./CommonTestUtils";
 
-export * from "./TrackableTestFileHandler";
+export * from "./TrackableClientStorage";

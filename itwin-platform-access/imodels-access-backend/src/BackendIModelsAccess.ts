@@ -2,7 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import * as fs from "fs";
 import { join } from "path";
+import { Readable } from "stream";
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
   ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, IModelDb, IModelHost, IModelIdArg, IModelJsFs,
@@ -13,6 +15,7 @@ import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion, LocalDirName
 } from "@itwin/core-common";
+import axios from "axios";
 import {
   AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset, ChangesetIdOrIndex,
   ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams, DeleteIModelParams,
@@ -20,7 +23,7 @@ import {
   GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetLockListParams, GetNamedVersionListParams,
   GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, Lock,
   LockLevel, LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion, OrderByOperator,
-  ProgressCallback, ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
+  ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
@@ -190,12 +193,42 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (!checkpoint || !checkpoint._links?.download)
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
 
-    let progressCallback: ProgressCallback | undefined;
-    if (arg.onProgress)
-      progressCallback = (progress: ProgressData) => arg.onProgress!(progress.bytesTransferred, progress.bytesTotal);
+    if (!arg.onProgress) {
+      await this._iModelsClient.storage.download({
+        transferType: "local",
+        url: checkpoint._links.download.href,
+        localPath: arg.localFile
+      });
+      return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
+    }
 
-    await this._iModelsClient.fileHandler.downloadFile({ downloadUrl: checkpoint._links.download.href, targetFilePath: arg.localFile, progressCallback });
-    return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
+    let bytesTransferred = 0;
+    const v1CheckpointSize = await this.getV1CheckpointSize(checkpoint._links.download.href);
+
+    const targetFileStream = fs.createWriteStream(arg.localFile);
+
+    const downloadStream: Readable = await this._iModelsClient.storage.download({
+      transferType: "stream",
+      url: checkpoint._links.download.href,
+      localPath: arg.localFile
+    });
+    downloadStream.pipe(targetFileStream);
+
+    return new Promise<ChangesetIndexAndId>((resolve) => {
+      downloadStream.on("data", (chunk) => {
+        bytesTransferred += chunk.length;
+        arg.onProgress!(bytesTransferred, v1CheckpointSize);
+      });
+      downloadStream.on("end", resolve);
+    });
+  }
+
+  // TODO: refactor.......
+  private async getV1CheckpointSize(downloadUrl: string): Promise<number> {
+    const response = await axios.get(downloadUrl, { headers: { Range: "bytes=0-0" } });
+    const rangeHeaderValue: string = response.headers["content-range"];
+    const rangeBytes = parseInt(rangeHeaderValue.split("/")[1], 10);
+    return rangeBytes;
   }
 
   public async queryV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {

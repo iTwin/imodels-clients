@@ -10,6 +10,8 @@ dependencies:
   '@itwin/core-quantity': 3.0.0_@itwin+core-bentley@3.0.0
   '@itwin/ecschema-metadata': 3.0.0_@itwin+core-bentley@3.0.0
   '@itwin/eslint-plugin': 3.0.0_eslint@7.31.0+typescript@4.4.4
+  '@itwin/object-storage-azure': 0.0.1-dev.3
+  '@itwin/object-storage-core': 0.0.1-dev.3
   '@itwin/webgl-compatibility': 3.0.0
   '@rush-temp/imodels-access-backend': 'file:projects/imodels-access-backend.tgz_@itwin+core-geometry@3.0.0'
   '@rush-temp/imodels-access-backend-tests': 'file:projects/imodels-access-backend-tests.tgz_@itwin+core-geometry@3.0.0'
@@ -65,6 +67,28 @@ packages:
       node: '>=12.0.0'
     resolution:
       integrity: sha512-7CU6DmCHIZp5ZPiZ9r3J17lTKMmYsm/zGvNkjArQwPkrLlZ1TZ+EUYfGgh2X31OLMVAQCTJZW4cXHJi02EbJnA==
+  /@azure/core-http/1.2.6:
+    dependencies:
+      '@azure/abort-controller': 1.0.4
+      '@azure/core-asynciterator-polyfill': 1.0.0
+      '@azure/core-auth': 1.3.2
+      '@azure/core-tracing': 1.0.0-preview.11
+      '@azure/logger': 1.0.3
+      '@types/node-fetch': 2.5.12
+      '@types/tunnel': 0.0.1
+      form-data: 3.0.1
+      node-fetch: 2.6.6
+      process: 0.11.10
+      tough-cookie: 4.0.0
+      tslib: 2.3.1
+      tunnel: 0.0.6
+      uuid: 8.3.2
+      xml2js: 0.4.23
+    dev: false
+    engines:
+      node: '>=8.0.0'
+    resolution:
+      integrity: sha512-odtH7UMKtekc5YQ86xg9GlVHNXR6pq2JgJ5FBo7/jbOjNGdBqcrIVrZx2bevXVJz/uUTSx6vUf62gzTXTfqYSQ==
   /@azure/core-http/2.2.3:
     dependencies:
       '@azure/abort-controller': 1.0.4
@@ -87,6 +111,18 @@ packages:
       node: '>=12.0.0'
     resolution:
       integrity: sha512-xr8AeszxP418rI//W38NfJDDr0kbVAPZkURZnZ+Fle+lLWeURjDE5zNIuocA1wUPoKSP8iXc0ApW6nPtbLGswA==
+  /@azure/core-lro/1.0.5:
+    dependencies:
+      '@azure/abort-controller': 1.0.4
+      '@azure/core-http': 1.2.6
+      '@azure/core-tracing': 1.0.0-preview.11
+      events: 3.3.0
+      tslib: 2.3.1
+    dev: false
+    engines:
+      node: '>=8.0.0'
+    resolution:
+      integrity: sha512-0EFCFZxARrIoLWMIRt4vuqconRVIO2Iin7nFBfJiYCCbKp5eEmxutNk8uqudPmG0XFl5YqlVh68/al/vbE5OOg==
   /@azure/core-lro/2.2.3:
     dependencies:
       '@azure/abort-controller': 1.0.4
@@ -107,6 +143,16 @@ packages:
       node: '>=12.0.0'
     resolution:
       integrity: sha512-UtH5iMlYsvg+nQYIl4UHlvvSrsBjOlRF4fs0j7mxd3rWdAStrKYrh2durOpHs5C9yZbVhsVDaisoyaf/lL1EVA==
+  /@azure/core-tracing/1.0.0-preview.11:
+    dependencies:
+      '@opencensus/web-types': 0.0.7
+      '@opentelemetry/api': 1.0.0-rc.0
+      tslib: 2.3.1
+    dev: false
+    engines:
+      node: '>=8.0.0'
+    resolution:
+      integrity: sha512-frF0pJc9HTmKncVokhBxCqipjbql02DThQ1ZJ9wLi7SDMLdPAFyDI5xZNzX5guLz+/DtPkY+SGK2li9FIXqshQ==
   /@azure/core-tracing/1.0.0-preview.13:
     dependencies:
       '@opentelemetry/api': 1.0.4
@@ -116,6 +162,16 @@ packages:
       node: '>=12.0.0'
     resolution:
       integrity: sha512-KxDlhXyMlh2Jhj2ykX6vNEU0Vou4nHr025KoSEiz7cS3BNiHNaZcdECk/DmLkEB0as5T7b/TpRcehJ5yV6NeXQ==
+  /@azure/core-tracing/1.0.0-preview.9:
+    dependencies:
+      '@opencensus/web-types': 0.0.7
+      '@opentelemetry/api': 0.10.2
+      tslib: 2.3.1
+    dev: false
+    engines:
+      node: '>=8.0.0'
+    resolution:
+      integrity: sha512-zczolCLJ5QG42AEPQ+Qg9SRYNUyB+yZ5dzof4YEc+dyWczO9G2sBqbAjLB7IqrsdHN2apkiB2oXeDKCsq48jug==
   /@azure/logger/1.0.3:
     dependencies:
       tslib: 2.3.1
@@ -124,6 +180,20 @@ packages:
       node: '>=12.0.0'
     resolution:
       integrity: sha512-aK4s3Xxjrx3daZr3VylxejK3vG5ExXck5WOHDJ8in/k9AqlfIyFMMT1uG7u8mNjX+QRILTIn0/Xgschfh/dQ9g==
+  /@azure/storage-blob/12.2.1:
+    dependencies:
+      '@azure/abort-controller': 1.0.4
+      '@azure/core-http': 1.2.6
+      '@azure/core-lro': 1.0.5
+      '@azure/core-paging': 1.2.1
+      '@azure/core-tracing': 1.0.0-preview.9
+      '@azure/logger': 1.0.3
+      '@opentelemetry/api': 0.10.2
+      events: 3.3.0
+      tslib: 2.3.1
+    dev: false
+    resolution:
+      integrity: sha512-erqCSmDL8b/AHZi94nq+nCE+2whQmvBDkAv4N9uic0MRac/gRyZqnsqkfrun/gr2rZo+qVtnMenwkkE3roXn8Q==
   /@azure/storage-blob/12.7.0:
     dependencies:
       '@azure/abort-controller': 1.0.4
@@ -290,9 +360,9 @@ packages:
     requiresBuild: true
     resolution:
       integrity: sha512-Qsru1C58syuSUBLG0sOkVWTRqy+ww1AsrJVfFHc1jaWftcRjy6FJuLIhI5u4EiGcf6qdUJQGgwpsrQyFnBjvxA==
-  /@bentley/itwin-client/3.0.0-dev.148_f4a588df173e76e968bad38684dae86a:
+  /@bentley/itwin-client/3.0.0-dev.148_@itwin+core-bentley@3.0.0:
     dependencies:
-      '@itwin/core-bentley': 3.0.0-dev.177
+      '@itwin/core-bentley': 3.0.0
       deep-assign: 2.0.0
       js-base64: 3.7.2
       lodash: 4.17.21
@@ -551,6 +621,15 @@ packages:
       '@itwin/core-bentley': ^3.0.0
     resolution:
       integrity: sha512-REsf9KNcX0CAY3vbAeLOIh629Ej2TSF5Ht27QIeF8MsuulJmXowDl/N3cGRNuKNSHxXJLuvkPEPoMvQNESmMGQ==
+  /@itwin/cloud-agnostic-core/0.0.1-dev.3:
+    dependencies:
+      inversify: 5.0.5
+      reflect-metadata: 0.1.13
+    dev: false
+    engines:
+      node: '>=12.20 <17.0.0'
+    resolution:
+      integrity: sha512-+UP3QbonPgfbVlWXL8l21vvV20GL3eSNTigKaxZeeLZDl84eiOUYyQppO+gejQMhUmwZ2MyGB5bMQ8wc1aMBqA==
   /@itwin/core-backend/3.0.0_b51cb391cd5e67e0937732529cca94e4:
     dependencies:
       '@azure/storage-blob': 12.7.0
@@ -581,10 +660,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-tfFM6lKVtjUMrQM/amHrEgJRtIhpqI5bGMtX8MwM9bBeH3hLGY8eTA8A7ReflWmUky+gHhpvN3TGsC7VLqqrIw==
-  /@itwin/core-bentley/3.0.0-dev.177:
-    dev: false
-    resolution:
-      integrity: sha512-4UdXP9sBkO3xB+Uyer9FtZeKtKHIMPezj7ezlAhmvMqDURrXOWOy4+lqUFi95mfy+raPCvyGKwl/PRaPsfWluA==
   /@itwin/core-common/3.0.0_162f3d5152e7671a08a264c69178e997:
     dependencies:
       '@itwin/core-bentley': 3.0.0
@@ -702,6 +777,29 @@ packages:
       typescript: ^3.7.0 || ^4.0.0
     resolution:
       integrity: sha512-yo76Ik1SxN4M2KCRuZNXB92hOk6sFw3giSTV5+QNseXaScSUCozxWcsb0mCZOvT1B1juD8D4KCCkZwfF951hIQ==
+  /@itwin/object-storage-azure/0.0.1-dev.3:
+    dependencies:
+      '@azure/storage-blob': 12.2.1
+      '@itwin/cloud-agnostic-core': 0.0.1-dev.3
+      '@itwin/object-storage-core': 0.0.1-dev.3
+      inversify: 5.0.5
+      reflect-metadata: 0.1.13
+    dev: false
+    engines:
+      node: '>=12.20 <17.0.0'
+    resolution:
+      integrity: sha512-FzSgreg1/RlxzPKWeV5mTui+xZ8wSc5D/+WHoUKZHS7pniX+ex/vW+96WBW3yys96L8zsva4qsdS3KsENVQfOw==
+  /@itwin/object-storage-core/0.0.1-dev.3:
+    dependencies:
+      '@itwin/cloud-agnostic-core': 0.0.1-dev.3
+      axios: 0.24.0
+      inversify: 5.0.5
+      reflect-metadata: 0.1.13
+    dev: false
+    engines:
+      node: '>=12.20 <17.0.0'
+    resolution:
+      integrity: sha512-F0cx8XVMpK5NRH2VVuWNOF+Cp/QMur42eEIiSpkWbNlMsc7tg/EOnFJHUkNoUF4QWKvEGJTAt9ILe2a5EpttpA==
   /@itwin/webgl-compatibility/3.0.0:
     dependencies:
       '@itwin/core-bentley': 3.0.0
@@ -732,12 +830,38 @@ packages:
       node: '>= 8'
     resolution:
       integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==
+  /@opencensus/web-types/0.0.7:
+    dev: false
+    engines:
+      node: '>=6.0'
+    resolution:
+      integrity: sha512-xB+w7ZDAu3YBzqH44rCmG9/RlrOmFuDPt/bpf17eJr8eZSrLt7nc7LnWdxM9Mmoj/YKMHpxRg28txu3TcpiL+g==
+  /@opentelemetry/api/0.10.2:
+    dependencies:
+      '@opentelemetry/context-base': 0.10.2
+    dev: false
+    engines:
+      node: '>=8.0.0'
+    resolution:
+      integrity: sha512-GtpMGd6vkzDMYcpu2t9LlhEgMy/SzBwRnz48EejlRArYqZzqSzAsKmegUK7zHgl+EOIaK9mKHhnRaQu3qw20cA==
+  /@opentelemetry/api/1.0.0-rc.0:
+    dev: false
+    engines:
+      node: '>=8.0.0'
+    resolution:
+      integrity: sha512-iXKByCMfrlO5S6Oh97BuM56tM2cIBB0XsL/vWF/AtJrJEKx4MC/Xdu0xDsGXMGcNWpqF7ujMsjjnp0+UHBwnDQ==
   /@opentelemetry/api/1.0.4:
     dev: false
     engines:
       node: '>=8.0.0'
     resolution:
       integrity: sha512-BuJuXRSJNQ3QoKA6GWWDyuLpOUck+9hAXNMCnrloc1aWVoy6Xq6t9PUV08aBZ4Lutqq2LEHM486bpZqoViScog==
+  /@opentelemetry/context-base/0.10.2:
+    dev: false
+    engines:
+      node: '>=8.0.0'
+    resolution:
+      integrity: sha512-hZNKjKOYsckoOEgBziGMnBcX0M7EtstnCmwz5jZUOUYwlZ+/xxX6z3jPu1XVO2Jivk0eLfuP9GP+vFD49CMetw==
   /@types/chai/4.2.22:
     dev: false
     resolution:
@@ -780,6 +904,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
+  /@types/tunnel/0.0.1:
+    dependencies:
+      '@types/node': 16.11.19
+    dev: false
+    resolution:
+      integrity: sha512-AOqu6bQu5MSWwYvehMXLukFHnupHrpZ8nvgae5Ggie9UwzDR1CCwoXgSSWNZJuyOlCdfdsWMA5F2LlmvyoTv8A==
   /@types/tunnel/0.0.3:
     dependencies:
       '@types/node': 16.11.19
@@ -1330,6 +1460,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==
+  /axios/0.24.0:
+    dependencies:
+      follow-redirects: 1.14.6
+    dev: false
+    resolution:
+      integrity: sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==
   /axobject-query/2.2.0:
     dev: false
     resolution:
@@ -5943,7 +6079,7 @@ packages:
     peerDependencies:
       '@itwin/core-geometry': '*'
     resolution:
-      integrity: sha512-52ZsGl1M6zNur4MOx2dsDkno/CLVJt3g5VpIkkHYn7nH96dSyD710GlIT8c0su8rZ+SpC60ykavVfjxgDN/9Mg==
+      integrity: sha512-VW5TmJIzY0DrqrvTmbirnR4ZMuVCNWkSeDGQVErcNT1UddAaWFcW65ujgnyXwJV1diN5kLlKDeMI8XwTvqNaAQ==
       tarball: 'file:projects/imodels-access-backend-tests.tgz'
     version: 0.0.0
   'file:projects/imodels-access-backend.tgz_@itwin+core-geometry@3.0.0':
@@ -5960,7 +6096,7 @@ packages:
     peerDependencies:
       '@itwin/core-geometry': '*'
     resolution:
-      integrity: sha512-voYz8g0xyDTKD5eQakkcd2MWNLohHXHu7+5WvSyvk9PTUnfVHiuFaqs+RfcULahLGB9jfsW2p8ttK83sqd42ug==
+      integrity: sha512-Jde+vKL7BWTnIxwM6M4MIcf3JdXAUMjOApV62duqQPcqAOa8FxkJ3mwQzjrhKNgDJQh2a0RlY0HPHxG1sNYHDQ==
       tarball: 'file:projects/imodels-access-backend.tgz'
     version: 0.0.0
   'file:projects/imodels-access-frontend-tests.tgz_e25951177ffa96dd156de3b9188b883a':
@@ -5988,12 +6124,12 @@ packages:
       '@itwin/core-quantity': '*'
       '@itwin/webgl-compatibility': '*'
     resolution:
-      integrity: sha512-CsUH+zvAAuKmqea3fhZlbkiEWuGNESrSwwAFe8EqC7oaQcAmR/tW0s42eltnldg+vZ40imhpCYg4vvx7bi9qvA==
+      integrity: sha512-mfYbZ4WC4+SVKoHG6P7ugM03pBNuQLyjG3BvEi79VkEh16e3C6H+jpg2K2q9W+cClg04uDVbRBYG8nAuAl7H/A==
       tarball: 'file:projects/imodels-access-frontend-tests.tgz'
     version: 0.0.0
   'file:projects/imodels-access-frontend.tgz':
     dependencies:
-      '@bentley/itwin-client': 3.0.0-dev.148_f4a588df173e76e968bad38684dae86a
+      '@bentley/itwin-client': 3.0.0-dev.148_@itwin+core-bentley@3.0.0
       '@itwin/appui-abstract': 3.0.0_@itwin+core-bentley@3.0.0
       '@itwin/core-bentley': 3.0.0
       '@itwin/core-common': 3.0.0_162f3d5152e7671a08a264c69178e997
@@ -6006,17 +6142,19 @@ packages:
     dev: false
     name: '@rush-temp/imodels-access-frontend'
     resolution:
-      integrity: sha512-EEEnWA4coil3gFGJE3bG6FeXIdd8a8LOOMUqMYBDojrU7u+4HGBQj6kBo10/aG7+T5uYJsDT9FzW+y8gnAoSaQ==
+      integrity: sha512-UG5A81d7TV4Y46DNdxMvLKgp8RDdKGi7CdP3qe/vjKbuVkN6oss1YnGxglxypnZJT/N1s4/Y6pYOD3NP6LmPUw==
       tarball: 'file:projects/imodels-access-frontend.tgz'
     version: 0.0.0
   'file:projects/imodels-client-authoring.tgz':
     dependencies:
       '@azure/storage-blob': 12.7.0
+      '@itwin/object-storage-azure': 0.0.1-dev.3
+      '@itwin/object-storage-core': 0.0.1-dev.3
       typescript: 4.4.4
     dev: false
     name: '@rush-temp/imodels-client-authoring'
     resolution:
-      integrity: sha512-M7B1TiCke6NMfYYzPQyKtIKM5f1/vLtmmd2WIhUY1OvmxNOPNWEsXLCnA531YeRGsuZwLYhSWTKLzR5s8T1HEg==
+      integrity: sha512-/qKofkxRgUfnvi1OWrCODjO5RCFdMHeGuAYgduKlJwz83dwuEDE0/rBag39UghVU0Irx7iKtWUvJbCYSNXBXpA==
       tarball: 'file:projects/imodels-client-authoring.tgz'
     version: 0.0.0
   'file:projects/imodels-client-common-config.tgz_typescript@4.4.4':
@@ -6040,12 +6178,13 @@ packages:
     version: 0.0.0
   'file:projects/imodels-client-management.tgz':
     dependencies:
+      '@itwin/object-storage-core': 0.0.1-dev.3
       axios: 0.21.4
       typescript: 4.4.4
     dev: false
     name: '@rush-temp/imodels-client-management'
     resolution:
-      integrity: sha512-pOTXVAiKblnS+wOxWDRVabaXmxLNJO4F4b+EEv0Oba5fpcing9+1i8ckH+r2ug/s36SOgHISIEu6emFKSHddUQ==
+      integrity: sha512-anmbBEUPhiu88ySTaP6Wro5Rez6xpc80zpf/RcSJono1AJ/HU8lEJP0FDazav/RGyHyldGp9V6YQL0G+5jj+IA==
       tarball: 'file:projects/imodels-client-management.tgz'
     version: 0.0.0
   'file:projects/imodels-client-test-utils.tgz':
@@ -6062,7 +6201,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-client-test-utils'
     resolution:
-      integrity: sha512-w2AP4YcjO1xxDYTwk+lcLa5UpUP6cXUggdwxjXtmRDeCQEU3SbfD2A+/ZqJ/9Enr8XB7SxcjTNv/XybDluqbzw==
+      integrity: sha512-7VDvY94Zzh6/o1+GCn/FqKIbPEUH9yJwam3WLR0t48W6qsVRKFwT063VMCSWEUVZL6AgDsMCiESNxDzMJnR9gg==
       tarball: 'file:projects/imodels-client-test-utils.tgz'
     version: 0.0.0
   'file:projects/imodels-clients-tests.tgz':
@@ -6084,7 +6223,7 @@ packages:
     dev: false
     name: '@rush-temp/imodels-clients-tests'
     resolution:
-      integrity: sha512-ugfi9RUcXS6pGGqPSH9wx/+LMjHBgBzFup1qDQgRCZycOaUhLFS3tFoIQnHA+Yn3ZMOHSsf3a21ZSfABXU8j7A==
+      integrity: sha512-805fg+cd+FRFS95g87/Ucc/2f59POGA7Qmwe5WHXzdrfV2C94oykb18Zw15h/9kMekCYkPViS8zQe5JshUCLqg==
       tarball: 'file:projects/imodels-clients-tests.tgz'
     version: 0.0.0
 registry: ''
@@ -6100,6 +6239,8 @@ specifiers:
   '@itwin/core-quantity': ^3.0.0
   '@itwin/ecschema-metadata': ^3.0.0
   '@itwin/eslint-plugin': ^3.0.0
+  '@itwin/object-storage-azure': 0.0.1-dev.3
+  '@itwin/object-storage-core': 0.0.1-dev.3
   '@itwin/webgl-compatibility': ^3.0.0
   '@rush-temp/imodels-access-backend': 'file:./projects/imodels-access-backend.tgz'
   '@rush-temp/imodels-access-backend-tests': 'file:./projects/imodels-access-backend-tests.tgz'

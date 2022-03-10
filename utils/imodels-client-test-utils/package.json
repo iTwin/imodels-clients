@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@itwin/imodels-client-authoring": "~1.0.1",
+    "@itwin/object-storage-core": "0.0.1-dev.3",
     "axios": "~0.21.1",
     "chai": "~4.3.4",
     "fs-extra": "~10.0.0",
