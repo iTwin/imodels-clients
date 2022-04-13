@@ -8,8 +8,7 @@ This package contains an API client that exposes a subset of [iModels API](https
 
 ## Usage examples
 
-Things to note:
-- `IModelsClient` expects the authorization info to be passed in a form of an async callback that returns authorization info. It is a common use case to consume `IModelsClient` in iTwin.js platform based applications which use `IModelApp.getAccessToken` or `IModelHost.getAccessToken` to get the access token which is returned as a string. The token string will look something like `Bearer ey....`. To convert the token string into the format that `IModelsClients` expect users can use `AccessTokenAdapter` class which is exported by both [`@itwin/imodels-access-frontend`](../../itwin-platform-access/imodels-access-frontend/src/interface-adapters/AccessTokenAdapter.ts) and [`@itwin/imodels-access-backend`](../../itwin-platform-access/imodels-access-backend/src/interface-adapters/AccessTokenAdapter.ts) packages.
+***Note:*** `IModelsClient` expects the authorization info to be passed in a form of an async callback that returns authorization info. It is a common use case to consume `IModelsClient` in iTwin.js platform based applications which use `IModelApp.getAccessToken` or `IModelHost.getAccessToken` to get the access token which is returned as a string. The token string will look something like `Bearer ey....`. To convert the token string into the format that `IModelsClients` expect users can use `AccessTokenAdapter` class which is exported by both [`@itwin/imodels-access-frontend`](../../itwin-platform-access/imodels-access-frontend/src/interface-adapters/AccessTokenAdapter.ts) and [`@itwin/imodels-access-backend`](../../itwin-platform-access/imodels-access-backend/src/interface-adapters/AccessTokenAdapter.ts) packages.
 ```typescript
 const iModelIterator: EntityListIterator<MinimalIModel> = iModelsClient.iModels.getMinimalList({
   authorization: AccessTokenAdapter.toAuthorizationCallback(await IModelApp.getAccessToken()),
