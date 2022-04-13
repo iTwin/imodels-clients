@@ -79,6 +79,3 @@ async function createNamedVersion(): Promise<void> {
   console.log(namedVersion.id);
 }
 ```
-
-### Using `IModelHost`
-
