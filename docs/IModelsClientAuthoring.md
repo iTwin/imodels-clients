@@ -1,25 +1,25 @@
 # `@itwin/imodels-client-authoring`
 
-`IModelsClient` exposed by `@itwin/imodels-client-authoring` package extends `IModelsClient` exposed by `@itwin/imodels-client-management` package so this documentation references sections from [`@itwin/imodels-client-management` documentation](IModelsClientManagement.md). All types mentioned there are also exported from `@itwin/imodels-client-authoring` package.
+`@itwin/imodels-client-authoring` package extends `IModelsClient` exposed by `@itwin/imodels-client-management` package thus this documentation references sections from [`@itwin/imodels-client-management` documentation](./IModelsClientManagement.md).
 
 ## Key types
 - [`IModelsClient`](../clients/imodels-client-authoring/src/IModelsClient.ts#L31)
 - [`IModelsClientOptions`](../clients/imodels-client-authoring/src/IModelsClient.ts#L18)
 
 ### Parameter and response types
-Please see [parameter and response types for `@itwin/imodels-client-management`](./IModelsClientManagement.md#parameter-and-response-types).
+Please see [documentation](./IModelsClientManagement.md#parameter-and-response-types) of parameter and response types for `@itwin/imodels-client-management`.
 
 Additional types:
 - [`TargetDirectoryParam`](../clients/imodels-client-authoring/src/base/interfaces/CommonInterfaces.ts#L13)
 
 ### Entities
-Please see [entities for `@itwin/imodels-client-management`](./IModelsClientManagement.md#entities).
+Please see [documentation](./IModelsClientManagement.md#entities) of entities for `@itwin/imodels-client-management`.
 
 Additional types:
 - [`Lock`](../clients/imodels-client-authoring/src/base/interfaces/apiEntities/LockInterfaces.ts#L25)
 
 ## Key methods
-Please see [key methods for `@itwin/imodels-client-management`](./IModelsClientManagement.md#key-methods).
+Please see [documentation](./IModelsClientManagement.md#key-methods) of key methods for `@itwin/imodels-client-management`.
 
 Additional methods:
 - [`IModelsClient.iModels`](../clients/imodels-client-authoring/src/IModelsClient.ts#L56)
