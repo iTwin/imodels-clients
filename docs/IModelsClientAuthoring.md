@@ -7,19 +7,19 @@
 - [`IModelsClientOptions`](../clients/imodels-client-authoring/src/IModelsClient.ts#L18)
 
 ### Parameter and response types
-Please see [parameter and response types for `@itwin/imodels-client-management`](./IModelsClientManagement.md#parameter-and-response-types)
+Please see [parameter and response types for `@itwin/imodels-client-management`](./IModelsClientManagement.md#parameter-and-response-types).
 
 Additional types:
 - [`TargetDirectoryParam`](../clients/imodels-client-authoring/src/base/interfaces/CommonInterfaces.ts#13)
 
 ### Entities
-Please see [entities for `@itwin/imodels-client-management`](./IModelsClientManagement.md#entities)
+Please see [entities for `@itwin/imodels-client-management`](./IModelsClientManagement.md#entities).
 
 Additional types:
 - [`Lock`](../clients/imodels-client-authoring/src/base/interfaces/apiEntities/LockInterfaces.ts#L25)
 
 ## Key methods
-Please see [key methods for `@itwin/imodels-client-management`](./IModelsClientManagement.md#key-methods)
+Please see [key methods for `@itwin/imodels-client-management`](./IModelsClientManagement.md#key-methods).
 
 Additional methods:
 - [`IModelsClient.iModels`](../clients/imodels-client-authoring/src/IModelsClient.ts#L)
