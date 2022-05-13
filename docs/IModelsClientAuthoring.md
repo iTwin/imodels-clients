@@ -23,7 +23,7 @@ Please see [key methods for `@itwin/imodels-client-management`](./IModelsClientM
 
 Additional methods:
 - [`IModelsClient.iModels`](../clients/imodels-client-authoring/src/IModelsClient.ts#L)
-  - [`createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel>`](../clients/imodels-client-authoring/src/operations/imodel/IModelOperations.ts#L33)
+  - [`createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel>`](../clients/imodels-client-authoring/src/operations/imodel/IModelOperations.ts#L33) ([sample](#create-imodel-from-baseline-file))
 - [`IModelsClient.briefcases`](../clients/imodels-client-authoring/src/IModelsClient.ts#L)
   - [`acquire(params: AcquireBriefcaseParams): Promise<Briefcase>`](../clients/imodels-client-authoring/src/operations/briefcase/BriefcaseOperations.ts#L17)
   - [`release(params: ReleaseBriefcaseParams): Promise<void>`](../clients/imodels-client-authoring/src/operations/briefcase/BriefcaseOperations.ts#L34)
@@ -34,3 +34,45 @@ Additional methods:
 - [`IModelsClient.locks`](../clients/imodels-client-authoring/src/IModelsClient.ts#L)
   - [`getList(params: GetLockListParams): EntityListIterator<Lock>`](../clients/imodels-client-authoring/src/operations/lock/LockOperations.ts#L19)
   - [`update(params: UpdateLockParams): Promise<Lock>`](../clients/imodels-client-authoring/src/operations/lock/LockOperations.ts#L34)
+
+## Usage examples
+
+Since the `@itwin/imodels-client-authoring` package extends the `@itwin/imodels-client-management` package all [its usage examples](./IModelsClientManagement.md#usage-examples) are valid for the current client as well.
+
+### Authorization
+
+`IModelsClient` expects the authorization info to be passed in a form of an asynchronous callback that returns authorization info. It is a common use case to consume `IModelsClient` in iTwin.js platform based applications which use `IModelApp.getAccessToken` or `IModelHost.getAccessToken` to get the authorization header value returned as a string. The authorization header value specifies the schema and access token e.g. `Bearer ey...`. To convert this value into the format that `IModelsClients` expect users can use `AccessTokenAdapter` class which is exported by both [`@itwin/imodels-access-frontend`](../../itwin-platform-access/imodels-access-frontend/src/interface-adapters/AccessTokenAdapter.ts) and [`@itwin/imodels-access-backend`](../../itwin-platform-access/imodels-access-backend/src/interface-adapters/AccessTokenAdapter.ts) packages.
+```typescript
+const iModelIterator: EntityListIterator<MinimalIModel> = iModelsClient.iModels.getMinimalList({
+  authorization: AccessTokenAdapter.toAuthorizationCallback(await IModelHost.getAccessToken()),
+  urlParams: {
+    projectId: "8a1fcd73-8c23-460d-a392-8b4afc00affc"
+  }
+});
+```
+
+### Create iModel from Baseline File
+```typescript
+import { Authorization, IModel, IModelsClient } from "@itwin/imodels-client-authoring";
+
+/** Function that creates a new iModel from Baseline file and prints its id to the console. */
+async function createIModelFromBaselineFile(): Promise<void> {
+  const iModelsClient: IModelsClient = new IModelsClient();
+  const iModel: IModel = await iModelsClient.iModels.createFromBaseline({
+    authorization: () => getAuthorization(),
+    iModelProperties: {
+      projectId: "8a1fcd73-8c23-460d-a392-8b4afc00affc",
+      name: "Sun City Renewable-energy Plant",
+      description: "Overall model of wind and solar farms in Sun City",
+      filePath: "D:\\imodels\\sun-city.bim"
+    }
+  });
+
+  console.log(iModel.id);
+}
+
+/** Function that returns valid authorization information. */
+async function getAuthorization(): Promise<Authorization> {
+  return { scheme: "Bearer", token: "ey..." };
+}
+```
