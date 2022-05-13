@@ -10,7 +10,7 @@
 Please see [parameter and response types for `@itwin/imodels-client-management`](./IModelsClientManagement.md#parameter-and-response-types).
 
 Additional types:
-- [`TargetDirectoryParam`](../clients/imodels-client-authoring/src/base/interfaces/CommonInterfaces.ts#13)
+- [`TargetDirectoryParam`](../clients/imodels-client-authoring/src/base/interfaces/CommonInterfaces.ts#L13)
 
 ### Entities
 Please see [entities for `@itwin/imodels-client-management`](./IModelsClientManagement.md#entities).
@@ -22,16 +22,16 @@ Additional types:
 Please see [key methods for `@itwin/imodels-client-management`](./IModelsClientManagement.md#key-methods).
 
 Additional methods:
-- [`IModelsClient.iModels`](../clients/imodels-client-authoring/src/IModelsClient.ts#L)
+- [`IModelsClient.iModels`](../clients/imodels-client-authoring/src/IModelsClient.ts#L56)
   - [`createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel>`](../clients/imodels-client-authoring/src/operations/imodel/IModelOperations.ts#L33) ([sample](#create-imodel-from-baseline-file))
-- [`IModelsClient.briefcases`](../clients/imodels-client-authoring/src/IModelsClient.ts#L)
+- [`IModelsClient.briefcases`](../clients/imodels-client-authoring/src/IModelsClient.ts#L61)
   - [`acquire(params: AcquireBriefcaseParams): Promise<Briefcase>`](../clients/imodels-client-authoring/src/operations/briefcase/BriefcaseOperations.ts#L17)
   - [`release(params: ReleaseBriefcaseParams): Promise<void>`](../clients/imodels-client-authoring/src/operations/briefcase/BriefcaseOperations.ts#L34)
-- [`IModelsClient.changesets`](../clients/imodels-client-authoring/src/IModelsClient.ts#L)
+- [`IModelsClient.changesets`](../clients/imodels-client-authoring/src/IModelsClient.ts#L66)
   - [`create(params: CreateChangesetParams): Promise<Changeset>`](../clients/imodels-client-authoring/src/operations/changeset/ChangesetOperations.ts#L20)
   - [`downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset>`](../clients/imodels-client-authoring/src/operations/changeset/ChangesetOperations.ts#L49)
   - [`downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]>`](../clients/imodels-client-authoring/src/operations/changeset/ChangesetOperations.ts#L65)
-- [`IModelsClient.locks`](../clients/imodels-client-authoring/src/IModelsClient.ts#L)
+- [`IModelsClient.locks`](../clients/imodels-client-authoring/src/IModelsClient.ts#L81)
   - [`getList(params: GetLockListParams): EntityListIterator<Lock>`](../clients/imodels-client-authoring/src/operations/lock/LockOperations.ts#L19)
   - [`update(params: UpdateLockParams): Promise<Lock>`](../clients/imodels-client-authoring/src/operations/lock/LockOperations.ts#L34)
 
@@ -41,7 +41,7 @@ Since the `@itwin/imodels-client-authoring` package extends the `@itwin/imodels-
 
 ### Authorization
 
-`IModelsClient` expects the authorization info to be passed in a form of an asynchronous callback that returns authorization info. It is a common use case to consume `IModelsClient` in iTwin.js platform based applications which use `IModelApp.getAccessToken` or `IModelHost.getAccessToken` to get the authorization header value returned as a string. The authorization header value specifies the schema and access token e.g. `Bearer ey...`. To convert this value into the format that `IModelsClients` expect users can use `AccessTokenAdapter` class which is exported by both [`@itwin/imodels-access-frontend`](../../itwin-platform-access/imodels-access-frontend/src/interface-adapters/AccessTokenAdapter.ts) and [`@itwin/imodels-access-backend`](../../itwin-platform-access/imodels-access-backend/src/interface-adapters/AccessTokenAdapter.ts) packages.
+`IModelsClient` expects the authorization info to be passed in a form of an asynchronous callback that returns authorization info. It is a common use case to consume `IModelsClient` in iTwin.js platform based applications which use `IModelApp.getAccessToken` or `IModelHost.getAccessToken` to get the authorization header value returned as a string. The authorization header value specifies the schema and access token e.g. `Bearer ey...`. To convert this value into the format that `IModelsClients` expect users can use `AccessTokenAdapter` class which is exported by both [`@itwin/imodels-access-frontend`](../itwin-platform-access/imodels-access-frontend/src/interface-adapters/AccessTokenAdapter.ts) and [`@itwin/imodels-access-backend`](../itwin-platform-access/imodels-access-backend/src/interface-adapters/AccessTokenAdapter.ts) packages.
 ```typescript
 const iModelIterator: EntityListIterator<MinimalIModel> = iModelsClient.iModels.getMinimalList({
   authorization: AccessTokenAdapter.toAuthorizationCallback(await IModelHost.getAccessToken()),

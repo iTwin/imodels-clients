@@ -20,8 +20,8 @@
   - [`getMinimalList(params: GetIModelListParams): EntityListIterator<MinimalIModel>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L17) ([sample](#get-all-project-imodels))
   - [`getRepresentationList(params: GetIModelListParams): EntityListIterator<IModel>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L33)
   - [`getSingle(params: GetSingleIModelParams): Promise<IModel>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L48)
-  - [`createEmpty(params: CreateEmptyIModelParams): Promise<IModel>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L)
-  - [`delete(params: DeleteIModelParams): Promise<void>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L)
+  - [`createEmpty(params: CreateEmptyIModelParams): Promise<IModel>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L62)
+  - [`delete(params: DeleteIModelParams): Promise<void>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L78)
 - [`IModelsClient.briefcases`](../clients/imodels-client-management/src/IModelsClient.ts#L49)
   - [`getMinimalList(params: GetBriefcaseListParams): EntityListIterator<MinimalBriefcase> `](../clients/imodels-client-management/src/operations/briefcase/BriefcaseOperations.ts#L19)
   - [`getRepresentationList(params: GetBriefcaseListParams): EntityListIterator<Briefcase>`](../clients/imodels-client-management/src/operations/briefcase/BriefcaseOperations.ts#L36)
@@ -43,7 +43,7 @@
 
 ### Authorization
 
-`IModelsClient` expects the authorization info to be passed in a form of an asynchronous callback that returns authorization info. It is a common use case to consume `IModelsClient` in iTwin.js platform based applications which use `IModelApp.getAccessToken` or `IModelHost.getAccessToken` to get the authorization header value returned as a string. The authorization header value specifies the schema and access token e.g. `Bearer ey...`. To convert this value into the format that `IModelsClients` expect users can use `AccessTokenAdapter` class which is exported by both [`@itwin/imodels-access-frontend`](../../itwin-platform-access/imodels-access-frontend/src/interface-adapters/AccessTokenAdapter.ts) and [`@itwin/imodels-access-backend`](../../itwin-platform-access/imodels-access-backend/src/interface-adapters/AccessTokenAdapter.ts) packages.
+`IModelsClient` expects the authorization info to be passed in a form of an asynchronous callback that returns authorization info. It is a common use case to consume `IModelsClient` in iTwin.js platform based applications which use `IModelApp.getAccessToken` or `IModelHost.getAccessToken` to get the authorization header value returned as a string. The authorization header value specifies the schema and access token e.g. `Bearer ey...`. To convert this value into the format that `IModelsClients` expect users can use `AccessTokenAdapter` class which is exported by both [`@itwin/imodels-access-frontend`](../itwin-platform-access/imodels-access-frontend/src/interface-adapters/AccessTokenAdapter.ts) and [`@itwin/imodels-access-backend`](../itwin-platform-access/imodels-access-backend/src/interface-adapters/AccessTokenAdapter.ts) packages.
 ```typescript
 const iModelIterator: EntityListIterator<MinimalIModel> = iModelsClient.iModels.getMinimalList({
   authorization: AccessTokenAdapter.toAuthorizationCallback(await IModelApp.getAccessToken()),
