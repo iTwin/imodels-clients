@@ -15,7 +15,7 @@ import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion, LocalDirName
 } from "@itwin/core-common";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset, ChangesetIdOrIndex,
   ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams, DeleteIModelParams,
@@ -223,12 +223,29 @@ export class BackendIModelsAccess implements BackendHubAccess {
     });
   }
 
-  // TODO: refactor.......
+  /**
+   * iModels API returns a link to a file in Azure Blob Storage. The API does not return checkpoint file size as
+   * a standalone property so we query it from Azure using the method described below.
+   *  
+   * To get the total size of the file we send a GET request to the file download url with `Range: bytes=0-0` header
+   * specified which requests to get only the first byte of the file. As a response we get the first file byte in
+   * the body and `Content-Range` response header which contains information about the total file size. See
+   * https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob#response-headers,
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range.
+   * 
+   * The format of returned `Content-Range` header in this case is
+   * `<unit> <range-start>-<range-end>/<size>`, e.g. `bytes 0-0/1253376`.
+   */
   private async getV1CheckpointSize(downloadUrl: string): Promise<number> {
-    const response = await axios.get(downloadUrl, { headers: { Range: "bytes=0-0" } });
-    const rangeHeaderValue: string = response.headers["content-range"];
-    const rangeBytes = parseInt(rangeHeaderValue.split("/")[1], 10);
-    return rangeBytes;
+    const emptyRangeHeaderValue = "bytes=0-0";
+    const contentRangeHeaderName = "content-range";
+
+    const response: AxiosResponse = await axios.get(downloadUrl, { headers: { Range: emptyRangeHeaderValue } });
+    const rangeHeaderValue: string = response.headers[contentRangeHeaderName];
+    const rangeTotalBytesString: string = rangeHeaderValue.split("/")[1];
+    const rangeTotalBytes: number = parseInt(rangeTotalBytesString, 10);
+
+    return rangeTotalBytes;
   }
 
   public async queryV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
