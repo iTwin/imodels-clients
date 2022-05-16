@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AzureClientStorage } from "@itwin/object-storage-azure";
+import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
 import {
   CheckpointOperations,
@@ -92,7 +92,7 @@ export class IModelsClient {
   public static fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
     return {
       ...ManagementIModelsClient.fillConfiguration(options),
-      storage: options?.storage ?? new AzureClientStorage()
+      storage: options?.storage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory())
     };
   }
 }

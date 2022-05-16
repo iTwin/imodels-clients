@@ -33,8 +33,8 @@
   "dependencies": {
     "@azure/storage-blob": "~12.7.0",
     "@itwin/imodels-client-management": "~1.0.1",
-    "@itwin/object-storage-azure": "0.0.1-dev.3",
-    "@itwin/object-storage-core": "0.0.1-dev.3"
+    "@itwin/object-storage-azure": "0.1.0-dev.1",
+    "@itwin/object-storage-core": "0.1.0-dev.1"
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "~1.0.1",

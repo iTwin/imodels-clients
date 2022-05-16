@@ -39,7 +39,7 @@ export class TrackableClientStorage implements ClientStorage {
     if (this._interceptors?.download)
       this._interceptors.download(input);
 
-    return this._underlyingStorage.download(input);
+    return this._underlyingStorage.download(input as any); // TODO
   }
 
   public async upload(
