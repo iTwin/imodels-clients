@@ -21,7 +21,7 @@ export interface IModelsClientOptions extends ManagementIModelsClientOptions {
    * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. If `undefined` the default
    * is used which is `LocalFsImpl` that is implemented using Node's `fs` module.
    */
-  localFs?: LocalFileSystem;
+  localFileSystem?: LocalFileSystem;
   /**
    * Storage handler to use in operations which transfer files. Examples of such operations are Changeset download in
    * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. If `undefined` the default
@@ -97,7 +97,7 @@ export class IModelsClient {
   public static fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
     return {
       ...ManagementIModelsClient.fillConfiguration(options),
-      localFs: options?.localFs ?? new LocalFileSystemImpl(),
+      localFileSystem: options?.localFileSystem ?? new LocalFileSystemImpl(),
       cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory())
     };
   }

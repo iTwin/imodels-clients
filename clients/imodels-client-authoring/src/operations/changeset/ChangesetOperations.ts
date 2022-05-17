@@ -51,7 +51,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns downloaded Changeset. See {@link DownloadedChangeset}.
    */
   public async downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset> {
-    await this._options.localFs.createDirectory(params.targetDirectoryPath);
+    await this._options.localFileSystem.createDirectory(params.targetDirectoryPath);
 
     const changeset: Changeset = await this.querySingleInternal(params);
     return this.downloadSingleChangeset({ ...params, changeset });
@@ -68,7 +68,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns downloaded Changeset metadata along with the downloaded file path. See {@link DownloadedChangeset}.
    */
   public async downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]> {
-    await this._options.localFs.createDirectory(params.targetDirectoryPath);
+    await this._options.localFileSystem.createDirectory(params.targetDirectoryPath);
 
     let result: DownloadedChangeset[] = [];
     for await (const changesetPage of this.getRepresentationList(params).byPage()) {
@@ -97,7 +97,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   }
 
   private async getCreateChangesetRequestBody(changesetProperties: ChangesetPropertiesForCreate): Promise<object> {
-    const changesetFileSize = await this._options.localFs.getFileSize(changesetProperties.filePath);
+    const changesetFileSize = await this._options.localFileSystem.getFileSize(changesetProperties.filePath);
     return {
       id: changesetProperties.id,
       description: changesetProperties.description,
@@ -164,15 +164,15 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   }
 
   private async isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): Promise<boolean> {
-    const fileExists = await this._options.localFs.fileExists(targetFilePath);
+    const fileExists = await this._options.localFileSystem.fileExists(targetFilePath);
     if (!fileExists)
       return false;
 
-    const existingFileSize = await this._options.localFs.getFileSize(targetFilePath);
+    const existingFileSize = await this._options.localFileSystem.getFileSize(targetFilePath);
     if (existingFileSize === expectedFileSize)
       return true;
 
-    await this._options.localFs.deleteFile(targetFilePath);
+    await this._options.localFileSystem.deleteFile(targetFilePath);
     return false;
   }
 

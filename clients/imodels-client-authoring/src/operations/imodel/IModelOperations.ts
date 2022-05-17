@@ -62,7 +62,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   }
 
   private async getCreateIModelFromBaselineRequestBody(iModelProperties: IModelPropertiesForCreateFromBaseline): Promise<object> {
-    const baselineFileSize = await this._options.localFs.getFileSize(iModelProperties.filePath);
+    const baselineFileSize = await this._options.localFileSystem.getFileSize(iModelProperties.filePath);
     return {
       ...this.getCreateEmptyIModelRequestBody(iModelProperties),
       baselineFile: {

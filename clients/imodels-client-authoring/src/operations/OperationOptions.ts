@@ -9,6 +9,6 @@ import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
 
 export interface OperationOptions extends ManagementOperationOptions {
   urlFormatter: IModelsApiUrlFormatter;
-  localFs: LocalFileSystem;
+  localFileSystem: LocalFileSystem;
   cloudStorage: ClientStorage;
 }
