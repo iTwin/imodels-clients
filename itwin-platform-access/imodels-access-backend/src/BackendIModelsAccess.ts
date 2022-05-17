@@ -219,7 +219,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
         bytesTransferred += chunk.length;
         arg.onProgress!(bytesTransferred, v1CheckpointSize);
       });
-      downloadStream.on("end", resolve);
+      targetFileStream.on("finish", resolve);
     });
   }
 
