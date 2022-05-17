@@ -199,7 +199,7 @@ describe("[Management] ChangesetOperations", () => {
         const expectedCheckpointChangesetIndex = changeset.index === firstNamedVersion.changesetIndex
           ? firstNamedVersion.changesetIndex
           : 0;
-        expect(checkpoint!.changesetIndex).to.equal(expectedCheckpointChangesetIndex);
+        expect(checkpoint.changesetIndex).to.equal(expectedCheckpointChangesetIndex);
       }
     });
 
@@ -217,7 +217,7 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
       expect(checkpoint).to.not.be.undefined;
-      expect(checkpoint!.changesetIndex).to.equal(firstNamedVersion.changesetIndex);
+      expect(checkpoint.changesetIndex).to.equal(firstNamedVersion.changesetIndex);
     });
   });
 });
