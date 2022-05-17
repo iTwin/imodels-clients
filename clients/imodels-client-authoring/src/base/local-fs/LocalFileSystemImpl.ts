@@ -16,15 +16,19 @@ export class LocalFileSystemImpl implements LocalFileSystem {
   }
 
   public async fileExists(filePath: string): Promise<boolean> {
-    try {
-      await promises.access(filePath, constants.F_OK);
-      return true;
-    } catch {
-      return false;
-    }
+    return this.pathIsAccessible(filePath);
   }
 
   public async deleteFile(filePath: string): Promise<void> {
     return promises.unlink(filePath);
+  }
+
+  protected async pathIsAccessible(path: string): Promise<boolean> {
+    try {
+      await promises.access(path, constants.F_OK);
+      return true;
+    } catch {
+      return false;
+    }
   }
 }
