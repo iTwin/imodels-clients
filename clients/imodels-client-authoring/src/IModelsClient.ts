@@ -27,7 +27,7 @@ export interface IModelsClientOptions extends ManagementIModelsClientOptions {
    * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. If `undefined` the default
    * is used which is `AzureClientStorage` class from `@itwin/object-storage-azure`.
    */
-  storage?: ClientStorage;
+  cloudStorage?: ClientStorage;
 }
 
 /**
@@ -55,7 +55,7 @@ export class IModelsClient {
    * see {@link iModelsClientOptions}.
    */
   public get storage(): ClientStorage {
-    return this._operationsOptions.storage;
+    return this._operationsOptions.cloudStorage;
   }
 
   /** iModel operations. See {@link iModelOperations}. */
@@ -98,7 +98,7 @@ export class IModelsClient {
     return {
       ...ManagementIModelsClient.fillConfiguration(options),
       localFs: options?.localFs ?? new LocalFileSystemImpl(),
-      storage: options?.storage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory())
+      cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory())
     };
   }
 }

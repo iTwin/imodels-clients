@@ -263,7 +263,7 @@ describe("[Authoring] ChangesetOperations", () => {
         };
 
         const trackedStorage = new TrackableClientStorage(azureClientStorage, { download: downloadInterceptor });
-        const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, storage: trackedStorage });
+        const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, cloudStorage: trackedStorage });
 
         const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", `download ${testCase.label} retry test`);
         const partialDownloadChangesetParams: CommonDownloadParams = {
@@ -298,7 +298,7 @@ describe("[Authoring] ChangesetOperations", () => {
         };
 
         const trackedStorage = new TrackableClientStorage(azureClientStorage, { download: downloadInterceptor });
-        const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, storage: trackedStorage });
+        const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, cloudStorage: trackedStorage });
 
         const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", `download ${testCase.label} reuse test`);
         const partialDownloadChangesetParams: CommonDownloadParams = {

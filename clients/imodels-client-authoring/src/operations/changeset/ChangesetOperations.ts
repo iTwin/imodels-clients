@@ -27,7 +27,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     });
 
     const uploadUrl = createChangesetResponse.changeset._links.upload.href;
-    await this._options.storage.upload({
+    await this._options.cloudStorage.upload({
       url: uploadUrl,
       data: params.changesetProperties.filePath
     });
@@ -136,7 +136,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       return;
 
     try {
-      await this._options.storage.download({
+      await this._options.cloudStorage.download({
         transferType: "local",
         url: params.changeset._links.download.href,
         localPath: targetFilePath
@@ -149,7 +149,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       });
 
       try {
-        await this._options.storage.download({
+        await this._options.cloudStorage.download({
           transferType: "local",
           url: changeset._links.download.href,
           localPath: targetFilePath

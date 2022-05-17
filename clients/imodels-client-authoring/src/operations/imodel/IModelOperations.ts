@@ -39,7 +39,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     });
 
     const uploadUrl = createIModelResponse.iModel._links.upload.href;
-    await this._options.storage.upload({
+    await this._options.cloudStorage.upload({
       url: uploadUrl,
       data: params.iModelProperties.filePath
     });
