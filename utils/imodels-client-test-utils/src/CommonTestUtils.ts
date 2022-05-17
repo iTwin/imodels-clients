@@ -23,6 +23,9 @@ export function createDirectory(directoryPath: string): void {
 }
 
 export async function cleanupDirectory(directory: string): Promise<void> {
+  if (!(await testLocalFileSystem.directoryExists(directory)))
+    return;
+
   const directoryObjects = await fs.promises.readdir(directory);
   const fileDeletePromises: Promise<void>[] = directoryObjects.map(async (objectName) => {
     const fullPath = path.join(directory, objectName);
