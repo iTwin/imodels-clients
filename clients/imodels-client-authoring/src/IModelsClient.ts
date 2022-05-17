@@ -11,12 +11,19 @@ import {
   NamedVersionOperations,
   RecursiveRequired
 } from "@itwin/imodels-client-management";
-import { BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations } from "./operations";
-import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
+import { BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations, IModelsApiUrlFormatter } from "./operations";
+import {  } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
+import { LocalFileSystem, LocalFileSystemImpl } from "./base";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions extends ManagementIModelsClientOptions {
+  /**
+   * Local filesystem to use in operations which transfer files. Examples of such operations are Changeset download in
+   * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. If `undefined` the default
+   * is used which is `LocalFsImpl` that is implemented using Node's `fs` module.
+   */
+  localFs?: LocalFileSystem;
   /**
    * Storage handler to use in operations which transfer files. Examples of such operations are Changeset download in
    * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. If `undefined` the default
@@ -92,6 +99,7 @@ export class IModelsClient {
   public static fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
     return {
       ...ManagementIModelsClient.fillConfiguration(options),
+      localFs: options?.localFs ?? new LocalFileSystemImpl(),
       storage: options?.storage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory())
     };
   }

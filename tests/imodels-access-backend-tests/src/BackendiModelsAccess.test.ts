@@ -187,7 +187,7 @@ describe("BackendIModelsAccess", () => {
       expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
     })
 
-    it("should report progress when downloading checkpoint", async () => {
+    it.only("should report progress when downloading checkpoint", async () => {
       // Arrange
       const progressLogs: { loaded: number, total: number }[] = [];
       const progressCallback: ProgressFunction = (loaded: number, total: number) => {

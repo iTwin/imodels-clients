@@ -2,7 +2,6 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import * as fs from "fs";
 import * as path from "path";
 import { Changeset, ChangesetResponse, ChangesetState, IModelScopedOperationParams, IModelsErrorCode, IModelsErrorImpl, ChangesetOperations as ManagementChangesetOperations } from "@itwin/imodels-client-management";
 import { DownloadedChangeset, TargetDirectoryParam } from "../../base";
@@ -20,7 +19,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns newly created Changeset. See {@link Changeset}.
    */
   public async create(params: CreateChangesetParams): Promise<Changeset> {
-    const createChangesetBody = this.getCreateChangesetRequestBody(params.changesetProperties);
+    const createChangesetBody = await this.getCreateChangesetRequestBody(params.changesetProperties);
     const createChangesetResponse = await this.sendPostRequest<ChangesetResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId }),
@@ -52,7 +51,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns downloaded Changeset. See {@link DownloadedChangeset}.
    */
   public async downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset> {
-    fs.mkdirSync(params.targetDirectoryPath, { recursive: true });
+    await this._options.localFs.createDirectory(params.targetDirectoryPath);
 
     const changeset: Changeset = await this.querySingleInternal(params);
     return this.downloadSingleChangeset({ ...params, changeset });
@@ -69,7 +68,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns downloaded Changeset metadata along with the downloaded file path. See {@link DownloadedChangeset}.
    */
   public async downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]> {
-    fs.mkdirSync(params.targetDirectoryPath, { recursive: true });
+    await this._options.localFs.createDirectory(params.targetDirectoryPath);
 
     let result: DownloadedChangeset[] = [];
     for await (const changesetPage of this.getRepresentationList(params).byPage()) {
@@ -97,14 +96,15 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     return result;
   }
 
-  private getCreateChangesetRequestBody(changesetProperties: ChangesetPropertiesForCreate): object {
+  private async getCreateChangesetRequestBody(changesetProperties: ChangesetPropertiesForCreate): Promise<object> {
+    const changesetFileSize = await this._options.localFs.getFileSize(changesetProperties.filePath);
     return {
       id: changesetProperties.id,
       description: changesetProperties.description,
       parentId: changesetProperties.parentId,
       briefcaseId: changesetProperties.briefcaseId,
       containingChanges: changesetProperties.containingChanges,
-      fileSize: fs.statSync(changesetProperties.filePath).size
+      fileSize: changesetFileSize
     };
   }
 
@@ -132,7 +132,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
   private async downloadChangesetFileWithRetry(params: IModelScopedOperationParams & { changeset: DownloadedChangeset }): Promise<void> {
     const targetFilePath = params.changeset.filePath;
-    if (this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
+    if (await this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
       return;
 
     try {
@@ -163,15 +163,16 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     }
   }
 
-  private isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): boolean {
-    if (!fs.existsSync(targetFilePath))
+  private async isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): Promise<boolean> {
+    const fileExists = await this._options.localFs.fileExists(targetFilePath);
+    if (!fileExists)
       return false;
 
-    const existingFileSize = fs.statSync(targetFilePath).size;
+    const existingFileSize = await this._options.localFs.getFileSize(targetFilePath);
     if (existingFileSize === expectedFileSize)
       return true;
 
-    fs.unlinkSync(targetFilePath);
+    await this._options.localFs.deleteFile(targetFilePath);
     return false;
   }
 

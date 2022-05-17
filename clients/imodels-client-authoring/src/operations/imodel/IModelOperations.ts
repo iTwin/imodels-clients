@@ -2,7 +2,6 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import * as fs from "fs";
 import { AuthorizationParam, IModel, IModelsErrorCode, IModelsErrorImpl, IModelOperations as ManagementIModelOperations, sleep } from "@itwin/imodels-client-management";
 import { IModelCreateResponse } from "../../base";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
@@ -32,7 +31,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   * or did not complete in time. See {@link iModelsErrorCode}.
   */
   public async createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel> {
-    const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties);
+    const createIModelBody = await this.getCreateIModelFromBaselineRequestBody(params.iModelProperties);
     const createIModelResponse = await this.sendPostRequest<IModelCreateResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getCreateIModelUrl(),
@@ -62,11 +61,12 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     });
   }
 
-  private getCreateIModelFromBaselineRequestBody(iModelProperties: IModelPropertiesForCreateFromBaseline): object {
+  private async getCreateIModelFromBaselineRequestBody(iModelProperties: IModelPropertiesForCreateFromBaseline): Promise<object> {
+    const baselineFileSize = await this._options.localFs.getFileSize(iModelProperties.filePath);
     return {
       ...this.getCreateEmptyIModelRequestBody(iModelProperties),
       baselineFile: {
-        size: fs.statSync(iModelProperties.filePath).size
+        size: baselineFileSize
       }
     };
   }

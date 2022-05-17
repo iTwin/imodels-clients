@@ -6,3 +6,5 @@ export * from "./interfaces/apiEntities/IModelInterfaces";
 export * from "./interfaces/apiEntities/ChangesetInterfaces";
 export * from "./interfaces/apiEntities/LockInterfaces";
 export * from "./interfaces/CommonInterfaces";
+export * from "./local-fs/LocalFileSystem";
+export * from "./local-fs/LocalFileSystemImpl";
