@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { ClientStorage } from "@itwin/object-storage-core";
 import { OperationOptions as ManagementOperationOptions } from "@itwin/imodels-client-management";
-import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
 import { LocalFileSystem } from "../base";
+import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
 
 export interface OperationOptions extends ManagementOperationOptions {
   urlFormatter: IModelsApiUrlFormatter;

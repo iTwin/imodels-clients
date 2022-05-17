@@ -11,10 +11,8 @@ import {
   NamedVersionOperations,
   RecursiveRequired
 } from "@itwin/imodels-client-management";
-import { BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations, IModelsApiUrlFormatter } from "./operations";
-import {  } from "./operations/IModelsApiUrlFormatter";
-import { OperationOptions } from "./operations/OperationOptions";
 import { LocalFileSystem, LocalFileSystemImpl } from "./base";
+import { BriefcaseOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions extends ManagementIModelsClientOptions {

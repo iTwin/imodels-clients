@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { assert } from "console";
 import * as fs from "fs";
 import * as path from "path";
 import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction } from "@itwin/core-backend";
@@ -9,9 +10,8 @@ import { BriefcaseId, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, Lo
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 import { ContainingChanges, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, cleanupDirectory, createGuidValue, TestProjectProvider } from "@itwin/imodels-client-test-utils";
+import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 import { getTestDIContainer } from "./TestDiContainerProvider";
-import { assert } from "console";
 
 class TestAuthorizationClient {
   constructor(private _accessToken: string) {
@@ -185,9 +185,9 @@ describe("BackendIModelsAccess", () => {
       expect(downloadedCheckpoint.index).to.be.equal(firstNamedVersion.changesetIndex);
       expect(fs.existsSync(localCheckpointFilePath)).to.be.equal(true);
       expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
-    })
+    });
 
-    it.only("should report progress when downloading checkpoint", async () => {
+    it("should report progress when downloading checkpoint", async () => {
       // Arrange
       const progressLogs: { loaded: number, total: number }[] = [];
       const progressCallback: ProgressFunction = (loaded: number, total: number) => {

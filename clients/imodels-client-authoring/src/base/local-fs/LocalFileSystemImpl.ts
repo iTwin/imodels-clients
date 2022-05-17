@@ -11,20 +11,20 @@ export class LocalFileSystemImpl implements LocalFileSystem {
   }
 
   public async getFileSize(filePath: string): Promise<number> {
-    const fileStats = await promises.stat(filePath)
+    const fileStats = await promises.stat(filePath);
     return fileStats.size;
   }
 
   public async fileExists(filePath: string): Promise<boolean> {
     try {
       await promises.access(filePath, constants.F_OK); // TODO: test
-      return true
+      return true;
     } catch {
       return false;
     }
   }
 
-  public deleteFile(filePath: string): Promise<void> {
+  public async deleteFile(filePath: string): Promise<void> {
     return promises.unlink(filePath);
   }
 }

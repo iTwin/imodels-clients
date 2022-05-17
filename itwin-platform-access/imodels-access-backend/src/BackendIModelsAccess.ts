@@ -226,13 +226,13 @@ export class BackendIModelsAccess implements BackendHubAccess {
   /**
    * iModels API returns a link to a file in Azure Blob Storage. The API does not return checkpoint file size as
    * a standalone property so we query it from Azure using the method described below.
-   *  
+   *
    * To get the total size of the file we send a GET request to the file download url with `Range: bytes=0-0` header
    * specified which requests to get only the first byte of the file. As a response we get the first file byte in
    * the body and `Content-Range` response header which contains information about the total file size. See
    * https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob#response-headers,
    * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range.
-   * 
+   *
    * The format of returned `Content-Range` header in this case is
    * `<unit> <range-start>-<range-end>/<size>`, e.g. `bytes 0-0/1253376`.
    */
