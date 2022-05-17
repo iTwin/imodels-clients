@@ -20,6 +20,7 @@
   },
   "scripts": {
     "build": "",
+    "clean": "",
     "lint": "",
     "lint-fix": "sort-package-json",
     "spell-check": ""

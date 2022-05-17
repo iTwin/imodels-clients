@@ -38,6 +38,7 @@ dependencies:
   nyc: 15.1.0
   puppeteer: 13.5.1
   reflect-metadata: 0.1.13
+  rimraf: 3.0.2
   sort-package-json: 1.53.1
   typescript: 4.4.4
 lockfileVersion: 5.1
@@ -5090,11 +5091,12 @@ packages:
   'file:projects/imodels-client-authoring.tgz':
     dependencies:
       '@azure/storage-blob': 12.7.0
+      rimraf: 3.0.2
       typescript: 4.4.4
     dev: false
     name: '@rush-temp/imodels-client-authoring'
     resolution:
-      integrity: sha512-dwnvhZoVDyRHoW7gjsuyrxCHPIcHHWu8usFCHCM8rGxPXjaAXsmXU2Qyo0QSOwKxlf0h/ImNPJvcjVj2/Pl2Iw==
+      integrity: sha512-OsQDqL4vEWLvK3E5Bd18CJUdIv7Zb+JQONZQJ38Z9AnupVFdIyJxIL6UFs758L+7tPrP4apecTynaNhHQF4M6Q==
       tarball: 'file:projects/imodels-client-authoring.tgz'
     version: 0.0.0
   'file:projects/imodels-client-common-config.tgz_typescript@4.4.4':
@@ -5162,6 +5164,7 @@ packages:
       integrity: sha512-9gTNlfM0RwtQk2bfZDwgnr891QxY+osWntQ5xaQLzAlR/IhTMGJpOL0wejQHpvXD10Pwlyw4fJ/BC5KBBPPmTg==
       tarball: 'file:projects/imodels-clients-tests.tgz'
     version: 0.0.0
+registry: ''
 specifiers:
   '@azure/storage-blob': ~12.7.0
   '@itwin/appui-abstract': ^3.0.0
@@ -5202,5 +5205,6 @@ specifiers:
   nyc: 15.1.0
   puppeteer: ~13.5.1
   reflect-metadata: ~0.1.13
+  rimraf: ~3.0.2
   sort-package-json: ~1.53.1
   typescript: ~4.4.0

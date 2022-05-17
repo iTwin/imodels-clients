@@ -23,6 +23,7 @@
   "typings": "lib/IModelsClientExports",
   "scripts": {
     "build": "tsc 1>&2",
+    "clean": "rimraf lib",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell ** --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "~1.0.1",
+    "rimraf": "~3.0.2",
     "typescript": "~4.4.0"
   }
 }
