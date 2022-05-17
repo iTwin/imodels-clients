@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { testLocalFileSystem } from "./TestLocalFileSystem";
 import * as fs from "fs";
 import * as path from "path";
+import { testLocalFileSystem } from "./TestLocalFileSystem";
 
 async function deleteFileIfExists(filePath: string): Promise<void> {
   if (await testLocalFileSystem.fileExists(filePath)) {
@@ -30,7 +30,7 @@ export function createDirectory(directoryPath: string): void {
 
 export async function cleanupDirectory(directory: string): Promise<void> {
   const filesInDirectory = await fs.promises.readdir(directory);
-  const fileDeletePromises: Promise<void>[] = filesInDirectory.map(fileName => deleteFileIfExists(path.join(directory, fileName)));
+  const fileDeletePromises: Promise<void>[] = filesInDirectory.map(async (fileName) => deleteFileIfExists(path.join(directory, fileName)));
   await Promise.all(fileDeletePromises);
 }
 
