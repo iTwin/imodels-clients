@@ -17,7 +17,7 @@ export class LocalFileSystemImpl implements LocalFileSystem {
 
   public async fileExists(filePath: string): Promise<boolean> {
     try {
-      await promises.access(filePath, constants.F_OK); // TODO: test
+      await promises.access(filePath, constants.F_OK);
       return true;
     } catch {
       return false;

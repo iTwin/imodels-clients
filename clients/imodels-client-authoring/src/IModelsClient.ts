@@ -54,7 +54,7 @@ export class IModelsClient {
    * File handler that is used for file transfer operations. This uses the user provided handler or default one,
    * see {@link iModelsClientOptions}.
    */
-  public get storage(): ClientStorage {
+  public get cloudStorage(): ClientStorage {
     return this._operationsOptions.cloudStorage;
   }
 

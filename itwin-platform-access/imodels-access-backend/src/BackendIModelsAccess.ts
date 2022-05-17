@@ -194,7 +194,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
 
     if (!arg.onProgress) {
-      await this._iModelsClient.storage.download({
+      await this._iModelsClient.cloudStorage.download({
         transferType: "local",
         url: checkpoint._links.download.href,
         localPath: arg.localFile
@@ -207,7 +207,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const targetFileStream = fs.createWriteStream(arg.localFile);
 
-    const downloadStream: Readable = await this._iModelsClient.storage.download({
+    const downloadStream: Readable = await this._iModelsClient.cloudStorage.download({
       transferType: "stream",
       url: checkpoint._links.download.href,
       localPath: arg.localFile
