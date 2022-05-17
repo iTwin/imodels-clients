@@ -21,11 +21,10 @@ export function createDirectory(directoryPath: string): void {
   fs.mkdirSync(directoryPath);
 }
 
-export function cleanupDirectory(directory: string): void {
-  if (fs.existsSync(directory)) {
-    fs.rmdirSync(directory, { recursive: true });
-    fs.mkdirSync(directory);
-  }
+export async function cleanupDirectory(directory: string): Promise<void> {
+  const filesInDirectory = await fs.promises.readdir(directory);
+  const fileDeletePromises: Promise<void>[] = filesInDirectory.map(file => fs.promises.unlink(file));
+  await Promise.all(fileDeletePromises);
 }
 
 export function createGuidValue(): string {

@@ -23,8 +23,8 @@ describe("[Authoring] ChangesetOperations", () => {
   let testIModelForRead: ReusableIModelMetadata;
   let testIModelForWrite: IModelMetadata;
 
-  beforeEach(() => {
-    cleanupDirectory(Constants.TestDownloadDirectoryPath);
+  beforeEach(async () => {
+    await cleanupDirectory(Constants.TestDownloadDirectoryPath);
   });
 
   before(async () => {
@@ -48,8 +48,8 @@ describe("[Authoring] ChangesetOperations", () => {
     testIModelForWrite = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
   });
 
-  afterEach(() => {
-    cleanupDirectory(Constants.TestDownloadDirectoryPath);
+  afterEach(async () => {
+    await cleanupDirectory(Constants.TestDownloadDirectoryPath);
   });
 
   after(async () => {

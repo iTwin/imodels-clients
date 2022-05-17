@@ -67,12 +67,12 @@ describe("BackendIModelsAccess", () => {
     testIModelForWrite = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
   });
 
-  beforeEach(() => {
-    cleanupDirectory(testDownloadPath);
+  beforeEach(async () => {
+    await cleanupDirectory(testDownloadPath);
   });
 
-  afterEach(() => {
-    cleanupDirectory(testDownloadPath);
+  afterEach(async () => {
+    await cleanupDirectory(testDownloadPath);
   });
 
   after(async () => {
