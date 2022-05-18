@@ -33,9 +33,9 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-client-authoring": "~1.0.1",
-    "@itwin/imodels-client-management": "~1.0.1",
-    "@itwin/imodels-client-test-utils": "~1.0.1",
+    "@itwin/imodels-client-authoring": "workspace:*",
+    "@itwin/imodels-client-management": "workspace:*",
+    "@itwin/imodels-client-test-utils": "workspace:*",
     "axios": "~0.21.1",
     "chai": "~4.3.4",
     "dotenv": "~10.0.0",
@@ -44,7 +44,7 @@
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
-    "@itwin/imodels-client-common-config": "~1.0.1",
+    "@itwin/imodels-client-common-config": "workspace:*",
     "@types/chai": "~4.2.21",
     "@types/mocha": "~9.0.0",
     "@types/node": "^16.4.6",

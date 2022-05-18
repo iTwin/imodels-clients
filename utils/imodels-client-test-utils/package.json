@@ -29,7 +29,7 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-client-authoring": "~1.0.1",
+    "@itwin/imodels-client-authoring": "workspace:*",
     "axios": "~0.21.1",
     "chai": "~4.3.4",
     "inversify": "~5.0.1",
@@ -37,7 +37,7 @@
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
-    "@itwin/imodels-client-common-config": "~1.0.1",
+    "@itwin/imodels-client-common-config": "workspace:*",
     "@types/chai": "~4.2.21",
     "@types/node": "^16.4.6",
     "cpx2": "4.2.0",

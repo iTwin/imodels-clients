@@ -34,7 +34,7 @@
     "axios": "~0.21.1"
   },
   "devDependencies": {
-    "@itwin/imodels-client-common-config": "~1.0.1",
+    "@itwin/imodels-client-common-config": "workspace:*",
     "typescript": "~4.4.0"
   }
 }
