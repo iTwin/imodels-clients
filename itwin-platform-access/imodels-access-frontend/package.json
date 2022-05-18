@@ -22,6 +22,7 @@
   "typings": "lib/IModelsAccessFrontendExports",
   "scripts": {
     "build": "tsc 1>&2",
+    "clean": "rimraf lib",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell ** --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
@@ -43,6 +44,7 @@
     "@itwin/imodels-client-common-config": "workspace:*",
     "@itwin/webgl-compatibility": "^3.0.0",
     "@types/node": "14.14.31",
+    "rimraf": "~3.0.2",
     "typescript": "~4.4.0"
   },
   "peerDependencies": {

@@ -7,21 +7,25 @@ importers:
       '@itwin/imodels-client-management': 'link:../imodels-client-management'
     devDependencies:
       '@itwin/imodels-client-common-config': 'link:../../utils/imodels-client-common-config'
+      rimraf: 3.0.2
       typescript: 4.4.4
     specifiers:
       '@azure/storage-blob': ~12.7.0
       '@itwin/imodels-client-common-config': 'workspace:*'
       '@itwin/imodels-client-management': 'workspace:*'
+      rimraf: ~3.0.2
       typescript: ~4.4.0
   ../../clients/imodels-client-management:
     dependencies:
       axios: 0.21.4
     devDependencies:
       '@itwin/imodels-client-common-config': 'link:../../utils/imodels-client-common-config'
+      rimraf: 3.0.2
       typescript: 4.4.4
     specifiers:
       '@itwin/imodels-client-common-config': 'workspace:*'
       axios: ~0.21.1
+      rimraf: ~3.0.2
       typescript: ~4.4.0
   ../../itwin-platform-access/imodels-access-backend:
     dependencies:
@@ -35,6 +39,7 @@ importers:
       '@itwin/imodels-client-common-config': 'link:../../utils/imodels-client-common-config'
       '@types/node': 14.14.31
       '@types/ws': 7.4.7
+      rimraf: 3.0.2
       typescript: 4.4.4
     specifiers:
       '@itwin/core-backend': ^3.0.0
@@ -46,6 +51,7 @@ importers:
       '@itwin/imodels-client-common-config': 'workspace:*'
       '@types/node': 14.14.31
       '@types/ws': ^7.0.0
+      rimraf: ~3.0.2
       typescript: ~4.4.0
   ../../itwin-platform-access/imodels-access-frontend:
     dependencies:
@@ -61,6 +67,7 @@ importers:
       '@itwin/imodels-client-common-config': 'link:../../utils/imodels-client-common-config'
       '@itwin/webgl-compatibility': 3.1.3
       '@types/node': 14.14.31
+      rimraf: 3.0.2
       typescript: 4.4.4
     specifiers:
       '@itwin/appui-abstract': ^3.0.0
@@ -74,6 +81,7 @@ importers:
       '@itwin/imodels-client-management': 'workspace:*'
       '@itwin/webgl-compatibility': ^3.0.0
       '@types/node': 14.14.31
+      rimraf: ~3.0.2
       typescript: ~4.4.0
   ../../tests/imodels-access-backend-tests:
     dependencies:
@@ -94,6 +102,7 @@ importers:
       '@types/mocha': 9.0.0
       '@types/node': 14.14.31
       nyc: 15.1.0
+      rimraf: 3.0.2
       typescript: 4.4.4
     specifiers:
       '@itwin/core-backend': ^3.0.0
@@ -112,6 +121,7 @@ importers:
       mocha: ~9.2.2
       nyc: 15.1.0
       reflect-metadata: ~0.1.13
+      rimraf: ~3.0.2
       typescript: ~4.4.0
   ../../tests/imodels-access-frontend-tests:
     dependencies:
@@ -130,6 +140,7 @@ importers:
       '@types/mocha': 9.0.0
       '@types/node': 14.14.31
       nyc: 15.1.0
+      rimraf: 3.0.2
       typescript: 4.4.4
     specifiers:
       '@itwin/core-common': ^3.0.0
@@ -146,6 +157,7 @@ importers:
       mocha: ~9.2.2
       nyc: 15.1.0
       reflect-metadata: ~0.1.13
+      rimraf: ~3.0.2
       typescript: ~4.4.0
   ../../tests/imodels-clients-tests:
     dependencies:
@@ -164,6 +176,7 @@ importers:
       '@types/mocha': 9.0.0
       '@types/node': 16.11.36
       nyc: 15.1.0
+      rimraf: 3.0.2
       typescript: 4.4.4
     specifiers:
       '@itwin/imodels-client-authoring': 'workspace:*'
@@ -180,6 +193,7 @@ importers:
       mocha: ~9.2.2
       nyc: 15.1.0
       reflect-metadata: ~0.1.13
+      rimraf: ~3.0.2
       typescript: ~4.4.0
   ../../utils/imodels-client-common-config:
     devDependencies:
@@ -213,6 +227,7 @@ importers:
       '@types/chai': 4.2.22
       '@types/node': 16.11.36
       cpx2: 4.2.0
+      rimraf: 3.0.2
       typescript: 4.4.4
     specifiers:
       '@itwin/imodels-client-authoring': 'workspace:*'
@@ -225,6 +240,7 @@ importers:
       inversify: ~5.0.1
       puppeteer: ~13.5.1
       reflect-metadata: ~0.1.13
+      rimraf: ~3.0.2
       typescript: ~4.4.0
 lockfileVersion: 5.1
 packages:
@@ -5368,3 +5384,4 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+registry: ''
