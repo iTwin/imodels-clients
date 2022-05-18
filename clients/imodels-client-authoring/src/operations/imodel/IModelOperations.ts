@@ -6,7 +6,7 @@ import { AuthorizationParam, IModel, IModelsErrorCode, IModelsErrorImpl, IModelO
 import { IModelCreateResponse } from "../../base";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
 import { Constants } from "../../Constants";
-import { BaselineFileOperations } from "../baselineFile/BaselineFileOperations";
+import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations";
 import { OperationOptions } from "../OperationOptions";
 import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline } from "./IModelOperationParams";
 

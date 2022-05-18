@@ -23,6 +23,8 @@ export interface BaselineFile {
   id: string;
   /** Baseline file display name. */
   displayName: string;
+  /** Baseline file size in bytes. */
+  fileSize: number;
   /** Baseline file state. See {@link BaselineFileState}. */
   state: BaselineFileState;
 }
