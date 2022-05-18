@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState } from "@itwin/imodels-client-authoring";
-import { TestChangesetFile } from "./test-context-providers";
+import { BaselineFile,BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState } from "@itwin/imodels-client-authoring";
+import { TestChangesetFile, TestIModelBaselineFile } from "./test-context-providers";
 
 export async function assertCollection<T>(params: {
   asyncIterable: EntityListIterator<T>;
@@ -32,6 +32,29 @@ export function assertIModel(params: {
   assertOptionalProperty(params.expectedIModelProperties.extent, params.actualIModel.extent);
   expect(params.actualIModel.createdDateTime).to.not.be.empty;
   expect(params.actualIModel.state).to.equal(IModelState.Initialized);
+}
+
+export async function assertBaselineFile(params: {
+  actualBaselineFile: BaselineFile;
+  expectedBaselineFileProperties: {
+    state: BaselineFileState;
+  };
+  expectedTestBaselineFile: TestIModelBaselineFile;
+}): Promise<void> {
+  expect(params.actualBaselineFile).to.not.be.undefined;
+  expect(params.actualBaselineFile.id).to.not.be.empty;
+  expect(params.actualBaselineFile.displayName).to.not.be.empty;
+
+  expect(params.actualBaselineFile.state).to.be.equal(params.expectedBaselineFileProperties.state);
+
+  const expectedFileStats = await fs.promises.stat(params.expectedTestBaselineFile.filePath);
+  expect(params.actualBaselineFile.fileSize).to.equal(expectedFileStats.size);
+
+  expect(params.actualBaselineFile._links).to.not.be.undefined;
+  expect(params.actualBaselineFile._links.creator).to.not.be.undefined;
+  expect(params.actualBaselineFile._links.creator.href).to.not.be.empty;
+  expect(params.actualBaselineFile._links.download).to.not.be.undefined;
+  expect(params.actualBaselineFile._links.download!.href).to.not.be.empty;
 }
 
 export function assertBriefcase(params: {
