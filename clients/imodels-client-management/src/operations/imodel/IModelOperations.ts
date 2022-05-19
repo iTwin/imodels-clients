@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { EntityListIterator, EntityListIteratorImpl, IModel, IModelResponse, IModelsResponse, MinimalIModel, OperationsBase, PreferReturn } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateEmptyIModelParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties } from "./IModelOperationParams";
+import { CreateEmptyIModelParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams";
 
 export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**
@@ -70,6 +70,22 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   /**
+   * Updates iModel properties. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels/operations/update-imodel/ Update iModel} operation from iModels API.
+   * @param {UpdateIModelParams} params parameters for this operation. See {@link UpdateIModelParams}.
+   * @returns {Promise<IModel>} updated iModel. See {@link IModel}.
+   */
+  public async update(params: UpdateIModelParams): Promise<IModel> {
+    const updateIModelBody = this.getUpdateIModelRequestBody(params.iModelProperties);
+    const updateIModelResponse = await this.sendPatchRequest<IModelResponse>({
+      authorization: params.authorization,
+      url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId }),
+      body: updateIModelBody
+    });
+    return updateIModelResponse.iModel;
+  }
+
+  /**
    * Deletes an iModel with specified id. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/delete-imodel/ Delete iModel}
    * operation from iModels API.
    * @param {DeleteiModelParams} params parameters for this operation. See {@link DeleteiModelParams}.
@@ -85,6 +101,14 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
   protected getCreateEmptyIModelRequestBody(iModelProperties: IModelProperties): object {
     return {
       projectId: iModelProperties.projectId,
+      name: iModelProperties.name,
+      description: iModelProperties.description,
+      extent: iModelProperties.extent
+    };
+  }
+
+  private getUpdateIModelRequestBody(iModelProperties: IModelPropertiesForUpdate): object {
+    return {
       name: iModelProperties.name,
       description: iModelProperties.description,
       extent: iModelProperties.extent

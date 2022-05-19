@@ -72,7 +72,7 @@ export interface EditableNamedVersionProperties {
 }
 
 /**
- * Properties that can be specified when updating a new Named Version. At least one of the editable properties should
+ * Properties that can be specified when updating a Named Version. At least one of the editable properties should
  * be specified.
  */
 export type NamedVersionPropertiesForUpdate = AtLeastOneProperty<EditableNamedVersionProperties>;

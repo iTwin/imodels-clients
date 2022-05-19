@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { AuthorizationCallback, CreateEmptyIModelParams, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, OrderByOperator, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, CreateEmptyIModelParams, Extent, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, OrderByOperator, UpdateIModelParams, toArray } from "@itwin/imodels-client-management";
 import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertCollection, assertError, assertIModel } from "@itwin/imodels-client-test-utils";
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
@@ -13,7 +13,8 @@ describe("[Management] IModelOperations", () => {
   let projectId: string;
 
   let testIModelGroup: TestIModelGroup;
-  let testIModel: IModelMetadata;
+  let testIModelForRead: IModelMetadata;
+  let testIModelForUpdate: IModelMetadata;
 
   before(async () => {
     const container = getTestDIContainer();
@@ -31,7 +32,8 @@ describe("[Management] IModelOperations", () => {
     testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "ManagementIModelOperations" });
 
     const testIModelCreator = container.get(TestIModelCreator);
-    testIModel = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for collection queries"));
+    testIModelForRead = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for collection queries"));
+    testIModelForUpdate = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for update"));
   });
 
   after(async () => {
@@ -98,7 +100,7 @@ describe("[Management] IModelOperations", () => {
     // Arrange
     const getSingleiModelParams: GetSingleIModelParams = {
       authorization,
-      iModelId: testIModel.id
+      iModelId: testIModelForRead.id
     };
 
     // Act
@@ -109,8 +111,8 @@ describe("[Management] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: {
         projectId,
-        name: testIModel.name,
-        description: testIModel.description
+        name: testIModelForRead.name,
+        description: testIModelForRead.description
       }
     });
   });
@@ -164,7 +166,7 @@ describe("[Management] IModelOperations", () => {
       authorization,
       urlParams: {
         projectId,
-        name: testIModel.name
+        name: testIModelForRead.name
       }
     };
 
@@ -195,6 +197,90 @@ describe("[Management] IModelOperations", () => {
     // Assert
     const iModelArray = await toArray(iModels);
     expect(iModelArray.length).to.equal(0);
+  });
+
+  it("should update iModel name", async () => {
+    // Arrange
+    const iModelBeforeUpdate: IModel = await iModelsClient.iModels.getSingle({
+      authorization,
+      iModelId: testIModelForUpdate.id
+    });
+
+    const newIModelName = testIModelGroup.getPrefixedUniqueIModelName("new iModel name");
+    const updateIModelParams: UpdateIModelParams = {
+      authorization,
+      iModelId: testIModelForUpdate.id,
+      iModelProperties: {
+        name: newIModelName
+      }
+    };
+
+    // Act
+    const iModel: IModel = await iModelsClient.iModels.update(updateIModelParams);
+
+    // Assert
+    expect(iModel.name).to.be.equal(newIModelName);
+    expect(iModel.description).to.be.equal(iModelBeforeUpdate.description);
+    expect(iModel.extent).to.be.deep.equal(iModelBeforeUpdate.extent);
+  });
+
+  it("should update iModel description", async () => {
+    // Arrange
+    const iModelBeforeUpdate: IModel = await iModelsClient.iModels.getSingle({
+      authorization,
+      iModelId: testIModelForUpdate.id
+    });
+
+    const newIModelDescription = "new description";
+    const updateIModelParams: UpdateIModelParams = {
+      authorization,
+      iModelId: testIModelForUpdate.id,
+      iModelProperties: {
+        description: newIModelDescription
+      }
+    };
+
+    // Act
+    const iModel: IModel = await iModelsClient.iModels.update(updateIModelParams);
+
+    // Assert
+    expect(iModel.name).to.be.equal(iModelBeforeUpdate.name);
+    expect(iModel.description).to.be.equal(newIModelDescription);
+    expect(iModel.extent).to.be.deep.equal(iModelBeforeUpdate.extent);
+  });
+
+  it("should update iModel extent", async () => {
+    // Arrange
+    const iModelBeforeUpdate: IModel = await iModelsClient.iModels.getSingle({
+      authorization,
+      iModelId: testIModelForUpdate.id
+    });
+
+    const newIModelExtent: Extent = {
+      southWest: {
+        latitude: 80,
+        longitude: 170
+      },
+      northEast: {
+        latitude: -80,
+        longitude: -170
+      }
+    };
+    const updateIModelParams: UpdateIModelParams = {
+      authorization,
+      iModelId: testIModelForUpdate.id,
+      iModelProperties: {
+        extent: newIModelExtent
+      }
+    };
+
+    // Act
+    const iModel: IModel = await iModelsClient.iModels.update(updateIModelParams);
+
+    // Assert
+    expect(iModel.name).to.be.equal(iModelBeforeUpdate.name);
+    expect(iModel.description).to.be.equal(iModelBeforeUpdate.description);
+    expect(iModel.extent).to.be.deep.equal(newIModelExtent);
   });
 
   it("should return unauthorized error when calling API with invalid access token", async () => {

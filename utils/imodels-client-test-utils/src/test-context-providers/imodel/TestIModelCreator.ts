@@ -39,7 +39,17 @@ export class TestIModelCreator {
       iModelProperties: {
         projectId,
         name: iModelName,
-        description: this._iModelDescription
+        description: this._iModelDescription,
+        extent: {
+          northEast: {
+            latitude: 90,
+            longitude: 180
+          },
+          southWest: {
+            latitude: -90,
+            longitude: -180
+          }
+        }
       }
     });
 

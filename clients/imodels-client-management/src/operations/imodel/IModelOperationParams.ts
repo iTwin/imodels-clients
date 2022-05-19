@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, CollectionRequestParams, Extent, IModel, IModelScopedOperationParams, OrderBy } from "../../base";
+import { AtLeastOneProperty, AuthorizationParam, CollectionRequestParams, Extent, IModel, IModelScopedOperationParams, OrderBy } from "../../base";
 
 /**
  * iModel entity properties that are supported in $orderBy url parameter which specifies by what property
@@ -50,6 +50,30 @@ export interface IModelProperties {
 export interface CreateEmptyIModelParams extends AuthorizationParam {
   /** Properties of the new iModel. */
   iModelProperties: IModelProperties;
+}
+
+export interface EditableIModelProperties {
+  /**
+   * iModel name. iModel name must be unique within the project, not exceed allowed 255 characters and not be an
+   * empty or whitespace string.
+   */
+  name: string;
+  /** iModel description. iModel description must not exceed allowed 255 characters. */
+  description: string;
+  /** iModel extent. See {@link Extent}. */
+  extent: Extent;
+}
+
+/**
+ * Properties that can be specified when updating an iModel. At least one of the editable properties should
+ * be specified.
+ */
+export type IModelPropertiesForUpdate = AtLeastOneProperty<EditableIModelProperties>;
+
+/** Parameters for update iModel operation. */
+export interface UpdateIModelParams extends IModelScopedOperationParams {
+  /** New values for some of the iModel properties. */
+  iModelProperties: IModelPropertiesForUpdate;
 }
 
 /** Parameters for delete iModel operation. */
