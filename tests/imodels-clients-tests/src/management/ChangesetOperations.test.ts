@@ -166,7 +166,8 @@ describe("[Management] ChangesetOperations", () => {
         briefcaseId: testIModel.briefcase.id,
         parentId: testChangesetFile.parentId,
         description: testChangesetFile.description,
-        containingChanges: testChangesetFile.containingChanges
+        containingChanges: testChangesetFile.containingChanges,
+        synchronizationInfo: testChangesetFile.synchronizationInfo
       },
       expectedTestChangesetFile: testChangesetFile
     });

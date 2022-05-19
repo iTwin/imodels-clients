@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
 import * as fs from "fs";
 import { injectable } from "inversify";
 import { TestSetupError } from "../../CommonTestUtils";
@@ -16,6 +17,7 @@ export interface TestChangesetFile {
   description: string;
   parentId: string;
   containingChanges: number;
+  synchronizationInfo?: SynchronizationInfoForCreate;
   filePath: string;
 }
 

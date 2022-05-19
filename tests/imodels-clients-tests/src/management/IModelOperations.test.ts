@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { AuthorizationCallback, CreateEmptyIModelParams, Extent, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, OrderByOperator, UpdateIModelParams, toArray } from "@itwin/imodels-client-management";
-import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertCollection, assertError, assertIModel } from "@itwin/imodels-client-test-utils";
+import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertCollection, assertError, assertIModel, ReusableTestIModelProvider, ReusableIModelMetadata } from "@itwin/imodels-client-test-utils";
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 describe("[Management] IModelOperations", () => {
@@ -13,7 +13,7 @@ describe("[Management] IModelOperations", () => {
   let projectId: string;
 
   let testIModelGroup: TestIModelGroup;
-  let testIModelForRead: IModelMetadata;
+  let testIModelForRead: ReusableIModelMetadata;
   let testIModelForUpdate: IModelMetadata;
 
   before(async () => {
@@ -31,8 +31,10 @@ describe("[Management] IModelOperations", () => {
     const testIModelGroupFactory = container.get(TestIModelGroupFactory);
     testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "ManagementIModelOperations" });
 
+    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
+    testIModelForRead = await reusableTestIModelProvider.getOrCreate();
+
     const testIModelCreator = container.get(TestIModelCreator);
-    testIModelForRead = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for collection queries"));
     testIModelForUpdate = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for update"));
   });
 
@@ -134,6 +136,7 @@ describe("[Management] IModelOperations", () => {
 
     // Assert
     const iModelNames = (await toArray(iModels)).map((iModel) => iModel.name);
+    expect(iModelNames.length).to.be.greaterThan(1);
     for (let i = 0; i < iModelNames.length - 1; i++)
       expect(iModelNames[i] < iModelNames[i + 1]).to.be.true;
   });
@@ -156,6 +159,7 @@ describe("[Management] IModelOperations", () => {
 
     // Assert
     const iModelNames = (await toArray(iModels)).map((iModel) => iModel.name);
+    expect(iModelNames.length).to.be.greaterThan(1);
     for (let i = 0; i < iModelNames.length - 1; i++)
       expect(iModelNames[i] > iModelNames[i + 1]).to.be.true;
   });

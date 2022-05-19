@@ -39,17 +39,7 @@ export class TestIModelCreator {
       iModelProperties: {
         projectId,
         name: iModelName,
-        description: this._iModelDescription,
-        extent: {
-          northEast: {
-            latitude: 90,
-            longitude: 180
-          },
-          southWest: {
-            latitude: -90,
-            longitude: -180
-          }
-        }
+        description: this._iModelDescription
       }
     });
 
@@ -136,6 +126,7 @@ export class TestIModelCreator {
           parentId: i === 0
             ? undefined
             : this._testIModelFileProvider.changesets[i - 1].id,
+          synchronizationInfo: this._testIModelFileProvider.changesets[i].synchronizationInfo,
           filePath: this._testIModelFileProvider.changesets[i].filePath
         }
       });

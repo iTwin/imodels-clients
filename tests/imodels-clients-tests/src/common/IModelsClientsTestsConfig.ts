@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as dotenv from "dotenv";
 import { injectable } from "inversify";
-import { ApisConfigValues, AuthConfigValues, BaseIntegrationTestsConfig, TestSetupError, TestUsersConfigValues } from "@itwin/imodels-client-test-utils";
+import { ApisConfigValues, AuthConfigValues, BaseIntegrationTestsConfig, BehaviorOptions, TestSetupError, TestUsersConfigValues } from "@itwin/imodels-client-test-utils";
 
 @injectable()
 export class IModelsClientsTestsConfig implements BaseIntegrationTestsConfig {
@@ -13,6 +13,7 @@ export class IModelsClientsTestsConfig implements BaseIntegrationTestsConfig {
   public readonly auth: AuthConfigValues;
   public readonly apis: ApisConfigValues;
   public readonly testUsers: TestUsersConfigValues;
+  public readonly behaviorOptions: BehaviorOptions;
 
   constructor() {
     dotenv.config();
@@ -50,6 +51,10 @@ export class IModelsClientsTestsConfig implements BaseIntegrationTestsConfig {
         password: process.env.TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD!
       }
     };
+
+    this.behaviorOptions = {
+      recreateReusableIModel: process.env?.TEST_BEHAVIOR_OPTIONS_RECREATE_IMODEL === "1"
+    }
   }
 
   private validateAllValuesPresent(): void {

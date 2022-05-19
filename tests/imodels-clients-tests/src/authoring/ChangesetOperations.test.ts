@@ -54,7 +54,7 @@ describe("[Authoring] ChangesetOperations", () => {
     await testIModelGroup.cleanupIModels();
   });
 
-  it("should create changeset", async () => {
+  it("should create changeset #1", async () => {
     // Arrange
     const acquireBriefcaseParams: AcquireBriefcaseParams = {
       authorization,
@@ -69,7 +69,49 @@ describe("[Authoring] ChangesetOperations", () => {
       changesetProperties: {
         briefcaseId: briefcase.briefcaseId,
         id: testChangesetFile.id,
-        filePath: testChangesetFile.filePath
+        filePath: testChangesetFile.filePath,
+        synchronizationInfo: {
+          taskId: "11111111-1111-1111-1111-111111111111"
+        }
+      }
+    };
+
+    // Act
+    const changeset = await iModelsClient.changesets.create(createChangesetParams);
+
+    // Assert
+    const expectedTestChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.id === changeset.id)!;
+    assertChangeset({
+      actualChangeset: changeset,
+      expectedChangesetProperties: createChangesetParams.changesetProperties,
+      expectedTestChangesetFile
+    });
+  });
+
+  it("should create changeset #2", async () => {
+    // Arrange
+    const acquireBriefcaseParams: AcquireBriefcaseParams = {
+      authorization,
+      iModelId: testIModelForWrite.id
+    };
+    const briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
+
+    const parentChangesetFile = testIModelFileProvider.changesets[0];
+    const testChangesetFile = testIModelFileProvider.changesets[1];
+    const createChangesetParams: CreateChangesetParams = {
+      authorization,
+      iModelId: testIModelForWrite.id,
+      changesetProperties: {
+        briefcaseId: briefcase.briefcaseId,
+        id: testChangesetFile.id,
+        parentId: parentChangesetFile.id,
+        filePath: testChangesetFile.filePath,
+        synchronizationInfo: {
+          taskId: "11111111-1111-1111-1111-111111111111",
+          changedFiles: [
+            "foo.bim"
+          ]
+        }
       }
     };
 

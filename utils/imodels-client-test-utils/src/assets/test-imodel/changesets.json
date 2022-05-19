@@ -6,7 +6,14 @@
       "fileName": "a1ecbdc8c4f6173004f9f881914a57c5511a362b.cs",
       "index": 1,
       "parentId": "",
-      "containingChanges": 0
+      "containingChanges": 0,
+      "synchronizationInfo": {
+        "taskId": "3c1511f3-0f1e-4018-a288-2241ed004f69",
+        "changedFiles": [
+          "file1.bim",
+          "file2.bim"
+        ]
+      }
     },
     {
       "id": "7caef8ab5afcd99c9e618fb37978c3a03d0409c7",

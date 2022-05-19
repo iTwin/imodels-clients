@@ -100,14 +100,21 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.creatorId).to.not.be.undefined;
   expect(params.actualChangeset.pushDateTime).to.not.be.empty;
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
-  expect(params.actualChangeset.synchronizationInfo).to.equal(null);
 
-  // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
-  expect(params.actualChangeset.fileSize).to.equal(fs.statSync(params.expectedTestChangesetFile.filePath).size);
+  expect(params.actualChangeset.synchronizationInfo).to.not.be.undefined;
+  expect(params.actualChangeset.synchronizationInfo!.taskId).to.be.equal(params.expectedChangesetProperties.synchronizationInfo!.taskId)
+  if (params.expectedChangesetProperties.synchronizationInfo!.changedFiles)
+    expect(params.actualChangeset.synchronizationInfo!.changedFiles).to.deep.equal(params.expectedChangesetProperties.synchronizationInfo!.changedFiles);
+  else
+    expect(params.actualChangeset.synchronizationInfo!.changedFiles).to.equal(null);
 
   expect(params.actualChangeset.application).to.not.be.undefined;
   expect(params.actualChangeset.application!.id).to.not.be.empty;
   expect(params.actualChangeset.application!.name).to.not.be.empty;
+
+  // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
+  expect(params.actualChangeset.fileSize).to.equal(fs.statSync(params.expectedTestChangesetFile.filePath).size);
+
 }
 
 export function assertDownloadedChangeset(params: {

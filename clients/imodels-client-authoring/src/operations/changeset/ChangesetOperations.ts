@@ -35,7 +35,11 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       body: confirmUploadBody
     });
 
-    return confirmUploadResponse.changeset;
+    return this.getSingle({
+      authorization: params.authorization,
+      iModelId: params.iModelId,
+      changesetId: confirmUploadResponse.changeset.id
+    });
   }
 
   /**
@@ -98,7 +102,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       parentId: changesetProperties.parentId,
       briefcaseId: changesetProperties.briefcaseId,
       containingChanges: changesetProperties.containingChanges,
-      fileSize: this._options.fileHandler.getFileSize(changesetProperties.filePath)
+      fileSize: this._options.fileHandler.getFileSize(changesetProperties.filePath),
+      synchronizationInfo: changesetProperties.synchronizationInfo
     };
   }
 
