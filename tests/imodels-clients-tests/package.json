@@ -27,7 +27,7 @@
     "cover": "nyc npm test",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
-    "spell-check": "cspell ** --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
+    "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
     "test:integration": "mocha lib/**/*.test.js --color --timeout 180000 --exit"
   },
   "eslintConfig": {
