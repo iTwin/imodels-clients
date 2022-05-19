@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionResponse, Link } from "../CommonInterfaces";
+import { Application, CollectionResponse, Link } from "../CommonInterfaces";
 import { Checkpoint } from "./CheckpointInterfaces";
 import { NamedVersion } from "./NamedVersionInterfaces";
 
@@ -23,12 +23,6 @@ export enum ContainingChanges {
   SheetsAndDrawings = 1 << 3,
   ViewsAndModels    = 1 << 4,
   GlobalProperties  = 1 << 5
-}
-
-/** Application information. */
-export interface Application {
-  /** Application name. */
-  name: string;
 }
 
 /** Synchronization information. */
@@ -89,7 +83,7 @@ export interface Changeset extends MinimalChangeset {
   application: Application | null;
   /** Information about synchronization process that created the Changeset. */
   synchronizationInfo: SynchronizationInfo | null;
-  /** Changeset links. */
+  /** Changeset links. See {@link ChangesetLinks}. */
   _links: ChangesetLinks;
   /**
    * Function to query Named Version for the current Changeset. If the Changeset does not have a Named Version the

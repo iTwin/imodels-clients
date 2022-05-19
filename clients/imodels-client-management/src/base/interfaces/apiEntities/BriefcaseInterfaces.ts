@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionResponse } from "../CommonInterfaces";
+import { Application, CollectionResponse, Link } from "../CommonInterfaces";
 
 /** Minimal representation of a Briefcase. */
 export interface MinimalBriefcase {
@@ -10,6 +10,12 @@ export interface MinimalBriefcase {
   id: string;
   /** Briefcase display name. */
   displayName: string;
+}
+
+/** Links that belong to Briefcase entity. */
+export interface BriefcaseLinks {
+  /** Link to the user which acquired the Briefcase. Link points to a specific user in iModels API. */
+  owner: Link;
 }
 
 export interface Briefcase extends MinimalBriefcase {
@@ -23,6 +29,10 @@ export interface Briefcase extends MinimalBriefcase {
   fileSize: number;
   /** Name of the device which holds the Briefcase. */
   deviceName: string | null;
+  /** Information about the application that acquired the Briefcase. */
+  application: Application | null;
+  /** Briefcase links. See {@link BriefcaseLinks}. */
+  _links: BriefcaseLinks;
 }
 
 /** DTO to hold a single Briefcase API response. */

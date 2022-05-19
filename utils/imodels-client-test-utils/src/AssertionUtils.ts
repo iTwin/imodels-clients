@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { BaselineFile,BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState } from "@itwin/imodels-client-authoring";
 import { TestChangesetFile, TestIModelBaselineFile } from "./test-context-providers";
 
 export async function assertCollection<T>(params: {
@@ -65,6 +65,7 @@ export function assertBriefcase(params: {
   expect(params.actualBriefcase.id).to.not.be.empty;
   expect(params.actualBriefcase.displayName).to.not.be.empty;
   expect(params.actualBriefcase.ownerId).to.not.be.empty;
+  expect(params.actualBriefcase.acquiredDateTime).to.not.be.empty;
 
   if (params.expectedBriefcaseProperties.briefcaseId)
     expect(params.actualBriefcase.briefcaseId).to.equal(params.expectedBriefcaseProperties.briefcaseId);
@@ -73,7 +74,14 @@ export function assertBriefcase(params: {
 
   expect(params.actualBriefcase.fileSize).to.be.greaterThan(0);
   assertOptionalProperty(params.expectedBriefcaseProperties?.deviceName, params.actualBriefcase.deviceName);
-  expect(params.actualBriefcase.acquiredDateTime).to.not.be.empty;
+
+  expect(params.actualBriefcase.application).to.not.be.undefined;
+  expect(params.actualBriefcase.application!.id).to.not.be.empty;
+  expect(params.actualBriefcase.application!.name).to.not.be.empty;
+
+  expect(params.actualBriefcase._links).to.not.be.undefined;
+  expect(params.actualBriefcase._links.owner).to.not.be.undefined;
+  expect(params.actualBriefcase._links.owner.href).to.not.be.empty;
 }
 
 export function assertChangeset(params: {
@@ -97,8 +105,9 @@ export function assertChangeset(params: {
   // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
   expect(params.actualChangeset.fileSize).to.equal(fs.statSync(params.expectedTestChangesetFile.filePath).size);
 
-  // TODO: add correct expected value when test client is set up
-  // expect(params.actualChangeset.application).to.equal(null);
+  expect(params.actualChangeset.application).to.not.be.undefined;
+  expect(params.actualChangeset.application!.id).to.not.be.empty;
+  expect(params.actualChangeset.application!.name).to.not.be.empty;
 }
 
 export function assertDownloadedChangeset(params: {
