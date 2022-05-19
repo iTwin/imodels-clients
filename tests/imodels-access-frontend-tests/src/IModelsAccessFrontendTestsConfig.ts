@@ -54,7 +54,7 @@ export class IModelsAccessFrontendTestsConfig implements BaseIntegrationTestsCon
 
     this.behaviorOptions = {
       recreateReusableIModel: false
-    }
+    };
   }
 
   private validateAllValuesPresent(): void {

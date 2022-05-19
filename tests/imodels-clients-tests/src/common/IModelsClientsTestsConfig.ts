@@ -54,7 +54,7 @@ export class IModelsClientsTestsConfig implements BaseIntegrationTestsConfig {
 
     this.behaviorOptions = {
       recreateReusableIModel: process.env?.TEST_BEHAVIOR_OPTIONS_RECREATE_IMODEL === "1"
-    }
+    };
   }
 
   private validateAllValuesPresent(): void {

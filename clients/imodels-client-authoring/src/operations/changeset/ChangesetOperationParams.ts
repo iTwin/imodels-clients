@@ -8,7 +8,7 @@ import { TargetDirectoryParam } from "../../base";
 export type SynchronizationInfoForCreate = Omit<SynchronizationInfo, "changedFiles"> & {
   /** Optional list of files that were processed by the synchronization. The array, if specified, must not be empty. */
   changedFiles?: string[];
-}
+};
 
 /** Properties that should be specified when creating a new Changeset. */
 export interface ChangesetPropertiesForCreate {

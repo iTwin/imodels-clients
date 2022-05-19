@@ -102,7 +102,7 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
 
   expect(params.actualChangeset.synchronizationInfo).to.not.be.undefined;
-  expect(params.actualChangeset.synchronizationInfo!.taskId).to.be.equal(params.expectedChangesetProperties.synchronizationInfo!.taskId)
+  expect(params.actualChangeset.synchronizationInfo!.taskId).to.be.equal(params.expectedChangesetProperties.synchronizationInfo!.taskId);
   if (params.expectedChangesetProperties.synchronizationInfo!.changedFiles)
     expect(params.actualChangeset.synchronizationInfo!.changedFiles).to.deep.equal(params.expectedChangesetProperties.synchronizationInfo!.changedFiles);
   else

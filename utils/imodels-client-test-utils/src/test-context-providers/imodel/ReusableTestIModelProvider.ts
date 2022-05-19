@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { DeleteIModelParams } from "@itwin/imodels-client-authoring";
 import { inject, injectable } from "inversify";
+import { DeleteIModelParams } from "@itwin/imodels-client-authoring";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 import { ReusableTestIModelProviderConfig } from "./ReusableTestIModelProviderConfig";
 import { TestIModelCreator } from "./TestIModelCreator";
@@ -30,7 +30,7 @@ export class ReusableTestIModelProvider {
 
   public async getOrCreate(): Promise<ReusableIModelMetadata> {
     if (!this._reusableIModel)
-      this._reusableIModel = await this.get()
+      this._reusableIModel = await this.get();
 
     return this._reusableIModel;
   }
