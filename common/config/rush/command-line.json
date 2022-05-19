@@ -1,6 +1,15 @@
 {
   "commands": [
     {
+      "name": "clean",
+      "commandKind": "bulk",
+      "summary": "Run output directory clean on each package",
+      "description": "Iterates through each package in the monorepo and runs the 'clean' script",
+      "enableParallelism": true,
+      "ignoreMissingScript": false,
+      "allowWarningsInSuccessfulBuild": true
+    },
+    {
       "name": "lint",
       "commandKind": "bulk",
       "summary": "Run lint rules on each package",

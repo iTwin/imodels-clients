@@ -20,6 +20,7 @@
   },
   "scripts": {
     "build": "",
+    "clean": "",
     "lint": "",
     "lint-fix": "sort-package-json",
     "spell-check": ""
@@ -28,7 +29,6 @@
     "@itwin/eslint-plugin": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "~4.28.4",
     "@typescript-eslint/parser": "~4.28.4",
-    "cspell": "~5.6.6",
     "eslint": "~7.31.0",
     "eslint-plugin-import": "~2.23.4",
     "eslint-plugin-mocha": "~9.0.0",
