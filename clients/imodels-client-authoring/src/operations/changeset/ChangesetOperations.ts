@@ -35,11 +35,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       body: confirmUploadBody
     });
 
-    return this.getSingle({
-      authorization: params.authorization,
-      iModelId: params.iModelId,
-      changesetId: confirmUploadResponse.changeset.id
-    });
+    return confirmUploadResponse.changeset;
   }
 
   /**

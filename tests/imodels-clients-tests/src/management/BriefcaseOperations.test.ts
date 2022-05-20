@@ -114,7 +114,8 @@ describe("[Management] BriefcaseOperations", () => {
       expectedBriefcaseProperties: {
         briefcaseId: testIModel.briefcase.id,
         deviceName: testIModel.briefcase.deviceName
-      }
+      },
+      isGetResponse: true
     });
   });
 });

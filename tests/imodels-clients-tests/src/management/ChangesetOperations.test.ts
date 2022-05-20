@@ -148,7 +148,8 @@ describe("[Management] ChangesetOperations", () => {
 
   it("should get changeset by id", async () => {
     // Arrange
-    const testChangesetFile = testIModelFileProvider.changesets[0];
+    const changesetWithNamedVersionIndex = testIModel.namedVersions[0].changesetIndex;
+    const testChangesetFile = testIModelFileProvider.changesets[changesetWithNamedVersionIndex - 1];
     const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
       iModelId: testIModel.id,
@@ -169,7 +170,12 @@ describe("[Management] ChangesetOperations", () => {
         containingChanges: testChangesetFile.containingChanges,
         synchronizationInfo: testChangesetFile.synchronizationInfo
       },
-      expectedTestChangesetFile: testChangesetFile
+      expectedTestChangesetFile: testChangesetFile,
+      expectedLinks: {
+        namedVersion: true,
+        checkpoint: true
+      },
+      isGetResponse: true
     });
   });
 

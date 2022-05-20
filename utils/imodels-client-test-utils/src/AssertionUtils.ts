@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
 import { TestChangesetFile, TestIModelBaselineFile } from "./test-context-providers";
 
 export async function assertCollection<T>(params: {
@@ -60,6 +60,7 @@ export async function assertBaselineFile(params: {
 export function assertBriefcase(params: {
   actualBriefcase: Briefcase;
   expectedBriefcaseProperties: BriefcaseProperties & { briefcaseId?: number };
+  isGetResponse: boolean;
 }): void {
   expect(params.actualBriefcase).to.not.be.undefined;
   expect(params.actualBriefcase.id).to.not.be.empty;
@@ -67,27 +68,56 @@ export function assertBriefcase(params: {
   expect(params.actualBriefcase.ownerId).to.not.be.empty;
   expect(params.actualBriefcase.acquiredDateTime).to.not.be.empty;
 
+  expect(params.actualBriefcase.fileSize).to.be.greaterThan(0);
+  assertOptionalProperty(params.expectedBriefcaseProperties?.deviceName, params.actualBriefcase.deviceName);
+
   if (params.expectedBriefcaseProperties.briefcaseId)
     expect(params.actualBriefcase.briefcaseId).to.equal(params.expectedBriefcaseProperties.briefcaseId);
   else
     expect(params.actualBriefcase.briefcaseId).to.be.greaterThan(0);
 
-  expect(params.actualBriefcase.fileSize).to.be.greaterThan(0);
-  assertOptionalProperty(params.expectedBriefcaseProperties?.deviceName, params.actualBriefcase.deviceName);
-
-  expect(params.actualBriefcase.application).to.not.be.undefined;
-  expect(params.actualBriefcase.application!.id).to.not.be.empty;
-  expect(params.actualBriefcase.application!.name).to.not.be.empty;
+  // TODO: remove the conditional `application` assertion when the API is fixed to return this
+  // information in POST/PATCH responses.
+  if (params.isGetResponse) {
+    expect(params.actualBriefcase.application).to.not.be.undefined;
+    expect(params.actualBriefcase.application!.id).to.not.be.empty;
+    expect(params.actualBriefcase.application!.name).to.not.be.empty;
+  } else {
+    expect(params.actualBriefcase.application).to.equal(null);
+  }
 
   expect(params.actualBriefcase._links).to.not.be.undefined;
   expect(params.actualBriefcase._links.owner).to.not.be.undefined;
   expect(params.actualBriefcase._links.owner.href).to.not.be.empty;
 }
 
+export function assertSynchronizationInfo(params: {
+  actualSynchronizationInfo: SynchronizationInfo | null;
+  expectedSynchronizationInfo: SynchronizationInfoForCreate | undefined;
+}): void {
+  if (params.expectedSynchronizationInfo) {
+    expect(params.actualSynchronizationInfo).to.not.be.undefined;
+    expect(params.actualSynchronizationInfo!.taskId).to.be.equal(params.expectedSynchronizationInfo.taskId);
+
+    if (params.expectedSynchronizationInfo.changedFiles)
+      expect(params.actualSynchronizationInfo!.changedFiles).to.deep.equal(params.expectedSynchronizationInfo.changedFiles);
+    else
+      expect(params.actualSynchronizationInfo!.changedFiles).to.equal(null);
+
+  } else {
+    expect(params.actualSynchronizationInfo).to.be.equal(null);
+  }
+}
+
 export function assertChangeset(params: {
   actualChangeset: Changeset;
   expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>;
   expectedTestChangesetFile: TestChangesetFile;
+  expectedLinks: {
+    namedVersion: boolean;
+    checkpoint: boolean;
+  };
+  isGetResponse: boolean;
 }): void {
   expect(params.actualChangeset).to.not.be.undefined;
   expect(params.actualChangeset.id).to.not.be.empty;
@@ -101,28 +131,56 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.pushDateTime).to.not.be.empty;
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
 
-  expect(params.actualChangeset.synchronizationInfo).to.not.be.undefined;
-  expect(params.actualChangeset.synchronizationInfo!.taskId).to.be.equal(params.expectedChangesetProperties.synchronizationInfo!.taskId);
-  if (params.expectedChangesetProperties.synchronizationInfo!.changedFiles)
-    expect(params.actualChangeset.synchronizationInfo!.changedFiles).to.deep.equal(params.expectedChangesetProperties.synchronizationInfo!.changedFiles);
-  else
-    expect(params.actualChangeset.synchronizationInfo!.changedFiles).to.equal(null);
+  // TODO: remove the conditional `synchronizationInfo` and `application` assertion when the API is fixed
+  // to return this information in POST/PATCH responses.
+  if (params.isGetResponse) {
+    assertSynchronizationInfo({
+      actualSynchronizationInfo: params.actualChangeset.synchronizationInfo,
+      expectedSynchronizationInfo: params.expectedChangesetProperties.synchronizationInfo
+    });
 
-  expect(params.actualChangeset.application).to.not.be.undefined;
-  expect(params.actualChangeset.application!.id).to.not.be.empty;
-  expect(params.actualChangeset.application!.name).to.not.be.empty;
+    expect(params.actualChangeset.application).to.not.be.undefined;
+    expect(params.actualChangeset.application!.id).to.not.be.empty;
+    expect(params.actualChangeset.application!.name).to.not.be.empty;
+
+  } else {
+    expect(params.actualChangeset.synchronizationInfo).to.equal(null);
+    expect(params.actualChangeset.application).to.equal(null);
+  }
 
   // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
   expect(params.actualChangeset.fileSize).to.equal(fs.statSync(params.expectedTestChangesetFile.filePath).size);
 
+  expect(params.actualChangeset._links).to.not.be.null;
+  expect(params.actualChangeset._links.creator).to.not.be.null;
+  expect(params.actualChangeset._links.creator.href).to.not.be.empty;
+  if (params.expectedLinks.namedVersion) {
+    expect(params.actualChangeset._links.namedVersion).to.not.be.null;
+    expect(params.actualChangeset._links.namedVersion!.href).to.not.be.empty;
+  }
+  if (params.expectedLinks.checkpoint) {
+    expect(params.actualChangeset._links.currentOrPrecedingCheckpoint).to.not.be.null;
+    expect(params.actualChangeset._links.currentOrPrecedingCheckpoint!.href).to.not.be.empty;
+  }
+  if (params.isGetResponse) {
+    expect(params.actualChangeset._links.download).to.not.be.null;
+    expect(params.actualChangeset._links.download.href).to.not.be.empty;
+  }
 }
 
 export function assertDownloadedChangeset(params: {
   actualChangeset: DownloadedChangeset;
   expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>;
   expectedTestChangesetFile: TestChangesetFile;
+  expectedLinks: {
+    namedVersion: boolean;
+    checkpoint: boolean;
+  };
 }): void {
-  assertChangeset(params);
+  assertChangeset({
+    ...params,
+    isGetResponse: true
+  });
 
   expect(fs.existsSync(params.actualChangeset.filePath)).to.equal(true);
 

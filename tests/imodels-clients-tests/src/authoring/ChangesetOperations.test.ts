@@ -84,7 +84,12 @@ describe("[Authoring] ChangesetOperations", () => {
     assertChangeset({
       actualChangeset: changeset,
       expectedChangesetProperties: createChangesetParams.changesetProperties,
-      expectedTestChangesetFile
+      expectedTestChangesetFile,
+      expectedLinks: {
+        namedVersion: false,
+        checkpoint: false
+      },
+      isGetResponse: false
     });
   });
 
@@ -123,7 +128,12 @@ describe("[Authoring] ChangesetOperations", () => {
     assertChangeset({
       actualChangeset: changeset,
       expectedChangesetProperties: createChangesetParams.changesetProperties,
-      expectedTestChangesetFile
+      expectedTestChangesetFile,
+      expectedLinks: {
+        namedVersion: false,
+        checkpoint: false
+      },
+      isGetResponse: false
     });
   });
 
@@ -146,6 +156,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
       for (const changeset of changesets) {
         const testChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
+        const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
         assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
@@ -153,7 +164,12 @@ describe("[Authoring] ChangesetOperations", () => {
             briefcaseId: testIModelForRead.briefcase.id,
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
-            containingChanges: testChangesetFile.containingChanges
+            containingChanges: testChangesetFile.containingChanges,
+            synchronizationInfo: testChangesetFile.synchronizationInfo
+          },
+          expectedLinks: {
+            namedVersion: changesetHasNamedVersion,
+            checkpoint: true
           },
           expectedTestChangesetFile: testChangesetFile
         });
@@ -184,6 +200,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
       for (const changeset of changesets) {
         const testChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
+        const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
         assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
@@ -191,7 +208,12 @@ describe("[Authoring] ChangesetOperations", () => {
             briefcaseId: testIModelForRead.briefcase.id,
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
-            containingChanges: testChangesetFile.containingChanges
+            containingChanges: testChangesetFile.containingChanges,
+            synchronizationInfo: testChangesetFile.synchronizationInfo
+          },
+          expectedLinks: {
+            namedVersion: changesetHasNamedVersion,
+            checkpoint: true
           },
           expectedTestChangesetFile: testChangesetFile
         });
@@ -240,6 +262,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
         // Assert
         const testChangesetFile = testCase.changesetUnderTest;
+        const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
         assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
@@ -247,7 +270,12 @@ describe("[Authoring] ChangesetOperations", () => {
             briefcaseId: testIModelForRead.briefcase.id,
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
-            containingChanges: testChangesetFile.containingChanges
+            containingChanges: testChangesetFile.containingChanges,
+            synchronizationInfo: testChangesetFile.synchronizationInfo
+          },
+          expectedLinks: {
+            namedVersion: changesetHasNamedVersion,
+            checkpoint: true
           },
           expectedTestChangesetFile: testChangesetFile
         });

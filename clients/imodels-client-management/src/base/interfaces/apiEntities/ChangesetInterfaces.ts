@@ -35,6 +35,8 @@ export interface SynchronizationInfo {
 
 /** Links that belong to Changeset entity returned from iModels API. */
 export interface ChangesetLinks {
+    /** Link to the user which created the Changeset. Link points to a specific user in iModels API. */
+  creator: Link;
   /** Link where to upload the Changeset file. Link points to a remote storage. */
   upload: Link;
   /** Link from where to download the Changeset file. Link points to a remote storage. */
