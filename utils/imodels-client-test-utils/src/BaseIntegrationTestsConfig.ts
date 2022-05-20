@@ -30,10 +30,19 @@ export interface TestUsersConfigValues {
   admin2FullyFeatured: TestUserConfigValues;
 }
 
+export interface BehaviorOptions {
+  /**
+   * Instructs the test setup to delete the existing reusable iModel and create a new one. Used
+   * in scenarios there are new features added to the API and we want to update the reusable iModel have more configured properties.
+   */
+  recreateReusableIModel: boolean;
+}
+
 export interface BaseIntegrationTestsConfig {
   testProjectName: string;
   testIModelName: string;
   auth: AuthConfigValues;
   apis: ApisConfigValues;
   testUsers: TestUsersConfigValues;
+  behaviorOptions: BehaviorOptions;
 }

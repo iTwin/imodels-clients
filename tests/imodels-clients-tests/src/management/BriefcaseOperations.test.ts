@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { AuthorizationCallback, Briefcase, GetBriefcaseListParams, GetSingleBriefcaseParams, IModelsClient, IModelsClientOptions, SPECIAL_VALUES_ME, toArray } from "@itwin/imodels-client-management";
-import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertBriefcase, assertCollection } from "@itwin/imodels-client-test-utils";
+import { AuthorizationCallback, Briefcase, GetBriefcaseListParams, GetSingleBriefcaseParams, IModelsClient, IModelsClientOptions, SPECIAL_VALUES_ME, take, toArray } from "@itwin/imodels-client-management";
+import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertBriefcase, assertCollection, assertMinimalBriefcase } from "@itwin/imodels-client-test-utils";
 import { getTestDIContainer } from "../common";
 
 describe("[Management] BriefcaseOperations", () => {
@@ -97,6 +97,28 @@ describe("[Management] BriefcaseOperations", () => {
     expect(briefcasesArray.length).to.equal(0);
   });
 
+  it("should get minimal briefcase", async () => {
+    // Arrange
+    const getBriefcaseListParams: GetBriefcaseListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $top: 1
+      }
+    };
+
+    // Act
+    const minimalBriefcases = iModelsClient.briefcases.getMinimalList(getBriefcaseListParams);
+
+    // Assert
+    const minimalBriefcaseList = await take(minimalBriefcases, 1);
+    expect(minimalBriefcaseList.length).to.be.equal(1);
+    const minimalBriefcase = minimalBriefcaseList[0];
+    assertMinimalBriefcase({
+      actualBriefcase: minimalBriefcase
+    });
+  });
+
   it("should get briefcase by id", async () => {
     // Arrange
     const getSingleBriefcaseParams: GetSingleBriefcaseParams = {
@@ -114,7 +136,8 @@ describe("[Management] BriefcaseOperations", () => {
       expectedBriefcaseProperties: {
         briefcaseId: testIModel.briefcase.id,
         deviceName: testIModel.briefcase.deviceName
-      }
+      },
+      isGetResponse: true
     });
   });
 });

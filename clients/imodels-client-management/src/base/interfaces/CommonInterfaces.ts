@@ -119,3 +119,11 @@ export enum PreferReturn {
   /** Instructs the server to return full entity representation. */
   Representation = "representation"
 }
+
+/** Application information. */
+export interface Application {
+  /** Application id. */
+  id: string;
+  /** Application name. */
+  name: string;
+}

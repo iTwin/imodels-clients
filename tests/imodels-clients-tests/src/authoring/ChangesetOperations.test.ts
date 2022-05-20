@@ -54,7 +54,7 @@ describe("[Authoring] ChangesetOperations", () => {
     await testIModelGroup.cleanupIModels();
   });
 
-  it("should create changeset", async () => {
+  it("should create changeset #1", async () => {
     // Arrange
     const acquireBriefcaseParams: AcquireBriefcaseParams = {
       authorization,
@@ -69,7 +69,10 @@ describe("[Authoring] ChangesetOperations", () => {
       changesetProperties: {
         briefcaseId: briefcase.briefcaseId,
         id: testChangesetFile.id,
-        filePath: testChangesetFile.filePath
+        filePath: testChangesetFile.filePath,
+        synchronizationInfo: {
+          taskId: "11111111-1111-1111-1111-111111111111"
+        }
       }
     };
 
@@ -81,7 +84,56 @@ describe("[Authoring] ChangesetOperations", () => {
     assertChangeset({
       actualChangeset: changeset,
       expectedChangesetProperties: createChangesetParams.changesetProperties,
-      expectedTestChangesetFile
+      expectedTestChangesetFile,
+      expectedLinks: {
+        namedVersion: false,
+        checkpoint: false
+      },
+      isGetResponse: false
+    });
+  });
+
+  it("should create changeset #2", async () => {
+    // Arrange
+    const acquireBriefcaseParams: AcquireBriefcaseParams = {
+      authorization,
+      iModelId: testIModelForWrite.id
+    };
+    const briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
+
+    const parentChangesetFile = testIModelFileProvider.changesets[0];
+    const testChangesetFile = testIModelFileProvider.changesets[1];
+    const createChangesetParams: CreateChangesetParams = {
+      authorization,
+      iModelId: testIModelForWrite.id,
+      changesetProperties: {
+        briefcaseId: briefcase.briefcaseId,
+        id: testChangesetFile.id,
+        parentId: parentChangesetFile.id,
+        filePath: testChangesetFile.filePath,
+        synchronizationInfo: {
+          taskId: "11111111-1111-1111-1111-111111111111",
+          changedFiles: [
+            "foo.bim"
+          ]
+        }
+      }
+    };
+
+    // Act
+    const changeset = await iModelsClient.changesets.create(createChangesetParams);
+
+    // Assert
+    const expectedTestChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.id === changeset.id)!;
+    assertChangeset({
+      actualChangeset: changeset,
+      expectedChangesetProperties: createChangesetParams.changesetProperties,
+      expectedTestChangesetFile,
+      expectedLinks: {
+        namedVersion: false,
+        checkpoint: false
+      },
+      isGetResponse: false
     });
   });
 
@@ -104,6 +156,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
       for (const changeset of changesets) {
         const testChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
+        const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
         assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
@@ -111,7 +164,12 @@ describe("[Authoring] ChangesetOperations", () => {
             briefcaseId: testIModelForRead.briefcase.id,
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
-            containingChanges: testChangesetFile.containingChanges
+            containingChanges: testChangesetFile.containingChanges,
+            synchronizationInfo: testChangesetFile.synchronizationInfo
+          },
+          expectedLinks: {
+            namedVersion: changesetHasNamedVersion,
+            checkpoint: true
           },
           expectedTestChangesetFile: testChangesetFile
         });
@@ -142,6 +200,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
       for (const changeset of changesets) {
         const testChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
+        const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
         assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
@@ -149,7 +208,12 @@ describe("[Authoring] ChangesetOperations", () => {
             briefcaseId: testIModelForRead.briefcase.id,
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
-            containingChanges: testChangesetFile.containingChanges
+            containingChanges: testChangesetFile.containingChanges,
+            synchronizationInfo: testChangesetFile.synchronizationInfo
+          },
+          expectedLinks: {
+            namedVersion: changesetHasNamedVersion,
+            checkpoint: true
           },
           expectedTestChangesetFile: testChangesetFile
         });
@@ -198,6 +262,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
         // Assert
         const testChangesetFile = testCase.changesetUnderTest;
+        const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
         assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
@@ -205,7 +270,12 @@ describe("[Authoring] ChangesetOperations", () => {
             briefcaseId: testIModelForRead.briefcase.id,
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
-            containingChanges: testChangesetFile.containingChanges
+            containingChanges: testChangesetFile.containingChanges,
+            synchronizationInfo: testChangesetFile.synchronizationInfo
+          },
+          expectedLinks: {
+            namedVersion: changesetHasNamedVersion,
+            checkpoint: true
           },
           expectedTestChangesetFile: testChangesetFile
         });

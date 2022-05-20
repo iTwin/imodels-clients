@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetSingleChangesetParams, IModelsClient, IModelsClientOptions, OrderByOperator, toArray } from "@itwin/imodels-client-management";
-import { NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertChangeset, assertCollection } from "@itwin/imodels-client-test-utils";
+import { NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertChangeset, assertCollection, assertMinimalChangeset } from "@itwin/imodels-client-test-utils";
 import { getTestDIContainer } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
@@ -146,9 +146,46 @@ describe("[Management] ChangesetOperations", () => {
     });
   });
 
+  it("should get minimal changeset", async () => {
+    // Arrange
+    const getChangesetListParams: GetChangesetListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        afterIndex: 0,
+        lastIndex: 1,
+        $orderBy: {
+          property: ChangesetOrderByProperty.Index,
+          operator: OrderByOperator.Descending
+        }
+      }
+    };
+
+    // Act
+    const minimalChangesets = iModelsClient.changesets.getMinimalList(getChangesetListParams);
+
+    // Assert
+    const minimalChangesetList = await toArray(minimalChangesets);
+    expect(minimalChangesetList.length).to.be.equal(1);
+    const minimalChangeset = minimalChangesetList[0];
+    const testChangesetFile = testIModelFileProvider.changesets[minimalChangeset.index - 1];
+    assertMinimalChangeset({
+      actualChangeset: minimalChangeset,
+      expectedChangesetProperties: {
+        id: testChangesetFile.id,
+        briefcaseId: testIModel.briefcase.id,
+        parentId: testChangesetFile.parentId,
+        description: testChangesetFile.description,
+        containingChanges: testChangesetFile.containingChanges
+      },
+      expectedTestChangesetFile: testChangesetFile
+    });
+  });
+
   it("should get changeset by id", async () => {
     // Arrange
-    const testChangesetFile = testIModelFileProvider.changesets[0];
+    const changesetWithNamedVersionIndex = testIModel.namedVersions[0].changesetIndex;
+    const testChangesetFile = testIModelFileProvider.changesets[changesetWithNamedVersionIndex - 1];
     const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
       iModelId: testIModel.id,
@@ -166,9 +203,15 @@ describe("[Management] ChangesetOperations", () => {
         briefcaseId: testIModel.briefcase.id,
         parentId: testChangesetFile.parentId,
         description: testChangesetFile.description,
-        containingChanges: testChangesetFile.containingChanges
+        containingChanges: testChangesetFile.containingChanges,
+        synchronizationInfo: testChangesetFile.synchronizationInfo
       },
-      expectedTestChangesetFile: testChangesetFile
+      expectedTestChangesetFile: testChangesetFile,
+      expectedLinks: {
+        namedVersion: true,
+        checkpoint: true
+      },
+      isGetResponse: true
     });
   });
 

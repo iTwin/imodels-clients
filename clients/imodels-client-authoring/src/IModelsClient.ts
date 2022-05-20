@@ -11,6 +11,7 @@ import {
 } from "@itwin/imodels-client-management";
 import { AzureSdkFileHandler, FileHandler } from "./base";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations } from "./operations";
+import { BaselineFileOperations } from "./operations/baseline-file/BaselineFileOperations";
 import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
 
@@ -55,6 +56,11 @@ export class IModelsClient {
   /** iModel operations. See {@link iModelOperations}. */
   public get iModels(): IModelOperations<OperationOptions> {
     return new IModelOperations(this._operationsOptions);
+  }
+
+  /** Baseline file operations. See {@link BaselineFileOperations}. */
+  public get baselineFiles(): BaselineFileOperations<OperationOptions> {
+    return new BaselineFileOperations(this._operationsOptions);
   }
 
   /** Briefcase operations. See {@link BriefcaseOperations}. */

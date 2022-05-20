@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { injectable } from "inversify";
+import { SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
 import { TestSetupError } from "../../CommonTestUtils";
 
 export interface TestIModelBaselineFile {
@@ -16,6 +17,7 @@ export interface TestChangesetFile {
   description: string;
   parentId: string;
   containingChanges: number;
+  synchronizationInfo?: SynchronizationInfoForCreate;
   filePath: string;
 }
 

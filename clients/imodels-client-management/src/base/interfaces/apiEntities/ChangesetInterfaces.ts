@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionResponse, Link } from "../CommonInterfaces";
+import { Application, CollectionResponse, Link } from "../CommonInterfaces";
 import { Checkpoint } from "./CheckpointInterfaces";
 import { NamedVersion } from "./NamedVersionInterfaces";
 
@@ -16,45 +16,29 @@ export enum ChangesetState {
 
 /** Flags that describe Changeset contents. */
 export enum ContainingChanges {
-  Regular           = 0,
-  Schema            = 1 << 0,
-  Definition        = 1 << 1,
-  SpatialData       = 1 << 2,
+  Regular = 0,
+  Schema = 1 << 0,
+  Definition = 1 << 1,
+  SpatialData = 1 << 2,
   SheetsAndDrawings = 1 << 3,
-  ViewsAndModels    = 1 << 4,
-  GlobalProperties  = 1 << 5
-}
-
-/** Application information. */
-export interface Application {
-  /** Application name. */
-  name: string;
+  ViewsAndModels = 1 << 4,
+  GlobalProperties = 1 << 5
 }
 
 /** Synchronization information. */
 export interface SynchronizationInfo {
+  /** Id of the synchronization task. */
+  taskId: string;
   /** List of files that were processed by the synchronization. */
   changedFiles: string[];
 }
 
-/** Links that belong to Changeset entity returned from iModels API. */
-export interface ChangesetLinks {
-  /** Link where to upload the Changeset file. Link points to a remote storage. */
-  upload: Link;
-  /** Link from where to download the Changeset file. Link points to a remote storage. */
-  download: Link;
-  /**
-   * Link to confirm the Changeset file upload and complete the creation process. Points to a specific
-   * Changeset in iModels API.
-   */
-  complete: Link;
-  /** Link to a Named Version created on the Changeset. Points to a specific Named Version in iModels API. */
-  namedVersion?: Link;
-  /**
-   * Link to a Checkpoint that is created on a current or preceding Changeset. Points to a specific Checkpoint
-   * in iModels API.
-   * */
-  currentOrPrecedingCheckpoint?: Link;
+/** Links that belong to minimal Changeset entity returned from iModels API. */
+export interface MinimalChangesetLinks {
+  /** Link to the current Changeset entity. */
+  self: Link;
+  /** Link to the user which created the Changeset. Link points to a specific user in iModels API. */
+  creator: Link;
 }
 
 /** Minimal representation of a Changeset. */
@@ -81,6 +65,28 @@ export interface MinimalChangeset {
   fileSize: number;
   /** Id of the Briefcase that was used to create the Changeset. */
   briefcaseId: number;
+  /** Changeset links. See {@link MinimalChangesetLinks}. */
+  _links: MinimalChangesetLinks;
+}
+
+/** Links that belong to Changeset entity returned from iModels API. */
+export interface ChangesetLinks extends MinimalChangesetLinks {
+  /** Link to a Named Version created on the Changeset. Points to a specific Named Version in iModels API. */
+  namedVersion?: Link;
+  /**
+   * Link to a Checkpoint that is created on a current or preceding Changeset. Points to a specific Checkpoint
+   * in iModels API.
+   * */
+  currentOrPrecedingCheckpoint?: Link;
+  /** Link where to upload the Changeset file. Link points to a remote storage. */
+  upload: Link;
+  /** Link from where to download the Changeset file. Link points to a remote storage. */
+  download: Link;
+  /**
+   * Link to confirm the Changeset file upload and complete the creation process. Points to a specific
+   * Changeset in iModels API.
+   */
+  complete: Link;
 }
 
 /** Full representation of a Changeset. */
@@ -89,7 +95,7 @@ export interface Changeset extends MinimalChangeset {
   application: Application | null;
   /** Information about synchronization process that created the Changeset. */
   synchronizationInfo: SynchronizationInfo | null;
-  /** Changeset links. */
+  /** Changeset links. See {@link ChangesetLinks}. */
   _links: ChangesetLinks;
   /**
    * Function to query Named Version for the current Changeset. If the Changeset does not have a Named Version the
