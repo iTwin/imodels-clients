@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, MinimalChangeset, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, MinimalBriefcase, MinimalChangeset, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
 import { TestChangesetFile, TestIModelBaselineFile } from "./test-context-providers";
 
 export async function assertCollection<T>(params: {
@@ -57,14 +57,23 @@ export async function assertBaselineFile(params: {
   expect(params.actualBaselineFile._links.download!.href).to.not.be.empty;
 }
 
+export function assertMinimalBriefcase(params: {
+  actualBriefcase: MinimalBriefcase;
+}): void {
+  expect(params.actualBriefcase).to.not.be.undefined;
+  expect(params.actualBriefcase.id).to.not.be.empty;
+  expect(params.actualBriefcase.displayName).to.not.be.empty;
+}
+
 export function assertBriefcase(params: {
   actualBriefcase: Briefcase;
   expectedBriefcaseProperties: BriefcaseProperties & { briefcaseId?: number };
   isGetResponse: boolean;
 }): void {
-  expect(params.actualBriefcase).to.not.be.undefined;
-  expect(params.actualBriefcase.id).to.not.be.empty;
-  expect(params.actualBriefcase.displayName).to.not.be.empty;
+  assertMinimalBriefcase({
+    actualBriefcase: params.actualBriefcase
+  });
+
   expect(params.actualBriefcase.ownerId).to.not.be.empty;
   expect(params.actualBriefcase.acquiredDateTime).to.not.be.empty;
 
