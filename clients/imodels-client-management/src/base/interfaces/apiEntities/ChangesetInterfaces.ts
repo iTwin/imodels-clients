@@ -33,28 +33,12 @@ export interface SynchronizationInfo {
   changedFiles: string[] | null;
 }
 
-/** Links that belong to Changeset entity returned from iModels API. */
-export interface ChangesetLinks {
+/** Links that belong to minimal Changeset entity returned from iModels API. */
+export interface MinimalChangesetLinks {
   /** Link to the current Changeset entity. */
   self: Link;
   /** Link to the user which created the Changeset. Link points to a specific user in iModels API. */
   creator: Link;
-  /** Link where to upload the Changeset file. Link points to a remote storage. */
-  upload: Link;
-  /** Link from where to download the Changeset file. Link points to a remote storage. */
-  download: Link;
-  /**
-   * Link to confirm the Changeset file upload and complete the creation process. Points to a specific
-   * Changeset in iModels API.
-   */
-  complete: Link;
-  /** Link to a Named Version created on the Changeset. Points to a specific Named Version in iModels API. */
-  namedVersion?: Link;
-  /**
-   * Link to a Checkpoint that is created on a current or preceding Changeset. Points to a specific Checkpoint
-   * in iModels API.
-   * */
-  currentOrPrecedingCheckpoint?: Link;
 }
 
 /** Minimal representation of a Changeset. */
@@ -81,6 +65,28 @@ export interface MinimalChangeset {
   fileSize: number;
   /** Id of the Briefcase that was used to create the Changeset. */
   briefcaseId: number;
+  /** Changeset links. See {@link MinimalChangesetLinks}. */
+  _links: MinimalChangesetLinks;
+}
+
+/** Links that belong to Changeset entity returned from iModels API. */
+export interface ChangesetLinks extends MinimalChangesetLinks {
+  /** Link to a Named Version created on the Changeset. Points to a specific Named Version in iModels API. */
+  namedVersion?: Link;
+  /**
+   * Link to a Checkpoint that is created on a current or preceding Changeset. Points to a specific Checkpoint
+   * in iModels API.
+   * */
+  currentOrPrecedingCheckpoint?: Link;
+  /** Link where to upload the Changeset file. Link points to a remote storage. */
+  upload: Link;
+  /** Link from where to download the Changeset file. Link points to a remote storage. */
+  download: Link;
+  /**
+   * Link to confirm the Changeset file upload and complete the creation process. Points to a specific
+   * Changeset in iModels API.
+   */
+  complete: Link;
 }
 
 /** Full representation of a Changeset. */

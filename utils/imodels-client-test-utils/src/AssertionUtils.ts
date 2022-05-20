@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Lock, MinimalChangeset, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
 import { TestChangesetFile, TestIModelBaselineFile } from "./test-context-providers";
 
 export async function assertCollection<T>(params: {
@@ -108,16 +108,10 @@ export function assertSynchronizationInfo(params: {
     expect(params.actualSynchronizationInfo).to.be.equal(null);
   }
 }
-
-export function assertChangeset(params: {
-  actualChangeset: Changeset;
+export function assertMinimalChangeset(params: {
+  actualChangeset: MinimalChangeset;
   expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>;
-  expectedTestChangesetFile: TestChangesetFile;
-  expectedLinks: {
-    namedVersion: boolean;
-    checkpoint: boolean;
-  };
-  isGetResponse: boolean;
+  expectedTestChangesetFile: Omit<TestChangesetFile, "synchronizationInfo">;
 }): void {
   expect(params.actualChangeset).to.not.be.undefined;
   expect(params.actualChangeset.id).to.not.be.empty;
@@ -130,6 +124,32 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.creatorId).to.not.be.undefined;
   expect(params.actualChangeset.pushDateTime).to.not.be.empty;
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
+
+  // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
+  expect(params.actualChangeset.fileSize).to.equal(fs.statSync(params.expectedTestChangesetFile.filePath).size);
+
+  expect(params.actualChangeset._links).to.not.be.null;
+  expect(params.actualChangeset._links.self).to.not.be.null;
+  expect(params.actualChangeset._links.self.href).to.not.be.empty;
+  expect(params.actualChangeset._links.creator).to.not.be.null;
+  expect(params.actualChangeset._links.creator.href).to.not.be.empty;
+}
+
+export function assertChangeset(params: {
+  actualChangeset: Changeset;
+  expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>;
+  expectedTestChangesetFile: TestChangesetFile;
+  expectedLinks: {
+    namedVersion: boolean;
+    checkpoint: boolean;
+  };
+  isGetResponse: boolean;
+}): void {
+  assertMinimalChangeset({
+    actualChangeset: params.actualChangeset,
+    expectedChangesetProperties: params.expectedChangesetProperties,
+    expectedTestChangesetFile: params.expectedTestChangesetFile
+  });
 
   // TODO: remove the conditional `synchronizationInfo` and `application` assertion when the API is fixed
   // to return this information in POST/PATCH responses.
@@ -148,14 +168,6 @@ export function assertChangeset(params: {
     expect(params.actualChangeset.application).to.equal(null);
   }
 
-  // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
-  expect(params.actualChangeset.fileSize).to.equal(fs.statSync(params.expectedTestChangesetFile.filePath).size);
-
-  expect(params.actualChangeset._links).to.not.be.null;
-  expect(params.actualChangeset._links.self).to.not.be.null;
-  expect(params.actualChangeset._links.self.href).to.not.be.empty;
-  expect(params.actualChangeset._links.creator).to.not.be.null;
-  expect(params.actualChangeset._links.creator.href).to.not.be.empty;
   if (params.expectedLinks.namedVersion) {
     expect(params.actualChangeset._links.namedVersion).to.not.be.null;
     expect(params.actualChangeset._links.namedVersion!.href).to.not.be.empty;
