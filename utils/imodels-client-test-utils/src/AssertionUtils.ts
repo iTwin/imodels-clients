@@ -152,6 +152,8 @@ export function assertChangeset(params: {
   expect(params.actualChangeset.fileSize).to.equal(fs.statSync(params.expectedTestChangesetFile.filePath).size);
 
   expect(params.actualChangeset._links).to.not.be.null;
+  expect(params.actualChangeset._links.self).to.not.be.null;
+  expect(params.actualChangeset._links.self.href).to.not.be.empty;
   expect(params.actualChangeset._links.creator).to.not.be.null;
   expect(params.actualChangeset._links.creator.href).to.not.be.empty;
   if (params.expectedLinks.namedVersion) {

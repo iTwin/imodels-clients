@@ -16,13 +16,13 @@ export enum ChangesetState {
 
 /** Flags that describe Changeset contents. */
 export enum ContainingChanges {
-  Regular           = 0,
-  Schema            = 1 << 0,
-  Definition        = 1 << 1,
-  SpatialData       = 1 << 2,
+  Regular = 0,
+  Schema = 1 << 0,
+  Definition = 1 << 1,
+  SpatialData = 1 << 2,
   SheetsAndDrawings = 1 << 3,
-  ViewsAndModels    = 1 << 4,
-  GlobalProperties  = 1 << 5
+  ViewsAndModels = 1 << 4,
+  GlobalProperties = 1 << 5
 }
 
 /** Synchronization information. */
@@ -35,7 +35,9 @@ export interface SynchronizationInfo {
 
 /** Links that belong to Changeset entity returned from iModels API. */
 export interface ChangesetLinks {
-    /** Link to the user which created the Changeset. Link points to a specific user in iModels API. */
+  /** Link to the current Changeset entity. */
+  self: Link;
+  /** Link to the user which created the Changeset. Link points to a specific user in iModels API. */
   creator: Link;
   /** Link where to upload the Changeset file. Link points to a remote storage. */
   upload: Link;
