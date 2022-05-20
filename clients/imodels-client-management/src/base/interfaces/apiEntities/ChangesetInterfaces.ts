@@ -30,7 +30,7 @@ export interface SynchronizationInfo {
   /** Id of the synchronization task. */
   taskId: string;
   /** List of files that were processed by the synchronization. */
-  changedFiles: string[] | null;
+  changedFiles: string[];
 }
 
 /** Links that belong to minimal Changeset entity returned from iModels API. */
