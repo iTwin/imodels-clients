@@ -192,17 +192,23 @@ export function assertChangeset(params: {
     isGetResponse: params.isGetResponse
   });
 
-  if (params.expectedLinks.namedVersion) {
-    expect(params.actualChangeset._links.namedVersion).to.exist;
-    expect(params.actualChangeset._links.namedVersion!.href).to.not.be.empty;
-  } else
-  if (params.expectedLinks.checkpoint) {
-    expect(params.actualChangeset._links.currentOrPrecedingCheckpoint).to.exist;
-    expect(params.actualChangeset._links.currentOrPrecedingCheckpoint!.href).to.not.be.empty;
-  }
+  assertOptionalLink({
+    actualLink: params.actualChangeset._links.namedVersion,
+    shouldLinkExist: params.expectedLinks.namedVersion
+  });
+
+  assertOptionalLink({
+    actualLink: params.actualChangeset._links.currentOrPrecedingCheckpoint,
+    shouldLinkExist: params.expectedLinks.checkpoint
+  });
+
   if (params.isGetResponse) {
     expect(params.actualChangeset._links.download).to.exist;
     expect(params.actualChangeset._links.download.href).to.not.be.empty;
+  } else {
+    // TODO: `download` link is not present in `create` method result.
+    // Fix this assertion when the API returns null link in POST/PATCH response.
+    expect(params.actualChangeset._links.download).to.be.undefined;
   }
 }
 
@@ -349,7 +355,7 @@ function assertOptionalProperty<TPropertyType>(expectedValue: TPropertyType, act
 }
 
 function assertOptionalLink(params: {
-  actualLink: Link | null;
+  actualLink: Link | null | undefined;
   shouldLinkExist: boolean;
 }): void {
   if (params.shouldLinkExist) {
