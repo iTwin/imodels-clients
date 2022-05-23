@@ -2,10 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, IModel, IModelsErrorCode, IModelsErrorImpl, IModelOperations as ManagementIModelOperations, sleep } from "@itwin/imodels-client-management";
-import { IModelCreateResponse } from "../../base";
+import { AuthorizationParam, IModel, IModelsErrorCode, IModelsErrorImpl, Link, IModelOperations as ManagementIModelOperations, waitForCondition } from "@itwin/imodels-client-management";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
-import { Constants } from "../../Constants";
 import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations";
 import { OperationOptions } from "../OperationOptions";
 import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline } from "./IModelOperationParams";
@@ -21,7 +19,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   /**
   * Creates an iModel from Baseline file with specified properties. Wraps the
   * {@link https://developer.bentley.com/apis/imodels/operations/create-imodel/ Create iModel} operation from iModels API.
-  * Internally it creates an iModel instace, uploads the Baseline file, confirms Baseline
+  * Internally it creates an iModel instance, uploads the Baseline file, confirms Baseline
   * file upload and then repeatedly queries the Baseline file state until the iModel is initialized. The execution of
   * this method can take up to several minutes due to waiting for initialization to complete. It also depends on the
   * Baseline file size - the larger the file, the longer the upload will take.
@@ -32,16 +30,14 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   */
   public async createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel> {
     const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties);
-    const createIModelResponse = await this.sendPostRequest<IModelCreateResponse>({
-      authorization: params.authorization,
-      url: this._options.urlFormatter.getCreateIModelUrl(),
-      body: createIModelBody
-    });
+    const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody);
 
-    const uploadUrl = createIModelResponse.iModel._links.upload.href;
+    this.assertLink(createdIModel._links.upload);
+    const uploadUrl = createdIModel._links.upload.href;
     await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.iModelProperties.filePath });
 
-    const confirmUploadUrl = createIModelResponse.iModel._links.complete.href;
+    this.assertLink(createdIModel._links.complete);
+    const confirmUploadUrl = createdIModel._links.complete.href;
     await this.sendPostRequest({
       authorization: params.authorization,
       url: confirmUploadUrl,
@@ -50,11 +46,11 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
 
     await this.waitForBaselineFileInitialization({
       authorization: params.authorization,
-      iModelId: createIModelResponse.iModel.id
+      iModelId: createdIModel.id
     });
     return this.getSingle({
       authorization: params.authorization,
-      iModelId: createIModelResponse.iModel.id
+      iModelId: createdIModel.id
     });
   }
 
@@ -68,26 +64,33 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   }
 
   private async waitForBaselineFileInitialization(params: AuthorizationParam & { iModelId: string, timeOutInMs?: number }): Promise<void> {
-    const sleepPeriodInMs = Constants.time.sleepPeriodInMs;
-    const timeOutInMs = params.timeOutInMs ?? Constants.time.iModelInitiazationTimeOutInMs;
-    for (let retries = Math.ceil(timeOutInMs / sleepPeriodInMs); retries > 0; --retries) {
+    const isBaselineInitialized: () => Promise<boolean> = async () => {
       const baselineFileState = (await this._baselineFileOperations.getSingle(params)).state;
 
-      if (baselineFileState === BaselineFileState.Initialized)
-        return;
-
-      if (baselineFileState !== BaselineFileState.WaitingForFile && baselineFileState !== BaselineFileState.InitializationScheduled)
+      if (baselineFileState !== BaselineFileState.Initialized &&
+        baselineFileState !== BaselineFileState.WaitingForFile &&
+        baselineFileState !== BaselineFileState.InitializationScheduled
+      )
         throw new IModelsErrorImpl({
           code: IModelsErrorCode.BaselineFileInitializationFailed,
           message: `Baseline File initialization failed with state '${baselineFileState}.'`
         });
 
-      await sleep(sleepPeriodInMs);
-    }
+      return baselineFileState === BaselineFileState.Initialized;
+    };
 
-    throw new IModelsErrorImpl({
-      code: IModelsErrorCode.BaselineFileInitializationFailed,
-      message: "Timed out waiting for Baseline File initialization."
+    return waitForCondition({
+      conditionToSatisfy: isBaselineInitialized,
+      timeoutErrorFactory: () => new IModelsErrorImpl({
+        code: IModelsErrorCode.BaselineFileInitializationFailed,
+        message: "Timed out waiting for Baseline File initialization."
+      }),
+      timeOutInMs: params.timeOutInMs
     });
+  }
+
+  private assertLink(link: Link | undefined): asserts link is Link {
+    if (!link || !link.href)
+      throw new Error("Assertion failed: link is falsy.");
   }
 }

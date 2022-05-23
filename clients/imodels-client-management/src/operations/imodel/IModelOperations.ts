@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIterator, EntityListIteratorImpl, IModel, IModelResponse, IModelsResponse, MinimalIModel, OperationsBase, PreferReturn } from "../../base";
+import { AuthorizationCallback, EntityListIterator, EntityListIteratorImpl, IModel, IModelResponse, IModelState, IModelsErrorCode, IModelsErrorImpl, IModelsResponse, MinimalIModel, OperationsBase, PreferReturn, waitForCondition } from "../../base";
 import { OperationOptions } from "../OperationOptions";
-import { CreateEmptyIModelParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams";
+import { CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForCreateFromTemplate, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams";
 
 export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**
@@ -61,12 +61,34 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    */
   public async createEmpty(params: CreateEmptyIModelParams): Promise<IModel> {
     const createIModelBody = this.getCreateEmptyIModelRequestBody(params.iModelProperties);
-    const createIModelResponse = await this.sendPostRequest<IModelResponse>({
+    return this.sendIModelPostRequest(params.authorization, createIModelBody);
+  }
+
+  /**
+   * Creates an iModel from a template. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels/operations/create-imodel/ Create iModel} operation from iModels API.
+   * It uses the `template` request body property to specify the source iModel which will be used as a template. Internally
+   * this method creates the iModel instance and then repeatedly queries the iModel state until the iModel is initialized.
+   * The execution of this method can take up to several minutes due to waiting for initialization to complete.
+   * @param {CreateIModelFromTemplateParams} params parameters for this operation. See {@link CreateIModelFromTemplateParams}.
+   * @returns {Promise<iModel>} newly created iModel. See {@link iModel}.
+   * @throws an error that implements `iModelsError` interface with code `iModelsErrorCode.IModelFromTemplateInitializationFailed`
+   * if iModel initialization failed or did not complete in time. See {@link iModelsErrorCode}.
+   */
+  public async createFromTemplate(params: CreateIModelFromTemplateParams): Promise<IModel> {
+    const createIModelBody = this.getCreateIModelFromTemplateRequestBody(params.iModelProperties);
+    const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody);
+
+    await this.waitForTemplatedIModelInitialization({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getCreateIModelUrl(),
-      body: createIModelBody
+      iModelId: createdIModel.id,
+      timeOutInMs: params.timeOutInMs
     });
-    return createIModelResponse.iModel;
+
+    return this.getSingle({
+      authorization: params.authorization,
+      iModelId: createdIModel.id
+    });
   }
 
   /**
@@ -107,11 +129,53 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     };
   }
 
+  protected async sendIModelPostRequest(authorization: AuthorizationCallback, createIModelBody: object): Promise<IModel> {
+    const createIModelResponse = await this.sendPostRequest<IModelResponse>({
+      authorization,
+      url: this._options.urlFormatter.getCreateIModelUrl(),
+      body: createIModelBody
+    });
+    return createIModelResponse.iModel;
+  }
+
+  private getCreateIModelFromTemplateRequestBody(iModelProperties: IModelPropertiesForCreateFromTemplate): object {
+    return {
+      ...this.getCreateEmptyIModelRequestBody(iModelProperties),
+      template: {
+        iModelId: iModelProperties.template.iModelId,
+        changesetId: iModelProperties.template.changesetId
+      }
+    };
+  }
+
   private getUpdateIModelRequestBody(iModelProperties: IModelPropertiesForUpdate): object {
     return {
       name: iModelProperties.name,
       description: iModelProperties.description,
       extent: iModelProperties.extent
     };
+  }
+
+  private async waitForTemplatedIModelInitialization(params: {
+    authorization: AuthorizationCallback;
+    iModelId: string;
+    timeOutInMs?: number;
+  }): Promise<void> {
+    const isIModelInitialized: () => Promise<boolean> = async () => {
+      const iModel: IModel = await this.getSingle({
+        authorization: params.authorization,
+        iModelId: params.iModelId
+      });
+      return iModel.state === IModelState.Initialized;
+    };
+
+    return waitForCondition({
+      conditionToSatisfy: isIModelInitialized,
+      timeoutErrorFactory: () => new IModelsErrorImpl({
+        code: IModelsErrorCode.IModelFromTemplateInitializationFailed,
+        message: "Timed out waiting for Baseline File initialization."
+      }),
+      timeOutInMs: params.timeOutInMs
+    });
   }
 }

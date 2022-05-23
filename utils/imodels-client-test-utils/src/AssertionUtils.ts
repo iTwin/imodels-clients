@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Application, BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, Lock, MinimalBriefcase, MinimalChangeset, MinimalNamedVersion, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
+import { Application, BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, Lock, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
 import { TestChangesetFile, TestIModelBaselineFile } from "./test-context-providers";
 
 export async function assertCollection<T>(params: {
@@ -62,13 +62,21 @@ export function assertSynchronizationInfo(params: {
   expect(params.actualSynchronizationInfo).to.be.equal(null);
 }
 
-export function assertIModel(params: {
-  actualIModel: IModel;
-  expectedIModelProperties: IModelProperties;
+export function assertMinimalIModel(params: {
+  actualIModel: MinimalIModel;
 }): void {
   expect(params.actualIModel).to.exist;
   expect(params.actualIModel.id).to.not.be.empty;
   expect(params.actualIModel.displayName).to.not.be.empty;
+}
+
+export function assertIModel(params: {
+  actualIModel: IModel;
+  expectedIModelProperties: IModelProperties;
+}): void {
+  assertMinimalIModel({
+    actualIModel: params.actualIModel
+  });
 
   expect(params.actualIModel.name).to.equal(params.expectedIModelProperties.name);
   assertOptionalProperty(params.expectedIModelProperties.description, params.actualIModel.description);
@@ -206,8 +214,7 @@ export function assertChangeset(params: {
     expect(params.actualChangeset._links.download).to.exist;
     expect(params.actualChangeset._links.download.href).to.not.be.empty;
   } else {
-    // TODO: `download` link is not present in `create` method result.
-    // Fix this assertion when the API returns null link in POST/PATCH response.
+    // `download` link is not present in `create` method result.
     expect(params.actualChangeset._links.download).to.be.undefined;
   }
 }
