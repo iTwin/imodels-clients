@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionResponse } from "../CommonInterfaces";
+import { Application, CollectionResponse, Link } from "../CommonInterfaces";
 
 /** Possible Named Version states. */
 export enum NamedVersionState {
@@ -30,6 +30,14 @@ export interface MinimalNamedVersion {
   changesetIndex: number;
 }
 
+/** Links that belong to Named Version entity. */
+export interface NamedVersionLinks {
+  /** Link to the user which created the Named Version. Link points to a specific user in iModels API. */
+  creator: Link | null;
+  /** Link to the Changeset on which the Named Version was created. Link points to a specific Changeset in iModels API. */
+  changeset: Link | null;
+}
+
 /** Full representation of a Named Version. */
 export interface NamedVersion extends MinimalNamedVersion {
   /** Named Version name. Value corresponds to {@link MinimalNamedVersion.displayName} property. */
@@ -44,6 +52,10 @@ export interface NamedVersion extends MinimalNamedVersion {
    * `NamedVersionState.Hidden` are present in the Named Version list returned by the API. See {@link NamedVersionState}.
    */
   state: NamedVersionState;
+  /** Information about the application that created the Named Version. */
+  application: Application | null;
+  /** Named Version links. See {@link NamedVersionLinks}. */
+  _links: NamedVersionLinks;
 }
 
 /** DTO to hold a single Named Version API response. */
