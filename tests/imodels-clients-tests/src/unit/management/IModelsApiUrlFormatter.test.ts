@@ -190,7 +190,6 @@ describe("[Management] IModelsApiUrlFormatter", () => {
       // Assert
       expect(userPermissionsUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/permissions");
     });
-
   });
 
   describe("Url parameter forming", () => {
