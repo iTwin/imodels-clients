@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Application, BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, Lock, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate, UserPermissions } from "@itwin/imodels-client-authoring";
+import { Application, BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, Lock, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate, User, UserPermissions } from "@itwin/imodels-client-authoring";
 import { TestChangesetFile, TestIModelBaselineFile } from "./test-context-providers";
 
 export async function assertCollection<T>(params: {
@@ -283,6 +283,30 @@ export function assertLock(params: {
       expect(expectedLockedObjectId).to.exist;
     }
   }
+}
+
+export function assertMinimalUser(params: {
+  actualUser: MinimalUser;
+}): void {
+  expect(params.actualUser).to.exist;
+  expect(params.actualUser.id).to.not.be.empty;
+  expect(params.actualUser.displayName).to.not.be.empty;
+
+  expect(params.actualUser._links).to.exist;
+  expect(params.actualUser._links.self).to.exist;
+  expect(params.actualUser._links.self?.href).to.not.be.empty;
+}
+
+export function assertUser(params: {
+  actualUser: User;
+}): void {
+  assertMinimalUser({
+    actualUser: params.actualUser
+  });
+
+  expect(params.actualUser.givenName).to.not.be.empty;
+  expect(params.actualUser.surname).to.not.be.empty;
+  expect(params.actualUser.email).to.not.be.empty;
 }
 
 export function assertUserPermissions(params: {

@@ -155,6 +155,44 @@ describe("[Management] IModelsApiUrlFormatter", () => {
     });
   });
 
+  describe("User urls", () => {
+    it("should format user list url", () => {
+      // Arrange
+      const getUserListUrlParams = { iModelId: "IMODEL_ID" };
+
+      // Act
+      const userListUrl = iModelsApiUrlFormatter.getUserListUrl(getUserListUrlParams);
+
+      // Assert
+      expect(userListUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/users");
+    });
+
+    it("should format single user url", () => {
+      // Arrange
+      const getSingleUserUrlParams = { iModelId: "IMODEL_ID", userId: "USER_ID" };
+
+      // Act
+      const singleUserUrl = iModelsApiUrlFormatter.getSingleUserUrl(getSingleUserUrlParams);
+
+      // Assert
+      expect(singleUserUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/users/USER_ID");
+    });
+  });
+
+  describe("User permission urls", () => {
+    it("should format permissions url", () => {
+      // Arrange
+      const getUserPermissionsUrlParams = { iModelId: "IMODEL_ID" };
+
+      // Act
+      const userPermissionsUrl = iModelsApiUrlFormatter.getUserPermissionsUrl(getUserPermissionsUrlParams);
+
+      // Assert
+      expect(userPermissionsUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/permissions");
+    });
+
+  });
+
   describe("Url parameter forming", () => {
     it("should append all url params", () => {
       // Arrange

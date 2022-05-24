@@ -13,6 +13,7 @@ export * from "./interfaces/apiEntities/BriefcaseInterfaces";
 export * from "./interfaces/apiEntities/ChangesetInterfaces";
 export * from "./interfaces/apiEntities/NamedVersionInterfaces";
 export * from "./interfaces/apiEntities/CheckpointInterfaces";
+export * from "./interfaces/apiEntities/UserInterfaces";
 export * from "./interfaces/apiEntities/UserPermissionInterfaces";
 export * from "./iterators/EntityListIterator";
 export * from "./iterators/EntityListIteratorImpl";
