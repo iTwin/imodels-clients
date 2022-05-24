@@ -67,6 +67,10 @@ export class IModelsApiUrlFormatter {
     return `${this.baseUrl}/${params.iModelId}/${parentEntityUrlPath}/checkpoint`;
   }
 
+  public getUserPermissionsUrl(params: { iModelId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}/permissions`;
+  }
+
   public parseCheckpointUrl(url: string): { iModelId: string, changesetIndex: number } {
     const matchedGroups: Dictionary<string> = this._checkpointUrlRegex.exec(url)!.groups!;
     return {
