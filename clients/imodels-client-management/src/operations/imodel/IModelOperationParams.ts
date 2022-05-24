@@ -56,7 +56,7 @@ export interface CreateEmptyIModelParams extends AuthorizationParam {
 export interface IModelTemplate {
   /** Id of the source iModel which to use as a template. iModel id must not be an empty or whitespace string.*/
   iModelId: string;
-  /** 
+  /**
    * iModel timeline point identified by the Changeset. If specified, all Changesets up to and including the one
    * specified will me merged into the resulting iModel baseline file. It means that the Changeset history will
    * be lost but the contents will be present in the result iModel baseline file.

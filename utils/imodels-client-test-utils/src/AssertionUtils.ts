@@ -19,49 +19,6 @@ export async function assertCollection<T>(params: {
   expect(params.isEntityCountCorrect(entityCount)).to.equal(true);
 }
 
-export function assertApplication(params: {
-  actualApplication: Application | null;
-  isGetResponse: boolean;
-}): void {
-  // TODO: remove the conditional `application` assertion when the API is fixed to return this
-  // information in POST/PATCH responses.
-  if (!params.isGetResponse) {
-    expect(params.actualApplication).to.equal(null);
-    return;
-  }
-
-  expect(params.actualApplication).to.exist;
-  expect(params.actualApplication!.id).to.not.be.empty;
-  expect(params.actualApplication!.name).to.not.be.empty;
-}
-
-export function assertSynchronizationInfo(params: {
-  actualSynchronizationInfo: SynchronizationInfo | null;
-  expectedSynchronizationInfo: SynchronizationInfoForCreate | undefined;
-  isGetResponse: boolean;
-}): void {
-  // TODO: remove the conditional `synchronizationInfo` assertion when the API is fixed to return this
-  // information in POST/PATCH responses.
-  if (!params.isGetResponse) {
-    expect(params.actualSynchronizationInfo).to.equal(null);
-    return;
-  }
-
-  if (params.expectedSynchronizationInfo) {
-    expect(params.actualSynchronizationInfo).to.exist;
-    expect(params.actualSynchronizationInfo!.taskId).to.be.equal(params.expectedSynchronizationInfo.taskId);
-
-    if (params.expectedSynchronizationInfo.changedFiles)
-      expect(params.actualSynchronizationInfo!.changedFiles).to.deep.equal(params.expectedSynchronizationInfo.changedFiles);
-    else
-      expect(params.actualSynchronizationInfo!.changedFiles).to.equal(null);
-
-    return;
-  }
-
-  expect(params.actualSynchronizationInfo).to.be.equal(null);
-}
-
 export function assertMinimalIModel(params: {
   actualIModel: MinimalIModel;
 }): void {
@@ -371,4 +328,47 @@ function assertOptionalLink(params: {
   } else {
     expect(params.actualLink).to.equal(null);
   }
+}
+
+function assertApplication(params: {
+  actualApplication: Application | null;
+  isGetResponse: boolean;
+}): void {
+  // TODO: remove the conditional `application` assertion when the API is fixed to return this
+  // information in POST/PATCH responses.
+  if (!params.isGetResponse) {
+    expect(params.actualApplication).to.equal(null);
+    return;
+  }
+
+  expect(params.actualApplication).to.exist;
+  expect(params.actualApplication!.id).to.not.be.empty;
+  expect(params.actualApplication!.name).to.not.be.empty;
+}
+
+function assertSynchronizationInfo(params: {
+  actualSynchronizationInfo: SynchronizationInfo | null;
+  expectedSynchronizationInfo: SynchronizationInfoForCreate | undefined;
+  isGetResponse: boolean;
+}): void {
+  // TODO: remove the conditional `synchronizationInfo` assertion when the API is fixed to return this
+  // information in POST/PATCH responses.
+  if (!params.isGetResponse) {
+    expect(params.actualSynchronizationInfo).to.equal(null);
+    return;
+  }
+
+  if (params.expectedSynchronizationInfo) {
+    expect(params.actualSynchronizationInfo).to.exist;
+    expect(params.actualSynchronizationInfo!.taskId).to.be.equal(params.expectedSynchronizationInfo.taskId);
+
+    if (params.expectedSynchronizationInfo.changedFiles)
+      expect(params.actualSynchronizationInfo!.changedFiles).to.deep.equal(params.expectedSynchronizationInfo.changedFiles);
+    else
+      expect(params.actualSynchronizationInfo!.changedFiles).to.equal(null);
+
+    return;
+  }
+
+  expect(params.actualSynchronizationInfo).to.be.equal(null);
 }
