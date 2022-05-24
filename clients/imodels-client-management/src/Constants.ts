@@ -18,4 +18,9 @@ export class Constants {
       contentType: "application/json"
     }
   };
+
+  public static time = {
+    sleepPeriodInMs: 1000,
+    iModelInitiazationTimeOutInMs: 5 * 60 * 1000
+  };
 }

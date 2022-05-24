@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { AuthorizationCallback, CreateNamedVersionParams, EntityListIterator, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, MinimalNamedVersion, NamedVersion, NamedVersionOrderByProperty, NamedVersionState, OrderByOperator, UpdateNamedVersionParams, toArray } from "@itwin/imodels-client-management";
-import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestSetupError, TestUtilTypes, assertCollection, assertNamedVersion } from "@itwin/imodels-client-test-utils";
+import { AuthorizationCallback, CreateNamedVersionParams, EntityListIterator, GetNamedVersionListParams, GetSingleNamedVersionParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, MinimalNamedVersion, NamedVersion, NamedVersionOrderByProperty, NamedVersionState, OrderByOperator, UpdateNamedVersionParams, take, toArray } from "@itwin/imodels-client-management";
+import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestSetupError, TestUtilTypes, assertCollection, assertMinimalNamedVersion, assertNamedVersion } from "@itwin/imodels-client-test-utils";
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 describe("[Management] NamedVersionOperations", () => {
@@ -169,6 +169,65 @@ describe("[Management] NamedVersionOperations", () => {
     expect(namedVersionArray.length).to.equal(0);
   });
 
+  it("should get minimal named version", async () => {
+    // Arrange
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $top: 1,
+        $orderBy: {
+          property: NamedVersionOrderByProperty.ChangesetIndex,
+          operator: OrderByOperator.Ascending
+        }
+      }
+    };
+
+    // Act
+    const minimalNamedVersions = iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
+
+    // Assert
+    const minimalNamedVersionList = await take(minimalNamedVersions, 1);
+    expect(minimalNamedVersionList.length).to.be.equal(1);
+    const minimalNamedVersion = minimalNamedVersionList[0];
+    const existingFirstNamedVersion = namedVersionsCreatedInSetup[0];
+    assertMinimalNamedVersion({
+      actualNamedVersion: minimalNamedVersion,
+      expectedNamedVersionProperties: {
+        changesetId: existingFirstNamedVersion.changesetId!,
+        changesetIndex: existingFirstNamedVersion.changesetIndex
+      }
+    });
+  });
+
+  it("should get named version by id", async () => {
+    // Arrange
+    const existingNamedVersion = namedVersionsCreatedInSetup[0];
+    const getSingleNamedVersionParams: GetSingleNamedVersionParams = {
+      authorization,
+      iModelId: testIModel.id,
+      namedVersionId: existingNamedVersion.id
+    };
+
+    // Act
+    const namedVersion: NamedVersion = await iModelsClient.namedVersions.getSingle(getSingleNamedVersionParams);
+
+    // Assert
+    assertNamedVersion({
+      actualNamedVersion: namedVersion,
+      expectedNamedVersionProperties: {
+        name: existingNamedVersion.name,
+        description: existingNamedVersion.description!,
+        changesetId: existingNamedVersion.changesetId!,
+        changesetIndex: existingNamedVersion.changesetIndex
+      },
+      expectedLinks: {
+        changeset: true
+      },
+      isGetResponse: true
+    });
+  });
+
   it("should create named version on baseline", async () => {
     // Arrange
     const createNamedVersionParams: CreateNamedVersionParams = {
@@ -189,7 +248,11 @@ describe("[Management] NamedVersionOperations", () => {
       expectedNamedVersionProperties: {
         ...createNamedVersionParams.namedVersionProperties,
         changesetIndex: 0
-      }
+      },
+      expectedLinks: {
+        changeset: false
+      },
+      isGetResponse: false
     });
   });
 
@@ -215,7 +278,11 @@ describe("[Management] NamedVersionOperations", () => {
       expectedNamedVersionProperties: {
         ...createNamedVersionParams.namedVersionProperties,
         changesetIndex
-      }
+      },
+      expectedLinks: {
+        changeset: true
+      },
+      isGetResponse: false
     });
   });
 
