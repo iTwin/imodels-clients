@@ -16,7 +16,7 @@ export class AxiosRestClient implements RestClient {
 
   public async sendGetRequest<TResponse>(params: HttpRequestParams): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
-      headers: params.headers
+      headers: params.headers,
     };
 
     return axios.get(params.url, requestConfig)

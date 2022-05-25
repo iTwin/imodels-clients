@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { ApiOptions, AxiosRestClient, RecursiveRequired, RestClient } from "./base";
 import { Constants } from "./Constants";
-import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, UserOperations, UserPermissionOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
 import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
 import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
@@ -65,7 +65,12 @@ export class IModelsClient {
     return new CheckpointOperations(this._operationsOptions);
   }
 
-  /** User permission operations. See {@link UserPermissionOperations}. */
+  /** Thumbnail operations. See {@link ThumbnailOperations}. */
+  public get thumbnails(): ThumbnailOperations<OperationOptions> {
+    return new ThumbnailOperations(this._operationsOptions);
+  }
+
+  /** User permission operations. See {@link UserOperations}. */
   public get users(): UserOperations<OperationOptions> {
     return new UserOperations(this._operationsOptions);
   }

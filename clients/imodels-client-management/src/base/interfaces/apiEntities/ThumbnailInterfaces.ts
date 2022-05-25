@@ -2,11 +2,16 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import * as path from "path";
 
-export class Constants {
-  public static TestDownloadDirectoryPath = path.join(__dirname, "../testDownloads");
-  public static AssetsDirectoryPath = path.join(__dirname, "../../assets");
-  public static PackagePrefix = "IModelsClientsTests";
-  public static TestDeviceName = "Test device";
+/** Thumbnail size. */
+export enum ThumbnailSize {
+  /** A small Thumbnail is a 400x250 PNG image. */
+  Small = "small",
+  /** A large thumbnail is a 800x500 PNG image. */
+  Large = "large"
+}
+
+export interface Thumbnail { // TODO: add content type?
+  size: ThumbnailSize;
+  data: Uint8Array;
 }

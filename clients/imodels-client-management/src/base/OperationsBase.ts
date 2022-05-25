@@ -65,7 +65,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     };
   }
 
-  private async formHeaders(params: AuthorizationParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Promise<Dictionary<string>> {
+  protected async formHeaders(params: AuthorizationParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Promise<Dictionary<string>> {
     const headers: Dictionary<string> = {};
     const authorizationInfo = await params.authorization();
     headers[Constants.headers.authorization] = `${authorizationInfo.scheme} ${authorizationInfo.token}`;

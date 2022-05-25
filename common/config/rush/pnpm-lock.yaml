@@ -202,6 +202,7 @@ importers:
       '@itwin/imodels-client-test-utils': 'link:../../utils/imodels-client-test-utils'
       axios: 0.21.4
       chai: 4.3.6
+      chai-as-promised: 7.1.1_chai@4.3.6
       dotenv: 10.0.0
       inversify: 5.0.5
       mocha: 9.2.2
@@ -209,8 +210,10 @@ importers:
     devDependencies:
       '@itwin/imodels-client-common-config': 'link:../../utils/imodels-client-common-config'
       '@types/chai': 4.2.22
+      '@types/chai-as-promised': 7.1.5
       '@types/mocha': 9.0.0
       '@types/node': 16.11.36
+      cpx2: 4.2.0
       cspell: 5.21.0
       eslint: 7.31.0
       nyc: 15.1.0
@@ -223,10 +226,13 @@ importers:
       '@itwin/imodels-client-management': 'workspace:*'
       '@itwin/imodels-client-test-utils': 'workspace:*'
       '@types/chai': ~4.2.21
+      '@types/chai-as-promised': ~7.1.5
       '@types/mocha': ~9.0.0
       '@types/node': ^16.4.6
       axios: ~0.21.1
       chai: ~4.3.4
+      chai-as-promised: ~7.1.1
+      cpx2: 4.2.0
       cspell: ~5.21.0
       dotenv: ~10.0.0
       eslint: ~7.31.0
@@ -1281,6 +1287,12 @@ packages:
       '@babel/runtime': 7.17.9
     resolution:
       integrity: sha512-IH2M+F3c8HR1DTroBARePUFG7wIewumtKA0UFqx51Z7S4hKrD60wFbpMmg0AcF4FvHAXMBoC+kYi1UKW9XbAOw==
+  /@types/chai-as-promised/7.1.5:
+    dependencies:
+      '@types/chai': 4.2.22
+    dev: true
+    resolution:
+      integrity: sha512-jStwss93SITGBwt/niYrkf2C+/1KTeZCZl1LaeezTlqppAKeoQC7jxyqYuP72sxBGKCIbw7oHgbYssIRzT5FCQ==
   /@types/chai/4.2.22:
     dev: true
     resolution:
@@ -1950,6 +1962,15 @@ packages:
     dev: true
     resolution:
       integrity: sha512-2SodVrFFtvGENGCv0ChVJIDQ0KPaS1cg7/qtfMaICgeMolDdo/Z2OD32F0Aq9yl6F4YFwGPBS5AaPqNYiW4PoA==
+  /chai-as-promised/7.1.1_chai@4.3.6:
+    dependencies:
+      chai: 4.3.6
+      check-error: 1.0.2
+    dev: false
+    peerDependencies:
+      chai: '>= 2.1.2 < 5'
+    resolution:
+      integrity: sha512-azL6xMoi+uxu6z4rhWQ1jbdUhOMhis2PvscD/xjLqNMkv3BPPp2JyyuTHOrf9BOosGpNQ11v6BKv/g57RXbiaA==
   /chai/4.3.6:
     dependencies:
       assertion-error: 1.1.0

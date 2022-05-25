@@ -7,5 +7,6 @@ export * from "./briefcase/BriefcaseOperationParams";
 export * from "./changeset/ChangesetOperationParams";
 export * from "./named-version/NamedVersionOperationParams";
 export * from "./checkpoint/CheckpointOperationParams";
+export * from "./thumbnail/ThumbnailOperationParams"
 export * from "./user/UserOperationParams";
 export * from "./user-permission/UserPermissionOperationParams";

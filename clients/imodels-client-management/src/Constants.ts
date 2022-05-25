@@ -11,7 +11,7 @@ export class Constants {
   public static headers = {
     accept: "Accept",
     authorization: "Authorization",
-    contentType: "ContentType",
+    contentType: "Content-Type",
     prefer: "Prefer",
 
     values: {
