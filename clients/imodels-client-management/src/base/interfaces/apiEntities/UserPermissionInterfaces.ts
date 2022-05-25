@@ -15,7 +15,7 @@ export enum IModelPermission {
    */
   Write = "imodels_write",
   /**
-   * Allows to create an iModel. Allows to configure access per iModel. Allows to manage Locks, Codes or local copies
+   * Allows to create an iModel. Allows to configure access per iModel. Allows to manage Locks or local copies
    * for the entire iModel. This Permission is both iModel and Project level Permission, but Create iModel operation
    * requires that user has `imodels_manage` Permission on the Project level. Use
    * {@link https://developer.bentley.com/apis/projects/ Projects API} to check if user can create an iModel on a
