@@ -140,6 +140,7 @@ describe("BackendIModelsAccess", () => {
       const downloadV1CheckpointParams: CheckpointArg = {
         localFile: localCheckpointFilePath,
         checkpoint: {
+          accessToken,
           iTwinId,
           iModelId: testIModelForRead.id,
           changeset: {
@@ -169,6 +170,7 @@ describe("BackendIModelsAccess", () => {
       const downloadV1CheckpointParams: CheckpointArg = {
         localFile: localCheckpointFilePath,
         checkpoint: {
+          accessToken,
           iTwinId,
           iModelId: testIModelForRead.id,
           changeset: {
@@ -199,6 +201,7 @@ describe("BackendIModelsAccess", () => {
       const downloadV1CheckpointParams: CheckpointArg = {
         localFile: localCheckpointFilePath,
         checkpoint: {
+          accessToken,
           iTwinId,
           iModelId: testIModelForRead.id,
           changeset: {
