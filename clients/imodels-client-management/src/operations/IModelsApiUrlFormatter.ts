@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OrderBy } from "../base/interfaces/CommonInterfaces";
+import { CollectionRequestParams, OrderBy } from "../base/interfaces/CommonInterfaces";
 import { Dictionary } from "../base/interfaces/UtilityTypes";
 import { ChangesetIdOrIndex, GetChangesetListUrlParams } from "./changeset/ChangesetOperationParams";
 import { CheckpointParentEntityId, GetBriefcaseListUrlParams, GetIModelListUrlParams, GetNamedVersionListUrlParams } from ".";
@@ -65,6 +65,18 @@ export class IModelsApiUrlFormatter {
       : `changesets/${params.changesetId ?? params.changesetIndex}`;
 
     return `${this.baseUrl}/${params.iModelId}/${parentEntityUrlPath}/checkpoint`;
+  }
+
+  public getUserListUrl(params: { iModelId: string, urlParams?: CollectionRequestParams }): string {
+    return `${this.baseUrl}/${params.iModelId}/users${this.formQueryString({ ...params.urlParams })}`;
+  }
+
+  public getSingleUserUrl(params: { iModelId: string } & { userId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}/users/${params.userId}`;
+  }
+
+  public getUserPermissionsUrl(params: { iModelId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}/permissions`;
   }
 
   public parseCheckpointUrl(url: string): { iModelId: string, changesetIndex: number } {

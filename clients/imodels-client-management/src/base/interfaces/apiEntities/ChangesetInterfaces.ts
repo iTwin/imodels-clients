@@ -37,7 +37,7 @@ export interface SynchronizationInfo {
 export interface MinimalChangesetLinks {
   /** Link to the current Changeset entity. */
   self: Link;
-  /** Link to the user which created the Changeset. Link points to a specific user in iModels API. */
+  /** Link to the User which created the Changeset. Link points to a specific User in iModels API. */
   creator: Link;
 }
 
