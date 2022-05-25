@@ -30,12 +30,12 @@ export interface User extends MinimalUser {
   email: string;
 }
 
-/** DTO to hold a single Changeset API response. */
+/** DTO to hold a single User API response. */
 export interface UserResponse {
   user: User;
 }
 
-/** DTO to hold minimal Changeset list API response. */
+/** DTO to hold minimal User list API response. */
 export interface MinimalUsersResponse extends CollectionResponse {
   users: MinimalUser[];
 }

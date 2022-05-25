@@ -90,12 +90,12 @@ export class IModelsClient {
     return new LockOperations(this._operationsOptions);
   }
 
-  /** User permission operations. See {@link UserPermissionOperations}. */
+  /** User operations. See {@link UserOperations}. */
   public get users(): UserOperations<OperationOptions> {
     return new UserOperations(this._operationsOptions);
   }
 
-  /** User permission operations. See {@link UserPermissionOperations}. */
+  /** User Permission operations. See {@link UserPermissionOperations}. */
   public get userPermissions(): UserPermissionOperations<OperationOptions> {
     return new UserPermissionOperations(this._operationsOptions);
   }

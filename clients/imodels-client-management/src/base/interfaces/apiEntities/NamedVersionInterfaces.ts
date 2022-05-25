@@ -32,7 +32,7 @@ export interface MinimalNamedVersion {
 
 /** Links that belong to Named Version entity. */
 export interface NamedVersionLinks {
-  /** Link to the user which created the Named Version. Link points to a specific user in iModels API. */
+  /** Link to the User which created the Named Version. Link points to a specific User in iModels API. */
   creator: Link | null;
   /** Link to the Changeset on which the Named Version was created. Link points to a specific Changeset in iModels API. */
   changeset: Link | null;

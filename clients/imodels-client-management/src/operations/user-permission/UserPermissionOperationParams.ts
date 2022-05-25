@@ -4,5 +4,5 @@
  *--------------------------------------------------------------------------------------------*/
 import { IModelScopedOperationParams } from "../../base";
 
-/** Parameters for get user permissions operation. */
+/** Parameters for get User Permissions operation. */
 export type GetUserPermissionsParams = IModelScopedOperationParams;

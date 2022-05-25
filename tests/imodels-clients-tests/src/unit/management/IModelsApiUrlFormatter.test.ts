@@ -179,7 +179,7 @@ describe("[Management] IModelsApiUrlFormatter", () => {
     });
   });
 
-  describe("User permission urls", () => {
+  describe("User Permission urls", () => {
     it("should format permissions url", () => {
       // Arrange
       const getUserPermissionsUrlParams = { iModelId: "IMODEL_ID" };
