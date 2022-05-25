@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Application, BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, Lock, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
+import { Application, BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, Lock, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate, User, UserPermissions } from "@itwin/imodels-client-authoring";
 import { TestChangesetFile, TestIModelBaselineFile } from "./test-context-providers";
 
 export async function assertCollection<T>(params: {
@@ -275,13 +275,51 @@ export function assertLock(params: {
   expect(params.actualLock.lockedObjects.length).to.equal(params.expectedLock.lockedObjects.length);
   for (const lockedObjects of params.actualLock.lockedObjects) {
     const expectedLockedObjects = params.expectedLock.lockedObjects.find((l) => l.lockLevel === lockedObjects.lockLevel);
-    expect(expectedLockedObjects).to.be.not.be.undefined;
+    expect(expectedLockedObjects).to.exist;
 
     expect(lockedObjects.objectIds.length).to.equal(expectedLockedObjects!.objectIds.length);
     for (const objectId of lockedObjects.objectIds) {
       const expectedLockedObjectId = expectedLockedObjects!.objectIds.find((id) => id === objectId);
       expect(expectedLockedObjectId).to.exist;
     }
+  }
+}
+
+export function assertMinimalUser(params: {
+  actualUser: MinimalUser;
+}): void {
+  expect(params.actualUser).to.exist;
+  expect(params.actualUser.id).to.not.be.empty;
+  expect(params.actualUser.displayName).to.not.be.empty;
+
+  expect(params.actualUser._links).to.exist;
+  expect(params.actualUser._links.self).to.exist;
+  expect(params.actualUser._links.self?.href).to.not.be.empty;
+}
+
+export function assertUser(params: {
+  actualUser: User;
+}): void {
+  assertMinimalUser({
+    actualUser: params.actualUser
+  });
+
+  expect(params.actualUser.givenName).to.not.be.empty;
+  expect(params.actualUser.surname).to.not.be.empty;
+  expect(params.actualUser.email).to.not.be.empty;
+}
+
+export function assertUserPermissions(params: {
+  actualPermissions: UserPermissions;
+  expectedPermissions: IModelPermission[];
+}): void {
+  expect(params.actualPermissions).to.exist;
+  expect(params.actualPermissions.permissions).to.exist;
+  expect(params.actualPermissions.permissions.length).to.be.equal(params.expectedPermissions.length);
+
+  for (const actualIModelPermission of params.actualPermissions.permissions) {
+    const isCurrentPermissionExpected = params.expectedPermissions.includes(actualIModelPermission);
+    expect(isCurrentPermissionExpected).to.equal(true);
   }
 }
 

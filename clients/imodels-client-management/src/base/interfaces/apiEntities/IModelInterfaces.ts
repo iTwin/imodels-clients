@@ -59,7 +59,7 @@ export interface IModelLinks {
    * @private
    */
   complete?: Link;
-  /** Link to the user who created the baseline file instance. Link points to a specific user in iModels API. */
+  /** Link to the User who created the baseline file instance. Link points to a specific User in iModels API. */
   creator: Link | null;
   /** Link to retrieve iModel Changesets. Link points to Changeset collection in iModels API. */
   changesets: Link | null;
