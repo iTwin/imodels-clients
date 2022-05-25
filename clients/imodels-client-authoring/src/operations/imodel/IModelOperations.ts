@@ -29,7 +29,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   * or did not complete in time. See {@link iModelsErrorCode}.
   */
   public async createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel> {
-    const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties);
+    const createIModelBody = await this.getCreateIModelFromBaselineRequestBody(params.iModelProperties);
     const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody);
 
     this.assertLink(createdIModel._links.upload);
