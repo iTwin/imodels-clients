@@ -67,7 +67,7 @@ export class IModelsClient {
 
   /** Briefcase operations. See {@link BriefcaseOperations}. */
   public get briefcases(): BriefcaseOperations<OperationOptions> {
-    return new BriefcaseOperations(this._operationsOptions);
+    return new BriefcaseOperations(this._operationsOptions, this.users);
   }
 
   /** Changeset operations. See {@link ChangesetOperations}. */

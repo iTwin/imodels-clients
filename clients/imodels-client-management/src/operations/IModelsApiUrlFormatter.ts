@@ -15,10 +15,12 @@ export class IModelsApiUrlFormatter {
   private readonly _groupNames = {
     iModelId: "iModelId",
     changesetIndex: "changesetIndex",
-    namedVersionId: "namedVersionId"
+    namedVersionId: "namedVersionId",
+    userId: "userId"
   };
-  private readonly _checkpointUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*?)/changesets/(?<${this._groupNames.changesetIndex}>.*?)/checkpoint`, this._regexIgnoreCaseOption);
-  private readonly _namedVersionUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*?)/namedversions/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
+  private readonly _checkpointUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIndex}>.*)/checkpoint`, this._regexIgnoreCaseOption);
+  private readonly _namedVersionUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/namedversions/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
+  private readonly _userUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/users/(?<${this._groupNames.userId}>.*)`, this._regexIgnoreCaseOption);
 
   constructor(protected readonly baseUrl: string) {
   }
@@ -92,6 +94,14 @@ export class IModelsApiUrlFormatter {
     return {
       iModelId: matchedGroups[this._groupNames.iModelId],
       namedVersionId: matchedGroups[this._groupNames.namedVersionId]
+    };
+  }
+
+  public parseUserUrl(url: string): { iModelId: string, userId: string } {
+    const matchedGroups: Dictionary<string> = this._userUrlRegex.exec(url)!.groups!;
+    return {
+      iModelId: matchedGroups[this._groupNames.iModelId],
+      userId: matchedGroups[this._groupNames.userId]
     };
   }
 

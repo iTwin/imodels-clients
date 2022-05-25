@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { AuthorizationCallback, Briefcase, GetBriefcaseListParams, GetSingleBriefcaseParams, IModelsClient, IModelsClientOptions, SPECIAL_VALUES_ME, take, toArray } from "@itwin/imodels-client-management";
-import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertBriefcase, assertCollection, assertMinimalBriefcase } from "@itwin/imodels-client-test-utils";
+import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertBriefcase, assertCollection, assertMinimalBriefcase, assertUser } from "@itwin/imodels-client-test-utils";
 import { getTestDIContainer } from "../common";
 
 describe("[Management] BriefcaseOperations", () => {
@@ -72,9 +72,9 @@ describe("[Management] BriefcaseOperations", () => {
     const briefcases = iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams);
 
     // Assert
-    const briefcasesArray = await toArray(briefcases);
-    expect(briefcasesArray.length).to.equal(1);
-    const briefcase = briefcasesArray[0];
+    const briefcaseList = await toArray(briefcases);
+    expect(briefcaseList.length).to.equal(1);
+    const briefcase = briefcaseList[0];
     expect(briefcase.briefcaseId).to.equal(testIModel.briefcase.id);
   });
 
@@ -138,6 +138,49 @@ describe("[Management] BriefcaseOperations", () => {
         deviceName: testIModel.briefcase.deviceName
       },
       isGetResponse: true
+    });
+  });
+
+  describe("link to owner", () => {
+    it("should contain a link to owner when querying representation collection", async () => {
+      // Arrange
+      const getBriefcaseListParams: GetBriefcaseListParams = {
+        authorization,
+        iModelId: testIModel.id,
+        urlParams: {
+          $top: 1
+        }
+      };
+
+      // Act
+      const briefcases = iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams);
+
+      // Assert
+      const briefcaseList: Briefcase[] = await toArray(briefcases);
+      expect(briefcaseList.length).to.be.equal(1);
+      const briefcase: Briefcase = briefcaseList[0]
+      const owner = await briefcase.getOwner();
+      assertUser({
+        actualUser: owner!
+      })
+    });
+
+    it("should contain a link to owner when querying briefcase by id", async () => {
+      // Arrange
+      const getSingleBriefcaseParams: GetSingleBriefcaseParams = {
+        authorization,
+        iModelId: testIModel.id,
+        briefcaseId: testIModel.briefcase.id
+      };
+
+      // Act
+      const briefcase: Briefcase = await iModelsClient.briefcases.getSingle(getSingleBriefcaseParams);
+
+      // Assert
+      const owner = await briefcase.getOwner();
+      assertUser({
+        actualUser: owner!
+      })
     });
   });
 });

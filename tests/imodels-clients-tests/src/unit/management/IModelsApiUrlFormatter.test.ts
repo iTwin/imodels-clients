@@ -177,6 +177,18 @@ describe("[Management] IModelsApiUrlFormatter", () => {
       // Assert
       expect(singleUserUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/users/USER_ID");
     });
+
+    it("should parse user url", () => {
+      // Arrange
+      const userUrl = "https://api.bentley.com/imodels/IMODEL_ID/users/USER_ID";
+
+      // Act
+      const { iModelId, userId } = iModelsApiUrlFormatter.parseUserUrl(userUrl);
+
+      // Assert
+      expect(iModelId).to.be.equal("IMODEL_ID");
+      expect(userId).to.be.equal("USER_ID");
+    });
   });
 
   describe("User Permission urls", () => {
