@@ -8,11 +8,11 @@ import { GetUserPermissionsParams } from "./UserPermissionOperationParams";
 
 export class UserPermissionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**
-   * Retrieves permissions the user has for the specified iModel. Wraps the
+   * Retrieves Permissions the User has for the specified iModel. Wraps the
    * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-user-permissions/ Get iModel User Permissions}
-   * operation from iModels API. iModels permissions may be configured on a Project level or an iModel level.
-   * This operation will return permissions configured for this specific iModel or Project permissions if iModel
-   * permissions are not configured.
+   * operation from iModels API. iModels Permissions may be configured on a Project level or an iModel level.
+   * This operation will return Permissions configured for this specific iModel or Project permissions if iModel
+   * Permissions are not configured.
    * @param {GetUserPermissionsParams} params parameters for this operation. See {@link GetUserPermissionsParams}.
    * @returns {Promise<UserPermissions>} user permissions. See {@link UserPermissions}.
    */
