@@ -26,4 +26,5 @@ This package contains tests for various classes in the [`@itwin/imodels-client-m
   - `TEST_USERS_ADMIN1_PASSWORD`
   - `TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL`
   - `TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD`
+  - `TEST_BEHAVIOR_OPTIONS_RECREATE_IMODEL` - set this option to "1" to recreate reusable test IModel.
 - Run `npm run test:integration` command or use "iModels Clients Tests" launch configuration in VS Code.

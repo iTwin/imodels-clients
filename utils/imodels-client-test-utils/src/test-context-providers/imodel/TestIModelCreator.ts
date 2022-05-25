@@ -126,6 +126,7 @@ export class TestIModelCreator {
           parentId: i === 0
             ? undefined
             : this._testIModelFileProvider.changesets[i - 1].id,
+          synchronizationInfo: this._testIModelFileProvider.changesets[i].synchronizationInfo,
           filePath: this._testIModelFileProvider.changesets[i].filePath
         }
       });

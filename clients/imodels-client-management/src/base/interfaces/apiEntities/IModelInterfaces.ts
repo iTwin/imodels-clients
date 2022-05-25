@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionResponse } from "../CommonInterfaces";
+import { CollectionResponse, Link } from "../CommonInterfaces";
 
 /** Possible iModel states. */
 export enum IModelState {
@@ -43,6 +43,30 @@ export interface MinimalIModel {
   displayName: string;
 }
 
+/** Links that belong to iModel entity returned from iModels API. */
+export interface IModelLinks {
+  /**
+   * Link where to upload the iModel Baseline file. Link points to a remote storage. IMPORTANT: this link
+   * is never present in any of the `IModel` instances returned from methods in this client. This property is
+   * only used internally.
+   * @private
+   */
+  upload?: Link;
+  /**
+   * Link to confirm the Baseline file upload and complete the iModel creation process. Points to a specific
+   * iModel Baseline in iModels API. IMPORTANT: this link is never present in any of the `IModel` instances
+   * returned from methods in this client. This property is only used internally.
+   * @private
+   */
+  complete?: Link;
+  /** Link to the user who created the baseline file instance. Link points to a specific user in iModels API. */
+  creator: Link | null;
+  /** Link to retrieve iModel Changesets. Link points to Changeset collection in iModels API. */
+  changesets: Link | null;
+  /** Link to retrieve iModel Named Versions. Link points to Named Version collection in iModels API. */
+  namedVersions: Link | null;
+}
+
 /** Full representation of an iModel. */
 export interface IModel extends MinimalIModel {
   /** iModel name. */
@@ -57,6 +81,8 @@ export interface IModel extends MinimalIModel {
   projectId: string;
   /** iModel extent. See {@link Extent}. */
   extent: Extent | null;
+  /** iModel links. See {@link IModelLinks}.*/
+  _links: IModelLinks;
 }
 
 /** DTO to hold a single iModel API response. */

@@ -104,7 +104,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       parentId: changesetProperties.parentId,
       briefcaseId: changesetProperties.briefcaseId,
       containingChanges: changesetProperties.containingChanges,
-      fileSize: changesetFileSize
+      fileSize: changesetFileSize,
+      synchronizationInfo: changesetProperties.synchronizationInfo
     };
   }
 

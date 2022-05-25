@@ -12,7 +12,7 @@ import {
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 import { LocalFileSystem, LocalFileSystemImpl } from "./base";
-import { BriefcaseOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
+import { BaselineFileOperations, IModelsApiUrlFormatter, OperationOptions, BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations } from "./operations";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions extends ManagementIModelsClientOptions {
@@ -61,6 +61,11 @@ export class IModelsClient {
   /** iModel operations. See {@link iModelOperations}. */
   public get iModels(): IModelOperations<OperationOptions> {
     return new IModelOperations(this._operationsOptions);
+  }
+
+  /** Baseline file operations. See {@link BaselineFileOperations}. */
+  public get baselineFiles(): BaselineFileOperations<OperationOptions> {
+    return new BaselineFileOperations(this._operationsOptions);
   }
 
   /** Briefcase operations. See {@link BriefcaseOperations}. */
