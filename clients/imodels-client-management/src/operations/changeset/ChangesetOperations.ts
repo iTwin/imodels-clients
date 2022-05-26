@@ -74,8 +74,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
    */
   public async getSingle(params: GetSingleChangesetParams): Promise<Changeset> {
     const changeset: Changeset = await this.querySingleInternal(params);
-    const result: Changeset = this.appendRelatedEntityCallbacks(params.authorization, changeset);
-    return result;
+    return changeset;
   }
 
   protected async querySingleInternal(params: GetSingleChangesetParams): Promise<Changeset> {
@@ -84,7 +83,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
       authorization,
       url: this._options.urlFormatter.getSingleChangesetUrl({ iModelId, ...changesetIdOrIndex })
     });
-    return response.changeset;
+    const result: Changeset = this.appendRelatedEntityCallbacks(params.authorization, response.changeset);
+    return result;
   }
 
   protected appendRelatedMinimalEntityCallbacks<TChangeset extends MinimalChangeset>(
