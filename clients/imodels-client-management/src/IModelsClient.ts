@@ -57,7 +57,7 @@ export class IModelsClient {
 
   /** Named version operations. See {@link NamedVersionOperations}. */
   public get namedVersions(): NamedVersionOperations<OperationOptions> {
-    return new NamedVersionOperations(this._operationsOptions);
+    return new NamedVersionOperations(this._operationsOptions, this);
   }
 
   /** Checkpoint operations. See {@link CheckpointOperations}. */

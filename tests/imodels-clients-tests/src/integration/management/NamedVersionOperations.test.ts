@@ -7,7 +7,7 @@ import { AuthorizationCallback, CreateNamedVersionParams, EntityListIterator, Ge
 import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestSetupError, TestUtilTypes, assertCollection, assertMinimalNamedVersion, assertNamedVersion } from "@itwin/imodels-client-test-utils";
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
-describe("[Management] NamedVersionOperations", () => {
+describe.only("[Management] NamedVersionOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let testIModelGroup: TestIModelGroup;
@@ -169,7 +169,45 @@ describe("[Management] NamedVersionOperations", () => {
     expect(namedVersionArray.length).to.equal(0);
   });
 
-  it("should get minimal named version", async () => {
+  it("should get valid full named version when querying representation collection", async () => {
+    // Arrange
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $top: 1,
+        $orderBy: {
+          property: NamedVersionOrderByProperty.ChangesetIndex,
+          operator: OrderByOperator.Ascending
+        }
+      }
+    };
+
+    // Act
+    const namedVersions: EntityListIterator<NamedVersion> =
+      iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
+
+    // Assert
+    const namedVersionList: NamedVersion[] = await take(namedVersions, 1);
+    expect(namedVersionList.length).to.be.equal(1);
+    const namedVersion = namedVersionList[0];
+    const existingFirstNamedVersion = namedVersionsCreatedInSetup[0];
+    await assertNamedVersion({
+      actualNamedVersion: namedVersion,
+      expectedNamedVersionProperties: {
+        name: existingFirstNamedVersion.name,
+        description: existingFirstNamedVersion.description!,
+        changesetId: existingFirstNamedVersion.changesetId!,
+        changesetIndex: existingFirstNamedVersion.changesetIndex
+      },
+      expectedLinks: {
+        changeset: true
+      },
+      isGetResponse: true
+    });
+  });
+
+  it("should get valid minimal named version when querying minimal collection", async () => {
     // Arrange
     const getNamedVersionListParams: GetNamedVersionListParams = {
       authorization,
@@ -213,7 +251,7 @@ describe("[Management] NamedVersionOperations", () => {
     const namedVersion: NamedVersion = await iModelsClient.namedVersions.getSingle(getSingleNamedVersionParams);
 
     // Assert
-    assertNamedVersion({
+    await assertNamedVersion({
       actualNamedVersion: namedVersion,
       expectedNamedVersionProperties: {
         name: existingNamedVersion.name,
@@ -243,7 +281,7 @@ describe("[Management] NamedVersionOperations", () => {
     const namedVersion = await iModelsClient.namedVersions.create(createNamedVersionParams);
 
     // Assert
-    assertNamedVersion({
+    await assertNamedVersion({
       actualNamedVersion: namedVersion,
       expectedNamedVersionProperties: {
         ...createNamedVersionParams.namedVersionProperties,
@@ -273,7 +311,7 @@ describe("[Management] NamedVersionOperations", () => {
     const namedVersion = await iModelsClient.namedVersions.create(createNamedVersionParams);
 
     // Assert
-    assertNamedVersion({
+    await assertNamedVersion({
       actualNamedVersion: namedVersion,
       expectedNamedVersionProperties: {
         ...createNamedVersionParams.namedVersionProperties,

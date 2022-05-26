@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetSingleChangesetParams, IModelsClient, IModelsClientOptions, MinimalChangeset, OrderByOperator, toArray } from "@itwin/imodels-client-management";
-import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertChangeset, assertCollection, assertMinimalChangeset, assertMinimalChangesetCallbacks, assertChangesetCallbacks } from "@itwin/imodels-client-test-utils";
+import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertChangeset, assertChangesetCallbacks, assertCollection, assertMinimalChangeset, assertMinimalChangesetCallbacks } from "@itwin/imodels-client-test-utils";
 import { getTestDIContainer } from "../common";
 
 describe("[Management] ChangesetOperations", () => {

@@ -53,3 +53,21 @@ export async function assertChangesetCallbacks(params: {
   expect(checkpoint).to.exist;
   expect(checkpoint!.changesetIndex).to.be.equal(params.checkpointProperties.changesetIndex);
 }
+
+export async function assertNamedVersionCallbacks(params: {
+  namedVersion: NamedVersion,
+  changesetProperties: {
+    shouldExist: boolean
+  }
+}): Promise<void> {
+  const creator: User | undefined = await params.namedVersion.getCreator();
+  assertUser({
+    actualUser: creator!
+  });
+
+  const changeset: Changeset | undefined = await params.namedVersion.getChangeset();
+  if (params.changesetProperties.shouldExist)
+    expect(changeset).to.exist;
+  else
+    expect(changeset).to.be.undefined;
+}

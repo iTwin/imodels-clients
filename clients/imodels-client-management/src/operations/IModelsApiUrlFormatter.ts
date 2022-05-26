@@ -14,10 +14,12 @@ export class IModelsApiUrlFormatter {
   private readonly _regexIgnoreCaseOption = "i";
   private readonly _groupNames = {
     iModelId: "iModelId",
+    changesetIdOrIndex: "changesetIdOrIndex",
     changesetIndex: "changesetIndex",
     namedVersionId: "namedVersionId",
     userId: "userId"
   };
+  private readonly _changesetUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIdOrIndex}>.*)`, this._regexIgnoreCaseOption);
   private readonly _checkpointUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIndex}>.*)/checkpoint`, this._regexIgnoreCaseOption);
   private readonly _namedVersionUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/namedversions/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
   private readonly _userUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/users/(?<${this._groupNames.userId}>.*)`, this._regexIgnoreCaseOption);
@@ -51,6 +53,31 @@ export class IModelsApiUrlFormatter {
 
   public getChangesetListUrl(params: { iModelId: string, urlParams?: GetChangesetListUrlParams }): string {
     return `${this.baseUrl}/${params.iModelId}/changesets${this.formQueryString({ ...params.urlParams })}`;
+  }
+
+  public parseChangesetUrl(url: string): { iModelId: string } & ChangesetIdOrIndex {
+    const matchedGroups: Dictionary<string> = this._changesetUrlRegex.exec(url)!.groups!;
+
+    return {
+      iModelId: matchedGroups[this._groupNames.iModelId],
+      ...this.parseChangesetIdOrIndex(matchedGroups[this._groupNames.changesetIdOrIndex])
+    };
+  }
+
+  /**
+   * API could return Changeset urls that either contain id or index since both are valid identifiers
+   * so here we handle both scenarios. We assume that anything longer that 40 symbols is a string id
+   * and everything else is a numeric index.
+   */
+  private parseChangesetIdOrIndex(changesetIdOrIndex: string): ChangesetIdOrIndex {
+    if (changesetIdOrIndex.length >= 40)
+      return {
+        changesetId: changesetIdOrIndex
+      };
+
+    return {
+      changesetIndex: parseInt(changesetIdOrIndex, 10)
+    }
   }
 
   public getSingleNamedVersionUrl(params: { iModelId: string } & { namedVersionId: string }): string {

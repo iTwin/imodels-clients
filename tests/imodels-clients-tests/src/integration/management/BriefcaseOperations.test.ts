@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { AuthorizationCallback, Briefcase, EntityListIterator, GetBriefcaseListParams, GetSingleBriefcaseParams, IModelsClient, IModelsClientOptions, SPECIAL_VALUES_ME, take, toArray } from "@itwin/imodels-client-management";
-import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertBriefcase, assertCollection, assertMinimalBriefcase, assertBriefcaseCallbacks } from "@itwin/imodels-client-test-utils";
+import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertBriefcase, assertBriefcaseCallbacks, assertCollection, assertMinimalBriefcase } from "@itwin/imodels-client-test-utils";
 import { getTestDIContainer } from "../common";
 
 describe("[Management] BriefcaseOperations", () => {
@@ -111,13 +111,12 @@ describe("[Management] BriefcaseOperations", () => {
     const briefcases: EntityListIterator<Briefcase> =
       iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams);
 
-
     // Assert
     const briefcaseList: Briefcase[] = await take(briefcases, 1);
     expect(briefcaseList.length).to.be.equal(1);
     const briefcaseFromCollection = briefcaseList[0];
     await assertBriefcaseCallbacks({
-      briefcase: briefcaseFromCollection,
+      briefcase: briefcaseFromCollection
     });
   });
 

@@ -6,6 +6,7 @@ import * as fs from "fs";
 import { expect } from "chai";
 import { Application, BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, Lock, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate, User, UserPermissions } from "@itwin/imodels-client-authoring";
 import { TestChangesetFile, TestIModelBaselineFile } from "./test-context-providers";
+import { assertNamedVersionCallbacks } from "./RelatedEntityCallbackAssertions";
 
 export async function assertCollection<T>(params: {
   asyncIterable: EntityListIterator<T>;
@@ -210,7 +211,7 @@ export function assertMinimalNamedVersion(params: {
   expect(params.actualNamedVersion.changesetIndex).to.equal(params.expectedNamedVersionProperties.changesetIndex);
 }
 
-export function assertNamedVersion(params: {
+export async function assertNamedVersion(params: {
   actualNamedVersion: NamedVersion;
   expectedNamedVersionProperties: NamedVersionPropertiesForCreate & {
     changesetIndex: number;
@@ -219,7 +220,7 @@ export function assertNamedVersion(params: {
     changeset: boolean;
   };
   isGetResponse: boolean;
-}): void {
+}): Promise<void> {
   assertMinimalNamedVersion({
     actualNamedVersion: params.actualNamedVersion,
     expectedNamedVersionProperties: params.expectedNamedVersionProperties
@@ -240,6 +241,13 @@ export function assertNamedVersion(params: {
   assertOptionalLink({
     actualLink: params.actualNamedVersion._links.changeset,
     shouldLinkExist: params.expectedLinks.changeset
+  });
+
+  await assertNamedVersionCallbacks({
+    namedVersion: params.actualNamedVersion,
+    changesetProperties: {
+      shouldExist: params.expectedNamedVersionProperties.changesetIndex !== 0
+    }
   });
 }
 
