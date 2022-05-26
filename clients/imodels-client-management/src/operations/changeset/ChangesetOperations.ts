@@ -2,10 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, ChangesetResponse, Checkpoint, EntityListIterator, EntityListIteratorImpl, NamedVersion, OperationsBase, PreferReturn } from "../../base";
+import { AuthorizationCallback, ChangesetResponse, Checkpoint, EntityListIterator, EntityListIteratorImpl, NamedVersion, OperationsBase, PreferReturn, User } from "../../base";
 import { Changeset, ChangesetsResponse, MinimalChangeset, MinimalChangesetsResponse } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { CheckpointOperations } from "../checkpoint/CheckpointOperations";
 import { NamedVersionOperations } from "../named-version/NamedVersionOperations";
+import { UserOperations } from "../OperationExports";
 import { OperationOptions } from "../OperationOptions";
 import { GetChangesetListParams, GetSingleChangesetParams } from "./ChangesetOperationParams";
 
@@ -13,7 +14,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   constructor(
     options: TOptions,
     protected _namedVersionOperations: NamedVersionOperations<TOptions>,
-    protected _checkpointOperations: CheckpointOperations<TOptions>
+    protected _checkpointOperations: CheckpointOperations<TOptions>,
+    protected _userOperations: UserOperations<TOptions>
   ) {
     super(options);
   }
@@ -28,11 +30,17 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
    * {@link MinimalChangeset}.
    */
   public getMinimalList(params: GetChangesetListParams): EntityListIterator<MinimalChangeset> {
+    const entityCollectionAccessor = (response: unknown) => {
+      const changesets = (response as MinimalChangesetsResponse).changesets;
+      const mappedChangesets = changesets.map((changeset) => this.appendRelatedMinimalEntityCallbacks(params.authorization, changeset));
+      return mappedChangesets;
+    };
+
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalChangeset>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: unknown) => (response as MinimalChangesetsResponse).changesets
+      entityCollectionAccessor
     }));
   }
 
@@ -82,17 +90,41 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     return response.changeset;
   }
 
+  protected appendRelatedMinimalEntityCallbacks<TChangeset extends MinimalChangeset>(authorization: AuthorizationCallback, changeset: TChangeset): TChangeset {
+    const getCreator = async () => this.getCreator(authorization, changeset._links.creator.href);
+
+    const result: TChangeset = {
+      ...changeset,
+      getCreator
+    };
+
+    return result;
+  }
+
   protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, changeset: Changeset): Changeset {
     const getNamedVersion = async () => this.getNamedVersion(authorization, changeset._links.namedVersion?.href);
     const getCurrentOrPrecedingCheckpoint = async () => this.getCurrentOrPrecedingCheckpoint(authorization, changeset._links.currentOrPrecedingCheckpoint?.href);
 
+    const changesetWithMinimalCallbacks = this.appendRelatedMinimalEntityCallbacks(authorization, changeset);
     const result: Changeset = {
-      ...changeset,
+      ...changesetWithMinimalCallbacks,
       getNamedVersion,
       getCurrentOrPrecedingCheckpoint
     };
 
     return result;
+  }
+
+  private async getCreator(authorization: AuthorizationCallback, creatorLink: string | undefined): Promise<User | undefined> {
+    if (!creatorLink)
+      return undefined;
+
+    const { iModelId, userId } = this._options.urlFormatter.parseUserUrl(creatorLink);
+    return this._userOperations.getSingle({
+      authorization,
+      iModelId,
+      userId
+    });
   }
 
   private async getNamedVersion(authorization: AuthorizationCallback, namedVersionLink: string | undefined): Promise<NamedVersion | undefined> {

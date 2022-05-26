@@ -13,6 +13,7 @@ export * from "./TestUtilBootstrapper";
 export * from "./BaseIntegrationTestsConfig";
 
 export * from "./AssertionUtils";
+export * from "./RelatedEntityCallbackAssertions";
 export * from "./CommonTestUtils";
 
 export * from "./TrackableTestFileHandler";

@@ -52,7 +52,7 @@ export class IModelsClient {
 
   /** Changeset operations. See {@link ChangesetOperations}. */
   public get changesets(): ChangesetOperations<OperationOptions> {
-    return new ChangesetOperations(this._operationsOptions, this.namedVersions, this.checkpoints);
+    return new ChangesetOperations(this._operationsOptions, this.namedVersions, this.checkpoints, this.users);
   }
 
   /** Named version operations. See {@link NamedVersionOperations}. */
