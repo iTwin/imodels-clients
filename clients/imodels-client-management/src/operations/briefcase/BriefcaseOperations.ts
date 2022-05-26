@@ -3,18 +3,19 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AuthorizationCallback, Briefcase, BriefcaseResponse, BriefcasesResponse, EntityListIterator, EntityListIteratorImpl, MinimalBriefcase, OperationsBase, PreferReturn } from "../../base";
+import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";
-import { UserOperations } from "../user/UserOperations";
 import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   constructor(
     options: TOptions,
-    protected _userOperations: UserOperations<TOptions>
+    private _iModelsClient: IModelsClient
   ) {
     super(options);
   }
+  
   /**
    * Gets Briefcases of a specific iModel. This method returns Briefcases in their minimal representation. The returned iterator
    * internally queries entities in pages. Wraps the
@@ -75,7 +76,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, briefcase: Briefcase): Briefcase {
     const getOwner = async () => getUser(
       authorization,
-      this._userOperations,
+      this._iModelsClient.users,
       this._options.urlFormatter,
       briefcase._links.owner.href
     );;

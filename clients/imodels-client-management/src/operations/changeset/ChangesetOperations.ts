@@ -4,9 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { AuthorizationCallback, ChangesetResponse, Checkpoint, EntityListIterator, EntityListIteratorImpl, NamedVersion, OperationsBase, PreferReturn } from "../../base";
 import { Changeset, ChangesetsResponse, MinimalChangeset, MinimalChangesetsResponse } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
-import { CheckpointOperations } from "../checkpoint/CheckpointOperations";
-import { NamedVersionOperations } from "../named-version/NamedVersionOperations";
-import { UserOperations } from "../OperationExports";
+import { IModelsClient } from "../../IModelsClientExports";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";
 import { GetChangesetListParams, GetSingleChangesetParams } from "./ChangesetOperationParams";
@@ -14,9 +12,7 @@ import { GetChangesetListParams, GetSingleChangesetParams } from "./ChangesetOpe
 export class ChangesetOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   constructor(
     options: TOptions,
-    protected _namedVersionOperations: NamedVersionOperations<TOptions>,
-    protected _checkpointOperations: CheckpointOperations<TOptions>,
-    protected _userOperations: UserOperations<TOptions>
+    private _iModelsClient: IModelsClient
   ) {
     super(options);
   }
@@ -94,7 +90,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   protected appendRelatedMinimalEntityCallbacks<TChangeset extends MinimalChangeset>(authorization: AuthorizationCallback, changeset: TChangeset): TChangeset {
     const getCreator = async () => getUser(
       authorization,
-      this._userOperations,
+      this._iModelsClient.users,
       this._options.urlFormatter,
       changeset._links.creator.href
     );
@@ -126,7 +122,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
       return undefined;
 
     const { iModelId, namedVersionId } = this._options.urlFormatter.parseNamedVersionUrl(namedVersionLink);
-    return this._namedVersionOperations.getSingle({
+    return this._iModelsClient.namedVersions.getSingle({
       authorization,
       iModelId,
       namedVersionId
@@ -138,7 +134,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
       return undefined;
 
     const { iModelId, changesetIndex } = this._options.urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
-    return this._checkpointOperations.getSingle({
+    return this._iModelsClient.checkpoints.getSingle({
       authorization,
       iModelId,
       changesetIndex
