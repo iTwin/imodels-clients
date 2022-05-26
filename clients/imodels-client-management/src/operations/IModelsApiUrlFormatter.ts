@@ -77,7 +77,7 @@ export class IModelsApiUrlFormatter {
 
     return {
       changesetIndex: parseInt(changesetIdOrIndex, 10)
-    }
+    };
   }
 
   public getSingleNamedVersionUrl(params: { iModelId: string } & { namedVersionId: string }): string {

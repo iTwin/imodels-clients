@@ -65,12 +65,12 @@ export interface NamedVersion extends MinimalNamedVersion {
    */
   getCreator: () => Promise<User | undefined>;
   /**
-   * Function to query Changeset on which the Named Version was created. If the information is not present or if the 
+   * Function to query Changeset on which the Named Version was created. If the information is not present or if the
    * Named Version is created on iModel baseline (before any Changesets) the function returns `undefined`. This
    * function reuses authorization information passed to specific Named Version operation that originally queried the
    * Named Version from API.
    */
-  getChangeset(): Promise<Changeset | undefined>
+  getChangeset(): Promise<Changeset | undefined>;
 }
 
 /** DTO to hold a single Named Version API response. */

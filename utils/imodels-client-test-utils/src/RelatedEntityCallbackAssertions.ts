@@ -2,12 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Briefcase, Changeset, Checkpoint, MinimalChangeset, NamedVersion, User } from "@itwin/imodels-client-authoring";
 import { expect } from "chai";
+import { Briefcase, Changeset, Checkpoint, MinimalChangeset, NamedVersion, User } from "@itwin/imodels-client-authoring";
 import { assertUser } from "./AssertionUtils";
 
 export async function assertBriefcaseCallbacks(params: {
-  briefcase: Briefcase
+  briefcase: Briefcase;
 }): Promise<void> {
   expect(params.briefcase.getOwner).to.exist;
 
@@ -18,7 +18,7 @@ export async function assertBriefcaseCallbacks(params: {
 }
 
 export async function assertMinimalChangesetCallbacks(params: {
-  changeset: MinimalChangeset
+  changeset: MinimalChangeset;
 }): Promise<void> {
   expect(params.changeset.getCreator).to.exist;
 
@@ -26,16 +26,12 @@ export async function assertMinimalChangesetCallbacks(params: {
   assertUser({
     actualUser: creator!
   });
-};
+}
 
 export async function assertChangesetCallbacks(params: {
-  changeset: Changeset,
-  namedVersionProperties: {
-    shouldExist: boolean
-  }
-  checkpointProperties: {
-    changesetIndex: number
-  }
+  changeset: Changeset;
+  shouldNamedVersionExist: boolean;
+  shouldCheckpointExist: boolean;
 }): Promise<void> {
   await assertMinimalChangesetCallbacks({
     changeset: params.changeset
@@ -43,22 +39,22 @@ export async function assertChangesetCallbacks(params: {
 
   expect(params.changeset.getNamedVersion).to.exist;
   const namedVersion: NamedVersion | undefined = await params.changeset.getNamedVersion();
-  if (params.namedVersionProperties.shouldExist)
+  if (params.shouldNamedVersionExist)
     expect(namedVersion).to.exist;
   else
     expect(namedVersion).to.be.undefined;
 
   expect(params.changeset.getCurrentOrPrecedingCheckpoint).to.exist;
   const checkpoint: Checkpoint | undefined = await params.changeset.getCurrentOrPrecedingCheckpoint();
-  expect(checkpoint).to.exist;
-  expect(checkpoint!.changesetIndex).to.be.equal(params.checkpointProperties.changesetIndex);
+  if (params.shouldCheckpointExist)
+    expect(checkpoint).to.exist;
+  else
+    expect(checkpoint).to.be.undefined;
 }
 
 export async function assertNamedVersionCallbacks(params: {
-  namedVersion: NamedVersion,
-  changesetProperties: {
-    shouldExist: boolean
-  }
+  namedVersion: NamedVersion;
+  shouldChangesetExist: boolean;
 }): Promise<void> {
   const creator: User | undefined = await params.namedVersion.getCreator();
   assertUser({
@@ -66,7 +62,7 @@ export async function assertNamedVersionCallbacks(params: {
   });
 
   const changeset: Changeset | undefined = await params.namedVersion.getChangeset();
-  if (params.changesetProperties.shouldExist)
+  if (params.shouldChangesetExist)
     expect(changeset).to.exist;
   else
     expect(changeset).to.be.undefined;

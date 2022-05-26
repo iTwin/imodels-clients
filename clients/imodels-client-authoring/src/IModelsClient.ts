@@ -5,7 +5,7 @@
 import {
   IModelsClient as ManagementIModelsClient,
   IModelsClientOptions as ManagementIModelsClientOptions,
-  RecursiveRequired,
+  RecursiveRequired
 } from "@itwin/imodels-client-management";
 import { AzureSdkFileHandler, FileHandler } from "./base";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations } from "./operations";

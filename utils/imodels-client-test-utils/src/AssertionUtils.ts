@@ -5,8 +5,8 @@
 import * as fs from "fs";
 import { expect } from "chai";
 import { Application, BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, Lock, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate, User, UserPermissions } from "@itwin/imodels-client-authoring";
+import { assertBriefcaseCallbacks, assertChangesetCallbacks, assertMinimalChangesetCallbacks, assertNamedVersionCallbacks } from "./RelatedEntityCallbackAssertions";
 import { TestChangesetFile, TestIModelBaselineFile } from "./test-context-providers";
-import { assertNamedVersionCallbacks } from "./RelatedEntityCallbackAssertions";
 
 export async function assertCollection<T>(params: {
   asyncIterable: EntityListIterator<T>;
@@ -74,11 +74,11 @@ export function assertMinimalBriefcase(params: {
   expect(params.actualBriefcase.displayName).to.not.be.empty;
 }
 
-export function assertBriefcase(params: {
+export async function assertBriefcase(params: {
   actualBriefcase: Briefcase;
   expectedBriefcaseProperties: BriefcaseProperties & { briefcaseId?: number };
   isGetResponse: boolean;
-}): void {
+}): Promise<void> {
   assertMinimalBriefcase({
     actualBriefcase: params.actualBriefcase
   });
@@ -102,13 +102,17 @@ export function assertBriefcase(params: {
   expect(params.actualBriefcase._links).to.exist;
   expect(params.actualBriefcase._links.owner).to.exist;
   expect(params.actualBriefcase._links.owner.href).to.not.be.empty;
+
+  await assertBriefcaseCallbacks({
+    briefcase: params.actualBriefcase
+  });
 }
 
-export function assertMinimalChangeset(params: {
+export async function assertMinimalChangeset(params: {
   actualChangeset: MinimalChangeset;
   expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>;
   expectedTestChangesetFile: Omit<TestChangesetFile, "synchronizationInfo">;
-}): void {
+}): Promise<void> {
   expect(params.actualChangeset).to.exist;
   expect(params.actualChangeset.id).to.not.be.empty;
   expect(params.actualChangeset.displayName).to.not.be.empty;
@@ -129,9 +133,13 @@ export function assertMinimalChangeset(params: {
   expect(params.actualChangeset._links.self.href).to.not.be.empty;
   expect(params.actualChangeset._links.creator).to.exist;
   expect(params.actualChangeset._links.creator.href).to.not.be.empty;
+
+  await assertMinimalChangesetCallbacks({
+    changeset: params.actualChangeset
+  });
 }
 
-export function assertChangeset(params: {
+export async function assertChangeset(params: {
   actualChangeset: Changeset;
   expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>;
   expectedTestChangesetFile: TestChangesetFile;
@@ -140,8 +148,8 @@ export function assertChangeset(params: {
     checkpoint: boolean;
   };
   isGetResponse: boolean;
-}): void {
-  assertMinimalChangeset({
+}): Promise<void> {
+  await assertMinimalChangeset({
     actualChangeset: params.actualChangeset,
     expectedChangesetProperties: params.expectedChangesetProperties,
     expectedTestChangesetFile: params.expectedTestChangesetFile
@@ -175,9 +183,15 @@ export function assertChangeset(params: {
     // `download` link is not present in `create` method result.
     expect(params.actualChangeset._links.download).to.be.undefined;
   }
+
+  await assertChangesetCallbacks({
+    changeset: params.actualChangeset,
+    shouldNamedVersionExist: params.expectedLinks.namedVersion,
+    shouldCheckpointExist: params.expectedLinks.checkpoint
+  });
 }
 
-export function assertDownloadedChangeset(params: {
+export async function assertDownloadedChangeset(params: {
   actualChangeset: DownloadedChangeset;
   expectedChangesetProperties: Partial<ChangesetPropertiesForCreate>;
   expectedTestChangesetFile: TestChangesetFile;
@@ -185,8 +199,8 @@ export function assertDownloadedChangeset(params: {
     namedVersion: boolean;
     checkpoint: boolean;
   };
-}): void {
-  assertChangeset({
+}): Promise<void> {
+  await assertChangeset({
     ...params,
     isGetResponse: true
   });
@@ -245,9 +259,7 @@ export async function assertNamedVersion(params: {
 
   await assertNamedVersionCallbacks({
     namedVersion: params.actualNamedVersion,
-    changesetProperties: {
-      shouldExist: params.expectedNamedVersionProperties.changesetIndex !== 0
-    }
+    shouldChangesetExist: params.expectedLinks.changeset
   });
 }
 
