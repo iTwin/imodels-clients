@@ -2,8 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, Briefcase, BriefcaseResponse, BriefcasesResponse, EntityListIterator, EntityListIteratorImpl, MinimalBriefcase, OperationsBase, PreferReturn, User } from "../../base";
+import { AuthorizationCallback, Briefcase, BriefcaseResponse, BriefcasesResponse, EntityListIterator, EntityListIteratorImpl, MinimalBriefcase, OperationsBase, PreferReturn } from "../../base";
 import { OperationOptions } from "../OperationOptions";
+import { getUser } from "../SharedFunctions";
 import { UserOperations } from "../user/UserOperations";
 import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOperationParams";
 
@@ -72,7 +73,12 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   }
 
   protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, briefcase: Briefcase): Briefcase {
-    const getOwner = async () => this.getOwner(authorization, briefcase._links.owner?.href);
+    const getOwner = async () => getUser(
+      authorization,
+      this._userOperations,
+      this._options.urlFormatter,
+      briefcase._links.owner.href
+    );;
 
     const result: Briefcase = {
       ...briefcase,
@@ -80,17 +86,5 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
     };
 
     return result;
-  }
-
-  private async getOwner(authorization: AuthorizationCallback, ownerLink: string | undefined): Promise<User | undefined> {
-    if (!ownerLink)
-      return undefined;
-
-    const { iModelId, userId } = this._options.urlFormatter.parseUserUrl(ownerLink);
-    return this._userOperations.getSingle({
-      authorization,
-      iModelId,
-      userId
-    });
   }
 }

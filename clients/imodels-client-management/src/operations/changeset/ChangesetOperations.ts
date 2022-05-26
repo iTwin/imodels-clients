@@ -2,12 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, ChangesetResponse, Checkpoint, EntityListIterator, EntityListIteratorImpl, NamedVersion, OperationsBase, PreferReturn, User } from "../../base";
+import { AuthorizationCallback, ChangesetResponse, Checkpoint, EntityListIterator, EntityListIteratorImpl, NamedVersion, OperationsBase, PreferReturn } from "../../base";
 import { Changeset, ChangesetsResponse, MinimalChangeset, MinimalChangesetsResponse } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { CheckpointOperations } from "../checkpoint/CheckpointOperations";
 import { NamedVersionOperations } from "../named-version/NamedVersionOperations";
 import { UserOperations } from "../OperationExports";
 import { OperationOptions } from "../OperationOptions";
+import { getUser } from "../SharedFunctions";
 import { GetChangesetListParams, GetSingleChangesetParams } from "./ChangesetOperationParams";
 
 export class ChangesetOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
@@ -91,7 +92,12 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   protected appendRelatedMinimalEntityCallbacks<TChangeset extends MinimalChangeset>(authorization: AuthorizationCallback, changeset: TChangeset): TChangeset {
-    const getCreator = async () => this.getCreator(authorization, changeset._links.creator.href);
+    const getCreator = async () => getUser(
+      authorization,
+      this._userOperations,
+      this._options.urlFormatter,
+      changeset._links.creator.href
+    );
 
     const result: TChangeset = {
       ...changeset,
@@ -113,18 +119,6 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     };
 
     return result;
-  }
-
-  private async getCreator(authorization: AuthorizationCallback, creatorLink: string | undefined): Promise<User | undefined> {
-    if (!creatorLink)
-      return undefined;
-
-    const { iModelId, userId } = this._options.urlFormatter.parseUserUrl(creatorLink);
-    return this._userOperations.getSingle({
-      authorization,
-      iModelId,
-      userId
-    });
   }
 
   private async getNamedVersion(authorization: AuthorizationCallback, namedVersionLink: string | undefined): Promise<NamedVersion | undefined> {

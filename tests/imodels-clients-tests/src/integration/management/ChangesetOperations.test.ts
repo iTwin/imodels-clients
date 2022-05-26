@@ -292,7 +292,7 @@ describe("[Management] ChangesetOperations", () => {
         shouldExist: false
       },
       checkpointProperties: {
-        changesetIndex: firstNamedVersion.changesetIndex
+        changesetIndex: 0
       }
     });
   });

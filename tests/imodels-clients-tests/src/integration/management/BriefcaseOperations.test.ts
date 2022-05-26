@@ -165,7 +165,7 @@ describe("[Management] BriefcaseOperations", () => {
     });
   });
 
-  it("should contain a link to owner when querying single", async () => {
+  it("should contain callbacks when querying single briefcase", async () => {
     // Arrange
     const getSingleBriefcaseParams: GetSingleBriefcaseParams = {
       authorization,
