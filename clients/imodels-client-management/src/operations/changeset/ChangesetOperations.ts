@@ -87,7 +87,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     return response.changeset;
   }
 
-  protected appendRelatedMinimalEntityCallbacks<TChangeset extends MinimalChangeset>(authorization: AuthorizationCallback, changeset: TChangeset): TChangeset {
+  protected appendRelatedMinimalEntityCallbacks<TChangeset extends MinimalChangeset>(
+    authorization: AuthorizationCallback,
+    changeset: TChangeset
+  ): TChangeset {
     const getCreator = async () => getUser(
       authorization,
       this._iModelsClient.users,

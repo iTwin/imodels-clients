@@ -15,7 +15,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   ) {
     super(options);
   }
-  
+
   /**
    * Gets Briefcases of a specific iModel. This method returns Briefcases in their minimal representation. The returned iterator
    * internally queries entities in pages. Wraps the
@@ -79,11 +79,11 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
       this._iModelsClient.users,
       this._options.urlFormatter,
       briefcase._links.owner.href
-    );;
+    );
 
     const result: Briefcase = {
       ...briefcase,
-      getOwner,
+      getOwner
     };
 
     return result;
