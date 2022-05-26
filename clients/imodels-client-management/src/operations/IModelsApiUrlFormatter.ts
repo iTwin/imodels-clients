@@ -15,14 +15,14 @@ export class IModelsApiUrlFormatter {
   private readonly _groupNames = {
     iModelId: "iModelId",
     changesetIdOrIndex: "changesetIdOrIndex",
-    changesetIndex: "changesetIndex",
     namedVersionId: "namedVersionId",
     userId: "userId"
   };
-  private readonly _changesetUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIdOrIndex}>.*)`, this._regexIgnoreCaseOption);
-  private readonly _checkpointUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIndex}>.*)/checkpoint`, this._regexIgnoreCaseOption);
-  private readonly _namedVersionUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/namedversions/(?<${this._groupNames.namedVersionId}>.*)`, this._regexIgnoreCaseOption);
-  private readonly _userUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/users/(?<${this._groupNames.userId}>.*)`, this._regexIgnoreCaseOption);
+  private readonly _numericRegex = /^\d+$/;
+  private readonly _changesetUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIdOrIndex}>[^\/]*)`, this._regexIgnoreCaseOption);
+  private readonly _checkpointUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIdOrIndex}>.*)/checkpoint`, this._regexIgnoreCaseOption);
+  private readonly _namedVersionUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/namedversions/(?<${this._groupNames.namedVersionId}>[^\/]*)`, this._regexIgnoreCaseOption);
+  private readonly _userUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/users/(?<${this._groupNames.userId}>[^\/]*)`, this._regexIgnoreCaseOption);
 
   constructor(protected readonly baseUrl: string) {
   }
@@ -57,26 +57,9 @@ export class IModelsApiUrlFormatter {
 
   public parseChangesetUrl(url: string): { iModelId: string } & ChangesetIdOrIndex {
     const matchedGroups: Dictionary<string> = this._changesetUrlRegex.exec(url)!.groups!;
-
     return {
       iModelId: matchedGroups[this._groupNames.iModelId],
       ...this.parseChangesetIdOrIndex(matchedGroups[this._groupNames.changesetIdOrIndex])
-    };
-  }
-
-  /**
-   * API could return Changeset urls that either contain id or index since both are valid identifiers
-   * so here we handle both scenarios. We assume that anything longer that 40 symbols is a string id
-   * and everything else is a numeric index.
-   */
-  private parseChangesetIdOrIndex(changesetIdOrIndex: string): ChangesetIdOrIndex {
-    if (changesetIdOrIndex.length >= 40)
-      return {
-        changesetId: changesetIdOrIndex
-      };
-
-    return {
-      changesetIndex: parseInt(changesetIdOrIndex, 10)
     };
   }
 
@@ -108,11 +91,11 @@ export class IModelsApiUrlFormatter {
     return `${this.baseUrl}/${params.iModelId}/permissions`;
   }
 
-  public parseCheckpointUrl(url: string): { iModelId: string, changesetIndex: number } {
+  public parseCheckpointUrl(url: string): { iModelId: string } & ChangesetIdOrIndex {
     const matchedGroups: Dictionary<string> = this._checkpointUrlRegex.exec(url)!.groups!;
     return {
       iModelId: matchedGroups[this._groupNames.iModelId],
-      changesetIndex: parseInt(matchedGroups[this._groupNames.changesetIndex], 10)
+      ...this.parseChangesetIdOrIndex(matchedGroups[this._groupNames.changesetIdOrIndex])
     };
   }
 
@@ -146,6 +129,23 @@ export class IModelsApiUrlFormatter {
     }
 
     return queryString;
+  }
+
+  /**
+   * API could return Changeset urls that either contain id or index since both are valid identifiers
+   * so here we handle both scenarios. We assume that anything longer that 40 symbols is a string id
+   * and everything else is a numeric index.
+   */
+  private parseChangesetIdOrIndex(changesetIdOrIndex: string): ChangesetIdOrIndex {
+    const containsOnlyDigits = this._numericRegex.test(changesetIdOrIndex);
+    if (containsOnlyDigits && changesetIdOrIndex.length < 40)
+      return {
+        changesetIndex: parseInt(changesetIdOrIndex, 10)
+      };
+
+    return {
+      changesetId: changesetIdOrIndex
+    };
   }
 
   private shouldAppendToUrl(urlParameterValue: UrlParameterValue): boolean {

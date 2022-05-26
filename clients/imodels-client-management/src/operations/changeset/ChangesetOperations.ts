@@ -136,11 +136,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     if (!currentOrPrecedingCheckpointLink)
       return undefined;
 
-    const { iModelId, changesetIndex } = this._options.urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
+    const entityIds = this._options.urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
     return this._iModelsClient.checkpoints.getSingle({
       authorization,
-      iModelId,
-      changesetIndex
+      ...entityIds
     });
   }
 }

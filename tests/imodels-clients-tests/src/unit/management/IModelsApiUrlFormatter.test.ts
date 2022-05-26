@@ -139,19 +139,115 @@ describe("[Management] IModelsApiUrlFormatter", () => {
       // Assert
       expect(singleChangesetUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/changesets/5");
     });
+
+    [
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/5",
+        expectedChangesetIndex: 5
+      },
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/5/",
+        expectedChangesetIndex: 5
+      },
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/55555555",
+        expectedChangesetIndex: 55555555
+      },
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/555555555555555555555555555555555555555",
+        expectedChangesetIndex: 555555555555555555555555555555555555555
+      },
+    ].forEach((testCase) => {
+      it(`should parse changeset url with index ${testCase.expectedChangesetIndex}`, () => {
+        // Act
+        const { iModelId, changesetId, changesetIndex } = iModelsApiUrlFormatter.parseChangesetUrl(testCase.url);
+
+        // Assert
+        expect(iModelId).to.be.equal("IMODEL_ID");
+        expect(changesetId).to.be.undefined;
+        expect(changesetIndex).to.be.equal(testCase.expectedChangesetIndex);
+      });
+    });
+
+    [
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/CHANGESET_ID",
+        expectedChangesetId: "CHANGESET_ID"
+      },
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/CHANGESET_ID/",
+        expectedChangesetId: "CHANGESET_ID"
+      },
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/5555555555555555555555555555555555555555",
+        expectedChangesetId: "5555555555555555555555555555555555555555"
+      },
+    ].forEach((testCase) => {
+      it(`should parse changeset url with id (${testCase.expectedChangesetId})`, () => {
+        // Act
+        const { iModelId, changesetId, changesetIndex } = iModelsApiUrlFormatter.parseChangesetUrl(testCase.url);
+
+        // Assert
+        expect(iModelId).to.be.equal("IMODEL_ID");
+        expect(changesetId).to.be.equal(testCase.expectedChangesetId);
+        expect(changesetIndex).to.be.undefined;
+      });
+    });
   });
 
   describe("Checkpoint urls", () => {
-    it("should parse checkpoint url", () => {
-      // Arrange
-      const checkpointUrl = "https://api.bentley.com/imodels/IMODEL_ID/changesets/5/checkpoint";
+    [
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/5/checkpoint",
+        expectedChangesetIndex: 5
+      },
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/5/checkpoint/",
+        expectedChangesetIndex: 5
+      },
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/55555555/checkpoint",
+        expectedChangesetIndex: 55555555
+      },
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/555555555555555555555555555555555555555/checkpoint",
+        expectedChangesetIndex: 555555555555555555555555555555555555555
+      },
+    ].forEach((testCase) => {
+      it(`should parse checkpointUrl url with index ${testCase.expectedChangesetIndex}`, () => {
+        // Act
+        const { iModelId, changesetId, changesetIndex } = iModelsApiUrlFormatter.parseCheckpointUrl(testCase.url);
 
-      // Act
-      const { iModelId, changesetIndex } = iModelsApiUrlFormatter.parseCheckpointUrl(checkpointUrl);
+        // Assert
+        expect(iModelId).to.be.equal("IMODEL_ID");
+        expect(changesetId).to.be.undefined;
+        expect(changesetIndex).to.be.equal(testCase.expectedChangesetIndex);
+      });
+    });
 
-      // Assert
-      expect(iModelId).to.be.equal("IMODEL_ID");
-      expect(changesetIndex).to.be.equal(5);
+    [
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/CHANGESET_ID/checkpoint",
+        expectedChangesetId: "CHANGESET_ID"
+      },
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/CHANGESET_ID/checkpoint/",
+        expectedChangesetId: "CHANGESET_ID"
+      },
+      {
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/5555555555555555555555555555555555555555/checkpoint",
+        expectedChangesetId: "5555555555555555555555555555555555555555"
+      },
+    ].forEach((testCase) => {
+      it(`should parse checkpointUrl url with id (${testCase.expectedChangesetId})`, () => {
+        // Act
+        const { iModelId, changesetId, changesetIndex } = iModelsApiUrlFormatter.parseCheckpointUrl(testCase.url);
+
+        // Assert
+        expect(iModelId).to.be.equal("IMODEL_ID");
+        expect(changesetId).to.be.equal(testCase.expectedChangesetId);
+        expect(changesetIndex).to.be.undefined;
+      });
     });
   });
 

@@ -148,10 +148,10 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
     if (!changesetLink)
       return undefined;
 
-    const ids = this._options.urlFormatter.parseChangesetUrl(changesetLink);
+    const entityIds = this._options.urlFormatter.parseChangesetUrl(changesetLink);
     return this._iModelsClient.changesets.getSingle({
       authorization,
-      ...ids
+      ...entityIds
     });
   }
 }

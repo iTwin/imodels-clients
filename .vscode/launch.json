@@ -1,7 +1,7 @@
 {
   "configurations": [
     {
-      "name": "iModels Clients Tests",
+      "name": "iModels Clients Integration Tests",
       "cwd": "${workspaceFolder}/tests/imodels-clients-tests",
       "type": "pwa-node",
       "request": "launch",
@@ -9,6 +9,23 @@
       "runtimeArgs": [
         "run",
         "test:integration"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/*/*/lib/**/*.js"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "iModels Clients Unit Tests",
+      "cwd": "${workspaceFolder}/tests/imodels-clients-tests",
+      "type": "pwa-node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "test:unit"
       ],
       "outFiles": [
         "${workspaceFolder}/*/*/lib/**/*.js"
