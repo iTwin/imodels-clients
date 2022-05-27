@@ -7,7 +7,9 @@ import {
   IModelsClient as ManagementIModelsClient,
   IModelsClientOptions as ManagementIModelsClientOptions,
   NamedVersionOperations,
-  RecursiveRequired
+  RecursiveRequired,
+  UserOperations,
+  UserPermissionOperations
 } from "@itwin/imodels-client-management";
 import { AzureSdkFileHandler, FileHandler } from "./base";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations } from "./operations";
@@ -86,6 +88,16 @@ export class IModelsClient {
   /** Lock operations. See {@link LockOperations}. */
   public get locks(): LockOperations<OperationOptions> {
     return new LockOperations(this._operationsOptions);
+  }
+
+  /** User operations. See {@link UserOperations}. */
+  public get users(): UserOperations<OperationOptions> {
+    return new UserOperations(this._operationsOptions);
+  }
+
+  /** User Permission operations. See {@link UserPermissionOperations}. */
+  public get userPermissions(): UserPermissionOperations<OperationOptions> {
+    return new UserPermissionOperations(this._operationsOptions);
   }
 
   /**
