@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { Application, BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, DownloadedChangeset, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, Lock, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate, User, UserPermissions, Thumbnail, ThumbnailSize } from "@itwin/imodels-client-authoring";
+import { Application, BaselineFile, BaselineFileState, Briefcase, BriefcaseProperties, Changeset, ChangesetPropertiesForCreate, ChangesetState, Checkpoint, CheckpointState, ContentType, DownloadedChangeset, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, Lock, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, SynchronizationInfo, SynchronizationInfoForCreate, Thumbnail, ThumbnailSize, User, UserPermissions } from "@itwin/imodels-client-authoring";
 import { TestChangesetFile, TestIModelBaselineFile } from "./test-context-providers";
 
 export async function assertCollection<T>(params: {
@@ -286,15 +286,17 @@ export function assertLock(params: {
 }
 
 export function assertThumbnail(params: {
-  actualThumbnail: Thumbnail,
+  actualThumbnail: Thumbnail;
   expectedThumbnailProperties: {
-    size: ThumbnailSize
-  }
+    size: ThumbnailSize;
+  };
 }): void {
   expect(params.actualThumbnail).to.exist;
+  expect(params.actualThumbnail.image).to.exist;
+  expect(params.actualThumbnail.image).to.not.be.empty;
+
   expect(params.actualThumbnail.size).to.be.equal(params.expectedThumbnailProperties.size);
-  expect(params.actualThumbnail.data).to.exist;
-  expect(params.actualThumbnail.data).to.not.be.empty;
+  expect(params.actualThumbnail.imageType).to.be.equal(ContentType.Png);
 }
 
 export function assertMinimalUser(params: {

@@ -12,11 +12,7 @@ export class Constants {
     accept: "Accept",
     authorization: "Authorization",
     contentType: "Content-Type",
-    prefer: "Prefer",
-
-    values: {
-      contentType: "application/json"
-    }
+    prefer: "Prefer"
   };
 
   public static time = {

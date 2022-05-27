@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { ContentType } from "../../rest/RestClient";
 
 /** Thumbnail size. */
 export enum ThumbnailSize {
@@ -11,7 +12,15 @@ export enum ThumbnailSize {
   Large = "large"
 }
 
-export interface Thumbnail { // TODO: add content type?
+/** Full representation of a iModel Thumbnail. */
+export interface Thumbnail {
+  /** Thumbnail size. See {@link ThumbnailSize}. */
   size: ThumbnailSize;
-  data: Uint8Array;
+  /**
+   * Type of the image. All Thumbnails queried from iModels API are .png images regardless of
+   * the original uploaded file type.
+   */
+  imageType: ContentType.Png;
+  /** Binary image data. */
+  image: Uint8Array;
 }

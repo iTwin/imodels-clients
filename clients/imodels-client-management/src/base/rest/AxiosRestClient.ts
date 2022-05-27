@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { IModelsErrorParser } from "../IModelsErrorParser";
-import { HttpRequestParams, HttpRequestWithBodyParams, ParseErrorFunc, RestClient } from "./RestClient";
+import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, ParseErrorFunc, RestClient } from "./RestClient";
 
 /** Default implementation for {@link RestClient} interface that uses `axios` library for sending the requests. */
 export class AxiosRestClient implements RestClient {
@@ -14,52 +14,60 @@ export class AxiosRestClient implements RestClient {
     this._parseErrorFunc = parseErrorFunc;
   }
 
-  public async sendGetRequest<TResponse>(params: HttpRequestParams): Promise<TResponse> {
-    const requestConfig: AxiosRequestConfig = {
-      headers: params.headers,
-    };
-
-    return axios.get(params.url, requestConfig)
-      .then((successResponse: AxiosResponse<TResponse>) => this.handleSuccess(successResponse))
-      .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
-  }
-
-  public async sendPostRequest<TResponse>(params: HttpRequestWithBodyParams): Promise<TResponse> {
+  public async sendGetRequest<TResponse>(params: HttpGetRequestParams): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
 
-    return axios.post(params.url, params.body ?? {}, requestConfig)
-      .then((successResponse: AxiosResponse<TResponse>) => this.handleSuccess(successResponse))
-      .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
+    if (params.responseType === ContentType.Png) {
+      requestConfig.responseType = "arraybuffer";
+    }
+
+    return this.executeRequest(async () => axios.get(params.url, requestConfig));
   }
 
-  public async sendPatchRequest<TResponse>(params: HttpRequestWithBodyParams): Promise<TResponse> {
+  public async sendPostRequest<TResponse>(params: HttpRequestWithJsonBodyParams): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
 
-    return axios.patch(params.url, params.body ?? {}, requestConfig)
-      .then((successResponse: AxiosResponse<TResponse>) => this.handleSuccess(successResponse))
-      .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
+    return this.executeRequest(async () => axios.post(params.url, params.body.content ?? {}, requestConfig));
+  }
+
+  public async sendPutRequest<TResponse>(params: HttpRequestWithBinaryBodyParams): Promise<TResponse> {
+    const requestConfig: AxiosRequestConfig = {
+      headers: params.headers
+    };
+
+    return this.executeRequest(async () => axios.put(params.url, params.body.content, requestConfig));
+  }
+
+  public async sendPatchRequest<TResponse>(params: HttpRequestWithJsonBodyParams): Promise<TResponse> {
+    const requestConfig: AxiosRequestConfig = {
+      headers: params.headers
+    };
+
+    return this.executeRequest(async () => axios.patch(params.url, params.body.content ?? {}, requestConfig));
   }
 
   public async sendDeleteRequest<TResponse>(params: HttpRequestParams): Promise<TResponse> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
-
-    return axios.delete(params.url, requestConfig)
-      .then((successResponse: AxiosResponse<TResponse>) => this.handleSuccess(successResponse))
-      .catch((errorResponse: AxiosError<TResponse>) => this.handleError(errorResponse));
+    return this.executeRequest(async () => axios.delete(params.url, requestConfig));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private handleError<TResponse>(errorResponse: AxiosError<TResponse>): any {
-    return Promise.reject(this._parseErrorFunc({ statusCode: errorResponse.response?.status, body: errorResponse.response?.data }));
-  }
+  private async executeRequest<TResponse>(requestFunc: () => Promise<AxiosResponse<TResponse>>): Promise<TResponse> {
+    try {
+      const response = await requestFunc();
+      return response.data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const parsedError: Error = this._parseErrorFunc({ statusCode: error.response?.status, body: error.response?.data });
+        throw parsedError;
+      }
 
-  private handleSuccess<TResponse>(response: AxiosResponse<TResponse>): TResponse {
-    return response.data;
+      throw new Error("AxiosRestClient: unknown error occurred.");
+    }
   }
 }

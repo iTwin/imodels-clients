@@ -4,23 +4,22 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import * as path from "path";
+import { expect, use } from "chai";
 import * as chaiAsPromised from "chai-as-promised";
-import { AuthorizationCallback, IModelsClient, IModelsClientOptions, DownloadThumbnailParams, Thumbnail, ThumbnailSize, ImageType, UploadThumbnailParams } from "@itwin/imodels-client-management";
-import { cleanupDirectory, createGuidValue, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertThumbnail } from "@itwin/imodels-client-test-utils";
-import { use, expect } from "chai";
+import { AuthorizationCallback, ContentType, DownloadThumbnailParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, Thumbnail, ThumbnailSize, UploadThumbnailParams } from "@itwin/imodels-client-management";
+import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertThumbnail, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 use(chaiAsPromised);
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
-import { IModelScopedOperationParams } from "../../../../../clients/imodels-client-authoring/node_modules/@itwin/imodels-client-management/lib/IModelsClientExports";
 
-describe.only("[Management] ThumbnailOperations", () => {
+describe("[Management] ThumbnailOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
 
   let testIModelGroup: TestIModelGroup;
-  let testIModelCreator: TestIModelCreator;
   let testIModelForRead: ReusableIModelMetadata;
+  let testIModelForWrite: IModelMetadata;
 
   before(async () => {
     const container = getTestDIContainer();
@@ -37,10 +36,11 @@ describe.only("[Management] ThumbnailOperations", () => {
       packageName: Constants.PackagePrefix, testSuiteName: "ManagementThumbnailOperations"
     });
 
-    testIModelCreator = container.get(TestIModelCreator);
-
     const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
+
+    const testIModelCreator = container.get(TestIModelCreator);
+    testIModelForWrite = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
   });
 
   afterEach(() => {
@@ -97,20 +97,17 @@ describe.only("[Management] ThumbnailOperations", () => {
   [
     {
       label: "png",
-      imageType: ImageType.Png,
+      contentType: ContentType.Png,
       fileToUploadPath: path.join(Constants.AssetsDirectoryPath, "Sample.png")
-    },
+    } as const,
     {
       label: "jpeg",
-      imageType: ImageType.Jpeg,
+      contentType: ContentType.Jpeg,
       fileToUploadPath: path.join(Constants.AssetsDirectoryPath, "Sample.jpeg")
-    }
-  ].forEach(testCase => {
+    } as const
+  ].forEach((testCase) => {
     it(`should upload a ${testCase.label} thumbnail`, async () => {
       // Arrange
-      const testIModelForWrite: IModelMetadata = await testIModelCreator.createEmpty(
-        testIModelGroup.getPrefixedUniqueIModelName(`Test upload ${testCase.label}`)
-      );
       const iModelScopedOperationParams: IModelScopedOperationParams = {
         authorization,
         iModelId: testIModelForWrite.id
@@ -121,24 +118,24 @@ describe.only("[Management] ThumbnailOperations", () => {
       const uploadThumbnailParams: UploadThumbnailParams = {
         ...iModelScopedOperationParams,
         thumbnailProperties: {
-          imageType: testCase.imageType,
-          data: fileContents
+          imageType: testCase.contentType,
+          image: fileContents
         }
-      }
+      };
 
       // Act
       await iModelsClient.thumbnails.upload(uploadThumbnailParams);
 
       // Assert
       const newThumbnail: Thumbnail = await iModelsClient.thumbnails.download(iModelScopedOperationParams);
-      expect(newThumbnail.data.length).to.not.be.equal(initialThumbnail.data.length);
+      expect(newThumbnail.image.length).to.not.be.equal(initialThumbnail.image.length);
     });
-  })
+  });
 
   async function saveThumbnailToFile(thumbnail: Thumbnail): Promise<void> {
     const downloadDirectory = path.join(Constants.TestDownloadDirectoryPath, "[Management] ThumbnailOperations");
     await fs.promises.mkdir(downloadDirectory, { recursive: true });
-    const targetFilePath = path.join(downloadDirectory, `test download - ${createGuidValue()}.png`)
-    await fs.promises.writeFile(targetFilePath, Buffer.from(thumbnail.data.buffer), "binary");
+    const targetFilePath = path.join(downloadDirectory, `test download - ${createGuidValue()}.png`);
+    await fs.promises.writeFile(targetFilePath, Buffer.from(thumbnail.image.buffer), "binary");
   }
 });
