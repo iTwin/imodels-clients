@@ -18,7 +18,7 @@ export class IModelsApiUrlFormatter {
     namedVersionId: "namedVersionId",
     userId: "userId"
   };
-  private readonly _numericRegex = /^\d+$/;
+  private readonly _numericRegex = new RegExp("^\\d+$")
   private readonly _changesetUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIdOrIndex}>[^/]*)`, this._regexIgnoreCaseOption);
   private readonly _checkpointUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIdOrIndex}>.*)/checkpoint`, this._regexIgnoreCaseOption);
   private readonly _namedVersionUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/namedversions/(?<${this._groupNames.namedVersionId}>[^/]*)`, this._regexIgnoreCaseOption);
@@ -133,8 +133,8 @@ export class IModelsApiUrlFormatter {
 
   /**
    * API could return Changeset urls that either contain id or index since both are valid identifiers
-   * so here we handle both scenarios. We assume that anything longer that 40 symbols is a string id
-   * and everything else is a numeric index.
+   * so here we handle both scenarios. We assume if the value contains only digits and is shorter than 40
+   * symbols it is a numeric index, otherwise, it is a string id.
    */
   private parseChangesetIdOrIndex(changesetIdOrIndex: string): ChangesetIdOrIndex {
     const containsOnlyDigits = this._numericRegex.test(changesetIdOrIndex);

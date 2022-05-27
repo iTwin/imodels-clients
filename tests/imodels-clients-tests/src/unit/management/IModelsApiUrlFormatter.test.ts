@@ -227,8 +227,8 @@ describe("[Management] IModelsApiUrlFormatter", () => {
 
     [
       {
-        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/CHANGESET_ID/checkpoint",
-        expectedChangesetId: "CHANGESET_ID"
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/CHANGESET_ID5/checkpoint",
+        expectedChangesetId: "CHANGESET_ID5"
       },
       {
         url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/CHANGESET_ID/checkpoint/",

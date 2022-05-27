@@ -84,7 +84,7 @@ export class IModelsClient extends ManagementIModelsClient{
    * @param {iModelsClientOptions} options user-passed client options.
    * @returns {RecursiveRequired<iModelsClientOptions>} required iModels client configuration options.
    */
-  public static fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
+  public static override fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
     return {
       ...ManagementIModelsClient.fillConfiguration(options),
       fileHandler: options?.fileHandler ?? new AzureSdkFileHandler()
