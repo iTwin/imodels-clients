@@ -18,7 +18,7 @@ export class IModelsApiUrlFormatter {
     namedVersionId: "namedVersionId",
     userId: "userId"
   };
-  private readonly _numericRegex = new RegExp("^\\d+$")
+  private readonly _numericRegex = new RegExp("^\\d+$");
   private readonly _changesetUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIdOrIndex}>[^/]*)`, this._regexIgnoreCaseOption);
   private readonly _checkpointUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIdOrIndex}>.*)/checkpoint`, this._regexIgnoreCaseOption);
   private readonly _namedVersionUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/namedversions/(?<${this._groupNames.namedVersionId}>[^/]*)`, this._regexIgnoreCaseOption);
