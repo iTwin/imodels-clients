@@ -19,8 +19,8 @@ export enum ContentType {
   Jpeg = "image/jpeg"
 }
 
-/** Helper type to group all supported binary types. */
-export type SupportedBinaryTypes = ContentType.Png | ContentType.Jpeg;
+/** Helper type to group all supported binary content types. */
+export type BinaryContentType = ContentType.Png | ContentType.Jpeg;
 
 /** Helper type to group all response content types that are supported in GET requests. */
 export type SupportedGetResponseTypes = ContentType.Json | ContentType.Png;
@@ -36,7 +36,7 @@ export interface JsonBody {
 /** Request body that contains binary data. */
 export interface BinaryBody {
   /** Type of the content described by standard `Content-Type` header values. */
-  contentType: SupportedBinaryTypes;
+  contentType: BinaryContentType;
   /** Binary data. */
   content: Uint8Array;
 }

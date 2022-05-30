@@ -5,11 +5,11 @@
 import { Constants } from "../Constants";
 import { AuthorizationParam, CollectionResponse, PreferReturn } from "./interfaces/CommonInterfaces";
 import { Dictionary, EntityCollectionPage } from "./interfaces/UtilityTypes";
-import { ContentType, RestClient, SupportedBinaryTypes, SupportedGetResponseTypes } from "./rest/RestClient";
+import { ContentType, RestClient, BinaryContentType, SupportedGetResponseTypes } from "./rest/RestClient";
 
 type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };
 type SendPostRequestParams = AuthorizationParam & { url: string, body: object | undefined };
-type SendPutRequestParams = AuthorizationParam & { url: string, contentType: SupportedBinaryTypes, body: Uint8Array };
+type SendPutRequestParams = AuthorizationParam & { url: string, contentType: BinaryContentType, body: Uint8Array };
 type SendPatchRequestParams = SendPostRequestParams;
 type SendDeleteRequestParams = AuthorizationParam & { url: string };
 

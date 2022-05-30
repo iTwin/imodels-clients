@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelScopedOperationParams, SupportedBinaryTypes, ThumbnailSize } from "../../base";
+import { IModelScopedOperationParams, BinaryContentType, ThumbnailSize } from "../../base";
 
 /** Url parameters supported in Thumbnail download operation. */
 export interface DownloadThumbnailUrlParams {
@@ -21,7 +21,7 @@ export interface ThumbnailPropertiesForUpload {
    * Type of the image described by standard `Content-Type` header values. Specify `ContentType.Png` when uploading a
    * .png image and `ContentType.Jpeg` when uploading a .jpeg image.
    */
-  imageType: SupportedBinaryTypes;
+  imageType: BinaryContentType;
   /** Binary image data. */
   image: Uint8Array;
 }
