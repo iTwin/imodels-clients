@@ -1,0 +1,12 @@
+{
+  "browser": "chrome",
+  "pluginsFile": false,
+  "supportFile": false,
+  "fixturesFolder": false,
+  "screenshotsFolder": false,
+  "integrationFolder": "lib/",
+  "testFiles": [
+    "**.test.js"
+  ],
+  "video": false
+}

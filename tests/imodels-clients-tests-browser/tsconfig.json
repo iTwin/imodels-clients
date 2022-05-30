@@ -1,0 +1,20 @@
+{
+  "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
+  "compilerOptions": {
+    "module": "es2020",
+    "target": "es2020",
+    "lib": [
+      "es2020",
+      "esnext.asynciterable",
+      "dom"
+    ],
+    "types": [
+      "cypress"
+    ],
+    "moduleResolution": "node",
+    "outDir": "./lib"
+  },
+  "include": [
+    "./src/**/*.ts"
+  ],
+}
