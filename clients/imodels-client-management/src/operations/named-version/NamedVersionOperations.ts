@@ -2,11 +2,20 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIterator, EntityListIteratorImpl, MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn } from "../../base";
+import { AuthorizationCallback, Changeset, EntityListIterator, EntityListIteratorImpl, MinimalNamedVersion, NamedVersion, NamedVersionResponse, NamedVersionsResponse, OperationsBase, PreferReturn } from "../../base";
+import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
+import { getUser } from "../SharedFunctions";
 import { CreateNamedVersionParams, GetNamedVersionListParams, GetSingleNamedVersionParams, NamedVersionPropertiesForCreate, NamedVersionPropertiesForUpdate, UpdateNamedVersionParams } from "./NamedVersionOperationParams";
 
 export class NamedVersionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
+  constructor(
+    options: TOptions,
+    private _iModelsClient: IModelsClient
+  ) {
+    super(options);
+  }
+
   /**
    * Gets Named Versions of a specific iModel. This method returns Named Versions in their minimal representation. The
    * returned iterator internally queries entities in pages. Wraps the
@@ -35,11 +44,17 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
    * {@link NamedVersion}.
    */
   public getRepresentationList(params: GetNamedVersionListParams): EntityListIterator<NamedVersion> {
+    const entityCollectionAccessor = (response: unknown) => {
+      const namedVersions = (response as NamedVersionsResponse<NamedVersion>).namedVersions;
+      const mappedNamedVersions = namedVersions.map((namedVersion) => this.appendRelatedEntityCallbacks(params.authorization, namedVersion));
+      return mappedNamedVersions;
+    };
+
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<NamedVersion>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getNamedVersionListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<NamedVersion>).namedVersions
+      entityCollectionAccessor
     }));
   }
 
@@ -55,7 +70,8 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleNamedVersionUrl({ iModelId: params.iModelId, namedVersionId: params.namedVersionId })
     });
-    return response.namedVersion;
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, response.namedVersion);
+    return result;
   }
 
   /**
@@ -72,7 +88,8 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       url: this._options.urlFormatter.getNamedVersionListUrl({ iModelId: params.iModelId }),
       body: createNamedVersionBody
     });
-    return createNamedVersionResponse.namedVersion;
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, createNamedVersionResponse.namedVersion);
+    return result;
   }
 
   /**
@@ -89,7 +106,8 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       url: this._options.urlFormatter.getSingleNamedVersionUrl({ iModelId: params.iModelId, namedVersionId: params.namedVersionId }),
       body: updateNamedVersionBody
     });
-    return updateNamedVersionResponse.namedVersion;
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, updateNamedVersionResponse.namedVersion);
+    return result;
   }
 
   private getCreateNamedVersionRequestBody(namedVersionProperties: NamedVersionPropertiesForCreate): object {
@@ -106,5 +124,34 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       description: namedVersionProperties.description,
       state: namedVersionProperties.state
     };
+  }
+
+  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, namedVersion: NamedVersion): NamedVersion {
+    const getCreator = async () => getUser(
+      authorization,
+      this._iModelsClient.users,
+      this._options.urlFormatter,
+      namedVersion._links.creator?.href
+    );
+    const getChangeset = async () => this.getChangeset(authorization, namedVersion._links.changeset?.href);
+
+    const result: NamedVersion = {
+      ...namedVersion,
+      getCreator,
+      getChangeset
+    };
+
+    return result;
+  }
+
+  private async getChangeset(authorization: AuthorizationCallback, changesetLink: string | undefined): Promise<Changeset | undefined> {
+    if (!changesetLink)
+      return undefined;
+
+    const entityIds = this._options.urlFormatter.parseChangesetUrl(changesetLink);
+    return this._iModelsClient.changesets.getSingle({
+      authorization,
+      ...entityIds
+    });
   }
 }

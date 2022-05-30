@@ -35,7 +35,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       body: confirmUploadBody
     });
 
-    return confirmUploadResponse.changeset;
+    const result = this.appendRelatedEntityCallbacks(params.authorization, confirmUploadResponse.changeset);
+    return result;
   }
 
   /**

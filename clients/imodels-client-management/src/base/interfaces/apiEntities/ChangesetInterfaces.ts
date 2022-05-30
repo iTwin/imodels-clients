@@ -5,6 +5,7 @@
 import { Application, CollectionResponse, Link } from "../CommonInterfaces";
 import { Checkpoint } from "./CheckpointInterfaces";
 import { NamedVersion } from "./NamedVersionInterfaces";
+import { User } from "./UserInterfaces";
 
 /** Possible Changeset states. */
 export enum ChangesetState {
@@ -67,6 +68,12 @@ export interface MinimalChangeset {
   briefcaseId: number;
   /** Changeset links. See {@link MinimalChangesetLinks}. */
   _links: MinimalChangesetLinks;
+  /**
+   * Function to query User who created the Changeset. If the information is not present the
+   * function returns `undefined`. This function reuses authorization information passed to specific Changeset
+   * operation that originally queried the Changeset from API.
+   */
+  getCreator: () => Promise<User | undefined>;
 }
 
 /** Links that belong to Changeset entity returned from iModels API. */
