@@ -14,13 +14,19 @@ export class AxiosRestClient implements RestClient {
     this._parseErrorFunc = parseErrorFunc;
   }
 
-  public async sendGetRequest<TResponse>(params: HttpGetRequestParams): Promise<TResponse> {
+  public sendGetRequest<TResponse>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<TResponse>;
+  public sendGetRequest(params: HttpGetRequestParams & { responseType: ContentType.Png }): Promise<Uint8Array>;
+  public async sendGetRequest<TResponse>(params: HttpGetRequestParams): Promise<TResponse | Uint8Array> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
 
     if (params.responseType === ContentType.Png) {
       requestConfig.responseType = "arraybuffer";
+      const responseData: Buffer | ArrayBuffer = await this.executeRequest(async () => axios.get(params.url, requestConfig));
+      if (responseData instanceof ArrayBuffer)
+        return new Uint8Array(responseData);
+      return responseData;
     }
 
     return this.executeRequest(async () => axios.get(params.url, requestConfig));

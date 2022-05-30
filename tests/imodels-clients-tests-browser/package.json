@@ -19,10 +19,8 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
-  "main": "lib/iModelsClientsTestsExports.js",
-  "typings": "lib/iModelsClientsTestsExports",
   "scripts": {
-    "build": "tsc 1>&2",
+    "build": "tsc && tsc --p cjs.tsconfig.json 1>&2",
     "clean": "rimraf lib",
     "cover": "",
     "lint": "eslint ./src/**/*.ts 1>&2",

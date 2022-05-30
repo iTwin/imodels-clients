@@ -1,6 +1,7 @@
 {
   "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
   "compilerOptions": {
+    "outDir": "./lib",
     "module": "es2020",
     "target": "es2020",
     "lib": [
@@ -12,9 +13,14 @@
       "cypress"
     ],
     "moduleResolution": "node",
-    "outDir": "./lib"
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "inlineSources": true
   },
   "include": [
     "./src/**/*.ts"
   ],
+  "exclude": [
+    "./src/setup/**/*.ts"
+  ]
 }

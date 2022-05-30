@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@itwin/imodels-client-authoring": "workspace:*",
+    "@itwin/imodels-client-management": "workspace:*",
     "axios": "~0.21.1",
     "chai": "~4.3.4",
     "inversify": "~5.0.1",
@@ -40,7 +41,7 @@
   "devDependencies": {
     "@itwin/imodels-client-common-config": "workspace:*",
     "@types/chai": "~4.2.21",
-    "@types/node": "^16.4.6",
+    "@types/node": "~16.11.36",
     "cpx2": "4.2.0",
     "cspell": "~5.21.0",
     "eslint": "~7.31.0",

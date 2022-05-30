@@ -76,11 +76,18 @@ export interface HttpRequestWithBinaryBodyParams extends HttpRequestParams {
  */
 export interface RestClient {
   /**
-   * Sends GET HTTP request.
+   * Sends GET HTTP request to get JSON response.
    * @param {HttpGetRequestParams} params parameters for this operation. See {@link HttpGetRequestParams}.
    * @throws an error if the request fails.
    */
-  sendGetRequest<TResponse>(params: HttpGetRequestParams): Promise<TResponse>;
+  sendGetRequest<TResponse>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<TResponse>;
+
+  /**
+   * Sends GET HTTP request to get binary response.
+   * @param {HttpGetRequestParams} params parameters for this operation. See {@link HttpGetRequestParams}.
+   * @throws an error if the request fails.
+   */
+  sendGetRequest(params: HttpGetRequestParams & { responseType: ContentType.Png }): Promise<Uint8Array>;
 
   /**
    * Sends POST HTTP request.

@@ -26,6 +26,7 @@ importers:
       axios: 0.21.4
     devDependencies:
       '@itwin/imodels-client-common-config': 'link:../../utils/imodels-client-common-config'
+      '@types/node': 16.11.36
       cspell: 5.21.0
       eslint: 7.31.0
       rimraf: 3.0.2
@@ -33,6 +34,7 @@ importers:
       typescript: 4.4.4
     specifiers:
       '@itwin/imodels-client-common-config': 'workspace:*'
+      '@types/node': ~16.11.36
       axios: ~0.21.1
       cspell: ~5.21.0
       eslint: ~7.31.0
@@ -228,7 +230,7 @@ importers:
       '@types/chai': ~4.2.21
       '@types/chai-as-promised': ~7.1.5
       '@types/mocha': ~9.0.0
-      '@types/node': ^16.4.6
+      '@types/node': ~16.11.36
       axios: ~0.21.1
       chai: ~4.3.4
       chai-as-promised: ~7.1.1
@@ -301,6 +303,7 @@ importers:
   ../../utils/imodels-client-test-utils:
     dependencies:
       '@itwin/imodels-client-authoring': 'link:../../clients/imodels-client-authoring'
+      '@itwin/imodels-client-management': 'link:../../clients/imodels-client-management'
       axios: 0.21.4
       chai: 4.3.6
       inversify: 5.0.5
@@ -319,8 +322,9 @@ importers:
     specifiers:
       '@itwin/imodels-client-authoring': 'workspace:*'
       '@itwin/imodels-client-common-config': 'workspace:*'
+      '@itwin/imodels-client-management': 'workspace:*'
       '@types/chai': ~4.2.21
-      '@types/node': ^16.4.6
+      '@types/node': ~16.11.36
       axios: ~0.21.1
       chai: ~4.3.4
       cpx2: 4.2.0

@@ -22,11 +22,23 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   constructor(protected _options: TOptions) {
   }
 
-  protected async sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse> {
-    return this._options.restClient.sendGetRequest<TResponse>({
+  protected async sendGetRequest<TResponse>(params: SendGetRequestParams & { responseType?: ContentType.Json }): Promise<TResponse>;
+  protected async sendGetRequest<TResponse>(params: SendGetRequestParams & { responseType: ContentType.Png }): Promise<Uint8Array>;
+  protected async sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse | Uint8Array> {
+    const urlAndHeaders = {
       url: params.url,
-      responseType: params.responseType ?? ContentType.Json,
       headers: await this.formHeaders(params)
+    };
+
+    if (params.responseType === ContentType.Png)
+      return this._options.restClient.sendGetRequest({
+        responseType: ContentType.Png,
+        ...urlAndHeaders
+      });
+
+    return this._options.restClient.sendGetRequest<TResponse>({
+      responseType: params.responseType ?? ContentType.Json,
+      ...urlAndHeaders
     });
   }
 

@@ -1,6 +1,6 @@
 {
   "browser": "chrome",
-  "pluginsFile": false,
+  "pluginsFile": "lib/CypressSetup.js",
   "supportFile": false,
   "fixturesFolder": false,
   "screenshotsFolder": false,
