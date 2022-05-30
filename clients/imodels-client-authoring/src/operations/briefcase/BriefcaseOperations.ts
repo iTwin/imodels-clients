@@ -21,7 +21,8 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Mana
       url: this._options.urlFormatter.getBriefcaseListUrl({ iModelId: params.iModelId }),
       body: acquireBriefcaseBody
     });
-    return acquireBriefcaseResponse.briefcase;
+    const result = this.appendRelatedEntityCallbacks(params.authorization, acquireBriefcaseResponse.briefcase);
+    return result;
   }
 
   /**

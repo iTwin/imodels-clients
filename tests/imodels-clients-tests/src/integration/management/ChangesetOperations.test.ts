@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, GetChangesetListParams, GetSingleChangesetParams, IModelsClient, IModelsClientOptions, OrderByOperator, toArray } from "@itwin/imodels-client-management";
-import { NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertChangeset, assertCollection, assertMinimalChangeset } from "@itwin/imodels-client-test-utils";
+import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetSingleChangesetParams, IModelsClient, IModelsClientOptions, MinimalChangeset, OrderByOperator, toArray } from "@itwin/imodels-client-management";
+import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertChangeset, assertCollection, assertMinimalChangeset } from "@itwin/imodels-client-test-utils";
 import { getTestDIContainer } from "../common";
 
 describe("[Management] ChangesetOperations", () => {
@@ -146,7 +146,7 @@ describe("[Management] ChangesetOperations", () => {
     });
   });
 
-  it("should get minimal changeset", async () => {
+  it("should get valid minimal changeset when querying minimal collection", async () => {
     // Arrange
     const getChangesetListParams: GetChangesetListParams = {
       authorization,
@@ -162,14 +162,15 @@ describe("[Management] ChangesetOperations", () => {
     };
 
     // Act
-    const minimalChangesets = iModelsClient.changesets.getMinimalList(getChangesetListParams);
+    const minimalChangesets: EntityListIterator<MinimalChangeset> =
+      iModelsClient.changesets.getMinimalList(getChangesetListParams);
 
     // Assert
     const minimalChangesetList = await toArray(minimalChangesets);
     expect(minimalChangesetList.length).to.be.equal(1);
     const minimalChangeset = minimalChangesetList[0];
     const testChangesetFile = testIModelFileProvider.changesets[minimalChangeset.index - 1];
-    assertMinimalChangeset({
+    await assertMinimalChangeset({
       actualChangeset: minimalChangeset,
       expectedChangesetProperties: {
         id: testChangesetFile.id,
@@ -182,21 +183,28 @@ describe("[Management] ChangesetOperations", () => {
     });
   });
 
-  it("should get changeset by id", async () => {
+  it("should get valid full changeset when querying representation collection", async () => {
     // Arrange
-    const changesetWithNamedVersionIndex = testIModel.namedVersions[0].changesetIndex;
-    const testChangesetFile = testIModelFileProvider.changesets[changesetWithNamedVersionIndex - 1];
-    const getSingleChangesetParams: GetSingleChangesetParams = {
+    const firstNamedVersion = testIModel.namedVersions[0];
+    const getChangesetListParams: GetChangesetListParams = {
       authorization,
       iModelId: testIModel.id,
-      changesetId: testChangesetFile.id
+      urlParams: {
+        afterIndex: firstNamedVersion.changesetIndex - 1,
+        lastIndex: firstNamedVersion.changesetIndex
+      }
     };
 
     // Act
-    const changeset: Changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
+    const changesets: EntityListIterator<Changeset> =
+      iModelsClient.changesets.getRepresentationList(getChangesetListParams);
 
     // Assert
-    assertChangeset({
+    const changesetList: Changeset[] = await toArray(changesets);
+    expect(changesetList.length).to.be.equal(1);
+    const changeset = changesetList[0];
+    const testChangesetFile = testIModelFileProvider.changesets[changeset.index - 1];
+    await assertChangeset({
       actualChangeset: changeset,
       expectedChangesetProperties: {
         id: testChangesetFile.id,
@@ -215,52 +223,37 @@ describe("[Management] ChangesetOperations", () => {
     });
   });
 
-  describe("link to checkpoint", () => {
-    let firstNamedVersion: NamedVersionMetadata;
+  it("should get changeset by id", async () => {
+    // Arrange
+    const firstNamedVersion = testIModel.namedVersions[0];
+    const changesetWithNamedVersionIndex = firstNamedVersion.changesetIndex;
+    const testChangesetFile = testIModelFileProvider.changesets[changesetWithNamedVersionIndex - 1];
+    const getSingleChangesetParams: GetSingleChangesetParams = {
+      authorization,
+      iModelId: testIModel.id,
+      changesetId: testChangesetFile.id
+    };
 
-    before(() => {
-      firstNamedVersion = testIModel.namedVersions[0];
-    });
+    // Act
+    const changeset: Changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
 
-    it("should contain a link to checkpoint when querying representation collection", async () => {
-      // Arrange
-      const getChangesetListParams: GetChangesetListParams = {
-        authorization,
-        iModelId: testIModel.id,
-        urlParams: {
-          lastIndex: firstNamedVersion.changesetIndex
-        }
-      };
-
-      // Act
-      const changesets = iModelsClient.changesets.getRepresentationList(getChangesetListParams);
-
-      // Assert
-      for await (const changeset of changesets) {
-        const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
-        expect(checkpoint).to.not.be.undefined;
-        const expectedCheckpointChangesetIndex = changeset.index === firstNamedVersion.changesetIndex
-          ? firstNamedVersion.changesetIndex
-          : 0;
-        expect(checkpoint!.changesetIndex).to.equal(expectedCheckpointChangesetIndex);
-      }
-    });
-
-    it("should contain a link to checkpoint when querying changeset by id", async () => {
-      // Arrange
-      const getSingleChangesetParams: GetSingleChangesetParams = {
-        authorization,
-        iModelId: testIModel.id,
-        changesetId: firstNamedVersion.changesetId
-      };
-
-      // Act
-      const changeset: Changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
-
-      // Assert
-      const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
-      expect(checkpoint).to.not.be.undefined;
-      expect(checkpoint!.changesetIndex).to.equal(firstNamedVersion.changesetIndex);
+    // Assert
+    await assertChangeset({
+      actualChangeset: changeset,
+      expectedChangesetProperties: {
+        id: testChangesetFile.id,
+        briefcaseId: testIModel.briefcase.id,
+        parentId: testChangesetFile.parentId,
+        description: testChangesetFile.description,
+        containingChanges: testChangesetFile.containingChanges,
+        synchronizationInfo: testChangesetFile.synchronizationInfo
+      },
+      expectedTestChangesetFile: testChangesetFile,
+      expectedLinks: {
+        namedVersion: true,
+        checkpoint: true
+      },
+      isGetResponse: true
     });
   });
 });

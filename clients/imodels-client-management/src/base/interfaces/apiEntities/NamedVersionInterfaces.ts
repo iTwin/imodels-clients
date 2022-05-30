@@ -3,6 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Application, CollectionResponse, Link } from "../CommonInterfaces";
+import { Changeset } from "./ChangesetInterfaces";
+import { User } from "./UserInterfaces";
 
 /** Possible Named Version states. */
 export enum NamedVersionState {
@@ -56,6 +58,19 @@ export interface NamedVersion extends MinimalNamedVersion {
   application: Application | null;
   /** Named Version links. See {@link NamedVersionLinks}. */
   _links: NamedVersionLinks;
+  /**
+   * Function to query User who created the Named Version. If the information is not present the
+   * function returns `undefined`. This function reuses authorization information passed to specific Named Version
+   * operation that originally queried the Named Version from API.
+   */
+  getCreator: () => Promise<User | undefined>;
+  /**
+   * Function to query Changeset on which the Named Version was created. If the information is not present or if the
+   * Named Version is created on iModel baseline (before any Changesets) the function returns `undefined`. This
+   * function reuses authorization information passed to specific Named Version operation that originally queried the
+   * Named Version from API.
+   */
+  getChangeset(): Promise<Changeset | undefined>;
 }
 
 /** DTO to hold a single Named Version API response. */

@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Application, CollectionResponse, Link } from "../CommonInterfaces";
+import { User } from "./UserInterfaces";
 
 /** Minimal representation of a Briefcase. */
 export interface MinimalBriefcase {
@@ -33,6 +34,12 @@ export interface Briefcase extends MinimalBriefcase {
   application: Application | null;
   /** Briefcase links. See {@link BriefcaseLinks}. */
   _links: BriefcaseLinks;
+  /**
+   * Function to query User who owns the Briefcase. If the information is not present the
+   * function returns `undefined`. This function reuses authorization information passed to specific Briefcase
+   * operation that originally queried the Briefcase from API.
+   */
+  getOwner: () => Promise<User | undefined>;
 }
 
 /** DTO to hold a single Briefcase API response. */
