@@ -36,7 +36,8 @@
     "chai": "~4.3.4",
     "inversify": "~5.0.1",
     "puppeteer": "~13.5.1",
-    "reflect-metadata": "~0.1.13"
+    "reflect-metadata": "~0.1.13",
+    "dotenv": "~10.0.0"
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "workspace:*",

@@ -1,6 +1,5 @@
-import { inject, injectable } from "inversify";
-import { BaseIntegrationTestsConfig } from "../../BaseIntegrationTestsConfig";
-import { TestUtilTypes } from "../../TestUtilTypes";
+import { injectable } from "inversify";
+import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
 
 @injectable()
 export class TestAuthorizationClientConfig {
@@ -10,8 +9,7 @@ export class TestAuthorizationClientConfig {
   public redirectUrl: string;
 
   constructor(
-    @inject(TestUtilTypes.BaseIntegrationTestsConfig)
-    config: BaseIntegrationTestsConfig
+    config: IModelsClientsTestsConfig
   ) {
     this.authority = config.auth.authority;
     this.clientId = config.auth.clientId;

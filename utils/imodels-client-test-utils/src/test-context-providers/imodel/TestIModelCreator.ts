@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import { CheckpointState, GetSingleCheckpointParams, Lock, LockLevel, LockedObjects, sleep } from "@itwin/imodels-client-authoring";
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
@@ -22,13 +22,9 @@ export class TestIModelCreator {
   private readonly _briefcaseDeviceName = "Some device name";
 
   constructor(
-    @inject(TestIModelsClient)
     private readonly _iModelsClient: TestIModelsClient,
-    @inject(TestAuthorizationProvider)
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
-    @inject(TestProjectProvider)
     private readonly _testProjectProvider: TestProjectProvider,
-    @inject(TestIModelFileProvider)
     private readonly _testIModelFileProvider: TestIModelFileProvider
   ) { }
 

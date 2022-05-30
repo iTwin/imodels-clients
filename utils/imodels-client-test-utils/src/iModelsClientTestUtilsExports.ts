@@ -10,7 +10,7 @@ export * from "./test-imodel-group/TestIModelGroupFactory";
 
 export * from "./TestUtilTypes";
 export * from "./TestUtilBootstrapper";
-export * from "./BaseIntegrationTestsConfig";
+export * from "./IModelsClientsTestsConfig";
 
 export * from "./assertions/BrowserFriendlyAssertions";
 export * from "./assertions/NodeOnlyAssertions";

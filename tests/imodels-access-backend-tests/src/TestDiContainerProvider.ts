@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import * as path from "path";
 import { Container } from "inversify";
-import { BaseIntegrationTestsConfig, TestUtilBootstrapper, TestUtilTypes } from "@itwin/imodels-client-test-utils";
-import { IModelsAccessBackendTestsConfig } from "./IModelsAccessBackendTestsConfig";
+import { TestUtilBootstrapper } from "@itwin/imodels-client-test-utils";
 import "reflect-metadata";
 
 let container: Container;
@@ -13,7 +13,7 @@ export function getTestDIContainer(): Container {
     return container;
 
   container = new Container();
-  TestUtilBootstrapper.bind(container);
-  container.bind<BaseIntegrationTestsConfig>(TestUtilTypes.BaseIntegrationTestsConfig).to(IModelsAccessBackendTestsConfig).inSingletonScope();
+  TestUtilBootstrapper.bind(container, path.join(__dirname, "..", ".env"));
+
   return container;
 }

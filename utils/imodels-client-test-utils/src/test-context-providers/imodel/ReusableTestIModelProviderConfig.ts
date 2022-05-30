@@ -2,9 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { inject, injectable } from "inversify";
-import { BaseIntegrationTestsConfig, BehaviorOptions } from "../../BaseIntegrationTestsConfig";
-import { TestUtilTypes } from "../../TestUtilTypes";
+import { injectable } from "inversify";
+import { BehaviorOptions, IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
 
 @injectable()
 export class ReusableTestIModelProviderConfig {
@@ -12,8 +11,7 @@ export class ReusableTestIModelProviderConfig {
   public behaviorOptions: Pick<BehaviorOptions, "recreateReusableIModel">;
 
   constructor(
-    @inject(TestUtilTypes.BaseIntegrationTestsConfig)
-    config: BaseIntegrationTestsConfig
+    config: IModelsClientsTestsConfig
   ) {
     this.testIModelName = config.testIModelName;
     this.behaviorOptions = config.behaviorOptions;

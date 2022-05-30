@@ -2,16 +2,18 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import * as path from "path";
 import { IModelsClientOptions } from "@itwin/imodels-client-management";
-import { BaseIntegrationTestsConfig, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilBootstrapper, TestUtilTypes } from "@itwin/imodels-client-test-utils";
+import { ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilBootstrapper, TestUtilTypes, IModelsClientsTestsConfig } from "@itwin/imodels-client-test-utils";
 import { Container } from "inversify";
 import { FrontendTestEnvVariableKeys } from "./FrontendTestEnvVariableKeys";
-import { IModelsClientsTestsConfig } from "./IModelsClientsTestsConfig";
 
 export default async function setup(_on: unknown, config: { env: any }): Promise<unknown> {
   const container = new Container();
   TestUtilBootstrapper.bind(container);
-  container.bind<BaseIntegrationTestsConfig>(TestUtilTypes.BaseIntegrationTestsConfig).to(IModelsClientsTestsConfig).inSingletonScope();
+
+  const testsConfig = new IModelsClientsTestsConfig(path.join(__dirname, "..", "..", ".env"));
+  container.bind(IModelsClientsTestsConfig).toConstantValue(testsConfig);
 
   const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
   config.env[FrontendTestEnvVariableKeys.iModelsClientApiOptions] = JSON.stringify(iModelsClientOptions.api);

@@ -4,10 +4,46 @@
  *--------------------------------------------------------------------------------------------*/
 import * as dotenv from "dotenv";
 import { injectable } from "inversify";
-import { ApisConfigValues, AuthConfigValues, BaseIntegrationTestsConfig, BehaviorOptions, TestSetupError, TestUsersConfigValues } from "@itwin/imodels-client-test-utils";
+import { TestSetupError } from "./CommonTestUtils";
+
+export interface AuthConfigValues {
+  authority: string;
+  clientId: string;
+  clientSecret: string;
+  redirectUrl: string;
+}
+
+export interface ApiConfigValues {
+  baseUrl: string;
+  version?: string;
+  scopes: string;
+}
+
+export interface ApisConfigValues {
+  projects: ApiConfigValues;
+  iModels: ApiConfigValues;
+}
+
+export interface TestUserConfigValues {
+  email: string;
+  password: string;
+}
+
+export interface TestUsersConfigValues {
+  admin1: TestUserConfigValues;
+  admin2FullyFeatured: TestUserConfigValues;
+}
+
+export interface BehaviorOptions {
+  /**
+   * Instructs the test setup to delete the existing reusable iModel and create a new one. Used
+   * in scenarios there are new features added to the API and we want to update the reusable iModel have more configured properties.
+   */
+  recreateReusableIModel: boolean;
+}
 
 @injectable()
-export class IModelsAccessFrontendTestsConfig implements BaseIntegrationTestsConfig {
+export class IModelsClientsTestsConfig {
   public readonly testProjectName: string;
   public readonly testIModelName: string;
   public readonly auth: AuthConfigValues;
@@ -15,8 +51,8 @@ export class IModelsAccessFrontendTestsConfig implements BaseIntegrationTestsCon
   public readonly testUsers: TestUsersConfigValues;
   public readonly behaviorOptions: BehaviorOptions;
 
-  constructor() {
-    dotenv.config();
+  constructor(envFilePath: string) {
+    dotenv.config({ path: envFilePath });
     this.validateAllValuesPresent();
 
     this.testProjectName = process.env.TEST_PROJECT_NAME!;

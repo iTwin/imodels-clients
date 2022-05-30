@@ -20,7 +20,9 @@
     "url": "http://www.bentley.com"
   },
   "scripts": {
-    "build": "tsc && tsc --p cjs.tsconfig.json 1>&2",
+    "build": "npm run build:tests && npm run build:tests-setup",
+    "build:tests": "tsc 1>&2",
+    "build:tests-setup": "tsc --p cjs.tsconfig.json 1>&2",
     "clean": "rimraf lib",
     "cover": "",
     "lint": "eslint ./src/**/*.ts 1>&2",
@@ -45,6 +47,7 @@
   "devDependencies": {
     "@itwin/imodels-client-common-config": "workspace:*",
     "@types/chai": "~4.2.21",
+    "@types/node": "~16.11.36",
     "cspell": "~5.21.0",
     "eslint": "~7.31.0",
     "nyc": "15.1.0",

@@ -8,10 +8,15 @@ import { ProjectsClient, ProjectsClientConfig, ReusableTestIModelProvider, Reusa
 import { TestAuthorizationProviderConfig } from "./test-context-providers/auth/TestAuthorizationProviderConfig";
 import { TestIModelGroupFactory } from "./test-imodel-group/TestIModelGroupFactory";
 import { TestUtilTypes } from "./TestUtilTypes";
+import { IModelsClientsTestsConfig } from "./IModelsClientsTestsConfig";
 
 export class TestUtilBootstrapper {
-  public static bind(container: Container): void {
+  public static bind(container: Container, envFilePath: string): void {
+    const config = new IModelsClientsTestsConfig(envFilePath);
+    container.bind(IModelsClientsTestsConfig).toConstantValue(config);
+    
     TestUtilBootstrapper.bindContextProviders(container);
+    
     container.bind(TestIModelGroupFactory).toSelf().inSingletonScope();
   }
 
