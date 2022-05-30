@@ -5,10 +5,11 @@
 import { Constants } from "../Constants";
 import { AuthorizationParam, CollectionResponse, PreferReturn } from "./interfaces/CommonInterfaces";
 import { Dictionary, EntityCollectionPage } from "./interfaces/UtilityTypes";
-import { RestClient } from "./rest/RestClient";
+import { BinaryContentType, ContentType, RestClient, SupportedGetResponseTypes } from "./rest/RestClient";
 
-type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn };
-type SendPostRequestParams = AuthorizationParam & { url: string, body: unknown };
+type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };
+type SendPostRequestParams = AuthorizationParam & { url: string, body: object | undefined };
+type SendPutRequestParams = AuthorizationParam & { url: string, contentType: BinaryContentType, body: Uint8Array };
 type SendPatchRequestParams = SendPostRequestParams;
 type SendDeleteRequestParams = AuthorizationParam & { url: string };
 
@@ -24,6 +25,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   protected async sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse> {
     return this._options.restClient.sendGetRequest<TResponse>({
       url: params.url,
+      responseType: params.responseType ?? ContentType.Json,
       headers: await this.formHeaders(params)
     });
   }
@@ -31,16 +33,33 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   protected async sendPostRequest<TResponse>(params: SendPostRequestParams): Promise<TResponse> {
     return this._options.restClient.sendPostRequest<TResponse>({
       url: params.url,
-      body: params.body,
-      headers: await this.formHeaders({ ...params, containsBody: true })
+      body: {
+        contentType: ContentType.Json,
+        content: params.body
+      },
+      headers: await this.formHeaders({ ...params, contentType: ContentType.Json })
+    });
+  }
+
+  protected async sendPutRequest<TResponse>(params: SendPutRequestParams): Promise<TResponse> {
+    return this._options.restClient.sendPutRequest<TResponse>({
+      url: params.url,
+      body: {
+        contentType: params.contentType,
+        content: params.body
+      },
+      headers: await this.formHeaders({ ...params, contentType: params.contentType })
     });
   }
 
   protected async sendPatchRequest<TResponse>(params: SendPatchRequestParams): Promise<TResponse> {
     return this._options.restClient.sendPatchRequest<TResponse>({
       url: params.url,
-      body: params.body,
-      headers: await this.formHeaders({ ...params, containsBody: true })
+      body: {
+        contentType: ContentType.Json,
+        content: params.body
+      },
+      headers: await this.formHeaders({ ...params, contentType: ContentType.Json })
     });
   }
 
@@ -65,7 +84,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     };
   }
 
-  private async formHeaders(params: AuthorizationParam & { preferReturn?: PreferReturn, containsBody?: boolean }): Promise<Dictionary<string>> {
+  private async formHeaders(params: AuthorizationParam & { preferReturn?: PreferReturn, contentType?: ContentType }): Promise<Dictionary<string>> {
     const headers: Dictionary<string> = {};
     const authorizationInfo = await params.authorization();
     headers[Constants.headers.authorization] = `${authorizationInfo.scheme} ${authorizationInfo.token}`;
@@ -74,8 +93,8 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     if (params.preferReturn)
       headers[Constants.headers.prefer] = `return=${params.preferReturn}`;
 
-    if (params.containsBody)
-      headers[Constants.headers.contentType] = Constants.headers.values.contentType;
+    if (params.contentType)
+      headers[Constants.headers.contentType] = params.contentType;
 
     return headers;
   }

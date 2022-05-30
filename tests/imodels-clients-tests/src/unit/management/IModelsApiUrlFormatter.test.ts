@@ -251,6 +251,19 @@ describe("[Management] IModelsApiUrlFormatter", () => {
     });
   });
 
+  describe("Thumbnail urls", () => {
+    it("should format thumbnail url", () => {
+      // Arrange
+      const getThumbnailUrlParams = { iModelId: "IMODEL_ID" };
+
+      // Act
+      const thumbnailUrl = iModelsApiUrlFormatter.getThumbnailUrl(getThumbnailUrlParams);
+
+      // Assert
+      expect(thumbnailUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/thumbnail");
+    });
+  });
+
   describe("User urls", () => {
     it("should format user list url", () => {
       // Arrange

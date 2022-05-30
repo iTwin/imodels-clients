@@ -5,7 +5,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, GetSingleChangesetParams, IModelsApiUrlFormatter, IModelsClient, IModelsClientOptions, ProgressCallback, ProgressData } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, ContentType, GetSingleChangesetParams, IModelsApiUrlFormatter, IModelsClient, IModelsClientOptions, ProgressCallback, ProgressData } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestChangesetFile, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, cleanupDirectory } from "@itwin/imodels-client-test-utils";
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
@@ -122,10 +122,13 @@ describe("AzureSdkFileHandler", () => {
         Authorization: `${authorizationValue.scheme} ${authorizationValue.token}`
       },
       body: {
-        id: testChangeset.id,
-        parentId: testChangeset.parentId,
-        briefcaseId: briefcase.briefcaseId,
-        fileSize: fs.statSync(testChangeset.filePath).size
+        contentType: ContentType.Json,
+        content: {
+          id: testChangeset.id,
+          parentId: testChangeset.parentId,
+          briefcaseId: briefcase.briefcaseId,
+          fileSize: fs.statSync(testChangeset.filePath).size
+        }
       }
     });
     return changesetMetadataCreateResponse.changeset._links.upload.href;

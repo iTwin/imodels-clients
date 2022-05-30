@@ -11,12 +11,8 @@ export class Constants {
   public static headers = {
     accept: "Accept",
     authorization: "Authorization",
-    contentType: "ContentType",
-    prefer: "Prefer",
-
-    values: {
-      contentType: "application/json"
-    }
+    contentType: "Content-Type",
+    prefer: "Prefer"
   };
 
   public static time = {

@@ -5,6 +5,7 @@
 import { CollectionRequestParams, OrderBy } from "../base/interfaces/CommonInterfaces";
 import { Dictionary } from "../base/interfaces/UtilityTypes";
 import { ChangesetIdOrIndex, GetChangesetListUrlParams } from "./changeset/ChangesetOperationParams";
+import { DownloadThumbnailUrlParams } from "./OperationParamExports";
 import { CheckpointParentEntityId, GetBriefcaseListUrlParams, GetIModelListUrlParams, GetNamedVersionListUrlParams } from ".";
 
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
@@ -77,6 +78,10 @@ export class IModelsApiUrlFormatter {
       : `changesets/${params.changesetId ?? params.changesetIndex}`;
 
     return `${this.baseUrl}/${params.iModelId}/${parentEntityUrlPath}/checkpoint`;
+  }
+
+  public getThumbnailUrl(params: {iModelId: string, urlParams?: DownloadThumbnailUrlParams }): string {
+    return `${this.baseUrl}/${params.iModelId}/thumbnail${this.formQueryString({ ...params.urlParams })}`;
   }
 
   public getUserListUrl(params: { iModelId: string, urlParams?: CollectionRequestParams }): string {
