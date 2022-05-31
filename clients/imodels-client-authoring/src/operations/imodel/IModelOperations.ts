@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AuthorizationParam, IModel, IModelsErrorCode, IModelsErrorImpl, Link, IModelOperations as ManagementIModelOperations, waitForCondition } from "@itwin/imodels-client-management";
-import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
+import { BaselineFileState } from "../../base";
 import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations";
 import { OperationOptions } from "../OperationOptions";
 import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline } from "./IModelOperationParams";

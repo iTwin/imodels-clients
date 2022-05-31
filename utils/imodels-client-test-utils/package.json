@@ -15,8 +15,8 @@
     "url": "https://github.com/iTwin/imodels-clients"
   },
   "license": "MIT",
-  "main": "lib/iModelsClientTestUtilsExports.js",
-  "typings": "lib/iModelsClientTestUtilsExports",
+  "main": "lib/index.js",
+  "typings": "lib/index",
   "scripts": {
     "build": "tsc 1>&2 && npm run build:copy-assets",
     "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",

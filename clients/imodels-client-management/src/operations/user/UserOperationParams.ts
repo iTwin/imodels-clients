@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, IModelScopedOperationParams } from "../../IModelsClientExports";
+import { CollectionRequestParams, IModelScopedOperationParams } from "../../base";
 
 /** Parameters for get User list operation. */
 export interface GetUserListParams extends IModelScopedOperationParams {

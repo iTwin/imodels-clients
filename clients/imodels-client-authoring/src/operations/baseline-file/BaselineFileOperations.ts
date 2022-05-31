@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { OperationsBase } from "@itwin/imodels-client-management";
-import { BaselineFile, BaselineFileResponse } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
+import { BaselineFile, BaselineFileResponse } from "../../base";
 import { OperationOptions } from "../OperationOptions";
 import { GetSingleBaselineFileParams } from "./BaselineFileOperationParams";
 
