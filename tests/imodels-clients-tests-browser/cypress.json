@@ -3,7 +3,7 @@
   "pluginsFile": "lib/CypressSetup.js",
   "supportFile": false,
   "fixturesFolder": false,
-  "screenshotsFolder": false,
+  "screenshotOnRunFailure": false,
   "integrationFolder": "lib/",
   "testFiles": [
     "**.test.js"

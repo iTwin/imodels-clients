@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ApiOptions, Authorization, AuthorizationCallback, DownloadThumbnailParams, IModelsClient, Thumbnail, ThumbnailSize } from "@itwin/imodels-client-management";
+import { ApiOptions, Authorization, AuthorizationCallback, ContentType, DownloadThumbnailParams, IModelsClient, IModelScopedOperationParams, Thumbnail, ThumbnailSize, UploadThumbnailParams } from "@itwin/imodels-client-management";
 import { assertThumbnail } from "@itwin/imodels-client-test-utils/lib/assertions/BrowserFriendlyAssertions";
 import { FrontendTestEnvVariableKeys } from "./setup/FrontendTestEnvVariableKeys";
 
@@ -10,9 +10,12 @@ describe("[Management] ThumbnailOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
 
-  let testIModelForReadId: string; // todo: testIModelForReadId
+  let testIModelForReadId: string;
+  let testIModelForWriteId: string;
 
-  before(() => {
+  let testPngFilePath: string
+
+  before(async () => {
     console.log("before");
 
     const iModelsClientApiOptions: ApiOptions = JSON.parse(Cypress.env(FrontendTestEnvVariableKeys.iModelsClientApiOptions));
@@ -22,6 +25,28 @@ describe("[Management] ThumbnailOperations", () => {
     authorization = async () => admin1AuthorizationInfo;
 
     testIModelForReadId = Cypress.env(FrontendTestEnvVariableKeys.testIModelForReadId);
+
+    const projectId: string = Cypress.env(FrontendTestEnvVariableKeys.testProjectId);
+    const testIModelForWrite = await iModelsClient.iModels.createEmpty({
+      authorization,
+      iModelProperties: {
+        projectId,
+        name: "Thumbnail browser tests"
+      }
+    });
+    testIModelForWriteId = testIModelForWrite.id;
+
+    testPngFilePath = Cypress.env(FrontendTestEnvVariableKeys.testPngFilePath);
+  });
+
+  after(async () => {
+    if (!testIModelForWriteId)
+      return;
+
+    await iModelsClient.iModels.delete({
+      authorization,
+      iModelId: testIModelForWriteId
+    });
   });
 
   it("should download a small thumbnail", async () => {
@@ -43,25 +68,37 @@ describe("[Management] ThumbnailOperations", () => {
     });
   });
 
-  it("should download a large thumbnail", async () => {
+  it(`should upload a png thumbnail`, async () => {
     // Arrange
-    const downloadThumbnailParams: DownloadThumbnailParams = {
+    const iModelScopedOperationParams: IModelScopedOperationParams = {
       authorization,
-      iModelId: testIModelForReadId,
-      urlParams: {
-        size: ThumbnailSize.Large
+      iModelId: testIModelForWriteId
+    };
+    const initialThumbnail: Thumbnail = await iModelsClient.thumbnails.download(iModelScopedOperationParams);
+
+    const testPngFileBytes = await readFile(testPngFilePath);
+    const uploadThumbnailParams: UploadThumbnailParams = {
+      ...iModelScopedOperationParams,
+      thumbnailProperties: {
+        imageType: ContentType.Png,
+        image: testPngFileBytes
       }
     };
 
     // Act
-    const thumbnail: Thumbnail = await iModelsClient.thumbnails.download(downloadThumbnailParams);
+    await iModelsClient.thumbnails.upload(uploadThumbnailParams);
 
     // Assert
-    assertThumbnail({
-      actualThumbnail: thumbnail,
-      expectedThumbnailProperties: {
-        size: ThumbnailSize.Large
-      }
-    });
+    const newThumbnail: Thumbnail = await iModelsClient.thumbnails.download(iModelScopedOperationParams);
+    expect(newThumbnail.image.length).to.not.be.equal(initialThumbnail.image.length);
   });
+
+  function readFile(filePath: string): Promise<Uint8Array> {
+    return new Promise((resolve) => {
+      cy.readFile(filePath, "binary").then((stringContent: string) => {
+        const binaryContent = Uint8Array.from(stringContent, x => x.charCodeAt(0))
+        resolve(binaryContent);
+      });
+    });
+  }
 });
