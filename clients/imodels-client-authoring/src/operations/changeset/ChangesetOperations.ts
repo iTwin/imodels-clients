@@ -138,7 +138,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
     try {
       const downloadLink = params.changeset._links.download;
-      assertLink(downloadLink)
+      assertLink(downloadLink);
       await this._options.fileHandler.downloadFile({ downloadUrl: downloadLink.href, targetFilePath });
 
     } catch (error) {

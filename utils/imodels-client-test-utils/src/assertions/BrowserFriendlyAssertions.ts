@@ -154,8 +154,8 @@ export function assertCheckpoint(params: {
   expect(params.actualCheckpoint.containerAccessInfo!.dbName).to.not.be.empty;
 
   expect(params.actualCheckpoint._links).to.exist;
-  expect(params.actualCheckpoint._links!.download).to.exist;
-  expect(params.actualCheckpoint._links!.download!.href).to.not.be.empty;
+  expect(params.actualCheckpoint._links.download).to.exist;
+  expect(params.actualCheckpoint._links.download!.href).to.not.be.empty;
 }
 
 export function assertThumbnail(params: {
