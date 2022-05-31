@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Dictionary } from "../interfaces/UtilityTypes";
+import { Dictionary } from "./UtilityTypes";
 
 /**
  * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the

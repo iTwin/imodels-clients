@@ -66,3 +66,8 @@ export interface IModelsError extends Error {
   /** Data that describes the error in more detail. See {@link iModelsErrorDetail}. */
   details?: IModelsErrorDetail[];
 }
+
+export function isIModelsApiError(error: unknown): error is IModelsError {
+  const errorCode: unknown = (error as IModelsError)?.code;
+  return errorCode !== undefined && typeof errorCode === "string";
+}

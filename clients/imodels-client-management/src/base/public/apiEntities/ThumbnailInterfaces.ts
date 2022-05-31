@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ContentType } from "../../rest/RestClient";
+import { ContentType } from "../RestClient";
 
 /** Thumbnail size. */
 export enum ThumbnailSize {

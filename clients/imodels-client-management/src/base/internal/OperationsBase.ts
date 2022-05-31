@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Constants } from "../Constants";
-import { AuthorizationParam, CollectionResponse, PreferReturn } from "./interfaces/CommonInterfaces";
-import { Dictionary, EntityCollectionPage } from "./interfaces/UtilityTypes";
-import { BinaryContentType, ContentType, RestClient, SupportedGetResponseTypes } from "./rest/RestClient";
+import { Constants } from "../../Constants";
+import { Dictionary, AuthorizationParam, CollectionResponse, PreferReturn } from "../public";
+import { BinaryContentType, ContentType, RestClient, SupportedGetResponseTypes } from "../public/RestClient";
+import { EntityCollectionPage } from "./UtilityTypes";
 
 type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };
 type SendPostRequestParams = AuthorizationParam & { url: string, body: object | undefined };

@@ -2,7 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIterator, EntityListIteratorImpl, MinimalUser, MinimalUsersResponse, OperationsBase, PreferReturn, User, UserResponse, UsersResponse } from "../../base";
+import { EntityListIterator, MinimalUser, MinimalUsersResponse, PreferReturn, User, UserResponse, UsersResponse } from "../../base/public";
+import { EntityListIteratorImpl, OperationsBase } from "../../base/internal";
 import { OperationOptions } from "../OperationOptions";
 import { GetSingleUserParams, GetUserListParams } from "./UserOperationParams";
 

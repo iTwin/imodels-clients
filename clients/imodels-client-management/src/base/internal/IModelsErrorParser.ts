@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsError, IModelsErrorCode, IModelsErrorDetail } from "./interfaces/IModelsErrorInterfaces";
+import { IModelsError, IModelsErrorCode, IModelsErrorDetail } from "../public";
 
 interface IModelsApiErrorWrapper {
   error: IModelsApiError;
@@ -18,11 +18,6 @@ interface IModelsApiErrorDetail {
   code: string;
   message: string;
   target: string;
-}
-
-export function isIModelsApiError(error: unknown): error is IModelsError {
-  const errorCode: unknown = (error as IModelsError)?.code;
-  return errorCode !== undefined && typeof errorCode === "string";
 }
 
 export class IModelsErrorImpl extends Error implements IModelsError {

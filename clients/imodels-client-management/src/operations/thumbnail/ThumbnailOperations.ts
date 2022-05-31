@@ -2,7 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ContentType, OperationsBase, Thumbnail, ThumbnailSize } from "../../base";
+import { ContentType, Thumbnail, ThumbnailSize } from "../../base/public";
+import { OperationsBase } from "../../base/internal";
 import { OperationOptions } from "../OperationOptions";
 import { DownloadThumbnailParams, UploadThumbnailParams } from "./ThumbnailOperationParams";
 

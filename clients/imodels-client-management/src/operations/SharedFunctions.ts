@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, User } from "../base";
+import { AuthorizationCallback, User } from "../base/public";
 import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
 import { OperationOptions } from "./OperationOptions";
 import { UserOperations } from "./user/UserOperations";
