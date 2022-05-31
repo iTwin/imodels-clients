@@ -128,12 +128,8 @@ export interface ChangesetResponse {
   changeset: Changeset;
 }
 
-/** DTO to hold minimal Changeset list API response. */
-export interface MinimalChangesetsResponse extends CollectionResponse {
-  changesets: MinimalChangeset[];
-}
 
-/** DTO to hold representation Changeset list API response. */
-export interface ChangesetsResponse extends CollectionResponse {
-  changesets: Changeset[];
+/** DTO to hold Changeset list API response. */
+export interface ChangesetsResponse<TChangeset extends MinimalChangeset> extends CollectionResponse {
+  changesets: TChangeset[];
 }

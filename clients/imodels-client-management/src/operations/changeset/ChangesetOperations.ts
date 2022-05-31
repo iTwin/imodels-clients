@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AuthorizationCallback, ChangesetResponse, Checkpoint, EntityListIterator, EntityListIteratorImpl, NamedVersion, OperationsBase, PreferReturn } from "../../base";
-import { Changeset, ChangesetsResponse, MinimalChangeset, MinimalChangesetsResponse } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
+import { Changeset, ChangesetsResponse, MinimalChangeset } from "../../base/interfaces/apiEntities/ChangesetInterfaces";
 import { IModelsClient } from "../../IModelsClientExports";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";
@@ -28,7 +28,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
    */
   public getMinimalList(params: GetChangesetListParams): EntityListIterator<MinimalChangeset> {
     const entityCollectionAccessor = (response: unknown) => {
-      const changesets = (response as MinimalChangesetsResponse).changesets;
+      const changesets = (response as ChangesetsResponse<MinimalChangeset>).changesets;
       const mappedChangesets = changesets.map((changeset) => this.appendRelatedMinimalEntityCallbacks(params.authorization, changeset));
       return mappedChangesets;
     };
@@ -52,7 +52,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
    */
   public getRepresentationList(params: GetChangesetListParams): EntityListIterator<Changeset> {
     const entityCollectionAccessor = (response: unknown) => {
-      const changesets = (response as ChangesetsResponse).changesets;
+      const changesets = (response as ChangesetsResponse<Changeset>).changesets;
       const mappedChangesets = changesets.map((changeset) => this.appendRelatedEntityCallbacks(params.authorization, changeset));
       return mappedChangesets;
     };
