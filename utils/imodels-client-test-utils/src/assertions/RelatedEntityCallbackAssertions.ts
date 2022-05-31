@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 import { Briefcase, Changeset, Checkpoint, MinimalChangeset, NamedVersion, User } from "@itwin/imodels-client-authoring";
-import { assertUser } from "./AssertionUtils";
+import { assertUser } from "./BrowserFriendlyAssertions";
 
 export async function assertBriefcaseCallbacks(params: {
   briefcase: Briefcase;

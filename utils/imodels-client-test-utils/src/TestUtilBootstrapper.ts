@@ -4,14 +4,19 @@
  *--------------------------------------------------------------------------------------------*/
 import { Container } from "inversify";
 import { IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { IModelsClientsTestsConfig } from "./IModelsClientsTestsConfig";
 import { ProjectsClient, ProjectsClientConfig, ReusableTestIModelProvider, ReusableTestIModelProviderConfig, TestAuthorizationClient, TestAuthorizationClientConfig, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelRetriever, TestIModelsClient, TestIModelsClientOptions, TestProjectProvider, TestProjectProviderConfig } from "./test-context-providers";
 import { TestAuthorizationProviderConfig } from "./test-context-providers/auth/TestAuthorizationProviderConfig";
 import { TestIModelGroupFactory } from "./test-imodel-group/TestIModelGroupFactory";
 import { TestUtilTypes } from "./TestUtilTypes";
 
 export class TestUtilBootstrapper {
-  public static bind(container: Container): void {
+  public static bind(container: Container, envFilePath: string): void {
+    const config = new IModelsClientsTestsConfig(envFilePath);
+    container.bind(IModelsClientsTestsConfig).toConstantValue(config);
+
     TestUtilBootstrapper.bindContextProviders(container);
+
     container.bind(TestIModelGroupFactory).toSelf().inSingletonScope();
   }
 

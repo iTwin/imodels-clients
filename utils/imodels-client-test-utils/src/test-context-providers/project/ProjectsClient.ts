@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosResponse } from "axios";
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import { AuthorizationParam } from "@itwin/imodels-client-authoring";
 import { ProjectsClientConfig } from "./ProjectsClientConfig";
 
@@ -22,7 +22,6 @@ interface ProjectResponse {
 @injectable()
 export class ProjectsClient {
   constructor(
-    @inject(ProjectsClientConfig)
     private _config: ProjectsClientConfig
   ) { }
 

@@ -2,17 +2,23 @@
   "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
+    "module": "es2020",
+    "target": "es2020",
+    "lib": [
+      "es2020",
+      "esnext.asynciterable",
+      "dom"
+    ],
+    "types": [
+      "cypress"
+    ],
+    "moduleResolution": "node",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
   },
-  "types": [
-    "reflect-metadata"
-  ],
   "include": [
     "./src/**/*.ts"
   ],
   "exclude": [
-    "lib",
-    "node_modules"
+    "./src/setup/**/*.ts"
   ]
 }

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 import { ProjectsClient } from "./ProjectsClient";
 import { TestProjectProviderConfig } from "./TestProjectProviderConfig";
@@ -12,11 +12,8 @@ export class TestProjectProvider {
   private _projectId: string | undefined;
 
   constructor(
-    @inject(TestProjectProviderConfig)
     private readonly _testProjectProviderConfig: TestProjectProviderConfig,
-    @inject(ProjectsClient)
     private readonly _projectsClient: ProjectsClient,
-    @inject(TestAuthorizationProvider)
     private readonly _testAuthorizationProvider: TestAuthorizationProvider
   ) { }
 

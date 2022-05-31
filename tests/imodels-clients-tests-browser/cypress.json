@@ -1,0 +1,12 @@
+{
+  "browser": "chrome",
+  "pluginsFile": "lib/CypressSetup.js",
+  "supportFile": false,
+  "fixturesFolder": false,
+  "screenshotOnRunFailure": false,
+  "integrationFolder": "lib/",
+  "testFiles": [
+    "**.test.js"
+  ],
+  "video": false
+}

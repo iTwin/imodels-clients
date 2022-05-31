@@ -2,16 +2,14 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { injectable } from "inversify";
-import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
+const frontendTestEnvVariableKeys = {
+  iModelsClientApiOptions: "iModelsClientApiOptions",
+  admin1AuthorizationInfo: "admin1AuthorizationInfo",
 
-@injectable()
-export class ProjectsClientConfig {
-  public baseUrl: string;
+  testProjectId: "testProjectId",
+  testIModelForReadId: "testIModelForReadId",
 
-  constructor(
-    config: IModelsClientsTestsConfig
-  ) {
-    this.baseUrl = config.apis.projects.baseUrl;
-  }
-}
+  testPngFilePath: "testPngFilePath"
+} as const;
+
+export { frontendTestEnvVariableKeys as FrontendTestEnvVariableKeys };

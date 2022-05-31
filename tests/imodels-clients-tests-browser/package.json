@@ -1,7 +1,7 @@
 {
-  "name": "@itwin/imodels-client-test-utils",
+  "name": "@itwin/imodels-clients-tests-browser",
   "version": "1.0.1",
-  "description": "Common utilities for iModels API client wrappers tests.",
+  "description": "Tests for iModels API client wrappers",
   "keywords": [
     "Bentley",
     "iModel",
@@ -15,33 +15,40 @@
     "url": "https://github.com/iTwin/imodels-clients"
   },
   "license": "MIT",
-  "main": "lib/iModelsClientTestUtilsExports.js",
-  "typings": "lib/iModelsClientTestUtilsExports",
+  "author": {
+    "name": "Bentley Systems, Inc.",
+    "url": "http://www.bentley.com"
+  },
   "scripts": {
-    "build": "tsc 1>&2 && npm run build:copy-assets",
+    "build": "npm run build:tests && npm run build:tests-setup && npm run build:copy-assets",
     "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
+    "build:tests": "tsc 1>&2",
+    "build:tests-setup": "tsc --p cjs.tsconfig.json 1>&2",
     "clean": "rimraf lib",
-    "cover": "nyc npm test",
+    "cover": "",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
-    "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
+    "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
+    "test:integration": "cypress run --browser chrome",
+    "test:integration:debug": "cypress open --browser chrome",
+    "test:unit": ""
   },
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",
-    "axios": "~0.21.1",
+    "@itwin/imodels-client-test-utils": "workspace:*",
     "chai": "~4.3.4",
+    "cypress": "~9.7.0",
     "dotenv": "~10.0.0",
     "inversify": "~5.0.1",
-    "puppeteer": "~13.5.1",
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "workspace:*",
     "@types/chai": "~4.2.21",
+    "@types/cypress": "~1.1.3",
     "@types/node": "~16.11.36",
     "cpx2": "4.2.0",
     "cspell": "~5.21.0",
