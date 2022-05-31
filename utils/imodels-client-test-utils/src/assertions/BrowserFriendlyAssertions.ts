@@ -41,7 +41,6 @@ export function assertIModel(params: {
   expect(params.actualIModel.state).to.equal(IModelState.Initialized);
 }
 
-
 export function assertMinimalBriefcase(params: {
   actualBriefcase: MinimalBriefcase;
 }): void {
@@ -52,7 +51,7 @@ export function assertMinimalBriefcase(params: {
 
 export async function assertBriefcase(params: {
   actualBriefcase: Briefcase;
-  expectedBriefcaseProperties: Pick<Briefcase, "deviceName"> & { briefcaseId?: number }
+  expectedBriefcaseProperties: Pick<Briefcase, "deviceName"> & { briefcaseId?: number };
   isGetResponse: boolean;
 }): Promise<void> {
   assertMinimalBriefcase({
@@ -271,5 +270,4 @@ export function assertApplication(params: {
   expect(params.actualApplication!.id).to.not.be.empty;
   expect(params.actualApplication!.name).to.not.be.empty;
 }
-
 

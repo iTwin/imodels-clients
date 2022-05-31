@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ApiOptions, Authorization, AuthorizationCallback, ContentType, DownloadThumbnailParams, IModelsClient, IModelScopedOperationParams, Thumbnail, ThumbnailSize, UploadThumbnailParams } from "@itwin/imodels-client-management";
 import { assertThumbnail } from "@itwin/imodels-client-test-utils/lib/assertions/BrowserFriendlyAssertions";
+import { ApiOptions, Authorization, AuthorizationCallback, ContentType, DownloadThumbnailParams, IModelScopedOperationParams, IModelsClient, Thumbnail, ThumbnailSize, UploadThumbnailParams } from "@itwin/imodels-client-management";
 import { FrontendTestEnvVariableKeys } from "./setup/FrontendTestEnvVariableKeys";
 
 describe("[Management] ThumbnailOperations", () => {
@@ -13,11 +13,9 @@ describe("[Management] ThumbnailOperations", () => {
   let testIModelForReadId: string;
   let testIModelForWriteId: string;
 
-  let testPngFilePath: string
+  let testPngFilePath: string;
 
   before(async () => {
-    console.log("before");
-
     const iModelsClientApiOptions: ApiOptions = JSON.parse(Cypress.env(FrontendTestEnvVariableKeys.iModelsClientApiOptions));
     iModelsClient = new IModelsClient({ api: iModelsClientApiOptions });
 
@@ -68,7 +66,7 @@ describe("[Management] ThumbnailOperations", () => {
     });
   });
 
-  it(`should upload a png thumbnail`, async () => {
+  it("should upload a png thumbnail", async () => {
     // Arrange
     const iModelScopedOperationParams: IModelScopedOperationParams = {
       authorization,
@@ -93,10 +91,10 @@ describe("[Management] ThumbnailOperations", () => {
     expect(newThumbnail.image.length).to.not.be.equal(initialThumbnail.image.length);
   });
 
-  function readFile(filePath: string): Promise<Uint8Array> {
+  async function readFile(filePath: string): Promise<Uint8Array> {
     return new Promise((resolve) => {
       cy.readFile(filePath, "binary").then((stringContent: string) => {
-        const binaryContent = Uint8Array.from(stringContent, x => x.charCodeAt(0))
+        const binaryContent = Uint8Array.from(stringContent, (x) => x.charCodeAt(0));
         resolve(binaryContent);
       });
     });

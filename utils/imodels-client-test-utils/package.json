@@ -34,10 +34,10 @@
     "@itwin/imodels-client-management": "workspace:*",
     "axios": "~0.21.1",
     "chai": "~4.3.4",
+    "dotenv": "~10.0.0",
     "inversify": "~5.0.1",
     "puppeteer": "~13.5.1",
-    "reflect-metadata": "~0.1.13",
-    "dotenv": "~10.0.0"
+    "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "workspace:*",

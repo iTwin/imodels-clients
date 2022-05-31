@@ -9,7 +9,7 @@ const frontendTestEnvVariableKeys = {
   testProjectId: "testProjectId",
   testIModelForReadId: "testIModelForReadId",
 
-  testPngFilePath: "testPngFilePath",
+  testPngFilePath: "testPngFilePath"
 } as const;
 
 export { frontendTestEnvVariableKeys as FrontendTestEnvVariableKeys };

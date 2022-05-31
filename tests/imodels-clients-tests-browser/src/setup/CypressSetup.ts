@@ -3,9 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as path from "path";
-import { IModelsClientOptions } from "@itwin/imodels-client-management";
-import { ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilBootstrapper, TestUtilTypes, TestProjectProvider } from "@itwin/imodels-client-test-utils";
 import { Container } from "inversify";
+import { IModelsClientOptions } from "@itwin/imodels-client-management";
+import { ReusableTestIModelProvider, TestAuthorizationProvider, TestProjectProvider, TestUtilBootstrapper, TestUtilTypes } from "@itwin/imodels-client-test-utils";
 import { FrontendTestEnvVariableKeys } from "./FrontendTestEnvVariableKeys";
 
 export default async function setup(_on: unknown, config: { env: any }): Promise<unknown> {

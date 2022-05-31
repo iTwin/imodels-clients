@@ -23,7 +23,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   }
 
   protected async sendGetRequest<TResponse>(params: SendGetRequestParams & { responseType?: ContentType.Json }): Promise<TResponse>;
-  protected async sendGetRequest<TResponse>(params: SendGetRequestParams & { responseType: ContentType.Png }): Promise<Uint8Array>;
+  protected async sendGetRequest(params: SendGetRequestParams & { responseType: ContentType.Png }): Promise<Uint8Array>;
   protected async sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse | Uint8Array> {
     const urlAndHeaders = {
       url: params.url,

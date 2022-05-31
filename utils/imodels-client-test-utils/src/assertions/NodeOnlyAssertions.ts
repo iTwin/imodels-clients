@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import { expect } from "chai";
-import { BaselineFile, BaselineFileState, Changeset, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate, Lock } from "@itwin/imodels-client-authoring";
-import { assertChangesetCallbacks, assertMinimalChangesetCallbacks } from "./RelatedEntityCallbackAssertions";
+import { BaselineFile, BaselineFileState, Changeset, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
 import { TestChangesetFile, TestIModelBaselineFile } from "../test-context-providers";
 import { assertApplication, assertOptionalLink, assertOptionalProperty } from "./BrowserFriendlyAssertions";
+import { assertChangesetCallbacks, assertMinimalChangesetCallbacks } from "./RelatedEntityCallbackAssertions";
 
 export async function assertBaselineFile(params: {
   actualBaselineFile: BaselineFile;
@@ -134,7 +134,6 @@ export async function assertDownloadedChangeset(params: {
   // Check if the downloaded file size matches the size of the changeset file used for test iModel creation
   expect(fs.statSync(params.actualChangeset.filePath).size).to.equal(fs.statSync(params.expectedTestChangesetFile.filePath).size);
 }
-
 
 export function assertLock(params: {
   actualLock: Lock;
