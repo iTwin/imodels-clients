@@ -95,7 +95,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
       authorization,
       this._iModelsClient.users,
       this._options.urlFormatter,
-      changeset._links.creator.href
+      changeset._links.creator?.href
     );
 
     const result: TChangeset = {

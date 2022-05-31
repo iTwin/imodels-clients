@@ -37,9 +37,9 @@ export interface SynchronizationInfo {
 /** Links that belong to minimal Changeset entity returned from iModels API. */
 export interface MinimalChangesetLinks {
   /** Link to the current Changeset entity. */
-  self: Link;
+  self: Link | null;
   /** Link to the User which created the Changeset. Link points to a specific User in iModels API. */
-  creator: Link;
+  creator: Link | null;
 }
 
 /** Minimal representation of a Changeset. */
@@ -79,21 +79,26 @@ export interface MinimalChangeset {
 /** Links that belong to Changeset entity returned from iModels API. */
 export interface ChangesetLinks extends MinimalChangesetLinks {
   /** Link to a Named Version created on the Changeset. Points to a specific Named Version in iModels API. */
-  namedVersion?: Link;
+  namedVersion: Link | null;
   /**
    * Link to a Checkpoint that is created on a current or preceding Changeset. Points to a specific Checkpoint
    * in iModels API.
    * */
-  currentOrPrecedingCheckpoint?: Link;
-  /** Link where to upload the Changeset file. Link points to a remote storage. */
-  upload: Link;
+  currentOrPrecedingCheckpoint: Link | null;
   /** Link from where to download the Changeset file. Link points to a remote storage. */
-  download: Link;
+  download: Link | null;
+  /**
+   * Link where to upload the Changeset file. Link points to a remote storage. IMPORTANT: this link
+   * is never present in any of the Changeset instances returned from methods in this client. This property
+   * is only used internally.
+   */
+  upload: Link | null | undefined;
   /**
    * Link to confirm the Changeset file upload and complete the creation process. Points to a specific
-   * Changeset in iModels API.
+   * Changeset in iModels API. IMPORTANT: this link is never present in any of the Changeset instances returned
+   * from methods in this client. This property is only used internally.
    */
-  complete: Link;
+  complete: Link | null | undefined;
 }
 
 /** Full representation of a Changeset. */

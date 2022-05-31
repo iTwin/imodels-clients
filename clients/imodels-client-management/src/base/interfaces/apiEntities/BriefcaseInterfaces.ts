@@ -16,7 +16,7 @@ export interface MinimalBriefcase {
 /** Links that belong to Briefcase entity. */
 export interface BriefcaseLinks {
   /** Link to the User which acquired the Briefcase. Link points to a specific User in iModels API. */
-  owner: Link;
+  owner: Link | null;
 }
 
 export interface Briefcase extends MinimalBriefcase {

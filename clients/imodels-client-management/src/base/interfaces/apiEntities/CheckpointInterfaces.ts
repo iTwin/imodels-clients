@@ -31,7 +31,7 @@ export interface ContainerAccessInfo {
 /** Links that belong to Checkpoint entity. */
 export interface CheckpointLinks {
   /** Link to download the Checkpoint file. Points to file storage. */
-  download: Link;
+  download: Link | null;
 }
 
 /** Full representation of a Checkpoint. */
@@ -51,7 +51,7 @@ export interface Checkpoint {
   /** Information to access storage container which stores the Checkpoint in blocks. See {@link ContainerAccessInfo}. */
   containerAccessInfo: ContainerAccessInfo | null;
   /** Checkpoint links. See {@link CheckpointLinks}. */
-  _links: CheckpointLinks | null;
+  _links: CheckpointLinks;
 }
 
 /** DTO to hold a single Checkpoint API response. */

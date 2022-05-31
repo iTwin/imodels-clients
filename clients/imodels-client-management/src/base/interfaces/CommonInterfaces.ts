@@ -96,7 +96,7 @@ export interface Link {
  */
 export interface CollectionLinks {
   /** Link to the current page. */
-  self: Link;
+  self: Link | null;
   /** Link to the previous page. If `null` it means that the previous page is empty. */
   prev: Link | null;
   /** Link to the next page. If `null` it means that the next page is empty. */
