@@ -1,3 +1,8 @@
+parameters:
+- name: runRushAudit
+  type: boolean
+  default: true
+
 steps:
   - task: NodeTool@0
     displayName: Install Node@14.17.5
@@ -7,6 +12,10 @@ steps:
 
   - script: node common/scripts/install-run-rush.js install --purge
     displayName: rush install
+
+  - script: node common/scripts/install-run-rush.js audit
+    displayName: rush audit
+    condition: and(succeeded(), eq('${{ parameters.runRushAudit }}', true))
 
   - script: node common/scripts/install-run-rush.js rebuild -v
     displayName: rush rebuild

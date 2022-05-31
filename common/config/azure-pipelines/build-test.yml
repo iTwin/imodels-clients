@@ -1,6 +1,11 @@
 name:
   $(Date:yyyy.M.d)$(Rev:.r)
 
+parameters:
+- name: runRushAudit
+  type: boolean
+  default: true
+
 trigger: none
 
 jobs:
@@ -22,3 +27,5 @@ jobs:
 
     steps:
     - template: templates/build-test.yml
+      parameters:
+        runRushAudit: ${{ parameters.runRushAudit }}
