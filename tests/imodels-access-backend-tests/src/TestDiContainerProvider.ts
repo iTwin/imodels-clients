@@ -5,7 +5,6 @@
 import * as path from "path";
 import { Container } from "inversify";
 import { TestUtilBootstrapper } from "@itwin/imodels-client-test-utils";
-import "reflect-metadata";
 
 let container: Container;
 export function getTestDIContainer(): Container {

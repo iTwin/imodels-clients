@@ -6,7 +6,6 @@ import { injectable } from "inversify";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 import { ProjectsClient } from "./ProjectsClient";
 import { TestProjectProviderConfig } from "./TestProjectProviderConfig";
-import "reflect-metadata";
 
 @injectable()
 export class TestProjectProvider {

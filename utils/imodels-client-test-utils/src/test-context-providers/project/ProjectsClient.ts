@@ -6,7 +6,6 @@ import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
 import { AuthorizationParam } from "@itwin/imodels-client-authoring";
 import { ProjectsClientConfig } from "./ProjectsClientConfig";
-import "reflect-metadata";
 
 interface Project {
   id: string;

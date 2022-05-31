@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
-import "reflect-metadata";
 
 @injectable()
 export class TestProjectProviderConfig {

@@ -5,7 +5,6 @@
 import { injectable } from "inversify";
 import { TestAuthorizationProvider, TestIModelsClient, TestProjectProvider } from "../test-context-providers";
 import { TestIModelGroup } from "./TestIModelGroup";
-import "reflect-metadata";
 
 @injectable()
 export class TestIModelGroupFactory {
