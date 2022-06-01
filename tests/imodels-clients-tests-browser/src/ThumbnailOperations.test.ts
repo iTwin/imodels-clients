@@ -3,7 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { assertThumbnail } from "@itwin/imodels-client-test-utils/lib/assertions/BrowserFriendlyAssertions";
-import { ApiOptions, Authorization, AuthorizationCallback, ContentType, DownloadThumbnailParams, IModelScopedOperationParams, IModelsClient, Thumbnail, ThumbnailOperations, ThumbnailSize, UploadThumbnailParams } from "@itwin/imodels-client-management";
+import { ThumbnailOperations } from "@itwin/imodels-client-management/lib/operations"
+import { ApiOptions, Authorization, AuthorizationCallback, ContentType, DownloadThumbnailParams, IModelScopedOperationParams, IModelsClient, Thumbnail, ThumbnailSize, UploadThumbnailParams } from "@itwin/imodels-client-management";
 import { FrontendTestEnvVariableKeys } from "./setup/FrontendTestEnvVariableKeys";
 
 describe(`[Management] ${ThumbnailOperations.name}`, () => {

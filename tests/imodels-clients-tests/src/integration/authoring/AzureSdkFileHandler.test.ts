@@ -5,7 +5,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AxiosRestClient, AzureSdkFileHandler, ChangesetResponse, ContentType, GetSingleChangesetParams, IModelsApiUrlFormatter, IModelsClient, IModelsClientOptions, ProgressCallback, ProgressData } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AuthorizationCallback, ChangesetResponse, ContentType, GetSingleChangesetParams, IModelsClient, IModelsClientOptions, ProgressCallback, ProgressData } from "@itwin/imodels-client-authoring";
+import { AzureSdkFileHandler } from "@itwin/imodels-client-authoring/lib/base/internal";
+import { IModelsApiUrlFormatter } from "@itwin/imodels-client-authoring/lib/operations";
+import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestChangesetFile, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, cleanupDirectory } from "@itwin/imodels-client-test-utils";
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 

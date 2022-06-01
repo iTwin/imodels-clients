@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { IModelsApiUrlFormatter } from "@itwin/imodels-client-authoring";
+import { IModelsApiUrlFormatter } from "@itwin/imodels-client-authoring/lib/operations";
 
 describe("[Authoring] IModelsApiUrlFormatter", () => {
   let iModelsApiUrlFormatter: IModelsApiUrlFormatter;

@@ -3,7 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
-import { CheckpointState, GetSingleCheckpointParams, Lock, LockLevel, LockedObjects, sleep } from "@itwin/imodels-client-authoring";
+import { CheckpointState, GetSingleCheckpointParams, Lock, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
+import { sleep } from "@itwin/imodels-client-management/lib/base/internal";
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 import { TestProjectProvider } from "../project/TestProjectProvider";

@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
-import { EntityPageListIterator } from "@itwin/imodels-client-management";
+import { EntityPageListIterator } from "@itwin/imodels-client-management/lib/base/internal";
 import { TestEntity, getEntityPageQueryFunc } from "./TestEntityPageFunctions";
 
 describe("EntityPageListIterator", () => {
