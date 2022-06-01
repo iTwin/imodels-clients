@@ -2,11 +2,14 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, OrderBy } from "../base/interfaces/CommonInterfaces";
-import { Dictionary } from "../base/interfaces/UtilityTypes";
+import { CollectionRequestParams, Dictionary,OrderBy } from "../base/public";
+
+import { GetBriefcaseListUrlParams } from "./briefcase/BriefcaseOperationParams";
 import { ChangesetIdOrIndex, GetChangesetListUrlParams } from "./changeset/ChangesetOperationParams";
+import { CheckpointParentEntityId } from "./checkpoint/CheckpointOperationParams";
+import { GetIModelListUrlParams } from "./imodel/IModelOperationParams";
+import { GetNamedVersionListUrlParams } from "./named-version/NamedVersionOperationParams";
 import { DownloadThumbnailUrlParams } from "./OperationParamExports";
-import { CheckpointParentEntityId, GetBriefcaseListUrlParams, GetIModelListUrlParams, GetNamedVersionListUrlParams } from ".";
 
 type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
@@ -80,7 +83,7 @@ export class IModelsApiUrlFormatter {
     return `${this.baseUrl}/${params.iModelId}/${parentEntityUrlPath}/checkpoint`;
   }
 
-  public getThumbnailUrl(params: {iModelId: string, urlParams?: DownloadThumbnailUrlParams }): string {
+  public getThumbnailUrl(params: { iModelId: string, urlParams?: DownloadThumbnailUrlParams }): string {
     return `${this.baseUrl}/${params.iModelId}/thumbnail${this.formQueryString({ ...params.urlParams })}`;
   }
 

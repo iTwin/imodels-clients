@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { AuthorizationCallback, BaselineFile, BaselineFileState, GetSingleBaselineFileParams, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertBaselineFile } from "@itwin/imodels-client-test-utils";
+
 import { getTestDIContainer } from "../common";
 
 describe("[Authoring] BaselineFileOperations", () => {

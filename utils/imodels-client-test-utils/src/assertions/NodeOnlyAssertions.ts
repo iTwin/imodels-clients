@@ -3,9 +3,13 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
+
 import { expect } from "chai";
+
 import { BaselineFile, BaselineFileState, Changeset, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
+
 import { TestChangesetFile, TestIModelBaselineFile } from "../test-context-providers";
+
 import { assertApplication, assertOptionalLink, assertOptionalProperty } from "./BrowserFriendlyAssertions";
 import { assertChangesetCallbacks, assertMinimalChangesetCallbacks } from "./RelatedEntityCallbackAssertions";
 

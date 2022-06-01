@@ -2,8 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { IModelsApiUrlFormatter } from "@itwin/imodels-client-management/lib/operations";
 import { expect } from "chai";
-import { IModelOrderByProperty, IModelsApiUrlFormatter, OrderByOperator } from "@itwin/imodels-client-management";
+
+import { IModelOrderByProperty, OrderByOperator } from "@itwin/imodels-client-management";
 
 describe("[Management] IModelsApiUrlFormatter", () => {
   let iModelsApiUrlFormatter: IModelsApiUrlFormatter;

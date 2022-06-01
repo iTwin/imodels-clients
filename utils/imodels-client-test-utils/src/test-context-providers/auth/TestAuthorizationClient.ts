@@ -4,10 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
+
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
 import * as puppeteer from "puppeteer";
+
 import { TestSetupError } from "../../CommonTestUtils";
+
 import { TestAuthorizationClientConfig } from "./TestAuthorizationClientConfigImpl";
 
 export interface TestUserCredentials {

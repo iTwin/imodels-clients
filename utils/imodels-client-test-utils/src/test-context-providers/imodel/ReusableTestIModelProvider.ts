@@ -3,8 +3,11 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
+
 import { DeleteIModelParams } from "@itwin/imodels-client-authoring";
+
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
+
 import { ReusableTestIModelProviderConfig } from "./ReusableTestIModelProviderConfig";
 import { TestIModelCreator } from "./TestIModelCreator";
 import { ReusableIModelMetadata } from "./TestIModelInterfaces";

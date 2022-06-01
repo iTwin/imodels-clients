@@ -2,11 +2,16 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, IModel, IModelsErrorCode, IModelsErrorImpl, IModelOperations as ManagementIModelOperations, waitForCondition } from "@itwin/imodels-client-management";
-import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
+import { IModelsErrorImpl, waitForCondition } from "@itwin/imodels-client-management/lib/base/internal";
+import { IModelOperations as ManagementIModelOperations } from "@itwin/imodels-client-management/lib/operations";
+
+import { AuthorizationParam, IModel, IModelsErrorCode } from "@itwin/imodels-client-management";
+
+import { BaselineFileState } from "../../base/public";
 import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations";
 import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";
+
 import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline } from "./IModelOperationParams";
 
 export class IModelOperations<TOptions extends OperationOptions> extends ManagementIModelOperations<TOptions> {

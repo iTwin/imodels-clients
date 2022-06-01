@@ -3,7 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as path from "path";
+
 import { Container } from "inversify";
+
 import { TestUtilBootstrapper } from "@itwin/imodels-client-test-utils";
 
 let container: Container;

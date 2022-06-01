@@ -2,8 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Briefcase, BriefcaseResponse, BriefcaseOperations as ManagementBriefcaseOperations } from "@itwin/imodels-client-management";
+import { BriefcaseResponse } from "@itwin/imodels-client-management/lib/base/internal";
+import { BriefcaseOperations as ManagementBriefcaseOperations } from "@itwin/imodels-client-management/lib/operations";
+
+import { Briefcase } from "@itwin/imodels-client-management";
+
 import { OperationOptions } from "../OperationOptions";
+
 import { AcquireBriefcaseParams, BriefcaseProperties, ReleaseBriefcaseParams } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<TOptions extends OperationOptions> extends ManagementBriefcaseOperations<TOptions> {
