@@ -6,7 +6,8 @@ import { EntityListIteratorImpl, OperationsBase } from "@itwin/imodels-client-ma
 
 import { EntityListIterator } from "@itwin/imodels-client-management";
 
-import { Lock, LockResponse, LocksResponse } from "../../base/public";
+import { Lock } from "../../base/public";
+import {LockResponse, LocksResponse} from "../../base/internal";
 import { OperationOptions } from "../OperationOptions";
 
 import { GetLockListParams, UpdateLockParams } from "./LockOperationParams";

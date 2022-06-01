@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Application, CollectionResponse, Link } from "../CommonInterfaces";
+import { Application, Link } from "../CommonInterfaces";
 
 import { Checkpoint } from "./CheckpointInterfaces";
 import { NamedVersion } from "./NamedVersionInterfaces";
@@ -117,19 +117,4 @@ export interface Changeset extends MinimalChangeset {
    * information passed to specific Changeset operation that originally queried the Changeset from API.
    */
   getCurrentOrPrecedingCheckpoint: () => Promise<Checkpoint | undefined>;
-}
-
-/** DTO to hold a single Changeset API response. */
-export interface ChangesetResponse {
-  changeset: Changeset;
-}
-
-/** DTO to hold minimal Changeset list API response. */
-export interface MinimalChangesetsResponse extends CollectionResponse {
-  changesets: MinimalChangeset[];
-}
-
-/** DTO to hold representation Changeset list API response. */
-export interface ChangesetsResponse extends CollectionResponse {
-  changesets: Changeset[];
 }

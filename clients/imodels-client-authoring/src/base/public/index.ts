@@ -3,7 +3,6 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 export * from "./apiEntities/BaselineFileInterfaces";
-export * from "./apiEntities/IModelInterfaces";
 export * from "./apiEntities/ChangesetInterfaces";
 export * from "./apiEntities/LockInterfaces";
 export * from "./CommonInterfaces";

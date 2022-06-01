@@ -40,8 +40,3 @@ export interface BaselineFile {
   /** Baseline file links. See {@link BaselineFileLinks}. */
   _links: BaselineFileLinks;
 }
-
-/** DTO to hold a single Baseline file API response. */
-export interface BaselineFileResponse {
-  baselineFile: BaselineFile;
-}

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Application, CollectionResponse, Link } from "../CommonInterfaces";
+import { Application, Link } from "../CommonInterfaces";
 
 import { Changeset } from "./ChangesetInterfaces";
 import { User } from "./UserInterfaces";
@@ -74,12 +74,4 @@ export interface NamedVersion extends MinimalNamedVersion {
   getChangeset(): Promise<Changeset | undefined>;
 }
 
-/** DTO to hold a single Named Version API response. */
-export interface NamedVersionResponse {
-  namedVersion: NamedVersion;
-}
 
-/** DTO to hold Named Version list API response. */
-export interface NamedVersionsResponse<TNamedVersion extends MinimalNamedVersion> extends CollectionResponse {
-  namedVersions: TNamedVersion[];
-}

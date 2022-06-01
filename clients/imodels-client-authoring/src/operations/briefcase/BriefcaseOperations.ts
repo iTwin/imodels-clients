@@ -4,7 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { BriefcaseOperations as ManagementBriefcaseOperations } from "@itwin/imodels-client-management/lib/operations";
 
-import { Briefcase, BriefcaseResponse } from "@itwin/imodels-client-management";
+import { BriefcaseResponse } from "@itwin/imodels-client-management/lib/base/internal";
+import { Briefcase } from "@itwin/imodels-client-management";
 
 import { OperationOptions } from "../OperationOptions";
 

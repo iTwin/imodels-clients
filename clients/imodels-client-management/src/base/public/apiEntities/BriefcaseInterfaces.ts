@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Application, CollectionResponse, Link } from "../CommonInterfaces";
+import { Application, Link } from "../CommonInterfaces";
 
 import { User } from "./UserInterfaces";
 
@@ -41,14 +41,4 @@ export interface Briefcase extends MinimalBriefcase {
    * operation that originally queried the Briefcase from API.
    */
   getOwner: () => Promise<User | undefined>;
-}
-
-/** DTO to hold a single Briefcase API response. */
-export interface BriefcaseResponse {
-  briefcase: Briefcase;
-}
-
-/** DTO to hold Briefcase list API response. */
-export interface BriefcasesResponse<TBriefcase extends MinimalBriefcase> extends CollectionResponse {
-  briefcases: TBriefcase[];
 }

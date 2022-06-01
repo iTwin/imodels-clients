@@ -90,26 +90,6 @@ export interface Link {
 }
 
 /**
- * Links that are included in all entity list page responses. They simplify pagination implementation because users
- * can send requests using these urls that already include pagination url parameters without having to
- * manually keep track of queried entity count.
- */
-export interface CollectionLinks {
-  /** Link to the current page. */
-  self: Link;
-  /** Link to the previous page. If `null` it means that the previous page is empty. */
-  prev: Link | null;
-  /** Link to the next page. If `null` it means that the next page is empty. */
-  next: Link | null;
-}
-
-/** Common properties of all entity list page responses. */
-export interface CollectionResponse {
-  /** Common entity list page response links. See {@link CollectionLinks}. */
-  _links: CollectionLinks;
-}
-
-/**
  * Values for return preference used in `Prefer` header. The header value is formed by joining
  * `return=` and the enum value.
  */

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionResponse, Link } from "../CommonInterfaces";
+import { Link } from "../CommonInterfaces";
 
 /** Links that belong to Minimal User entity. */
 export interface MinimalUserLinks {
@@ -28,20 +28,5 @@ export interface User extends MinimalUser {
   surname: string;
   /** User email address. */
   email: string;
-}
-
-/** DTO to hold a single User API response. */
-export interface UserResponse {
-  user: User;
-}
-
-/** DTO to hold minimal User list API response. */
-export interface MinimalUsersResponse extends CollectionResponse {
-  users: MinimalUser[];
-}
-
-/** DTO to hold representation User list API response. */
-export interface UsersResponse extends CollectionResponse {
-  users: User[];
 }
 

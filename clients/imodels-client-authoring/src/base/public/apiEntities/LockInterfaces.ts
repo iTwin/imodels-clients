@@ -28,13 +28,3 @@ export interface Lock {
   /** Ids of the locked objects grouped by their lock level. See {@link LockedObjects}. */
   lockedObjects: LockedObjects[];
 }
-
-/** DTO to hold a single Lock API response. */
-export interface LockResponse {
-  lock: Lock;
-}
-
-/** DTO to hold Lock list API response. */
-export interface LocksResponse {
-  locks: Lock[];
-}

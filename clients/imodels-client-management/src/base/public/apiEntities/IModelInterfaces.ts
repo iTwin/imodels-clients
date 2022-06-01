@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionResponse, Link } from "../CommonInterfaces";
+import { Link } from "../CommonInterfaces";
 
 /** Possible iModel states. */
 export enum IModelState {
@@ -83,14 +83,4 @@ export interface IModel extends MinimalIModel {
   extent: Extent | null;
   /** iModel links. See {@link IModelLinks}.*/
   _links: IModelLinks;
-}
-
-/** DTO to hold a single iModel API response. */
-export interface IModelResponse {
-  iModel: IModel;
-}
-
-/** DTO to hold iModel list API response. */
-export interface IModelsResponse<TIModel extends MinimalIModel> extends CollectionResponse {
-  iModels: TIModel[];
 }

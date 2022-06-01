@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../../Constants";
-import { AuthorizationParam, CollectionResponse, Dictionary, PreferReturn } from "../public";
-import { BinaryContentType, ContentType, RestClient, SupportedGetResponseTypes } from "../public/RestClient";
+import { AuthorizationParam, Dictionary, PreferReturn, BinaryContentType, ContentType, RestClient, SupportedGetResponseTypes } from "../public";
+import { CollectionResponse } from "./ApiResponseInterfaces";
 
 import { EntityCollectionPage } from "./UtilityTypes";
 

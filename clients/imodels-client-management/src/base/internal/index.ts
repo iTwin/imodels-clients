@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 export * from "./iterators/EntityListIteratorImpl";
 export * from "./iterators/EntityPageListIterator";
+export * from "./ApiResponseInterfaces";
 export * from "./AxiosRestClient";
 export * from "./IModelsErrorParser";
 export * from "./OperationsBase";
