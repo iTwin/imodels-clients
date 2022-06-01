@@ -6,7 +6,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { URL } from "url";
 import { AnonymousCredential, BlobDownloadOptions, BlobGetPropertiesResponse, BlockBlobClient, BlockBlobParallelUploadOptions } from "@azure/storage-blob";
-import { DownloadFileParams, FileHandler, ProgressCallback, UploadFileParams } from "./FileHandler";
+import { DownloadFileParams, FileHandler, ProgressCallback, UploadFileParams } from "../public/FileHandler";
 
 interface AzureProgressCallbackData {
   loadedBytes: number;

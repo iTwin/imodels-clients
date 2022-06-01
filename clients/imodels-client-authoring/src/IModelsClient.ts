@@ -7,7 +7,8 @@ import {
   IModelsClientOptions as ManagementIModelsClientOptions,
   RecursiveRequired
 } from "@itwin/imodels-client-management";
-import { AzureSdkFileHandler, FileHandler } from "./base";
+import { FileHandler } from "./base/public";
+import { AzureSdkFileHandler } from "./base/internal";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations } from "./operations";
 import { BaselineFileOperations } from "./operations/baseline-file/BaselineFileOperations";
 import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
@@ -27,7 +28,7 @@ export interface IModelsClientOptions extends ManagementIModelsClientOptions {
  * iModels API client for iModel authoring workflows. For more information on the API visit the
  * {@link https://developer.bentley.com/apis/imodels/ iModels API documentation page}.
  */
-export class IModelsClient extends ManagementIModelsClient{
+export class IModelsClient extends ManagementIModelsClient {
   protected override _operationsOptions: OperationOptions;
 
   /**
