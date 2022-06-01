@@ -54,8 +54,8 @@ export class IModelsClient extends ManagementIModelsClient {
   }
 
   /**
-   * File handler that is used for file transfer operations. This uses the user provided handler or default one,
-   * see {@link iModelsClientOptions}.
+   * `ClientStorage` instance that is used for file transfer operations. This uses the user provided instance or default one,
+   * see {@link IModelsClientOptions}.
    */
   public get cloudStorage(): ClientStorage {
     return this._operationsOptions.cloudStorage;
