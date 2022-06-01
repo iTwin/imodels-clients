@@ -3,7 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { promises } from "fs";
-import { LocalFileSystemImpl } from "@itwin/imodels-client-authoring";
+
+import { LocalFileSystemImpl } from "@itwin/imodels-client-authoring/lib/base/internal";
 
 export class TestLocalFileSystem extends LocalFileSystemImpl {
   public async isDirectory(path: string): Promise<boolean> {

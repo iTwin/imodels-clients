@@ -4,11 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import * as path from "path";
+
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ConfigDownloadInput, UrlDownloadInput } from "@itwin/object-storage-core";
 import { expect } from "chai";
+
 import { AcquireBriefcaseParams, AuthorizationCallback, CreateChangesetParams, DownloadChangesetListParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, TargetDirectoryParam } from "@itwin/imodels-client-authoring";
 import { FileTransferLog, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableClientStorage, assertChangeset, assertDownloadedChangeset, cleanupDirectory } from "@itwin/imodels-client-test-utils";
+
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 type CommonDownloadParams = IModelScopedOperationParams & TargetDirectoryParam;
@@ -83,7 +86,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
     // Assert
     const expectedTestChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.id === changeset.id)!;
-    assertChangeset({
+    await assertChangeset({
       actualChangeset: changeset,
       expectedChangesetProperties: createChangesetParams.changesetProperties,
       expectedTestChangesetFile,
@@ -127,7 +130,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
     // Assert
     const expectedTestChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.id === changeset.id)!;
-    assertChangeset({
+    await assertChangeset({
       actualChangeset: changeset,
       expectedChangesetProperties: createChangesetParams.changesetProperties,
       expectedTestChangesetFile,
@@ -159,7 +162,7 @@ describe("[Authoring] ChangesetOperations", () => {
       for (const changeset of changesets) {
         const testChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
         const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
-        assertDownloadedChangeset({
+        await assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
             id: testChangesetFile.id,
@@ -203,7 +206,7 @@ describe("[Authoring] ChangesetOperations", () => {
       for (const changeset of changesets) {
         const testChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
         const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
-        assertDownloadedChangeset({
+        await assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
             id: testChangesetFile.id,
@@ -265,7 +268,7 @@ describe("[Authoring] ChangesetOperations", () => {
         // Assert
         const testChangesetFile = testCase.changesetUnderTest;
         const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
-        assertDownloadedChangeset({
+        await assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
             id: testChangesetFile.id,

@@ -1,0 +1,31 @@
+name:
+  $(Date:yyyy.M.d)$(Rev:.r)
+
+parameters:
+- name: runRushAudit
+  type: boolean
+  default: true
+
+trigger: none
+
+jobs:
+  - job: BuildTestSBX
+    strategy:
+      matrix:
+        linux:
+          imageName: 'ubuntu-latest'
+        mac:
+          imageName: 'macos-latest'
+        windows:
+          imageName: 'windows-latest'
+    pool:
+        vmImage: $(imageName)
+    variables:
+      - group: iModels Clients - Integration Tests - DEV
+    workspace:
+      clean: all
+
+    steps:
+    - template: templates/build-test.yml
+      parameters:
+        runRushAudit: ${{ parameters.runRushAudit }}

@@ -15,8 +15,8 @@
     "url": "https://github.com/iTwin/imodels-clients"
   },
   "license": "MIT",
-  "main": "lib/iModelsClientTestUtilsExports.js",
-  "typings": "lib/iModelsClientTestUtilsExports",
+  "main": "lib/index.js",
+  "typings": "lib/index",
   "scripts": {
     "build": "tsc 1>&2 && npm run build:copy-assets",
     "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
@@ -31,9 +31,11 @@
   },
   "dependencies": {
     "@itwin/imodels-client-authoring": "workspace:*",
+    "@itwin/imodels-client-management": "workspace:*",
     "@itwin/object-storage-core": "0.1.0-dev.1",
     "axios": "~0.21.1",
     "chai": "~4.3.4",
+    "dotenv": "~10.0.0",
     "inversify": "~5.0.1",
     "puppeteer": "~13.5.1",
     "reflect-metadata": "~0.1.13"
@@ -41,7 +43,7 @@
   "devDependencies": {
     "@itwin/imodels-client-common-config": "workspace:*",
     "@types/chai": "~4.2.21",
-    "@types/node": "^16.4.6",
+    "@types/node": "~16.11.36",
     "cpx2": "4.2.0",
     "cspell": "~5.21.0",
     "eslint": "~7.31.0",

@@ -2,8 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, EntityListIterator, EntityListIteratorImpl, IModel, IModelResponse, IModelState, IModelsErrorCode, IModelsErrorImpl, IModelsResponse, MinimalIModel, OperationsBase, PreferReturn, waitForCondition } from "../../base";
+import { EntityListIteratorImpl, IModelResponse, IModelsErrorImpl, IModelsResponse, OperationsBase, waitForCondition } from "../../base/internal";
+import { AuthorizationCallback, EntityListIterator, IModel, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn } from "../../base/public";
 import { OperationOptions } from "../OperationOptions";
+
 import { CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForCreateFromTemplate, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams";
 
 export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {

@@ -3,9 +3,16 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as path from "path";
-import { Changeset, ChangesetResponse, ChangesetState, IModelScopedOperationParams, IModelsErrorCode, IModelsErrorImpl, ChangesetOperations as ManagementChangesetOperations } from "@itwin/imodels-client-management";
-import { DownloadedChangeset, TargetDirectoryParam } from "../../base";
+
+import { ChangesetResponse, IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
+import { ChangesetOperations as ManagementChangesetOperations } from "@itwin/imodels-client-management/lib/operations";
+
+import { Changeset, ChangesetState, IModelScopedOperationParams, IModelsErrorCode } from "@itwin/imodels-client-management";
+
+import { DownloadedChangeset, TargetDirectoryParam } from "../../base/public";
+import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";
+
 import { ChangesetPropertiesForCreate, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams } from "./ChangesetOperationParams";
 import { LimitedParallelQueue } from "./LimitedParallelQueue";
 
@@ -26,20 +33,24 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       body: createChangesetBody
     });
 
-    const uploadUrl = createChangesetResponse.changeset._links.upload.href;
+    const uploadLink = createChangesetResponse.changeset._links.upload;
+    assertLink(uploadLink);
     await this._options.cloudStorage.upload({
-      url: uploadUrl,
+      url: uploadLink.href,
       data: params.changesetProperties.filePath
     });
 
+    const completeLink = createChangesetResponse.changeset._links.complete;
+    assertLink(completeLink);
     const confirmUploadBody = this.getConfirmUploadRequestBody(params.changesetProperties);
     const confirmUploadResponse = await this.sendPatchRequest<ChangesetResponse>({
       authorization: params.authorization,
-      url: createChangesetResponse.changeset._links.complete.href,
+      url: completeLink.href,
       body: confirmUploadBody
     });
 
-    return confirmUploadResponse.changeset;
+    const result = this.appendRelatedEntityCallbacks(params.authorization, confirmUploadResponse.changeset);
+    return result;
   }
 
   /**
@@ -137,9 +148,11 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       return;
 
     try {
+      const downloadLink = params.changeset._links.download;
+      assertLink(downloadLink);
       await this._options.cloudStorage.download({
         transferType: "local",
-        url: params.changeset._links.download.href,
+        url: downloadLink.href,
         localPath: targetFilePath
       });
     } catch (error) {
@@ -150,9 +163,11 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       });
 
       try {
+        const newDownloadLink = changeset._links.download;
+        assertLink(newDownloadLink);
         await this._options.cloudStorage.download({
           transferType: "local",
-          url: changeset._links.download.href,
+          url: newDownloadLink.href,
           localPath: targetFilePath
         });
       } catch (errorAfterRetry) {

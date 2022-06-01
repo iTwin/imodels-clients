@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 import * as path from "path";
+
 import { testLocalFileSystem } from "./TestLocalFileSystem";
 
 export class TestSetupError extends Error {

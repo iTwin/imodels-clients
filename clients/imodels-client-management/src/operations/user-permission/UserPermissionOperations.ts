@@ -2,8 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OperationsBase, UserPermissions } from "../../base";
+import { OperationsBase } from "../../base/internal";
+import { UserPermissions } from "../../base/public";
 import { OperationOptions } from "../OperationOptions";
+
 import { GetUserPermissionsParams } from "./UserPermissionOperationParams";
 
 export class UserPermissionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {

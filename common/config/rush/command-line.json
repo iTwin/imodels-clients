@@ -35,6 +35,13 @@
       "enableParallelism": true,
       "ignoreMissingScript": false,
       "allowWarningsInSuccessfulBuild": true
+    },
+    {
+      "name": "audit",
+      "commandKind": "global",
+      "summary": "Run npm audit for the entire monorepo",
+      "description": "Scans the entire monorepo for security vulnerabilities via pnpm audit",
+      "shellCommand": "node common/scripts/run-pnpm-audit.js"
     }
   ]
 }

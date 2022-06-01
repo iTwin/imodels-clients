@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { AuthorizationCallback, GetUserPermissionsParams, IModelPermission, IModelsClient, IModelsClientOptions, UserPermissions } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertUserPermissions } from "@itwin/imodels-client-test-utils";
+
 import { getTestDIContainer } from "../common";
 
 describe("[Management] UserPermissionOperations", () => {

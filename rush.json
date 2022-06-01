@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
   "rushVersion": "5.35.2",
-  "pnpmVersion": "4.14.4",
+  "pnpmVersion": "6.13.0",
   "nodeSupportedVersionRange": ">=12.13.0 <17.0.0",
   "ensureConsistentVersions": true,
   "projectFolderMinDepth": 1,
@@ -15,18 +15,6 @@
     "useWorkspaces": true
   },
   "projects": [
-    {
-      "packageName": "@itwin/imodels-client-common-config",
-      "projectFolder": "utils/imodels-client-common-config",
-      "shouldPublish": true,
-      "versionPolicyName": "prerelease-monorepo-lockStep"
-    },
-    {
-      "packageName": "@itwin/imodels-client-test-utils",
-      "projectFolder": "utils/imodels-client-test-utils",
-      "shouldPublish": true,
-      "versionPolicyName": "prerelease-monorepo-lockStep"
-    },
     {
       "packageName": "@itwin/imodels-client-management",
       "projectFolder": "clients/imodels-client-management",
@@ -52,22 +40,34 @@
       "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
+      "packageName": "@itwin/imodels-client-test-utils",
+      "projectFolder": "utils/imodels-client-test-utils",
+      "shouldPublish": false
+    },
+    {
+      "packageName": "@itwin/imodels-client-common-config",
+      "projectFolder": "utils/imodels-client-common-config",
+      "shouldPublish": false
+    },
+    {
       "packageName": "@itwin/imodels-clients-tests",
       "projectFolder": "tests/imodels-clients-tests",
-      "shouldPublish": true,
-      "versionPolicyName": "prerelease-monorepo-lockStep"
+      "shouldPublish": false
+    },
+    {
+      "packageName": "@itwin/imodels-clients-tests-browser",
+      "projectFolder": "tests/imodels-clients-tests-browser",
+      "shouldPublish": false
     },
     {
       "packageName": "@itwin/imodels-access-frontend-tests",
       "projectFolder": "tests/imodels-access-frontend-tests",
-      "shouldPublish": true,
-      "versionPolicyName": "prerelease-monorepo-lockStep"
+      "shouldPublish": false
     },
     {
       "packageName": "@itwin/imodels-access-backend-tests",
       "projectFolder": "tests/imodels-access-backend-tests",
-      "shouldPublish": true,
-      "versionPolicyName": "prerelease-monorepo-lockStep"
+      "shouldPublish": false
     }
   ]
 }

@@ -4,16 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
+
 import {
-  CheckpointOperations,
   IModelsClient as ManagementIModelsClient,
   IModelsClientOptions as ManagementIModelsClientOptions,
-  NamedVersionOperations,
-  RecursiveRequired,
-  UserOperations,
-  UserPermissionOperations
+  RecursiveRequired
 } from "@itwin/imodels-client-management";
-import { LocalFileSystem, LocalFileSystemImpl } from "./base";
+
+import { LocalFileSystemImpl } from "./base/internal";
+import { LocalFileSystem } from "./base/public";
 import { BaselineFileOperations, BriefcaseOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
 
 /** User-configurable iModels client options. */
@@ -36,8 +35,8 @@ export interface IModelsClientOptions extends ManagementIModelsClientOptions {
  * iModels API client for iModel authoring workflows. For more information on the API visit the
  * {@link https://developer.bentley.com/apis/imodels/ iModels API documentation page}.
  */
-export class IModelsClient {
-  protected _operationsOptions: OperationOptions;
+export class IModelsClient extends ManagementIModelsClient {
+  protected override _operationsOptions: OperationOptions;
 
   /**
    * Class constructor.
@@ -46,6 +45,8 @@ export class IModelsClient {
    */
   constructor(options?: IModelsClientOptions) {
     const filledIModelsClientOptions = IModelsClient.fillConfiguration(options);
+    super(filledIModelsClientOptions);
+
     this._operationsOptions = {
       ...filledIModelsClientOptions,
       urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
@@ -61,7 +62,7 @@ export class IModelsClient {
   }
 
   /** iModel operations. See {@link iModelOperations}. */
-  public get iModels(): IModelOperations<OperationOptions> {
+  public override get iModels(): IModelOperations<OperationOptions> {
     return new IModelOperations(this._operationsOptions);
   }
 
@@ -71,38 +72,18 @@ export class IModelsClient {
   }
 
   /** Briefcase operations. See {@link BriefcaseOperations}. */
-  public get briefcases(): BriefcaseOperations<OperationOptions> {
-    return new BriefcaseOperations(this._operationsOptions);
+  public override get briefcases(): BriefcaseOperations<OperationOptions> {
+    return new BriefcaseOperations(this._operationsOptions, this);
   }
 
   /** Changeset operations. See {@link ChangesetOperations}. */
-  public get changesets(): ChangesetOperations<OperationOptions> {
-    return new ChangesetOperations(this._operationsOptions, this.namedVersions, this.checkpoints);
-  }
-
-  /** Named version operations. See {@link NamedVersionOperations}. */
-  public get namedVersions(): NamedVersionOperations<OperationOptions> {
-    return new NamedVersionOperations(this._operationsOptions);
-  }
-
-  /** Checkpoint operations. See {@link CheckpointOperations}. */
-  public get checkpoints(): CheckpointOperations<OperationOptions> {
-    return new CheckpointOperations(this._operationsOptions);
+  public override get changesets(): ChangesetOperations<OperationOptions> {
+    return new ChangesetOperations(this._operationsOptions, this);
   }
 
   /** Lock operations. See {@link LockOperations}. */
   public get locks(): LockOperations<OperationOptions> {
     return new LockOperations(this._operationsOptions);
-  }
-
-  /** User operations. See {@link UserOperations}. */
-  public get users(): UserOperations<OperationOptions> {
-    return new UserOperations(this._operationsOptions);
-  }
-
-  /** User Permission operations. See {@link UserPermissionOperations}. */
-  public get userPermissions(): UserPermissionOperations<OperationOptions> {
-    return new UserPermissionOperations(this._operationsOptions);
   }
 
   /**
@@ -111,7 +92,7 @@ export class IModelsClient {
    * @param {iModelsClientOptions} options user-passed client options.
    * @returns {RecursiveRequired<iModelsClientOptions>} required iModels client configuration options.
    */
-  public static fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
+  public static override fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
     return {
       ...ManagementIModelsClient.fillConfiguration(options),
       localFileSystem: options?.localFileSystem ?? new LocalFileSystemImpl(),

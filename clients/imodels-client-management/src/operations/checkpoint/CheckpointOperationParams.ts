@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelScopedOperationParams } from "../../base";
+import { IModelScopedOperationParams } from "../../base/public";
 
 interface ChangesetIdParam {
   changesetId: string;

@@ -5,6 +5,7 @@
 import * as fs from "fs";
 import { join } from "path";
 import { Readable } from "stream";
+
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
   ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, IModelDb, IModelHost, IModelIdArg, IModelJsFs,
@@ -16,6 +17,7 @@ import {
   IModelVersion, LocalDirName
 } from "@itwin/core-common";
 import axios, { AxiosResponse } from "axios";
+
 import {
   AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset, ChangesetIdOrIndex,
   ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams, DeleteIModelParams,
@@ -25,6 +27,7 @@ import {
   LockLevel, LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion, OrderByOperator,
   ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
+
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";

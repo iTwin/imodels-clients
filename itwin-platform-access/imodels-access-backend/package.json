@@ -18,8 +18,8 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
-  "main": "lib/IModelsAccessBackendExports.js",
-  "typings": "lib/IModelsAccessBackendExports",
+  "main": "lib/index.js",
+  "typings": "lib/index",
   "scripts": {
     "build": "tsc 1>&2",
     "clean": "rimraf lib",

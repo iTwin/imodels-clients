@@ -2,11 +2,14 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
+
 import { GetBriefcaseListParams, GetLockListParams, GetNamedVersionListParams, IModel, Lock, NamedVersion, toArray } from "@itwin/imodels-client-authoring";
+
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 import { TestProjectProvider } from "../project/TestProjectProvider";
+
 import { TestIModelCreator } from "./TestIModelCreator";
 import { TestIModelFileProvider } from "./TestIModelFileProvider";
 import { BriefcaseMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
@@ -15,13 +18,9 @@ import { TestIModelsClient } from "./TestIModelsClient";
 @injectable()
 export class TestIModelRetriever {
   constructor(
-    @inject(TestIModelsClient)
     private readonly _iModelsClient: TestIModelsClient,
-    @inject(TestAuthorizationProvider)
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
-    @inject(TestProjectProvider)
     private readonly _testProjectProvider: TestProjectProvider,
-    @inject(TestIModelFileProvider)
     private readonly _testIModelFileProvider: TestIModelFileProvider
   ) { }
 
