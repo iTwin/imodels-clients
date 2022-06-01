@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { OperationsBase } from "@itwin/imodels-client-management/lib/base/internal";
 
-import { BaselineFile } from "../../base/public";
 import { BaselineFileResponse } from "../../base/internal";
+import { BaselineFile } from "../../base/public";
 import { OperationOptions } from "../OperationOptions";
 
 import { GetSingleBaselineFileParams } from "./BaselineFileOperationParams";

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIteratorImpl, OperationsBase, NamedVersionResponse, NamedVersionsResponse, } from "../../base/internal";
+import { EntityListIteratorImpl, NamedVersionResponse, NamedVersionsResponse, OperationsBase } from "../../base/internal";
 import { AuthorizationCallback, Changeset, EntityListIterator, MinimalNamedVersion, NamedVersion, PreferReturn } from "../../base/public";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";

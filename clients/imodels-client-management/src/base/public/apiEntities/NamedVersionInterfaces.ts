@@ -74,4 +74,3 @@ export interface NamedVersion extends MinimalNamedVersion {
   getChangeset(): Promise<Changeset | undefined>;
 }
 
-

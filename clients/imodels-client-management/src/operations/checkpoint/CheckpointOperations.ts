@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OperationsBase, CheckpointResponse } from "../../base/internal";
+import { CheckpointResponse, OperationsBase } from "../../base/internal";
 import { Checkpoint } from "../../base/public";
 import { OperationOptions } from "../OperationOptions";
 
