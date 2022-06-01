@@ -2,9 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, IModel, IModelsErrorCode, IModelsErrorImpl, Link, IModelOperations as ManagementIModelOperations, waitForCondition } from "@itwin/imodels-client-management";
+import { AuthorizationParam, IModel, IModelsErrorCode, IModelsErrorImpl, IModelOperations as ManagementIModelOperations, waitForCondition } from "@itwin/imodels-client-management";
 import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
 import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations";
+import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";
 import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline } from "./IModelOperationParams";
 
@@ -32,11 +33,11 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties);
     const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody);
 
-    this.assertLink(createdIModel._links.upload);
+    assertLink(createdIModel._links.upload);
     const uploadUrl = createdIModel._links.upload.href;
     await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.iModelProperties.filePath });
 
-    this.assertLink(createdIModel._links.complete);
+    assertLink(createdIModel._links.complete);
     const confirmUploadUrl = createdIModel._links.complete.href;
     await this.sendPostRequest({
       authorization: params.authorization,
@@ -87,10 +88,5 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
       }),
       timeOutInMs: params.timeOutInMs
     });
-  }
-
-  private assertLink(link: Link | undefined): asserts link is Link {
-    if (!link || !link.href)
-      throw new Error("Assertion failed: link is falsy.");
   }
 }

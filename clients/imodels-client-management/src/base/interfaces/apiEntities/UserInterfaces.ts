@@ -35,13 +35,7 @@ export interface UserResponse {
   user: User;
 }
 
-/** DTO to hold minimal User list API response. */
-export interface MinimalUsersResponse extends CollectionResponse {
-  users: MinimalUser[];
+/** DTO to hold User list API response. */
+export interface UsersResponse<TUser extends MinimalUser> extends CollectionResponse {
+  users: TUser[];
 }
-
-/** DTO to hold representation User list API response. */
-export interface UsersResponse extends CollectionResponse {
-  users: User[];
-}
-

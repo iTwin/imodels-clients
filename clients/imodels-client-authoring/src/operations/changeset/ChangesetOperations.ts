@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { Changeset, ChangesetResponse, ChangesetState, IModelScopedOperationParams, IModelsErrorCode, IModelsErrorImpl, ChangesetOperations as ManagementChangesetOperations } from "@itwin/imodels-client-management";
 import { DownloadedChangeset, TargetDirectoryParam } from "../../base";
+import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";
 import { ChangesetPropertiesForCreate, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams } from "./ChangesetOperationParams";
 import { LimitedParallelQueue } from "./LimitedParallelQueue";
@@ -25,13 +26,17 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       body: createChangesetBody
     });
 
-    const uploadUrl = createChangesetResponse.changeset._links.upload.href;
+    const uploadLink = createChangesetResponse.changeset._links.upload;
+    assertLink(uploadLink);
+    const uploadUrl = uploadLink.href;
     await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.changesetProperties.filePath });
 
+    const completeLink = createChangesetResponse.changeset._links.complete;
+    assertLink(completeLink);
     const confirmUploadBody = this.getConfirmUploadRequestBody(params.changesetProperties);
     const confirmUploadResponse = await this.sendPatchRequest<ChangesetResponse>({
       authorization: params.authorization,
-      url: createChangesetResponse.changeset._links.complete.href,
+      url: completeLink.href,
       body: confirmUploadBody
     });
 
@@ -132,7 +137,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       return;
 
     try {
-      await this._options.fileHandler.downloadFile({ downloadUrl: params.changeset._links.download.href, targetFilePath });
+      const downloadLink = params.changeset._links.download;
+      assertLink(downloadLink);
+      await this._options.fileHandler.downloadFile({ downloadUrl: downloadLink.href, targetFilePath });
+
     } catch (error) {
       const changeset = await this.querySingleInternal({
         authorization: params.authorization,
@@ -141,7 +149,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       });
 
       try {
-        await this._options.fileHandler.downloadFile({ downloadUrl: changeset._links.download.href, targetFilePath });
+        const newDownloadLink = changeset._links.download;
+        assertLink(newDownloadLink);
+        await this._options.fileHandler.downloadFile({ downloadUrl: newDownloadLink.href, targetFilePath });
+
       } catch (errorAfterRetry) {
         throw new IModelsErrorImpl({
           code: IModelsErrorCode.ChangesetDownloadFailed,
