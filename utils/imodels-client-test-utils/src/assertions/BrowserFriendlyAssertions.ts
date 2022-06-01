@@ -78,7 +78,7 @@ export async function assertBriefcase(params: {
 
   expect(params.actualBriefcase._links).to.exist;
   expect(params.actualBriefcase._links.owner).to.exist;
-  expect(params.actualBriefcase._links.owner.href).to.not.be.empty;
+  expect(params.actualBriefcase._links.owner!.href).to.not.be.empty;
 
   await assertBriefcaseCallbacks({
     briefcase: params.actualBriefcase
@@ -156,8 +156,8 @@ export function assertCheckpoint(params: {
   expect(params.actualCheckpoint.containerAccessInfo!.dbName).to.not.be.empty;
 
   expect(params.actualCheckpoint._links).to.exist;
-  expect(params.actualCheckpoint._links?.download).to.exist;
-  expect(params.actualCheckpoint._links?.download.href).to.not.be.empty;
+  expect(params.actualCheckpoint._links.download).to.exist;
+  expect(params.actualCheckpoint._links.download!.href).to.not.be.empty;
 }
 
 export function assertThumbnail(params: {
@@ -251,7 +251,7 @@ export function assertOptionalLink(params: {
 }): void {
   if (params.shouldLinkExist) {
     expect(params.actualLink).to.exist;
-    expect(params.actualLink?.href).to.not.be.empty;
+    expect(params.actualLink!.href).to.not.be.empty;
   } else {
     expect(params.actualLink).to.equal(null);
   }

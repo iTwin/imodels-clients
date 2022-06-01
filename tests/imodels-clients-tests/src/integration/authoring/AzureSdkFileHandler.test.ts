@@ -109,7 +109,7 @@ describe("AzureSdkFileHandler", () => {
       changesetId: testChangeset.id
     };
     const changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
-    return changeset._links.download.href;
+    return changeset._links.download!.href;
   }
 
   async function getTestChangesetUploadUrl(testChangeset: TestChangesetFile): Promise<string> {
@@ -137,6 +137,6 @@ describe("AzureSdkFileHandler", () => {
         }
       }
     });
-    return changesetMetadataCreateResponse.changeset._links.upload.href;
+    return changesetMetadataCreateResponse.changeset._links.upload!.href;
   }
 });

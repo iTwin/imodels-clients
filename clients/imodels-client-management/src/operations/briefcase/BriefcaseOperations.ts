@@ -80,7 +80,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
       authorization,
       this._iModelsClient.users,
       this._options.urlFormatter,
-      briefcase._links.owner.href
+      briefcase._links.owner?.href
     );
 
     const result: Briefcase = {

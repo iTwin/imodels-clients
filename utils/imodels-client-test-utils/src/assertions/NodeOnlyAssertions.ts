@@ -31,7 +31,7 @@ export async function assertBaselineFile(params: {
 
   expect(params.actualBaselineFile._links).to.exist;
   expect(params.actualBaselineFile._links.creator).to.exist;
-  expect(params.actualBaselineFile._links.creator.href).to.not.be.empty;
+  expect(params.actualBaselineFile._links.creator!.href).to.not.be.empty;
   expect(params.actualBaselineFile._links.download).to.exist;
   expect(params.actualBaselineFile._links.download!.href).to.not.be.empty;
 }
@@ -58,9 +58,9 @@ export async function assertMinimalChangeset(params: {
 
   expect(params.actualChangeset._links).to.exist;
   expect(params.actualChangeset._links.self).to.exist;
-  expect(params.actualChangeset._links.self.href).to.not.be.empty;
+  expect(params.actualChangeset._links.self!.href).to.not.be.empty;
   expect(params.actualChangeset._links.creator).to.exist;
-  expect(params.actualChangeset._links.creator.href).to.not.be.empty;
+  expect(params.actualChangeset._links.creator!.href).to.not.be.empty;
 
   await assertMinimalChangesetCallbacks({
     changeset: params.actualChangeset
@@ -106,7 +106,7 @@ export async function assertChangeset(params: {
 
   if (params.isGetResponse) {
     expect(params.actualChangeset._links.download).to.exist;
-    expect(params.actualChangeset._links.download.href).to.not.be.empty;
+    expect(params.actualChangeset._links.download!.href).to.not.be.empty;
   } else {
     // `download` link is not present in `create` method result.
     expect(params.actualChangeset._links.download).to.be.undefined;

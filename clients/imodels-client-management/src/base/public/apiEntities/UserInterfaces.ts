@@ -29,4 +29,3 @@ export interface User extends MinimalUser {
   /** User email address. */
   email: string;
 }
-

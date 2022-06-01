@@ -47,18 +47,18 @@ export interface MinimalIModel {
 export interface IModelLinks {
   /**
    * Link where to upload the iModel Baseline file. Link points to a remote storage. IMPORTANT: this link
-   * is never present in any of the `IModel` instances returned from methods in this client. This property is
+   * is never present in any of the IModel instances returned from methods in this client. This property is
    * only used internally.
    * @private
    */
-  upload?: Link;
+  upload: Link | null | undefined;
   /**
    * Link to confirm the Baseline file upload and complete the iModel creation process. Points to a specific
-   * iModel Baseline in iModels API. IMPORTANT: this link is never present in any of the `IModel` instances
+   * iModel Baseline in iModels API. IMPORTANT: this link is never present in any of the IModel instances
    * returned from methods in this client. This property is only used internally.
    * @private
    */
-  complete?: Link;
+  complete: Link | null | undefined;
   /** Link to the User who created the baseline file instance. Link points to a specific User in iModels API. */
   creator: Link | null;
   /** Link to retrieve iModel Changesets. Link points to Changeset collection in iModels API. */

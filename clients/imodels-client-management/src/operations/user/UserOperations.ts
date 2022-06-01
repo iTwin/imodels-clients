@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIteratorImpl, MinimalUsersResponse, OperationsBase, UserResponse, UsersResponse } from "../../base/internal";
+import { EntityListIteratorImpl, OperationsBase, UserResponse, UsersResponse } from "../../base/internal";
 import { EntityListIterator, MinimalUser, PreferReturn, User } from "../../base/public";
 import { OperationOptions } from "../OperationOptions";
 
@@ -21,7 +21,7 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
       authorization: params.authorization,
       url: this._options.urlFormatter.getUserListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: unknown) => (response as MinimalUsersResponse).users
+      entityCollectionAccessor: (response: unknown) => (response as UsersResponse<MinimalUser>).users
     }));
   }
 
@@ -38,7 +38,7 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
       authorization: params.authorization,
       url: this._options.urlFormatter.getUserListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: unknown) => (response as UsersResponse).users
+      entityCollectionAccessor: (response: unknown) => (response as UsersResponse<User>).users
     }));
   }
 

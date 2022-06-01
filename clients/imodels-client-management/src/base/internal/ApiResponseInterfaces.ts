@@ -34,20 +34,12 @@ export interface NamedVersionsResponse<TNamedVersion extends MinimalNamedVersion
   namedVersions: TNamedVersion[];
 }
 
-export interface MinimalChangesetsResponse extends CollectionResponse { // TODO: unify
-  changesets: MinimalChangeset[];
+export interface ChangesetsResponse<TChangeset extends MinimalChangeset> extends CollectionResponse {
+  changesets: TChangeset[];
 }
 
-export interface ChangesetsResponse extends CollectionResponse {
-  changesets: Changeset[];
-}
-
-export interface MinimalUsersResponse extends CollectionResponse {
-  users: MinimalUser[];
-}
-
-export interface UsersResponse extends CollectionResponse {
-  users: User[];
+export interface UsersResponse<TUser extends MinimalUser> extends CollectionResponse {
+  users: TUser[];
 }
 
 export interface BriefcaseResponse {

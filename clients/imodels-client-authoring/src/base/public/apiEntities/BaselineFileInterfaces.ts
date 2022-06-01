@@ -22,7 +22,7 @@ export enum BaselineFileState {
 /** Links that belong to Baseline File entity. */
 export interface BaselineFileLinks {
   /** Link to the User who created the baseline file instance. */
-  creator: Link;
+  creator: Link | null;
   /** Link from where to download the Baseline file. Link points to a remote storage. */
   download: Link | null;
 }
