@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { IModelsApiUrlFormatter as ManamegentIModelsApiUrlFormatter } from "@itwin/imodels-client-management/lib/operations";
+
 import { GetLockListUrlParams } from "./lock/LockOperationParams";
 
 export class IModelsApiUrlFormatter extends ManamegentIModelsApiUrlFormatter {

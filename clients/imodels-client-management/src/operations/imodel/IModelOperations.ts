@@ -5,6 +5,7 @@
 import { EntityListIteratorImpl, IModelsErrorImpl, OperationsBase, waitForCondition } from "../../base/internal";
 import { AuthorizationCallback, EntityListIterator, IModel, IModelResponse, IModelState, IModelsErrorCode, IModelsResponse, MinimalIModel, PreferReturn } from "../../base/public";
 import { OperationOptions } from "../OperationOptions";
+
 import { CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForCreateFromTemplate, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams";
 
 export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {

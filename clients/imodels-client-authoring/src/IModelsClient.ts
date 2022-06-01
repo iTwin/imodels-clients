@@ -7,8 +7,9 @@ import {
   IModelsClientOptions as ManagementIModelsClientOptions,
   RecursiveRequired
 } from "@itwin/imodels-client-management";
-import { FileHandler } from "./base/public";
+
 import { AzureSdkFileHandler } from "./base/internal";
+import { FileHandler } from "./base/public";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations } from "./operations";
 import { BaselineFileOperations } from "./operations/baseline-file/BaselineFileOperations";
 import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";

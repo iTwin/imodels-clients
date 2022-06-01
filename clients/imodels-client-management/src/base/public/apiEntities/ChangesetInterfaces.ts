@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Application, CollectionResponse, Link } from "../CommonInterfaces";
+
 import { Checkpoint } from "./CheckpointInterfaces";
 import { NamedVersion } from "./NamedVersionInterfaces";
 import { User } from "./UserInterfaces";

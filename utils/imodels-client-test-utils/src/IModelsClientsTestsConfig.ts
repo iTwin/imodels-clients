@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import * as dotenv from "dotenv";
 import { injectable } from "inversify";
+
 import { TestSetupError } from "./CommonTestUtils";
 
 export interface AuthConfigValues {

@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
+
 import { BehaviorOptions, IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
 
 @injectable()

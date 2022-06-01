@@ -2,9 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { expect } from "chai";
-import { EntityListIterator } from "@itwin/imodels-client-management";
 import { EntityListIteratorImpl } from "@itwin/imodels-client-management/lib/base/internal";
+import { expect } from "chai";
+
+import { EntityListIterator } from "@itwin/imodels-client-management";
+
 import { TestEntity, getEntityPageQueryFunc } from "./TestEntityPageFunctions";
 
 describe("EntityListIteratorImpl", () => {

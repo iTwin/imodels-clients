@@ -1,4 +1,5 @@
 import { injectable } from "inversify";
+
 import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
 
 @injectable()

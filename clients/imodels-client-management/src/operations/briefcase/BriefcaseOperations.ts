@@ -2,11 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, Briefcase, BriefcaseResponse, BriefcasesResponse, EntityListIterator, MinimalBriefcase, PreferReturn } from "../../base/public";
 import { EntityListIteratorImpl, OperationsBase } from "../../base/internal";
+import { AuthorizationCallback, Briefcase, BriefcaseResponse, BriefcasesResponse, EntityListIterator, MinimalBriefcase, PreferReturn } from "../../base/public";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";
+
 import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {

@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Application, CollectionResponse, Link } from "../CommonInterfaces";
+
 import { User } from "./UserInterfaces";
 
 /** Minimal representation of a Briefcase. */

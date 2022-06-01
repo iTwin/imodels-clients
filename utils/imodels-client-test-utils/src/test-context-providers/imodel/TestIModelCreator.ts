@@ -2,12 +2,15 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { injectable } from "inversify";
-import { CheckpointState, GetSingleCheckpointParams, Lock, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
 import { sleep } from "@itwin/imodels-client-management/lib/base/internal";
+import { injectable } from "inversify";
+
+import { CheckpointState, GetSingleCheckpointParams, Lock, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
+
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 import { TestProjectProvider } from "../project/TestProjectProvider";
+
 import { TestIModelFileProvider } from "./TestIModelFileProvider";
 import { BriefcaseMetadata, IModelMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
 import { TestIModelsClient } from "./TestIModelsClient";

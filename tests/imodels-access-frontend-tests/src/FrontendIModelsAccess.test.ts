@@ -6,8 +6,10 @@ import { ChangesetIndexAndId, IModelVersion } from "@itwin/core-common";
 import { IModelIdArg } from "@itwin/core-frontend";
 import { FrontendIModelsAccess } from "@itwin/imodels-access-frontend";
 import { expect } from "chai";
+
 import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes } from "@itwin/imodels-client-test-utils";
+
 import { getTestDIContainer } from "./TestDiContainerProvider";
 
 describe("FrontendIModelsAccess", () => {

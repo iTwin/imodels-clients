@@ -3,7 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Container } from "inversify";
+
 import { IModelsClientOptions } from "@itwin/imodels-client-authoring";
+
 import { IModelsClientsTestsConfig } from "./IModelsClientsTestsConfig";
 import { ProjectsClient, ProjectsClientConfig, ReusableTestIModelProvider, ReusableTestIModelProviderConfig, TestAuthorizationClient, TestAuthorizationClientConfig, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelRetriever, TestIModelsClient, TestIModelsClientOptions, TestProjectProvider, TestProjectProviderConfig } from "./test-context-providers";
 import { TestAuthorizationProviderConfig } from "./test-context-providers/auth/TestAuthorizationProviderConfig";

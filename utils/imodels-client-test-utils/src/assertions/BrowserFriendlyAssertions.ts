@@ -3,7 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
+
 import { Application, Briefcase, Checkpoint, CheckpointState, ContentType, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, MinimalBriefcase, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, Thumbnail, ThumbnailSize, User, UserPermissions } from "@itwin/imodels-client-management";
+
 import { assertBriefcaseCallbacks, assertNamedVersionCallbacks } from "./RelatedEntityCallbackAssertions";
 
 export async function assertCollection<T>(params: {

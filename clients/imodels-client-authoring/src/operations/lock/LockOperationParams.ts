@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { CollectionRequestParams, IModelScopedOperationParams } from "@itwin/imodels-client-management";
+
 import { LockedObjects } from "../../base/public";
 
 /** Url parameters supported in Lock list query. */

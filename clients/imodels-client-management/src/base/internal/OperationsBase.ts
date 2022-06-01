@@ -3,8 +3,9 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../../Constants";
-import { Dictionary, AuthorizationParam, CollectionResponse, PreferReturn } from "../public";
+import { AuthorizationParam, CollectionResponse, Dictionary, PreferReturn } from "../public";
 import { BinaryContentType, ContentType, RestClient, SupportedGetResponseTypes } from "../public/RestClient";
+
 import { EntityCollectionPage } from "./UtilityTypes";
 
 type SendGetRequestParams = AuthorizationParam & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };

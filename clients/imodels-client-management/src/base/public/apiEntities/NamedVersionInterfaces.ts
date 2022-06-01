@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Application, CollectionResponse, Link } from "../CommonInterfaces";
+
 import { Changeset } from "./ChangesetInterfaces";
 import { User } from "./UserInterfaces";
 

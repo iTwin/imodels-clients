@@ -2,8 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { flatten, EntityListIterator } from "../../public";
+import { EntityListIterator, flatten } from "../../public";
 import { EntityPageQueryFunc } from "../UtilityTypes";
+
 import { EntityPageListIterator } from "./EntityPageListIterator";
 
 export class EntityListIteratorImpl<TEntity> implements EntityListIterator<TEntity> {
