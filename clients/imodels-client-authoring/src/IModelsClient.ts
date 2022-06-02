@@ -11,7 +11,7 @@ import {
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 
-import { LocalFileSystemImpl } from "./base/internal";
+import { NodeLocalFileSystem } from "./base/internal";
 import { LocalFileSystem } from "./base/public";
 import { BaselineFileOperations, BriefcaseOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
 
@@ -95,7 +95,7 @@ export class IModelsClient extends ManagementIModelsClient {
   public static override fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
     return {
       ...ManagementIModelsClient.fillConfiguration(options),
-      localFileSystem: options?.localFileSystem ?? new LocalFileSystemImpl(),
+      localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
       cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory())
     };
   }

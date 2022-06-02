@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import { promises } from "fs";
 
-import { LocalFileSystemImpl } from "@itwin/imodels-client-authoring/lib/base/internal";
+import { NodeLocalFileSystem } from "@itwin/imodels-client-authoring/lib/base/internal";
 
-export class TestLocalFileSystem extends LocalFileSystemImpl {
+export class TestLocalFileSystem extends NodeLocalFileSystem {
   public async isDirectory(path: string): Promise<boolean> {
     const fileStats = await promises.stat(path);
     return fileStats.isDirectory();

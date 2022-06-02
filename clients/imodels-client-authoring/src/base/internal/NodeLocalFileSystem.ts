@@ -6,7 +6,7 @@ import { constants, promises } from "fs";
 
 import { LocalFileSystem } from "../public";
 
-export class LocalFileSystemImpl implements LocalFileSystem {
+export class NodeLocalFileSystem implements LocalFileSystem {
   public async createDirectory(directory: string): Promise<void> {
     await promises.mkdir(directory, { recursive: true });
   }
