@@ -35,7 +35,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   * or did not complete in time. See {@link iModelsErrorCode}.
   */
   public async createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel> {
-    const createIModelBody = await this.getCreateIModelFromBaselineRequestBody(params.iModelProperties);
+    const baselineFileSize = await this._options.localFileSystem.getFileSize(params.iModelProperties.filePath);
+    const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties, baselineFileSize);
     const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody);
 
     assertLink(createdIModel._links.upload);
@@ -63,8 +64,10 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     });
   }
 
-  private async getCreateIModelFromBaselineRequestBody(iModelProperties: IModelPropertiesForCreateFromBaseline): Promise<object> {
-    const baselineFileSize = await this._options.localFileSystem.getFileSize(iModelProperties.filePath);
+  private getCreateIModelFromBaselineRequestBody(
+    iModelProperties: IModelPropertiesForCreateFromBaseline,
+    baselineFileSize: number
+  ): object {
     return {
       ...this.getCreateEmptyIModelRequestBody(iModelProperties),
       baselineFile: {

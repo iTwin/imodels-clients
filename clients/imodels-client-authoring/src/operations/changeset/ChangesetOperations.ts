@@ -26,7 +26,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns newly created Changeset. See {@link Changeset}.
    */
   public async create(params: CreateChangesetParams): Promise<Changeset> {
-    const createChangesetBody = await this.getCreateChangesetRequestBody(params.changesetProperties);
+    const changesetFileSize = await this._options.localFileSystem.getFileSize(params.changesetProperties.filePath);
+    const createChangesetBody = this.getCreateChangesetRequestBody(params.changesetProperties, changesetFileSize);
     const createChangesetResponse = await this.sendPostRequest<ChangesetResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId }),
@@ -107,8 +108,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     return result;
   }
 
-  private async getCreateChangesetRequestBody(changesetProperties: ChangesetPropertiesForCreate): Promise<object> {
-    const changesetFileSize = await this._options.localFileSystem.getFileSize(changesetProperties.filePath);
+  private getCreateChangesetRequestBody(
+    changesetProperties: ChangesetPropertiesForCreate,
+    changesetFileSize: number
+  ): object {
     return {
       id: changesetProperties.id,
       description: changesetProperties.description,
