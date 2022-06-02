@@ -5,11 +5,12 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import {AzureSdkFileHandler} from "@itwin/imodels-client-authoring/lib/base/internal";
+import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
+import { ConfigDownloadInput, UrlDownloadInput } from "@itwin/object-storage-core";
 import { expect } from "chai";
 
-import { AcquireBriefcaseParams, AuthorizationCallback, CreateChangesetParams, DownloadChangesetListParams, DownloadFileParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, TargetDirectoryParam } from "@itwin/imodels-client-authoring";
-import { FileTransferLog, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanupDirectory } from "@itwin/imodels-client-test-utils";
+import { AcquireBriefcaseParams, AuthorizationCallback, CreateChangesetParams, DownloadChangesetListParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, TargetDirectoryParam } from "@itwin/imodels-client-authoring";
+import { FileTransferLog, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableClientStorage, assertChangeset, assertDownloadedChangeset, cleanupDirectory } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
@@ -25,8 +26,8 @@ describe("[Authoring] ChangesetOperations", () => {
   let testIModelForRead: ReusableIModelMetadata;
   let testIModelForWrite: IModelMetadata;
 
-  beforeEach(() => {
-    cleanupDirectory(Constants.TestDownloadDirectoryPath);
+  beforeEach(async () => {
+    await cleanupDirectory(Constants.TestDownloadDirectoryPath);
   });
 
   before(async () => {
@@ -50,8 +51,8 @@ describe("[Authoring] ChangesetOperations", () => {
     testIModelForWrite = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
   });
 
-  afterEach(() => {
-    cleanupDirectory(Constants.TestDownloadDirectoryPath);
+  afterEach(async () => {
+    await cleanupDirectory(Constants.TestDownloadDirectoryPath);
   });
 
   after(async () => {
@@ -323,21 +324,19 @@ describe("[Authoring] ChangesetOperations", () => {
       it(`should should retry changeset download if it fails the first time when downloading changeset ${testCase.label}`, async () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
-        const azureSdkFileHandler = new AzureSdkFileHandler();
+        const azureClientStorage = new AzureClientStorage(new BlockBlobClientWrapperFactory());
         let hasDownloadFailed = false;
-        const downloadStub = async (params: DownloadFileParams) => {
-          fileTransferLog.recordDownload(params.downloadUrl);
+        const downloadInterceptor = (input: UrlDownloadInput | ConfigDownloadInput) => {
+          fileTransferLog.recordDownload((input as UrlDownloadInput).url);
 
           if (!hasDownloadFailed) {
             hasDownloadFailed = true;
             throw new Error("Download failed.");
           }
-
-          return azureSdkFileHandler.downloadFile(params);
         };
 
-        const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
-        const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, fileHandler: trackedFileHandler });
+        const trackedStorage = new TrackableClientStorage(azureClientStorage, { download: downloadInterceptor });
+        const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, cloudStorage: trackedStorage });
 
         const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", `download ${testCase.label} retry test`);
         const partialDownloadChangesetParams: CommonDownloadParams = {
@@ -366,14 +365,13 @@ describe("[Authoring] ChangesetOperations", () => {
       it(`should not download changeset again if it is already present when downloading changeset ${testCase.label}`, async () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
-        const azureSdkFileHandler = new AzureSdkFileHandler();
-        const downloadStub = async (params: DownloadFileParams) => {
-          fileTransferLog.recordDownload(params.downloadUrl);
-          return azureSdkFileHandler.downloadFile(params);
+        const azureClientStorage = new AzureClientStorage(new BlockBlobClientWrapperFactory());
+        const downloadInterceptor = async (input: UrlDownloadInput | ConfigDownloadInput) => {
+          fileTransferLog.recordDownload((input as UrlDownloadInput).url);
         };
 
-        const trackedFileHandler = new TrackableTestFileHandler(azureSdkFileHandler, { downloadStub });
-        const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, fileHandler: trackedFileHandler });
+        const trackedStorage = new TrackableClientStorage(azureClientStorage, { download: downloadInterceptor });
+        const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, cloudStorage: trackedStorage });
 
         const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", `download ${testCase.label} reuse test`);
         const partialDownloadChangesetParams: CommonDownloadParams = {

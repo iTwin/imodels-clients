@@ -2,27 +2,33 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
+import { ClientStorage } from "@itwin/object-storage-core";
+
 import {
   IModelsClient as ManagementIModelsClient,
   IModelsClientOptions as ManagementIModelsClientOptions,
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 
-import { AzureSdkFileHandler } from "./base/internal";
-import { FileHandler } from "./base/public";
-import { BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations } from "./operations";
-import { BaselineFileOperations } from "./operations/baseline-file/BaselineFileOperations";
-import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
-import { OperationOptions } from "./operations/OperationOptions";
+import { NodeLocalFileSystem } from "./base/internal";
+import { LocalFileSystem } from "./base/public";
+import { BaselineFileOperations, BriefcaseOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions extends ManagementIModelsClientOptions {
   /**
-   * File handler to use in operations which transfer files. Examples of such operations are Changeset download in
+   * Local filesystem to use in operations which transfer files. Examples of such operations are Changeset download in
    * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. If `undefined` the default
-   * handler is used which is implemented using Azure SDK. See {@link AzureSdkFileHandler}.
+   * is used which is `LocalFsImpl` that is implemented using Node's `fs` module.
    */
-  fileHandler?: FileHandler;
+  localFileSystem?: LocalFileSystem;
+  /**
+   * Storage handler to use in operations which transfer files. Examples of such operations are Changeset download in
+   * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. If `undefined` the default
+   * is used which is `AzureClientStorage` class from `@itwin/object-storage-azure`.
+   */
+  cloudStorage?: ClientStorage;
 }
 
 /**
@@ -48,11 +54,11 @@ export class IModelsClient extends ManagementIModelsClient {
   }
 
   /**
-   * File handler that is used for file transfer operations. This uses the user provided handler or default one,
-   * see {@link iModelsClientOptions}.
+   * `ClientStorage` instance that is used for file transfer operations. This uses the user provided instance or default one,
+   * see {@link IModelsClientOptions}.
    */
-  public get fileHandler(): FileHandler {
-    return this._operationsOptions.fileHandler;
+  public get cloudStorage(): ClientStorage {
+    return this._operationsOptions.cloudStorage;
   }
 
   /** iModel operations. See {@link iModelOperations}. */
@@ -89,7 +95,8 @@ export class IModelsClient extends ManagementIModelsClient {
   public static override fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
     return {
       ...ManagementIModelsClient.fillConfiguration(options),
-      fileHandler: options?.fileHandler ?? new AzureSdkFileHandler()
+      localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
+      cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory())
     };
   }
 }

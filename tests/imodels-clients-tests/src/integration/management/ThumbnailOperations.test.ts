@@ -45,8 +45,8 @@ describe("[Management] ThumbnailOperations", () => {
     testIModelForWrite = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
   });
 
-  afterEach(() => {
-    cleanupDirectory(Constants.TestDownloadDirectoryPath);
+  afterEach(async () => {
+    await cleanupDirectory(Constants.TestDownloadDirectoryPath);
   });
 
   it("should download a small thumbnail", async () => {

@@ -6,4 +6,4 @@ export * from "./apiEntities/BaselineFileInterfaces";
 export * from "./apiEntities/ChangesetInterfaces";
 export * from "./apiEntities/LockInterfaces";
 export * from "./CommonInterfaces";
-export * from "./FileHandler";
+export * from "./LocalFileSystem";

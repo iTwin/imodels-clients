@@ -17,4 +17,4 @@ export * from "./assertions/NodeOnlyAssertions";
 export * from "./assertions/RelatedEntityCallbackAssertions";
 export * from "./CommonTestUtils";
 
-export * from "./TrackableTestFileHandler";
+export * from "./TrackableClientStorage";

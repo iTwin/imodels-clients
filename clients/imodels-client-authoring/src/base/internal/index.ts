@@ -3,4 +3,4 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 export * from "./ApiResponseInterfaces";
-export * from "./AzureSdkFileHandler";
+export * from "./NodeLocalFileSystem";

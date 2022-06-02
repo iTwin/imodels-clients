@@ -17,12 +17,12 @@ export function getTestRunId(): string {
 before(async () => {
   await cleanupIModelsInTestProject();
   createDirectory(Constants.TestDownloadDirectoryPath);
-  cleanupDirectory(Constants.TestDownloadDirectoryPath);
+  await cleanupDirectory(Constants.TestDownloadDirectoryPath);
 });
 
 after(async () => {
   await cleanupIModelsInTestProject();
-  cleanupDirectory(Constants.TestDownloadDirectoryPath);
+  await cleanupDirectory(Constants.TestDownloadDirectoryPath);
 });
 
 async function cleanupIModelsInTestProject(): Promise<void> {

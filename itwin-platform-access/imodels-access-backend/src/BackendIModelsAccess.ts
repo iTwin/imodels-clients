@@ -2,7 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import * as fs from "fs";
 import { join } from "path";
+import { Readable } from "stream";
 
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
@@ -14,6 +16,7 @@ import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion, LocalDirName
 } from "@itwin/core-common";
+import axios, { AxiosResponse } from "axios";
 
 import {
   AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset, ChangesetIdOrIndex,
@@ -22,7 +25,7 @@ import {
   GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetLockListParams, GetNamedVersionListParams,
   GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, Lock,
   LockLevel, LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion, OrderByOperator,
-  ProgressCallback, ProgressData, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
+  ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
 
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
@@ -193,12 +196,59 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (!checkpoint || !checkpoint._links?.download)
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
 
-    let progressCallback: ProgressCallback | undefined;
-    if (arg.onProgress)
-      progressCallback = (progress: ProgressData) => arg.onProgress!(progress.bytesTransferred, progress.bytesTotal);
+    if (!arg.onProgress) {
+      await this._iModelsClient.cloudStorage.download({
+        transferType: "local",
+        url: checkpoint._links.download.href,
+        localPath: arg.localFile
+      });
+      return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
+    }
 
-    await this._iModelsClient.fileHandler.downloadFile({ downloadUrl: checkpoint._links.download.href, targetFilePath: arg.localFile, progressCallback });
-    return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
+    let bytesTransferred = 0;
+    const v1CheckpointSize = await this.getV1CheckpointSize(checkpoint._links.download.href);
+
+    const targetFileStream = fs.createWriteStream(arg.localFile);
+
+    const downloadStream: Readable = await this._iModelsClient.cloudStorage.download({
+      transferType: "stream",
+      url: checkpoint._links.download.href,
+      localPath: arg.localFile
+    });
+    downloadStream.pipe(targetFileStream);
+
+    return new Promise<ChangesetIndexAndId>((resolve) => {
+      downloadStream.on("data", (chunk) => {
+        bytesTransferred += chunk.length;
+        arg.onProgress!(bytesTransferred, v1CheckpointSize);
+      });
+      targetFileStream.on("finish", resolve);
+    });
+  }
+
+  /**
+   * iModels API returns a link to a file in Azure Blob Storage. The API does not return checkpoint file size as
+   * a standalone property so we query it from Azure using the method described below.
+   *
+   * To get the total size of the file we send a GET request to the file download url with `Range: bytes=0-0` header
+   * specified which requests to get only the first byte of the file. As a response we get the first file byte in
+   * the body and `Content-Range` response header which contains information about the total file size. See
+   * https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob#response-headers,
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range.
+   *
+   * The format of returned `Content-Range` header in this case is
+   * `<unit> <range-start>-<range-end>/<size>`, e.g. `bytes 0-0/1253376`.
+   */
+  private async getV1CheckpointSize(downloadUrl: string): Promise<number> {
+    const emptyRangeHeaderValue = "bytes=0-0";
+    const contentRangeHeaderName = "content-range";
+
+    const response: AxiosResponse = await axios.get(downloadUrl, { headers: { Range: emptyRangeHeaderValue } });
+    const rangeHeaderValue: string = response.headers[contentRangeHeaderName];
+    const rangeTotalBytesString: string = rangeHeaderValue.split("/")[1];
+    const rangeTotalBytes: number = parseInt(rangeTotalBytesString, 10);
+
+    return rangeTotalBytes;
   }
 
   public async queryV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {

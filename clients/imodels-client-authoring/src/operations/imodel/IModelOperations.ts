@@ -35,12 +35,16 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   * or did not complete in time. See {@link iModelsErrorCode}.
   */
   public async createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel> {
-    const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties);
+    const baselineFileSize = await this._options.localFileSystem.getFileSize(params.iModelProperties.filePath);
+    const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties, baselineFileSize);
     const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody);
 
     assertLink(createdIModel._links.upload);
     const uploadUrl = createdIModel._links.upload.href;
-    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.iModelProperties.filePath });
+    await this._options.cloudStorage.upload({
+      url: uploadUrl,
+      data: params.iModelProperties.filePath
+    });
 
     assertLink(createdIModel._links.complete);
     const confirmUploadUrl = createdIModel._links.complete.href;
@@ -60,11 +64,14 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     });
   }
 
-  private getCreateIModelFromBaselineRequestBody(iModelProperties: IModelPropertiesForCreateFromBaseline): object {
+  private getCreateIModelFromBaselineRequestBody(
+    iModelProperties: IModelPropertiesForCreateFromBaseline,
+    baselineFileSize: number
+  ): object {
     return {
       ...this.getCreateEmptyIModelRequestBody(iModelProperties),
       baselineFile: {
-        size: this._options.fileHandler.getFileSize(iModelProperties.filePath)
+        size: baselineFileSize
       }
     };
   }

@@ -2,6 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import * as path from "path";
+
 import { ChangesetResponse, IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
 import { ChangesetOperations as ManagementChangesetOperations } from "@itwin/imodels-client-management/lib/operations";
 
@@ -24,7 +26,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns newly created Changeset. See {@link Changeset}.
    */
   public async create(params: CreateChangesetParams): Promise<Changeset> {
-    const createChangesetBody = this.getCreateChangesetRequestBody(params.changesetProperties);
+    const changesetFileSize = await this._options.localFileSystem.getFileSize(params.changesetProperties.filePath);
+    const createChangesetBody = this.getCreateChangesetRequestBody(params.changesetProperties, changesetFileSize);
     const createChangesetResponse = await this.sendPostRequest<ChangesetResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId }),
@@ -33,8 +36,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
     const uploadLink = createChangesetResponse.changeset._links.upload;
     assertLink(uploadLink);
-    const uploadUrl = uploadLink.href;
-    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.changesetProperties.filePath });
+    await this._options.cloudStorage.upload({
+      url: uploadLink.href,
+      data: params.changesetProperties.filePath
+    });
 
     const completeLink = createChangesetResponse.changeset._links.complete;
     assertLink(completeLink);
@@ -58,7 +63,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns downloaded Changeset. See {@link DownloadedChangeset}.
    */
   public async downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset> {
-    this._options.fileHandler.createDirectory(params.targetDirectoryPath);
+    await this._options.localFileSystem.createDirectory(params.targetDirectoryPath);
+
     const changeset: Changeset = await this.querySingleInternal(params);
     return this.downloadSingleChangeset({ ...params, changeset });
   }
@@ -74,14 +80,14 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
    * @returns downloaded Changeset metadata along with the downloaded file path. See {@link DownloadedChangeset}.
    */
   public async downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]> {
-    this._options.fileHandler.createDirectory(params.targetDirectoryPath);
+    await this._options.localFileSystem.createDirectory(params.targetDirectoryPath);
 
     let result: DownloadedChangeset[] = [];
     for await (const changesetPage of this.getRepresentationList(params).byPage()) {
       const changesetsWithFilePath: DownloadedChangeset[] = changesetPage.map(
         (changeset: Changeset) => ({
           ...changeset,
-          filePath: this._options.fileHandler.join(params.targetDirectoryPath, this.createFileName(changeset.id))
+          filePath: path.join(params.targetDirectoryPath, this.createFileName(changeset.id))
         }));
       result = result.concat(changesetsWithFilePath);
 
@@ -102,14 +108,17 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     return result;
   }
 
-  private getCreateChangesetRequestBody(changesetProperties: ChangesetPropertiesForCreate): object {
+  private getCreateChangesetRequestBody(
+    changesetProperties: ChangesetPropertiesForCreate,
+    changesetFileSize: number
+  ): object {
     return {
       id: changesetProperties.id,
       description: changesetProperties.description,
       parentId: changesetProperties.parentId,
       briefcaseId: changesetProperties.briefcaseId,
       containingChanges: changesetProperties.containingChanges,
-      fileSize: this._options.fileHandler.getFileSize(changesetProperties.filePath),
+      fileSize: changesetFileSize,
       synchronizationInfo: changesetProperties.synchronizationInfo
     };
   }
@@ -124,7 +133,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   private async downloadSingleChangeset(params: IModelScopedOperationParams & TargetDirectoryParam & { changeset: Changeset }): Promise<DownloadedChangeset> {
     const changesetWithPath: DownloadedChangeset = {
       ...params.changeset,
-      filePath: this._options.fileHandler.join(params.targetDirectoryPath, this.createFileName(params.changeset.id))
+      filePath: path.join(params.targetDirectoryPath, this.createFileName(params.changeset.id))
     };
 
     await this.downloadChangesetFileWithRetry({
@@ -138,14 +147,17 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
   private async downloadChangesetFileWithRetry(params: IModelScopedOperationParams & { changeset: DownloadedChangeset }): Promise<void> {
     const targetFilePath = params.changeset.filePath;
-    if (this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
+    if (await this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
       return;
 
     try {
       const downloadLink = params.changeset._links.download;
       assertLink(downloadLink);
-      await this._options.fileHandler.downloadFile({ downloadUrl: downloadLink.href, targetFilePath });
-
+      await this._options.cloudStorage.download({
+        transferType: "local",
+        url: downloadLink.href,
+        localPath: targetFilePath
+      });
     } catch (error) {
       const changeset = await this.querySingleInternal({
         authorization: params.authorization,
@@ -156,8 +168,11 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       try {
         const newDownloadLink = changeset._links.download;
         assertLink(newDownloadLink);
-        await this._options.fileHandler.downloadFile({ downloadUrl: newDownloadLink.href, targetFilePath });
-
+        await this._options.cloudStorage.download({
+          transferType: "local",
+          url: newDownloadLink.href,
+          localPath: targetFilePath
+        });
       } catch (errorAfterRetry) {
         throw new IModelsErrorImpl({
           code: IModelsErrorCode.ChangesetDownloadFailed,
@@ -167,15 +182,16 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     }
   }
 
-  private isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): boolean {
-    if (!this._options.fileHandler.exists(targetFilePath))
+  private async isChangesetAlreadyDownloaded(targetFilePath: string, expectedFileSize: number): Promise<boolean> {
+    const fileExists = await this._options.localFileSystem.fileExists(targetFilePath);
+    if (!fileExists)
       return false;
 
-    const existingFileSize = this._options.fileHandler.getFileSize(targetFilePath);
+    const existingFileSize = await this._options.localFileSystem.getFileSize(targetFilePath);
     if (existingFileSize === expectedFileSize)
       return true;
 
-    this._options.fileHandler.unlink(targetFilePath);
+    await this._options.localFileSystem.deleteFile(targetFilePath);
     return false;
   }
 
