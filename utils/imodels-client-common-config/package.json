@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-client-common-config",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "description": "Common configuration for iModels API client wrappers.",
   "keywords": [
     "Bentley",

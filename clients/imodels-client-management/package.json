@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-client-management",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "description": "iModels API client wrapper for applications that manage iModels.",
   "keywords": [
     "Bentley",

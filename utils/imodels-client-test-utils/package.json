@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-client-test-utils",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "description": "Common utilities for iModels API client wrappers tests.",
   "keywords": [
     "Bentley",
