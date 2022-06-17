@@ -9,7 +9,7 @@ parameters:
 trigger: none
 
 jobs:
-  - job: BuildTestSBXAndPublish
+  - job: BuildAndTest
     strategy:
       matrix:
         linux:
@@ -29,4 +29,11 @@ jobs:
     - template: templates/build-test.yml
       parameters:
         runRushAudit: ${{ parameters.runRushAudit }}
+
+  - job: Publish
+    dependsOn: BuildAndTest
+    pool: 
+      vmImage: 'windows-latest'
+   
+    steps:
     - template: templates/publish.yml
