@@ -6,10 +6,6 @@ import { IModelsError, IModelsErrorCode, IModelsErrorParser } from "@itwin/imode
 import { assertError } from "@itwin/imodels-client-test-utils";
 
 describe("IModelsErrorParser", () => {
-  it("should fail", () => {
-    throw new Error("foo");
-  });
-
   it("should parse error", () => {
     // Arrange
     const errorResponse: unknown = {

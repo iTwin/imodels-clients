@@ -29,15 +29,3 @@ jobs:
     - template: templates/build-test.yml
       parameters:
         runRushAudit: ${{ parameters.runRushAudit }}
-
-  - job: Publish
-    dependsOn: BuildAndTest
-    pool: 
-      vmImage: 'windows-latest'
-   
-    steps:
-    - task: PowerShell@2
-      displayName: Test step
-      inputs:
-        targetType: 'inline'
-        script: 'Write-Host "foobar"' 
