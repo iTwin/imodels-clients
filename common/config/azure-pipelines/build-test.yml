@@ -9,7 +9,7 @@ parameters:
 trigger: none
 
 jobs:
-  - job: BuildTestSBX
+  - job: BuildAndTest
     strategy:
       matrix:
         linux:
