@@ -16,3 +16,5 @@ export * from "./AssertionUtils";
 export * from "./CommonTestUtils";
 
 export * from "./TrackableTestFileHandler";
+
+export * from "./TestAbortSignal";

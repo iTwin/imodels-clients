@@ -19,7 +19,7 @@ export class TrackableTestFileHandler implements FileHandler {
   constructor(
     private _underlyingHandler: FileHandler,
     private _stubs?: {
-      downloadStub?: (params: DownloadFileParams) => Promise<void>;
+      downloadStub?: (params: DownloadFileParams) => Promise<boolean>;
     }) {
   }
 
@@ -27,7 +27,7 @@ export class TrackableTestFileHandler implements FileHandler {
     return this._underlyingHandler.uploadFile(params);
   }
 
-  public async downloadFile(params: DownloadFileParams): Promise<void> {
+  public async downloadFile(params: DownloadFileParams): Promise<boolean> {
     if (this._stubs?.downloadStub)
       return this._stubs?.downloadStub(params);
 

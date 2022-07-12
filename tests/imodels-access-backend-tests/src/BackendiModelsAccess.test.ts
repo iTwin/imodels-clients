@@ -6,8 +6,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, IModelIdArg, LockMap, LockProps, LockState } from "@itwin/core-backend";
 import { BriefcaseId, ChangesetFileProps, ChangesetType, LocalDirName } from "@itwin/core-common";
-import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
-import { expect } from "chai";
+import { BackendIModelsAccess, DownloadChangesetRangeArg, ProgressFunction, ProgressStatus } from "@itwin/imodels-access-backend";
+import { assert, expect } from "chai";
 import { ContainingChanges, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 import { getTestDIContainer } from "./TestDiContainerProvider";
@@ -113,6 +113,58 @@ describe("BackendIModelsAccess", () => {
         else
           expect(downloadedChangeset.changesType).to.be.equal(ChangesetType.Regular);
       }
+    });
+
+    it("should report download changesets progress", async () => {
+      // Arrange
+      const progressReports: {downloaded: number, total: number}[] = [];
+      const progressCallback: ProgressFunction = (downloaded, total) => {
+        progressReports.push({downloaded, total});
+        return ProgressStatus.Continue;
+      }
+
+      const downloadChangesetsParams: DownloadChangesetRangeArg = {
+        accessToken,
+        iModelId: testIModelForRead.id,
+        targetDir: testDownloadPath,
+        progressCallback
+      };
+
+      // Act
+      const downloadedChangesets: ChangesetFileProps[] = await backendIModelsAccess.downloadChangesets(downloadChangesetsParams);
+
+      // Assert
+      expect(downloadedChangesets.length).to.be.equal(testIModelFileProvider.changesets.length);
+      assert(progressReports.length > 0);
+
+      const lastReport = progressReports[progressReports.length - 1];
+      expect(lastReport.downloaded === lastReport.total);
+    });
+
+    it("should cancel changesets download", async () => {
+      // Arrange
+      const progressReports: {downloaded: number, total: number}[] = [];
+      const progressCallback: ProgressFunction = (downloaded, total) => {
+        progressReports.push({downloaded, total});
+        return ProgressStatus.Abort;
+      }
+
+      const downloadChangesetsParams: DownloadChangesetRangeArg = {
+        accessToken,
+        iModelId: testIModelForRead.id,
+        targetDir: testDownloadPath,
+        progressCallback
+      };
+
+      // Act
+      const downloadedChangesets: ChangesetFileProps[] = await backendIModelsAccess.downloadChangesets(downloadChangesetsParams);
+
+      // Assert
+      expect(downloadedChangesets.length).to.be.lessThan(testIModelFileProvider.changesets.length);
+
+      assert(progressReports.length > 0);
+      const lastReport = progressReports[progressReports.length - 1];
+      expect(lastReport.downloaded !== lastReport.total);
     });
   });
 

@@ -14,6 +14,12 @@ export interface ProgressData {
 /** Function to call to report file transfer progress. */
 export type ProgressCallback = (progressData: ProgressData) => void;
 
+/** Signal raised when abort event happens. */
+export interface AbortSignal {
+  /** Add a listener for the signal. */
+  addListener(listener: () => void): () => void;
+}
+
 /** Parameters for upload file operation. */
 export interface UploadFileParams {
   /** Remote storage url where to upload the file. */
@@ -32,6 +38,8 @@ export interface DownloadFileParams {
   targetFilePath: string;
   /** Function to be called to report progress on each transfer iteration. See {@link ProgressCallback}. */
   progressCallback?: ProgressCallback;
+  /** Signal raised when transfer should be cancelled. See {@link AbortSignal}. */
+  abortSignal?: AbortSignal;
 }
 
 /**
@@ -51,7 +59,7 @@ export interface FileHandler {
    * @param {DownloadFileParams} params parameters for this operation. See {@link DownloadFileParams}.
    * @returns a promise that resolves after operation completes.
    */
-  downloadFile(params: DownloadFileParams): Promise<void>;
+  downloadFile(params: DownloadFileParams): Promise<boolean>;
 
   /**
    * Determines if a file with the specified path exists in the file system.

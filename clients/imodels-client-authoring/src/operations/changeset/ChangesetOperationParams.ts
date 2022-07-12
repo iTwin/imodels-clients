@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { ContainingChanges, GetChangesetListParams, GetSingleChangesetParams, IModelScopedOperationParams, SynchronizationInfo } from "@itwin/imodels-client-management";
-import { TargetDirectoryParam } from "../../base";
+import { AbortSignal, ProgressCallback, TargetDirectoryParam } from "../../base";
 
 export type SynchronizationInfoForCreate = Omit<SynchronizationInfo, "changedFiles"> & {
   /** Optional list of files that were processed by the synchronization. The array, if specified, must not be empty. */
@@ -40,8 +40,20 @@ export interface CreateChangesetParams extends IModelScopedOperationParams {
   changesetProperties: ChangesetPropertiesForCreate;
 }
 
+/** */
+export interface ProgressCallbackParam {
+  /** */
+  progressCallback?: ProgressCallback;
+}
+
+/** */
+export interface AbortCallbackParam {
+  /** */
+  abortSignal?: AbortSignal;
+}
+
 /** Parameters for single Changeset download operation. */
-export type DownloadSingleChangesetParams = GetSingleChangesetParams & TargetDirectoryParam;
+export type DownloadSingleChangesetParams = GetSingleChangesetParams & TargetDirectoryParam & ProgressCallbackParam & AbortCallbackParam;
 
 /** Parameters for Changeset list download operation. */
-export type DownloadChangesetListParams = GetChangesetListParams & TargetDirectoryParam;
+export type DownloadChangesetListParams = GetChangesetListParams & TargetDirectoryParam & ProgressCallbackParam & AbortCallbackParam;

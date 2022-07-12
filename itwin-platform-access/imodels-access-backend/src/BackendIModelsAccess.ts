@@ -26,6 +26,35 @@ import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
+/** Return value from [[ProgressFunction]]. */
+ export enum ProgressStatus {
+  /** Continue download. */
+  Continue = 0,
+  /** Abort download. */
+  Abort = 1,
+}
+
+/** Called to show progress during a download. If this function returns non-zero, the download is aborted. */
+export type ProgressFunction = (loaded: number, total: number) => ProgressStatus;
+
+/** Argument for cancelling and tracking download progress. */
+ export interface DownloadProgressArg {
+  /** Called to show progress during a download. If this function returns non-zero, the download is aborted. */
+  progressCallback?: ProgressFunction;
+}
+
+/** Argument for downloading a changeset. */
+ export interface DownloadChangesetArg extends ChangesetArg, DownloadProgressArg {
+  /** Directory where the changeset should be downloaded. */
+  targetDir: LocalDirName;
+}
+
+/** Argument for downloading a changeset range. */
+ export interface DownloadChangesetRangeArg extends ChangesetRangeArg, DownloadProgressArg {
+  /** Directory where the changesets should be downloaded. */
+  targetDir: LocalDirName;
+}
+
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
   private readonly _changeSet0 = { id: "", changesType: 0, description: "initialChangeset", parentId: "", briefcaseId: 0, pushDate: "", userCreated: "", index: 0 };
@@ -34,24 +63,36 @@ export class BackendIModelsAccess implements BackendHubAccess {
     this._iModelsClient = iModelsClient ?? new IModelsClient();
   }
 
-  public async downloadChangesets(arg: ChangesetRangeArg & { targetDir: LocalDirName }): Promise<ChangesetFileProps[]> {
+  public async downloadChangesets(arg: DownloadChangesetRangeArg): Promise<ChangesetFileProps[]> {
     const downloadParams: DownloadChangesetListParams = {
       ...this.getIModelScopedOperationParams(arg),
       targetDirectoryPath: arg.targetDir
     };
     downloadParams.urlParams = PlatformToClientAdapter.toChangesetRangeUrlParams(arg.range);
 
+    if (arg.progressCallback) {
+      const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallbackAndAbortSignal(arg.progressCallback);
+      downloadParams.abortSignal = abortSignal;
+      downloadParams.progressCallback = progressCallback;
+    }
+
     const downloadedChangesets: DownloadedChangeset[] = await this._iModelsClient.changesets.downloadList(downloadParams);
     const result: ChangesetFileProps[] = downloadedChangesets.map(ClientToPlatformAdapter.toChangesetFileProps);
     return result;
   }
 
-  public async downloadChangeset(arg: ChangesetArg & { targetDir: LocalDirName }): Promise<ChangesetFileProps> {
+  public async downloadChangeset(arg: DownloadChangesetArg): Promise<ChangesetFileProps> {
     const downloadSingleChangesetParams: DownloadSingleChangesetParams = {
       ...this.getIModelScopedOperationParams(arg),
       ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset),
       targetDirectoryPath: arg.targetDir
     };
+
+    if (arg.progressCallback) {
+      const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallbackAndAbortSignal(arg.progressCallback);
+      downloadSingleChangesetParams.abortSignal = abortSignal;
+      downloadSingleChangesetParams.progressCallback = progressCallback;
+    }
 
     const downloadedChangeset: DownloadedChangeset = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
     const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset);

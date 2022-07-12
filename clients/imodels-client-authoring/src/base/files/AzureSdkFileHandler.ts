@@ -7,6 +7,7 @@ import * as path from "path";
 import { URL } from "url";
 import { AnonymousCredential, BlobDownloadOptions, BlobGetPropertiesResponse, BlockBlobClient, BlockBlobParallelUploadOptions } from "@azure/storage-blob";
 import { DownloadFileParams, FileHandler, ProgressCallback, UploadFileParams } from "./FileHandler";
+import { AbortController } from "@azure/abort-controller";
 
 interface AzureProgressCallbackData {
   loadedBytes: number;
@@ -36,22 +37,38 @@ export class AzureSdkFileHandler implements FileHandler {
     await blockBlobClient.uploadFile(params.sourceFilePath, uploadOptions);
   }
 
-  public async downloadFile(params: DownloadFileParams): Promise<void> {
+  public async downloadFile(params: DownloadFileParams): Promise<boolean> {
     if (this.isUrlExpired(params.downloadUrl))
       throw new Error("AzureSdkFileHandler: cannot download file because SAS url is expired.");
 
     const blockBlobClient = new BlockBlobClient(params.downloadUrl, new AnonymousCredential());
 
-    let downloadOptions: BlobDownloadOptions | undefined;
+    let downloadOptions: BlobDownloadOptions = {};
     if (params.progressCallback) {
       const blobProperties: BlobGetPropertiesResponse = await blockBlobClient.getProperties();
       const fileSize = blobProperties.contentLength!;
-      downloadOptions = {
-        onProgress: this.adaptProgressCallback(params.progressCallback, fileSize)
-      };
+      downloadOptions.onProgress = this.adaptProgressCallback(params.progressCallback, fileSize);
     }
 
-    await blockBlobClient.downloadToFile(params.targetFilePath, undefined, undefined, downloadOptions);
+    let removeAbortListener: () => void = () => {};
+    if (params.abortSignal) {
+      const abortController = new AbortController();
+      removeAbortListener = params.abortSignal.addListener(() => abortController.abort());
+      downloadOptions.abortSignal = abortController.signal;
+    }
+
+    try {
+      await blockBlobClient.downloadToFile(params.targetFilePath, undefined, undefined, downloadOptions);
+    } catch (error: any) {
+      if (error.name === "AbortError")
+        return false;
+
+      throw error;
+    } finally {
+      removeAbortListener();
+    }
+
+    return true;
   }
 
   public exists(filePath: string): boolean {

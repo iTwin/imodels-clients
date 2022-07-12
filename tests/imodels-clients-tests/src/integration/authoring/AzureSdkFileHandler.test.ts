@@ -76,6 +76,10 @@ describe("AzureSdkFileHandler", () => {
     expect(progressLog.bytesTotal).to.equal(fs.statSync(testChangeset.filePath).size);
   });
 
+  it("TODO: should cancel download", async () => {
+
+  });
+
   it("should call callback when uploading file", async () => {
     // Arrange
     const testChangeset = testIModelFileProvider.changesets[0];

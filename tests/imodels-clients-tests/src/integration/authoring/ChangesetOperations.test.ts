@@ -5,9 +5,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import { expect } from "chai";
-import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetListParams, DownloadFileParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, TargetDirectoryParam } from "@itwin/imodels-client-authoring";
-import { FileTransferLog, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanupDirectory } from "@itwin/imodels-client-test-utils";
+import { AcquireBriefcaseParams, AuthorizationCallback, AzureSdkFileHandler, CreateChangesetParams, DownloadChangesetListParams, DownloadFileParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, TargetDirectoryParam, ProgressData, ProgressCallback } from "@itwin/imodels-client-authoring";
+import { FileTransferLog, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableTestFileHandler, assertChangeset, assertDownloadedChangeset, cleanupDirectory, TestAbortSignal } from "@itwin/imodels-client-test-utils";
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
+import { assert } from "console";
 
 type CommonDownloadParams = IModelScopedOperationParams & TargetDirectoryParam;
 
@@ -393,6 +394,69 @@ describe("[Authoring] ChangesetOperations", () => {
         const timesDownloadUrlWasCalled = fileTransferLog.downloads[allDownloadUrlsCalled[0]];
         expect(timesDownloadUrlWasCalled).to.equal(1);
       });
+    });
+
+    it("should report progress of multiple changesets download", async () => {
+      // Arrange
+      const progressReports: ProgressData[] = [];
+      const progressCallback: ProgressCallback = (progressData) => progressReports.push(progressData);
+
+      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "download progress test");
+      const downloadChangesetListParams: DownloadChangesetListParams = {
+        authorization,
+        iModelId: testIModelForRead.id,
+        targetDirectoryPath: downloadPath,
+        progressCallback
+      };
+
+      // Act
+      const changesets = await iModelsClient.changesets.downloadList(downloadChangesetListParams);
+
+      // Assert
+      expect(changesets.length).to.equal(testIModelFileProvider.changesets.length);
+      expect(fs.readdirSync(downloadPath).length).to.equal(testIModelFileProvider.changesets.length);
+
+      expect(progressReports.length > 1);
+
+      let previousDownloadedBytes = 0;
+      const totalBytes = changesets.map((changesets) => changesets.fileSize).reduce((sum, size) => sum + size);
+
+      for (let index = 0; index < progressReports.length; index++) {
+        assert (totalBytes === progressReports[index].bytesTotal);
+        assert (previousDownloadedBytes <= progressReports[index].bytesTransferred);
+
+        if (index === progressReports.length - 1)
+          assert(progressReports[index].bytesTransferred === totalBytes);
+        else
+          assert(progressReports[index].bytesTransferred <= totalBytes);
+          
+        previousDownloadedBytes = progressReports[index].bytesTransferred;
+      }
+    });
+
+    it("should cancel multiple changesets download", async () => {
+      // Arrange
+      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "download cancel test");
+      const abortSignal = new TestAbortSignal();
+      const downloadChangesetListParams: DownloadChangesetListParams = {
+        authorization,
+        iModelId: testIModelForRead.id,
+        targetDirectoryPath: downloadPath,
+        abortSignal
+      };
+
+      // Act
+      const promise = iModelsClient.changesets.downloadList(downloadChangesetListParams);
+      abortSignal.raise();
+      const changesets = await promise;
+
+      // Assert
+      const allChangesets = testIModelFileProvider.changesets.length;
+      const returnedChangesets = changesets.length;
+      const changesetFiles = fs.readdirSync(downloadPath).length;
+
+      expect(returnedChangesets).to.be.equal(changesetFiles)
+      expect(returnedChangesets).to.be.lessThan(allChangesets);
     });
   });
 });

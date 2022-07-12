@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CreateNewIModelProps, LockMap, LockState } from "@itwin/core-backend";
+import { CreateNewIModelProps, LockMap, LockState, ProgressFunction } from "@itwin/core-backend";
 import { RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetRange, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
-import { ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
+import { ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties, LockLevel, LockedObjects, ProgressCallback, AbortSignal } from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
@@ -67,6 +67,26 @@ export class PlatformToClientAdapter {
         ? 0
         : changesetRange.first - 1
     };
+  }
+
+  public static toProgressCallbackAndAbortSignal(progressFunction: ProgressFunction): [ProgressCallback, AbortSignal] {
+    const listeners = new Array<() => void>();
+
+    const abortSignal: AbortSignal = {
+      addListener: (listener) => {
+        listeners.push(listener);
+        return () => listeners.splice(listeners.indexOf(listener), 1);
+      }
+    }
+
+    const progressCallback: ProgressCallback = (data) => {
+      const abort = progressFunction(data.bytesTransferred, data.bytesTotal) > 0;
+
+      if (abort)
+        listeners.forEach((listener) => listener());
+    }
+    
+    return [progressCallback, abortSignal];
   }
 
   private static toLockLevel(lockState: LockState): LockLevel {
