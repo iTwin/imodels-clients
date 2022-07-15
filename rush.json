@@ -55,6 +55,11 @@
       "shouldPublish": false
     },
     {
+      "packageName": "@itwin/imodels-clients-tests-browser",
+      "projectFolder": "tests/imodels-clients-tests-browser",
+      "shouldPublish": false
+    },
+    {
       "packageName": "@itwin/imodels-access-frontend-tests",
       "projectFolder": "tests/imodels-access-frontend-tests",
       "shouldPublish": false

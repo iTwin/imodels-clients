@@ -2,37 +2,41 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
+import { ClientStorage } from "@itwin/object-storage-core";
+
 import {
-  CheckpointOperations,
   IModelsClient as ManagementIModelsClient,
   IModelsClientOptions as ManagementIModelsClientOptions,
-  NamedVersionOperations,
-  RecursiveRequired,
-  UserOperations,
-  UserPermissionOperations
+  RecursiveRequired
 } from "@itwin/imodels-client-management";
-import { AzureSdkFileHandler, FileHandler } from "./base";
-import { BriefcaseOperations, ChangesetOperations, IModelOperations, LockOperations } from "./operations";
-import { BaselineFileOperations } from "./operations/baseline-file/BaselineFileOperations";
-import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
-import { OperationOptions } from "./operations/OperationOptions";
+
+import { NodeLocalFileSystem } from "./base/internal";
+import { LocalFileSystem } from "./base/public";
+import { BaselineFileOperations, BriefcaseOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions extends ManagementIModelsClientOptions {
   /**
-   * File handler to use in operations which transfer files. Examples of such operations are Changeset download in
+   * Local filesystem to use in operations which transfer files. Examples of such operations are Changeset download in
    * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. If `undefined` the default
-   * handler is used which is implemented using Azure SDK. See {@link AzureSdkFileHandler}.
+   * is used which is `LocalFsImpl` that is implemented using Node's `fs` module.
    */
-  fileHandler?: FileHandler;
+  localFileSystem?: LocalFileSystem;
+  /**
+   * Storage handler to use in operations which transfer files. Examples of such operations are Changeset download in
+   * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. If `undefined` the default
+   * is used which is `AzureClientStorage` class from `@itwin/object-storage-azure`.
+   */
+  cloudStorage?: ClientStorage;
 }
 
 /**
  * iModels API client for iModel authoring workflows. For more information on the API visit the
  * {@link https://developer.bentley.com/apis/imodels/ iModels API documentation page}.
  */
-export class IModelsClient {
-  protected _operationsOptions: OperationOptions;
+export class IModelsClient extends ManagementIModelsClient {
+  protected override _operationsOptions: OperationOptions;
 
   /**
    * Class constructor.
@@ -41,6 +45,8 @@ export class IModelsClient {
    */
   constructor(options?: IModelsClientOptions) {
     const filledIModelsClientOptions = IModelsClient.fillConfiguration(options);
+    super(filledIModelsClientOptions);
+
     this._operationsOptions = {
       ...filledIModelsClientOptions,
       urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
@@ -48,15 +54,15 @@ export class IModelsClient {
   }
 
   /**
-   * File handler that is used for file transfer operations. This uses the user provided handler or default one,
-   * see {@link iModelsClientOptions}.
+   * `ClientStorage` instance that is used for file transfer operations. This uses the user provided instance or default one,
+   * see {@link IModelsClientOptions}.
    */
-  public get fileHandler(): FileHandler {
-    return this._operationsOptions.fileHandler;
+  public get cloudStorage(): ClientStorage {
+    return this._operationsOptions.cloudStorage;
   }
 
   /** iModel operations. See {@link iModelOperations}. */
-  public get iModels(): IModelOperations<OperationOptions> {
+  public override get iModels(): IModelOperations<OperationOptions> {
     return new IModelOperations(this._operationsOptions);
   }
 
@@ -66,38 +72,18 @@ export class IModelsClient {
   }
 
   /** Briefcase operations. See {@link BriefcaseOperations}. */
-  public get briefcases(): BriefcaseOperations<OperationOptions> {
-    return new BriefcaseOperations(this._operationsOptions);
+  public override get briefcases(): BriefcaseOperations<OperationOptions> {
+    return new BriefcaseOperations(this._operationsOptions, this);
   }
 
   /** Changeset operations. See {@link ChangesetOperations}. */
-  public get changesets(): ChangesetOperations<OperationOptions> {
-    return new ChangesetOperations(this._operationsOptions, this.namedVersions, this.checkpoints);
-  }
-
-  /** Named version operations. See {@link NamedVersionOperations}. */
-  public get namedVersions(): NamedVersionOperations<OperationOptions> {
-    return new NamedVersionOperations(this._operationsOptions);
-  }
-
-  /** Checkpoint operations. See {@link CheckpointOperations}. */
-  public get checkpoints(): CheckpointOperations<OperationOptions> {
-    return new CheckpointOperations(this._operationsOptions);
+  public override get changesets(): ChangesetOperations<OperationOptions> {
+    return new ChangesetOperations(this._operationsOptions, this);
   }
 
   /** Lock operations. See {@link LockOperations}. */
   public get locks(): LockOperations<OperationOptions> {
     return new LockOperations(this._operationsOptions);
-  }
-
-  /** User operations. See {@link UserOperations}. */
-  public get users(): UserOperations<OperationOptions> {
-    return new UserOperations(this._operationsOptions);
-  }
-
-  /** User Permission operations. See {@link UserPermissionOperations}. */
-  public get userPermissions(): UserPermissionOperations<OperationOptions> {
-    return new UserPermissionOperations(this._operationsOptions);
   }
 
   /**
@@ -106,10 +92,11 @@ export class IModelsClient {
    * @param {iModelsClientOptions} options user-passed client options.
    * @returns {RecursiveRequired<iModelsClientOptions>} required iModels client configuration options.
    */
-  public static fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
+  public static override fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
     return {
       ...ManagementIModelsClient.fillConfiguration(options),
-      fileHandler: options?.fileHandler ?? new AzureSdkFileHandler()
+      localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
+      cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory())
     };
   }
 }

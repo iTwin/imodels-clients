@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { AcquireBriefcaseParams, AuthorizationCallback, Briefcase, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertBriefcase } from "@itwin/imodels-client-test-utils";
+
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 describe("[Authoring] BriefcaseOperations", () => {
@@ -47,7 +48,7 @@ describe("[Authoring] BriefcaseOperations", () => {
     const briefcase: Briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
 
     // Assert
-    assertBriefcase({
+    await assertBriefcase({
       actualBriefcase: briefcase,
       expectedBriefcaseProperties: acquireBriefcaseParams.briefcaseProperties!,
       isGetResponse: false

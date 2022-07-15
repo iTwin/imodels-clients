@@ -19,8 +19,8 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
-  "main": "lib/IModelsClientExports.js",
-  "typings": "lib/IModelsClientExports",
+  "main": "lib/index.js",
+  "typings": "lib/index",
   "scripts": {
     "build": "tsc 1>&2",
     "clean": "rimraf lib",
@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "workspace:*",
+    "@types/node": "~16.11.36",
     "cspell": "~5.21.0",
     "eslint": "~7.31.0",
     "rimraf": "~3.0.2",

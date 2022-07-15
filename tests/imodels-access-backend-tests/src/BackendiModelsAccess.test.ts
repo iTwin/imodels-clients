@@ -2,21 +2,35 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { assert } from "console";
 import * as fs from "fs";
 import * as path from "path";
-import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, IModelIdArg, LockMap, LockProps, LockState } from "@itwin/core-backend";
-import { BriefcaseId, ChangesetFileProps, ChangesetType, LocalDirName } from "@itwin/core-common";
+
+import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction } from "@itwin/core-backend";
+import { BriefcaseId, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
+
 import { ContainingChanges, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
+import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
+
 import { getTestDIContainer } from "./TestDiContainerProvider";
+
+class TestAuthorizationClient {
+  constructor(private _accessToken: string) {
+  }
+
+  public async getAccessToken(): Promise<string> {
+    return this._accessToken;
+  }
+}
 
 describe("BackendIModelsAccess", () => {
   const testRunId = createGuidValue();
 
   let backendIModelsAccess: BackendIModelsAccess;
   let accessToken: string;
+  let iTwinId: string;
 
   let testIModelFileProvider: TestIModelFileProvider;
   let testIModelGroup: TestIModelGroup;
@@ -35,6 +49,10 @@ describe("BackendIModelsAccess", () => {
     const authorizationCallback = authorizationProvider.getAdmin1Authorization();
     const authorization = await authorizationCallback();
     accessToken = `${authorization.scheme} ${authorization.token}`;
+    IModelHost.authorizationClient = new TestAuthorizationClient(accessToken);
+
+    const testProjectProvider = container.get(TestProjectProvider);
+    iTwinId = await testProjectProvider.getOrCreate();
 
     testIModelFileProvider = container.get(TestIModelFileProvider);
 
@@ -52,12 +70,12 @@ describe("BackendIModelsAccess", () => {
     testIModelForWrite = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
   });
 
-  beforeEach(() => {
-    cleanupDirectory(testDownloadPath);
+  beforeEach(async () => {
+    await cleanupDirectory(testDownloadPath);
   });
 
-  afterEach(() => {
-    cleanupDirectory(testDownloadPath);
+  afterEach(async () => {
+    await cleanupDirectory(testDownloadPath);
   });
 
   after(async () => {
@@ -113,6 +131,100 @@ describe("BackendIModelsAccess", () => {
         else
           expect(downloadedChangeset.changesType).to.be.equal(ChangesetType.Regular);
       }
+    });
+  });
+
+  describe("checkpoints v1", () => {
+    it("should download checkpoint for a specific changeset", async () => {
+      // Arrange
+      const lastNamedVersion = testIModelForRead.namedVersions[testIModelForRead.namedVersions.length - 1];
+
+      const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_specific_changeset.bim");
+      const downloadV1CheckpointParams: CheckpointArg = {
+        localFile: localCheckpointFilePath,
+        checkpoint: {
+          accessToken,
+          iTwinId,
+          iModelId: testIModelForRead.id,
+          changeset: {
+            id: lastNamedVersion.changesetId
+          }
+        }
+      };
+
+      // Act
+      const downloadedCheckpoint: ChangesetIndexAndId = await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
+
+      // Assert
+      expect(downloadedCheckpoint.id).to.be.equal(lastNamedVersion.changesetId);
+      expect(downloadedCheckpoint.index).to.be.equal(lastNamedVersion.changesetIndex);
+      expect(fs.existsSync(localCheckpointFilePath)).to.be.equal(true);
+      expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
+    });
+
+    it("should download preceding checkpoint if one for current changeset does not exist", async () => {
+      // Arrange
+      const firstNamedVersion = testIModelForRead.namedVersions[0];
+      assert(testIModelFileProvider.changesets.length >= firstNamedVersion.changesetIndex + 1, "Not enough changesets");
+      const nextChangeset = testIModelFileProvider.changesets[firstNamedVersion.changesetIndex];
+      assert(firstNamedVersion.changesetId !== nextChangeset.id, "Unexpected changeset ids");
+
+      const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_preceding_changeset.bim");
+      const downloadV1CheckpointParams: CheckpointArg = {
+        localFile: localCheckpointFilePath,
+        checkpoint: {
+          accessToken,
+          iTwinId,
+          iModelId: testIModelForRead.id,
+          changeset: {
+            id: nextChangeset.id
+          }
+        }
+      };
+
+      // Act
+      const downloadedCheckpoint: ChangesetIndexAndId = await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
+
+      // Assert
+      expect(downloadedCheckpoint.id).to.be.equal(firstNamedVersion.changesetId);
+      expect(downloadedCheckpoint.index).to.be.equal(firstNamedVersion.changesetIndex);
+      expect(fs.existsSync(localCheckpointFilePath)).to.be.equal(true);
+      expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
+    });
+
+    it("should report progress when downloading checkpoint", async () => {
+      // Arrange
+      const progressLogs: { loaded: number, total: number }[] = [];
+      const progressCallback: ProgressFunction = (loaded: number, total: number) => {
+        progressLogs.push({ loaded, total });
+        return 0;
+      };
+
+      const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_progress_test.bim");
+      const downloadV1CheckpointParams: CheckpointArg = {
+        localFile: localCheckpointFilePath,
+        checkpoint: {
+          accessToken,
+          iTwinId,
+          iModelId: testIModelForRead.id,
+          changeset: {
+            id: testIModelForRead.namedVersions[0].changesetId
+          }
+        },
+        onProgress: progressCallback
+      };
+
+      // Act
+      await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
+
+      // Assert
+      expect(fs.existsSync(localCheckpointFilePath)).to.be.equal(true);
+      expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
+
+      expect(progressLogs.length).to.be.greaterThan(0);
+      const lastReportedLog = progressLogs[progressLogs.length - 1];
+      expect(lastReportedLog.loaded).to.be.equal(lastReportedLog.total);
+      expect(lastReportedLog.total).to.be.equal(fs.statSync(localCheckpointFilePath).size);
     });
   });
 

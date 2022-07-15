@@ -2,10 +2,16 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationParam, IModel, IModelsErrorCode, IModelsErrorImpl, Link, IModelOperations as ManagementIModelOperations, waitForCondition } from "@itwin/imodels-client-management";
-import { BaselineFileState } from "../../base/interfaces/apiEntities/BaselineFileInterfaces";
+import { IModelsErrorImpl, waitForCondition } from "@itwin/imodels-client-management/lib/base/internal";
+import { IModelOperations as ManagementIModelOperations } from "@itwin/imodels-client-management/lib/operations";
+
+import { AuthorizationParam, IModel, IModelsErrorCode } from "@itwin/imodels-client-management";
+
+import { BaselineFileState } from "../../base/public";
 import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations";
+import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";
+
 import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline } from "./IModelOperationParams";
 
 export class IModelOperations<TOptions extends OperationOptions> extends ManagementIModelOperations<TOptions> {
@@ -29,14 +35,18 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   * or did not complete in time. See {@link iModelsErrorCode}.
   */
   public async createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel> {
-    const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties);
+    const baselineFileSize = await this._options.localFileSystem.getFileSize(params.iModelProperties.filePath);
+    const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties, baselineFileSize);
     const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody);
 
-    this.assertLink(createdIModel._links.upload);
+    assertLink(createdIModel._links.upload);
     const uploadUrl = createdIModel._links.upload.href;
-    await this._options.fileHandler.uploadFile({ uploadUrl, sourceFilePath: params.iModelProperties.filePath });
+    await this._options.cloudStorage.upload({
+      url: uploadUrl,
+      data: params.iModelProperties.filePath
+    });
 
-    this.assertLink(createdIModel._links.complete);
+    assertLink(createdIModel._links.complete);
     const confirmUploadUrl = createdIModel._links.complete.href;
     await this.sendPostRequest({
       authorization: params.authorization,
@@ -54,11 +64,14 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     });
   }
 
-  private getCreateIModelFromBaselineRequestBody(iModelProperties: IModelPropertiesForCreateFromBaseline): object {
+  private getCreateIModelFromBaselineRequestBody(
+    iModelProperties: IModelPropertiesForCreateFromBaseline,
+    baselineFileSize: number
+  ): object {
     return {
       ...this.getCreateEmptyIModelRequestBody(iModelProperties),
       baselineFile: {
-        size: this._options.fileHandler.getFileSize(iModelProperties.filePath)
+        size: baselineFileSize
       }
     };
   }
@@ -87,10 +100,5 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
       }),
       timeOutInMs: params.timeOutInMs
     });
-  }
-
-  private assertLink(link: Link | undefined): asserts link is Link {
-    if (!link || !link.href)
-      throw new Error("Assertion failed: link is falsy.");
   }
 }
