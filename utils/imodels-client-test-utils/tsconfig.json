@@ -2,7 +2,8 @@
   "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "types": [
     "reflect-metadata"

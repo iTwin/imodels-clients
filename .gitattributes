@@ -2,3 +2,5 @@
 # line endings showing up in git diffs
 *       text eol=lf
 *.bim   binary
+*.png   binary
+*.jpeg  binary

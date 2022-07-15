@@ -2,8 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
+
 import { Authorization, AuthorizationCallback } from "@itwin/imodels-client-authoring";
+
 import { TestAuthorizationClient } from "./TestAuthorizationClient";
 import { TestAuthorizationProviderConfig } from "./TestAuthorizationProviderConfig";
 
@@ -12,9 +14,7 @@ export class TestAuthorizationProvider {
   private _authorizations: { [key: string]: Authorization } = {};
 
   constructor(
-    @inject(TestAuthorizationProviderConfig)
     private readonly _config: TestAuthorizationProviderConfig,
-    @inject(TestAuthorizationClient)
     private readonly _testiModelsAuthClient: TestAuthorizationClient
   ) { }
 

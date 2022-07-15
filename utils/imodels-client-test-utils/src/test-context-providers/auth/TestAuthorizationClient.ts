@@ -4,10 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
+
 import axios, { AxiosResponse } from "axios";
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import * as puppeteer from "puppeteer";
+
 import { TestSetupError } from "../../CommonTestUtils";
+
 import { TestAuthorizationClientConfig } from "./TestAuthorizationClientConfigImpl";
 
 export interface TestUserCredentials {
@@ -38,7 +41,6 @@ export class TestAuthorizationClient {
   };
 
   constructor(
-    @inject(TestAuthorizationClientConfig)
     private readonly _authConfig: TestAuthorizationClientConfig
   ) { }
 

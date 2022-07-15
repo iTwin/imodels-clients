@@ -5,6 +5,8 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { testLocalFileSystem } from "./TestLocalFileSystem";
+
 export class TestSetupError extends Error {
   constructor(message: string) {
     super(message);
@@ -21,11 +23,23 @@ export function createDirectory(directoryPath: string): void {
   fs.mkdirSync(directoryPath);
 }
 
-export function cleanupDirectory(directory: string): void {
-  if (fs.existsSync(directory)) {
-    fs.rmdirSync(directory, { recursive: true });
-    fs.mkdirSync(directory);
-  }
+export async function cleanupDirectory(directory: string): Promise<void> {
+  if (!(await testLocalFileSystem.directoryExists(directory)))
+    return;
+
+  const directoryObjects = await fs.promises.readdir(directory);
+  const fileDeletePromises: Promise<void>[] = directoryObjects.map(async (objectName) => {
+    const fullPath = path.join(directory, objectName);
+
+    const isDirectory = await testLocalFileSystem.isDirectory(fullPath);
+    if (isDirectory) {
+      await cleanupDirectory(fullPath);
+      await testLocalFileSystem.deleteDirectory(fullPath);
+    } else {
+      await testLocalFileSystem.deleteFile(fullPath);
+    }
+  });
+  await Promise.all(fileDeletePromises);
 }
 
 export function createGuidValue(): string {

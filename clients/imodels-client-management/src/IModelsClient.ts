@@ -2,9 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ApiOptions, AxiosRestClient, RecursiveRequired, RestClient } from "./base";
+import { AxiosRestClient } from "./base/internal";
+import { ApiOptions, RecursiveRequired, RestClient } from "./base/public";
 import { Constants } from "./Constants";
-import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, UserOperations, UserPermissionOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
 import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
 import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
@@ -47,22 +48,27 @@ export class IModelsClient {
 
   /** Briefcase operations. See {@link BriefcaseOperations}. */
   public get briefcases(): BriefcaseOperations<OperationOptions> {
-    return new BriefcaseOperations(this._operationsOptions);
+    return new BriefcaseOperations(this._operationsOptions, this);
   }
 
   /** Changeset operations. See {@link ChangesetOperations}. */
   public get changesets(): ChangesetOperations<OperationOptions> {
-    return new ChangesetOperations(this._operationsOptions, this.namedVersions, this.checkpoints);
+    return new ChangesetOperations(this._operationsOptions, this);
   }
 
   /** Named version operations. See {@link NamedVersionOperations}. */
   public get namedVersions(): NamedVersionOperations<OperationOptions> {
-    return new NamedVersionOperations(this._operationsOptions);
+    return new NamedVersionOperations(this._operationsOptions, this);
   }
 
   /** Checkpoint operations. See {@link CheckpointOperations}. */
   public get checkpoints(): CheckpointOperations<OperationOptions> {
     return new CheckpointOperations(this._operationsOptions);
+  }
+
+  /** Thumbnail operations. See {@link ThumbnailOperations}. */
+  public get thumbnails(): ThumbnailOperations<OperationOptions> {
+    return new ThumbnailOperations(this._operationsOptions);
   }
 
   /** User operations. See {@link UserOperations}. */

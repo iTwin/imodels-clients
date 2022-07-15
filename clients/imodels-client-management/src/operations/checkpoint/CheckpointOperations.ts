@@ -2,8 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Checkpoint, CheckpointResponse, OperationsBase } from "../../base";
+import { CheckpointResponse, OperationsBase } from "../../base/internal";
+import { Checkpoint } from "../../base/public";
 import { OperationOptions } from "../OperationOptions";
+
 import { GetSingleCheckpointParams } from "./CheckpointOperationParams";
 
 export class CheckpointOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {

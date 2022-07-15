@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
 import { IModelError } from "@itwin/core-common";
+
 import { Authorization, AuthorizationCallback } from "@itwin/imodels-client-management";
 
 export class AccessTokenAdapter {
