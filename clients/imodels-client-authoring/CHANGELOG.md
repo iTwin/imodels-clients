@@ -3,7 +3,7 @@
 ## 2.0.0
 
 Breaking changes:
-- Removed `FileHandler` interface and default `AzureFileHandler` implementation. Storage operations now use `@itwin/object-storage-core` and `@itwin/object-storage-azure` packages.
+- Removed `FileHandler` interface and default `AzureFileHandler` implementation. Storage operations now use [`@itwin/object-storage-core`](https://www.npmjs.com/package/@itwin/object-storage-core) and [`@itwin/object-storage-azure`](https://www.npmjs.com/package/@itwin/object-storage-azure) packages.
 - Removed internal code exports from the main `index.ts` file that should not be used directly by package users. The following components are no longer part of the public package API:
   - Operation classes (`IModelOperations`, `ChangesetOperations`, etc.)
   - Utility types (raw API response interfaces, etc.)
