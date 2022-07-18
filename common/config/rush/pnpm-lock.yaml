@@ -10,8 +10,8 @@ importers:
       '@azure/storage-blob': ~12.7.0
       '@itwin/imodels-client-common-config': workspace:*
       '@itwin/imodels-client-management': workspace:*
-      '@itwin/object-storage-azure': 0.1.0-dev.1
-      '@itwin/object-storage-core': 0.1.0-dev.1
+      '@itwin/object-storage-azure': 1.0.0
+      '@itwin/object-storage-core': 1.0.0
       cspell: ~5.21.0
       eslint: ~7.31.0
       rimraf: ~3.0.2
@@ -20,8 +20,8 @@ importers:
     dependencies:
       '@azure/storage-blob': 12.7.0
       '@itwin/imodels-client-management': link:../imodels-client-management
-      '@itwin/object-storage-azure': 0.1.0-dev.1
-      '@itwin/object-storage-core': 0.1.0-dev.1
+      '@itwin/object-storage-azure': 1.0.0
+      '@itwin/object-storage-core': 1.0.0
     devDependencies:
       '@itwin/imodels-client-common-config': link:../../utils/imodels-client-common-config
       cspell: 5.21.2
@@ -219,8 +219,8 @@ importers:
       '@itwin/imodels-client-common-config': workspace:*
       '@itwin/imodels-client-management': workspace:*
       '@itwin/imodels-client-test-utils': workspace:*
-      '@itwin/object-storage-azure': 0.1.0-dev.1
-      '@itwin/object-storage-core': 0.1.0-dev.1
+      '@itwin/object-storage-azure': 1.0.0
+      '@itwin/object-storage-core': 1.0.0
       '@types/chai': ~4.2.21
       '@types/chai-as-promised': ~7.1.5
       '@types/mocha': ~9.0.0
@@ -243,8 +243,8 @@ importers:
       '@itwin/imodels-client-authoring': link:../../clients/imodels-client-authoring
       '@itwin/imodels-client-management': link:../../clients/imodels-client-management
       '@itwin/imodels-client-test-utils': link:../../utils/imodels-client-test-utils
-      '@itwin/object-storage-azure': 0.1.0-dev.1
-      '@itwin/object-storage-core': 0.1.0-dev.1
+      '@itwin/object-storage-azure': 1.0.0
+      '@itwin/object-storage-core': 1.0.0
       axios: 0.21.4
       chai: 4.3.6
       chai-as-promised: 7.1.1_chai@4.3.6
@@ -328,7 +328,7 @@ importers:
       '@itwin/imodels-client-authoring': workspace:*
       '@itwin/imodels-client-common-config': workspace:*
       '@itwin/imodels-client-management': workspace:*
-      '@itwin/object-storage-core': 0.1.0-dev.1
+      '@itwin/object-storage-core': 1.0.0
       '@types/chai': ~4.2.21
       '@types/node': ~16.11.36
       axios: ~0.21.1
@@ -346,7 +346,7 @@ importers:
     dependencies:
       '@itwin/imodels-client-authoring': link:../../clients/imodels-client-authoring
       '@itwin/imodels-client-management': link:../../clients/imodels-client-management
-      '@itwin/object-storage-core': 0.1.0-dev.1
+      '@itwin/object-storage-core': 1.0.0
       axios: 0.21.4
       chai: 4.3.6
       dotenv: 10.0.0
@@ -1071,8 +1071,8 @@ packages:
       '@itwin/core-bentley': 3.2.0
     dev: true
 
-  /@itwin/cloud-agnostic-core/0.1.0-dev.1:
-    resolution: {integrity: sha512-zONUTZqlSdMnJKt1Y5jqXdLUPY5LbNLsG0jbRqMx95jXlX4gY0VLNuqfHYRNqs/e7B4i9kFV5wvmLUSRSevieA==}
+  /@itwin/cloud-agnostic-core/1.0.0:
+    resolution: {integrity: sha512-9lSvBXWknuDqOcSqZ5sDLngdVsUZtKDBsEJxvnQa8fi+e4Rm64Mc/NGf+495k5rYYKpi8dSxt1oxgRrSjAbmfQ==}
     engines: {node: '>=12.20 <17.0.0'}
     dependencies:
       inversify: 5.0.5
@@ -1349,13 +1349,13 @@ packages:
       - supports-color
     dev: true
 
-  /@itwin/object-storage-azure/0.1.0-dev.1:
-    resolution: {integrity: sha512-SNKsXRT+jILXrKstowFpL3j985PWvx7e0ESxvV4XW152YFUeLs6Ls/erxHcA7E9a24U/2tKePtgTOkHdnkOnCw==}
+  /@itwin/object-storage-azure/1.0.0:
+    resolution: {integrity: sha512-HVXLiIHCPJcgnz4sXWj2dPY7hqdQKhmCAoUlFRkg6C/TWjTtvNeCp+EkfyJsiqVI2NwM4HHG5qoW8BfLFDqdTQ==}
     engines: {node: '>=12.20 <17.0.0'}
     dependencies:
       '@azure/storage-blob': 12.2.1
-      '@itwin/cloud-agnostic-core': 0.1.0-dev.1
-      '@itwin/object-storage-core': 0.1.0-dev.1
+      '@itwin/cloud-agnostic-core': 1.0.0
+      '@itwin/object-storage-core': 1.0.0
       inversify: 5.0.5
       reflect-metadata: 0.1.13
     transitivePeerDependencies:
@@ -1363,12 +1363,12 @@ packages:
       - encoding
     dev: false
 
-  /@itwin/object-storage-core/0.1.0-dev.1:
-    resolution: {integrity: sha512-4ChkPm3PwN9+vBnsDlga0AMxbchs2sF1MGHiISDRTaLFZ74KGOpDLfzgIL7PhCIwRLOST/YgZyNXhm5EKPJPeQ==}
+  /@itwin/object-storage-core/1.0.0:
+    resolution: {integrity: sha512-eiOPTNQ5hLrQ8aL7T9P+IjL0aoxgqbxQ2L9Kt0wsC8ukpyuvVUD9UjAhS0SclxCa4bgulO8nEF5CZBeFA4+RkA==}
     engines: {node: '>=12.20 <17.0.0'}
     dependencies:
-      '@itwin/cloud-agnostic-core': 0.1.0-dev.1
-      axios: 0.24.0
+      '@itwin/cloud-agnostic-core': 1.0.0
+      axios: 0.27.2
       inversify: 5.0.5
       reflect-metadata: 0.1.13
     transitivePeerDependencies:
@@ -2115,10 +2115,11 @@ packages:
       - debug
     dev: false
 
-  /axios/0.24.0:
-    resolution: {integrity: sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==}
+  /axios/0.27.2:
+    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
     dependencies:
       follow-redirects: 1.15.1
+      form-data: 4.0.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -5908,3 +5909,5 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+registry: ''
