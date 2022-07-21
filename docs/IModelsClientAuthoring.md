@@ -3,37 +3,40 @@
 `@itwin/imodels-client-authoring` package extends `IModelsClient` exposed by `@itwin/imodels-client-management` package thus this documentation references sections from [`@itwin/imodels-client-management` documentation](./IModelsClientManagement.md).
 
 ## Key types
-- [`IModelsClient`](../clients/imodels-client-authoring/src/IModelsClient.ts#L31)
-- [`IModelsClientOptions`](../clients/imodels-client-authoring/src/IModelsClient.ts#L18)
+- [`IModelsClient`](../clients/imodels-client-authoring/src/IModelsClient.ts#L38)
+- [`IModelsClientOptions`](../clients/imodels-client-authoring/src/IModelsClient.ts#L19)
 
 ### Parameter and response types
 Please see [documentation](./IModelsClientManagement.md#parameter-and-response-types) of parameter and response types for `@itwin/imodels-client-management`.
 
 Additional types:
-- [`TargetDirectoryParam`](../clients/imodels-client-authoring/src/base/interfaces/CommonInterfaces.ts#L13)
+- [`TargetDirectoryParam`](../clients/imodels-client-authoring/src/base/public/CommonInterfaces.ts#L13)
 
 ### Entities
 Please see [documentation](./IModelsClientManagement.md#entities) of entities for `@itwin/imodels-client-management`.
 
 Additional types:
-- [`Lock`](../clients/imodels-client-authoring/src/base/interfaces/apiEntities/LockInterfaces.ts#L25)
+- [`BaselineFile`](../clients/imodels-client-authoring/src/base/public/apiEntities/BaselineFileInterfaces.ts#L31)
+- [`Lock`](../clients/imodels-client-authoring/src/base/public/apiEntities/LockInterfaces.ts#L25)
 
 ## Key methods
 Please see [documentation](./IModelsClientManagement.md#key-methods) of key methods for `@itwin/imodels-client-management`.
 
 Additional methods:
-- [`IModelsClient.iModels`](../clients/imodels-client-authoring/src/IModelsClient.ts#L56)
-  - [`createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel>`](../clients/imodels-client-authoring/src/operations/imodel/IModelOperations.ts#L33) ([sample](#create-imodel-from-baseline-file))
-- [`IModelsClient.briefcases`](../clients/imodels-client-authoring/src/IModelsClient.ts#L61)
-  - [`acquire(params: AcquireBriefcaseParams): Promise<Briefcase>`](../clients/imodels-client-authoring/src/operations/briefcase/BriefcaseOperations.ts#L17)
-  - [`release(params: ReleaseBriefcaseParams): Promise<void>`](../clients/imodels-client-authoring/src/operations/briefcase/BriefcaseOperations.ts#L34)
-- [`IModelsClient.changesets`](../clients/imodels-client-authoring/src/IModelsClient.ts#L66)
-  - [`create(params: CreateChangesetParams): Promise<Changeset>`](../clients/imodels-client-authoring/src/operations/changeset/ChangesetOperations.ts#L20)
-  - [`downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset>`](../clients/imodels-client-authoring/src/operations/changeset/ChangesetOperations.ts#L49)
-  - [`downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]>`](../clients/imodels-client-authoring/src/operations/changeset/ChangesetOperations.ts#L65)
-- [`IModelsClient.locks`](../clients/imodels-client-authoring/src/IModelsClient.ts#L81)
-  - [`getList(params: GetLockListParams): EntityListIterator<Lock>`](../clients/imodels-client-authoring/src/operations/lock/LockOperations.ts#L19)
-  - [`update(params: UpdateLockParams): Promise<Lock>`](../clients/imodels-client-authoring/src/operations/lock/LockOperations.ts#L34)
+- [`IModelsClient.iModels`](../clients/imodels-client-authoring/src/IModelsClient.ts#L38)
+  - [`createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel>`](../clients/imodels-client-authoring/src/operations/imodel/IModelOperations.ts#L37) ([sample](#create-imodel-from-baseline-file))
+- [`IModelsClient.baselineFiles`](../clients/imodels-client-authoring/src/IModelsClient.ts#L70)
+  - [`getSingle(params: GetSingleBaselineFileParams): Promise<BaselineFile>`](../clients/imodels-client-authoring/src/operations/baseline-file/BaselineFileOperations.ts#L21)
+- [`IModelsClient.briefcases`](../clients/imodels-client-authoring/src/IModelsClient.ts#L75)
+  - [`acquire(params: AcquireBriefcaseParams): Promise<Briefcase>`](../clients/imodels-client-authoring/src/operations/briefcase/BriefcaseOperations.ts#L22)
+  - [`release(params: ReleaseBriefcaseParams): Promise<void>`](../clients/imodels-client-authoring/src/operations/briefcase/BriefcaseOperations.ts#L40)
+- [`IModelsClient.changesets`](../clients/imodels-client-authoring/src/IModelsClient.ts#L80)
+  - [`create(params: CreateChangesetParams): Promise<Changeset>`](../clients/imodels-client-authoring/src/operations/changeset/ChangesetOperations.ts#L28)
+  - [`downloadSingle(params: DownloadSingleChangesetParams): Promise<DownloadedChangeset>`](../clients/imodels-client-authoring/src/operations/changeset/ChangesetOperations.ts#L65)
+  - [`downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]>`](../clients/imodels-client-authoring/src/operations/changeset/ChangesetOperations.ts#L82)
+- [`IModelsClient.locks`](../clients/imodels-client-authoring/src/IModelsClient.ts#L85)
+  - [`getList(params: GetLockListParams): EntityListIterator<Lock>`](../clients/imodels-client-authoring/src/operations/lock/LockOperations.ts#L24)
+  - [`update(params: UpdateLockParams): Promise<Lock>`](../clients/imodels-client-authoring/src/operations/lock/LockOperations.ts#L39)
 
 ## Usage examples
 
