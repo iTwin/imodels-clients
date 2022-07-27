@@ -2,8 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { IModelsApiError, IModelsErrorBaseImpl, IModelsErrorImpl, IModelsErrorParser as ManagementIModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
+
 import { IModelsErrorCode } from "@itwin/imodels-client-management";
-import { IModelsErrorParser as ManagementIModelsErrorParser, IModelsErrorImpl, IModelsErrorBaseImpl, IModelsApiError } from "@itwin/imodels-client-management/lib/base/internal";
+
 import { ConflictingLock, ConflictingLocksError, LocksError } from "../public/apiEntities/LockErrorInterfaces";
 
 interface AuthoringIModelsApiErrorWrapper {
@@ -19,9 +21,9 @@ class LocksErrorImpl extends IModelsErrorBaseImpl implements LocksError {
   public objectIds?: string[];
 
   constructor(params: {
-    code: IModelsErrorCode,
-    message: string,
-    objectIds?: string[]
+    code: IModelsErrorCode;
+    message: string;
+    objectIds?: string[];
   }) {
     super(params);
     this.objectIds = params.objectIds;
@@ -31,9 +33,9 @@ class ConflictingLocksErrorImpl extends IModelsErrorBaseImpl implements Conflict
   public conflictingLocks?: ConflictingLock[];
 
   constructor(params: {
-    code: IModelsErrorCode,
-    message: string,
-    conflictingLocks?: ConflictingLock[]
+    code: IModelsErrorCode;
+    message: string;
+    conflictingLocks?: ConflictingLock[];
   }) {
     super(params);
     this.conflictingLocks = params.conflictingLocks;
@@ -100,9 +102,9 @@ export class IModelsErrorParser extends ManagementIModelsErrorParser {
     result += " Conflicting locks:\n";
     for (let i = 0; i < conflictingLocks.length; i++) {
       result += `${i + 1}. Object id: ${conflictingLocks[i].objectId
-        }, lock level: ${conflictingLocks[i].lockLevel
-        }, briefcase ids: ${conflictingLocks[i].briefcaseIds.join(", ")
-        }\n`;
+      }, lock level: ${conflictingLocks[i].lockLevel
+      }, briefcase ids: ${conflictingLocks[i].briefcaseIds.join(", ")
+      }\n`;
     }
     return result;
   }

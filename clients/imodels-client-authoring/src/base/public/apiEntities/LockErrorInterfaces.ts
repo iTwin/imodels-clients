@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { IModelsErrorBase } from "@itwin/imodels-client-management";
+
 import { LockLevel } from "./LockInterfaces";
 
 /** Error thrown by Lock update operation. */

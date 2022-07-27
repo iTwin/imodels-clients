@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
 
@@ -12,10 +13,9 @@ import {
 } from "@itwin/imodels-client-management";
 
 import { NodeLocalFileSystem } from "./base/internal";
+import { IModelsErrorParser } from "./base/internal/IModelsErrorParser";
 import { LocalFileSystem } from "./base/public";
 import { BaselineFileOperations, BriefcaseOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
-import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
-import { IModelsErrorParser } from "./base/internal/IModelsErrorParser";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions extends ManagementIModelsClientOptions {
