@@ -4,15 +4,19 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, ParseErrorFunc, RestClient } from "../public/RestClient";
+import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, RestClient } from "../public/RestClient";
 
-import { IModelsErrorParser } from "./IModelsErrorParser";
+/**
+ * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the
+ * methods in {@link RestClient}.
+ */
+export type ParseErrorFunc = (response: { body?: unknown }) => Error;
 
 /** Default implementation for {@link RestClient} interface that uses `axios` library for sending the requests. */
 export class AxiosRestClient implements RestClient {
   private _parseErrorFunc: ParseErrorFunc;
 
-  constructor(parseErrorFunc: ParseErrorFunc = IModelsErrorParser.parse) {
+  constructor(parseErrorFunc: ParseErrorFunc) {
     this._parseErrorFunc = parseErrorFunc;
   }
 
@@ -71,7 +75,7 @@ export class AxiosRestClient implements RestClient {
       return response.data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        const parsedError: Error = this._parseErrorFunc({ statusCode: error.response?.status, body: error.response?.data });
+        const parsedError: Error = this._parseErrorFunc({ body: error.response?.data });
         throw parsedError;
       }
       throw new Error("AxiosRestClient: unknown error occurred.");

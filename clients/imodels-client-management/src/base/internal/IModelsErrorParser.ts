@@ -8,7 +8,7 @@ interface IModelsApiErrorWrapper {
   error: IModelsApiError;
 }
 
-interface IModelsApiError {
+export interface IModelsApiError {
   code: string;
   message?: string;
   details?: IModelsApiErrorDetail[];
@@ -20,28 +20,32 @@ interface IModelsApiErrorDetail {
   target: string;
 }
 
-export class IModelsErrorImpl extends Error implements IModelsError {
+export class IModelsErrorBaseImpl extends Error {
   public code: IModelsErrorCode;
-  public details?: IModelsErrorDetail[];
 
-  constructor(params: { code: IModelsErrorCode, message: string, details?: IModelsErrorDetail[] }) {
+  constructor(params: { code: IModelsErrorCode, message: string }) {
     super();
     this.name = this.code = params.code;
     this.message = params.message;
+  }
+}
+
+export class IModelsErrorImpl extends IModelsErrorBaseImpl implements IModelsError {
+  public details?: IModelsErrorDetail[];
+
+  constructor(params: { code: IModelsErrorCode, message: string, details?: IModelsErrorDetail[] }) {
+    super(params);
     this.details = params.details;
   }
 }
 
 export class IModelsErrorParser {
-  private static readonly _defaultErrorMessage = "Unknown error occurred";
+  protected static readonly _defaultErrorMessage = "Unknown error occurred";
+  protected static readonly _unknownErrorProperties = { code: IModelsErrorCode.Unknown, message: IModelsErrorParser._defaultErrorMessage };
 
-  public static parse(response: { statusCode?: number, body?: unknown }): Error {
-    if (!response.statusCode)
-      return new IModelsErrorImpl({ code: IModelsErrorCode.Unknown, message: IModelsErrorParser._defaultErrorMessage });
-
-    // TODO: remove the special handling when APIM team fixes incorrect error body
-    if (response.statusCode === 401)
-      return new IModelsErrorImpl({ code: IModelsErrorCode.Unauthorized, message: "The user is unauthorized. Please provide valid authentication credentials." });
+  public static parse(response: { body?: unknown }): Error {
+    if (!response.body)
+      return new IModelsErrorImpl(IModelsErrorParser._unknownErrorProperties);
 
     const errorFromApi: IModelsApiErrorWrapper | undefined = response.body as IModelsApiErrorWrapper;
     const errorCode: IModelsErrorCode = IModelsErrorParser.parseCode(errorFromApi?.error?.code);
@@ -55,7 +59,7 @@ export class IModelsErrorParser {
     });
   }
 
-  private static parseCode(errorCode: string | undefined): IModelsErrorCode {
+  protected static parseCode(errorCode: string | undefined): IModelsErrorCode {
     if (!errorCode)
       return IModelsErrorCode.Unrecognized;
 

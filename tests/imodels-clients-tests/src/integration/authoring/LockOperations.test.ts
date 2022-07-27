@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { AuthorizationCallback, GetLockListParams, IModelsClient, IModelsClientOptions, IModelsErrorCode, LockLevel, UpdateLockParams, toArray } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, GetLockListParams, IModelsClient, IModelsClientOptions, IModelsErrorCode, LockLevel, UpdateLockParams, toArray, ConflictingLocksError, ConflictingLock, LocksError } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertCollection, assertError, assertLock } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
@@ -373,9 +373,19 @@ describe("[Authoring] LockOperations", () => {
       objectThrown,
       expectedError: {
         code: IModelsErrorCode.ConflictWithAnotherUser,
-        message: "Lock(s) is owned by another briefcase."
+        message:
+          "Lock(s) is owned by another briefcase. Conflicting locks:\n" +
+          `1. Object id: 0x5, lock level: shared, briefcase ids: ${briefcase1.briefcaseId}\n`
       }
     });
+    const conflictingLocks = (objectThrown as ConflictingLocksError).conflictingLocks;
+    expect(conflictingLocks).to.not.be.undefined;
+    expect(conflictingLocks!.length).to.be.equal(1);
+    const conflictingLock: ConflictingLock = conflictingLocks![0];
+    expect(conflictingLock.objectId).to.be.equal("0x5");
+    expect(conflictingLock.lockLevel).to.be.equal(LockLevel.Shared);
+    expect(conflictingLock.briefcaseIds.length).to.be.equal(1);
+    expect(conflictingLock.briefcaseIds[0]).to.be.equal(briefcase1.briefcaseId);
   });
 
   it("should return error when trying to acquire lock on an object that has been locked by a more recent changeset", async () => {
@@ -422,8 +432,13 @@ describe("[Authoring] LockOperations", () => {
       objectThrown,
       expectedError: {
         code: IModelsErrorCode.NewerChangesExist,
-        message: "One or more objects have been locked in a newer Changeset."
+        message: "One or more objects have been locked in a newer Changeset. Object ids: 0x5"
       }
     });
+    const objectIds = (objectThrown as LocksError).objectIds;
+    expect(objectIds).to.not.be.undefined;
+    expect(objectIds!.length).to.be.equal(1);
+    const objectId = objectIds![0];
+    expect(objectId).to.be.equal("0x5");
   });
 });

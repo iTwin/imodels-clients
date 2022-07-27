@@ -14,6 +14,8 @@ import {
 import { NodeLocalFileSystem } from "./base/internal";
 import { LocalFileSystem } from "./base/public";
 import { BaselineFileOperations, BriefcaseOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
+import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
+import { IModelsErrorParser } from "./base/internal/IModelsErrorParser";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions extends ManagementIModelsClientOptions {
@@ -44,7 +46,7 @@ export class IModelsClient extends ManagementIModelsClient {
    * are `undefined` the client uses defaults. See {@link iModelsClientOptions}.
    */
   constructor(options?: IModelsClientOptions) {
-    const filledIModelsClientOptions = IModelsClient.fillConfiguration(options);
+    const filledIModelsClientOptions = IModelsClient.fillAuthoringClientConfiguration(options);
     super(filledIModelsClientOptions);
 
     this._operationsOptions = {
@@ -86,15 +88,12 @@ export class IModelsClient extends ManagementIModelsClient {
     return new LockOperations(this._operationsOptions);
   }
 
-  /**
-   * Creates a required configuration instance from user provided options and applying default ones for not specified
-   * options. See {@link iModelsClientOptions}.
-   * @param {iModelsClientOptions} options user-passed client options.
-   * @returns {RecursiveRequired<iModelsClientOptions>} required iModels client configuration options.
-   */
-  public static override fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
+  private static fillAuthoringClientConfiguration(
+    options: IModelsClientOptions | undefined
+  ): RecursiveRequired<IModelsClientOptions> {
     return {
-      ...ManagementIModelsClient.fillConfiguration(options),
+      api: this.fillApiConfiguration(options?.api),
+      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse),
       localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
       cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory())
     };

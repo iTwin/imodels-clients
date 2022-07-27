@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient } from "./base/internal";
+import { AxiosRestClient, IModelsErrorParser } from "./base/internal";
 import { ApiOptions, RecursiveRequired, RestClient } from "./base/public";
 import { Constants } from "./Constants";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
@@ -34,7 +34,7 @@ export class IModelsClient {
    * are `undefined` the client uses defaults. See {@link iModelsClientOptions}.
    */
   constructor(options?: IModelsClientOptions) {
-    const filledIModelsClientOptions = IModelsClient.fillConfiguration(options);
+    const filledIModelsClientOptions = IModelsClient.fillManagementClientConfiguration(options);
     this._operationsOptions = {
       ...filledIModelsClientOptions,
       urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
@@ -81,19 +81,21 @@ export class IModelsClient {
     return new UserPermissionOperations(this._operationsOptions);
   }
 
-  /**
-   * Creates a required configuration instance from user provided options and applying default ones for not specified
-   * options. See {@link iModelsClientOptions}.
-   * @param {iModelsClientOptions} options user-passed client options.
-   * @returns {RecursiveRequired<iModelsClientOptions>} required iModels client configuration options.
-   */
-  public static fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
+  private static fillManagementClientConfiguration(
+    options: IModelsClientOptions | undefined
+  ): RecursiveRequired<IModelsClientOptions> {
     return {
-      restClient: options?.restClient ?? new AxiosRestClient(),
-      api: {
-        baseUrl: options?.api?.baseUrl ?? Constants.api.baseUrl,
-        version: options?.api?.version ?? Constants.api.version
-      }
+      api: this.fillApiConfiguration(options?.api),
+      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse)
+    };
+  }
+
+  protected static fillApiConfiguration(
+    apiOptions: ApiOptions | undefined
+  ): RecursiveRequired<ApiOptions> {
+    return {
+      baseUrl: apiOptions?.baseUrl ?? Constants.api.baseUrl,
+      version: apiOptions?.version ?? Constants.api.version
     };
   }
 }
