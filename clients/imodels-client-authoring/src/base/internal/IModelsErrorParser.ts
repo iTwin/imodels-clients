@@ -44,7 +44,6 @@ class ConflictingLocksErrorImpl extends IModelsErrorBaseImpl implements Conflict
 }
 
 export class IModelsErrorParser extends ManagementIModelsErrorParser {
-
   public static override parse(response: { body?: unknown }): Error {
     if (!response.body)
       return new IModelsErrorImpl(ManagementIModelsErrorParser._unknownErrorProperties);
