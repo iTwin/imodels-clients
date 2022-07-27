@@ -29,6 +29,7 @@ class LocksErrorImpl extends IModelsErrorBaseImpl implements LocksError {
     this.objectIds = params.objectIds;
   }
 }
+
 class ConflictingLocksErrorImpl extends IModelsErrorBaseImpl implements ConflictingLocksError {
   public conflictingLocks?: ConflictingLock[];
 
