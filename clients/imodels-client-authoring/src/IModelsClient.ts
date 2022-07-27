@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
 
@@ -12,6 +13,7 @@ import {
 } from "@itwin/imodels-client-management";
 
 import { NodeLocalFileSystem } from "./base/internal";
+import { IModelsErrorParser } from "./base/internal/IModelsErrorParser";
 import { LocalFileSystem } from "./base/public";
 import { BaselineFileOperations, BriefcaseOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
 
@@ -44,7 +46,7 @@ export class IModelsClient extends ManagementIModelsClient {
    * are `undefined` the client uses defaults. See {@link iModelsClientOptions}.
    */
   constructor(options?: IModelsClientOptions) {
-    const filledIModelsClientOptions = IModelsClient.fillConfiguration(options);
+    const filledIModelsClientOptions = IModelsClient.fillAuthoringClientConfiguration(options);
     super(filledIModelsClientOptions);
 
     this._operationsOptions = {
@@ -86,15 +88,12 @@ export class IModelsClient extends ManagementIModelsClient {
     return new LockOperations(this._operationsOptions);
   }
 
-  /**
-   * Creates a required configuration instance from user provided options and applying default ones for not specified
-   * options. See {@link iModelsClientOptions}.
-   * @param {iModelsClientOptions} options user-passed client options.
-   * @returns {RecursiveRequired<iModelsClientOptions>} required iModels client configuration options.
-   */
-  public static override fillConfiguration(options?: IModelsClientOptions): RecursiveRequired<IModelsClientOptions> {
+  private static fillAuthoringClientConfiguration(
+    options: IModelsClientOptions | undefined
+  ): RecursiveRequired<IModelsClientOptions> {
     return {
-      ...ManagementIModelsClient.fillConfiguration(options),
+      api: this.fillApiConfiguration(options?.api),
+      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse),
       localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
       cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory())
     };

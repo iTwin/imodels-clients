@@ -34,7 +34,7 @@ describe("IModelsErrorParser", () => {
     };
 
     // Act
-    const parsedError: IModelsError = IModelsErrorParser.parse({ statusCode: 400, body: errorResponse }) as IModelsError;
+    const parsedError: IModelsError = IModelsErrorParser.parse({ body: errorResponse }) as IModelsError;
 
     // Assert
     const expectedErrorMessage = "Cannot create iModel. Details:\n" +

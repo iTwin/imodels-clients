@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 export * from "./apiEntities/BaselineFileInterfaces";
 export * from "./apiEntities/ChangesetInterfaces";
+export * from "./apiEntities/LockErrorInterfaces";
 export * from "./apiEntities/LockInterfaces";
 export * from "./CommonInterfaces";
 export * from "./LocalFileSystem";

@@ -5,12 +5,6 @@
 import { Dictionary } from "./UtilityTypes";
 
 /**
- * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the
- * methods in {@link RestClient}.
- */
-export type ParseErrorFunc = (response: { statusCode?: number, body?: unknown }) => Error;
-
-/**
  * Content-Type header values that are used with for iModels API.
  */
 export enum ContentType {

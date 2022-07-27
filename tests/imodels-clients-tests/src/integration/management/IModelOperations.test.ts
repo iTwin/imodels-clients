@@ -384,7 +384,7 @@ describe("[Management] IModelOperations", () => {
       objectThrown,
       expectedError: {
         code: IModelsErrorCode.Unauthorized,
-        message: "The user is unauthorized. Please provide valid authentication credentials."
+        message: "IDX12741: JWT: 'invalid token' must have three segments (JWS) or five segments (JWE)."
       }
     });
   });

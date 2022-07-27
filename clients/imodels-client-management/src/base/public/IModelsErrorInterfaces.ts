@@ -32,7 +32,7 @@ export enum IModelsErrorCode {
   NamedVersionOnChangesetExists = "NamedVersionOnChangesetExists",
   ProjectNotFound = "ProjectNotFound",
   IModelNotFound = "iModelNotFound",
-  NamedVersionNotFound  = "NamedVersionNotFound",
+  NamedVersionNotFound = "NamedVersionNotFound",
   ChangesetNotFound = "ChangesetNotFound",
   UserNotFound = "UserNotFound",
   BriefcaseNotFound = "BriefcaseNotFound",
@@ -59,10 +59,18 @@ export interface IModelsErrorDetail {
   target?: string;
 }
 
-/** Interface for the errors thrown by this library. */
-export interface IModelsError extends Error {
+/** Base interface for all errors returned from iModels API. */
+export interface IModelsErrorBase extends Error {
   /** Error code. See {@link iModelsErrorCode}. */
   code: IModelsErrorCode;
+}
+
+/**
+ * Most common error returned in the majority of error cases by iModels API and the only error returned from iModels
+ * API operations that are surfaced in this library. Other types of errors may be returned from libraries that extend
+ * this one.
+ */
+export interface IModelsError extends IModelsErrorBase {
   /** Data that describes the error in more detail. See {@link iModelsErrorDetail}. */
   details?: IModelsErrorDetail[];
 }
