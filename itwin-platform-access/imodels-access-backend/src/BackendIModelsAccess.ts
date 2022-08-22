@@ -191,6 +191,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return briefcaseIds;
   }
 
+  // eslint-disable-next-line deprecation/deprecation
   public async downloadV1Checkpoint(arg: CheckpointArg): Promise<ChangesetIndexAndId> {
     const checkpoint: Checkpoint | undefined = await this.queryCurrentOrPrecedingCheckpoint(arg);
     if (!checkpoint || !checkpoint._links?.download)
@@ -424,6 +425,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return tempBaselineFilePath;
   }
 
+  // eslint-disable-next-line deprecation/deprecation
   private async queryCurrentOrPrecedingCheckpoint(arg: CheckpointArg): Promise<Checkpoint | undefined> {
     const changesetIdOrIndex: ChangesetIdOrIndex = PlatformToClientAdapter.toChangesetIdOrIndex(arg.checkpoint.changeset);
     const getCheckpointParams: GetSingleCheckpointParams = {

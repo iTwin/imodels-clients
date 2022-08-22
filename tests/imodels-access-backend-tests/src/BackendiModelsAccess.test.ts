@@ -6,7 +6,7 @@ import { assert } from "console";
 import * as fs from "fs";
 import * as path from "path";
 
-import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction } from "@itwin/core-backend";
+import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction } from "@itwin/core-backend";
 import { BriefcaseId, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
@@ -140,7 +140,7 @@ describe("BackendIModelsAccess", () => {
       const lastNamedVersion = testIModelForRead.namedVersions[testIModelForRead.namedVersions.length - 1];
 
       const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_specific_changeset.bim");
-      const downloadV1CheckpointParams: CheckpointArg = {
+      const downloadV1CheckpointParams = {
         localFile: localCheckpointFilePath,
         checkpoint: {
           accessToken,
@@ -153,6 +153,7 @@ describe("BackendIModelsAccess", () => {
       };
 
       // Act
+      // eslint-disable-next-line deprecation/deprecation
       const downloadedCheckpoint: ChangesetIndexAndId = await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
 
       // Assert
@@ -170,7 +171,7 @@ describe("BackendIModelsAccess", () => {
       assert(firstNamedVersion.changesetId !== nextChangeset.id, "Unexpected changeset ids");
 
       const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_preceding_changeset.bim");
-      const downloadV1CheckpointParams: CheckpointArg = {
+      const downloadV1CheckpointParams = {
         localFile: localCheckpointFilePath,
         checkpoint: {
           accessToken,
@@ -183,6 +184,7 @@ describe("BackendIModelsAccess", () => {
       };
 
       // Act
+      // eslint-disable-next-line deprecation/deprecation
       const downloadedCheckpoint: ChangesetIndexAndId = await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
 
       // Assert
@@ -201,7 +203,7 @@ describe("BackendIModelsAccess", () => {
       };
 
       const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_progress_test.bim");
-      const downloadV1CheckpointParams: CheckpointArg = {
+      const downloadV1CheckpointParams = {
         localFile: localCheckpointFilePath,
         checkpoint: {
           accessToken,
@@ -215,6 +217,7 @@ describe("BackendIModelsAccess", () => {
       };
 
       // Act
+      // eslint-disable-next-line deprecation/deprecation
       await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
 
       // Assert
