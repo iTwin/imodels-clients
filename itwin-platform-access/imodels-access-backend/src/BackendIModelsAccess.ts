@@ -191,6 +191,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return briefcaseIds;
   }
 
+  // eslint-disable-next-line deprecation/deprecation
   public async downloadV1Checkpoint(arg: CheckpointArg): Promise<ChangesetIndexAndId> {
     const checkpoint: Checkpoint | undefined = await this.queryCurrentOrPrecedingCheckpoint(arg);
     if (!checkpoint || !checkpoint._links?.download)
@@ -274,42 +275,6 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const result = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
     return result;
-  }
-
-  public async downloadV2Checkpoint(arg: CheckpointArg): Promise<ChangesetIndexAndId> {
-    const checkpoint: Checkpoint | undefined = await this.queryCurrentOrPrecedingCheckpoint(arg);
-    if (!checkpoint || !checkpoint.containerAccessInfo)
-      throw new IModelError(IModelStatus.NotFound, "V2 checkpoint not found");
-
-    const v2CheckpointAccessProps = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
-
-    const transfer = new IModelHost.platform.CloudDbTransfer("download", {
-      ...v2CheckpointAccessProps,
-      writeable: false,
-      localFile: arg.localFile
-    });
-
-    let timer: NodeJS.Timeout | undefined;
-    try {
-      let total = 0;
-      const onProgress = arg.onProgress;
-      if (onProgress) {
-        timer = setInterval(async () => { // set an interval timer to show progress every 250ms
-          const progress = transfer.getProgress();
-          total = progress.total;
-          if (onProgress(progress.loaded, progress.total))
-            transfer.cancelTransfer();
-        }, 250);
-      }
-      await transfer.promise;
-      onProgress?.(total, total); // make sure we call progress func one last time when download completes
-    } catch (err: unknown) {
-      throw ((err as Error)?.message === "cancelled") ? new IModelError(BriefcaseStatus.DownloadCancelled, "download cancelled") : err;
-    } finally {
-      if (timer)
-        clearInterval(timer);
-    }
-    return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
   }
 
   public async acquireLocks(arg: BriefcaseDbArg, locks: LockMap): Promise<void> {
@@ -460,6 +425,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return tempBaselineFilePath;
   }
 
+  // eslint-disable-next-line deprecation/deprecation
   private async queryCurrentOrPrecedingCheckpoint(arg: CheckpointArg): Promise<Checkpoint | undefined> {
     const changesetIdOrIndex: ChangesetIdOrIndex = PlatformToClientAdapter.toChangesetIdOrIndex(arg.checkpoint.changeset);
     const getCheckpointParams: GetSingleCheckpointParams = {

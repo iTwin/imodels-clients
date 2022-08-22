@@ -2,4 +2,5 @@
 
 ## 2.0.0
 
-This release contains no changes compared to the previous package version.
+Breaking changes:
+- Updated iTwin.js peer dependencies to version 3.3.0.
