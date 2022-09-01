@@ -18,31 +18,27 @@
     {
       "packageName": "@itwin/imodels-client-management",
       "projectFolder": "clients/imodels-client-management",
-      "shouldPublish": true,
-      "versionPolicyName": "prerelease-monorepo-lockStep"
+      "shouldPublish": false
     },
     {
       "packageName": "@itwin/imodels-client-authoring",
       "projectFolder": "clients/imodels-client-authoring",
-      "shouldPublish": true,
-      "versionPolicyName": "prerelease-monorepo-lockStep"
+      "shouldPublish": false
     },
     {
       "packageName": "@itwin/imodels-access-frontend",
       "projectFolder": "itwin-platform-access/imodels-access-frontend",
-      "shouldPublish": true,
-      "versionPolicyName": "prerelease-monorepo-lockStep"
+      "shouldPublish": false
     },
     {
       "packageName": "@itwin/imodels-access-backend",
       "projectFolder": "itwin-platform-access/imodels-access-backend",
-      "shouldPublish": true,
-      "versionPolicyName": "prerelease-monorepo-lockStep"
+      "shouldPublish": false
     },
     {
       "packageName": "@itwin/imodels-client-test-utils",
       "projectFolder": "utils/imodels-client-test-utils",
-      "shouldPublish": false
+      "shouldPublish": true
     },
     {
       "packageName": "@itwin/imodels-client-common-config",
