@@ -1,7 +1,10 @@
 {
   "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib/cjs",
+    "outDir": "./lib/esm",
+    "module": "esnext",
+    "target": "esnext",
+    "esModuleInterop": true
   },
   "include": [
     "./src/**/*.ts"

@@ -1,7 +1,7 @@
 {
   "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib",
+    "outDir": "./lib/cjs",
     "esModuleInterop": true
   },
   "include": [
