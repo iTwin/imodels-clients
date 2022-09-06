@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient } from "@itwin/imodels-client-management/lib/cjs/base/internal";
+import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
 
