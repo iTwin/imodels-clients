@@ -4,9 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import * as path from "path";
 
-import { ChangesetResponse, IModelsErrorImpl } from "@itwin/imodels-client-management/lib/cjs/base/internal";
+import { ChangesetResponse, IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
+import { ChangesetOperations as ManagementChangesetOperations } from "@itwin/imodels-client-management/lib/operations";
 
-import { Changeset, ChangesetState, IModelScopedOperationParams, IModelsErrorCode, ChangesetOperations as ManagementChangesetOperations } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetState, IModelScopedOperationParams, IModelsErrorCode } from "@itwin/imodels-client-management";
 
 import { DownloadedChangeset, TargetDirectoryParam } from "../../base/public";
 import { assertLink } from "../CommonFunctions";
