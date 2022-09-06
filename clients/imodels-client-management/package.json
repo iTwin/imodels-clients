@@ -19,10 +19,11 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
-  "main": "lib/index.js",
-  "typings": "lib/index",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/cjs/index.d.ts",
   "scripts": {
-    "build": "tsc 1>&2",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json 1>&2",
     "clean": "rimraf lib",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",

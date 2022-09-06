@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsApiError, IModelsErrorBaseImpl, IModelsErrorImpl, IModelsErrorParser as ManagementIModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
+import { IModelsApiError, IModelsErrorBaseImpl, IModelsErrorImpl, IModelsErrorParser as ManagementIModelsErrorParser } from "@itwin/imodels-client-management/lib/cjs/base/internal";
 
 import { IModelsErrorCode } from "@itwin/imodels-client-management";
 

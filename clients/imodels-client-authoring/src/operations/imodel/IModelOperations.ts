@@ -2,10 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsErrorImpl, waitForCondition } from "@itwin/imodels-client-management/lib/base/internal";
-import { IModelOperations as ManagementIModelOperations } from "@itwin/imodels-client-management/lib/operations";
+import { IModelsErrorImpl, waitForCondition } from "@itwin/imodels-client-management/lib/cjs/base/internal";
 
-import { AuthorizationParam, IModel, IModelsErrorCode } from "@itwin/imodels-client-management";
+import { AuthorizationParam, IModel, IModelsErrorCode, IModelOperations as ManagementIModelOperations } from "@itwin/imodels-client-management";
 
 import { BaselineFileState } from "../../base/public";
 import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations";
