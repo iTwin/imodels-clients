@@ -19,7 +19,7 @@
     "url": "http://www.bentley.com"
   },
   "main": "./lib/cjs/index.js",
-  "module": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
   "types": "./lib/cjs/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json 1>&2",
