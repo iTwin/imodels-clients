@@ -13,6 +13,5 @@
     "declaration": true,
     "strict": true,
     "noImplicitOverride": true,
-    "moduleResolution": "node",
   }
 }
