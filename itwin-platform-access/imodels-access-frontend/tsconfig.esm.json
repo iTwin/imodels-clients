@@ -1,7 +1,8 @@
 {
   "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.esm.json",
   "compilerOptions": {
-    "outDir": "./lib/esm"
+    "outDir": "./lib/esm",
+    "esModuleInterop": true
   },
   "include": [
     "./src/**/*.ts"
