@@ -158,6 +158,28 @@ export function assertLock(params: {
   }
 }
 
+export function assertProgressReports(params: {
+  progressReports: {
+    loaded: number;
+    total: number;
+  }[];
+}) {
+  expect(params.progressReports.length).to.be.greaterThan(0);
+
+  let previousReport = params.progressReports[0];
+  for (const report of params.progressReports) {
+    expect(report.loaded).to.be.lessThanOrEqual(report.total);
+
+    if (previousReport !== report){
+      expect(report.loaded).to.be.greaterThan(previousReport.loaded);
+      expect(report.total).to.be.equal(previousReport.total);
+    }
+
+    previousReport = report;
+  }
+  expect(previousReport.loaded).to.be.equal(previousReport.total);
+}
+
 function assertSynchronizationInfo(params: {
   actualSynchronizationInfo: SynchronizationInfo | null;
   expectedSynchronizationInfo: SynchronizationInfoForCreate | undefined;

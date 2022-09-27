@@ -6,13 +6,13 @@ import { assert } from "console";
 import * as fs from "fs";
 import * as path from "path";
 
-import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction } from "@itwin/core-backend";
+import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, DownloadChangesetRangeArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction, ProgressStatus } from "@itwin/core-backend";
 import { BriefcaseId, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 
-import { ContainingChanges, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
+import { ContainingChanges, IModelsClient, IModelsClientOptions, IModelsError, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
 
@@ -131,6 +131,53 @@ describe("BackendIModelsAccess", () => {
         else
           expect(downloadedChangeset.changesType).to.be.equal(ChangesetType.Regular);
       }
+    });
+
+    it("should cancel changesets download and finish downloading missing changesets during next download.", async () => {
+      // Arrange
+      const downloadChangesetsParams: DownloadChangesetRangeArg = {
+        accessToken,
+        iModelId: testIModelForRead.id,
+        targetDir: testDownloadPath
+      };
+
+      const progressReports: {loaded: number, total: number}[] = [];
+      const progressCallbackFor1stDownload = (loaded: number, total: number) => {
+        progressReports.push({loaded, total});
+        return loaded < total / 4 ? ProgressStatus.Continue : ProgressStatus.Abort;
+      };
+      const progressCallbackFor2ndDownload = (loaded: number, total: number) => {
+        progressReports.push({loaded, total});
+        return ProgressStatus.Continue;
+      };
+
+      // Act
+      let objectThrown: unknown;
+      try {
+        await backendIModelsAccess.downloadChangesets({
+          ...downloadChangesetsParams,
+          progressCallback: progressCallbackFor1stDownload
+        });
+      } catch (error: unknown) {
+        objectThrown = error;
+      }
+
+      const changesets = await backendIModelsAccess.downloadChangesets({
+        ...downloadChangesetsParams,
+        progressCallback: progressCallbackFor2ndDownload
+      });
+
+      // Assert
+      expect(changesets.length).to.equal(testIModelFileProvider.changesets.length);
+
+      const downloadedFilesSizeSum = fs.readdirSync(testDownloadPath).reduce((sum, filename) => sum + fs.statSync(path.join(testDownloadPath, filename)).size, 0);
+      const expectedSizeSum = changesets.reduce((sum, changeset) => sum + (changeset.size ?? 0), 0);
+      expect(downloadedFilesSizeSum).to.equal(expectedSizeSum);
+
+      assertProgressReports({ progressReports });
+
+      expect(isIModelsApiError(objectThrown)).to.be.true;
+      expect((objectThrown as IModelsError).code).to.be.equal(IModelsErrorCode.DownloadAborted);
     });
   });
 
