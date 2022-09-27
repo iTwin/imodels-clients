@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@itwin/imodels-client-authoring": "workspace:*",
+    "abort-controller": "~3.0.0",
     "axios": "~0.21.1"
   },
   "devDependencies": {
