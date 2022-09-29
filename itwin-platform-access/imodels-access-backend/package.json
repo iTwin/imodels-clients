@@ -31,8 +31,8 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
+    "@azure/abort-controller": "~1.1.0",
     "@itwin/imodels-client-authoring": "workspace:*",
-    "abort-controller": "~3.0.0",
     "axios": "~0.21.1"
   },
   "devDependencies": {

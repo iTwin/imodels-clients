@@ -7,7 +7,7 @@ import * as path from "path";
 
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ConfigDownloadInput, UrlDownloadInput } from "@itwin/object-storage-core";
-import { AbortController } from "abort-controller";
+import { AbortController } from "@azure/abort-controller";
 import { expect } from "chai";
 
 import { AcquireBriefcaseParams, AuthorizationCallback, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, IModelsError, IModelsErrorCode, ProgressCallback, TargetDirectoryParam, isIModelsApiError } from "@itwin/imodels-client-authoring";

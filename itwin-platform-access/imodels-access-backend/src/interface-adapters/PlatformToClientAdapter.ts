@@ -5,7 +5,7 @@
 import { CreateNewIModelProps, LockMap, LockState, ProgressFunction, ProgressStatus } from "@itwin/core-backend";
 import { RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetRange, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
-import { AbortController, AbortSignal } from "abort-controller";
+import { AbortController, AbortSignal } from "@azure/abort-controller";
 
 import { ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties, LockLevel, LockedObjects, ProgressCallback } from "@itwin/imodels-client-authoring";
 
