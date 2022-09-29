@@ -23,6 +23,7 @@ type ChunkDownloadedCallback = (bytes: number) => void;
 interface DownloadInfo {
   url: string;
   localPath: string;
+  abortSignal?: GenericAbortSignal;
 }
 
 export class ChangesetOperations<TOptions extends OperationOptions> extends ManagementChangesetOperations<TOptions>{
@@ -183,10 +184,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       assertLink(downloadLink);
       await this.downloadChangesetFile({
         url: downloadLink.href,
-        localPath: targetFilePath
+        localPath: targetFilePath,
+        abortSignal: params.abortSignal
       },
-      params.chunkDownloadedCallback,
-      params.abortSignal
+      params.chunkDownloadedCallback
       );
     } catch (error) {
       this.throwIfAbortError(error, params.changeset);
@@ -202,10 +203,11 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
         assertLink(newDownloadLink);
         await this.downloadChangesetFile({
           url: newDownloadLink.href,
-          localPath: targetFilePath
+          localPath: targetFilePath,
+          abortSignal: params.abortSignal
         },
-        params.chunkDownloadedCallback,
-        params.abortSignal);
+        params.chunkDownloadedCallback
+        );
       } catch (errorAfterRetry) {
         this.throwIfAbortError(error, params.changeset);
 
@@ -219,24 +221,21 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
   private async downloadChangesetFile(
     downloadInput: DownloadInfo,
-    chunkDownloadedCallback?: ChunkDownloadedCallback,
-    abortSignal?: GenericAbortSignal
+    chunkDownloadedCallback?: ChunkDownloadedCallback
   ) {
     if (!chunkDownloadedCallback) {
       return this._options.cloudStorage.download({
         ...downloadInput,
-        transferType: "local",
-        abortSignal
+        transferType: "local"
       });
     }
 
-    return this.downloadChangesetFileWithProgressReporting(downloadInput, chunkDownloadedCallback, abortSignal);
+    return this.downloadChangesetFileWithProgressReporting(downloadInput, chunkDownloadedCallback);
   }
 
   private async downloadChangesetFileWithProgressReporting(
     downloadInput: DownloadInfo,
-    chunkDownloadedCallback: ChunkDownloadedCallback,
-    abortSignal?: GenericAbortSignal
+    chunkDownloadedCallback: ChunkDownloadedCallback
   ) {
     const targetFileStream = fs.createWriteStream(downloadInput.localPath);
     let downloadStream: Readable | undefined;
@@ -244,15 +243,14 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     try{
       downloadStream = await this._options.cloudStorage.download({
         ...downloadInput,
-        transferType: "stream",
-        abortSignal
+        transferType: "stream"
       });
       downloadStream.pipe(targetFileStream);
       downloadStream.on("data", (chunk) => chunkDownloadedCallback(chunk.length));
 
       await new Promise((resolve, reject) => {
         downloadStream?.on("error", reject);
-        targetFileStream.on("finish", resolve)
+        targetFileStream.on("finish", resolve);
       });
     } catch (error: unknown) {
       const closingPromise = new Promise((resolve) => {

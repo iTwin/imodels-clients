@@ -2,12 +2,15 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { AbortController, AbortSignal } from "@azure/abort-controller";
 import { CreateNewIModelProps, LockMap, LockState, ProgressFunction, ProgressStatus } from "@itwin/core-backend";
 import { RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetRange, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
-import { AbortController, AbortSignal } from "@azure/abort-controller";
 
-import { ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties, LockLevel, LockedObjects, ProgressCallback } from "@itwin/imodels-client-authoring";
+import {
+  ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties,
+  LockLevel, LockedObjects, ProgressCallback
+} from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {

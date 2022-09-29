@@ -158,16 +158,16 @@ export function assertLock(params: {
   }
 }
 
-export function assertProgressReports(params: {
-  progressReports: {
-    loaded: number;
-    total: number;
-  }[];
-}) {
-  expect(params.progressReports.length).to.be.greaterThan(0);
+export interface ProgressReport {
+  loaded: number;
+  total: number;
+}
 
-  let previousReport = params.progressReports[0];
-  for (const report of params.progressReports) {
+export function assertProgressReports(progressReports: ProgressReport[]) {
+  expect(progressReports.length).to.be.greaterThan(0);
+
+  let previousReport = progressReports[0];
+  for (const report of progressReports) {
     expect(report.loaded).to.be.lessThanOrEqual(report.total);
 
     if (previousReport !== report){

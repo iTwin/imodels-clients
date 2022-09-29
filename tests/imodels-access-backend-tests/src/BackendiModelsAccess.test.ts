@@ -12,7 +12,7 @@ import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 
 import { ContainingChanges, IModelsClient, IModelsClientOptions, IModelsError, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
-import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
+import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
 
@@ -141,7 +141,7 @@ describe("BackendIModelsAccess", () => {
         targetDir: testDownloadPath
       };
 
-      const progressReports: {loaded: number, total: number}[] = [];
+      const progressReports: ProgressReport[] = [];
       const progressCallbackFor1stDownload = (loaded: number, total: number) => {
         progressReports.push({loaded, total});
         return loaded < total / 4 ? ProgressStatus.Continue : ProgressStatus.Abort;
@@ -151,7 +151,7 @@ describe("BackendIModelsAccess", () => {
         return ProgressStatus.Continue;
       };
 
-      // Act
+      // Act #1
       let objectThrown: unknown;
       try {
         await backendIModelsAccess.downloadChangesets({
@@ -162,22 +162,26 @@ describe("BackendIModelsAccess", () => {
         objectThrown = error;
       }
 
+      // Assert #1
+      expect(fs.readdirSync(testDownloadPath).length).to.be.greaterThan(0);
+
+      expect(isIModelsApiError(objectThrown)).to.be.true;
+      expect((objectThrown as IModelsError).code).to.be.equal(IModelsErrorCode.DownloadAborted);
+
+      // Act #2
       const changesets = await backendIModelsAccess.downloadChangesets({
         ...downloadChangesetsParams,
         progressCallback: progressCallbackFor2ndDownload
       });
 
-      // Assert
+      // Assert #2
       expect(changesets.length).to.equal(testIModelFileProvider.changesets.length);
 
       const downloadedFilesSizeSum = fs.readdirSync(testDownloadPath).reduce((sum, filename) => sum + fs.statSync(path.join(testDownloadPath, filename)).size, 0);
       const expectedSizeSum = changesets.reduce((sum, changeset) => sum + (changeset.size ?? 0), 0);
       expect(downloadedFilesSizeSum).to.equal(expectedSizeSum);
 
-      assertProgressReports({ progressReports });
-
-      expect(isIModelsApiError(objectThrown)).to.be.true;
-      expect((objectThrown as IModelsError).code).to.be.equal(IModelsErrorCode.DownloadAborted);
+      assertProgressReports(progressReports);
     });
   });
 

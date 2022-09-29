@@ -5,13 +5,13 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { AbortController } from "@azure/abort-controller";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ConfigDownloadInput, UrlDownloadInput } from "@itwin/object-storage-core";
-import { AbortController } from "@azure/abort-controller";
 import { expect } from "chai";
 
 import { AcquireBriefcaseParams, AuthorizationCallback, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, IModelsError, IModelsErrorCode, ProgressCallback, TargetDirectoryParam, isIModelsApiError } from "@itwin/imodels-client-authoring";
-import { FileTransferLog, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableClientStorage, assertChangeset, assertDownloadedChangeset, assertProgressReports, cleanupDirectory } from "@itwin/imodels-client-test-utils";
+import { FileTransferLog, IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableClientStorage, assertChangeset, assertDownloadedChangeset, assertProgressReports, cleanupDirectory } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
@@ -400,7 +400,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
     it("should report progress of changeset download", async () => {
       // Arrange
-      const progressReports: { loaded: number, total: number }[] = [];
+      const progressReports: ProgressReport[] = [];
       const progressCallback: ProgressCallback = (loaded: number, total: number) => progressReports.push({loaded, total});
 
       const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "download changeset while reporting progress");
@@ -416,7 +416,7 @@ describe("[Authoring] ChangesetOperations", () => {
       await iModelsClient.changesets.downloadSingle(downloadParams);
 
       // Assert
-      assertProgressReports({ progressReports });
+      assertProgressReports(progressReports);
     });
 
     it("should cancel changeset download", async () => {
@@ -450,7 +450,7 @@ describe("[Authoring] ChangesetOperations", () => {
 
     it("should report progress of changesets download", async () => {
       // Arrange
-      const progressReports: { loaded: number, total: number }[] = [];
+      const progressReports: ProgressReport[] = [];
       const progressCallback: ProgressCallback = (loaded: number, total: number) => progressReports.push({loaded, total});
 
       const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "download changesets while reporting progress");
@@ -468,7 +468,7 @@ describe("[Authoring] ChangesetOperations", () => {
       expect(changesets.length).to.equal(testIModelFileProvider.changesets.length);
       expect(fs.readdirSync(downloadPath).length).to.equal(testIModelFileProvider.changesets.length);
 
-      assertProgressReports({ progressReports });
+      assertProgressReports(progressReports);
     });
 
     it("should cancel changesets download", async () => {
