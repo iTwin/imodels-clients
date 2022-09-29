@@ -171,7 +171,7 @@ export function assertProgressReports(params: {
     expect(report.loaded).to.be.lessThanOrEqual(report.total);
 
     if (previousReport !== report){
-      expect(report.loaded).to.be.greaterThan(previousReport.loaded);
+      expect(report.loaded).to.be.greaterThanOrEqual(previousReport.loaded);
       expect(report.total).to.be.equal(previousReport.total);
     }
 

@@ -235,7 +235,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
   private async downloadChangesetFileWithProgressReporting(
     downloadInput: DownloadInfo,
-    chunkDownloadedCallback?: ChunkDownloadedCallback,
+    chunkDownloadedCallback: ChunkDownloadedCallback,
     abortSignal?: GenericAbortSignal
   ) {
     const targetFileStream = fs.createWriteStream(downloadInput.localPath);
@@ -248,6 +248,12 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
         abortSignal
       });
       downloadStream.pipe(targetFileStream);
+      downloadStream.on("data", (chunk) => chunkDownloadedCallback(chunk.length));
+
+      await new Promise((resolve, reject) => {
+        downloadStream?.on("error", reject);
+        targetFileStream.on("finish", resolve)
+      });
     } catch (error: unknown) {
       const closingPromise = new Promise((resolve) => {
         targetFileStream.on("finish", () => {
@@ -261,10 +267,6 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
       throw error;
     }
-
-    downloadStream?.on("data", (chunk) => chunkDownloadedCallback?.(chunk.length));
-
-    await new Promise((resolve) => targetFileStream.on("finish", resolve));
   }
 
   public static abort: () => void = () => undefined;
