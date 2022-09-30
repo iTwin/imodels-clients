@@ -254,7 +254,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       });
     } catch (error: unknown) {
       const closingPromise = new Promise((resolve) => {
-        targetFileStream.on("finish", () => {
+        targetFileStream.once("close", () => {
           void this._options.localFileSystem.deleteFile(downloadInput.localPath);
           resolve(undefined);
         });
