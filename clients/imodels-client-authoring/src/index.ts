@@ -5,6 +5,6 @@
 export * from "@itwin/imodels-client-management/lib/base/public";
 export * from "@itwin/imodels-client-management/lib/operations/OperationParamExports";
 
-export * from "./base/public";
+export * from "./base/types";
 export * from "./operations/OperationParamExports";
 export * from "./IModelsClient";

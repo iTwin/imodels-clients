@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { EntityListIteratorImpl, IModelResponse, IModelsErrorImpl, IModelsResponse, OperationsBase, waitForCondition } from "../../base/internal";
-import { AuthorizationCallback, EntityListIterator, IModel, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn } from "../../base/public";
+import { AuthorizationCallback, EntityListIterator, IModel, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn } from "../../base/types";
 import { OperationOptions } from "../OperationOptions";
 
 import { CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForCreateFromTemplate, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams";

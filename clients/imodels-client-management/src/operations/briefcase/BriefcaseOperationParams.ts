@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, IModelScopedOperationParams } from "../../base/public";
+import { CollectionRequestParams, IModelScopedOperationParams } from "../../base/types";
 
 /** Special value to indicate the id of current user who is making the request. */
 export const SPECIAL_VALUES_ME = "me";

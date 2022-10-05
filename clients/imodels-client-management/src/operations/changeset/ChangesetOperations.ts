@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { ChangesetResponse, ChangesetsResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, Changeset, Checkpoint, EntityListIterator, MinimalChangeset, NamedVersion, PreferReturn } from "../../base/public";
+import { AuthorizationCallback, Changeset, Checkpoint, EntityListIterator, MinimalChangeset, NamedVersion, PreferReturn } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";

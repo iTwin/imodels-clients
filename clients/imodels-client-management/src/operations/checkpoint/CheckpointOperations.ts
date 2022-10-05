@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { CheckpointResponse, OperationsBase } from "../../base/internal";
-import { Checkpoint } from "../../base/public";
+import { Checkpoint } from "../../base/types";
 import { OperationOptions } from "../OperationOptions";
 
 import { GetSingleCheckpointParams } from "./CheckpointOperationParams";

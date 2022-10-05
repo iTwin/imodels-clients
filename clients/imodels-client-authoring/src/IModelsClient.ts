@@ -14,7 +14,7 @@ import {
 
 import { NodeLocalFileSystem } from "./base/internal";
 import { IModelsErrorParser } from "./base/internal/IModelsErrorParser";
-import { LocalFileSystem } from "./base/public";
+import { LocalFileSystem } from "./base/types";
 import { BaselineFileOperations, BriefcaseOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
 
 /** User-configurable iModels client options. */

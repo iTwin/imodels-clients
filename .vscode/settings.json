@@ -7,14 +7,14 @@
     "**/.rush": true
   },
   "files.exclude": {
-    "**/.nyc_output": true,
-    "**/.rush": true,
-    "**/*.build.log": true,
-    "**/*.build.error.log": true,
-    "**/package-deps.json": true,
-    "**/node_modules": true,
-    "**/out": true,
-    "**/lib": true,
-    "common/temp": true
+    "**/.nyc_output": false,
+    "**/.rush": false,
+    "**/*.build.log": false,
+    "**/*.build.error.log": false,
+    "**/package-deps.json": false,
+    "**/node_modules": false,
+    "**/out": false,
+    "**/lib": false,
+    "common/temp": false
   }
 }

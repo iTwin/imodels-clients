@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { OperationsBase } from "../../base/internal";
-import { ContentType, Thumbnail, ThumbnailSize } from "../../base/public";
+import { ContentType, Thumbnail, ThumbnailSize } from "../../base/types";
 import { OperationOptions } from "../OperationOptions";
 
 import { DownloadThumbnailParams, UploadThumbnailParams } from "./ThumbnailOperationParams";
