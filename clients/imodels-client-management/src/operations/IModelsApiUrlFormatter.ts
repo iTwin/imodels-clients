@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, Dictionary,OrderBy } from "../base/public";
+import { CollectionRequestParams, Dictionary,OrderBy } from "../base/types";
 
 import { GetBriefcaseListUrlParams } from "./briefcase/BriefcaseOperationParams";
 import { ChangesetIdOrIndex, GetChangesetListUrlParams } from "./changeset/ChangesetOperationParams";

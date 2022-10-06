@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsError, IModelsErrorCode, IModelsErrorDetail } from "../public";
+import { IModelsError, IModelsErrorCode, IModelsErrorDetail } from "../types";
 
 interface IModelsApiErrorWrapper {
   error: IModelsApiError;

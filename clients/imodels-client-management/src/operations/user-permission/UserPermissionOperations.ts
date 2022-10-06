@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { OperationsBase } from "../../base/internal";
-import { UserPermissions } from "../../base/public";
+import { UserPermissions } from "../../base/types";
 import { OperationOptions } from "../OperationOptions";
 
 import { GetUserPermissionsParams } from "./UserPermissionOperationParams";

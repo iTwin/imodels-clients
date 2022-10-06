@@ -11,7 +11,7 @@ import { ChangesetOperations as ManagementChangesetOperations } from "@itwin/imo
 
 import { Changeset, ChangesetState, IModelScopedOperationParams, IModelsErrorCode } from "@itwin/imodels-client-management";
 
-import { AbortDownloadParam, DownloadProgressParam, DownloadedChangeset, GenericAbortSignal, TargetDirectoryParam } from "../../base/public";
+import { AbortDownloadParam, DownloadProgressParam, DownloadedChangeset, GenericAbortSignal, TargetDirectoryParam } from "../../base/types";
 import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";
 

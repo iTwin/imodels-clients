@@ -5,7 +5,7 @@
 import { OperationOptions as ManagementOperationOptions } from "@itwin/imodels-client-management/lib/operations";
 import { ClientStorage } from "@itwin/object-storage-core";
 
-import { LocalFileSystem } from "../base/public";
+import { LocalFileSystem } from "../base/types";
 
 import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
 

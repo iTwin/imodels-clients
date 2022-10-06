@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, RestClient } from "../public/RestClient";
+import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, RestClient } from "../types/RestClient";
 
 /**
  * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the
