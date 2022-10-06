@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { EntityListIteratorImpl, OperationsBase, UserResponse, UsersResponse } from "../../base/internal";
-import { EntityListIterator, MinimalUser, PreferReturn, User } from "../../base/public";
+import { EntityListIterator, MinimalUser, PreferReturn, User } from "../../base/types";
 import { OperationOptions } from "../OperationOptions";
 
 import { GetSingleUserParams, GetUserListParams } from "./UserOperationParams";

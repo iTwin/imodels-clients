@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { CollectionRequestParams, IModelScopedOperationParams } from "@itwin/imodels-client-management";
 
-import { LockedObjects } from "../../base/public";
+import { LockedObjects } from "../../base/types";
 
 /** Url parameters supported in Lock list query. */
 export interface GetLockListUrlParams extends CollectionRequestParams {

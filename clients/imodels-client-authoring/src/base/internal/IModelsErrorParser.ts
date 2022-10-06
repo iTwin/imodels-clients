@@ -6,7 +6,7 @@ import { IModelsApiError, IModelsErrorBaseImpl, IModelsErrorImpl, IModelsErrorPa
 
 import { IModelsErrorCode } from "@itwin/imodels-client-management";
 
-import { ConflictingLock, ConflictingLocksError, LocksError } from "../public/apiEntities/LockErrorInterfaces";
+import { ConflictingLock, ConflictingLocksError, LocksError } from "../types/apiEntities/LockErrorInterfaces";
 
 interface AuthoringIModelsApiErrorWrapper {
   error: AuthoringIModelsApiError;

@@ -7,7 +7,7 @@ import { IModelOperations as ManagementIModelOperations } from "@itwin/imodels-c
 
 import { AuthorizationParam, IModel, IModelsErrorCode } from "@itwin/imodels-client-management";
 
-import { BaselineFileState } from "../../base/public";
+import { BaselineFileState } from "../../base/types";
 import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations";
 import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";

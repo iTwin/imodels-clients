@@ -9,7 +9,7 @@ import { ChangesetOperations as ManagementChangesetOperations } from "@itwin/imo
 
 import { Changeset, ChangesetState, IModelScopedOperationParams, IModelsErrorCode } from "@itwin/imodels-client-management";
 
-import { DownloadedChangeset, TargetDirectoryParam } from "../../base/public";
+import { DownloadedChangeset, TargetDirectoryParam } from "../../base/types";
 import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";
 

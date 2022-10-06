@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Briefcase, Changeset, Checkpoint, IModel, Link, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, User } from "../public";
+import { Briefcase, Changeset, Checkpoint, IModel, Link, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, User } from "../types";
 
 /**
  * Links that are included in all entity list page responses. They simplify pagination implementation because users
