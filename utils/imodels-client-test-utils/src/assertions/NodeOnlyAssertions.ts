@@ -163,7 +163,7 @@ export interface ProgressReport {
   total: number;
 }
 
-export function assertProgressReports(progressReports: ProgressReport[]) {
+export function assertProgressReports(progressReports: ProgressReport[], containsLastReport: boolean = true) {
   expect(progressReports.length).to.be.greaterThan(0);
 
   let previousReport = progressReports[0];
@@ -177,7 +177,9 @@ export function assertProgressReports(progressReports: ProgressReport[]) {
 
     previousReport = report;
   }
-  expect(previousReport.loaded).to.be.equal(previousReport.total);
+
+  if (containsLastReport)
+    expect(previousReport.loaded).to.be.equal(previousReport.total);
 }
 
 function assertSynchronizationInfo(params: {

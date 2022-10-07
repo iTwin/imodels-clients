@@ -141,7 +141,7 @@ describe("BackendIModelsAccess", () => {
         targetDir: testDownloadPath
       };
 
-      const progressReports: ProgressReport[] = [];
+      let progressReports: ProgressReport[] = [];
       const progressCallbackFor1stDownload = (loaded: number, total: number) => {
         progressReports.push({loaded, total});
         return loaded < total / 4 ? ProgressStatus.Continue : ProgressStatus.Abort;
@@ -164,9 +164,13 @@ describe("BackendIModelsAccess", () => {
 
       // Assert #1
       expect(fs.readdirSync(testDownloadPath).length).to.be.greaterThan(0);
+      expect(fs.readdirSync(testDownloadPath).length).to.be.lessThan(10);
 
       expect(isIModelsApiError(objectThrown)).to.be.true;
       expect((objectThrown as IModelsError).code).to.be.equal(IModelsErrorCode.DownloadAborted);
+
+      assertProgressReports(progressReports, false);
+      progressReports = [];
 
       // Act #2
       const changesets = await backendIModelsAccess.downloadChangesets({

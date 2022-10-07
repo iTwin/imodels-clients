@@ -249,13 +249,13 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       downloadStream.on("data", (chunk) => chunkDownloadedCallback(chunk.length));
 
       await new Promise((resolve, reject) => {
-        downloadStream?.on("error", reject);
-        targetFileStream.on("finish", resolve);
+        downloadStream?.once("error", reject);
+        targetFileStream.once("close", resolve);
       });
     } catch (error: unknown) {
       const closingPromise = new Promise((resolve) => {
-        targetFileStream.once("close", () => {
-          void this._options.localFileSystem.deleteFile(downloadInput.localPath);
+        targetFileStream.once("close", async () => {
+          await this._options.localFileSystem.deleteFile(downloadInput.localPath);
           resolve(undefined);
         });
       });

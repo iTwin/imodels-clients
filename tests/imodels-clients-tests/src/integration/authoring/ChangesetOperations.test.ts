@@ -444,6 +444,8 @@ describe("[Authoring] ChangesetOperations", () => {
       }
 
       // Assert
+      expect(fs.readdirSync(downloadPath).length).to.be.equal(0);
+
       expect(isIModelsApiError(thrownError)).to.be.true;
       expect((thrownError as IModelsError).code).to.be.equal(IModelsErrorCode.DownloadAborted);
     });
@@ -471,6 +473,7 @@ describe("[Authoring] ChangesetOperations", () => {
       assertProgressReports(progressReports);
     });
 
+    // TODO: Potentially a flaky test on mac build: incomplete changesets files are not deleted.
     it("should cancel changesets download", async () => {
       // Arrange
       const abortController = new AbortController();
