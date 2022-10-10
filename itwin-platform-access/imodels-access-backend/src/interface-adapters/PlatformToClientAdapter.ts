@@ -79,8 +79,8 @@ export class PlatformToClientAdapter {
       return;
 
     const abortController = new AbortController();
-    const convertedProgressCallback = (loaded: number, total: number) => {
-      const cancel = progressCallback(loaded, total);
+    const convertedProgressCallback = (downloaded: number, total: number) => {
+      const cancel = progressCallback(downloaded, total);
 
       if (cancel !== ProgressStatus.Continue)
         abortController.abort();

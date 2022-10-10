@@ -401,7 +401,7 @@ describe("[Authoring] ChangesetOperations", () => {
     it("should report progress of changeset download", async () => {
       // Arrange
       const progressReports: ProgressReport[] = [];
-      const progressCallback: ProgressCallback = (loaded: number, total: number) => progressReports.push({loaded, total});
+      const progressCallback: ProgressCallback = (downloaded: number, total: number) => progressReports.push({downloaded, total});
 
       const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "download changeset while reporting progress");
       const downloadParams: DownloadSingleChangesetParams = {
@@ -453,7 +453,7 @@ describe("[Authoring] ChangesetOperations", () => {
     it("should report progress of changesets download", async () => {
       // Arrange
       const progressReports: ProgressReport[] = [];
-      const progressCallback: ProgressCallback = (loaded: number, total: number) => progressReports.push({loaded, total});
+      const progressCallback: ProgressCallback = (downloaded: number, total: number) => progressReports.push({downloaded, total});
 
       const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "download changesets while reporting progress");
       const downloadChangesetListParams: DownloadChangesetListParams = {
@@ -478,8 +478,8 @@ describe("[Authoring] ChangesetOperations", () => {
       // Arrange
       const abortController = new AbortController();
       const abortSignal = abortController.signal;
-      const progressCallback: ProgressCallback = (loaded, total) => {
-        if (loaded > total / 2)
+      const progressCallback: ProgressCallback = (downloaded, total) => {
+        if (downloaded > total / 2)
           abortController.abort();
       };
 

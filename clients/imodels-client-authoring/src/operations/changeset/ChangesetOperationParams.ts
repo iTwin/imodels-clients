@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { ContainingChanges, GetChangesetListParams, GetSingleChangesetParams, IModelScopedOperationParams, SynchronizationInfo } from "@itwin/imodels-client-management";
 
-import { AbortDownloadParam, DownloadProgressParam, TargetDirectoryParam } from "../../base/types";
+import { DownloadProgressParam, TargetDirectoryParam } from "../../base/types";
 
 export type SynchronizationInfoForCreate = Omit<SynchronizationInfo, "changedFiles"> & {
   /** Optional list of files that were processed by the synchronization. The array, if specified, must not be empty. */
@@ -42,7 +42,7 @@ export interface CreateChangesetParams extends IModelScopedOperationParams {
 }
 
 /** Parameters for single Changeset download operation. */
-export type DownloadSingleChangesetParams = GetSingleChangesetParams & TargetDirectoryParam & AbortDownloadParam & DownloadProgressParam;
+export type DownloadSingleChangesetParams = GetSingleChangesetParams & TargetDirectoryParam & DownloadProgressParam;
 
 /** Parameters for Changeset list download operation. */
-export type DownloadChangesetListParams = GetChangesetListParams & TargetDirectoryParam & AbortDownloadParam & DownloadProgressParam;
+export type DownloadChangesetListParams = GetChangesetListParams & TargetDirectoryParam & DownloadProgressParam;

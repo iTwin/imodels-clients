@@ -142,12 +142,12 @@ describe("BackendIModelsAccess", () => {
       };
 
       let progressReports: ProgressReport[] = [];
-      const progressCallbackFor1stDownload = (loaded: number, total: number) => {
-        progressReports.push({loaded, total});
-        return loaded < total / 4 ? ProgressStatus.Continue : ProgressStatus.Abort;
+      const progressCallbackFor1stDownload = (downloaded: number, total: number) => {
+        progressReports.push({downloaded, total});
+        return downloaded < total / 4 ? ProgressStatus.Continue : ProgressStatus.Abort;
       };
-      const progressCallbackFor2ndDownload = (loaded: number, total: number) => {
-        progressReports.push({loaded, total});
+      const progressCallbackFor2ndDownload = (downloaded: number, total: number) => {
+        progressReports.push({downloaded, total});
         return ProgressStatus.Continue;
       };
 
@@ -251,9 +251,9 @@ describe("BackendIModelsAccess", () => {
 
     it("should report progress when downloading checkpoint", async () => {
       // Arrange
-      const progressLogs: { loaded: number, total: number }[] = [];
-      const progressCallback: ProgressFunction = (loaded: number, total: number) => {
-        progressLogs.push({ loaded, total });
+      const progressLogs: ProgressReport[] = [];
+      const progressCallback: ProgressFunction = (downloaded: number, total: number) => {
+        progressLogs.push({ downloaded, total });
         return 0;
       };
 
@@ -281,7 +281,7 @@ describe("BackendIModelsAccess", () => {
 
       expect(progressLogs.length).to.be.greaterThan(0);
       const lastReportedLog = progressLogs[progressLogs.length - 1];
-      expect(lastReportedLog.loaded).to.be.equal(lastReportedLog.total);
+      expect(lastReportedLog.downloaded).to.be.equal(lastReportedLog.total);
       expect(lastReportedLog.total).to.be.equal(fs.statSync(localCheckpointFilePath).size);
     });
   });

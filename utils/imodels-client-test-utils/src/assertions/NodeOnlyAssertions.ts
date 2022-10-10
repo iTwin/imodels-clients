@@ -159,7 +159,7 @@ export function assertLock(params: {
 }
 
 export interface ProgressReport {
-  loaded: number;
+  downloaded: number;
   total: number;
 }
 
@@ -168,10 +168,10 @@ export function assertProgressReports(progressReports: ProgressReport[], contain
 
   let previousReport = progressReports[0];
   for (const report of progressReports) {
-    expect(report.loaded).to.be.lessThanOrEqual(report.total);
+    expect(report.downloaded).to.be.lessThanOrEqual(report.total);
 
     if (previousReport !== report){
-      expect(report.loaded).to.be.greaterThanOrEqual(previousReport.loaded);
+      expect(report.downloaded).to.be.greaterThanOrEqual(previousReport.downloaded);
       expect(report.total).to.be.equal(previousReport.total);
     }
 
@@ -179,7 +179,7 @@ export function assertProgressReports(progressReports: ProgressReport[], contain
   }
 
   if (containsLastReport)
-    expect(previousReport.loaded).to.be.equal(previousReport.total);
+    expect(previousReport.downloaded).to.be.equal(previousReport.total);
 }
 
 function assertSynchronizationInfo(params: {

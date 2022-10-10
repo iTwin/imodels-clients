@@ -11,7 +11,7 @@ import { ChangesetOperations as ManagementChangesetOperations } from "@itwin/imo
 
 import { Changeset, ChangesetState, IModelScopedOperationParams, IModelsErrorCode } from "@itwin/imodels-client-management";
 
-import { AbortDownloadParam, DownloadProgressParam, DownloadedChangeset, GenericAbortSignal, TargetDirectoryParam } from "../../base/types";
+import { DownloadProgressParam, DownloadedChangeset, GenericAbortSignal, TargetDirectoryParam } from "../../base/types";
 import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";
 
@@ -145,7 +145,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   }
 
   private async downloadSingleChangeset(
-    params: IModelScopedOperationParams & TargetDirectoryParam & { changeset: Changeset } & AbortDownloadParam & DownloadProgressParam
+    params: IModelScopedOperationParams & TargetDirectoryParam & { changeset: Changeset } & DownloadProgressParam
   ): Promise<DownloadedChangeset> {
     const changesetWithPath: DownloadedChangeset = {
       ...params.changeset,
@@ -173,7 +173,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   }
 
   private async downloadChangesetFileWithRetry(
-    params: IModelScopedOperationParams & { changeset: DownloadedChangeset } & AbortDownloadParam & { chunkDownloadedCallback?: ChunkDownloadedCallback }
+    params: IModelScopedOperationParams & { changeset: DownloadedChangeset } & { abortSignal?: GenericAbortSignal } & { chunkDownloadedCallback?: ChunkDownloadedCallback }
   ): Promise<void> {
     const targetFilePath = params.changeset.filePath;
     if (await this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
@@ -303,8 +303,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       }
     }
 
-    return (loaded: number) => {
-      bytesDownloaded += loaded;
+    return (downloaded: number) => {
+      bytesDownloaded += downloaded;
       params.progressCallback?.(bytesDownloaded, totalSize);
     };
   }
