@@ -19,9 +19,9 @@ export interface DownloadFileParams {
   url: string;
   /** Absolute file path. */
   localPath: string;
-  /** Function called to report file download progress. */
+  /** Function called to report progress of the download. */
   downloadCallback?: FileDownloadCallback;
-  /** Abort signal used to cancel file download. */
+  /** Abort signal for cancelling file download. */
   abortSignal?: GenericAbortSignal;
 }
 

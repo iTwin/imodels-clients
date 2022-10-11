@@ -17,19 +17,19 @@ export interface TargetDirectoryParam {
   targetDirectoryPath: string;
 }
 
-/** Signal interface used to signal abort. */
+/** Signal interface for signalling abort. */
 export type GenericAbortSignal = ObjectStorageAbortSignal;
 
-/** Function used to report progress of the download. */
+/** Function for reporting progress of the download. */
 export type ProgressCallback = (downloaded: number, total: number) => void;
 
-/** Function used to report progress of the single file download. */
+/** Function for reporting progress of the single file download. */
 export type FileDownloadCallback = (downloaded: number) => void;
 
 /** Common parameters for progress reporting download operations. */
 export interface DownloadProgressParam {
   /** Function called to report download progress. */
   progressCallback?: ProgressCallback;
-  /** Abort signal used to cancel download. */
+  /** Abort signal for cancelling download. */
   abortSignal?: GenericAbortSignal;
 }
