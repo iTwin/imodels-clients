@@ -14,6 +14,7 @@ import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion
 } from "@itwin/core-common";
+import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations";
 import axios, { AxiosResponse } from "axios";
 
 import {
@@ -29,7 +30,6 @@ import {
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
-import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations";
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;

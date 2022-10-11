@@ -12,7 +12,7 @@ import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 
 import { ContainingChanges, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertProgressReports, cleanupDirectory, createGuidValue, assertAbortError } from "@itwin/imodels-client-test-utils";
+import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
 
@@ -165,7 +165,7 @@ describe("BackendIModelsAccess", () => {
       // Assert #1
       expect(fs.readdirSync(testDownloadPath).length).to.be.greaterThan(0);
 
-      assertAbortError(thrownError)
+      assertAbortError(thrownError);
       assertProgressReports(progressReports, false);
       progressReports = [];
 

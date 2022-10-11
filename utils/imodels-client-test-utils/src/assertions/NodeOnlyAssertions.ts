@@ -6,7 +6,7 @@ import * as fs from "fs";
 
 import { expect } from "chai";
 
-import { BaselineFile, BaselineFileState, Changeset, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, isIModelsApiError, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, Changeset, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate, isIModelsApiError } from "@itwin/imodels-client-authoring";
 
 import { TestChangesetFile, TestIModelBaselineFile } from "../test-context-providers";
 
@@ -172,7 +172,7 @@ export function assertProgressReports(progressReports: ProgressReport[], downloa
 
     if (previousReport !== report){
       expect(report.total).to.be.equal(previousReport.total);
-      
+
       if (downloadWasSuccessful)
         expect(report.downloaded).to.be.greaterThanOrEqual(previousReport.downloaded);
     }

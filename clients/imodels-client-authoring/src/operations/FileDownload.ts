@@ -3,18 +3,21 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
-import { ClientStorage } from "@itwin/object-storage-core";
-import { FileDownloadCallback, GenericAbortSignal } from "../base/types";
+
 import { IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
+import { ClientStorage } from "@itwin/object-storage-core";
+
 import { IModelsErrorCode } from "@itwin/imodels-client-management";
 
-/** Parameters used to download file. */
+import { FileDownloadCallback, GenericAbortSignal } from "../base/types";
+
+/** Parameters for downloading single file. */
 export interface DownloadFileParams {
-  /** Client storage used to download file. */
-  storage: ClientStorage,
-  /** URL of the file in storage. */
+  /** Storage client for downloading file. */
+  storage: ClientStorage;
+  /** URL of the file in the storage. */
   url: string;
-  /** Absolute path of the file. */
+  /** Absolute file path. */
   localPath: string;
   /** Function called to report file download progress. */
   downloadCallback?: FileDownloadCallback;
@@ -54,7 +57,7 @@ export async function downloadFile(params: DownloadFileParams) {
 
 function adaptAbortError(error: unknown): unknown {
   if (!(error instanceof Error) || error.name !== "AbortError")
-      return error;
+    return error;
 
   throw new IModelsErrorImpl({
     code: IModelsErrorCode.DownloadAborted,

@@ -17,7 +17,7 @@ import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 type CommonDownloadParams = IModelScopedOperationParams & TargetDirectoryParam;
 
-describe.only("[Authoring] ChangesetOperations", () => {
+describe("[Authoring] ChangesetOperations", () => {
   let iModelsClient: IModelsClient;
   let iModelsClientOptions: IModelsClientOptions;
   let authorization: AuthorizationCallback;
@@ -493,10 +493,9 @@ describe.only("[Authoring] ChangesetOperations", () => {
       };
 
       // Act
-      let changesets: DownloadedChangeset[] = [];
       let thrownError: unknown;
       try {
-        changesets = await iModelsClient.changesets.downloadList(downloadChangesetListParams);
+        await iModelsClient.changesets.downloadList(downloadChangesetListParams);
       } catch (error: unknown) {
         thrownError = error;
       }
