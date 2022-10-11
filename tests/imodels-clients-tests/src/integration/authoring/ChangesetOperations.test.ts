@@ -17,7 +17,7 @@ import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 type CommonDownloadParams = IModelScopedOperationParams & TargetDirectoryParam;
 
-describe("[Authoring] ChangesetOperations", () => {
+describe.only("[Authoring] ChangesetOperations", () => {
   let iModelsClient: IModelsClient;
   let iModelsClientOptions: IModelsClientOptions;
   let authorization: AuthorizationCallback;
@@ -444,8 +444,6 @@ describe("[Authoring] ChangesetOperations", () => {
       }
 
       // Assert
-      expect(fs.readdirSync(downloadPath).length).to.be.equal(0);
-
       expect(isIModelsApiError(thrownError)).to.be.true;
       expect((thrownError as IModelsError).code).to.be.equal(IModelsErrorCode.DownloadAborted);
     });
@@ -473,12 +471,14 @@ describe("[Authoring] ChangesetOperations", () => {
       assertProgressReports(progressReports);
     });
 
-    // TODO: Potentially a flaky test on mac build: incomplete changesets files are not deleted.
     it("should cancel changesets download", async () => {
       // Arrange
       const abortController = new AbortController();
       const abortSignal = abortController.signal;
+
+      const progressReports: ProgressReport[] = [];
       const progressCallback: ProgressCallback = (downloaded, total) => {
+        progressReports.push({downloaded, total});
         if (downloaded > total / 2)
           abortController.abort();
       };
@@ -502,11 +502,10 @@ describe("[Authoring] ChangesetOperations", () => {
       }
 
       // Assert
-      expect(changesets.length).to.lessThan(testIModelFileProvider.changesets.length);
-      expect(fs.readdirSync(downloadPath).length).to.lessThan(testIModelFileProvider.changesets.length);
-
       expect(isIModelsApiError(thrownError)).to.be.true;
       expect((thrownError as IModelsError).code).to.be.equal(IModelsErrorCode.DownloadAborted);
+
+      assertProgressReports(progressReports, false);
     });
   });
 });

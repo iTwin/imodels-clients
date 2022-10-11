@@ -6,7 +6,7 @@ import * as fs from "fs";
 
 import { expect } from "chai";
 
-import { BaselineFile, BaselineFileState, Changeset, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, Changeset, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, isIModelsApiError, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
 
 import { TestChangesetFile, TestIModelBaselineFile } from "../test-context-providers";
 
@@ -163,7 +163,7 @@ export interface ProgressReport {
   total: number;
 }
 
-export function assertProgressReports(progressReports: ProgressReport[], containsLastReport: boolean = true) {
+export function assertProgressReports(progressReports: ProgressReport[], downloadWasSuccessful: boolean = true): void {
   expect(progressReports.length).to.be.greaterThan(0);
 
   let previousReport = progressReports[0];
@@ -171,15 +171,21 @@ export function assertProgressReports(progressReports: ProgressReport[], contain
     expect(report.downloaded).to.be.lessThanOrEqual(report.total);
 
     if (previousReport !== report){
-      expect(report.downloaded).to.be.greaterThanOrEqual(previousReport.downloaded);
       expect(report.total).to.be.equal(previousReport.total);
+      
+      if (downloadWasSuccessful)
+        expect(report.downloaded).to.be.greaterThanOrEqual(previousReport.downloaded);
     }
 
     previousReport = report;
   }
 
-  if (containsLastReport)
-    expect(previousReport.downloaded).to.be.equal(previousReport.total);
+  expect(previousReport.downloaded === previousReport.total).to.be.equal(downloadWasSuccessful);
+}
+
+export function assertAbortError(error: unknown): void {
+  expect(isIModelsApiError(error)).to.be.true;
+  expect((error as IModelsError).code).to.be.equal(IModelsErrorCode.DownloadAborted);
 }
 
 function assertSynchronizationInfo(params: {

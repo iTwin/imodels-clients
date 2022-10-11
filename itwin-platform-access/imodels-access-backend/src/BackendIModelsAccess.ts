@@ -2,9 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import * as fs from "fs";
 import { join } from "path";
-import { Readable } from "stream";
 
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
@@ -31,6 +29,7 @@ import {
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
+import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations";
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
@@ -214,25 +213,18 @@ export class BackendIModelsAccess implements BackendHubAccess {
       return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
     }
 
-    let bytesTransferred = 0;
     const v1CheckpointSize = await this.getV1CheckpointSize(checkpoint._links.download.href);
+    const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.onProgress) ?? [];
 
-    const targetFileStream = fs.createWriteStream(arg.localFile);
-
-    const downloadStream: Readable = await this._iModelsClient.cloudStorage.download({
-      transferType: "stream",
+    await downloadFile({
+      storage: this._iModelsClient.cloudStorage,
       url: checkpoint._links.download.href,
-      localPath: arg.localFile
+      localPath: arg.localFile,
+      downloadCallback: (downloaded) => progressCallback?.(downloaded, v1CheckpointSize),
+      abortSignal
     });
-    downloadStream.pipe(targetFileStream);
 
-    return new Promise<ChangesetIndexAndId>((resolve) => {
-      downloadStream.on("data", (chunk) => {
-        bytesTransferred += chunk.length;
-        arg.onProgress!(bytesTransferred, v1CheckpointSize);
-      });
-      targetFileStream.on("finish", resolve);
-    });
+    return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
   }
 
   /**
