@@ -100,7 +100,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       // changesets first because their SAS tokens have a shorter lifespan.
       changesetsWithFilePath.sort((changeset1: DownloadedChangeset, changeset2: DownloadedChangeset) => changeset1.fileSize - changeset2.fileSize);
 
-      const queue = new LimitedParallelQueue({ maxParallelPromises: 1 });
+      const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
       for (const changeset of changesetsWithFilePath)
         queue.push(async () => this.downloadChangesetFileWithRetry({
           authorization: params.authorization,
@@ -224,7 +224,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   }
 
   private async getProvideDownloadCallback(params: DownloadChangesetListParams): Promise<ProvideFileDownloadCallback | undefined> {
-    if (params.progressCallback === undefined)
+    if (!params.progressCallback)
       return;
 
     let totalSize = 0;
