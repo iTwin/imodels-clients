@@ -9,7 +9,10 @@ import { ClientStorage } from "@itwin/object-storage-core";
 
 import { IModelsErrorCode } from "@itwin/imodels-client-management";
 
-import { FileDownloadCallback, GenericAbortSignal } from "../base/types";
+import { GenericAbortSignal } from "../base/types";
+
+/** Function for reporting progress of the download. */
+export type DownloadCallback = (bytesDownloaded: number) => void;
 
 /** Parameters for downloading single file. */
 export interface DownloadFileParams {
@@ -19,14 +22,16 @@ export interface DownloadFileParams {
   url: string;
   /** Absolute file path. */
   localPath: string;
-  /** Function called to report progress of the download. */
-  downloadCallback?: FileDownloadCallback;
+  /** Function periodically called to report how many bytes of the file are downloaded. */
+  fileDownloadCallback?: DownloadCallback;
+  /** Function periodically called to report how many bytes were downloaded since the last time this function was called. */
+  chunkDownloadCallback?: DownloadCallback;
   /** Abort signal for cancelling file download. */
   abortSignal?: GenericAbortSignal;
 }
 
 /** Downloads file to path from provided storage. */
-export async function downloadFile(params: DownloadFileParams) {
+export async function downloadFile(params: DownloadFileParams): Promise<void> {
   const targetFileStream = fs.createWriteStream(params.localPath);
 
   try {
@@ -36,11 +41,12 @@ export async function downloadFile(params: DownloadFileParams) {
     });
     downloadStream.pipe(targetFileStream);
 
-    if (params.downloadCallback){
+    if (params.fileDownloadCallback || params.chunkDownloadCallback){
       let bytesDownloaded = 0;
       downloadStream.on("data", (chunk: any) => {
         bytesDownloaded += chunk?.length;
-        params.downloadCallback?.(bytesDownloaded);
+        params.fileDownloadCallback?.(bytesDownloaded);
+        params.chunkDownloadCallback?.(chunk?.length);
       });
     }
 
@@ -49,7 +55,6 @@ export async function downloadFile(params: DownloadFileParams) {
       targetFileStream.on("close", resolve);
     });
   } catch (error: unknown) {
-    params.downloadCallback?.(0);
     targetFileStream.end();
     throw adaptAbortError(error);
   }

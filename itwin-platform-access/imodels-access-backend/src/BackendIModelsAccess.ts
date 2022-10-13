@@ -204,15 +204,6 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (!checkpoint || !checkpoint._links?.download)
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
 
-    if (!arg.onProgress) {
-      await this._iModelsClient.cloudStorage.download({
-        transferType: "local",
-        url: checkpoint._links.download.href,
-        localPath: arg.localFile
-      });
-      return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
-    }
-
     const v1CheckpointSize = await this.getV1CheckpointSize(checkpoint._links.download.href);
     const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.onProgress) ?? [];
 
@@ -220,7 +211,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       storage: this._iModelsClient.cloudStorage,
       url: checkpoint._links.download.href,
       localPath: arg.localFile,
-      downloadCallback: (downloaded) => progressCallback?.(downloaded, v1CheckpointSize),
+      fileDownloadCallback: (downloaded) => progressCallback?.(downloaded, v1CheckpointSize),
       abortSignal
     });
 

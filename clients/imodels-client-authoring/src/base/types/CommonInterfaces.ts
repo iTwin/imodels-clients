@@ -23,9 +23,6 @@ export type GenericAbortSignal = ObjectStorageAbortSignal;
 /** Function for reporting progress of the download. */
 export type ProgressCallback = (downloaded: number, total: number) => void;
 
-/** Function for reporting progress of the single file download. */
-export type FileDownloadCallback = (downloaded: number) => void;
-
 /** Common parameters for progress reporting download operations. */
 export interface DownloadProgressParam {
   /** Function called to report download progress. */
