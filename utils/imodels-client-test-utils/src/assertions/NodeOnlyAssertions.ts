@@ -171,10 +171,8 @@ export function assertProgressReports(progressReports: ProgressReport[], downloa
     expect(report.downloaded).to.be.lessThanOrEqual(report.total);
 
     if (previousReport !== report){
-      expect(report.total).to.be.equal(previousReport.total);
-
-      if (downloadWasSuccessful)
-        expect(report.downloaded).to.be.greaterThanOrEqual(previousReport.downloaded);
+      expect(report.total).to.be.greaterThanOrEqual(previousReport.total);
+      expect(report.downloaded).to.be.greaterThanOrEqual(previousReport.downloaded);
     }
 
     previousReport = report;
