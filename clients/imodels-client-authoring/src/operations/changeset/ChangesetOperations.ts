@@ -27,7 +27,7 @@ interface DownloadChangesetFileWithRetryParams extends IModelScopedOperationPara
   changeset: DownloadedChangeset;
   abortSignal?: GenericAbortSignal;
   downloadCallback?: DownloadCallback;
-  firstDownloadFailureCallback?: DownloadFailedCallback;
+  firstDownloadFailedCallback?: DownloadFailedCallback;
 }
 
 export class ChangesetOperations<TOptions extends OperationOptions> extends ManagementChangesetOperations<TOptions>{
@@ -96,7 +96,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   public async downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]> {
     await this._options.localFileSystem.createDirectory(params.targetDirectoryPath);
 
-    const [downloadCallback, failureCallback] = await this.provideDownloadCallbacks(params) ?? [];
+    const [downloadCallback, downloadFailedCallback] = await this.provideDownloadCallbacks(params) ?? [];
 
     let result: DownloadedChangeset[] = [];
     for await (const changesetPage of this.getRepresentationList(params).byPage()) {
@@ -119,7 +119,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
           changeset,
           abortSignal: params.abortSignal,
           downloadCallback,
-          firstDownloadFailureCallback: failureCallback
+          firstDownloadFailedCallback: downloadFailedCallback
         }));
       await queue.waitAll();
     }
@@ -198,7 +198,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       });
     } catch (error) {
       this.throwIfAbortError(error, params.changeset);
-      params.firstDownloadFailureCallback?.(bytesDownloaded);
+      params.firstDownloadFailedCallback?.(bytesDownloaded);
 
       const changeset = await this.querySingleInternal({
         authorization: params.authorization,
@@ -262,9 +262,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       totalDownloaded += downloaded;
       params.progressCallback?.(totalDownloaded, totalSize);
     };
-    const failureCallback: DownloadCallback = (downloadedBeforeFailure) => totalSize += downloadedBeforeFailure;
+    // We increase total size to prevent cases where downloaded size is larger than total size at the end of the download.
+    const downloadFailedCallback: DownloadCallback = (downloadedBeforeFailure) => totalSize += downloadedBeforeFailure;
 
-    return [progressCallback, failureCallback];
+    return [progressCallback, downloadFailedCallback];
   }
 
   private throwIfAbortError(error: unknown, changeset: Changeset) {
