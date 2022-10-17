@@ -23,9 +23,9 @@ export interface DownloadFileParams {
   /** Absolute file path. */
   localPath: string;
   /** Function periodically called to report how many bytes of the file are downloaded. */
-  fileDownloadCallback?: DownloadCallback;
-  /** Function periodically called to report how many bytes were downloaded since the last time this function was called. */
-  chunkDownloadCallback?: DownloadCallback;
+  totalDownloadCallback?: DownloadCallback;
+  /** Function called to report how many bytes were downloaded with the latest chunk. */
+  latestDownloadedChunkSizeCallback?: DownloadCallback;
   /** Abort signal for cancelling file download. */
   abortSignal?: GenericAbortSignal;
 }
@@ -41,12 +41,12 @@ export async function downloadFile(params: DownloadFileParams): Promise<void> {
     });
     downloadStream.pipe(targetFileStream);
 
-    if (params.fileDownloadCallback || params.chunkDownloadCallback){
+    if (params.totalDownloadCallback || params.latestDownloadedChunkSizeCallback){
       let bytesDownloaded = 0;
       downloadStream.on("data", (chunk: any) => {
         bytesDownloaded += chunk?.length;
-        params.fileDownloadCallback?.(bytesDownloaded);
-        params.chunkDownloadCallback?.(chunk?.length);
+        params.totalDownloadCallback?.(bytesDownloaded);
+        params.latestDownloadedChunkSizeCallback?.(chunk?.length);
       });
     }
 

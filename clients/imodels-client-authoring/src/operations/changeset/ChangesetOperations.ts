@@ -157,14 +157,14 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       filePath: path.join(params.targetDirectoryPath, this.createFileName(params.changeset.id))
     };
 
-    const fileDownloadCallback = params.progressCallback ? (bytes: number) => params.progressCallback?.(bytes, changesetWithPath.fileSize) : undefined;
+    const downloadCallback = params.progressCallback ? (bytes: number) => params.progressCallback?.(bytes, changesetWithPath.fileSize) : undefined;
 
     await this.downloadChangesetFileWithRetry({
       authorization: params.authorization,
       iModelId: params.iModelId,
       changeset: changesetWithPath,
       abortSignal: params.abortSignal,
-      downloadCallback: fileDownloadCallback
+      downloadCallback
     });
 
     return changesetWithPath;
@@ -183,7 +183,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
     let bytesDownloaded = 0;
     if (params.downloadCallback) {
-      downloadParams.chunkDownloadCallback = (downloaded) => {
+      downloadParams.latestDownloadedChunkSizeCallback = (downloaded) => {
         bytesDownloaded += downloaded;
         params.downloadCallback?.(downloaded);
       };

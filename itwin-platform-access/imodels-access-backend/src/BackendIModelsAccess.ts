@@ -206,13 +206,13 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const v1CheckpointSize = await this.getV1CheckpointSize(checkpoint._links.download.href);
     const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.onProgress) ?? [];
-    const fileDownloadCallback = progressCallback ? (downloaded: number) => progressCallback?.(downloaded, v1CheckpointSize) : undefined;
+    const totalDownloadCallback = progressCallback ? (downloaded: number) => progressCallback?.(downloaded, v1CheckpointSize) : undefined;
 
     await downloadFile({
       storage: this._iModelsClient.cloudStorage,
       url: checkpoint._links.download.href,
       localPath: arg.localFile,
-      fileDownloadCallback,
+      totalDownloadCallback,
       abortSignal
     });
 
