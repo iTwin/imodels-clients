@@ -800,7 +800,7 @@ packages:
       '@cspell/dict-elixir': 2.0.1
       '@cspell/dict-en_us': 2.3.3
       '@cspell/dict-en-gb': 1.1.33
-      '@cspell/dict-filetypes': 2.2.0
+      '@cspell/dict-filetypes': 2.1.1
       '@cspell/dict-fonts': 2.1.0
       '@cspell/dict-fullstack': 2.0.6
       '@cspell/dict-git': 1.0.1
@@ -894,7 +894,7 @@ packages:
     resolution: {integrity: sha512-csyKeaNktfpvMkmE2GOPTwsrQm3wWhLKVaDRaGU0qTcIjDiCvqv/iYgrVrKRkoddA3kdNTZ8YNCcix7lb6VkOg==}
     dev: true
 
-  /@cspell/dict-filetypes/2.2.0:
+  /@cspell/dict-filetypes/2.1.1:
     resolution: {integrity: sha512-Oo0/mUbFHzsaATqRLdkV1RMoYns3aGzeKFIpVJg415GYtJ8EABXtEArYTXeMwlboyGTPvEk+PR2hBSTSfQTqmg==}
     dev: true
 
@@ -3364,7 +3364,7 @@ packages:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
     dev: true
 
-  /fast-safe-stringify/2.2.0:
+  /fast-safe-stringify/2.1.1:
     resolution: {integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==}
 
   /fastq/1.13.0:
@@ -3995,7 +3995,7 @@ packages:
       has-tostringtag: 1.0.0
     dev: true
 
-  /is-extglob/2.2.0:
+  /is-extglob/2.1.1:
     resolution: {integrity: sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==}
     engines: {node: '>=0.10.0'}
 
@@ -4007,7 +4007,7 @@ packages:
     resolution: {integrity: sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg==}
     engines: {node: '>=0.10.0'}
     dependencies:
-      is-extglob: 2.2.0
+      is-extglob: 2.1.1
 
   /is-installed-globally/0.4.0:
     resolution: {integrity: sha512-iwGqO3J21aaSkC7jWnHP/difazwS7SFeIqxv6wEtLU8Y5KlzFTjyqcSIT0d8s4+dDhKytsk9PJZ2BkS5eZwQRQ==}
@@ -4947,7 +4947,7 @@ packages:
       end-of-stream: 1.4.4
       once: 1.4.0
 
-  /punycode/2.2.0:
+  /punycode/2.1.1:
     resolution: {integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==}
     engines: {node: '>=6'}
 
@@ -4965,7 +4965,7 @@ packages:
       progress: 2.0.3
       proxy-from-env: 1.1.0
       rimraf: 3.0.2
-      tar-fs: 2.2.0
+      tar-fs: 2.1.1
       unbzip2-stream: 1.4.3
       ws: 8.5.0
     transitivePeerDependencies:
@@ -5096,7 +5096,7 @@ packages:
     resolution: {integrity: sha512-LY85DTSu+heYgDqq/mK+7zFHWkttVNRXC9NKcKGyuGLdlsfbjEPrIEYdCVrx6hqnJb+xSu3Lzaoo8VnmOhhjNA==}
     dev: true
 
-  /require-directory/2.2.0:
+  /require-directory/2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
 
@@ -5437,7 +5437,7 @@ packages:
       component-emitter: 1.3.0
       cookiejar: 2.1.3
       debug: 4.3.4
-      fast-safe-stringify: 2.2.0
+      fast-safe-stringify: 2.1.1
       form-data: 4.0.0
       formidable: 2.0.1
       methods: 1.1.2
@@ -5491,7 +5491,7 @@ packages:
       strip-ansi: 6.0.1
     dev: true
 
-  /tar-fs/2.2.0:
+  /tar-fs/2.1.1:
     resolution: {integrity: sha512-V0r2Y9scmbDRLCNex/+hYzvp/zyYjvFbHPNgVTKfQvVrb6guiE/fxP+XblDNR011utopbkex2nM4dHNV6GDsng==}
     dependencies:
       chownr: 1.1.4
@@ -5559,14 +5559,14 @@ packages:
     engines: {node: '>=0.8'}
     dependencies:
       psl: 1.9.0
-      punycode: 2.2.0
+      punycode: 2.1.1
 
   /tough-cookie/4.1.2:
     resolution: {integrity: sha512-G9fqXWoYFZgTc2z8Q5zaHy/vJMjm+WV0AkAeHxVCQiEB1b+dGvWzFW6QV07cY5jQ5gRkeid2qIkzkxUnmoQZUQ==}
     engines: {node: '>=6'}
     dependencies:
       psl: 1.9.0
-      punycode: 2.2.0
+      punycode: 2.1.1
       universalify: 0.2.0
       url-parse: 1.5.10
 
@@ -5715,7 +5715,7 @@ packages:
   /uri-js/4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
-      punycode: 2.2.0
+      punycode: 2.1.1
     dev: true
 
   /url-parse/1.5.10:
@@ -5938,7 +5938,7 @@ packages:
       decamelize: 1.2.0
       find-up: 4.1.0
       get-caller-file: 2.0.5
-      require-directory: 2.2.0
+      require-directory: 2.1.1
       require-main-filename: 2.0.0
       set-blocking: 2.0.0
       string-width: 4.2.3
@@ -5954,7 +5954,7 @@ packages:
       cliui: 7.0.4
       escalade: 3.1.1
       get-caller-file: 2.0.5
-      require-directory: 2.2.0
+      require-directory: 2.1.1
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.4
