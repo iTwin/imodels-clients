@@ -46,7 +46,8 @@ export enum IModelsErrorCode {
 
   BaselineFileInitializationFailed = "BaselineFileInitializationFailed",
   IModelFromTemplateInitializationFailed = "IModelFromTemplateInitializationFailed",
-  ChangesetDownloadFailed = "ChangesetDownloadFailed"
+  ChangesetDownloadFailed = "ChangesetDownloadFailed",
+  DownloadAborted = "DownloadAborted"
 }
 
 /** Error detail information. */

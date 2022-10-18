@@ -6,13 +6,13 @@ import { assert } from "console";
 import * as fs from "fs";
 import * as path from "path";
 
-import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction } from "@itwin/core-backend";
+import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, DownloadChangesetRangeArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction, ProgressStatus } from "@itwin/core-backend";
 import { BriefcaseId, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 
 import { ContainingChanges, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
+import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
 
@@ -132,6 +132,58 @@ describe("BackendIModelsAccess", () => {
           expect(downloadedChangeset.changesType).to.be.equal(ChangesetType.Regular);
       }
     });
+
+    it("should cancel changesets download and finish downloading missing changesets during next download", async () => {
+      // Arrange
+      const downloadChangesetsParams: DownloadChangesetRangeArg = {
+        accessToken,
+        iModelId: testIModelForRead.id,
+        targetDir: testDownloadPath
+      };
+
+      let progressReports: ProgressReport[] = [];
+      const progressCallbackFor1stDownload = (downloaded: number, total: number) => {
+        progressReports.push({downloaded, total});
+        return downloaded < total / 4 ? ProgressStatus.Continue : ProgressStatus.Abort;
+      };
+      const progressCallbackFor2ndDownload = (downloaded: number, total: number) => {
+        progressReports.push({downloaded, total});
+        return ProgressStatus.Continue;
+      };
+
+      // Act #1
+      let thrownError: unknown;
+      try {
+        await backendIModelsAccess.downloadChangesets({
+          ...downloadChangesetsParams,
+          progressCallback: progressCallbackFor1stDownload
+        });
+      } catch (error: unknown) {
+        thrownError = error;
+      }
+
+      // Assert #1
+      expect(fs.readdirSync(testDownloadPath).length).to.be.greaterThan(0);
+
+      assertAbortError(thrownError);
+      assertProgressReports(progressReports, false);
+      progressReports = [];
+
+      // Act #2
+      const changesets = await backendIModelsAccess.downloadChangesets({
+        ...downloadChangesetsParams,
+        progressCallback: progressCallbackFor2ndDownload
+      });
+
+      // Assert #2
+      expect(changesets.length).to.equal(testIModelFileProvider.changesets.length);
+
+      const downloadedFilesSizeSum = fs.readdirSync(testDownloadPath).reduce((sum, filename) => sum + fs.statSync(path.join(testDownloadPath, filename)).size, 0);
+      const expectedSizeSum = changesets.reduce((sum, changeset) => sum + (changeset.size ?? 0), 0);
+      expect(downloadedFilesSizeSum).to.equal(expectedSizeSum);
+
+      assertProgressReports(progressReports);
+    });
   });
 
   describe("checkpoints v1", () => {
@@ -196,10 +248,10 @@ describe("BackendIModelsAccess", () => {
 
     it("should report progress when downloading checkpoint", async () => {
       // Arrange
-      const progressLogs: { loaded: number, total: number }[] = [];
-      const progressCallback: ProgressFunction = (loaded: number, total: number) => {
-        progressLogs.push({ loaded, total });
-        return 0;
+      const progressLogs: ProgressReport[] = [];
+      const progressCallback: ProgressFunction = (downloaded: number, total: number) => {
+        progressLogs.push({ downloaded, total });
+        return ProgressStatus.Continue;
       };
 
       const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_progress_test.bim");
@@ -224,10 +276,47 @@ describe("BackendIModelsAccess", () => {
       expect(fs.existsSync(localCheckpointFilePath)).to.be.equal(true);
       expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
 
-      expect(progressLogs.length).to.be.greaterThan(0);
+      assertProgressReports(progressLogs);
       const lastReportedLog = progressLogs[progressLogs.length - 1];
-      expect(lastReportedLog.loaded).to.be.equal(lastReportedLog.total);
       expect(lastReportedLog.total).to.be.equal(fs.statSync(localCheckpointFilePath).size);
+    });
+
+    it("should cancel checkpoint download", async () => {
+      // Arrange
+      const progressLogs: ProgressReport[] = [];
+      const progressCallback: ProgressFunction = (downloaded: number, total: number) => {
+        progressLogs.push({ downloaded, total });
+        return downloaded > total / 2 ? ProgressStatus.Abort : ProgressStatus.Continue;
+      };
+
+      const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_cancel_test.bim");
+      const downloadV1CheckpointParams = {
+        localFile: localCheckpointFilePath,
+        checkpoint: {
+          accessToken,
+          iTwinId,
+          iModelId: testIModelForRead.id,
+          changeset: {
+            id: testIModelForRead.namedVersions[0].changesetId
+          }
+        },
+        onProgress: progressCallback
+      };
+
+      // Act
+      let thrownError: unknown;
+      try {
+        // eslint-disable-next-line deprecation/deprecation
+        await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
+      } catch (error: unknown) {
+        thrownError = error;
+      }
+
+      // Assert
+      assertAbortError(thrownError);
+      assertProgressReports(progressLogs, false);
+      const lastReportedLog = progressLogs[progressLogs.length - 1];
+      expect(lastReportedLog.total).to.be.greaterThan(fs.statSync(localCheckpointFilePath).size);
     });
   });
 

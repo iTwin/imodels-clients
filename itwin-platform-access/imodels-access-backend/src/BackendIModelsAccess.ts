@@ -2,20 +2,19 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import * as fs from "fs";
 import { join } from "path";
-import { Readable } from "stream";
 
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
-  ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, IModelDb, IModelHost, IModelIdArg, IModelJsFs,
-  IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
+  ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg,
+  IModelDb, IModelHost, IModelIdArg, IModelJsFs,  IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
 import { BriefcaseStatus, Guid, GuidString, IModelStatus, Logger, OpenMode } from "@itwin/core-bentley";
 import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
-  IModelVersion, LocalDirName
+  IModelVersion
 } from "@itwin/core-common";
+import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations";
 import axios, { AxiosResponse } from "axios";
 
 import {
@@ -40,24 +39,32 @@ export class BackendIModelsAccess implements BackendHubAccess {
     this._iModelsClient = iModelsClient ?? new IModelsClient();
   }
 
-  public async downloadChangesets(arg: ChangesetRangeArg & { targetDir: LocalDirName }): Promise<ChangesetFileProps[]> {
+  public async downloadChangesets(arg: DownloadChangesetRangeArg): Promise<ChangesetFileProps[]> {
     const downloadParams: DownloadChangesetListParams = {
       ...this.getIModelScopedOperationParams(arg),
       targetDirectoryPath: arg.targetDir
     };
     downloadParams.urlParams = PlatformToClientAdapter.toChangesetRangeUrlParams(arg.range);
 
+    const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.progressCallback) ?? [];
+    downloadParams.progressCallback = progressCallback;
+    downloadParams.abortSignal = abortSignal;
+
     const downloadedChangesets: DownloadedChangeset[] = await this._iModelsClient.changesets.downloadList(downloadParams);
     const result: ChangesetFileProps[] = downloadedChangesets.map(ClientToPlatformAdapter.toChangesetFileProps);
     return result;
   }
 
-  public async downloadChangeset(arg: ChangesetArg & { targetDir: LocalDirName }): Promise<ChangesetFileProps> {
+  public async downloadChangeset(arg: DownloadChangesetArg): Promise<ChangesetFileProps> {
     const downloadSingleChangesetParams: DownloadSingleChangesetParams = {
       ...this.getIModelScopedOperationParams(arg),
       ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset),
       targetDirectoryPath: arg.targetDir
     };
+
+    const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.progressCallback) ?? [];
+    downloadSingleChangesetParams.progressCallback = progressCallback;
+    downloadSingleChangesetParams.abortSignal = abortSignal;
 
     const downloadedChangeset: DownloadedChangeset = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
     const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset);
@@ -197,34 +204,19 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (!checkpoint || !checkpoint._links?.download)
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
 
-    if (!arg.onProgress) {
-      await this._iModelsClient.cloudStorage.download({
-        transferType: "local",
-        url: checkpoint._links.download.href,
-        localPath: arg.localFile
-      });
-      return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
-    }
-
-    let bytesTransferred = 0;
     const v1CheckpointSize = await this.getV1CheckpointSize(checkpoint._links.download.href);
+    const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.onProgress) ?? [];
+    const totalDownloadCallback = progressCallback ? (downloaded: number) => progressCallback?.(downloaded, v1CheckpointSize) : undefined;
 
-    const targetFileStream = fs.createWriteStream(arg.localFile);
-
-    const downloadStream: Readable = await this._iModelsClient.cloudStorage.download({
-      transferType: "stream",
+    await downloadFile({
+      storage: this._iModelsClient.cloudStorage,
       url: checkpoint._links.download.href,
-      localPath: arg.localFile
+      localPath: arg.localFile,
+      totalDownloadCallback,
+      abortSignal
     });
-    downloadStream.pipe(targetFileStream);
 
-    return new Promise<ChangesetIndexAndId>((resolve) => {
-      downloadStream.on("data", (chunk) => {
-        bytesTransferred += chunk.length;
-        arg.onProgress!(bytesTransferred, v1CheckpointSize);
-      });
-      targetFileStream.on("finish", resolve);
-    });
+    return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
   }
 
   /**

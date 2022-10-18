@@ -2,11 +2,15 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CreateNewIModelProps, LockMap, LockState } from "@itwin/core-backend";
+import { AbortController, AbortSignal } from "@azure/abort-controller";
+import { CreateNewIModelProps, LockMap, LockState, ProgressFunction, ProgressStatus } from "@itwin/core-backend";
 import { RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetRange, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
 
-import { ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
+import {
+  ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties,
+  LockLevel, LockedObjects, ProgressCallback
+} from "@itwin/imodels-client-authoring";
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
@@ -68,6 +72,21 @@ export class PlatformToClientAdapter {
         ? 0
         : changesetRange.first - 1
     };
+  }
+
+  public static toProgressCallback(progressCallback?: ProgressFunction): [ProgressCallback, AbortSignal] | undefined {
+    if (!progressCallback)
+      return;
+
+    const abortController = new AbortController();
+    const convertedProgressCallback = (downloaded: number, total: number) => {
+      const cancel = progressCallback(downloaded, total);
+
+      if (cancel !== ProgressStatus.Continue)
+        abortController.abort();
+    };
+
+    return [convertedProgressCallback, abortController.signal];
   }
 
   private static toLockLevel(lockState: LockState): LockLevel {

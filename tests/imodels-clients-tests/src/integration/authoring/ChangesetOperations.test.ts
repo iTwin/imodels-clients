@@ -5,12 +5,13 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { AbortController } from "@azure/abort-controller";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ConfigDownloadInput, UrlDownloadInput } from "@itwin/object-storage-core";
 import { expect } from "chai";
 
-import { AcquireBriefcaseParams, AuthorizationCallback, CreateChangesetParams, DownloadChangesetListParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, TargetDirectoryParam } from "@itwin/imodels-client-authoring";
-import { FileTransferLog, IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableClientStorage, assertChangeset, assertDownloadedChangeset, cleanupDirectory } from "@itwin/imodels-client-test-utils";
+import { AcquireBriefcaseParams, AuthorizationCallback, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, IModelsError, IModelsErrorCode, ProgressCallback, TargetDirectoryParam, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { FileTransferLog, IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableClientStorage, assertChangeset, assertDownloadedChangeset, assertProgressReports, cleanupDirectory } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
@@ -395,6 +396,115 @@ describe("[Authoring] ChangesetOperations", () => {
         const timesDownloadUrlWasCalled = fileTransferLog.downloads[allDownloadUrlsCalled[0]];
         expect(timesDownloadUrlWasCalled).to.equal(1);
       });
+    });
+
+    it("should report progress of changeset download", async () => {
+      // Arrange
+      const progressReports: ProgressReport[] = [];
+      const progressCallback: ProgressCallback = (downloaded: number, total: number) => progressReports.push({downloaded, total});
+
+      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "download changeset while reporting progress");
+      const downloadParams: DownloadSingleChangesetParams = {
+        authorization,
+        iModelId: testIModelForRead.id,
+        changesetId: testIModelFileProvider.changesets[0].id,
+        targetDirectoryPath: downloadPath,
+        progressCallback
+      };
+
+      // Act
+      await iModelsClient.changesets.downloadSingle(downloadParams);
+
+      // Assert
+      assertProgressReports(progressReports);
+    });
+
+    it("should cancel changeset download", async () => {
+      // Arrange
+      const abortController = new AbortController();
+      const abortSignal = abortController.signal;
+
+      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "cancel changeset download");
+      const downloadParams: DownloadSingleChangesetParams = {
+        authorization,
+        iModelId: testIModelForRead.id,
+        changesetId: testIModelFileProvider.changesets[0].id,
+        targetDirectoryPath: downloadPath,
+        abortSignal
+      };
+
+      // Act
+      let thrownError: unknown;
+      try {
+        const promise = iModelsClient.changesets.downloadSingle(downloadParams);
+        abortController.abort();
+        await promise;
+      } catch (error: unknown) {
+        thrownError = error;
+      }
+
+      // Assert
+      expect(isIModelsApiError(thrownError)).to.be.true;
+      expect((thrownError as IModelsError).code).to.be.equal(IModelsErrorCode.DownloadAborted);
+    });
+
+    it("should report progress of changesets download", async () => {
+      // Arrange
+      const progressReports: ProgressReport[] = [];
+      const progressCallback: ProgressCallback = (downloaded: number, total: number) => progressReports.push({downloaded, total});
+
+      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "download changesets while reporting progress");
+      const downloadChangesetListParams: DownloadChangesetListParams = {
+        authorization,
+        iModelId: testIModelForRead.id,
+        targetDirectoryPath: downloadPath,
+        progressCallback
+      };
+
+      // Act
+      const changesets = await iModelsClient.changesets.downloadList(downloadChangesetListParams);
+
+      // Assert
+      expect(changesets.length).to.equal(testIModelFileProvider.changesets.length);
+      expect(fs.readdirSync(downloadPath).length).to.equal(testIModelFileProvider.changesets.length);
+
+      assertProgressReports(progressReports);
+    });
+
+    it("should cancel changesets download", async () => {
+      // Arrange
+      const abortController = new AbortController();
+      const abortSignal = abortController.signal;
+
+      const progressReports: ProgressReport[] = [];
+      const progressCallback: ProgressCallback = (downloaded, total) => {
+        progressReports.push({downloaded, total});
+        if (downloaded > total / 2)
+          abortController.abort();
+      };
+
+      const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "cancel changesets download");
+      const downloadChangesetListParams: DownloadChangesetListParams = {
+        authorization,
+        iModelId: testIModelForRead.id,
+        targetDirectoryPath: downloadPath,
+        progressCallback,
+        abortSignal
+      };
+
+      // Act
+      let thrownError: unknown;
+      try {
+        await iModelsClient.changesets.downloadList(downloadChangesetListParams);
+      } catch (error: unknown) {
+        thrownError = error;
+      }
+
+      // Assert
+      expect(isIModelsApiError(thrownError)).to.be.true;
+      expect((thrownError as IModelsError).code).to.be.equal(IModelsErrorCode.DownloadAborted);
+
+      assertProgressReports(progressReports, false);
     });
   });
 });

@@ -7,14 +7,28 @@ import * as path from "path";
 import { ChangesetResponse, IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
 import { ChangesetOperations as ManagementChangesetOperations } from "@itwin/imodels-client-management/lib/operations";
 
-import { Changeset, ChangesetState, IModelScopedOperationParams, IModelsErrorCode } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetState, IModelScopedOperationParams, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
 
-import { DownloadedChangeset, TargetDirectoryParam } from "../../base/types";
+import { DownloadProgressParam, DownloadedChangeset, GenericAbortSignal, TargetDirectoryParam } from "../../base/types";
 import { assertLink } from "../CommonFunctions";
+import { DownloadFileParams, downloadFile } from "../FileDownload";
 import { OperationOptions } from "../OperationOptions";
 
 import { ChangesetPropertiesForCreate, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams } from "./ChangesetOperationParams";
 import { LimitedParallelQueue } from "./LimitedParallelQueue";
+
+/** Function called to report how many bytes were downloaded since the last time this function was called. */
+type DownloadCallback = (bytesDownloaded: number) => void;
+
+/** Function called after failure to report how many bytes were downloaded before downloaded was stopped due to failure. */
+type DownloadFailedCallback = (bytesDownloadedBeforeFailure: number) => void;
+
+interface DownloadChangesetFileWithRetryParams extends IModelScopedOperationParams {
+  changeset: DownloadedChangeset;
+  abortSignal?: GenericAbortSignal;
+  downloadCallback?: DownloadCallback;
+  firstDownloadFailedCallback?: DownloadFailedCallback;
+}
 
 export class ChangesetOperations<TOptions extends OperationOptions> extends ManagementChangesetOperations<TOptions>{
   /**
@@ -82,6 +96,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
   public async downloadList(params: DownloadChangesetListParams): Promise<DownloadedChangeset[]> {
     await this._options.localFileSystem.createDirectory(params.targetDirectoryPath);
 
+    const [downloadCallback, downloadFailedCallback] = await this.provideDownloadCallbacks(params) ?? [];
+
     let result: DownloadedChangeset[] = [];
     for await (const changesetPage of this.getRepresentationList(params).byPage()) {
       const changesetsWithFilePath: DownloadedChangeset[] = changesetPage.map(
@@ -100,7 +116,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
         queue.push(async () => this.downloadChangesetFileWithRetry({
           authorization: params.authorization,
           iModelId: params.iModelId,
-          changeset
+          changeset,
+          abortSignal: params.abortSignal,
+          downloadCallback,
+          firstDownloadFailedCallback: downloadFailedCallback
         }));
       await queue.waitAll();
     }
@@ -130,35 +149,57 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     };
   }
 
-  private async downloadSingleChangeset(params: IModelScopedOperationParams & TargetDirectoryParam & { changeset: Changeset }): Promise<DownloadedChangeset> {
+  private async downloadSingleChangeset(
+    params: IModelScopedOperationParams & TargetDirectoryParam & { changeset: Changeset } & DownloadProgressParam
+  ): Promise<DownloadedChangeset> {
     const changesetWithPath: DownloadedChangeset = {
       ...params.changeset,
       filePath: path.join(params.targetDirectoryPath, this.createFileName(params.changeset.id))
     };
 
+    const downloadCallback = params.progressCallback ? (bytes: number) => params.progressCallback?.(bytes, changesetWithPath.fileSize) : undefined;
+
     await this.downloadChangesetFileWithRetry({
       authorization: params.authorization,
       iModelId: params.iModelId,
-      changeset: changesetWithPath
+      changeset: changesetWithPath,
+      abortSignal: params.abortSignal,
+      downloadCallback
     });
 
     return changesetWithPath;
   }
 
-  private async downloadChangesetFileWithRetry(params: IModelScopedOperationParams & { changeset: DownloadedChangeset }): Promise<void> {
+  private async downloadChangesetFileWithRetry(params: DownloadChangesetFileWithRetryParams): Promise<void> {
     const targetFilePath = params.changeset.filePath;
     if (await this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
       return;
 
+    const downloadParams: Omit<DownloadFileParams, "url"> = {
+      storage: this._options.cloudStorage,
+      localPath: targetFilePath,
+      abortSignal: params.abortSignal
+    };
+
+    let bytesDownloaded = 0;
+    if (params.downloadCallback) {
+      downloadParams.latestDownloadedChunkSizeCallback = (downloaded) => {
+        bytesDownloaded += downloaded;
+        params.downloadCallback?.(downloaded);
+      };
+    }
+
     try {
       const downloadLink = params.changeset._links.download;
       assertLink(downloadLink);
-      await this._options.cloudStorage.download({
-        transferType: "local",
-        url: downloadLink.href,
-        localPath: targetFilePath
+      await downloadFile({
+        ...downloadParams,
+        url: downloadLink.href
       });
     } catch (error) {
+      this.throwIfAbortError(error, params.changeset);
+      params.firstDownloadFailedCallback?.(bytesDownloaded);
+
       const changeset = await this.querySingleInternal({
         authorization: params.authorization,
         iModelId: params.iModelId,
@@ -168,12 +209,13 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       try {
         const newDownloadLink = changeset._links.download;
         assertLink(newDownloadLink);
-        await this._options.cloudStorage.download({
-          transferType: "local",
-          url: newDownloadLink.href,
-          localPath: targetFilePath
+        await downloadFile({
+          ...downloadParams,
+          url: newDownloadLink.href
         });
       } catch (errorAfterRetry) {
+        this.throwIfAbortError(error, params.changeset);
+
         throw new IModelsErrorImpl({
           code: IModelsErrorCode.ChangesetDownloadFailed,
           message: `Failed to download changeset. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}, error: ${JSON.stringify(errorAfterRetry)}.`
@@ -197,5 +239,40 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
   private createFileName(changesetId: string): string {
     return `${changesetId}.cs`;
+  }
+
+  private async provideDownloadCallbacks(params: DownloadChangesetListParams): Promise<[DownloadCallback, DownloadFailedCallback] | undefined> {
+    if (!params.progressCallback)
+      return;
+
+    let totalSize = 0;
+    let totalDownloaded = 0;
+
+    for await (const changesetPage of this.getMinimalList(params).byPage()){
+      for (const changeset of changesetPage){
+        totalSize += changeset.fileSize;
+
+        const filePath = path.join(params.targetDirectoryPath, this.createFileName(changeset.id));
+        if (await this.isChangesetAlreadyDownloaded(filePath, changeset.fileSize))
+          totalDownloaded += changeset.fileSize;
+      }
+    }
+
+    const progressCallback: DownloadCallback = (downloaded) => {
+      totalDownloaded += downloaded;
+      params.progressCallback?.(totalDownloaded, totalSize);
+    };
+    // We increase total size to prevent cases where downloaded size is larger than total size at the end of the download.
+    const downloadFailedCallback: DownloadCallback = (downloadedBeforeFailure) => totalSize += downloadedBeforeFailure;
+
+    return [progressCallback, downloadFailedCallback];
+  }
+
+  private throwIfAbortError(error: unknown, changeset: Changeset) {
+    if (!isIModelsApiError(error) || error.code !== IModelsErrorCode.DownloadAborted)
+      return;
+
+    error.message = `Changeset download was aborted. Changeset id: ${changeset.id}, message: ${error.message}}.`;
+    throw error;
   }
 }

@@ -6,7 +6,7 @@ import * as fs from "fs";
 
 import { expect } from "chai";
 
-import { BaselineFile, BaselineFileState, Changeset, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, Changeset, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate, isIModelsApiError } from "@itwin/imodels-client-authoring";
 
 import { TestChangesetFile, TestIModelBaselineFile } from "../test-context-providers";
 
@@ -156,6 +156,34 @@ export function assertLock(params: {
       expect(expectedLockedObjectId).to.exist;
     }
   }
+}
+
+export interface ProgressReport {
+  downloaded: number;
+  total: number;
+}
+
+export function assertProgressReports(progressReports: ProgressReport[], downloadWasSuccessful: boolean = true): void {
+  expect(progressReports.length).to.be.greaterThan(0);
+
+  let previousReport = progressReports[0];
+  for (const report of progressReports) {
+    expect(report.downloaded).to.be.lessThanOrEqual(report.total);
+
+    if (previousReport !== report){
+      expect(report.total).to.be.greaterThanOrEqual(previousReport.total);
+      expect(report.downloaded).to.be.greaterThanOrEqual(previousReport.downloaded);
+    }
+
+    previousReport = report;
+  }
+
+  expect(previousReport.downloaded === previousReport.total).to.be.equal(downloadWasSuccessful);
+}
+
+export function assertAbortError(error: unknown): void {
+  expect(isIModelsApiError(error)).to.be.true;
+  expect((error as IModelsError).code).to.be.equal(IModelsErrorCode.DownloadAborted);
 }
 
 function assertSynchronizationInfo(params: {

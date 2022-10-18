@@ -5,4 +5,5 @@
 export * from "./OperationExports";
 export * from "./OperationParamExports";
 export * from "./OperationOptions";
+export * from "./FileDownload";
 export * from "./IModelsApiUrlFormatter";
