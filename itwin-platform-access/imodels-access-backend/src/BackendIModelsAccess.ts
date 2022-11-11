@@ -50,7 +50,12 @@ export class BackendIModelsAccess implements BackendHubAccess {
     downloadParams.progressCallback = progressCallback;
     downloadParams.abortSignal = abortSignal;
 
-    const downloadedChangesets: DownloadedChangeset[] = await this._iModelsClient.changesets.downloadList(downloadParams);
+    let downloadedChangesets: DownloadedChangeset[] = [];
+    try {
+      downloadedChangesets = await this._iModelsClient.changesets.downloadList(downloadParams);
+    } catch (error: unknown) {
+      throw ClientToPlatformAdapter.toChangesetDownloadAbortedError(error);
+    }
     const result: ChangesetFileProps[] = downloadedChangesets.map(ClientToPlatformAdapter.toChangesetFileProps);
     return result;
   }
@@ -66,7 +71,12 @@ export class BackendIModelsAccess implements BackendHubAccess {
     downloadSingleChangesetParams.progressCallback = progressCallback;
     downloadSingleChangesetParams.abortSignal = abortSignal;
 
-    const downloadedChangeset: DownloadedChangeset = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
+    let downloadedChangeset: DownloadedChangeset | undefined;
+    try {
+      downloadedChangeset = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
+    } catch (error: unknown) {
+      throw ClientToPlatformAdapter.toChangesetDownloadAbortedError(error);
+    }
     const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset);
     return result;
   }
