@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-backend",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "Interoperability package between iModels API and iTwin.js library for backend.",
   "keywords": [
     "Bentley",
