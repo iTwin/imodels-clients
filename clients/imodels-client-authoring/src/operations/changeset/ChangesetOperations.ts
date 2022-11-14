@@ -272,7 +272,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     if (!isIModelsApiError(error) || error.code !== IModelsErrorCode.DownloadAborted)
       return;
 
-    error.message = `Changeset download was aborted. Changeset id: ${changeset.id}, message: ${error.message}}.`;
+    error.message = `Changeset(s) download was aborted. Changeset id: ${changeset.id}}.`;
     throw error;
   }
 }

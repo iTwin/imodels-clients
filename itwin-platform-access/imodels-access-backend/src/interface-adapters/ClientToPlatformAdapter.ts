@@ -3,10 +3,10 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { LockProps, LockState, V2CheckpointAccessProps } from "@itwin/core-backend";
-import { IModelStatus, RepositoryStatus } from "@itwin/core-bentley";
+import { ChangeSetStatus, IModelStatus, RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetProps, ChangesetType, IModelError } from "@itwin/core-common";
 
-import { ContainerAccessInfo, ContainingChanges, DownloadedChangeset, Lock, LockLevel, MinimalChangeset } from "@itwin/imodels-client-authoring";
+import { ContainerAccessInfo, ContainingChanges, DownloadedChangeset, IModelsErrorCode, Lock, LockLevel, MinimalChangeset, isIModelsApiError } from "@itwin/imodels-client-authoring";
 
 export class ClientToPlatformAdapter {
   public static toChangesetProps(changeset: MinimalChangeset): ChangesetProps {
@@ -50,6 +50,14 @@ export class ClientToPlatformAdapter {
       dbName: containerAccessInfo.dbName,
       storageType: "azure?sas=1"
     };
+  }
+
+  public static toChangesetDownloadAbortedError(error: unknown): unknown {
+    if (!isIModelsApiError(error) || error.code !== IModelsErrorCode.DownloadAborted)
+      return error;
+
+    const errorNumber = ChangeSetStatus.CHANGESET_ERROR_BASE + 26; // ChangeSetStatus.DownloadCancelled (only available from iTwinJs 3.5)
+    return new IModelError(errorNumber, error.message);
   }
 
   private static toLockState(lockLevel: LockLevel): LockState {

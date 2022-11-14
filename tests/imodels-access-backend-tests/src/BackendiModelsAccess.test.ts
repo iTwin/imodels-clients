@@ -7,7 +7,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, DownloadChangesetRangeArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction, ProgressStatus } from "@itwin/core-backend";
-import { BriefcaseId, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, LocalDirName } from "@itwin/core-common";
+import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 
@@ -163,9 +163,10 @@ describe("BackendIModelsAccess", () => {
       }
 
       // Assert #1
-      expect(fs.readdirSync(testDownloadPath).length).to.be.greaterThan(0);
+      const expectedErrorNumber = ChangeSetStatus.CHANGESET_ERROR_BASE + 26; // ChangeSetStatus.DownloadCancelled (only available from iTwinJs 3.5)
+      expect(thrownError).to.ownProperty("errorNumber", expectedErrorNumber);
 
-      assertAbortError(thrownError);
+      expect(fs.readdirSync(testDownloadPath).length).to.be.greaterThan(0);
       assertProgressReports(progressReports, false);
       progressReports = [];
 
