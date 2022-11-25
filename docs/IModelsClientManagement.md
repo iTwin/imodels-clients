@@ -89,6 +89,30 @@ async function getAuthorization(): Promise<Authorization> {
 }
 ```
 
+### Get an iModel with a specific name
+```typescript
+import { EntityListIterator, IModel, IModelsClient, toArray } from "@itwin/imodels-client-management";
+
+/** Function that queries an iModel with a specific name. Function returns `undefined` if such iModel does not exist. */
+async function getiModel(): Promise<IModel | undefined> {
+  const iModelsClient: IModelsClient = new IModelsClient();
+  const iModelIterator: EntityListIterator<IModel> = iModelsClient.iModels.getRepresentationList({
+    authorization: () => getAuthorization(),
+    urlParams: {
+      projectId: "8a1fcd73-8c23-460d-a392-8b4afc00affc",
+      name: "Sun City Renewable-energy Plant",
+    }
+  });
+
+  const iModelArray = await toArray(iModelIterator);
+  if (iModelArray.length === 0)
+    return undefined;
+
+  const iModel = iModelArray[0];
+  return iModel;
+}
+```
+
 ### Get all iModel Changesets
 ```typescript
 import { Authorization, EntityListIterator, IModelsClient, MinimalChangeset } from "@itwin/imodels-client-management";
