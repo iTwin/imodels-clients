@@ -6,7 +6,7 @@ Copyright © Bentley Systems, Incorporated. All rights reserved. See [LICENSE.md
 
 This package contains an API client that exposes a subset of [iModels API](https://developer.bentley.com/apis/imodels/) operations that enable applications to manage iModels - query Changesets, Locks and other related entities, create Named Versions, etc. This is a lightweight library intended to be used by iTwin management applications that do not write any data into the iModel itself, an example of such application is the [iTwin Demo Portal](https://itwindemo.bentley.com/).
 
-## Usage examples
+Please see the [list of key methods and types](../../docs/IModelsClientManagement.md) to discover what API operations are exposed by this client package.
 
 ### Authorization
 
@@ -41,6 +41,30 @@ async function printiModelIds(): Promise<void> {
 /** Function that returns valid authorization information. */
 async function getAuthorization(): Promise<Authorization> {
   return { scheme: "Bearer", token: "ey..." };
+}
+```
+
+### Get an iModel with a specific name
+```typescript
+import { EntityListIterator, IModel, IModelsClient, toArray } from "@itwin/imodels-client-management";
+
+/** Function that queries an iModel with a specific name. Function returns `undefined` if such iModel does not exist. */
+async function getiModel(): Promise<IModel | undefined> {
+  const iModelsClient: IModelsClient = new IModelsClient();
+  const iModelIterator: EntityListIterator<IModel> = iModelsClient.iModels.getRepresentationList({
+    authorization: () => getAuthorization(),
+    urlParams: {
+      projectId: "8a1fcd73-8c23-460d-a392-8b4afc00affc",
+      name: "Sun City Renewable-energy Plant",
+    }
+  });
+
+  const iModelArray = await toArray(iModelIterator);
+  if (iModelArray.length === 0)
+    return undefined;
+
+  const iModel = iModelArray[0];
+  return iModel;
 }
 ```
 
