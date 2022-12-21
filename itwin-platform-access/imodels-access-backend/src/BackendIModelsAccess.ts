@@ -254,6 +254,21 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return rangeTotalBytes;
   }
 
+  private async queryCurrentOrPrecedingV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
+    const getSingleChangesetParams: GetSingleChangesetParams = {
+      ...this.getIModelScopedOperationParams(arg),
+      ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset)
+    }
+
+    const changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
+
+    const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
+    if (checkpoint === undefined || checkpoint.containerAccessInfo === null)
+      return undefined;
+    return ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
+
+  }
+
   public async queryV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
     const getSingleCheckpointParams: GetSingleCheckpointParams = {
       ...this.getIModelScopedOperationParams(arg),
@@ -265,15 +280,21 @@ export class BackendIModelsAccess implements BackendHubAccess {
       checkpoint = await this._iModelsClient.checkpoints.getSingle(getSingleCheckpointParams);
     } catch (error) {
       // Means that neither v1 nor v2 checkpoint exists
-      if (isIModelsApiError(error) && error.code === IModelsErrorCode.CheckpointNotFound)
+      if (isIModelsApiError(error) && error.code === IModelsErrorCode.CheckpointNotFound) {
+        if (arg?.allowPreceding)
+          return this.queryCurrentOrPrecedingV2Checkpoint(arg);
         return undefined;
+      }
 
       throw error;
     }
 
-    if (checkpoint.containerAccessInfo === null)
-      // Means that v2 checkpoint does not exist
+    // Means the v2 checkpoint does not exist.
+    if (checkpoint.containerAccessInfo === null) {
+      if (arg?.allowPreceding)
+        return this.queryCurrentOrPrecedingV2Checkpoint(arg);
       return undefined;
+    }
 
     const result = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
     return result;
