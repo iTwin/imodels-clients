@@ -24,7 +24,7 @@ import {
   GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetLockListParams, GetNamedVersionListParams,
   GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, Lock,
   LockLevel, LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion, OrderByOperator,
-  ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
+  ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray, ContainerAccessInfo
 } from "@itwin/imodels-client-authoring";
 
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
@@ -254,19 +254,43 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return rangeTotalBytes;
   }
 
+  // The imodels api does not distinguish between a v2 and a v1 checkpoint when calling getCurrentOrPrecedingCheckpoint.
+  // It is possible that a preceding v2 checkpoint exists, but earlier in the timeline than the most recent v1 checkpoint. In this case we would miss out on the preceding v2 checkpoint. 
+  // To get around this, this function decrements the changesetIndex of the discovered checkpoint if it is not a v2 checkpoint and searches again. 
+  private async queryCurrentOrPrecedingV2CheckpointHelper(arg: CheckpointProps, changesetIndex: number): Promise<ContainerAccessInfo | undefined> {
+    if (changesetIndex <= 0) 
+      return undefined;
+
+    const getSingleChangesetParams: GetSingleChangesetParams = {
+      ...this.getIModelScopedOperationParams(arg),
+      ...PlatformToClientAdapter.toChangesetIdOrIndex({index: changesetIndex})
+    }
+
+    const changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
+    const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
+
+    if (!checkpoint)
+        return undefined;
+
+    if (!!checkpoint.containerAccessInfo)
+        return checkpoint.containerAccessInfo;
+
+    const previousChangesetIndex = checkpoint.changesetIndex - 1;
+    return this.queryCurrentOrPrecedingV2CheckpointHelper(arg, previousChangesetIndex);
+  }
+
   private async queryCurrentOrPrecedingV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
     const getSingleChangesetParams: GetSingleChangesetParams = {
       ...this.getIModelScopedOperationParams(arg),
       ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset)
     }
-
+    
     const changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
-
-    const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
-    if (checkpoint === undefined || checkpoint.containerAccessInfo === null)
+    const containerAccessInfo = await this.queryCurrentOrPrecedingV2CheckpointHelper(arg, changeset.index);
+    if (containerAccessInfo === undefined)
       return undefined;
-    return ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
 
+    return ClientToPlatformAdapter.toV2CheckpointAccessProps(containerAccessInfo);
   }
 
   public async queryV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
