@@ -82,7 +82,7 @@ describe("IModelsErrorParser", () => {
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unauthorized,
-        message: "iModels API message",
+        message: "iModels API message"
       }
     });
   });
@@ -101,7 +101,7 @@ describe("IModelsErrorParser", () => {
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unauthorized,
-        message: "unwrapped error message",
+        message: "unwrapped error message"
       }
     });
   });
@@ -117,7 +117,7 @@ describe("IModelsErrorParser", () => {
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unauthorized,
-        message: "Authorization failed",
+        message: "Authorization failed"
       }
     });
   });
