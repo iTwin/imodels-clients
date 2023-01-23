@@ -39,6 +39,8 @@
     "@itwin/imodels-access-backend": "workspace:*",
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-test-utils": "workspace:*",
+    "@itwin/core-geometry":"^3.3.0",
+    "@itwin/core-quantity": "^3.3.0",
     "dotenv": "~10.0.0",
     "inversify": "~5.0.1",
     "mocha": "~9.2.2",

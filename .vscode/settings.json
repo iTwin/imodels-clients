@@ -12,9 +12,9 @@
     "**/*.build.log": true,
     "**/*.build.error.log": true,
     "**/package-deps.json": true,
-    "**/node_modules": true,
+    // "**/node_modules": true,
     "**/out": true,
     "**/lib": true,
-    "common/temp": true
+    // "common/temp": true
   }
 }
