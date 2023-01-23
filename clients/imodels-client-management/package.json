@@ -20,8 +20,8 @@
     "url": "http://www.bentley.com"
   },
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "module": "lib/esm/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json 1>&2",
     "clean": "rimraf lib",
