@@ -15,13 +15,13 @@ jobs:
   - job: BuildAndTest
     strategy:
       matrix:
-        linux:
+        linux-node18:
           imageName: 'ubuntu-latest'
           nodeVersion: $(node18Version)
-        mac:
+        mac-node18:
           imageName: 'macos-latest'
           nodeVersion: $(node18Version)
-        windows:
+        windows-node18:
           imageName: 'windows-latest'
           nodeVersion: $(node18Version)
     pool:
