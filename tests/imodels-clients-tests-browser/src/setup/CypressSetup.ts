@@ -11,7 +11,7 @@ import { ReusableTestIModelProvider, TestAuthorizationProvider, TestProjectProvi
 
 import { FrontendTestEnvVariableKeys } from "./FrontendTestEnvVariableKeys";
 
-export default async function setup(_on: unknown, config: { env: any }): Promise<unknown> {
+export async function setupIntegrationTests(_on: unknown, config: { env: any }): Promise<unknown> {
   const container = new Container();
   TestUtilBootstrapper.bind(container, path.join(__dirname, "..", ".env"));
 
