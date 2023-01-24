@@ -10,9 +10,6 @@ steps:
       versionSpec: '14.17.5'
       checkLatest: true
 
-  - script: git config user.name
-    displayName: test user
-
   - script: node common/scripts/install-run-rush.js install --purge
     displayName: rush install
 
