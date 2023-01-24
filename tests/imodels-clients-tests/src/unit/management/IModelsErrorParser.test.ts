@@ -65,4 +65,60 @@ describe("IModelsErrorParser", () => {
       }
     });
   });
+
+  it("should parse unauthorized error when error is of regular iModels API error format", () => {
+    // Arrange
+    const errorResponse: unknown = {
+      error: {
+        code: "iModels API code",
+        message: "iModels API message"
+      }
+    };
+
+    // Act
+    const parsedError: IModelsError = IModelsErrorParser.parse({ statusCode: 401, body: errorResponse }) as IModelsError;
+
+    assertError({
+      objectThrown: parsedError,
+      expectedError: {
+        code: IModelsErrorCode.Unauthorized,
+        message: "iModels API message"
+      }
+    });
+  });
+
+  it("should parse unauthorized error when error is of unwrapped error format", () => {
+    // Arrange
+    const errorResponse: unknown = {
+      code: "unwrapped error code",
+      message: "unwrapped error message"
+    };
+
+    // Act
+    const parsedError: IModelsError = IModelsErrorParser.parse({ statusCode: 401, body: errorResponse }) as IModelsError;
+
+    assertError({
+      objectThrown: parsedError,
+      expectedError: {
+        code: IModelsErrorCode.Unauthorized,
+        message: "unwrapped error message"
+      }
+    });
+  });
+
+  it("should parse unauthorized error when error is of unknown format", () => {
+    // Arrange
+    const errorResponse: unknown = {};
+
+    // Act
+    const parsedError: IModelsError = IModelsErrorParser.parse({ statusCode: 401, body: errorResponse }) as IModelsError;
+
+    assertError({
+      objectThrown: parsedError,
+      expectedError: {
+        code: IModelsErrorCode.Unauthorized,
+        message: "Authorization failed"
+      }
+    });
+  });
 });

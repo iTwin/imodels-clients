@@ -4,6 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import { IModelsError, IModelsErrorCode, IModelsErrorDetail } from "../types";
 
+interface UnwrappedError {
+  message: string;
+}
+
 interface IModelsApiErrorWrapper {
   error: IModelsApiError;
 }
@@ -41,13 +45,21 @@ export class IModelsErrorImpl extends IModelsErrorBaseImpl implements IModelsErr
 
 export class IModelsErrorParser {
   protected static readonly _defaultErrorMessage = "Unknown error occurred";
+  protected static readonly _defaultUnauthorizedMessage = "Authorization failed";
   protected static readonly _unknownErrorProperties = { code: IModelsErrorCode.Unknown, message: IModelsErrorParser._defaultErrorMessage };
 
-  public static parse(response: { body?: unknown }): Error {
+  public static parse(response: { statusCode?: number, body?: unknown }): Error {
     if (!response.body)
       return new IModelsErrorImpl(IModelsErrorParser._unknownErrorProperties);
 
     const errorFromApi: IModelsApiErrorWrapper | undefined = response.body as IModelsApiErrorWrapper;
+
+    if (response.statusCode === 401)
+      return new IModelsErrorImpl({
+        code: IModelsErrorCode.Unauthorized,
+        message: IModelsErrorParser.resolveUnauthorizedMessage(response.body)
+      });
+
     const errorCode: IModelsErrorCode = IModelsErrorParser.parseCode(errorFromApi?.error?.code);
     const errorDetails: IModelsErrorDetail[] | undefined = IModelsErrorParser.parseDetails(errorFromApi.error?.details);
     const errorMessage: string = IModelsErrorParser.parseAndFormatMessage(errorFromApi?.error?.message, errorDetails);
@@ -98,5 +110,11 @@ export class IModelsErrorParser {
     }
 
     return result;
+  }
+
+  private static resolveUnauthorizedMessage(responseBody?: unknown): string {
+    return (responseBody as IModelsApiErrorWrapper)?.error?.message
+      ?? (responseBody as UnwrappedError)?.message
+      ?? IModelsErrorParser._defaultUnauthorizedMessage;
   }
 }

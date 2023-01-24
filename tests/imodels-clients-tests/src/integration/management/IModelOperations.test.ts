@@ -384,7 +384,7 @@ describe("[Management] IModelOperations", () => {
       objectThrown,
       expectedError: {
         code: IModelsErrorCode.Unauthorized,
-        message: "IDX12741: JWT: 'invalid token' must have three segments (JWS) or five segments (JWE)."
+        message: "Invalid JWT."
       }
     });
   });
