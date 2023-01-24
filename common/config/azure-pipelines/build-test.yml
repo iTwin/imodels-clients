@@ -8,16 +8,22 @@ parameters:
 
 trigger: none
 
+variables:
+  node18Version: '18.13.0'
+
 jobs:
   - job: BuildAndTest
     strategy:
       matrix:
         linux:
           imageName: 'ubuntu-latest'
+          nodeVersion: $(node18Version)
         mac:
           imageName: 'macos-latest'
+          nodeVersion: $(node18Version)
         windows:
           imageName: 'windows-latest'
+          nodeVersion: $(node18Version)
     pool:
         vmImage: $(imageName)
     variables:
