@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------------------------
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
- * See LICENSE.md in the project root for license terms and full copyright notice.
+ * See LICENSE.md in the iTwin root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
@@ -9,20 +9,22 @@ import { AuthorizationParam } from "@itwin/imodels-client-authoring";
 
 import { ITwinsClientConfig } from "./ITwinsClientConfig";
 
-interface Project {
+interface iTwin {
   id: string;
 }
 
-interface ProjectsResponse {
-  projects: Project[];
+interface ITwinsResponse {
+  iTwins: iTwin[];
 }
 
-interface ProjectResponse {
-  project: Project;
+interface ITwinResponse {
+  iTwin: iTwin;
 }
 
 @injectable()
 export class ITwinsClient {
+  private readonly defaultClass = "Endeavor";
+  private readonly defaultSubClass = "Project";
   constructor(
     private _config: ITwinsClientConfig
   ) { }
@@ -31,21 +33,23 @@ export class ITwinsClient {
     const authorizationInfo = await params.authorization();
     const requestConfig = {
       headers: {
+        Accept: "application/vnd.bentley.itwin-platform.v1+json",
         Authorization: `${authorizationInfo.scheme} ${authorizationInfo.token}`
       }
     };
 
-    const getProjectsWithNameUrl = `${this._config.baseUrl}?displayName=${params.iTwinName}`; // TODOooooooooooooooooooooooooooooooooo
-    const getProjectsWithNameResponse: AxiosResponse<ProjectsResponse> = await axios.get(getProjectsWithNameUrl, requestConfig);
-    if (getProjectsWithNameResponse.data.projects.length > 0)
-      return getProjectsWithNameResponse.data.projects[0].id;
+    const getITwinsWithNameUrl = `${this._config.baseUrl}?subClass=${this.defaultSubClass}&displayName=${params.iTwinName}`;
+    const getITwinsWithNameResponse: AxiosResponse<ITwinsResponse> = await axios.get(getITwinsWithNameUrl, requestConfig);
+    if (getITwinsWithNameResponse.data.iTwins.length > 0)
+      return getITwinsWithNameResponse.data.iTwins[0].id;
 
-    const createProjectUrl = this._config.baseUrl;
-    const createProjectBody = {
-      displayName: params.iTwinName,
-      projectNumber: `${params.iTwinName} ${new Date()}`
+    const createITwinUrl = this._config.baseUrl;
+    const createITwinBody = {
+      class: this.defaultClass,
+      subClass: this.defaultSubClass,
+      displayName: params.iTwinName
     };
-    const createProjectResponse: AxiosResponse<ProjectResponse> = await axios.post(createProjectUrl, createProjectBody, requestConfig);
-    return createProjectResponse.data.project.id;
+    const createITwinResponse: AxiosResponse<ITwinResponse> = await axios.post(createITwinUrl, createITwinBody, requestConfig);
+    return createITwinResponse.data.iTwin.id;
   }
 }
