@@ -337,7 +337,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     const getIModelListParams: GetIModelListParams = {
       ...this.getAuthorizationParam(arg),
       urlParams: {
-        projectId: arg.iTwinId,
+        iTwinId: arg.iTwinId,
         name: arg.iModelName
       }
     };

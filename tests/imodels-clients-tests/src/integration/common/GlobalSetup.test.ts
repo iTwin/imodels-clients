@@ -15,17 +15,17 @@ export function getTestRunId(): string {
 }
 
 before(async () => {
-  await cleanupIModelsInTestProject();
+  await cleanupTestRuniModels();
   createDirectory(Constants.TestDownloadDirectoryPath);
   await cleanupDirectory(Constants.TestDownloadDirectoryPath);
 });
 
 after(async () => {
-  await cleanupIModelsInTestProject();
+  await cleanupTestRuniModels();
   await cleanupDirectory(Constants.TestDownloadDirectoryPath);
 });
 
-async function cleanupIModelsInTestProject(): Promise<void> {
+async function cleanupTestRuniModels(): Promise<void> {
   const container = getTestDIContainer();
   const testIModelGroupFactory = container.get(TestIModelGroupFactory);
   const testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix });

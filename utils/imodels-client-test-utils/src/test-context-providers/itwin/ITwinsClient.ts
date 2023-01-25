@@ -7,7 +7,7 @@ import { injectable } from "inversify";
 
 import { AuthorizationParam } from "@itwin/imodels-client-authoring";
 
-import { ProjectsClientConfig } from "./ProjectsClientConfig";
+import { ITwinsClientConfig } from "./ITwinsClientConfig";
 
 interface Project {
   id: string;
@@ -22,12 +22,12 @@ interface ProjectResponse {
 }
 
 @injectable()
-export class ProjectsClient {
+export class ITwinsClient {
   constructor(
-    private _config: ProjectsClientConfig
+    private _config: ITwinsClientConfig
   ) { }
 
-  public async getOrCreateProject(params: AuthorizationParam & { projectName: string }): Promise<string> {
+  public async getOrCreateITwin(params: AuthorizationParam & { iTwinName: string }): Promise<string> {
     const authorizationInfo = await params.authorization();
     const requestConfig = {
       headers: {
@@ -35,15 +35,15 @@ export class ProjectsClient {
       }
     };
 
-    const getProjectsWithNameUrl = `${this._config.baseUrl}?displayName=${params.projectName}`;
+    const getProjectsWithNameUrl = `${this._config.baseUrl}?displayName=${params.iTwinName}`; // TODOooooooooooooooooooooooooooooooooo
     const getProjectsWithNameResponse: AxiosResponse<ProjectsResponse> = await axios.get(getProjectsWithNameUrl, requestConfig);
     if (getProjectsWithNameResponse.data.projects.length > 0)
       return getProjectsWithNameResponse.data.projects[0].id;
 
     const createProjectUrl = this._config.baseUrl;
     const createProjectBody = {
-      displayName: params.projectName,
-      projectNumber: `${params.projectName} ${new Date()}`
+      displayName: params.iTwinName,
+      projectNumber: `${params.iTwinName} ${new Date()}`
     };
     const createProjectResponse: AxiosResponse<ProjectResponse> = await axios.post(createProjectUrl, createProjectBody, requestConfig);
     return createProjectResponse.data.project.id;

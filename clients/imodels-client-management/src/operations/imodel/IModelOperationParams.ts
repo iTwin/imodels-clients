@@ -16,8 +16,8 @@ export enum IModelOrderByProperty {
 export interface GetIModelListUrlParams extends CollectionRequestParams {
   /** Specifies in what order should entities be returned. See {@link OrderBy}. */
   $orderBy?: OrderBy<IModel, IModelOrderByProperty>;
-  /** Filters iModels for a specific project. */
-  projectId: string;
+  /** Filters iModels for a specific iTwin. */
+  iTwinId: string;
   /** Filters iModels with a specific name. */
   name?: string;
 }
@@ -33,10 +33,10 @@ export type GetSingleIModelParams = IModelScopedOperationParams;
 
 /** Properties that should be specified when creating a new iModel. */
 export interface IModelProperties {
-  /** Project which will own the iModel. Project id must not be an empty or whitespace string. */
-  projectId: string;
+  /** iTwin to which iModel will belong to. iTwinId id must not be an empty or whitespace string. */
+  iTwinId: string;
   /**
-   * iModel name. iModel name must be unique within the project, not exceed allowed 255 characters and not be an
+   * iModel name. iModel name must be unique within the iTwin, not exceed allowed 255 characters and not be an
    * empty or whitespace string.
    */
   name: string;
@@ -80,7 +80,7 @@ export interface CreateIModelFromTemplateParams extends AuthorizationParam {
 
 export interface EditableIModelProperties {
   /**
-   * iModel name. iModel name must be unique within the project, not exceed allowed 255 characters and not be an
+   * iModel name. iModel name must be unique within the iTwin, not exceed allowed 255 characters and not be an
    * empty or whitespace string.
    */
   name: string;

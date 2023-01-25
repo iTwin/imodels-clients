@@ -9,7 +9,7 @@ import { CheckpointState, GetSingleCheckpointParams, Lock, LockLevel, LockedObje
 
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
-import { TestProjectProvider } from "../project/TestProjectProvider";
+import { TestITwinProvider } from "../itwin/TestITwinProvider";
 
 import { TestIModelFileProvider } from "./TestIModelFileProvider";
 import { BriefcaseMetadata, IModelMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
@@ -28,16 +28,16 @@ export class TestIModelCreator {
   constructor(
     private readonly _iModelsClient: TestIModelsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
-    private readonly _testProjectProvider: TestProjectProvider,
+    private readonly _testITwinProvider: TestITwinProvider,
     private readonly _testIModelFileProvider: TestIModelFileProvider
   ) { }
 
   public async createEmpty(iModelName: string): Promise<IModelMetadata> {
-    const projectId = await this._testProjectProvider.getOrCreate();
+    const iTwinId = await this._testITwinProvider.getOrCreate();
     const iModel = await this._iModelsClient.iModels.createEmpty({
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelProperties: {
-        projectId,
+        iTwinId,
         name: iModelName,
         description: this._iModelDescription
       }

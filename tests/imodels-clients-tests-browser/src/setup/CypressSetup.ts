@@ -7,7 +7,7 @@ import * as path from "path";
 import { Container } from "inversify";
 
 import { IModelsClientOptions } from "@itwin/imodels-client-management";
-import { ReusableTestIModelProvider, TestAuthorizationProvider, TestProjectProvider, TestUtilBootstrapper, TestUtilTypes } from "@itwin/imodels-client-test-utils";
+import { ReusableTestIModelProvider, TestAuthorizationProvider, TestITwinProvider, TestUtilBootstrapper, TestUtilTypes } from "@itwin/imodels-client-test-utils";
 
 import { FrontendTestEnvVariableKeys } from "./FrontendTestEnvVariableKeys";
 
@@ -23,9 +23,9 @@ export async function setupIntegrationTests(_on: unknown, config: { env: any }):
   const authorizationInfo = await authorizationCallback();
   config.env[FrontendTestEnvVariableKeys.admin1AuthorizationInfo] = JSON.stringify(authorizationInfo);
 
-  const testProjectProvider = container.get(TestProjectProvider);
-  const projectId = await testProjectProvider.getOrCreate();
-  config.env[FrontendTestEnvVariableKeys.testProjectId] = projectId;
+  const testITwinProvider = container.get(TestITwinProvider);
+  const iTwinId = await testITwinProvider.getOrCreate();
+  config.env[FrontendTestEnvVariableKeys.testITwinId] = iTwinId;
 
   const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
   const testIModelForRead = await reusableTestIModelProvider.getOrCreate();

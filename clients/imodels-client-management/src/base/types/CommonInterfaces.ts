@@ -42,7 +42,7 @@ export interface AuthorizationParam {
 
 /**
  * Common parameters for iModel scoped operations. All operations exposed in this client are iModel scoped
- * except for {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}.
+ * except for {@link https://developer.bentley.com/apis/imodels-v2/operations/get-itwin-imodels/ Get iTwin iModels}.
  */
 export interface IModelScopedOperationParams extends AuthorizationParam {
   /** iModel id. */

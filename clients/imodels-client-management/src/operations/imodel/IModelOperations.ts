@@ -10,8 +10,8 @@ import { CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelPa
 
 export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**
-   * Gets iModels for a specific project. This method returns iModels in their minimal representation. The returned iterator
-   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}
+   * Gets iModels for a specific iTwin. This method returns iModels in their minimal representation. The returned iterator
+   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels-v2/operations/get-itwin-imodels/ Get iTwin iModels}
    * operation from iModels API.
    * @param {GetiModelListParams} params parameters for this operation. See {@link GetiModelListParams}.
    * @returns {EntityListIterator<MinimaliModel>} iterator for iModel list. See {@link EntityListIterator}, {@link MinimaliModel}.
@@ -26,8 +26,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   /**
-   * Gets iModels for a specific project. This method returns iModels in their full representation. The returned iterator
-   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}
+   * Gets iModels for a specific iTwin. This method returns iModels in their full representation. The returned iterator
+   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels-v2/operations/get-itwin-imodels/ Get iTwin iModels}
    * operation from iModels API.
    * @param {GetiModelListParams} params parameters for this operation. See {@link GetiModelListParams}.
    * @returns {EntityListIterator<iModel>} iterator for iModel list. See {@link EntityListIterator}, {@link iModel}.
@@ -124,7 +124,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
 
   protected getCreateEmptyIModelRequestBody(iModelProperties: IModelProperties): object {
     return {
-      projectId: iModelProperties.projectId,
+      iTwinId: iModelProperties.iTwinId,
       name: iModelProperties.name,
       description: iModelProperties.description,
       extent: iModelProperties.extent

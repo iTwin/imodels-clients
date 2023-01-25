@@ -21,7 +21,7 @@ export interface ApiConfigValues {
 }
 
 export interface ApisConfigValues {
-  projects: ApiConfigValues;
+  iTwins: ApiConfigValues;
   iModels: ApiConfigValues;
 }
 
@@ -45,7 +45,7 @@ export interface BehaviorOptions {
 
 @injectable()
 export class IModelsClientsTestsConfig {
-  public readonly testProjectName: string;
+  public readonly testITwinName: string;
   public readonly testIModelName: string;
   public readonly auth: AuthConfigValues;
   public readonly apis: ApisConfigValues;
@@ -56,7 +56,7 @@ export class IModelsClientsTestsConfig {
     dotenv.config({ path: envFilePath });
     this.validateAllValuesPresent();
 
-    this.testProjectName = process.env.TEST_PROJECT_NAME!;
+    this.testITwinName = process.env.TEST_ITWIN_NAME!;
     this.testIModelName = process.env.TEST_IMODEL_NAME!;
 
     this.auth = {
@@ -72,9 +72,9 @@ export class IModelsClientsTestsConfig {
         version: process.env.APIS_IMODELS_VERSION!,
         scopes: process.env.APIS_IMODELS_SCOPES!
       },
-      projects: {
-        baseUrl: process.env.APIS_PROJECTS_BASE_URL!,
-        scopes: process.env.APIS_PROJECTS_SCOPES!
+      iTwins: {
+        baseUrl: process.env.APIS_ITWINS_BASE_URL!,
+        scopes: process.env.APIS_ITWINS_SCOPES!
       }
     };
 
@@ -95,7 +95,7 @@ export class IModelsClientsTestsConfig {
   }
 
   private validateAllValuesPresent(): void {
-    this.validateConfigValue("TEST_PROJECT_NAME");
+    this.validateConfigValue("TEST_ITWIN_NAME");
     this.validateConfigValue("TEST_IMODEL_NAME");
 
     this.validateConfigValue("AUTH_AUTHORITY");
@@ -107,8 +107,8 @@ export class IModelsClientsTestsConfig {
     this.validateConfigValue("APIS_IMODELS_VERSION");
     this.validateConfigValue("APIS_IMODELS_SCOPES");
 
-    this.validateConfigValue("APIS_PROJECTS_BASE_URL");
-    this.validateConfigValue("APIS_PROJECTS_SCOPES");
+    this.validateConfigValue("APIS_ITWINS_BASE_URL");
+    this.validateConfigValue("APIS_ITWINS_SCOPES");
 
     this.validateConfigValue("TEST_USERS_ADMIN1_EMAIL");
     this.validateConfigValue("TEST_USERS_ADMIN1_PASSWORD");
