@@ -18,7 +18,7 @@ export interface ApiOptions {
 export interface Authorization {
   /**
    * Authentication scheme. For information on supported authentication schemes see
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-details/#authentication iModels API documenation}.
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-details/#authentication iModels API documenation}.
    */
   scheme: string;
   /** Access token. */

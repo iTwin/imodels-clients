@@ -12,7 +12,7 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
   /**
    * Downloads a thumbnail for a specific iModel. The Thumbnail returned is either a default one or a custom
    * uploaded one. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-thumbnail/ Download iModel Thumbnail}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-thumbnail/ Download iModel Thumbnail}
    * operation from iModels API.
    * @param {DownloadThumbnailParams} params parameters for this operation. See {@link DownloadThumbnailParams}.
    * @returns {Promise<Thumbnail>} downloaded Thumbnail. See {@link Thumbnail}. The method returns the data in binary
@@ -47,7 +47,7 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
 
   /**
    * Uploads a custom iModel Thumbnail. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/upload-imodel-thumbnail/ Upload iModel Thumbnail}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/upload-imodel-thumbnail/ Upload iModel Thumbnail}
    * operation from iModels API.
    * @param {UploadThumbnailParams} params parameters for this operation. See {@link UploadThumbnailParams}.
    * @returns {Promise<void>} a promise that resolves after operation completes.

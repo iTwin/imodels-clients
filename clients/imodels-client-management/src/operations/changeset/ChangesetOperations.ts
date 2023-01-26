@@ -21,7 +21,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   /**
    * Gets Changesets for a specific iModel. This method returns Changesets in their minimal representation. The
    * returned iterator internally queries entities in pages. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-changesets/ Get iModel Changesets}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-changesets/ Get iModel Changesets}
    * operation from iModels API.
    * @param {GetChangesetListParams} params parameters for this operation. See {@link GetChangesetListParams}.
    * @returns {EntityListIterator<MinimalChangeset>} iterator for Changeset list. See {@link EntityListIterator},
@@ -45,7 +45,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   /**
    * Gets Changesets for a specific iModel. This method returns Changesets in their full representation. The returned
    * iterator internally queries entities in pages. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-changesets/ Get iModel Changesets}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-changesets/ Get iModel Changesets}
    * operation from iModels API.
    * @param {GetChangesetListParams} params parameters for this operation. See {@link GetChangesetListParams}.
    * @returns {EntityListIterator<Changeset>} iterator for Changeset list. See {@link EntityListIterator},
@@ -68,7 +68,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
 
   /**
    * Gets a single Changeset identified by either index or id. This method returns a Changeset in its full
-   * representation. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-changeset-details/
+   * representation. Wraps the {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-changeset-details/
    * Get iModel Changeset} operation from iModels API.
    * @param {GetSingleChangesetParams} params parameters for this operation. See {@link GetSingleChangesetParams}.
    * @returns {Promise<Changeset>} a Changeset with specified id or index. See {@link Changeset}.

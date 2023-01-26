@@ -12,7 +12,7 @@ export class UserPermissionOperations<TOptions extends OperationOptions> extends
   /**
    * Retrieves Permissions the current user has for the specified iModel. The current user is determined based on
    * passed authorization information. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-user-permissions/ Get iModel User Permissions}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-user-permissions/ Get iModel User Permissions}
    * operation from iModels API. iModels Permissions may be configured on a iTwin level or an iModel level.
    * This operation will return Permissions configured for this specific iModel or iTwin Permissions if iModel
    * Permissions are not configured.
