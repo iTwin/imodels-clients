@@ -49,7 +49,7 @@ Since the `@itwin/imodels-client-authoring` package extends the `@itwin/imodels-
 const iModelIterator: EntityListIterator<MinimalIModel> = iModelsClient.iModels.getMinimalList({
   authorization: AccessTokenAdapter.toAuthorizationCallback(await IModelHost.getAccessToken()),
   urlParams: {
-    projectId: "8a1fcd73-8c23-460d-a392-8b4afc00affc"
+    iTwinId: "8a1fcd73-8c23-460d-a392-8b4afc00affc"
   }
 });
 ```
@@ -64,7 +64,7 @@ async function createIModelFromBaselineFile(): Promise<void> {
   const iModel: IModel = await iModelsClient.iModels.createFromBaseline({
     authorization: () => getAuthorization(),
     iModelProperties: {
-      projectId: "8a1fcd73-8c23-460d-a392-8b4afc00affc",
+      iTwinId: "8a1fcd73-8c23-460d-a392-8b4afc00affc",
       name: "Sun City Renewable-energy Plant",
       description: "Overall model of wind and solar farms in Sun City",
       filePath: "D:\\imodels\\sun-city.bim"
