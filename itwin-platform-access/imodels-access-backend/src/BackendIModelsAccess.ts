@@ -257,7 +257,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   // The imodels api does not distinguish between a v2 and a v1 checkpoint when calling getCurrentOrPrecedingCheckpoint.
   // It is possible that a preceding v2 checkpoint exists, but earlier in the timeline than the most recent v1 checkpoint. In this case we would miss out on the preceding v2 checkpoint. 
   // To get around this, this function decrements the changesetIndex of the discovered checkpoint if it is not a v2 checkpoint and searches again. 
-  private async queryCurrentOrPrecedingV2CheckpointHelper(arg: CheckpointProps, changesetIndex: number): Promise<ContainerAccessInfo | undefined> {
+  private async findLatestV2CheckpointForChangeset(arg: CheckpointProps, changesetIndex: number): Promise<ContainerAccessInfo | undefined> {
     if (changesetIndex <= 0) 
       return undefined;
 
@@ -276,7 +276,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
         return checkpoint.containerAccessInfo;
 
     const previousChangesetIndex = checkpoint.changesetIndex - 1;
-    return this.queryCurrentOrPrecedingV2CheckpointHelper(arg, previousChangesetIndex);
+    return this.findLatestV2CheckpointForChangeset(arg, previousChangesetIndex);
   }
 
   private async queryCurrentOrPrecedingV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
@@ -286,7 +286,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     }
     
     const changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
-    const containerAccessInfo = await this.queryCurrentOrPrecedingV2CheckpointHelper(arg, changeset.index);
+    const containerAccessInfo = await this.findLatestV2CheckpointForChangeset(arg, changeset.index);
     if (containerAccessInfo === undefined)
       return undefined;
 
@@ -305,9 +305,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     } catch (error) {
       // Means that neither v1 nor v2 checkpoint exists
       if (isIModelsApiError(error) && error.code === IModelsErrorCode.CheckpointNotFound) {
-        if (arg?.allowPreceding)
-          return this.queryCurrentOrPrecedingV2Checkpoint(arg);
-        return undefined;
+        return arg?.allowPreceding ? this.queryCurrentOrPrecedingV2Checkpoint(arg) : undefined;
       }
 
       throw error;
@@ -315,9 +313,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     // Means the v2 checkpoint does not exist.
     if (checkpoint.containerAccessInfo === null) {
-      if (arg?.allowPreceding)
-        return this.queryCurrentOrPrecedingV2Checkpoint(arg);
-      return undefined;
+      return arg?.allowPreceding ? this.queryCurrentOrPrecedingV2Checkpoint(arg) : undefined;
     }
 
     const result = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
