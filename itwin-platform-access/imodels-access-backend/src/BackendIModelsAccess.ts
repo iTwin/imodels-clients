@@ -19,12 +19,12 @@ import axios, { AxiosResponse } from "axios";
 
 import {
   AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset, ChangesetIdOrIndex,
-  ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams, DeleteIModelParams,
-  DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, EntityListIterator,
-  GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetLockListParams, GetNamedVersionListParams,
-  GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, Lock,
-  LockLevel, LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion, OrderByOperator,
-  ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray, ContainerAccessInfo
+  ChangesetOrderByProperty, Checkpoint, ContainerAccessInfo, CreateChangesetParams, CreateIModelFromBaselineParams,
+  DeleteIModelParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset,
+  EntityListIterator, GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetLockListParams,
+  GetNamedVersionListParams, GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode,
+  Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion,
+  OrderByOperator, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
 
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
@@ -255,25 +255,25 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   // The imodels api does not distinguish between a v2 and a v1 checkpoint when calling getCurrentOrPrecedingCheckpoint.
-  // It is possible that a preceding v2 checkpoint exists, but earlier in the timeline than the most recent v1 checkpoint. In this case we would miss out on the preceding v2 checkpoint. 
-  // To get around this, this function decrements the changesetIndex of the discovered checkpoint if it is not a v2 checkpoint and searches again. 
+  // It is possible that a preceding v2 checkpoint exists, but earlier in the timeline than the most recent v1 checkpoint. In this case we would miss out on the preceding v2 checkpoint.
+  // To get around this, this function decrements the changesetIndex of the discovered checkpoint if it is not a v2 checkpoint and searches again.
   private async findLatestV2CheckpointForChangeset(arg: CheckpointProps, changesetIndex: number): Promise<ContainerAccessInfo | undefined> {
-    if (changesetIndex <= 0) 
+    if (changesetIndex <= 0)
       return undefined;
 
     const getSingleChangesetParams: GetSingleChangesetParams = {
       ...this.getIModelScopedOperationParams(arg),
       ...PlatformToClientAdapter.toChangesetIdOrIndex({index: changesetIndex})
-    }
+    };
 
     const changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
     const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
 
     if (!checkpoint)
-        return undefined;
+      return undefined;
 
-    if (!!checkpoint.containerAccessInfo)
-        return checkpoint.containerAccessInfo;
+    if (checkpoint.containerAccessInfo)
+      return checkpoint.containerAccessInfo;
 
     const previousChangesetIndex = checkpoint.changesetIndex - 1;
     return this.findLatestV2CheckpointForChangeset(arg, previousChangesetIndex);
@@ -283,8 +283,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
     const getSingleChangesetParams: GetSingleChangesetParams = {
       ...this.getIModelScopedOperationParams(arg),
       ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset)
-    }
-    
+    };
+
     const changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
     const containerAccessInfo = await this.findLatestV2CheckpointForChangeset(arg, changeset.index);
     if (containerAccessInfo === undefined)
