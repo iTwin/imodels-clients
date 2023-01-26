@@ -23,8 +23,9 @@ interface ITwinResponse {
 
 @injectable()
 export class ITwinsClient {
-  private readonly defaultClass = "Endeavor";
-  private readonly defaultSubClass = "Project";
+  private readonly _defaultClass = "Endeavor";
+  private readonly _defaultSubClass = "Project";
+
   constructor(
     private _config: ITwinsClientConfig
   ) { }
@@ -38,15 +39,15 @@ export class ITwinsClient {
       }
     };
 
-    const getITwinsWithNameUrl = `${this._config.baseUrl}?subClass=${this.defaultSubClass}&displayName=${params.iTwinName}`;
+    const getITwinsWithNameUrl = `${this._config.baseUrl}?subClass=${this._defaultSubClass}&displayName=${params.iTwinName}`;
     const getITwinsWithNameResponse: AxiosResponse<ITwinsResponse> = await axios.get(getITwinsWithNameUrl, requestConfig);
     if (getITwinsWithNameResponse.data.iTwins.length > 0)
       return getITwinsWithNameResponse.data.iTwins[0].id;
 
     const createITwinUrl = this._config.baseUrl;
     const createITwinBody = {
-      class: this.defaultClass,
-      subClass: this.defaultSubClass,
+      class: this._defaultClass,
+      subClass: this._defaultSubClass,
       displayName: params.iTwinName
     };
     const createITwinResponse: AxiosResponse<ITwinResponse> = await axios.post(createITwinUrl, createITwinBody, requestConfig);
