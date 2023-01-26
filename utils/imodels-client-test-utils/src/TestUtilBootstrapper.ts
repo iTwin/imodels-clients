@@ -7,7 +7,7 @@ import { Container } from "inversify";
 import { IModelsClientOptions } from "@itwin/imodels-client-authoring";
 
 import { IModelsClientsTestsConfig } from "./IModelsClientsTestsConfig";
-import { ProjectsClient, ProjectsClientConfig, ReusableTestIModelProvider, ReusableTestIModelProviderConfig, TestAuthorizationClient, TestAuthorizationClientConfig, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelRetriever, TestIModelsClient, TestIModelsClientOptions, TestProjectProvider, TestProjectProviderConfig } from "./test-context-providers";
+import { ITwinsClient, ITwinsClientConfig, ReusableTestIModelProvider, ReusableTestIModelProviderConfig, TestAuthorizationClient, TestAuthorizationClientConfig, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelRetriever, TestIModelsClient, TestIModelsClientOptions, TestITwinProvider, TestITwinProviderConfig } from "./test-context-providers";
 import { TestAuthorizationProviderConfig } from "./test-context-providers/auth/TestAuthorizationProviderConfig";
 import { TestIModelGroupFactory } from "./test-imodel-group/TestIModelGroupFactory";
 import { TestUtilTypes } from "./TestUtilTypes";
@@ -28,10 +28,10 @@ export class TestUtilBootstrapper {
     container.bind(TestAuthorizationProviderConfig).toSelf().inSingletonScope();
     container.bind(TestAuthorizationProvider).toSelf().inSingletonScope();
 
-    container.bind(ProjectsClientConfig).toSelf().inSingletonScope();
-    container.bind(ProjectsClient).toSelf().inSingletonScope();
-    container.bind(TestProjectProviderConfig).toSelf().inSingletonScope();
-    container.bind(TestProjectProvider).toSelf().inSingletonScope();
+    container.bind(ITwinsClientConfig).toSelf().inSingletonScope();
+    container.bind(ITwinsClient).toSelf().inSingletonScope();
+    container.bind(TestITwinProviderConfig).toSelf().inSingletonScope();
+    container.bind(TestITwinProvider).toSelf().inSingletonScope();
 
     container.bind<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions).to(TestIModelsClientOptions).inSingletonScope();
     container.bind(TestIModelsClient).toSelf().inSingletonScope();

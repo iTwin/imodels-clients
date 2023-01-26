@@ -26,7 +26,7 @@ export class PlatformToClientAdapter {
 
   public static toIModelProperties(createNewIModelProps: CreateNewIModelProps): IModelProperties {
     return {
-      projectId: createNewIModelProps.iTwinId,
+      iTwinId: createNewIModelProps.iTwinId,
       name: createNewIModelProps.iModelName,
       description: createNewIModelProps.description
     };

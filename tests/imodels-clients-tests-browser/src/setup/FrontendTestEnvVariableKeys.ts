@@ -6,7 +6,7 @@ const frontendTestEnvVariableKeys = {
   iModelsClientApiOptions: "iModelsClientApiOptions",
   admin1AuthorizationInfo: "admin1AuthorizationInfo",
 
-  testProjectId: "testProjectId",
+  testITwinId: "testITwinId",
   testIModelForReadId: "testIModelForReadId",
 
   testPngFilePath: "testPngFilePath"

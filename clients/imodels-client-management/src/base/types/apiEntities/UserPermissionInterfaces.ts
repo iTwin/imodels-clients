@@ -16,16 +16,16 @@ export enum IModelPermission {
   Write = "imodels_write",
   /**
    * Allows to create an iModel. Allows to configure access per iModel. Allows to manage Locks or local copies
-   * for the entire iModel. This Permission is both iModel and Project level Permission, but Create iModel operation
-   * requires that user has `imodels_manage` Permission on the Project level. Use
-   * {@link https://developer.bentley.com/apis/projects/ Projects API} to check if user can create an iModel on a
-   * given Project.
+   * for the entire iModel. This Permission is both iModel and iTwin level Permission, but Create iModel operation
+   * requires that user has `imodels_manage` Permission on the iTwin level. Use
+   * {@link https://developer.bentley.com/apis/access-control/operations/get-itwin-permissions/ Access Control API}
+   * to check if user can create an iModel on a given iTwin.
    */
   Manage = "imodels_manage",
   /**
-   * Allows to delete an iModel. This Permission is only available on the Project level. Use
-   * {@link https://developer.bentley.com/apis/projects/ Projects API} to check if user can delete iModels on a given
-   * Project. */
+   * Allows to delete an iModel. This Permission is only available on the iTwin level. Use
+   * {@link https://developer.bentley.com/apis/access-control/operations/get-itwin-permissions/ Access Control API}
+   * to check if user can delete iModels on a given iTwin. */
   Delete = "imodels-delete"
 }
 

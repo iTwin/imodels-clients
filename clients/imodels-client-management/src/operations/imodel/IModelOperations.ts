@@ -10,8 +10,8 @@ import { CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelPa
 
 export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**
-   * Gets iModels for a specific project. This method returns iModels in their minimal representation. The returned iterator
-   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}
+   * Gets iModels for a specific iTwin. This method returns iModels in their minimal representation. The returned iterator
+   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels-v2/operations/get-itwin-imodels/ Get iTwin iModels}
    * operation from iModels API.
    * @param {GetiModelListParams} params parameters for this operation. See {@link GetiModelListParams}.
    * @returns {EntityListIterator<MinimaliModel>} iterator for iModel list. See {@link EntityListIterator}, {@link MinimaliModel}.
@@ -26,8 +26,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   /**
-   * Gets iModels for a specific project. This method returns iModels in their full representation. The returned iterator
-   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}
+   * Gets iModels for a specific iTwin. This method returns iModels in their full representation. The returned iterator
+   * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels-v2/operations/get-itwin-imodels/ Get iTwin iModels}
    * operation from iModels API.
    * @param {GetiModelListParams} params parameters for this operation. See {@link GetiModelListParams}.
    * @returns {EntityListIterator<iModel>} iterator for iModel list. See {@link EntityListIterator}, {@link iModel}.
@@ -43,7 +43,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
 
   /**
    * Gets a single iModel by its id. This method returns an iModel in its full representation. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-details/ Get iModel} operation from iModels API.
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-details/ Get iModel} operation from iModels API.
    * @param {GetSingleiModelParams} params parameters for this operation. See {@link GetSingleiModelParams}.
    * @returns {Promise<iModel>} an iModel with specified id. See {@link iModel}.
    */
@@ -57,7 +57,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
 
   /**
    * Creates an empty iModel with specified properties. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/create-imodel/ Create iModel} operation from iModels API.
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/create-imodel/ Create iModel} operation from iModels API.
    * @param {CreateEmptyiModelParams} params parameters for this operation. See {@link CreateEmptyiModelParams}.
    * @returns {Promise<iModel>} newly created iModel. See {@link iModel}.
    */
@@ -68,7 +68,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
 
   /**
    * Creates an iModel from a template. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/create-imodel/ Create iModel} operation from iModels API.
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/create-imodel/ Create iModel} operation from iModels API.
    * It uses the `template` request body property to specify the source iModel which will be used as a template. Internally
    * this method creates the iModel instance and then repeatedly queries the iModel state until the iModel is initialized.
    * The execution of this method can take up to several minutes due to waiting for initialization to complete.
@@ -95,7 +95,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
 
   /**
    * Updates iModel properties. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/update-imodel/ Update iModel} operation from iModels API.
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/update-imodel/ Update iModel} operation from iModels API.
    * @param {UpdateIModelParams} params parameters for this operation. See {@link UpdateIModelParams}.
    * @returns {Promise<IModel>} updated iModel. See {@link IModel}.
    */
@@ -110,7 +110,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   /**
-   * Deletes an iModel with specified id. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/delete-imodel/ Delete iModel}
+   * Deletes an iModel with specified id. Wraps the {@link https://developer.bentley.com/apis/imodels-v2/operations/delete-imodel/ Delete iModel}
    * operation from iModels API.
    * @param {DeleteiModelParams} params parameters for this operation. See {@link DeleteiModelParams}.
    * @returns {Promise<void>} a promise that resolves after operation completes.
@@ -124,7 +124,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
 
   protected getCreateEmptyIModelRequestBody(iModelProperties: IModelProperties): object {
     return {
-      projectId: iModelProperties.projectId,
+      iTwinId: iModelProperties.iTwinId,
       name: iModelProperties.name,
       description: iModelProperties.description,
       extent: iModelProperties.extent

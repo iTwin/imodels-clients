@@ -12,7 +12,7 @@ import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 
 import { ContainingChanges, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
+import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
 
@@ -51,8 +51,8 @@ describe("BackendIModelsAccess", () => {
     accessToken = `${authorization.scheme} ${authorization.token}`;
     IModelHost.authorizationClient = new TestAuthorizationClient(accessToken);
 
-    const testProjectProvider = container.get(TestProjectProvider);
-    iTwinId = await testProjectProvider.getOrCreate();
+    const testITwinProvider = container.get(TestITwinProvider);
+    iTwinId = await testITwinProvider.getOrCreate();
 
     testIModelFileProvider = container.get(TestIModelFileProvider);
 

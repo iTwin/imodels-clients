@@ -3,14 +3,14 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AuthorizationCallback, CreateIModelFromBaselineParams, IModel, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { TestAuthorizationProvider, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertIModel } from "@itwin/imodels-client-test-utils";
+import { TestAuthorizationProvider, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertIModel } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 describe("[Authoring] IModelOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
-  let projectId: string;
+  let iTwinId: string;
 
   let testIModelFileProvider: TestIModelFileProvider;
   let testIModelGroup: TestIModelGroup;
@@ -24,8 +24,8 @@ describe("[Authoring] IModelOperations", () => {
     const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
-    const testProjectProvider = container.get(TestProjectProvider);
-    projectId = await testProjectProvider.getOrCreate();
+    const testITwinProvider = container.get(TestITwinProvider);
+    iTwinId = await testITwinProvider.getOrCreate();
 
     testIModelFileProvider = container.get(TestIModelFileProvider);
 
@@ -42,7 +42,7 @@ describe("[Authoring] IModelOperations", () => {
     const createIModelParams: CreateIModelFromBaselineParams = {
       authorization,
       iModelProperties: {
-        projectId,
+        iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel from baseline"),
         filePath: testIModelFileProvider.iModel.filePath
       }

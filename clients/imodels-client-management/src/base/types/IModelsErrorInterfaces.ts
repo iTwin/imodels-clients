@@ -30,7 +30,7 @@ export enum IModelsErrorCode {
   VersionExists = "NamedVersionExists",
   ChangesetExists = "ChangesetExists",
   NamedVersionOnChangesetExists = "NamedVersionOnChangesetExists",
-  ProjectNotFound = "ProjectNotFound",
+  ITwinNotFound = "iTwinNotFound",
   IModelNotFound = "iModelNotFound",
   NamedVersionNotFound = "NamedVersionNotFound",
   ChangesetNotFound = "ChangesetNotFound",

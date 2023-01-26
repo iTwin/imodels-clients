@@ -21,7 +21,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   /**
    * Gets Briefcases of a specific iModel. This method returns Briefcases in their minimal representation. The returned iterator
    * internally queries entities in pages. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcases/ Get iModel Briefcases}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-briefcases/ Get iModel Briefcases}
    * operation from iModels API.
    * @param {GetBriefcaseListParams} params parameters for this operation. See {@link GetBriefcaseListParams}.
    * @returns {EntityListIterator<MinimalBriefcase>} iterator for Briefcase list. See {@link EntityListIterator},
@@ -39,7 +39,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   /**
    * Gets Briefcases of a specific iModel. This method returns Briefcases in their full representation. The returned iterator
    * internally queries entities in pages. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcases/ Get iModel Briefcases}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-briefcases/ Get iModel Briefcases}
    * operation from iModels API.
    * @param {GetBriefcaseListParams} params parameters for this operation. See {@link GetBriefcaseListParams}.
    * @returns {EntityListIterator<Briefcase>} iterator for Briefcase list. See {@link EntityListIterator}, {@link Briefcase}.
@@ -61,7 +61,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
 
   /**
    * Gets a single Briefcase by its id. This method returns a Briefcase in its full representation. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-briefcase-details/ Get iModel Briefcase}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-briefcase-details/ Get iModel Briefcase}
    * operation from iModels API.
    * @param {GetSingleBriefcaseParams} params parameters for this operation. See {@link GetSingleBriefcaseParams}.
    * @returns {Promise<Briefcase>} an Briefcase with specified id. See {@link iModel}.

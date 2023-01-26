@@ -8,7 +8,7 @@ import { GetBriefcaseListParams, GetLockListParams, GetNamedVersionListParams, I
 
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
-import { TestProjectProvider } from "../project/TestProjectProvider";
+import { TestITwinProvider } from "../itwin/TestITwinProvider";
 
 import { TestIModelCreator } from "./TestIModelCreator";
 import { TestIModelFileProvider } from "./TestIModelFileProvider";
@@ -20,16 +20,16 @@ export class TestIModelRetriever {
   constructor(
     private readonly _iModelsClient: TestIModelsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
-    private readonly _testProjectProvider: TestProjectProvider,
+    private readonly _testITwinProvider: TestITwinProvider,
     private readonly _testIModelFileProvider: TestIModelFileProvider
   ) { }
 
   public async findIModelByName(iModelName: string): Promise<IModel | undefined> {
-    const projectId = await this._testProjectProvider.getOrCreate();
+    const iTwinId = await this._testITwinProvider.getOrCreate();
     const iModelIterator = this._iModelsClient.iModels.getRepresentationList({
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       urlParams: {
-        projectId,
+        iTwinId,
         name: iModelName
       }
     });

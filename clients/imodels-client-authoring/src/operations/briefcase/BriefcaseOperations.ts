@@ -14,7 +14,7 @@ import { AcquireBriefcaseParams, BriefcaseProperties, ReleaseBriefcaseParams } f
 export class BriefcaseOperations<TOptions extends OperationOptions> extends ManagementBriefcaseOperations<TOptions> {
   /**
    * Acquires a new Briefcase with specified properties. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/acquire-imodel-briefcase/ Acquire iModel Briefcase}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/acquire-imodel-briefcase/ Acquire iModel Briefcase}
    * operation from iModels API.
    * @param {AcquireBriefcaseParams} params parameters for this operation. See {@link AcquireBriefcaseParams}.
    * @returns {Promise<Briefcase>} newly acquired Briefcase. See {@link Briefcase}.
@@ -32,7 +32,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Mana
 
   /**
    * Releases the specified Briefcase. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/release-imodel-briefcase/ Release iModel Briefcase}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/release-imodel-briefcase/ Release iModel Briefcase}
    * operation from iModels API.
    * @param {ReleaseBriefcaseParams} params parameters for this operation. See {@link ReleaseBriefcaseParams}.
    * @returns {Promise<Briefcase>} a promise that resolves after operation completes.

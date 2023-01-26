@@ -12,8 +12,8 @@ export class CheckpointOperations<TOptions extends OperationOptions> extends Ope
   /**
    * Gets a single Checkpoint generated either on a specific Changeset or for a specific Named Version. This method
    * returns a Checkpoint in its full representation. Wraps
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-changeset-checkpoint/ Get Changeset Checkpoint}
-   * and {@link https://developer.bentley.com/apis/imodels/operations/get-named-version-checkpoint/
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-changeset-checkpoint/ Get Changeset Checkpoint}
+   * and {@link https://developer.bentley.com/apis/imodels-v2/operations/get-named-version-checkpoint/
    * Get Named Version Checkpoint} operations from iModels API.
    * @param {GetSingleCheckpointParams} params parameters for this operation. See {@link GetSingleCheckpointParams}.
    * @returns {Promise<Checkpoint>} a Checkpoint for the specified parent entity. See {@link Checkpoint}.
