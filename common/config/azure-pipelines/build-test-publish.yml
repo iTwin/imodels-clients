@@ -31,7 +31,7 @@ jobs:
     pool:
         vmImage: $(imageName)
     variables:
-      - group: iModels Clients - Integration Tests - DEV
+      - group: iModels Clients V3 - Integration Tests - DEV
     workspace:
       clean: all
 
