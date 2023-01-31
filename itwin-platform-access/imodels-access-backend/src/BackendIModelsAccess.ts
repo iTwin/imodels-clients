@@ -272,7 +272,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (!checkpoint)
       return undefined;
 
-    if (checkpoint.containerAccessInfo !== undefined)
+    if (checkpoint.containerAccessInfo !== null)
       return checkpoint.containerAccessInfo;
 
     const previousChangesetIndex = checkpoint.changesetIndex - 1;
