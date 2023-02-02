@@ -11,7 +11,7 @@ import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, 
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 
-import { ContainingChanges, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, ContainingChanges, IModelsClient, IModelsClientOptions, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
@@ -29,6 +29,8 @@ describe("BackendIModelsAccess", () => {
   const testRunId = createGuidValue();
 
   let backendIModelsAccess: BackendIModelsAccess;
+  let iModelsClient: IModelsClient;
+  let authorizationCallback: AuthorizationCallback
   let accessToken: string;
   let iTwinId: string;
 
@@ -42,11 +44,11 @@ describe("BackendIModelsAccess", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
-    const iModelsClient = new IModelsClient(iModelsClientOptions);
+    iModelsClient = new IModelsClient(iModelsClientOptions);
     backendIModelsAccess = new BackendIModelsAccess(iModelsClient);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
-    const authorizationCallback = authorizationProvider.getAdmin1Authorization();
+    authorizationCallback = authorizationProvider.getAdmin1Authorization();
     const authorization = await authorizationCallback();
     accessToken = `${authorization.scheme} ${authorization.token}`;
     IModelHost.authorizationClient = new TestAuthorizationClient(accessToken);
@@ -246,7 +248,21 @@ describe("BackendIModelsAccess", () => {
       // Arrange
       // iModel has 3 checkpoints. changeset index 10 has only v1 checkpoint, changeset index 5 has only v1 checkpoint. iModel has only 10 changesets. baseline has v1 and v2 checkpoint. 
       // This iModel is a clone of the testIModelFileProvider aka "[do not delete][iModelsClientsTests] Reusable Test iModel" so it will have the same changesets. 
-      const iModelId = "1aca14e4-32df-44d3-85d7-b892959a0fba"; 
+      const iModelId = "1aca14e4-32df-44d3-85d7-b892959a0fba";
+      try {
+        // Make sure iModel exists since we're hardcoding this ID.
+        const iModel = await iModelsClient.iModels.getSingle({
+          iModelId,
+          authorization: authorizationCallback
+        });
+        expect(iModel).to.not.be.undefined;
+      } catch (error) {
+        if (isIModelsApiError(error) && error.code === IModelsErrorCode.IModelNotFound) {
+          throw new Error("iModel was not found. Please recreate the test iModel as described within the test, or disable the test.");
+        }
+        throw error;
+      }
+      
       const mostRecentChangeset = testIModelFileProvider.changesets[testIModelFileProvider.changesets.length - 1];
       const queryV2CheckpointParams: CheckpointProps = {
           accessToken,
