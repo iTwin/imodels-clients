@@ -234,10 +234,10 @@ describe("BackendIModelsAccess", () => {
 
       // Act
       const queryCheckpointExpectUndefined: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams);
-
       const queryV2CheckpointParamsAllowPreceding = {...queryV2CheckpointParams, allowPreceding: true};
       const queryCheckpointExpectSuccess: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParamsAllowPreceding);
 
+      // Assert
       expect(queryCheckpointExpectUndefined).to.be.undefined;
       expect(queryCheckpointExpectSuccess).to.not.be.undefined;
     })
@@ -261,6 +261,7 @@ describe("BackendIModelsAccess", () => {
       // Act
       const queryCheckpoint: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams);
 
+      // Assert
       expect(queryCheckpoint).to.not.be.undefined;
       expect(queryCheckpoint!.dbName === "BASELINE.bim").to.be.true;
 
