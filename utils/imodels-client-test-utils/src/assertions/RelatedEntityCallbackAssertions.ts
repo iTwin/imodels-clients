@@ -4,9 +4,20 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { Briefcase, Changeset, Checkpoint, MinimalChangeset, NamedVersion, User } from "@itwin/imodels-client-authoring";
+import { Briefcase, Changeset, Checkpoint, IModel, MinimalChangeset, NamedVersion, User } from "@itwin/imodels-client-authoring";
 
 import { assertUser } from "./BrowserFriendlyAssertions";
+
+export async function assertIModelCallbacks(params: {
+  iModel: IModel;
+}): Promise<void> {
+  expect(params.iModel.getCreator).to.exist;
+
+  const creator: User | undefined = await params.iModel.getCreator();
+  assertUser({
+    actualUser: creator!
+  });
+}
 
 export async function assertBriefcaseCallbacks(params: {
   briefcase: Briefcase;

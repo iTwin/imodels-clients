@@ -8,6 +8,7 @@ import { IModelOperations as ManagementIModelOperations } from "@itwin/imodels-c
 import { AuthorizationParam, IModel, IModelsErrorCode } from "@itwin/imodels-client-management";
 
 import { BaselineFileState } from "../../base/types";
+import { IModelsClient } from "../../IModelsClient";
 import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations";
 import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";
@@ -17,8 +18,8 @@ import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline }
 export class IModelOperations<TOptions extends OperationOptions> extends ManagementIModelOperations<TOptions> {
   private _baselineFileOperations: BaselineFileOperations<TOptions>;
 
-  constructor(options: TOptions) {
-    super(options);
+  constructor(options: TOptions, iModelsClient: IModelsClient) {
+    super(options, iModelsClient);
     this._baselineFileOperations = new BaselineFileOperations<TOptions>(options);
   }
 

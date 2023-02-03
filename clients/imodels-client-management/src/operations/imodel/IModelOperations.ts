@@ -3,12 +3,19 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { EntityListIteratorImpl, IModelResponse, IModelsErrorImpl, IModelsResponse, OperationsBase, waitForCondition } from "../../base/internal";
-import { AuthorizationCallback, EntityListIterator, IModel, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn } from "../../base/types";
+import { AuthorizationCallback, EntityListIterator, IModel, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn, User } from "../../base/types";
+import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 
 import { CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForCreateFromTemplate, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams";
 
 export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
+  constructor(
+    options: TOptions,
+    private _iModelsClient: IModelsClient
+  ) {
+    super(options);
+  }
   /**
    * Gets iModels for a specific project. This method returns iModels in their minimal representation. The returned iterator
    * internally queries entities in pages. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/get-project-imodels/ Get Project iModels}
@@ -33,11 +40,17 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * @returns {EntityListIterator<iModel>} iterator for iModel list. See {@link EntityListIterator}, {@link iModel}.
    */
   public getRepresentationList(params: GetIModelListParams): EntityListIterator<IModel> {
+    const entityCollectionAccessor = (response: unknown) => {
+      const iModels = (response as IModelsResponse<IModel>).iModels;
+      const mappedIModels = iModels.map((iModel) => this.appendRelatedEntityCallbacks(params.authorization, iModel));
+      return mappedIModels;
+    };
+
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<IModel>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: unknown) => (response as IModelsResponse<IModel>).iModels
+      entityCollectionAccessor
     }));
   }
 
@@ -52,7 +65,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId })
     });
-    return response.iModel;
+    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, response.iModel);
+    return result;
   }
 
   /**
@@ -63,7 +77,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    */
   public async createEmpty(params: CreateEmptyIModelParams): Promise<IModel> {
     const createIModelBody = this.getCreateEmptyIModelRequestBody(params.iModelProperties);
-    return this.sendIModelPostRequest(params.authorization, createIModelBody);
+    const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody);
+    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, createdIModel);
+    return result;
   }
 
   /**
@@ -106,7 +122,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId }),
       body: updateIModelBody
     });
-    return updateIModelResponse.iModel;
+    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, updateIModelResponse.iModel);
+    return result;
   }
 
   /**
@@ -120,6 +137,17 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId })
     });
+  }
+
+  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, iModel: IModel): IModel {
+    const getCreator = async () => this.getCreator(authorization, iModel._links.creator?.href);
+
+    const result: IModel = {
+      ...iModel,
+      getCreator
+    };
+
+    return result;
   }
 
   protected getCreateEmptyIModelRequestBody(iModelProperties: IModelProperties): object {
@@ -138,6 +166,18 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       body: createIModelBody
     });
     return createIModelResponse.iModel;
+  }
+
+  private async getCreator(authorization: AuthorizationCallback, creatorLink: string | undefined): Promise<User | undefined> {
+    if (!creatorLink)
+      return undefined;
+
+    const { iModelId, userId } = this._options.urlFormatter.parseUserUrl(creatorLink);
+    return this._iModelsClient.users.getSingle({
+      authorization,
+      iModelId,
+      userId
+    });
   }
 
   private getCreateIModelFromTemplateRequestBody(iModelProperties: IModelPropertiesForCreateFromTemplate): object {

@@ -52,7 +52,7 @@ describe("[Authoring] IModelOperations", () => {
     const iModel: IModel = await iModelsClient.iModels.createFromBaseline(createIModelParams);
 
     // Assert
-    assertIModel({
+    await assertIModel({
       actualIModel: iModel,
       expectedIModelProperties: createIModelParams.iModelProperties
     });
