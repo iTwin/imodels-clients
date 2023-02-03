@@ -9,7 +9,7 @@ import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, Tes
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
-describe.only("[Management] IModelOperations", () => {
+describe("[Management] IModelOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let projectId: string;

@@ -7,7 +7,7 @@ import { TestAuthorizationProvider, TestIModelFileProvider, TestIModelGroup, Tes
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
-describe.only("[Authoring] IModelOperations", () => {
+describe("[Authoring] IModelOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let projectId: string;

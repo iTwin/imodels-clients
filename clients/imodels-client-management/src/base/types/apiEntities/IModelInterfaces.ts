@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Link } from "../CommonInterfaces";
+
 import { User } from "./UserInterfaces";
 
 /** Possible iModel states. */

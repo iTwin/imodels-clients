@@ -141,7 +141,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
 
   protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, iModel: IModel): IModel {
     const getCreator = async () => this.getCreator(authorization, iModel._links.creator?.href);
-  
+
     const result: IModel = {
       ...iModel,
       getCreator
