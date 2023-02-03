@@ -30,7 +30,7 @@ describe("BackendIModelsAccess", () => {
 
   let backendIModelsAccess: BackendIModelsAccess;
   let iModelsClient: IModelsClient;
-  let authorizationCallback: AuthorizationCallback
+  let authorizationCallback: AuthorizationCallback;
   let accessToken: string;
   let iTwinId: string;
 
@@ -224,30 +224,31 @@ describe("BackendIModelsAccess", () => {
       assert(testIModelFileProvider.changesets.length >= firstNamedVersion.changesetIndex + 1, "Not enough changesets");
       const nextChangeset = testIModelFileProvider.changesets[firstNamedVersion.changesetIndex];
       assert(firstNamedVersion.changesetId !== nextChangeset.id, "Unexpected changeset ids");
-     
       const queryV2CheckpointParams: CheckpointProps = {
-          accessToken,
-          iTwinId,
-          iModelId: testIModelForRead.id,
-          changeset: {
-            id: nextChangeset.id
-          }
+        accessToken,
+        iTwinId,
+        iModelId: testIModelForRead.id,
+        changeset: {
+          id: nextChangeset.id
+        }
       };
 
       // Act
-      const queryCheckpointExpectUndefined: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams);
-      const queryV2CheckpointParamsAllowPreceding = {...queryV2CheckpointParams, allowPreceding: true};
-      const queryCheckpointExpectSuccess: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParamsAllowPreceding);
-
+      const v2checkpointForExactChangeset: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams);
       // Assert
-      expect(queryCheckpointExpectUndefined).to.be.undefined;
-      expect(queryCheckpointExpectSuccess).to.not.be.undefined;
-    })
+      expect(v2checkpointForExactChangeset).to.be.undefined;
+
+      // Act
+      const v2checkpointForChangesetAllowPrecedingParams = {...queryV2CheckpointParams, allowPreceding: true};
+      const v2checkpointForChangesetAllowPreceding: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(v2checkpointForChangesetAllowPrecedingParams);
+      // Assert
+      expect(v2checkpointForChangesetAllowPreceding).to.not.be.undefined;
+    });
 
     it("should skip over a preceding v1 checkpoint in favor of finding a preceding v2 checkpoint", async () => {
       // Arrange
-      // iModel has 3 checkpoints. changeset index 10 has only v1 checkpoint, changeset index 5 has only v1 checkpoint. iModel has only 10 changesets. baseline has v1 and v2 checkpoint. 
-      // This iModel is a clone of the testIModelFileProvider aka "[do not delete][iModelsClientsTests] Reusable Test iModel" so it will have the same changesets. 
+      // iModel has 3 checkpoints. changeset index 10 has only v1 checkpoint, changeset index 5 has only v1 checkpoint. iModel has only 10 changesets. baseline has v1 and v2 checkpoint.
+      // This iModel is a clone of the testIModelFileProvider aka "[do not delete][iModelsClientsTests] Reusable Test iModel" so it will have the same changesets.
       const iModelId = "1aca14e4-32df-44d3-85d7-b892959a0fba";
       try {
         // Make sure iModel exists since we're hardcoding this ID.
@@ -262,16 +263,16 @@ describe("BackendIModelsAccess", () => {
         }
         throw error;
       }
-      
+
       const mostRecentChangeset = testIModelFileProvider.changesets[testIModelFileProvider.changesets.length - 1];
       const queryV2CheckpointParams: CheckpointProps = {
-          accessToken,
-          iTwinId,
-          iModelId,
-          changeset: {
-            id: mostRecentChangeset.id,
-          },
-          allowPreceding: true
+        accessToken,
+        iTwinId,
+        iModelId,
+        changeset: {
+          id: mostRecentChangeset.id
+        },
+        allowPreceding: true
       };
 
       // Act
@@ -281,7 +282,7 @@ describe("BackendIModelsAccess", () => {
       expect(queryCheckpoint).to.not.be.undefined;
       expect(queryCheckpoint!.dbName === "BASELINE.bim").to.be.true;
 
-    })
+    });
 
     it("should download preceding checkpoint if one for current changeset does not exist", async () => {
       // Arrange
