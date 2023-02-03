@@ -6,12 +6,12 @@ import { assert } from "console";
 import * as fs from "fs";
 import * as path from "path";
 
-import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, DownloadChangesetRangeArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction, ProgressStatus } from "@itwin/core-backend";
+import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointProps, DownloadChangesetRangeArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction, ProgressStatus, V2CheckpointAccessProps } from "@itwin/core-backend";
 import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 
-import { ContainingChanges, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, ContainingChanges, IModelsClient, IModelsClientOptions, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
@@ -29,6 +29,8 @@ describe("BackendIModelsAccess", () => {
   const testRunId = createGuidValue();
 
   let backendIModelsAccess: BackendIModelsAccess;
+  let iModelsClient: IModelsClient;
+  let authorizationCallback: AuthorizationCallback;
   let accessToken: string;
   let iTwinId: string;
 
@@ -42,11 +44,11 @@ describe("BackendIModelsAccess", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
-    const iModelsClient = new IModelsClient(iModelsClientOptions);
+    iModelsClient = new IModelsClient(iModelsClientOptions);
     backendIModelsAccess = new BackendIModelsAccess(iModelsClient);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
-    const authorizationCallback = authorizationProvider.getAdmin1Authorization();
+    authorizationCallback = authorizationProvider.getAdmin1Authorization();
     const authorization = await authorizationCallback();
     accessToken = `${authorization.scheme} ${authorization.token}`;
     IModelHost.authorizationClient = new TestAuthorizationClient(accessToken);
@@ -214,6 +216,72 @@ describe("BackendIModelsAccess", () => {
       expect(downloadedCheckpoint.index).to.be.equal(lastNamedVersion.changesetIndex);
       expect(fs.existsSync(localCheckpointFilePath)).to.be.equal(true);
       expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
+    });
+
+    it("should query preceding checkpoint v2", async () => {
+      // Arrange
+      const firstNamedVersion = testIModelForRead.namedVersions[0];
+      assert(testIModelFileProvider.changesets.length >= firstNamedVersion.changesetIndex + 1, "Not enough changesets");
+      const nextChangeset = testIModelFileProvider.changesets[firstNamedVersion.changesetIndex];
+      assert(firstNamedVersion.changesetId !== nextChangeset.id, "Unexpected changeset ids");
+      const queryV2CheckpointParams: CheckpointProps = {
+        accessToken,
+        iTwinId,
+        iModelId: testIModelForRead.id,
+        changeset: {
+          id: nextChangeset.id
+        }
+      };
+
+      // Act
+      const v2checkpointForExactChangeset: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams);
+      // Assert
+      expect(v2checkpointForExactChangeset).to.be.undefined;
+
+      // Act
+      const v2checkpointForChangesetAllowPrecedingParams = {...queryV2CheckpointParams, allowPreceding: true};
+      const v2checkpointForChangesetAllowPreceding: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(v2checkpointForChangesetAllowPrecedingParams);
+      // Assert
+      expect(v2checkpointForChangesetAllowPreceding).to.not.be.undefined;
+    });
+
+    it("should skip over a preceding v1 checkpoint in favor of finding a preceding v2 checkpoint", async () => {
+      // Arrange
+      // iModel has 3 checkpoints. changeset index 10 has only v1 checkpoint, changeset index 5 has only v1 checkpoint. iModel has only 10 changesets. baseline has v1 and v2 checkpoint.
+      // This iModel is a clone of the testIModelFileProvider aka "[do not delete][iModelsClientsTests] Reusable Test iModel" so it will have the same changesets.
+      const iModelId = "1aca14e4-32df-44d3-85d7-b892959a0fba";
+      try {
+        // Make sure iModel exists since we're hardcoding this ID.
+        const iModel = await iModelsClient.iModels.getSingle({
+          iModelId,
+          authorization: authorizationCallback
+        });
+        expect(iModel).to.not.be.undefined;
+      } catch (error) {
+        if (isIModelsApiError(error) && error.code === IModelsErrorCode.IModelNotFound) {
+          throw new Error("iModel was not found. Please recreate the test iModel as described within the test, or disable the test.");
+        }
+        throw error;
+      }
+
+      const mostRecentChangeset = testIModelFileProvider.changesets[testIModelFileProvider.changesets.length - 1];
+      const queryV2CheckpointParams: CheckpointProps = {
+        accessToken,
+        iTwinId,
+        iModelId,
+        changeset: {
+          id: mostRecentChangeset.id
+        },
+        allowPreceding: true
+      };
+
+      // Act
+      const queryCheckpoint: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams);
+
+      // Assert
+      expect(queryCheckpoint).to.not.be.undefined;
+      expect(queryCheckpoint!.dbName === "BASELINE.bim").to.be.true;
+
     });
 
     it("should download preceding checkpoint if one for current changeset does not exist", async () => {
