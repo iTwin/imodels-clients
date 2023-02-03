@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Link } from "../CommonInterfaces";
+import { User } from "./UserInterfaces";
 
 /** Possible iModel states. */
 export enum IModelState {
@@ -83,4 +84,10 @@ export interface IModel extends MinimalIModel {
   extent: Extent | null;
   /** iModel links. See {@link IModelLinks}.*/
   _links: IModelLinks;
+  /**
+   * Function to query User who created this iModel. If this information is unavailable the
+   * function returns `undefined`. This function reuses authorization information passed to specific iModel
+   * operation that originally queried the iModel from API.
+   */
+  getCreator: () => Promise<User | undefined>;
 }

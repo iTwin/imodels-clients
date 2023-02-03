@@ -43,7 +43,7 @@ export class IModelsClient {
 
   /** iModel operations. See {@link iModelOperations}. */
   public get iModels(): IModelOperations<OperationOptions> {
-    return new IModelOperations(this._operationsOptions);
+    return new IModelOperations(this._operationsOptions, this);
   }
 
   /** Briefcase operations. See {@link BriefcaseOperations}. */

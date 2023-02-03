@@ -7,7 +7,7 @@ import { TestAuthorizationProvider, TestIModelFileProvider, TestIModelGroup, Tes
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
-describe("[Authoring] IModelOperations", () => {
+describe.only("[Authoring] IModelOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let projectId: string;
@@ -52,7 +52,7 @@ describe("[Authoring] IModelOperations", () => {
     const iModel: IModel = await iModelsClient.iModels.createFromBaseline(createIModelParams);
 
     // Assert
-    assertIModel({
+    await assertIModel({
       actualIModel: iModel,
       expectedIModelProperties: createIModelParams.iModelProperties
     });

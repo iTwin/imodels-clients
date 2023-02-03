@@ -65,7 +65,7 @@ export class IModelsClient extends ManagementIModelsClient {
 
   /** iModel operations. See {@link iModelOperations}. */
   public override get iModels(): IModelOperations<OperationOptions> {
-    return new IModelOperations(this._operationsOptions);
+    return new IModelOperations(this._operationsOptions, this);
   }
 
   /** Baseline file operations. See {@link BaselineFileOperations}. */

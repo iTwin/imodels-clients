@@ -13,12 +13,13 @@ import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";
 
 import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline } from "./IModelOperationParams";
+import { IModelsClient } from "../../IModelsClient";
 
 export class IModelOperations<TOptions extends OperationOptions> extends ManagementIModelOperations<TOptions> {
   private _baselineFileOperations: BaselineFileOperations<TOptions>;
 
-  constructor(options: TOptions) {
-    super(options);
+  constructor(options: TOptions, iModelsClient: IModelsClient) {
+    super(options, iModelsClient);
     this._baselineFileOperations = new BaselineFileOperations<TOptions>(options);
   }
 

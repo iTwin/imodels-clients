@@ -9,7 +9,7 @@ import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, Tes
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
-describe("[Management] IModelOperations", () => {
+describe.only("[Management] IModelOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let projectId: string;
@@ -89,7 +89,7 @@ describe("[Management] IModelOperations", () => {
     const iModel: IModel = await iModelsClient.iModels.getSingle(getSingleiModelParams);
 
     // Assert
-    assertIModel({
+    await assertIModel({
       actualIModel: iModel,
       expectedIModelProperties: {
         projectId,
@@ -224,7 +224,7 @@ describe("[Management] IModelOperations", () => {
     const iModel: IModel = await iModelsClient.iModels.createEmpty(createIModelParams);
 
     // Assert
-    assertIModel({
+    await assertIModel({
       actualIModel: iModel,
       expectedIModelProperties: createIModelParams.iModelProperties
     });
@@ -247,7 +247,7 @@ describe("[Management] IModelOperations", () => {
     const iModel: IModel = await iModelsClient.iModels.createFromTemplate(createIModelFromTemplateParams);
 
     // Assert
-    assertIModel({
+    await assertIModel({
       actualIModel: iModel,
       expectedIModelProperties: createIModelFromTemplateParams.iModelProperties
     });
@@ -271,7 +271,7 @@ describe("[Management] IModelOperations", () => {
     const iModel: IModel = await iModelsClient.iModels.createFromTemplate(createIModelFromTemplateParams);
 
     // Assert
-    assertIModel({
+    await assertIModel({
       actualIModel: iModel,
       expectedIModelProperties: createIModelFromTemplateParams.iModelProperties
     });
@@ -297,9 +297,15 @@ describe("[Management] IModelOperations", () => {
     const iModel: IModel = await iModelsClient.iModels.update(updateIModelParams);
 
     // Assert
-    expect(iModel.name).to.be.equal(newIModelName);
-    expect(iModel.description).to.be.equal(iModelBeforeUpdate.description);
-    expect(iModel.extent).to.be.deep.equal(iModelBeforeUpdate.extent);
+    await assertIModel({
+      actualIModel: iModel,
+      expectedIModelProperties: {
+        name: newIModelName,
+        projectId: iModelBeforeUpdate.projectId,
+        description: iModelBeforeUpdate.description!,
+        extent: iModelBeforeUpdate.extent!
+      }
+    });
   });
 
   it("should update iModel description", async () => {
@@ -322,9 +328,15 @@ describe("[Management] IModelOperations", () => {
     const iModel: IModel = await iModelsClient.iModels.update(updateIModelParams);
 
     // Assert
-    expect(iModel.name).to.be.equal(iModelBeforeUpdate.name);
-    expect(iModel.description).to.be.equal(newIModelDescription);
-    expect(iModel.extent).to.be.deep.equal(iModelBeforeUpdate.extent);
+    await assertIModel({
+      actualIModel: iModel,
+      expectedIModelProperties: {
+        name: iModelBeforeUpdate.name,
+        projectId: iModelBeforeUpdate.projectId,
+        description: newIModelDescription,
+        extent: iModelBeforeUpdate.extent!
+      }
+    });
   });
 
   it("should update iModel extent", async () => {
@@ -356,9 +368,15 @@ describe("[Management] IModelOperations", () => {
     const iModel: IModel = await iModelsClient.iModels.update(updateIModelParams);
 
     // Assert
-    expect(iModel.name).to.be.equal(iModelBeforeUpdate.name);
-    expect(iModel.description).to.be.equal(iModelBeforeUpdate.description);
-    expect(iModel.extent).to.be.deep.equal(newIModelExtent);
+    await assertIModel({
+      actualIModel: iModel,
+      expectedIModelProperties: {
+        name: iModelBeforeUpdate.name,
+        projectId: iModelBeforeUpdate.projectId,
+        description: iModelBeforeUpdate.description!,
+        extent: newIModelExtent
+      }
+    });
   });
 
   it("should return unauthorized error when calling API with invalid access token", async () => {
