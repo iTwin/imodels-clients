@@ -11,7 +11,7 @@ steps:
   - script: node common/scripts/install-run-rush.js rebuild -v
     displayName: rush rebuild
 
-  - script: node common/scripts/install-run-rush.js publish --publish --include-all --set-access-level public
+  - script: node common/scripts/install-run-rush.js publish --publish --include-all --set-access-level public --target-branch main
     displayName: rush publish package
     condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     env:
