@@ -11,6 +11,11 @@ steps:
   - script: node common/scripts/install-run-rush.js rebuild -v
     displayName: rush rebuild
 
+  - name: Configure git
+    run: |
+      git config --local user.email imodeljs-admin@users.noreply.github.com
+      git config --local user.name imodeljs-admin
+
   - script: node common/scripts/install-run-rush.js publish --publish --include-all --set-access-level public --target-branch main
     displayName: rush publish package
     condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
