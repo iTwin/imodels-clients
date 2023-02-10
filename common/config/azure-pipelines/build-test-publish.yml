@@ -44,6 +44,6 @@ jobs:
     dependsOn: BuildAndTest
     pool: 
       vmImage: 'windows-latest'
-   
+
     steps:
     - template: templates/publish.yml
