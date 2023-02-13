@@ -36,7 +36,8 @@
     {
       "packageName": "@itwin/imodels-access-backend",
       "projectFolder": "itwin-platform-access/imodels-access-backend",
-      "shouldPublish": false
+      "shouldPublish": true,
+      "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
       "packageName": "@itwin/imodels-client-test-utils",
