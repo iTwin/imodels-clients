@@ -301,7 +301,7 @@ describe("[Management] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: {
         name: newIModelName,
-        projectId: iModelBeforeUpdate.projectId,
+        iTwinId: iModelBeforeUpdate.iTwinId,
         description: iModelBeforeUpdate.description!,
         extent: iModelBeforeUpdate.extent!
       }
@@ -332,7 +332,7 @@ describe("[Management] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: {
         name: iModelBeforeUpdate.name,
-        projectId: iModelBeforeUpdate.projectId,
+        iTwinId: iModelBeforeUpdate.iTwinId,
         description: newIModelDescription,
         extent: iModelBeforeUpdate.extent!
       }
@@ -372,7 +372,7 @@ describe("[Management] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: {
         name: iModelBeforeUpdate.name,
-        projectId: iModelBeforeUpdate.projectId,
+        iTwinId: iModelBeforeUpdate.iTwinId,
         description: iModelBeforeUpdate.description!,
         extent: newIModelExtent
       }
