@@ -20,7 +20,7 @@
 
 ## Key methods
 - [`IModelsClient.iModels`](../clients/imodels-client-management/src/IModelsClient.ts#L45)
-  - [`getMinimalList(params: GetIModelListParams): EntityListIterator<MinimalIModel>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L19) ([sample](#get-all-project-imodels))
+  - [`getMinimalList(params: GetIModelListParams): EntityListIterator<MinimalIModel>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L19) ([sample](#get-all-iTwin-imodels))
   - [`getRepresentationList(params: GetIModelListParams): EntityListIterator<IModel>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L35)
   - [`getSingle(params: GetSingleIModelParams): Promise<IModel>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L50)
   - [`createEmpty(params: CreateEmptyIModelParams): Promise<IModel>`](../clients/imodels-client-management/src/operations/imodel/IModelOperations.ts#L64)
@@ -60,22 +60,22 @@
 const iModelIterator: EntityListIterator<MinimalIModel> = iModelsClient.iModels.getMinimalList({
   authorization: AccessTokenAdapter.toAuthorizationCallback(await IModelApp.getAccessToken()),
   urlParams: {
-    projectId: "8a1fcd73-8c23-460d-a392-8b4afc00affc"
+    iTwinId: "8a1fcd73-8c23-460d-a392-8b4afc00affc"
   }
 });
 ```
 
-### Get all project iModels
+### Get all iTwin iModels
 ```typescript
 import { Authorization, EntityListIterator, IModelsClient, MinimalIModel } from "@itwin/imodels-client-management";
 
-/** Function that queries all iModels for a particular project and prints their ids to the console. */
+/** Function that queries all iModels for a particular iTwinId and prints their ids to the console. */
 async function printiModelIds(): Promise<void> {
   const iModelsClient: IModelsClient = new IModelsClient();
   const iModelIterator: EntityListIterator<MinimalIModel> = iModelsClient.iModels.getMinimalList({
     authorization: () => getAuthorization(),
     urlParams: {
-      projectId: "8a1fcd73-8c23-460d-a392-8b4afc00affc"
+      iTwinId: "8a1fcd73-8c23-460d-a392-8b4afc00affc"
     }
   });
 
@@ -99,7 +99,7 @@ async function getiModel(): Promise<IModel | undefined> {
   const iModelIterator: EntityListIterator<IModel> = iModelsClient.iModels.getRepresentationList({
     authorization: () => getAuthorization(),
     urlParams: {
-      projectId: "8a1fcd73-8c23-460d-a392-8b4afc00affc",
+      iTwinId: "8a1fcd73-8c23-460d-a392-8b4afc00affc",
       name: "Sun City Renewable-energy Plant",
     }
   });

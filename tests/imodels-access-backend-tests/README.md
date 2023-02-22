@@ -11,7 +11,7 @@ This package contains tests for various classes in the [`@itwin/imodels-access-b
 ## Running tests
 
 - Create `.env` file in the current directory (`./tests/imodels-access-backend-tests`). The following variables should be configured:
-  - `TEST_PROJECT_NAME`
+  - `TEST_ITWIN_NAME`
   - `TEST_IMODEL_NAME`
   - `AUTH_AUTHORITY`
   - `AUTH_CLIENT_ID`
@@ -20,8 +20,8 @@ This package contains tests for various classes in the [`@itwin/imodels-access-b
   - `APIS_IMODELS_BASE_URL`
   - `APIS_IMODELS_VERSION`
   - `APIS_IMODELS_SCOPES`
-  - `APIS_PROJECTS_BASE_URL`
-  - `APIS_PROJECTS_SCOPES`
+  - `APIS_ITWINS_BASE_URL`
+  - `APIS_ITWINS_SCOPES`
   - `TEST_USERS_ADMIN1_EMAIL`
   - `TEST_USERS_ADMIN1_PASSWORD`
   - `TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL`

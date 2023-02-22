@@ -25,7 +25,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
 
   /**
   * Creates an iModel from Baseline file with specified properties. Wraps the
-  * {@link https://developer.bentley.com/apis/imodels/operations/create-imodel/ Create iModel} operation from iModels API.
+  * {@link https://developer.bentley.com/apis/imodels-v2/operations/create-imodel/ Create iModel} operation from iModels API.
   * Internally it creates an iModel instance, uploads the Baseline file, confirms Baseline
   * file upload and then repeatedly queries the Baseline file state until the iModel is initialized. The execution of
   * this method can take up to several minutes due to waiting for initialization to complete. It also depends on the

@@ -34,44 +34,32 @@ steps:
     displayName: npm run test:integration (@itwin/imodels-client-management and @itwin/imodels-client-authoring tests)
     workingDirectory: tests/imodels-clients-tests
     env:
-      AUTH_CLIENT_ID: $(AUTH_CLIENT_ID)
       AUTH_CLIENT_SECRET: $(AUTH_CLIENT_SECRET)
-      TEST_USERS_ADMIN1_EMAIL: $(TEST_USERS_ADMIN1_EMAIL)
       TEST_USERS_ADMIN1_PASSWORD: $(TEST_USERS_ADMIN1_PASSWORD)
-      TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL: $(TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL)
       TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD: $(TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD)
 
   - script: npm run test:integration
     displayName: npm run test:integration (@itwin/imodels-client-management and @itwin/imodels-client-authoring browser tests)
     workingDirectory: tests/imodels-clients-tests-browser
     env:
-      AUTH_CLIENT_ID: $(AUTH_CLIENT_ID)
       AUTH_CLIENT_SECRET: $(AUTH_CLIENT_SECRET)
-      TEST_USERS_ADMIN1_EMAIL: $(TEST_USERS_ADMIN1_EMAIL)
       TEST_USERS_ADMIN1_PASSWORD: $(TEST_USERS_ADMIN1_PASSWORD)
-      TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL: $(TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL)
       TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD: $(TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD)
 
   - script: npm run test:integration
     displayName: npm run test:integration (@itwin/imodels-access-frontend tests)
     workingDirectory: tests/imodels-access-frontend-tests
     env:
-      AUTH_CLIENT_ID: $(AUTH_CLIENT_ID)
       AUTH_CLIENT_SECRET: $(AUTH_CLIENT_SECRET)
-      TEST_USERS_ADMIN1_EMAIL: $(TEST_USERS_ADMIN1_EMAIL)
       TEST_USERS_ADMIN1_PASSWORD: $(TEST_USERS_ADMIN1_PASSWORD)
-      TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL: $(TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL)
       TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD: $(TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD)
 
   - script: npm run test:integration
     displayName: npm run test:integration (@itwin/imodels-access-backend tests)
     workingDirectory: tests/imodels-access-backend-tests
     env:
-      AUTH_CLIENT_ID: $(AUTH_CLIENT_ID)
       AUTH_CLIENT_SECRET: $(AUTH_CLIENT_SECRET)
-      TEST_USERS_ADMIN1_EMAIL: $(TEST_USERS_ADMIN1_EMAIL)
       TEST_USERS_ADMIN1_PASSWORD: $(TEST_USERS_ADMIN1_PASSWORD)
-      TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL: $(TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL)
       TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD: $(TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD)
 
   - script: node common/scripts/install-run-rush.js publish --pack --include-all --publish

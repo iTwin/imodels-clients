@@ -8,7 +8,7 @@ import { IModelsClientsTestsConfig, TestUsersConfigValues } from "../../IModelsC
 
 interface ApiScopes {
   iModels: string;
-  projects: string;
+  iTwins: string;
 }
 
 @injectable()
@@ -22,7 +22,7 @@ export class TestAuthorizationProviderConfig {
     this.testUsers = config.testUsers;
     this.apiScopes = {
       iModels: config.apis.iModels.scopes,
-      projects: config.apis.projects.scopes
+      iTwins: config.apis.iTwins.scopes
     };
   }
 }

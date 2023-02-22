@@ -38,13 +38,13 @@ describe("[Management] IModelsApiUrlFormatter", () => {
 
     it("should format iModel list url", () => {
       // Arrange
-      const getIModelListUrlParams = { iModelId: "IMODEL_ID", urlParams: { projectId: "PROJECT_ID" } };
+      const getIModelListUrlParams = { iModelId: "IMODEL_ID", urlParams: { iTwinId: "ITWIN_ID" } };
 
       // Act
       const iModelListUrl = iModelsApiUrlFormatter.getIModelListUrl(getIModelListUrlParams);
 
       // Assert
-      expect(iModelListUrl).to.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID");
+      expect(iModelListUrl).to.equal("https://api.bentley.com/imodels?iTwinId=ITWIN_ID");
     });
   });
 
@@ -320,7 +320,7 @@ describe("[Management] IModelsApiUrlFormatter", () => {
       // Arrange
       const getIModelListUrlParams = {
         urlParams: {
-          projectId: "PROJECT_ID",
+          iTwinId: "ITWIN_ID",
           name: "IMODEL_NAME",
           $skip: 1,
           $top: 2,
@@ -337,7 +337,7 @@ describe("[Management] IModelsApiUrlFormatter", () => {
       const iModelListUrl = iModelsApiUrlFormatter.getIModelListUrl(getIModelListUrlParams);
 
       // Assert
-      expect(iModelListUrl).to.be.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID&name=IMODEL_NAME&$skip=1&$top=2&$orderBy=name asc&testParam1=1&testParam2=param2");
+      expect(iModelListUrl).to.be.equal("https://api.bentley.com/imodels?iTwinId=ITWIN_ID&name=IMODEL_NAME&$skip=1&$top=2&$orderBy=name asc&testParam1=1&testParam2=param2");
     });
 
     [
@@ -362,7 +362,7 @@ describe("[Management] IModelsApiUrlFormatter", () => {
         // Arrange
         const getIModelListUrlParams = {
           urlParams: {
-            projectId: "PROJECT_ID",
+            iTwinId: "ITWIN_ID",
             testValue: testCase.valueUnderTest
           }
         };
@@ -371,7 +371,7 @@ describe("[Management] IModelsApiUrlFormatter", () => {
         const iModelListUrl = iModelsApiUrlFormatter.getIModelListUrl(getIModelListUrlParams);
 
         // Assert
-        expect(iModelListUrl).to.be.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID");
+        expect(iModelListUrl).to.be.equal("https://api.bentley.com/imodels?iTwinId=ITWIN_ID");
       });
     });
 
@@ -379,7 +379,7 @@ describe("[Management] IModelsApiUrlFormatter", () => {
       // Arrange
       const getIModelListUrlParams = {
         urlParams: {
-          projectId: "PROJECT_ID",
+          iTwinId: "ITWIN_ID",
           testValue: 0
         }
       };
@@ -388,7 +388,7 @@ describe("[Management] IModelsApiUrlFormatter", () => {
       const iModelListUrl = iModelsApiUrlFormatter.getIModelListUrl(getIModelListUrlParams);
 
       // Assert
-      expect(iModelListUrl).to.be.equal("https://api.bentley.com/imodels?projectId=PROJECT_ID&testValue=0");
+      expect(iModelListUrl).to.be.equal("https://api.bentley.com/imodels?iTwinId=ITWIN_ID&testValue=0");
     });
   });
 });

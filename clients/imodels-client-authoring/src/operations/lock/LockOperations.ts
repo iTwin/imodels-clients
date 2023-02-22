@@ -16,7 +16,7 @@ export class LockOperations<TOptions extends OperationOptions> extends Operation
   /**
    * Gets Locks for a specific iModel. This method returns Locks in their full representation. The returned iterator
    * internally queries entities in pages. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-locks/ Get iModel Locks} operation from
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-locks/ Get iModel Locks} operation from
    * iModels API.
    * @param {GetLockListParams} params parameters for this operation. See {@link GetLockListParams}.
    * @returns {EntityListIterator<Lock>} iterator for Lock list. See {@link EntityListIterator}, {@link Lock}.
@@ -31,7 +31,7 @@ export class LockOperations<TOptions extends OperationOptions> extends Operation
 
   /**
    * Updates Lock for a specific Briefcase. This operation is used to acquire new locks and change the lock level for
-   * already existing ones. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/update-imodel-locks/
+   * already existing ones. Wraps the {@link https://developer.bentley.com/apis/imodels-v2/operations/update-imodel-locks/
    * Update iModel Locks} operation from iModels API.
    * @param {UpdateLockParams} params parameters for this operation. See {@link UpdateLockParams}.
    * @returns {Promise<Lock>} updated Lock. See {@link Lock}.

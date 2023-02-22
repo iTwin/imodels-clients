@@ -6,29 +6,29 @@ import { injectable } from "inversify";
 
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 
-import { ProjectsClient } from "./ProjectsClient";
-import { TestProjectProviderConfig } from "./TestProjectProviderConfig";
+import { ITwinsClient } from "./ITwinsClient";
+import { TestITwinProviderConfig } from "./TestITwinProviderConfig";
 
 @injectable()
-export class TestProjectProvider {
-  private _projectId: string | undefined;
+export class TestITwinProvider {
+  private _iTwinId: string | undefined;
 
   constructor(
-    private readonly _testProjectProviderConfig: TestProjectProviderConfig,
-    private readonly _projectsClient: ProjectsClient,
+    private readonly _testITwinProviderConfig: TestITwinProviderConfig,
+    private readonly _iTwinsClient: ITwinsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider
   ) { }
 
   public async getOrCreate(): Promise<string> {
-    return this._projectId ?? await this.initialize();
+    return this._iTwinId ?? await this.initialize();
   }
 
   private async initialize(): Promise<string> {
-    const authorization = this._testAuthorizationProvider.getAdmin1AuthorizationForProjects();
-    this._projectId = await this._projectsClient.getOrCreateProject({
+    const authorization = this._testAuthorizationProvider.getAdmin1AuthorizationForITwins();
+    this._iTwinId = await this._iTwinsClient.getOrCreateITwin({
       authorization,
-      projectName: this._testProjectProviderConfig.testProjectName
+      iTwinName: this._testITwinProviderConfig.testITwinName
     });
-    return this._projectId;
+    return this._iTwinId;
   }
 }

@@ -11,7 +11,7 @@ import { GetSingleUserParams, GetUserListParams } from "./UserOperationParams";
 export class UserOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /** Gets Users who have ever been connected to the iModel specified by the iModel id. This method returns Users in
    * their minimal representation. The returned iterator internally queries entities in pages. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-users/ Get iModel Users}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-users/ Get iModel Users}
    * operation from iModels API.
    * @param {GetUserListParams} params parameters for this operation. See {@link GetUserListParams}.
    * @returns {EntityListIterator<MinimalUser>} iterator for User list. See {@link EntityListIterator}, {@link MinimalUser}.
@@ -28,7 +28,7 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
   /**
    * Gets Users who have ever been connected to the iModel specified by the iModel id. This method returns Users in their
    * full representation. The returned iterator internally queries entities in pages. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-users/ Get iModel Users}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-users/ Get iModel Users}
    * operation from iModels API.
    * @param {GetUserListParams} params parameters for this operation. See {@link GetUserListParams}.
    * @returns {EntityListIterator<User>} iterator for User list. See {@link EntityListIterator}, {@link User}.
@@ -44,7 +44,7 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
 
   /**
    * Gets a single User by its id. This method returns a User in its full representation. Wraps the
-   * {@link https://developer.bentley.com/apis/imodels/operations/get-imodel-user-details/ Get iModel User}
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-user-details/ Get iModel User}
    * operation from iModels API.
    * @param {GetSingleUserParams} params parameters for this operation. See {@link GetSingleUserParams}.
    * @returns {Promise<User>} a User with specified id. See {@link User}.

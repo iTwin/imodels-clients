@@ -6,10 +6,10 @@ export * from "./auth/TestAuthorizationClient";
 export * from "./auth/TestAuthorizationClientConfigImpl";
 export * from "./auth/TestAuthorizationProvider";
 
-export * from "./project/ProjectsClient";
-export * from "./project/ProjectsClientConfig";
-export * from "./project/TestProjectProvider";
-export * from "./project/TestProjectProviderConfig";
+export * from "./itwin/ITwinsClient";
+export * from "./itwin/ITwinsClientConfig";
+export * from "./itwin/TestITwinProvider";
+export * from "./itwin/TestITwinProviderConfig";
 
 export * from "./imodel/ReusableTestIModelProvider";
 export * from "./imodel/ReusableTestIModelProviderConfig";
