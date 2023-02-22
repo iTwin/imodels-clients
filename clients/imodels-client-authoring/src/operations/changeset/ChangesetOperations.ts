@@ -32,7 +32,7 @@ interface DownloadChangesetFileWithRetryParams extends IModelScopedOperationPara
 
 export class ChangesetOperations<TOptions extends OperationOptions> extends ManagementChangesetOperations<TOptions>{
   /**
-   * Creates a Changeset. Wraps the {@link https://developer.bentley.com/apis/imodels/operations/create-imodel-changeset/
+   * Creates a Changeset. Wraps the {@link https://developer.bentley.com/apis/imodels-v2/operations/create-imodel-changeset/
    * Create iModel Changeset} operation from iModels API. Internally it creates a Changeset instance, uploads the Changeset
    * file and confirms Changeset file upload. The execution of this method depends on the Changeset file size - the larger
    * the file, the longer the upload will take.

@@ -33,7 +33,7 @@ export interface TestIModelSetupContext extends AuthorizationParam {
 }
 
 export interface IModelIdentificationByNameParams {
-  projectId: string;
+  iTwinId: string;
   iModelName: string;
 }
 

@@ -7,12 +7,12 @@ import { injectable } from "inversify";
 import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
 
 @injectable()
-export class ProjectsClientConfig {
+export class ITwinsClientConfig {
   public baseUrl: string;
 
   constructor(
     config: IModelsClientsTestsConfig
   ) {
-    this.baseUrl = config.apis.projects.baseUrl;
+    this.baseUrl = config.apis.iTwins.baseUrl;
   }
 }

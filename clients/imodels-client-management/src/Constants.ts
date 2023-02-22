@@ -5,7 +5,7 @@
 export class Constants {
   public static api = {
     baseUrl: "https://api.bentley.com/imodels",
-    version: "itwin-platform.v1"
+    version: "itwin-platform.v2"
   };
 
   public static headers = {

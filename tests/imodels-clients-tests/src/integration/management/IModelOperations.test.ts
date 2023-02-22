@@ -5,14 +5,14 @@
 import { expect } from "chai";
 
 import { AuthorizationCallback, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
-import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestProjectProvider, TestUtilTypes, assertCollection, assertError, assertIModel, assertMinimalIModel } from "@itwin/imodels-client-test-utils";
+import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertCollection, assertError, assertIModel, assertMinimalIModel } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 describe("[Management] IModelOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
-  let projectId: string;
+  let iTwinId: string;
 
   let testIModelFileProvider: TestIModelFileProvider;
   let testIModelGroup: TestIModelGroup;
@@ -28,8 +28,8 @@ describe("[Management] IModelOperations", () => {
     const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
-    const testProjectProvider = container.get(TestProjectProvider);
-    projectId = await testProjectProvider.getOrCreate();
+    const testITwinProvider = container.get(TestITwinProvider);
+    iTwinId = await testITwinProvider.getOrCreate();
 
     testIModelFileProvider = container.get(TestIModelFileProvider);
 
@@ -62,7 +62,7 @@ describe("[Management] IModelOperations", () => {
       const getIModelListParams: GetIModelListParams = {
         authorization,
         urlParams: {
-          projectId,
+          iTwinId,
           $top: 5
         }
       };
@@ -92,7 +92,7 @@ describe("[Management] IModelOperations", () => {
     await assertIModel({
       actualIModel: iModel,
       expectedIModelProperties: {
-        projectId,
+        iTwinId,
         name: testIModelForRead.name,
         description: testIModelForRead.description
       }
@@ -104,7 +104,7 @@ describe("[Management] IModelOperations", () => {
     const getIModelListParams: GetIModelListParams = {
       authorization,
       urlParams: {
-        projectId,
+        iTwinId,
         $orderBy: {
           property: IModelOrderByProperty.Name
         }
@@ -126,7 +126,7 @@ describe("[Management] IModelOperations", () => {
     const getIModelListParams: GetIModelListParams = {
       authorization,
       urlParams: {
-        projectId,
+        iTwinId,
         $orderBy: {
           property: IModelOrderByProperty.Name,
           operator: OrderByOperator.Descending
@@ -149,7 +149,7 @@ describe("[Management] IModelOperations", () => {
     const getIModelListParams: GetIModelListParams = {
       authorization,
       urlParams: {
-        projectId,
+        iTwinId,
         name: testIModelForRead.name
       }
     };
@@ -170,7 +170,7 @@ describe("[Management] IModelOperations", () => {
     const getIModelListParams: GetIModelListParams = {
       authorization,
       urlParams: {
-        projectId,
+        iTwinId,
         $top: 1
       }
     };
@@ -192,7 +192,7 @@ describe("[Management] IModelOperations", () => {
     const getIModelListParams: GetIModelListParams = {
       authorization,
       urlParams: {
-        projectId,
+        iTwinId,
         name: "Non existent name"
       }
     };
@@ -210,7 +210,7 @@ describe("[Management] IModelOperations", () => {
     const createIModelParams: CreateEmptyIModelParams = {
       authorization,
       iModelProperties: {
-        projectId,
+        iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("Empty Test IModel"),
         description: "Sample iModel description",
         extent: {
@@ -235,7 +235,7 @@ describe("[Management] IModelOperations", () => {
     const createIModelFromTemplateParams: CreateIModelFromTemplateParams = {
       authorization,
       iModelProperties: {
-        projectId,
+        iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("iModel from template (without changeset)"),
         template: {
           iModelId: testIModelForRead.id
@@ -258,7 +258,7 @@ describe("[Management] IModelOperations", () => {
     const createIModelFromTemplateParams: CreateIModelFromTemplateParams = {
       authorization,
       iModelProperties: {
-        projectId,
+        iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("iModel from template (with changeset)"),
         template: {
           iModelId: testIModelForRead.id,
@@ -384,7 +384,7 @@ describe("[Management] IModelOperations", () => {
     const createIModelParams: CreateEmptyIModelParams = {
       authorization: async () => ({ scheme: "Bearer", token: "invalid token" }),
       iModelProperties: {
-        projectId,
+        iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel (unauthorized)")
       }
     };
@@ -412,7 +412,7 @@ describe("[Management] IModelOperations", () => {
     const createIModelParams: CreateEmptyIModelParams = {
       authorization,
       iModelProperties: {
-        projectId,
+        iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel (invalid)"),
         description: "x".repeat(256)
       }
@@ -431,10 +431,10 @@ describe("[Management] IModelOperations", () => {
       objectThrown,
       expectedError: {
         code: IModelsErrorCode.InvalidIModelsRequest,
-        message: "Cannot create iModel. Details:\n1. InvalidValue: Provided 'description' is not valid. The value exceeds allowed 255 characters. Target: description.\n",
+        message: "Cannot create iModel. Details:\n1. InvalidValue: Provided 'description' value is not valid. The value exceeds allowed 255 characters. Target: description.\n",
         details: [{
           code: IModelsErrorCode.InvalidValue,
-          message: "Provided 'description' is not valid. The value exceeds allowed 255 characters.",
+          message: "Provided 'description' value is not valid. The value exceeds allowed 255 characters.",
           target: "description"
         }]
       }

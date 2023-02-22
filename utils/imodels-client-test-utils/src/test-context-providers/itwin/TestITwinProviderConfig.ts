@@ -7,10 +7,10 @@ import { injectable } from "inversify";
 import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
 
 @injectable()
-export class TestProjectProviderConfig {
-  public testProjectName: string;
+export class TestITwinProviderConfig {
+  public testITwinName: string;
 
   constructor(config: IModelsClientsTestsConfig) {
-    this.testProjectName = config.testProjectName;
+    this.testITwinName = config.testITwinName;
   }
 }

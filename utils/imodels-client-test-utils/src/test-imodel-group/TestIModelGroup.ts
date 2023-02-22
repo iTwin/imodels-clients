@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { TestAuthorizationProvider, TestIModelsClient, TestProjectProvider } from "../test-context-providers";
+import { TestAuthorizationProvider, TestIModelsClient, TestITwinProvider } from "../test-context-providers";
 
 export interface TestRunContext {
   testRunId: string;
@@ -16,7 +16,7 @@ export class TestIModelGroup {
   constructor(
     private readonly _iModelsClient: TestIModelsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
-    private readonly _testProjectProvider: TestProjectProvider,
+    private readonly _testITwinProvider: TestITwinProvider,
     testRunContext: TestRunContext
   ) {
     this._iModelNamePrefix = `[${testRunContext.testRunId}][${testRunContext.packageName}]`;
@@ -29,11 +29,11 @@ export class TestIModelGroup {
   }
 
   public async cleanupIModels(): Promise<void> {
-    const projectId = await this._testProjectProvider.getOrCreate();
+    const iTwinId = await this._testITwinProvider.getOrCreate();
     const iModels = this._iModelsClient.iModels.getMinimalList({
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       urlParams: {
-        projectId
+        iTwinId
       }
     });
     for await (const iModel of iModels)
