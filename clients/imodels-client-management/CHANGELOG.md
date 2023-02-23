@@ -1,5 +1,10 @@
 # Change Log - @itwin/imodels-client-management 
 
+## 3.0.0
+
+Breaking changes:
+- Updated client to use [iModels API V2](https://developer.bentley.com/apis/imodels-v2/overview/) by default. All references to the term "Project" were updated to use "iTwin" (`projectId` -> `iTwinId`, ...).
+
 ## 2.0.0
 
 Breaking changes:
