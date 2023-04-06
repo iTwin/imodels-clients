@@ -78,7 +78,7 @@ export class AxiosRestClient implements RestClient {
         const parsedError: Error = this._parseErrorFunc({ statusCode: error.response?.status, body: error.response?.data });
         throw parsedError;
       }
-      throw new Error("AxiosRestClient: unknown error occurred.");
+      throw error;
     }
   }
 }

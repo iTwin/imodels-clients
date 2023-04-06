@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsApiError, IModelsErrorBaseImpl, IModelsErrorImpl, IModelsErrorParser as ManagementIModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
+import { IModelsApiError, IModelsErrorBaseImpl, IModelsErrorParser as ManagementIModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
 
 import { IModelsErrorCode } from "@itwin/imodels-client-management";
 
@@ -45,9 +45,6 @@ class ConflictingLocksErrorImpl extends IModelsErrorBaseImpl implements Conflict
 
 export class IModelsErrorParser extends ManagementIModelsErrorParser {
   public static override parse(response: { body?: unknown }): Error {
-    if (!response.body)
-      return new IModelsErrorImpl(ManagementIModelsErrorParser._unknownErrorProperties);
-
     const errorFromApi: AuthoringIModelsApiErrorWrapper | undefined =
       response.body as AuthoringIModelsApiErrorWrapper;
     const errorCode: IModelsErrorCode = IModelsErrorParser.parseCode(errorFromApi?.error?.code);
