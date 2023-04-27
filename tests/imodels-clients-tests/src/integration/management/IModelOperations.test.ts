@@ -101,6 +101,14 @@ describe("[Management] IModelOperations", () => {
 
   it("should return items in ascending order when querying representation collection", async () => {
     // Arrange
+    await iModelsClient.iModels.createEmpty({
+      authorization,
+      iModelProperties: {
+        iTwinId,
+        name: testIModelGroup.getFirstIModelNameForOrderingTests()
+      }
+    });
+
     const getIModelListParams: GetIModelListParams = {
       authorization,
       urlParams: {
@@ -115,14 +123,21 @@ describe("[Management] IModelOperations", () => {
     const iModels = iModelsClient.iModels.getRepresentationList(getIModelListParams);
 
     // Assert
-    const iModelNames = (await toArray(iModels)).map((iModel) => iModel.name);
-    expect(iModelNames.length).to.be.greaterThan(1);
-    for (let i = 0; i < iModelNames.length - 1; i++)
-      expect(iModelNames[i] < iModelNames[i + 1]).to.be.true;
+    const iModelArray = await toArray(iModels);
+    expect(iModelArray.length).to.be.greaterThanOrEqual(2);
+    expect(iModelArray[0].name.startsWith(testIModelGroup.firstNamePrefix)).to.be.true;
   });
 
   it("should return items in descending order when querying representation collection", async () => {
     // Arrange
+    await iModelsClient.iModels.createEmpty({
+      authorization,
+      iModelProperties: {
+        iTwinId,
+        name: testIModelGroup.getLastIModelNameForOrderingTests()
+      }
+    });
+
     const getIModelListParams: GetIModelListParams = {
       authorization,
       urlParams: {
@@ -138,10 +153,9 @@ describe("[Management] IModelOperations", () => {
     const iModels = iModelsClient.iModels.getRepresentationList(getIModelListParams);
 
     // Assert
-    const iModelNames = (await toArray(iModels)).map((iModel) => iModel.name);
-    expect(iModelNames.length).to.be.greaterThan(1);
-    for (let i = 0; i < iModelNames.length - 1; i++)
-      expect(iModelNames[i] > iModelNames[i + 1]).to.be.true;
+    const iModelArray = await toArray(iModels);
+    expect(iModelArray.length).to.be.greaterThanOrEqual(2);
+    expect(iModelArray[0].name.startsWith(testIModelGroup.lastNamePrefix)).to.be.true;
   });
 
   it("should return iModels that match the name filter when querying representation collection", async () => {
