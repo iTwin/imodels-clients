@@ -2,12 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ResponseInfo } from "@itwin/imodels-client-management/lib/base/internal";
+import { OriginalError, ResponseInfo } from "@itwin/imodels-client-management/lib/base/internal";
 
 import { IModelsError, IModelsErrorCode } from "@itwin/imodels-client-management";
 import { assertError } from "@itwin/imodels-client-test-utils";
 
-export function testIModelsErrorParser(testedFunction: (response: ResponseInfo) => Error): void {
+export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, originalError: OriginalError) => Error): void {
   it("should parse valid iModels API error", () => {
     // Arrange
     const errorResponse: unknown = {
@@ -34,7 +34,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo) 
     };
 
     // Act
-    const parsedError: IModelsError = testedFunction({ body: errorResponse }) as IModelsError;
+    const parsedError: IModelsError = testedFunction({ body: errorResponse }, new Error()) as IModelsError;
 
     // Assert
     const expectedErrorMessage = "Cannot create iModel. Details:\n" +
@@ -76,7 +76,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo) 
     };
 
     // Act
-    const parsedError: IModelsError = testedFunction({ statusCode: 401, body: errorResponse }) as IModelsError;
+    const parsedError: IModelsError = testedFunction({ statusCode: 401, body: errorResponse }, new Error()) as IModelsError;
 
     // Assert
     assertError({
@@ -96,7 +96,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo) 
     };
 
     // Act
-    const parsedError: IModelsError = testedFunction({ statusCode: 401, body: errorResponse }) as IModelsError;
+    const parsedError: IModelsError = testedFunction({ statusCode: 401, body: errorResponse }, new Error()) as IModelsError;
 
     // Assert
     assertError({
@@ -113,7 +113,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo) 
     const errorResponse: unknown = {};
 
     // Act
-    const parsedError: IModelsError = testedFunction({ statusCode: 401, body: errorResponse }) as IModelsError;
+    const parsedError: IModelsError = testedFunction({ statusCode: 401, body: errorResponse }, new Error()) as IModelsError;
 
     // Assert
     assertError({
@@ -125,58 +125,97 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo) 
     });
   });
 
-  it("should return unknown error when error status code and body is not defined", () => {
+  it("should return unknown error when error properties and response properties are undefined", () => {
     // Act
-    const parsedError: IModelsError = testedFunction({ statusCode: undefined, body: undefined }) as IModelsError;
+    const parsedError: IModelsError = testedFunction({ statusCode: undefined, body: undefined }, new Error()) as IModelsError;
 
     // Assert
     assertError({
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unrecognized,
-        message: "Unknown error occurred. Response status code: undefined, response body: undefined"
+        message: "Unknown error occurred.\n" +
+          "Original error message: ,\n" +
+          "original error code: undefined,\n" +
+          "response status code: undefined,\n" +
+          "response body: undefined"
+      }
+    });
+  });
+
+  it("should include original error code in unrecognized error message", () => {
+    // Act
+    const originalError = new Error("originalErrorMessage");
+    (originalError as any).code = "originalErrorCode";
+    const parsedError: IModelsError = testedFunction({ statusCode: undefined, body: undefined }, originalError) as IModelsError;
+
+    // Assert
+    assertError({
+      objectThrown: parsedError,
+      expectedError: {
+        code: IModelsErrorCode.Unrecognized,
+        message: "Unknown error occurred.\n"+
+          "Original error message: originalErrorMessage,\n"+
+          "original error code: originalErrorCode,\n"+
+          "response status code: undefined,\n"+
+          "response body: undefined"
       }
     });
   });
 
   it("should return unknown error when error body is not defined", () => {
     // Act
-    const parsedError: IModelsError = testedFunction({ statusCode: 444, body: undefined }) as IModelsError;
+    const parsedError: IModelsError = testedFunction({ statusCode: 444, body: undefined }, new Error("originalErrorMessage")) as IModelsError;
 
     // Assert
     assertError({
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unrecognized,
-        message: "Unknown error occurred. Response status code: 444, response body: undefined"
+        message: "Unknown error occurred.\n"+
+          "Original error message: originalErrorMessage,\n"+
+          "original error code: undefined,\n"+
+          "response status code: 444,\n"+
+          "response body: undefined"
       }
     });
   });
 
   it("should return unknown error when error body is null", () => {
     // Act
-    const parsedError: IModelsError = testedFunction({ statusCode: 445, body: null }) as IModelsError;
+    const parsedError: IModelsError = testedFunction({ statusCode: 445, body: null }, new Error("originalErrorMessage")) as IModelsError;
 
     // Assert
     assertError({
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unrecognized,
-        message: "Unknown error occurred. Response status code: 445, response body: null"
+        message: "Unknown error occurred.\n"+
+          "Original error message: originalErrorMessage,\n"+
+          "original error code: undefined,\n"+
+          "response status code: 445,\n"+
+          "response body: null"
       }
     });
   });
 
   it("should return unknown error when error body is of unexpected format", () => {
     // Act
-    const parsedError: IModelsError = testedFunction({ statusCode: 446, body: { unknownProperty: "unknown value" } }) as IModelsError;
+    const parsedError: IModelsError = testedFunction(
+      { statusCode: 446, body: { unknownProperty: "unknown value" } },
+      new Error("originalErrorMessage")
+    ) as IModelsError;
 
     // Assert
     assertError({
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unrecognized,
-        message: "Unknown error occurred. Response status code: 446, response body: {\"unknownProperty\":\"unknown value\"}"
+        message: "Unknown error occurred.\n"+
+          "Original error message: originalErrorMessage,\n"+
+          "original error code: undefined,\n"+
+          "response status code: 446,\n"+
+          "response body: {\"unknownProperty\":\"unknown value\"}"
       }
     });
   });

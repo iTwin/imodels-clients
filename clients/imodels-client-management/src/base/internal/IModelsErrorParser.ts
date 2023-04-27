@@ -48,13 +48,17 @@ export interface ResponseInfo {
   body?: unknown;
 }
 
+export interface OriginalError extends Error {
+  code?: string;
+}
+
 export class IModelsErrorParser {
   protected static readonly _defaultErrorMessage = "Unknown error occurred";
   protected static readonly _defaultUnauthorizedMessage = "Authorization failed";
 
-  public static parse(response: ResponseInfo): Error {
+  public static parse(response: ResponseInfo, originalError: OriginalError): Error {
     if (!response.body)
-      return IModelsErrorParser.createUnrecognizedError(response);
+      return IModelsErrorParser.createUnrecognizedError(response, originalError);
 
     if (response.statusCode === 401)
       return IModelsErrorParser.createUnauthorizedError(response);
@@ -63,7 +67,7 @@ export class IModelsErrorParser {
     const errorCode: IModelsErrorCode = IModelsErrorParser.parseCode(errorFromApi?.error?.code);
 
     if (errorCode === IModelsErrorCode.Unrecognized)
-      return IModelsErrorParser.createUnrecognizedError(response);
+      return IModelsErrorParser.createUnrecognizedError(response, originalError);
 
     const errorDetails: IModelsErrorDetail[] | undefined = IModelsErrorParser.parseDetails(errorFromApi.error?.details);
     const errorMessage: string = IModelsErrorParser.parseAndFormatMessage(errorFromApi?.error?.message, errorDetails);
@@ -116,10 +120,14 @@ export class IModelsErrorParser {
     return result;
   }
 
-  private static createUnrecognizedError(response: ResponseInfo): Error {
+  private static createUnrecognizedError(response: ResponseInfo, originalError: OriginalError): Error {
     return new IModelsErrorImpl({
       code: IModelsErrorCode.Unrecognized,
-      message: `${IModelsErrorParser._defaultErrorMessage}. Response status code: ${response.statusCode}, response body: ${JSON.stringify(response.body)}`
+      message: `${IModelsErrorParser._defaultErrorMessage}.\n` +
+        `Original error message: ${originalError.message},\n` +
+        `original error code: ${originalError.code},\n` +
+        `response status code: ${response.statusCode},\n` +
+        `response body: ${JSON.stringify(response.body)}`
     });
   }
 
