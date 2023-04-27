@@ -9,7 +9,7 @@ import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationPr
 
 import { getTestDIContainer } from "../common";
 
-describe.only("[Management] UserOperations", () => {
+describe("[Management] UserOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
 
