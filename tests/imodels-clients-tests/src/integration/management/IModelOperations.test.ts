@@ -157,9 +157,9 @@ describe("[Management] IModelOperations", () => {
   });
 
   function assertAscendingiModelArray(iModelArray: IModel[]): { firstIModelIndex: number, lastIModelIndex: number } {
-    const firstIModelIndex = iModelArray.findIndex(iModel => iModel.name.startsWith(testIModelGroup.firstNamePrefix));
+    const firstIModelIndex = iModelArray.findIndex((iModel) => iModel.name.startsWith(testIModelGroup.firstNamePrefix));
     expect(firstIModelIndex).to.not.be.equal(-1);
-    const lastIModelIndex = iModelArray.findIndex(iModel => iModel.name.startsWith(testIModelGroup.lastNamePrefix));
+    const lastIModelIndex = iModelArray.findIndex((iModel) => iModel.name.startsWith(testIModelGroup.lastNamePrefix));
     expect(lastIModelIndex).to.not.be.equal(-1);
     return { firstIModelIndex, lastIModelIndex };
   }
