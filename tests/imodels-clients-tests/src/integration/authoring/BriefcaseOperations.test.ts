@@ -50,8 +50,7 @@ describe("[Authoring] BriefcaseOperations", () => {
     // Assert
     await assertBriefcase({
       actualBriefcase: briefcase,
-      expectedBriefcaseProperties: acquireBriefcaseParams.briefcaseProperties!,
-      isGetResponse: false
+      expectedBriefcaseProperties: acquireBriefcaseParams.briefcaseProperties!
     });
   });
 });

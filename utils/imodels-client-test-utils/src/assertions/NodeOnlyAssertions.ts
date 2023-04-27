@@ -85,7 +85,7 @@ export async function assertChangeset(params: {
 
   assertApplication({
     actualApplication: params.actualChangeset.application,
-    isGetResponse: params.isGetResponse
+    expectNull: !params.isGetResponse
   });
 
   assertSynchronizationInfo({

@@ -9,7 +9,7 @@ import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationPr
 
 import { getTestDIContainer } from "../common";
 
-describe("[Management] UserOperations", () => {
+describe.only("[Management] UserOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
 
@@ -51,7 +51,8 @@ describe("[Management] UserOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: users,
-        isEntityCountCorrect: (count) => count === 2
+        // both test users + there may be additional services that accessed iModel
+        isEntityCountCorrect: (count) => count >= 2
       });
     });
   });

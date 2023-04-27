@@ -58,7 +58,6 @@ export function assertMinimalBriefcase(params: {
 export async function assertBriefcase(params: {
   actualBriefcase: Briefcase;
   expectedBriefcaseProperties: Pick<Briefcase, "deviceName"> & { briefcaseId?: number };
-  isGetResponse: boolean;
 }): Promise<void> {
   assertMinimalBriefcase({
     actualBriefcase: params.actualBriefcase
@@ -77,7 +76,7 @@ export async function assertBriefcase(params: {
 
   assertApplication({
     actualApplication: params.actualBriefcase.application,
-    isGetResponse: params.isGetResponse
+    expectNull: false
   });
 
   expect(params.actualBriefcase._links).to.exist;
@@ -124,7 +123,7 @@ export async function assertNamedVersion(params: {
 
   assertApplication({
     actualApplication: params.actualNamedVersion.application,
-    isGetResponse: params.isGetResponse
+    expectNull: !params.isGetResponse
   });
 
   expect(params.actualNamedVersion._links).to.exist;
@@ -263,11 +262,11 @@ export function assertOptionalLink(params: {
 
 export function assertApplication(params: {
   actualApplication: Application | null;
-  isGetResponse: boolean;
+  expectNull: boolean;
 }): void {
   // TODO: remove the conditional `application` assertion when the API is fixed to return this
   // information in POST/PATCH responses.
-  if (!params.isGetResponse) {
+  if (params.expectNull) {
     expect(params.actualApplication).to.equal(null);
     return;
   }
