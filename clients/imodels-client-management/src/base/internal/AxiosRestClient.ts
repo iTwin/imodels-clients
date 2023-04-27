@@ -10,7 +10,7 @@ import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBi
  * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the
  * methods in {@link RestClient}.
  */
-export type ParseErrorFunc = (response: { statusCode?: number, body?: unknown }) => Error;
+export type ParseErrorFunc = (response: { statusCode?: number, body?: unknown }, originalError: Error & { code?: string }) => Error;
 
 /** Default implementation for {@link RestClient} interface that uses `axios` library for sending the requests. */
 export class AxiosRestClient implements RestClient {
@@ -75,10 +75,10 @@ export class AxiosRestClient implements RestClient {
       return response.data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        const parsedError: Error = this._parseErrorFunc({ statusCode: error.response?.status, body: error.response?.data });
+        const parsedError: Error = this._parseErrorFunc({ statusCode: error.response?.status, body: error.response?.data }, error);
         throw parsedError;
       }
-      throw new Error("AxiosRestClient: unknown error occurred.");
+      throw error;
     }
   }
 }
