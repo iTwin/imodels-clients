@@ -56,7 +56,7 @@ export class TestIModelGroup {
 
   private doesIModelBelongToGroup(iModelName: string): boolean {
     return iModelName.startsWith(this._iModelNamePrefix) ||
-      iModelName.startsWith(this.firstNamePrefix) ||
-      iModelName.startsWith(this.lastNamePrefix);
+      iModelName === this.getFirstIModelNameForOrderingTests() ||
+      iModelName === this.getLastIModelNameForOrderingTests();
   }
 }
