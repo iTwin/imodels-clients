@@ -99,7 +99,7 @@ describe("[Management] IModelOperations", () => {
     });
   });
 
-  it("should return items in ascending order when querying representation collection", async () => {
+  it("should return items in ascending/descending order when querying representation collection", async () => {
     // Arrange
     await iModelsClient.iModels.createEmpty({
       authorization,
@@ -108,28 +108,6 @@ describe("[Management] IModelOperations", () => {
         name: testIModelGroup.getFirstIModelNameForOrderingTests()
       }
     });
-
-    const getIModelListParams: GetIModelListParams = {
-      authorization,
-      urlParams: {
-        iTwinId,
-        $orderBy: {
-          property: IModelOrderByProperty.Name
-        }
-      }
-    };
-
-    // Act
-    const iModels = iModelsClient.iModels.getRepresentationList(getIModelListParams);
-
-    // Assert
-    const iModelArray = await toArray(iModels);
-    expect(iModelArray.length).to.be.greaterThanOrEqual(2);
-    expect(iModelArray[0].name.startsWith(testIModelGroup.firstNamePrefix)).to.be.true;
-  });
-
-  it("should return items in descending order when querying representation collection", async () => {
-    // Arrange
     await iModelsClient.iModels.createEmpty({
       authorization,
       iModelProperties: {
@@ -138,7 +116,16 @@ describe("[Management] IModelOperations", () => {
       }
     });
 
-    const getIModelListParams: GetIModelListParams = {
+    const getAscendingIModelListParams: GetIModelListParams = {
+      authorization,
+      urlParams: {
+        iTwinId,
+        $orderBy: {
+          property: IModelOrderByProperty.Name
+        }
+      }
+    };
+    const getDescendingIModelListParams: GetIModelListParams = {
       authorization,
       urlParams: {
         iTwinId,
@@ -150,13 +137,32 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModels = iModelsClient.iModels.getRepresentationList(getIModelListParams);
+    const ascendingIModelArray = await toArray(iModelsClient.iModels.getRepresentationList(getAscendingIModelListParams));
+    const descendingIModelArray = await toArray(iModelsClient.iModels.getRepresentationList(getDescendingIModelListParams));
 
     // Assert
-    const iModelArray = await toArray(iModels);
-    expect(iModelArray.length).to.be.greaterThanOrEqual(2);
-    expect(iModelArray[0].name.startsWith(testIModelGroup.lastNamePrefix)).to.be.true;
+    expect(ascendingIModelArray.length).to.be.greaterThanOrEqual(2);
+    const {
+      firstIModelIndex: firstIModelIndexInAscArray,
+      lastIModelIndex: lastIModelIndexInAscArray
+    } = assertAscendingiModelArray(ascendingIModelArray);
+    expect(lastIModelIndexInAscArray).to.be.greaterThan(firstIModelIndexInAscArray);
+
+    expect(descendingIModelArray.length).to.be.greaterThanOrEqual(2);
+    const {
+      firstIModelIndex: firstIModelIndexInDescArray,
+      lastIModelIndex: lastIModelIndexInDescArray
+    } = assertAscendingiModelArray(descendingIModelArray);
+    expect(firstIModelIndexInDescArray).to.be.greaterThan(lastIModelIndexInDescArray);
   });
+
+  function assertAscendingiModelArray(iModelArray: IModel[]): { firstIModelIndex: number, lastIModelIndex: number } {
+    const firstIModelIndex = iModelArray.findIndex(iModel => iModel.name.startsWith(testIModelGroup.firstNamePrefix));
+    expect(firstIModelIndex).to.not.be.equal(-1);
+    const lastIModelIndex = iModelArray.findIndex(iModel => iModel.name.startsWith(testIModelGroup.lastNamePrefix));
+    expect(lastIModelIndex).to.not.be.equal(-1);
+    return { firstIModelIndex, lastIModelIndex };
+  }
 
   it("should return iModels that match the name filter when querying representation collection", async () => {
     // Arrange

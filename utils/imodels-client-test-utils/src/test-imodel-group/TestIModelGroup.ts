@@ -11,7 +11,7 @@ export interface TestRunContext {
 }
 
 export class TestIModelGroup {
-  public readonly firstNamePrefix = "***";
+  public readonly firstNamePrefix = "AAA";
   public readonly lastNamePrefix = "YYY";
   private _iModelNamePrefix: string;
 
