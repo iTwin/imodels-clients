@@ -11,6 +11,8 @@ export interface TestRunContext {
 }
 
 export class TestIModelGroup {
+  public readonly firstNamePrefix = "AAA";
+  public readonly lastNamePrefix = "YYY";
   private _iModelNamePrefix: string;
 
   constructor(
@@ -28,6 +30,14 @@ export class TestIModelGroup {
     return `${this._iModelNamePrefix} ${iModelName}`;
   }
 
+  public getFirstIModelNameForOrderingTests(): string {
+    return `${this.firstNamePrefix}${this._iModelNamePrefix} Ordering tests`;
+  }
+
+  public getLastIModelNameForOrderingTests(): string {
+    return `${this.lastNamePrefix}${this._iModelNamePrefix} Ordering tests`;
+  }
+
   public async cleanupIModels(): Promise<void> {
     const iTwinId = await this._testITwinProvider.getOrCreate();
     const iModels = this._iModelsClient.iModels.getMinimalList({
@@ -37,14 +47,16 @@ export class TestIModelGroup {
       }
     });
     for await (const iModel of iModels)
-      if (this.doesIModelBelongToContext(iModel.displayName))
+      if (this.doesIModelBelongToGroup(iModel.displayName))
         await this._iModelsClient.iModels.delete({
           authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
           iModelId: iModel.id
         });
   }
 
-  private doesIModelBelongToContext(iModelName: string): boolean {
-    return iModelName.startsWith(this._iModelNamePrefix);
+  private doesIModelBelongToGroup(iModelName: string): boolean {
+    return iModelName.startsWith(this._iModelNamePrefix) ||
+      iModelName === this.getFirstIModelNameForOrderingTests() ||
+      iModelName === this.getLastIModelNameForOrderingTests();
   }
 }
