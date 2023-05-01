@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "comment": "Update peers to be >= 3.6",
+      "type": "none",
+      "packageName": "@itwin/imodels-access-backend"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-backend",
+  "email": "aruniverse@users.noreply.github.com"
+}
