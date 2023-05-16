@@ -12,6 +12,7 @@
     "noUnusedLocals": true,
     "declaration": true,
     "strict": true,
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "declarationMap": true
   }
 }
