@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { ChangesetResponse, ChangesetsResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, Changeset, Checkpoint, EntityListIterator, MinimalChangeset, NamedVersion, PreferReturn } from "../../base/types";
+import { AuthorizationCallback, Changeset, Checkpoint, EntityListIterator, HeadersFactories, MinimalChangeset, NamedVersion, PreferReturn } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";
@@ -30,7 +30,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   public getMinimalList(params: GetChangesetListParams): EntityListIterator<MinimalChangeset> {
     const entityCollectionAccessor = (response: unknown) => {
       const changesets = (response as ChangesetsResponse<MinimalChangeset>).changesets;
-      const mappedChangesets = changesets.map((changeset) => this.appendRelatedMinimalEntityCallbacks(params.authorization, changeset));
+      const mappedChangesets = changesets.map((changeset) => this.appendRelatedMinimalEntityCallbacks(params.authorization, changeset, params.headersFactories));
       return mappedChangesets;
     };
 
@@ -38,7 +38,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor
+      entityCollectionAccessor,
+      headersFactories: params.headersFactories
     }));
   }
 
@@ -54,7 +55,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   public getRepresentationList(params: GetChangesetListParams): EntityListIterator<Changeset> {
     const entityCollectionAccessor = (response: unknown) => {
       const changesets = (response as ChangesetsResponse<Changeset>).changesets;
-      const mappedChangesets = changesets.map((changeset) => this.appendRelatedEntityCallbacks(params.authorization, changeset));
+      const mappedChangesets = changesets.map((changeset) => this.appendRelatedEntityCallbacks(params.authorization, changeset, params.headersFactories));
       return mappedChangesets;
     };
 
@@ -62,7 +63,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor
+      entityCollectionAccessor,
+      headersFactories: params.headersFactories
     }));
   }
 
@@ -79,24 +81,27 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   protected async querySingleInternal(params: GetSingleChangesetParams): Promise<Changeset> {
-    const { authorization, iModelId, ...changesetIdOrIndex } = params;
+    const { authorization, iModelId, headersFactories, ...changesetIdOrIndex } = params;
     const response = await this.sendGetRequest<ChangesetResponse>({
       authorization,
-      url: this._options.urlFormatter.getSingleChangesetUrl({ iModelId, ...changesetIdOrIndex })
+      url: this._options.urlFormatter.getSingleChangesetUrl({ iModelId, ...changesetIdOrIndex }),
+      headersFactories
     });
-    const result: Changeset = this.appendRelatedEntityCallbacks(params.authorization, response.changeset);
+    const result: Changeset = this.appendRelatedEntityCallbacks(params.authorization, response.changeset, params.headersFactories);
     return result;
   }
 
   protected appendRelatedMinimalEntityCallbacks<TChangeset extends MinimalChangeset>(
     authorization: AuthorizationCallback,
-    changeset: TChangeset
+    changeset: TChangeset,
+    headersFactories?: HeadersFactories
   ): TChangeset {
     const getCreator = async () => getUser(
       authorization,
       this._iModelsClient.users,
       this._options.urlFormatter,
-      changeset._links.creator?.href
+      changeset._links.creator?.href,
+      headersFactories
     );
 
     const result: TChangeset = {
@@ -107,11 +112,11 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     return result;
   }
 
-  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, changeset: Changeset): Changeset {
-    const getNamedVersion = async () => this.getNamedVersion(authorization, changeset._links.namedVersion?.href);
-    const getCurrentOrPrecedingCheckpoint = async () => this.getCurrentOrPrecedingCheckpoint(authorization, changeset._links.currentOrPrecedingCheckpoint?.href);
+  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, changeset: Changeset, headersFactories?: HeadersFactories ): Changeset {
+    const getNamedVersion = async () => this.getNamedVersion(authorization, changeset._links.namedVersion?.href, headersFactories);
+    const getCurrentOrPrecedingCheckpoint = async () => this.getCurrentOrPrecedingCheckpoint(authorization, changeset._links.currentOrPrecedingCheckpoint?.href, headersFactories);
 
-    const changesetWithMinimalCallbacks = this.appendRelatedMinimalEntityCallbacks(authorization, changeset);
+    const changesetWithMinimalCallbacks = this.appendRelatedMinimalEntityCallbacks(authorization, changeset, headersFactories);
     const result: Changeset = {
       ...changesetWithMinimalCallbacks,
       getNamedVersion,
@@ -121,7 +126,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     return result;
   }
 
-  private async getNamedVersion(authorization: AuthorizationCallback, namedVersionLink: string | undefined): Promise<NamedVersion | undefined> {
+  private async getNamedVersion(authorization: AuthorizationCallback, namedVersionLink: string | undefined, headersFactories: HeadersFactories | undefined): Promise<NamedVersion | undefined> {
     if (!namedVersionLink)
       return undefined;
 
@@ -129,18 +134,20 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     return this._iModelsClient.namedVersions.getSingle({
       authorization,
       iModelId,
-      namedVersionId
+      namedVersionId,
+      headersFactories
     });
   }
 
-  private async getCurrentOrPrecedingCheckpoint(authorization: AuthorizationCallback, currentOrPrecedingCheckpointLink: string | undefined): Promise<Checkpoint | undefined> {
+  private async getCurrentOrPrecedingCheckpoint(authorization: AuthorizationCallback, currentOrPrecedingCheckpointLink: string | undefined, headersFactories: HeadersFactories | undefined): Promise<Checkpoint | undefined> {
     if (!currentOrPrecedingCheckpointLink)
       return undefined;
 
     const entityIds = this._options.urlFormatter.parseCheckpointUrl(currentOrPrecedingCheckpointLink);
     return this._iModelsClient.checkpoints.getSingle({
       authorization,
-      ...entityIds
+      ...entityIds,
+      headersFactories
     });
   }
 }

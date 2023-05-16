@@ -24,9 +24,10 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Mana
     const acquireBriefcaseResponse = await this.sendPostRequest<BriefcaseResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getBriefcaseListUrl({ iModelId: params.iModelId }),
-      body: acquireBriefcaseBody
+      body: acquireBriefcaseBody,
+      headersFactories: params.headersFactories
     });
-    const result = this.appendRelatedEntityCallbacks(params.authorization, acquireBriefcaseResponse.briefcase);
+    const result = this.appendRelatedEntityCallbacks(params.authorization, acquireBriefcaseResponse.briefcase, params.headersFactories);
     return result;
   }
 

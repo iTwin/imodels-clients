@@ -5,7 +5,7 @@
 import { IModelsErrorImpl, waitForCondition } from "@itwin/imodels-client-management/lib/base/internal";
 import { IModelOperations as ManagementIModelOperations } from "@itwin/imodels-client-management/lib/operations";
 
-import { AuthorizationParam, IModel, IModelsErrorCode } from "@itwin/imodels-client-management";
+import { AuthorizationParam, HeadersParam, IModel, IModelsErrorCode } from "@itwin/imodels-client-management";
 
 import { BaselineFileState } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
@@ -52,16 +52,19 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     await this.sendPostRequest({
       authorization: params.authorization,
       url: confirmUploadUrl,
-      body: undefined
+      body: undefined,
+      headersFactories: params.headersFactories
     });
 
     await this.waitForBaselineFileInitialization({
       authorization: params.authorization,
-      iModelId: createdIModel.id
+      iModelId: createdIModel.id,
+      headersFactories: params.headersFactories
     });
     return this.getSingle({
       authorization: params.authorization,
-      iModelId: createdIModel.id
+      iModelId: createdIModel.id,
+      headersFactories: params.headersFactories
     });
   }
 
@@ -77,7 +80,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     };
   }
 
-  private async waitForBaselineFileInitialization(params: AuthorizationParam & { iModelId: string, timeOutInMs?: number }): Promise<void> {
+  private async waitForBaselineFileInitialization(params: AuthorizationParam & HeadersParam & { iModelId: string, timeOutInMs?: number }): Promise<void> {
     const isBaselineInitialized: () => Promise<boolean> = async () => {
       const baselineFileState = (await this._baselineFileOperations.getSingle(params)).state;
 

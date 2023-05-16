@@ -2,6 +2,7 @@
   "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
+    "declarationMap": true
   },
   "include": [
     "./src/**/*.ts"

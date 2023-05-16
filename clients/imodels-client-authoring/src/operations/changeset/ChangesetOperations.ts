@@ -45,7 +45,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     const createChangesetResponse = await this.sendPostRequest<ChangesetResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId }),
-      body: createChangesetBody
+      body: createChangesetBody,
+      headersFactories: params.headersFactories
     });
 
     const uploadLink = createChangesetResponse.changeset._links.upload;
@@ -61,10 +62,11 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     const confirmUploadResponse = await this.sendPatchRequest<ChangesetResponse>({
       authorization: params.authorization,
       url: completeLink.href,
-      body: confirmUploadBody
+      body: confirmUploadBody,
+      headersFactories: params.headersFactories
     });
 
-    const result = this.appendRelatedEntityCallbacks(params.authorization, confirmUploadResponse.changeset);
+    const result = this.appendRelatedEntityCallbacks(params.authorization, confirmUploadResponse.changeset, params.headersFactories);
     return result;
   }
 
@@ -119,7 +121,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
           changeset,
           abortSignal: params.abortSignal,
           downloadCallback,
-          firstDownloadFailedCallback: downloadFailedCallback
+          firstDownloadFailedCallback: downloadFailedCallback,
+          headersFactories: params.headersFactories
         }));
       await queue.waitAll();
     }
@@ -164,7 +167,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       iModelId: params.iModelId,
       changeset: changesetWithPath,
       abortSignal: params.abortSignal,
-      downloadCallback
+      downloadCallback,
+      headersFactories: params.headersFactories
     });
 
     return changesetWithPath;

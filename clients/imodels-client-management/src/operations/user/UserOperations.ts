@@ -21,7 +21,8 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
       authorization: params.authorization,
       url: this._options.urlFormatter.getUserListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: unknown) => (response as UsersResponse<MinimalUser>).users
+      entityCollectionAccessor: (response: unknown) => (response as UsersResponse<MinimalUser>).users,
+      headersFactories: params.headersFactories
     }));
   }
 
@@ -38,7 +39,8 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
       authorization: params.authorization,
       url: this._options.urlFormatter.getUserListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: unknown) => (response as UsersResponse<User>).users
+      entityCollectionAccessor: (response: unknown) => (response as UsersResponse<User>).users,
+      headersFactories: params.headersFactories
     }));
   }
 
@@ -52,7 +54,8 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
   public async getSingle(params: GetSingleUserParams): Promise<User> {
     const response = await this.sendGetRequest<UserResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleUserUrl({ iModelId: params.iModelId, userId: params.userId })
+      url: this._options.urlFormatter.getSingleUserUrl({ iModelId: params.iModelId, userId: params.userId }),
+      headersFactories: params.headersFactories
     });
     return response.user;
   }

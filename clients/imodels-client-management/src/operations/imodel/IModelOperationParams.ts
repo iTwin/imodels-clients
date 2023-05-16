@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AtLeastOneProperty, AuthorizationParam, CollectionRequestParams, Extent, IModel, IModelScopedOperationParams, OrderBy } from "../../base/types";
+import { AtLeastOneProperty, AuthorizationParam, CollectionRequestParams, Extent, HeadersParam, IModel, IModelScopedOperationParams, OrderBy } from "../../base/types";
 
 /**
  * iModel entity properties that are supported in $orderBy url parameter which specifies by what property
@@ -23,7 +23,7 @@ export interface GetIModelListUrlParams extends CollectionRequestParams {
 }
 
 /** Parameters for get iModel list operation. */
-export interface GetIModelListParams extends AuthorizationParam {
+export interface GetIModelListParams extends AuthorizationParam, HeadersParam {
   /** Parameters that will be appended to the entity list request url that will narrow down the results. */
   urlParams: GetIModelListUrlParams;
 }
@@ -47,7 +47,7 @@ export interface IModelProperties {
 }
 
 /** Parameters for create iModel operation. */
-export interface CreateEmptyIModelParams extends AuthorizationParam {
+export interface CreateEmptyIModelParams extends AuthorizationParam, HeadersParam {
   /** Properties of the new iModel. See {@link IModelProperties}. */
   iModelProperties: IModelProperties;
 }
@@ -71,7 +71,7 @@ export interface IModelPropertiesForCreateFromTemplate extends IModelProperties 
 }
 
 /** Parameters for create iModel from template operation. */
-export interface CreateIModelFromTemplateParams extends AuthorizationParam {
+export interface CreateIModelFromTemplateParams extends AuthorizationParam, HeadersParam {
   /** Properties of the new iModel. See {@link IModelPropertiesForCreateFromTemplate}. */
   iModelProperties: IModelPropertiesForCreateFromTemplate;
   /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */

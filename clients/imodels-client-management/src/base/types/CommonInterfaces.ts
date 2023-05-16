@@ -11,6 +11,11 @@ export interface ApiOptions {
   version?: string;
 }
 
+/** Lets you add additional custom headers to each request */
+export interface HeadersFactories {
+  [key: string]: () => string | (() => string | undefined) | (() => undefined);
+}
+
 /**
  * Request authorization data. This data is sent to the server in `Authorization` request header, the header value is
  * formatted by joining `scheme` and `token` property values with a single space.
@@ -40,11 +45,17 @@ export interface AuthorizationParam {
   authorization: AuthorizationCallback;
 }
 
+/** Headers parameter. This interface is extended by all other specific operation parameter interfaces. */0;
+export interface HeadersParam {
+  /** Additional headers to add to each request. See {@link HeadersFactories}. */
+  headersFactories?: HeadersFactories;
+}
+
 /**
  * Common parameters for iModel scoped operations. All operations exposed in this client are iModel scoped
  * except for {@link https://developer.bentley.com/apis/imodels-v2/operations/get-itwin-imodels/ Get iTwin iModels}.
  */
-export interface IModelScopedOperationParams extends AuthorizationParam {
+export interface IModelScopedOperationParams extends AuthorizationParam, HeadersParam {
   /** iModel id. */
   iModelId: string;
 }

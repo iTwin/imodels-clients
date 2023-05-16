@@ -22,7 +22,8 @@ export class UserPermissionOperations<TOptions extends OperationOptions> extends
   public async get(params: GetUserPermissionsParams): Promise<UserPermissions> {
     const response = await this.sendGetRequest<UserPermissions>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getUserPermissionsUrl({ iModelId: params.iModelId })
+      url: this._options.urlFormatter.getUserPermissionsUrl({ iModelId: params.iModelId }),
+      headersFactories: params.headersFactories
     });
     return response;
   }

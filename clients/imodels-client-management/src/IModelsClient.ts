@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AxiosRestClient, IModelsErrorParser } from "./base/internal";
-import { ApiOptions, RecursiveRequired, RestClient } from "./base/types";
+import { ApiOptions, HeadersFactories, RecursiveRequired, RestClient } from "./base/types";
 import { Constants } from "./Constants";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
 import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
@@ -19,6 +19,8 @@ export interface IModelsClientOptions {
   restClient?: RestClient;
   /** iModels API options. See {@link ApiOptions}. */
   api?: ApiOptions;
+  /** additional headers to add to each request. See {@link HeadersFactories}. */
+  headersFactories?: HeadersFactories;
 }
 
 /**
@@ -86,7 +88,8 @@ export class IModelsClient {
   ): RecursiveRequired<IModelsClientOptions> {
     return {
       api: this.fillApiConfiguration(options?.api),
-      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse)
+      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse),
+      headersFactories: options?.headersFactories ?? {}
     };
   }
 
