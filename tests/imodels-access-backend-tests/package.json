@@ -37,7 +37,7 @@
     "@itwin/core-common": "^4.0.0-dev.105",
     "@itwin/core-geometry": "^4.0.0-dev.105",
     "@itwin/core-quantity": "^4.0.0-dev.105",
-    "@itwin/ecschema-metadata": "^3.3.0",
+    "@itwin/ecschema-metadata": "^3.6.0",
     "@itwin/imodels-access-backend": "workspace:*",
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-test-utils": "workspace:*",
