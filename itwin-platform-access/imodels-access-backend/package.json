@@ -36,10 +36,10 @@
     "axios": "~0.21.1"
   },
   "devDependencies": {
-    "@itwin/core-backend": "^3.6.0 || ^4.0.0",
-    "@itwin/core-bentley": "^3.6.0 || ^4.0.0",
-    "@itwin/core-common": "^3.6.0 || ^4.0.0",
-    "@itwin/core-geometry": "^3.6.0 || ^4.0.0",
+    "@itwin/core-backend": "^3.6.0",
+    "@itwin/core-bentley": "^3.6.0",
+    "@itwin/core-common": "^3.6.0",
+    "@itwin/core-geometry": "^3.6.0",
     "@itwin/imodels-client-common-config": "workspace:*",
     "@types/node": "14.14.31",
     "@types/ws": "^7.0.0",
