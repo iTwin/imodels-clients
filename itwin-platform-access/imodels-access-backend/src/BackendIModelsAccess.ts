@@ -33,7 +33,7 @@ import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAd
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
-  private readonly _changeSet0 = { id: "", changesType: 0, description: "initialChangeset", parentId: "", briefcaseId: 0, pushDate: "", userCreated: "", index: 0 };
+  private readonly _changeSet0 = { id: "", changesType: 0, description: "initialChangeset", parentId: "", briefcaseId: 0, pushDate: "", userCreated: "", index: 0, size: 0 };
 
   constructor(iModelsClient?: IModelsClient) {
     this._iModelsClient = iModelsClient ?? new IModelsClient();
