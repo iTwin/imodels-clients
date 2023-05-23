@@ -33,7 +33,7 @@ importers:
   ../../clients/imodels-client-management:
     specifiers:
       '@itwin/imodels-client-common-config': workspace:*
-      '@types/node': ~18.11.18
+      '@types/node': ^18.11.18
       axios: ^1.0.0
       cspell: ~5.21.0
       eslint: ~7.31.0
@@ -245,7 +245,7 @@ importers:
       '@types/chai': ~4.2.21
       '@types/chai-as-promised': ~7.1.5
       '@types/mocha': ~9.0.0
-      '@types/node': ~18.11.18
+      '@types/node': ^18.11.18
       axios: ^1.0.0
       chai: ~4.3.4
       chai-as-promised: ~7.1.1
@@ -295,7 +295,7 @@ importers:
       '@itwin/imodels-client-management': workspace:*
       '@itwin/imodels-client-test-utils': workspace:*
       '@types/chai': ~4.2.21
-      '@types/node': ~18.11.18
+      '@types/node': ^18.11.18
       chai: ~4.3.4
       cpx2: 4.2.0
       cspell: ~5.21.0
@@ -352,7 +352,7 @@ importers:
       '@itwin/imodels-client-management': workspace:*
       '@itwin/object-storage-core': ^1.6.0
       '@types/chai': ~4.2.21
-      '@types/node': ~18.11.18
+      '@types/node': ^18.11.18
       axios: ^1.0.0
       chai: ~4.3.4
       cpx2: 4.2.0
