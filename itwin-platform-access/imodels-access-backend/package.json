@@ -31,7 +31,7 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@azure/abort-controller": "~1.1.0",
+    "@azure/abort-controller": "^1.1.0",
     "@itwin/imodels-client-authoring": "workspace:*",
     "axios": "^1.0.0"
   },
@@ -50,8 +50,8 @@
     "typescript": "~4.4.0"
   },
   "peerDependencies": {
-    "@itwin/core-backend": "^3.6.0 || ^4.0.0",
-    "@itwin/core-bentley": "^3.6.0 || ^4.0.0",
-    "@itwin/core-common": "^3.6.0 || ^4.0.0"
+    "@itwin/core-backend": "^4.0.0",
+    "@itwin/core-bentley": "^4.0.0",
+    "@itwin/core-common": "^4.0.0"
   }
 }
