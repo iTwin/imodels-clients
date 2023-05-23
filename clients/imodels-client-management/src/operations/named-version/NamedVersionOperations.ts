@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { EntityListIteratorImpl, NamedVersionResponse, NamedVersionsResponse, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, Changeset, EntityListIterator, HeadersFactories, MinimalNamedVersion, NamedVersion, PreferReturn } from "../../base/types";
+import { AuthorizationCallback, Changeset, EntityListIterator, HeaderFactories, MinimalNamedVersion, NamedVersion, PreferReturn } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";
@@ -33,7 +33,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       url: this._options.urlFormatter.getNamedVersionListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<MinimalNamedVersion>).namedVersions,
-      headersFactories: params.headersFactories
+      headers: params.headers
     }));
   }
 
@@ -49,7 +49,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
   public getRepresentationList(params: GetNamedVersionListParams): EntityListIterator<NamedVersion> {
     const entityCollectionAccessor = (response: unknown) => {
       const namedVersions = (response as NamedVersionsResponse<NamedVersion>).namedVersions;
-      const mappedNamedVersions = namedVersions.map((namedVersion) => this.appendRelatedEntityCallbacks(params.authorization, namedVersion, params.headersFactories));
+      const mappedNamedVersions = namedVersions.map((namedVersion) => this.appendRelatedEntityCallbacks(params.authorization, namedVersion, params.headers));
       return mappedNamedVersions;
     };
 
@@ -58,7 +58,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       url: this._options.urlFormatter.getNamedVersionListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor,
-      headersFactories: params.headersFactories
+      headers: params.headers
     }));
   }
 
@@ -73,9 +73,9 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
     const response = await this.sendGetRequest<NamedVersionResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleNamedVersionUrl({ iModelId: params.iModelId, namedVersionId: params.namedVersionId }),
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
-    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, response.namedVersion, params.headersFactories);
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, response.namedVersion, params.headers);
     return result;
   }
 
@@ -92,9 +92,9 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       authorization: params.authorization,
       url: this._options.urlFormatter.getNamedVersionListUrl({ iModelId: params.iModelId }),
       body: createNamedVersionBody,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
-    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, createNamedVersionResponse.namedVersion, params.headersFactories);
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, createNamedVersionResponse.namedVersion, params.headers);
     return result;
   }
 
@@ -111,9 +111,9 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleNamedVersionUrl({ iModelId: params.iModelId, namedVersionId: params.namedVersionId }),
       body: updateNamedVersionBody,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
-    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, updateNamedVersionResponse.namedVersion, params.headersFactories);
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, updateNamedVersionResponse.namedVersion, params.headers);
     return result;
   }
 
@@ -133,15 +133,15 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
     };
   }
 
-  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, namedVersion: NamedVersion, headersFactories?: HeadersFactories): NamedVersion {
+  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, namedVersion: NamedVersion, headers?: HeaderFactories): NamedVersion {
     const getCreator = async () => getUser(
       authorization,
       this._iModelsClient.users,
       this._options.urlFormatter,
       namedVersion._links.creator?.href,
-      headersFactories
+      headers
     );
-    const getChangeset = async () => this.getChangeset(authorization, namedVersion._links.changeset?.href, headersFactories);
+    const getChangeset = async () => this.getChangeset(authorization, namedVersion._links.changeset?.href, headers);
 
     const result: NamedVersion = {
       ...namedVersion,
@@ -152,7 +152,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
     return result;
   }
 
-  private async getChangeset(authorization: AuthorizationCallback, changesetLink: string | undefined, headersFactories?: HeadersFactories): Promise<Changeset | undefined> {
+  private async getChangeset(authorization: AuthorizationCallback, changesetLink: string | undefined, headers?: HeaderFactories): Promise<Changeset | undefined> {
     if (!changesetLink)
       return undefined;
 
@@ -160,7 +160,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
     return this._iModelsClient.changesets.getSingle({
       authorization,
       ...entityIds,
-      headersFactories
+      headers
     });
   }
 }

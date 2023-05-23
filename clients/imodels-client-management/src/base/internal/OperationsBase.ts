@@ -3,21 +3,21 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../../Constants";
-import { AuthorizationParam, BinaryContentType, ContentType, Dictionary, HeadersFactories, HeadersParam, PreferReturn, RestClient, SupportedGetResponseTypes } from "../types";
+import { AuthorizationParam, BinaryContentType, ContentType, Dictionary, HeaderFactories, HeadersParam, PreferReturn, RestClient, SupportedGetResponseTypes } from "../types";
 
 import { CollectionResponse } from "./ApiResponseInterfaces";
 import { EntityCollectionPage } from "./UtilityTypes";
 
-type SendGetRequestParams = AuthorizationParam & HeadersParam & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };
-type SendPostRequestParams = AuthorizationParam & HeadersParam & { url: string, body: object | undefined };
-type SendPutRequestParams = AuthorizationParam & HeadersParam & { url: string, contentType: BinaryContentType, body: Uint8Array };
-type SendPatchRequestParams = SendPostRequestParams;
-type SendDeleteRequestParams = AuthorizationParam & HeadersParam & { url: string };
+export type SendGetRequestParams = AuthorizationParam & HeadersParam & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };
+export type SendPostRequestParams = AuthorizationParam & HeadersParam & { url: string, body: object | undefined };
+export type SendPutRequestParams = AuthorizationParam & HeadersParam & { url: string, contentType: BinaryContentType, body: Uint8Array };
+export type SendPatchRequestParams = SendPostRequestParams;
+export type SendDeleteRequestParams = AuthorizationParam & HeadersParam & { url: string };
 
 export interface OperationsBaseOptions {
   restClient: RestClient;
   api: { version: string };
-  headersFactories?: HeadersFactories;
+  headers?: HeaderFactories;
 }
 
 export class OperationsBase<TOptions extends OperationsBaseOptions> {
@@ -98,13 +98,15 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     };
   }
 
-  private addHeaders(headers: Dictionary<string>, headersFactories?: HeadersFactories) {
-    if (!headersFactories)
+  protected addHeaders(headers: Dictionary<string>, newHeaders?: HeaderFactories) {
+    if (!newHeaders)
       return;
 
-    for (const headerName in headersFactories) {
-      if(Object.prototype.hasOwnProperty.call(headersFactories, headerName)) {
-        const value = headersFactories[headerName]();
+    for (const headerName in newHeaders) {
+      if(Object.prototype.hasOwnProperty.call(newHeaders, headerName)) {
+        let value: unknown = newHeaders[headerName];
+        if(typeof value === "function")
+          value = value();
         if (typeof value === "string")
           headers[headerName] = value;
       }
@@ -123,8 +125,8 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     if (params.contentType)
       headers[Constants.headers.contentType] = params.contentType;
 
-    this.addHeaders(headers, this._options.headersFactories);
-    this.addHeaders(headers, params.headersFactories);
+    this.addHeaders(headers, this._options.headers);
+    this.addHeaders(headers, params.headers);
 
     return headers;
   }

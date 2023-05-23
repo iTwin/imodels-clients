@@ -23,7 +23,7 @@ export class UserPermissionOperations<TOptions extends OperationOptions> extends
     const response = await this.sendGetRequest<UserPermissions>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getUserPermissionsUrl({ iModelId: params.iModelId }),
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
     return response;
   }

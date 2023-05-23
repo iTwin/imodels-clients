@@ -36,7 +36,7 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
       authorization: params.authorization,
       url,
       responseType: ContentType.Png,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
 
     return {
@@ -60,7 +60,7 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
       url,
       contentType: params.thumbnailProperties.imageType,
       body: params.thumbnailProperties.image,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
   }
 }

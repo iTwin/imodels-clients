@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { EntityListIteratorImpl, IModelResponse, IModelsErrorImpl, IModelsResponse, OperationsBase, waitForCondition } from "../../base/internal";
-import { AuthorizationCallback, EntityListIterator, HeadersFactories, IModel, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn, User } from "../../base/types";
+import { AuthorizationCallback, EntityListIterator, HeaderFactories, IModel, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn, User } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 
@@ -29,7 +29,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as IModelsResponse<MinimalIModel>).iModels,
-      headersFactories: params.headersFactories
+      headers: params.headers
     }));
   }
 
@@ -43,7 +43,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
   public getRepresentationList(params: GetIModelListParams): EntityListIterator<IModel> {
     const entityCollectionAccessor = (response: unknown) => {
       const iModels = (response as IModelsResponse<IModel>).iModels;
-      const mappedIModels = iModels.map((iModel) => this.appendRelatedEntityCallbacks(params.authorization, iModel, params.headersFactories));
+      const mappedIModels = iModels.map((iModel) => this.appendRelatedEntityCallbacks(params.authorization, iModel, params.headers));
       return mappedIModels;
     };
 
@@ -52,7 +52,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor,
-      headersFactories: params.headersFactories
+      headers: params.headers
     }));
   }
 
@@ -66,9 +66,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     const response = await this.sendGetRequest<IModelResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId }),
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
-    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, response.iModel, params.headersFactories);
+    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, response.iModel, params.headers);
     return result;
   }
 
@@ -80,8 +80,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    */
   public async createEmpty(params: CreateEmptyIModelParams): Promise<IModel> {
     const createIModelBody = this.getCreateEmptyIModelRequestBody(params.iModelProperties);
-    const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headersFactories);
-    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, createdIModel, params.headersFactories);
+    const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headers);
+    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, createdIModel, params.headers);
     return result;
   }
 
@@ -98,19 +98,19 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    */
   public async createFromTemplate(params: CreateIModelFromTemplateParams): Promise<IModel> {
     const createIModelBody = this.getCreateIModelFromTemplateRequestBody(params.iModelProperties);
-    const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headersFactories);
+    const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headers);
 
     await this.waitForTemplatedIModelInitialization({
       authorization: params.authorization,
       iModelId: createdIModel.id,
       timeOutInMs: params.timeOutInMs,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
 
     return this.getSingle({
       authorization: params.authorization,
       iModelId: createdIModel.id,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
   }
 
@@ -126,9 +126,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId }),
       body: updateIModelBody,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
-    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, updateIModelResponse.iModel, params.headersFactories);
+    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, updateIModelResponse.iModel, params.headers);
     return result;
   }
 
@@ -142,12 +142,12 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     return this.sendDeleteRequest({
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId }),
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
   }
 
-  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, iModel: IModel, headersFactories?: HeadersFactories): IModel {
-    const getCreator = async () => this.getCreator(authorization, iModel._links.creator?.href, headersFactories);
+  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, iModel: IModel, headers?: HeaderFactories): IModel {
+    const getCreator = async () => this.getCreator(authorization, iModel._links.creator?.href, headers);
 
     const result: IModel = {
       ...iModel,
@@ -166,17 +166,17 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     };
   }
 
-  protected async sendIModelPostRequest(authorization: AuthorizationCallback, createIModelBody: object, headersFactories?: HeadersFactories): Promise<IModel> {
+  protected async sendIModelPostRequest(authorization: AuthorizationCallback, createIModelBody: object, headers?: HeaderFactories): Promise<IModel> {
     const createIModelResponse = await this.sendPostRequest<IModelResponse>({
       authorization,
       url: this._options.urlFormatter.getCreateIModelUrl(),
       body: createIModelBody,
-      headersFactories
+      headers
     });
     return createIModelResponse.iModel;
   }
 
-  private async getCreator(authorization: AuthorizationCallback, creatorLink: string | undefined, headersFactories?: HeadersFactories): Promise<User | undefined> {
+  private async getCreator(authorization: AuthorizationCallback, creatorLink: string | undefined, headers?: HeaderFactories): Promise<User | undefined> {
     if (!creatorLink)
       return undefined;
 
@@ -185,7 +185,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       authorization,
       iModelId,
       userId,
-      headersFactories
+      headers
     });
   }
 
@@ -211,13 +211,13 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     authorization: AuthorizationCallback;
     iModelId: string;
     timeOutInMs?: number;
-    headersFactories?: HeadersFactories;
+    headers?: HeaderFactories;
   }): Promise<void> {
     const isIModelInitialized: () => Promise<boolean> = async () => {
       const iModel: IModel = await this.getSingle({
         authorization: params.authorization,
         iModelId: params.iModelId,
-        headersFactories: params.headersFactories
+        headers: params.headers
       });
       return iModel.state === IModelState.Initialized;
     };

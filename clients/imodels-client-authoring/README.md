@@ -24,6 +24,25 @@ const iModelIterator: EntityListIterator<MinimalIModel> = iModelsClient.iModels.
 });
 ```
 
+### Headers
+
+To include custom headers in your requests, you have the option to provide additional headers or header factories. When constructing an instance of `IModelsClient`, any headers passed to the constructor will be automatically added to all requests made by the client. On the other hand, when invoking specific operations, you can pass headers through the operation parameters, which will be included only in the requests related to that particular operation. If a header with the same key is specified in both the constructor and operation parameters, the header from the operation parameters will overwrite the corresponding header from the constructor.
+```typescript
+iModelsClient = new IModelsClient({
+  headers: {
+    "x-activity-id": () => "xActivityIdValue",
+    "some-custom-header": "someCustomValue"
+  }
+});
+
+iModelsClient.baselineFiles.getSingle({
+  headers: {
+    "x-activity-id": "some value that overrides factory",
+    "new-custom-header": "header that will be sent in this operation requests"
+  }
+})
+```
+
 ### Create iModel from Baseline File
 ```typescript
 import { Authorization, IModel, IModelsClient } from "@itwin/imodels-client-authoring";

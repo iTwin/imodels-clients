@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { BriefcaseResponse, BriefcasesResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, Briefcase, EntityListIterator, HeadersFactories, MinimalBriefcase, PreferReturn } from "../../base/types";
+import { AuthorizationCallback, Briefcase, EntityListIterator, HeaderFactories, MinimalBriefcase, PreferReturn } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";
@@ -33,7 +33,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
       url: this._options.urlFormatter.getBriefcaseListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as BriefcasesResponse<MinimalBriefcase>).briefcases,
-      headersFactories: params.headersFactories
+      headers: params.headers
     }));
   }
 
@@ -48,7 +48,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
   public getRepresentationList(params: GetBriefcaseListParams): EntityListIterator<Briefcase> {
     const entityCollectionAccessor = (response: unknown) => {
       const briefcases = (response as BriefcasesResponse<Briefcase>).briefcases;
-      const mappedBriefcases = briefcases.map((briefcase) => this.appendRelatedEntityCallbacks(params.authorization, briefcase, params.headersFactories));
+      const mappedBriefcases = briefcases.map((briefcase) => this.appendRelatedEntityCallbacks(params.authorization, briefcase, params.headers));
       return mappedBriefcases;
     };
 
@@ -57,7 +57,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
       url: this._options.urlFormatter.getBriefcaseListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor,
-      headersFactories: params.headersFactories
+      headers: params.headers
     }));
   }
 
@@ -72,19 +72,19 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
     const response = await this.sendGetRequest<BriefcaseResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleBriefcaseUrl({ iModelId: params.iModelId, briefcaseId: params.briefcaseId }),
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
-    const result: Briefcase = this.appendRelatedEntityCallbacks(params.authorization, response.briefcase, params.headersFactories);
+    const result: Briefcase = this.appendRelatedEntityCallbacks(params.authorization, response.briefcase, params.headers);
     return result;
   }
 
-  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, briefcase: Briefcase, headersFactories?: HeadersFactories): Briefcase {
+  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, briefcase: Briefcase, headers?: HeaderFactories): Briefcase {
     const getOwner = async () => getUser(
       authorization,
       this._iModelsClient.users,
       this._options.urlFormatter,
       briefcase._links.owner?.href,
-      headersFactories
+      headers
     );
 
     const result: Briefcase = {

@@ -22,7 +22,7 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
       url: this._options.urlFormatter.getUserListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
       entityCollectionAccessor: (response: unknown) => (response as UsersResponse<MinimalUser>).users,
-      headersFactories: params.headersFactories
+      headers: params.headers
     }));
   }
 
@@ -40,7 +40,7 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
       url: this._options.urlFormatter.getUserListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
       entityCollectionAccessor: (response: unknown) => (response as UsersResponse<User>).users,
-      headersFactories: params.headersFactories
+      headers: params.headers
     }));
   }
 
@@ -55,7 +55,7 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
     const response = await this.sendGetRequest<UserResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleUserUrl({ iModelId: params.iModelId, userId: params.userId }),
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
     return response.user;
   }

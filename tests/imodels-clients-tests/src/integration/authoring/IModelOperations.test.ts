@@ -2,6 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { randomUUID } from "crypto";
+
 import { AuthorizationCallback, CreateIModelFromBaselineParams, IModel, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
 import { TestAuthorizationProvider, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertIModel } from "@itwin/imodels-client-test-utils";
 
@@ -45,6 +47,9 @@ describe("[Authoring] IModelOperations", () => {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel from baseline"),
         filePath: testIModelFileProvider.iModel.filePath
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
       }
     };
 

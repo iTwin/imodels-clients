@@ -19,11 +19,11 @@ export class CheckpointOperations<TOptions extends OperationOptions> extends Ope
    * @returns {Promise<Checkpoint>} a Checkpoint for the specified parent entity. See {@link Checkpoint}.
    */
   public async getSingle(params: GetSingleCheckpointParams): Promise<Checkpoint> {
-    const { authorization, iModelId, headersFactories, ...parentEntityId } = params;
+    const { authorization, iModelId, headers, ...parentEntityId } = params;
     const response = await this.sendGetRequest<CheckpointResponse>({
       authorization,
       url: this._options.urlFormatter.getCheckpointUrl({ iModelId, ...parentEntityId }),
-      headersFactories
+      headers
     });
     return response.checkpoint;
   }

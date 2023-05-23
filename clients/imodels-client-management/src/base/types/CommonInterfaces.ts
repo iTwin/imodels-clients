@@ -12,8 +12,8 @@ export interface ApiOptions {
 }
 
 /** Lets you add additional custom headers to each request */
-export interface HeadersFactories {
-  [key: string]: () => string | (() => string | undefined) | (() => undefined);
+export interface HeaderFactories {
+  [key: string]: (() => string | undefined) | string;
 }
 
 /**
@@ -47,8 +47,8 @@ export interface AuthorizationParam {
 
 /** Headers parameter. This interface is extended by all other specific operation parameter interfaces. */0;
 export interface HeadersParam {
-  /** Additional headers to add to each request. See {@link HeadersFactories}. */
-  headersFactories?: HeadersFactories;
+  /** Additional headers to add to each request. See {@link HeaderFactories}. */
+  headers?: HeaderFactories;
 }
 
 /**

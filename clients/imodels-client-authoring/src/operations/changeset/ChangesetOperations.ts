@@ -46,7 +46,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId }),
       body: createChangesetBody,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
 
     const uploadLink = createChangesetResponse.changeset._links.upload;
@@ -63,10 +63,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       authorization: params.authorization,
       url: completeLink.href,
       body: confirmUploadBody,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
 
-    const result = this.appendRelatedEntityCallbacks(params.authorization, confirmUploadResponse.changeset, params.headersFactories);
+    const result = this.appendRelatedEntityCallbacks(params.authorization, confirmUploadResponse.changeset, params.headers);
     return result;
   }
 
@@ -122,7 +122,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
           abortSignal: params.abortSignal,
           downloadCallback,
           firstDownloadFailedCallback: downloadFailedCallback,
-          headersFactories: params.headersFactories
+          headers: params.headers
         }));
       await queue.waitAll();
     }
@@ -168,7 +168,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       changeset: changesetWithPath,
       abortSignal: params.abortSignal,
       downloadCallback,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
 
     return changesetWithPath;
@@ -207,7 +207,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       const changeset = await this.querySingleInternal({
         authorization: params.authorization,
         iModelId: params.iModelId,
-        changesetId: params.changeset.id
+        changesetId: params.changeset.id,
+        headers: params.headers
       });
 
       try {

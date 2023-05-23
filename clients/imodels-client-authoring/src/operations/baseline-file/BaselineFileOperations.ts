@@ -22,7 +22,7 @@ export class BaselineFileOperations<TOptions extends OperationOptions> extends O
     const response = await this.sendGetRequest<BaselineFileResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getBaselineUrl({ iModelId: params.iModelId }),
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
     return response.baselineFile;
   }

@@ -26,7 +26,7 @@ export class LockOperations<TOptions extends OperationOptions> extends Operation
       authorization: params.authorization,
       url: this._options.urlFormatter.getLockListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       entityCollectionAccessor: (response: unknown) => (response as LocksResponse).locks,
-      headersFactories: params.headersFactories
+      headers: params.headers
     }));
   }
 
@@ -43,7 +43,7 @@ export class LockOperations<TOptions extends OperationOptions> extends Operation
       authorization: params.authorization,
       url: this._options.urlFormatter.getLockListUrl({ iModelId: params.iModelId }),
       body: updateLockBody,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
     return updateLockResponse.lock;
   }

@@ -38,7 +38,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   public async createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel> {
     const baselineFileSize = await this._options.localFileSystem.getFileSize(params.iModelProperties.filePath);
     const createIModelBody = this.getCreateIModelFromBaselineRequestBody(params.iModelProperties, baselineFileSize);
-    const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody);
+    const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headers);
 
     assertLink(createdIModel._links.upload);
     const uploadUrl = createdIModel._links.upload.href;
@@ -53,18 +53,18 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
       authorization: params.authorization,
       url: confirmUploadUrl,
       body: undefined,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
 
     await this.waitForBaselineFileInitialization({
       authorization: params.authorization,
       iModelId: createdIModel.id,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
     return this.getSingle({
       authorization: params.authorization,
       iModelId: createdIModel.id,
-      headersFactories: params.headersFactories
+      headers: params.headers
     });
   }
 

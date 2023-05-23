@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, HeadersFactories, User } from "../base/types";
+import { AuthorizationCallback, HeaderFactories, User } from "../base/types";
 
 import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
 import { OperationOptions } from "./OperationOptions";
@@ -13,7 +13,7 @@ export async function getUser(
   userOperations: UserOperations<OperationOptions>,
   urlFormatter: IModelsApiUrlFormatter,
   userLink: string | undefined,
-  headersFactories?: HeadersFactories
+  headers?: HeaderFactories
 ): Promise<User | undefined> {
   if (!userLink)
     return undefined;
@@ -23,6 +23,6 @@ export async function getUser(
     authorization,
     iModelId,
     userId,
-    headersFactories
+    headers
   });
 }
