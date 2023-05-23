@@ -9,8 +9,7 @@ parameters:
 trigger: none
 
 variables:
-  node18Version: '18.13.0'
-  node12Version: '12.17.0'
+  node18Version: '18.12.0'
 
 jobs:
   - job: BuildAndTest
@@ -19,9 +18,6 @@ jobs:
         linux-node18:
           imageName: 'ubuntu-latest'
           nodeVersion: $(node18Version)
-        linux-node12:
-          imageName: 'ubuntu-latest'
-          nodeVersion: $(node12Version)
         mac-node18:
           imageName: 'macos-latest'
           nodeVersion: $(node18Version)
