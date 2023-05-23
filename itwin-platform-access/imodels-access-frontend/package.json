@@ -52,8 +52,8 @@
     "typescript": "~4.4.0"
   },
   "peerDependencies": {
-    "@itwin/core-bentley": "^3.6.0 || ^4.0.0",
-    "@itwin/core-common": "^3.6.0 || ^4.0.0",
-    "@itwin/core-frontend": "^3.6.0 || ^4.0.0"
+    "@itwin/core-bentley": "^4.0.0",
+    "@itwin/core-common": "^4.0.0",
+    "@itwin/core-frontend": "^4.0.0"
   }
 }
