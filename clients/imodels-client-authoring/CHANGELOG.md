@@ -1,5 +1,10 @@
 # Change Log - @itwin/imodels-client-authoring 
 
+## 4.0.0
+
+Breaking changes:
+- Dropped support for Node.js versions older than 18.12.0.
+
 ## 3.0.0
 
 Breaking changes:
