@@ -19,7 +19,7 @@ export interface IModelsClientOptions {
   restClient?: RestClient;
   /** iModels API options. See {@link ApiOptions}. */
   api?: ApiOptions;
-  /** additional headers to add to each request. See {@link HeaderFactories}. */
+  /** Additional headers to add to each request. See {@link HeaderFactories}. */
   headers?: HeaderFactories;
 }
 

@@ -45,12 +45,12 @@ export interface AuthorizationParam {
   authorization: AuthorizationCallback;
 }
 
-/**
- * Headers parameter. This interface is extended by all other specific operation parameter interfaces.
- * @remarks The `headers` parameter inside specific operation will overwrite the constructor headers.
- */
+/** Headers parameter. This interface is extended by all other specific operation parameter interfaces. */
 export interface HeadersParam {
-  /** Additional headers to add to each request. See {@link HeaderFactories}. */
+  /**
+   * Additional headers to add to each request. See {@link HeaderFactories}.
+   * @remarks The headers passed to a specific operation will overwrite headers passed to the `IModelsClient` constructor.
+   * */
   headers?: HeaderFactories;
 }
 

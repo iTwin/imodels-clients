@@ -103,8 +103,6 @@ describe("[Management] OperationsBase", () => {
     requiredArgs = {url: "url", authorization: authorizationCallback};
   });
 
-  operationsTestCases;
-
   for( const testCase of operationsTestCases) {
     const { caseName, headersPassedToConstructor, headersPassedToOperation, expectedHeaders } = testCase;
 

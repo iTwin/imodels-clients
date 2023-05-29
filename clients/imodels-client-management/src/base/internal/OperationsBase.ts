@@ -109,7 +109,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
       return;
 
     for (const headerName in additionalHeaders) {
-      if(Object.prototype.hasOwnProperty.call(additionalHeaders, headerName)) {
+      if (Object.prototype.hasOwnProperty.call(additionalHeaders, headerName)) {
         const headerValue: string | undefined = this.resolveHeaderValue(additionalHeaders[headerName]);
         if (typeof headerValue === "string")
           existingHeaders[headerName] = headerValue;
