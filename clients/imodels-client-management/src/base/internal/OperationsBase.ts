@@ -8,9 +8,7 @@ import { AuthorizationParam, BinaryContentType, ContentType, Dictionary, HeaderF
 import { CollectionResponse } from "./ApiResponseInterfaces";
 import { EntityCollectionPage } from "./UtilityTypes";
 
-interface CommonRequestParams extends AuthorizationParam, HeadersParam {
-}
-
+type CommonRequestParams = AuthorizationParam & HeadersParam;
 export type SendGetRequestParams = CommonRequestParams & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };
 export type SendPostRequestParams = CommonRequestParams & { url: string, body: object | undefined };
 export type SendPutRequestParams = CommonRequestParams & { url: string, contentType: BinaryContentType, body: Uint8Array };

@@ -11,7 +11,7 @@ export interface ApiOptions {
   version?: string;
 }
 
-/** A collection of custom headers to add to each request */
+/** A collection of custom headers to add to each request. */
 export interface HeaderFactories {
   [key: string]: (() => string | undefined) | string;
 }
