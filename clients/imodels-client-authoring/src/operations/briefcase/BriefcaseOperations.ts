@@ -24,9 +24,10 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Mana
     const acquireBriefcaseResponse = await this.sendPostRequest<BriefcaseResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getBriefcaseListUrl({ iModelId: params.iModelId }),
-      body: acquireBriefcaseBody
+      body: acquireBriefcaseBody,
+      headers: params.headers
     });
-    const result = this.appendRelatedEntityCallbacks(params.authorization, acquireBriefcaseResponse.briefcase);
+    const result = this.appendRelatedEntityCallbacks(params.authorization, acquireBriefcaseResponse.briefcase, params.headers);
     return result;
   }
 
@@ -40,7 +41,8 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Mana
   public async release(params: ReleaseBriefcaseParams): Promise<void> {
     return this.sendDeleteRequest({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleBriefcaseUrl({ iModelId: params.iModelId, briefcaseId: params.briefcaseId })
+      url: this._options.urlFormatter.getSingleBriefcaseUrl({ iModelId: params.iModelId, briefcaseId: params.briefcaseId }),
+      headers: params.headers
     });
   }
 

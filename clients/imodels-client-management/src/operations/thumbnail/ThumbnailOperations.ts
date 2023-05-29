@@ -35,7 +35,8 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
     const response: Uint8Array = await this.sendGetRequest({
       authorization: params.authorization,
       url,
-      responseType: ContentType.Png
+      responseType: ContentType.Png,
+      headers: params.headers
     });
 
     return {
@@ -58,7 +59,8 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
       authorization: params.authorization,
       url,
       contentType: params.thumbnailProperties.imageType,
-      body: params.thumbnailProperties.image
+      body: params.thumbnailProperties.image,
+      headers: params.headers
     });
   }
 }

@@ -25,7 +25,8 @@ export class LockOperations<TOptions extends OperationOptions> extends Operation
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<Lock>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getLockListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
-      entityCollectionAccessor: (response: unknown) => (response as LocksResponse).locks
+      entityCollectionAccessor: (response: unknown) => (response as LocksResponse).locks,
+      headers: params.headers
     }));
   }
 
@@ -41,7 +42,8 @@ export class LockOperations<TOptions extends OperationOptions> extends Operation
     const updateLockResponse = await this.sendPatchRequest<LockResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getLockListUrl({ iModelId: params.iModelId }),
-      body: updateLockBody
+      body: updateLockBody,
+      headers: params.headers
     });
     return updateLockResponse.lock;
   }

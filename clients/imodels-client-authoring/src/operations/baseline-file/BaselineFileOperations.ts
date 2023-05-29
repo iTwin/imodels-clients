@@ -21,7 +21,8 @@ export class BaselineFileOperations<TOptions extends OperationOptions> extends O
   public async getSingle(params: GetSingleBaselineFileParams): Promise<BaselineFile> {
     const response = await this.sendGetRequest<BaselineFileResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getBaselineUrl({ iModelId: params.iModelId })
+      url: this._options.urlFormatter.getBaselineUrl({ iModelId: params.iModelId }),
+      headers: params.headers
     });
     return response.baselineFile;
   }

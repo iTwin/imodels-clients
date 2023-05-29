@@ -45,7 +45,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     const createChangesetResponse = await this.sendPostRequest<ChangesetResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId }),
-      body: createChangesetBody
+      body: createChangesetBody,
+      headers: params.headers
     });
 
     const uploadLink = createChangesetResponse.changeset._links.upload;
@@ -61,10 +62,11 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     const confirmUploadResponse = await this.sendPatchRequest<ChangesetResponse>({
       authorization: params.authorization,
       url: completeLink.href,
-      body: confirmUploadBody
+      body: confirmUploadBody,
+      headers: params.headers
     });
 
-    const result = this.appendRelatedEntityCallbacks(params.authorization, confirmUploadResponse.changeset);
+    const result = this.appendRelatedEntityCallbacks(params.authorization, confirmUploadResponse.changeset, params.headers);
     return result;
   }
 
@@ -119,7 +121,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
           changeset,
           abortSignal: params.abortSignal,
           downloadCallback,
-          firstDownloadFailedCallback: downloadFailedCallback
+          firstDownloadFailedCallback: downloadFailedCallback,
+          headers: params.headers
         }));
       await queue.waitAll();
     }
@@ -164,7 +167,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       iModelId: params.iModelId,
       changeset: changesetWithPath,
       abortSignal: params.abortSignal,
-      downloadCallback
+      downloadCallback,
+      headers: params.headers
     });
 
     return changesetWithPath;
@@ -203,7 +207,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       const changeset = await this.querySingleInternal({
         authorization: params.authorization,
         iModelId: params.iModelId,
-        changesetId: params.changeset.id
+        changesetId: params.changeset.id,
+        headers: params.headers
       });
 
       try {

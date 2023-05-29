@@ -2,6 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { randomUUID } from "crypto";
+
 import { expect } from "chai";
 
 import { AuthorizationCallback, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
@@ -64,6 +66,9 @@ describe("[Management] IModelOperations", () => {
         urlParams: {
           iTwinId,
           $top: 5
+        },
+        headers: {
+          "X-Correlation-Id": randomUUID()
         }
       };
 
@@ -82,7 +87,10 @@ describe("[Management] IModelOperations", () => {
     // Arrange
     const getSingleiModelParams: GetSingleIModelParams = {
       authorization,
-      iModelId: testIModelForRead.id
+      iModelId: testIModelForRead.id,
+      headers: {
+        "X-Correlation-Id": randomUUID()
+      }
     };
 
     // Act
@@ -101,11 +109,15 @@ describe("[Management] IModelOperations", () => {
 
   it("should return items in ascending/descending order when querying representation collection", async () => {
     // Arrange
+    const correlationId = randomUUID();
     await iModelsClient.iModels.createEmpty({
       authorization,
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getFirstIModelNameForOrderingTests()
+      },
+      headers: {
+        "X-Correlation-Id": correlationId
       }
     });
     await iModelsClient.iModels.createEmpty({
@@ -113,6 +125,9 @@ describe("[Management] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getLastIModelNameForOrderingTests()
+      },
+      headers: {
+        "X-Correlation-Id": correlationId
       }
     });
 
@@ -123,6 +138,9 @@ describe("[Management] IModelOperations", () => {
         $orderBy: {
           property: IModelOrderByProperty.Name
         }
+      },
+      headers: {
+        "X-Correlation-Id": correlationId
       }
     };
     const getDescendingIModelListParams: GetIModelListParams = {
@@ -133,6 +151,9 @@ describe("[Management] IModelOperations", () => {
           property: IModelOrderByProperty.Name,
           operator: OrderByOperator.Descending
         }
+      },
+      headers: {
+        "X-Correlation-Id": correlationId
       }
     };
 
@@ -171,6 +192,9 @@ describe("[Management] IModelOperations", () => {
       urlParams: {
         iTwinId,
         name: testIModelForRead.name
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
       }
     };
 
@@ -192,6 +216,9 @@ describe("[Management] IModelOperations", () => {
       urlParams: {
         iTwinId,
         $top: 1
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
       }
     };
 
@@ -214,6 +241,9 @@ describe("[Management] IModelOperations", () => {
       urlParams: {
         iTwinId,
         name: "Non existent name"
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
       }
     };
 
@@ -237,6 +267,9 @@ describe("[Management] IModelOperations", () => {
           southWest: { latitude: 1, longitude: 2 },
           northEast: { latitude: 3, longitude: 4 }
         }
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
       }
     };
 
@@ -260,6 +293,9 @@ describe("[Management] IModelOperations", () => {
         template: {
           iModelId: testIModelForRead.id
         }
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
       }
     };
 
@@ -284,6 +320,9 @@ describe("[Management] IModelOperations", () => {
           iModelId: testIModelForRead.id,
           changesetId: testIModelFileProvider.changesets[5].id
         }
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
       }
     };
 
@@ -299,9 +338,13 @@ describe("[Management] IModelOperations", () => {
 
   it("should update iModel name", async () => {
     // Arrange
+    const correlationId = randomUUID();
     const iModelBeforeUpdate: IModel = await iModelsClient.iModels.getSingle({
       authorization,
-      iModelId: testIModelForUpdate.id
+      iModelId: testIModelForUpdate.id,
+      headers: {
+        "X-Correlation-Id": correlationId
+      }
     });
 
     const newIModelName = testIModelGroup.getPrefixedUniqueIModelName("new iModel name");
@@ -310,6 +353,9 @@ describe("[Management] IModelOperations", () => {
       iModelId: testIModelForUpdate.id,
       iModelProperties: {
         name: newIModelName
+      },
+      headers: {
+        "X-Correlation-Id": correlationId
       }
     };
 
@@ -330,9 +376,13 @@ describe("[Management] IModelOperations", () => {
 
   it("should update iModel description", async () => {
     // Arrange
+    const correlationId = randomUUID();
     const iModelBeforeUpdate: IModel = await iModelsClient.iModels.getSingle({
       authorization,
-      iModelId: testIModelForUpdate.id
+      iModelId: testIModelForUpdate.id,
+      headers: {
+        "X-Correlation-Id": correlationId
+      }
     });
 
     const newIModelDescription = "new description";
@@ -341,6 +391,9 @@ describe("[Management] IModelOperations", () => {
       iModelId: testIModelForUpdate.id,
       iModelProperties: {
         description: newIModelDescription
+      },
+      headers: {
+        "X-Correlation-Id": correlationId
       }
     };
 
@@ -361,9 +414,13 @@ describe("[Management] IModelOperations", () => {
 
   it("should update iModel extent", async () => {
     // Arrange
+    const correlationId = randomUUID();
     const iModelBeforeUpdate: IModel = await iModelsClient.iModels.getSingle({
       authorization,
-      iModelId: testIModelForUpdate.id
+      iModelId: testIModelForUpdate.id,
+      headers: {
+        "X-Correlation-Id": correlationId
+      }
     });
 
     const newIModelExtent: Extent = {
@@ -381,6 +438,9 @@ describe("[Management] IModelOperations", () => {
       iModelId: testIModelForUpdate.id,
       iModelProperties: {
         extent: newIModelExtent
+      },
+      headers: {
+        "X-Correlation-Id": correlationId
       }
     };
 
@@ -406,6 +466,9 @@ describe("[Management] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel (unauthorized)")
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
       }
     };
 
@@ -435,6 +498,9 @@ describe("[Management] IModelOperations", () => {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel (invalid)"),
         description: "x".repeat(256)
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
       }
     };
 

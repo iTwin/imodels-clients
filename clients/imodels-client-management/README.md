@@ -20,6 +20,27 @@ const iModelIterator: EntityListIterator<MinimalIModel> = iModelsClient.iModels.
 });
 ```
 
+### Headers
+
+To include custom headers in your requests, you have the option to provide additional headers or header factories. When constructing an instance of `IModelsClient`, any headers passed to the constructor will be automatically added to all requests made by the client. On the other hand, when invoking specific operations, you can pass headers through the operation parameters, which will be included only in the requests related to that particular operation. If a header with the same key is specified in both the constructor and operation parameters, the header from the operation parameters will overwrite the corresponding header from the constructor.
+
+**Note:** Whitespace values, such as empty strings or spaces are treated as regular headers in our requests. This means that if you provide a whitespace header value it will be sent with the request.
+```typescript
+iModelsClient = new IModelsClient({
+  headers: {
+    "X-Correlation-Id": () => "xCorrelationIdValue",
+    "some-custom-header": "someCustomValue"
+  }
+});
+
+iModelsClient.baselineFiles.getSingle({
+  headers: {
+    "X-Correlation-Id": "some value that overrides factory",
+    "new-custom-header": "header that will be sent in this operation requests"
+  }
+})
+```
+
 ### Get all project iModels
 ```typescript
 import { Authorization, EntityListIterator, IModelsClient, MinimalIModel } from "@itwin/imodels-client-management";
