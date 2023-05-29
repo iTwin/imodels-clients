@@ -3,9 +3,6 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { randomUUID } from "crypto";
-
-import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
-import { TestErrorParser } from "@itwin/imodels-client-test-utils/lib/TestErrorParser";
 import { expect } from "chai";
 
 import { AuthorizationCallback, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
@@ -27,7 +24,6 @@ describe("[Management] IModelOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
-    iModelsClientOptions.restClient = new AxiosRestClient(TestErrorParser.parse);
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
