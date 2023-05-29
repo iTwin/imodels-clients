@@ -26,14 +26,14 @@ To include custom headers in your requests, you have the option to provide addit
 ```typescript
 iModelsClient = new IModelsClient({
   headers: {
-    "x-activity-id": () => "xActivityIdValue",
+    "X-Correlation-Id": () => "xCorrelationIdValue",
     "some-custom-header": "someCustomValue"
   }
 });
 
 iModelsClient.baselineFiles.getSingle({
   headers: {
-    "x-activity-id": "some value that overrides factory",
+    "X-Correlation-Id": "some value that overrides factory",
     "new-custom-header": "header that will be sent in this operation requests"
   }
 })

@@ -8,16 +8,18 @@ import { AuthorizationParam, BinaryContentType, ContentType, Dictionary, HeaderF
 import { CollectionResponse } from "./ApiResponseInterfaces";
 import { EntityCollectionPage } from "./UtilityTypes";
 
-export type SendGetRequestParams = AuthorizationParam & HeadersParam & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };
-export type SendPostRequestParams = AuthorizationParam & HeadersParam & { url: string, body: object | undefined };
-export type SendPutRequestParams = AuthorizationParam & HeadersParam & { url: string, contentType: BinaryContentType, body: Uint8Array };
-export type SendPatchRequestParams = SendPostRequestParams;
-export type SendDeleteRequestParams = AuthorizationParam & HeadersParam & { url: string };
+interface CommonRequestParams extends AuthorizationParam, HeadersParam {
+}
 
+export type SendGetRequestParams = CommonRequestParams & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };
+export type SendPostRequestParams = CommonRequestParams & { url: string, body: object | undefined };
+export type SendPutRequestParams = CommonRequestParams & { url: string, contentType: BinaryContentType, body: Uint8Array };
+export type SendPatchRequestParams = SendPostRequestParams;
+export type SendDeleteRequestParams = CommonRequestParams & { url: string };
 export interface OperationsBaseOptions {
   restClient: RestClient;
   api: { version: string };
-  headers?: HeaderFactories;
+  headers: HeaderFactories;
 }
 
 export class OperationsBase<TOptions extends OperationsBaseOptions> {
@@ -84,7 +86,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     });
   }
 
-  protected async getEntityCollectionPage<TEntity>(params: AuthorizationParam & HeadersParam & {
+  protected async getEntityCollectionPage<TEntity>(params: CommonRequestParams & {
     url: string;
     preferReturn?: PreferReturn;
     entityCollectionAccessor: (response: unknown) => TEntity[];
@@ -98,22 +100,28 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     };
   }
 
-  protected addHeaders(headers: Dictionary<string>, newHeaders?: HeaderFactories) {
-    if (!newHeaders)
+  private resolveHeaderValue(headerOrHeaderFactory: (() => string | undefined) | string): string | undefined {
+    if (typeof headerOrHeaderFactory === "function")
+      return headerOrHeaderFactory();
+    return headerOrHeaderFactory;
+  }
+
+  private addOrUpdateHeaders(existingHeaders: Dictionary<string>, additionalHeaders?: HeaderFactories) {
+    if (!additionalHeaders)
       return;
 
-    for (const headerName in newHeaders) {
-      if(Object.prototype.hasOwnProperty.call(newHeaders, headerName)) {
-        let value: unknown = newHeaders[headerName];
-        if(typeof value === "function")
-          value = value();
-        if (typeof value === "string")
-          headers[headerName] = value;
+    for (const headerName in additionalHeaders) {
+      if(Object.prototype.hasOwnProperty.call(additionalHeaders, headerName)) {
+        const headerValue: string | undefined = this.resolveHeaderValue(additionalHeaders[headerName]);
+        if (typeof headerValue === "string")
+          existingHeaders[headerName] = headerValue;
+        else
+          delete existingHeaders[headerName];
       }
     }
   }
 
-  private async formHeaders(params: AuthorizationParam & HeadersParam & { preferReturn?: PreferReturn, contentType?: ContentType}): Promise<Dictionary<string>> {
+  private async formHeaders(params: CommonRequestParams & { preferReturn?: PreferReturn, contentType?: ContentType}): Promise<Dictionary<string>> {
     const headers: Dictionary<string> = {};
     const authorizationInfo = await params.authorization();
     headers[Constants.headers.authorization] = `${authorizationInfo.scheme} ${authorizationInfo.token}`;
@@ -125,8 +133,8 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     if (params.contentType)
       headers[Constants.headers.contentType] = params.contentType;
 
-    this.addHeaders(headers, this._options.headers);
-    this.addHeaders(headers, params.headers);
+    this.addOrUpdateHeaders(headers, this._options.headers);
+    this.addOrUpdateHeaders(headers, params.headers);
 
     return headers;
   }

@@ -112,7 +112,7 @@ describe("[Management] IModelOperations", () => {
 
   it("should return items in ascending/descending order when querying representation collection", async () => {
     // Arrange
-    const guid = randomUUID();
+    const correlationId = randomUUID();
     await iModelsClient.iModels.createEmpty({
       authorization,
       iModelProperties: {
@@ -120,7 +120,7 @@ describe("[Management] IModelOperations", () => {
         name: testIModelGroup.getFirstIModelNameForOrderingTests()
       },
       headers: {
-        "X-Correlation-Id": guid
+        "X-Correlation-Id": correlationId
       }
     });
     await iModelsClient.iModels.createEmpty({
@@ -130,7 +130,7 @@ describe("[Management] IModelOperations", () => {
         name: testIModelGroup.getLastIModelNameForOrderingTests()
       },
       headers: {
-        "X-Correlation-Id": guid
+        "X-Correlation-Id": correlationId
       }
     });
 
@@ -143,7 +143,7 @@ describe("[Management] IModelOperations", () => {
         }
       },
       headers: {
-        "X-Correlation-Id": guid
+        "X-Correlation-Id": correlationId
       }
     };
     const getDescendingIModelListParams: GetIModelListParams = {
@@ -156,7 +156,7 @@ describe("[Management] IModelOperations", () => {
         }
       },
       headers: {
-        "X-Correlation-Id": guid
+        "X-Correlation-Id": correlationId
       }
     };
 
@@ -341,12 +341,12 @@ describe("[Management] IModelOperations", () => {
 
   it("should update iModel name", async () => {
     // Arrange
-    const guid = randomUUID();
+    const correlationId = randomUUID();
     const iModelBeforeUpdate: IModel = await iModelsClient.iModels.getSingle({
       authorization,
       iModelId: testIModelForUpdate.id,
       headers: {
-        "X-Correlation-Id": guid
+        "X-Correlation-Id": correlationId
       }
     });
 
@@ -358,7 +358,7 @@ describe("[Management] IModelOperations", () => {
         name: newIModelName
       },
       headers: {
-        "X-Correlation-Id": guid
+        "X-Correlation-Id": correlationId
       }
     };
 
@@ -379,12 +379,12 @@ describe("[Management] IModelOperations", () => {
 
   it("should update iModel description", async () => {
     // Arrange
-    const guid = randomUUID();
+    const correlationId = randomUUID();
     const iModelBeforeUpdate: IModel = await iModelsClient.iModels.getSingle({
       authorization,
       iModelId: testIModelForUpdate.id,
       headers: {
-        "X-Correlation-Id": guid
+        "X-Correlation-Id": correlationId
       }
     });
 
@@ -396,7 +396,7 @@ describe("[Management] IModelOperations", () => {
         description: newIModelDescription
       },
       headers: {
-        "X-Correlation-Id": guid
+        "X-Correlation-Id": correlationId
       }
     };
 
@@ -417,12 +417,12 @@ describe("[Management] IModelOperations", () => {
 
   it("should update iModel extent", async () => {
     // Arrange
-    const guid = randomUUID();
+    const correlationId = randomUUID();
     const iModelBeforeUpdate: IModel = await iModelsClient.iModels.getSingle({
       authorization,
       iModelId: testIModelForUpdate.id,
       headers: {
-        "X-Correlation-Id": guid
+        "X-Correlation-Id": correlationId
       }
     });
 
@@ -443,7 +443,7 @@ describe("[Management] IModelOperations", () => {
         extent: newIModelExtent
       },
       headers: {
-        "X-Correlation-Id": guid
+        "X-Correlation-Id": correlationId
       }
     };
 
