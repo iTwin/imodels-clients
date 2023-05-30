@@ -49,7 +49,11 @@ export interface AuthorizationParam {
 export interface HeadersParam {
   /**
    * Additional headers to add to each request. See {@link HeaderFactories}.
-   * @remarks The headers passed to a specific operation will overwrite headers passed to the `IModelsClient` constructor.
+   * @remarks Important considerations:
+   * - The headers passed to a specific operation will overwrite headers passed to the `IModelsClient` constructor.
+   * - If header passed is a header factory (a function) and it returns `null` or `undefined`, the header will not be added to the
+   * request. If a header with the same name was previously passed to the `IModelsClient` constructor and it had a valid value,
+   * it will anyway not be added to the request.
    * */
   headers?: HeaderFactories;
 }
