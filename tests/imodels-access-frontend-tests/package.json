@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-frontend-tests",
-  "version": "4.0.0",
+  "version": "0.0.0",
   "description": "Tests for iTwin platform and iModels API interoperability package - @itwin/imodels-access-frontend.",
   "keywords": [
     "Bentley",
