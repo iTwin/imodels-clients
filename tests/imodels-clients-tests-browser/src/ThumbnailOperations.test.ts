@@ -26,7 +26,8 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
     authorization = async () => admin1AuthorizationInfo;
 
     testIModelForReadId = Cypress.env(FrontendTestEnvVariableKeys.testIModelForReadId);
-    expect(testIModelForReadId).to.equal(1);
+
+    expect(Cypress.env(FrontendTestEnvVariableKeys.testITwinId)).to.equal(1);
 
     const iTwinId: string = Cypress.env(FrontendTestEnvVariableKeys.testITwinId);
     const testIModelForWrite = await iModelsClient.iModels.createEmpty({
@@ -57,9 +58,6 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
       authorization,
       iModelId: testIModelForReadId
     };
-
-
-    expect(testIModelForReadId).to.equal(1);
 
     // Act
     const thumbnail: Thumbnail = await iModelsClient.thumbnails.download(downloadThumbnailParams);
