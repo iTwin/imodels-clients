@@ -250,53 +250,11 @@ describe("[Management] OperationsBase", () => {
       // Act
       await iModelsOperationsWrapper.sendPostRequest({
         ...requiredArgs,
-        body: {}
+        body: undefined
       });
 
       // Assert
       const callHeaders = restClient.sendPostRequest.lastCall.args[0].headers;
-      expect(callHeaders).to.not.have.property("Content-Type");
-    });
-
-    it("Adds Content-Type header for Put Request", async () => {
-      // Arrange
-      const iModelsOperationsWrapper = new TestOperationsWrapper(
-        {
-          restClient,
-          api: {version: "version"},
-          headers: {}
-        });
-
-      // Act
-      await iModelsOperationsWrapper.sendPutRequest({
-        ...requiredArgs,
-        body: new Uint8Array(1),
-        contentType: ContentType.Png
-      });
-
-      // Assert
-      const callHeaders = restClient.sendPutRequest.lastCall.args[0].headers;
-      expect(callHeaders).to.include({"Content-Type": ContentType.Png});
-    });
-
-    it("Does not add Content-Type header for Put Request", async () => {
-      // Arrange
-      const iModelsOperationsWrapper = new TestOperationsWrapper(
-        {
-          restClient,
-          api: {version: "version"},
-          headers: {}
-        });
-
-      // Act
-      await iModelsOperationsWrapper.sendPutRequest({
-        ...requiredArgs,
-        body: new Uint8Array(),
-        contentType: ContentType.Png
-      });
-
-      // Assert
-      const callHeaders = restClient.sendPutRequest.lastCall.args[0].headers;
       expect(callHeaders).to.not.have.property("Content-Type");
     });
 
@@ -335,7 +293,7 @@ describe("[Management] OperationsBase", () => {
       // Act
       await iModelsOperationsWrapper.sendPatchRequest({
         ...requiredArgs,
-        body: {}
+        body: undefined
       });
 
       // Assert

@@ -128,7 +128,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     if (params.preferReturn)
       headers[Constants.headers.prefer] = `return=${params.preferReturn}`;
 
-    if (params.contentType && params.body !== undefined && JSON.stringify(params.body) !== "{}")
+    if (params.contentType && params.body !== undefined)
       headers[Constants.headers.contentType] = params.contentType;
 
     this.addOrUpdateHeaders(headers, this._options.headers);
