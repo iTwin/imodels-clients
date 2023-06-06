@@ -56,6 +56,15 @@ describe("[Management] ThumbnailOperations", () => {
       iModelId: testIModelForRead.id
     };
 
+    /* eslint-disable no-console */
+    console.log(testIModelForRead.briefcase);
+    console.log(testIModelForRead.description);
+    console.log(testIModelForRead.id);
+    console.log(testIModelForRead.lock);
+    console.log(testIModelForRead.name);
+    console.log(testIModelForRead.namedVersions);
+    /* eslint-enable no-console */
+
     // Act
     const thumbnail: Thumbnail = await iModelsClient.thumbnails.download(downloadThumbnailParams);
 
