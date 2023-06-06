@@ -27,8 +27,6 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
 
     testIModelForReadId = Cypress.env(FrontendTestEnvVariableKeys.testIModelForReadId);
 
-    expect(Cypress.env(FrontendTestEnvVariableKeys.testITwinId)).to.equal(1);
-
     const iTwinId: string = Cypress.env(FrontendTestEnvVariableKeys.testITwinId);
     const testIModelForWrite = await iModelsClient.iModels.createEmpty({
       authorization,
