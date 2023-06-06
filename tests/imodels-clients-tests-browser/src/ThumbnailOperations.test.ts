@@ -57,9 +57,8 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
       iModelId: testIModelForReadId
     };
 
-    /* eslint-disable no-console */
-    console.error(testIModelForReadId);
-    /* eslint-enable no-console */
+
+    expect(testIModelForReadId).to.equal(1);
 
     // Act
     const thumbnail: Thumbnail = await iModelsClient.thumbnails.download(downloadThumbnailParams);
