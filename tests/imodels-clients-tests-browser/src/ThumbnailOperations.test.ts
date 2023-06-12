@@ -73,7 +73,10 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
     // Arrange
     const iModelScopedOperationParams: IModelScopedOperationParams = {
       authorization,
-      iModelId: testIModelForWriteId
+      iModelId: testIModelForWriteId,
+      headers: {
+        "Accept-Encoding": "gzip,deflate,compress"
+      }
     };
     const initialThumbnail: Thumbnail = await iModelsClient.thumbnails.download(iModelScopedOperationParams);
 
