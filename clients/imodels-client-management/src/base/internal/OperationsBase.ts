@@ -119,7 +119,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     }
   }
 
-  private async formHeaders(params: CommonRequestParams & { preferReturn?: PreferReturn, contentType?: ContentType}): Promise<Dictionary<string>> {
+  private async formHeaders(params: CommonRequestParams & { preferReturn?: PreferReturn, contentType?: ContentType, body?: object }): Promise<Dictionary<string>> {
     const headers: Dictionary<string> = {};
     const authorizationInfo = await params.authorization();
     headers[Constants.headers.authorization] = `${authorizationInfo.scheme} ${authorizationInfo.token}`;
@@ -128,7 +128,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     if (params.preferReturn)
       headers[Constants.headers.prefer] = `return=${params.preferReturn}`;
 
-    if (params.contentType)
+    if (params.contentType && params.body !== undefined)
       headers[Constants.headers.contentType] = params.contentType;
 
     this.addOrUpdateHeaders(headers, this._options.headers);

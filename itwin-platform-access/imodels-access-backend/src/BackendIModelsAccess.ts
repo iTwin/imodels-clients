@@ -247,7 +247,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     const contentRangeHeaderName = "content-range";
 
     const response: AxiosResponse = await axios.get(downloadUrl, { headers: { Range: emptyRangeHeaderValue } });
-    const rangeHeaderValue: string = response.headers[contentRangeHeaderName];
+    const rangeHeaderValue: string = response.headers[contentRangeHeaderName]!;
     const rangeTotalBytesString: string = rangeHeaderValue.split("/")[1];
     const rangeTotalBytes: number = parseInt(rangeTotalBytesString, 10);
 

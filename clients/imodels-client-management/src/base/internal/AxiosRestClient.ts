@@ -18,6 +18,8 @@ export class AxiosRestClient implements RestClient {
 
   constructor(parseErrorFunc: ParseErrorFunc) {
     this._parseErrorFunc = parseErrorFunc;
+    delete axios.defaults.headers.post["Content-Type"];
+    delete axios.defaults.headers.patch["Content-Type"];
   }
 
   public sendGetRequest<TResponse>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<TResponse>;
@@ -43,7 +45,7 @@ export class AxiosRestClient implements RestClient {
       headers: params.headers
     };
 
-    return this.executeRequest(async () => axios.post(params.url, params.body.content ?? {}, requestConfig));
+    return this.executeRequest(async () => axios.post(params.url, params.body.content, requestConfig));
   }
 
   public async sendPutRequest<TResponse>(params: HttpRequestWithBinaryBodyParams): Promise<TResponse> {
@@ -59,7 +61,7 @@ export class AxiosRestClient implements RestClient {
       headers: params.headers
     };
 
-    return this.executeRequest(async () => axios.patch(params.url, params.body.content ?? {}, requestConfig));
+    return this.executeRequest(async () => axios.patch(params.url, params.body.content, requestConfig));
   }
 
   public async sendDeleteRequest<TResponse>(params: HttpRequestParams): Promise<TResponse> {
