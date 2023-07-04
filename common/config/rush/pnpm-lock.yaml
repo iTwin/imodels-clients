@@ -54,10 +54,10 @@ importers:
   ../../itwin-platform-access/imodels-access-backend:
     specifiers:
       '@azure/abort-controller': ^1.1.0
-      '@itwin/core-backend': ^4.0.3
-      '@itwin/core-bentley': ^4.0.3
-      '@itwin/core-common': ^4.0.3
-      '@itwin/core-geometry': ^4.0.3
+      '@itwin/core-backend': ^4.0.0
+      '@itwin/core-bentley': ^4.0.0
+      '@itwin/core-common': ^4.0.0
+      '@itwin/core-geometry': ^4.0.0
       '@itwin/imodels-client-authoring': workspace:*
       '@itwin/imodels-client-common-config': workspace:*
       '@types/node': 14.14.31
@@ -88,16 +88,16 @@ importers:
 
   ../../itwin-platform-access/imodels-access-frontend:
     specifiers:
-      '@itwin/appui-abstract': ^4.0.3
-      '@itwin/core-bentley': ^4.0.3
-      '@itwin/core-common': ^4.0.3
-      '@itwin/core-frontend': ^4.0.3
-      '@itwin/core-geometry': ^4.0.3
-      '@itwin/core-orbitgt': ^4.0.3
-      '@itwin/core-quantity': ^4.0.3
+      '@itwin/appui-abstract': ^4.0.0
+      '@itwin/core-bentley': ^4.0.0
+      '@itwin/core-common': ^4.0.0
+      '@itwin/core-frontend': ^4.0.0
+      '@itwin/core-geometry': ^4.0.0
+      '@itwin/core-orbitgt': ^4.0.0
+      '@itwin/core-quantity': ^4.0.0
       '@itwin/imodels-client-common-config': workspace:*
       '@itwin/imodels-client-management': workspace:*
-      '@itwin/webgl-compatibility': ^4.0.3
+      '@itwin/webgl-compatibility': ^4.0.0
       '@types/node': 14.14.31
       cspell: ~5.21.0
       eslint: ~7.31.0
@@ -125,12 +125,12 @@ importers:
 
   ../../tests/imodels-access-backend-tests:
     specifiers:
-      '@itwin/core-backend': ^4.0.3
-      '@itwin/core-bentley': ^4.0.3
-      '@itwin/core-common': ^4.0.3
-      '@itwin/core-geometry': ^4.0.3
-      '@itwin/core-quantity': ^4.0.3
-      '@itwin/ecschema-metadata': ^4.0.3
+      '@itwin/core-backend': ^4.0.0
+      '@itwin/core-bentley': ^4.0.0
+      '@itwin/core-common': ^4.0.0
+      '@itwin/core-geometry': ^4.0.0
+      '@itwin/core-quantity': ^4.0.0
+      '@itwin/ecschema-metadata': ^4.0.0
       '@itwin/imodels-access-backend': workspace:*
       '@itwin/imodels-client-authoring': workspace:*
       '@itwin/imodels-client-common-config': workspace:*
@@ -178,18 +178,18 @@ importers:
 
   ../../tests/imodels-access-frontend-tests:
     specifiers:
-      '@itwin/appui-abstract': ^4.0.3
-      '@itwin/core-bentley': ^4.0.3
-      '@itwin/core-common': ^4.0.3
-      '@itwin/core-frontend': ^4.0.3
-      '@itwin/core-geometry': ^4.0.3
-      '@itwin/core-orbitgt': ^4.0.3
-      '@itwin/core-quantity': ^4.0.3
+      '@itwin/appui-abstract': ^4.0.0
+      '@itwin/core-bentley': ^4.0.0
+      '@itwin/core-common': ^4.0.0
+      '@itwin/core-frontend': ^4.0.0
+      '@itwin/core-geometry': ^4.0.0
+      '@itwin/core-orbitgt': ^4.0.0
+      '@itwin/core-quantity': ^4.0.0
       '@itwin/imodels-access-frontend': workspace:*
       '@itwin/imodels-client-common-config': workspace:*
       '@itwin/imodels-client-management': workspace:*
       '@itwin/imodels-client-test-utils': workspace:*
-      '@itwin/webgl-compatibility': ^4.0.3
+      '@itwin/webgl-compatibility': ^4.0.0
       '@types/chai': ~4.2.21
       '@types/mocha': ~9.0.0
       '@types/node': 14.14.31
