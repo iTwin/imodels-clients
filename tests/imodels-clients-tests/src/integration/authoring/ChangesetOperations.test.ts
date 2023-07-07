@@ -640,7 +640,8 @@ describe("[Authoring] ChangesetOperations", () => {
       const progressReports: ProgressReport[] = [];
       const progressCallback: ProgressCallback = (downloaded, total) => {
         progressReports.push({ downloaded, total });
-        if (downloaded > total / 2) abortController.abort();
+        if (downloaded > total / 2)
+          abortController.abort();
       };
 
       const downloadPath = path.join(

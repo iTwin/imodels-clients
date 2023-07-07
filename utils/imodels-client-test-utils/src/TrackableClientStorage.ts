@@ -46,7 +46,7 @@ export class TrackableClientStorage implements ClientStorage {
     transferType: "local";
     localPath: string;
   }): Promise<string>;
-  
+
   public async download(
     input: UrlDownloadInput | ConfigDownloadInput
   ): Promise<TransferData> {
