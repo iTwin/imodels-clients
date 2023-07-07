@@ -32,7 +32,7 @@ export class TrackableClientStorage implements ClientStorage {
     private _underlyingStorage: ClientStorage,
     private _interceptors?: {
       download?: (input: UrlDownloadInput | ConfigDownloadInput) => void;
-  }) {}
+    }) {}
 
   public download(input: (UrlDownloadInput | ConfigDownloadInput) & {
     transferType: "buffer";
