@@ -2,8 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import "reflect-metadata";
+
 import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
-import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
+import {
+  AzureClientStorage,
+  BlockBlobClientWrapperFactory
+} from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
 
 import {
@@ -15,7 +20,15 @@ import {
 import { NodeLocalFileSystem } from "./base/internal";
 import { IModelsErrorParser } from "./base/internal/IModelsErrorParser";
 import { LocalFileSystem } from "./base/types";
-import { BaselineFileOperations, BriefcaseOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
+import {
+  BaselineFileOperations,
+  BriefcaseOperations,
+  ChangesetOperations,
+  IModelOperations,
+  IModelsApiUrlFormatter,
+  LockOperations,
+  OperationOptions
+} from "./operations";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions extends ManagementIModelsClientOptions {
@@ -46,12 +59,15 @@ export class IModelsClient extends ManagementIModelsClient {
    * are `undefined` the client uses defaults. See {@link iModelsClientOptions}.
    */
   constructor(options?: IModelsClientOptions) {
-    const filledIModelsClientOptions = IModelsClient.fillAuthoringClientConfiguration(options);
+    const filledIModelsClientOptions =
+      IModelsClient.fillAuthoringClientConfiguration(options);
     super(filledIModelsClientOptions);
 
     this._operationsOptions = {
       ...filledIModelsClientOptions,
-      urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
+      urlFormatter: new IModelsApiUrlFormatter(
+        filledIModelsClientOptions.api.baseUrl
+      )
     };
   }
 
@@ -93,9 +109,12 @@ export class IModelsClient extends ManagementIModelsClient {
   ): RecursiveRequired<IModelsClientOptions> {
     return {
       api: this.fillApiConfiguration(options?.api),
-      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse),
+      restClient:
+        options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse),
       localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
-      cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory()),
+      cloudStorage:
+        options?.cloudStorage ??
+        new AzureClientStorage(new BlockBlobClientWrapperFactory()),
       headers: options?.headers ?? {}
     };
   }

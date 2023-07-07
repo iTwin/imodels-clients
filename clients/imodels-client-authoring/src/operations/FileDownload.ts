@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import "reflect-metadata";
 import * as fs from "fs";
 
 import { IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
@@ -41,7 +42,10 @@ export async function downloadFile(params: DownloadFileParams): Promise<void> {
     });
     downloadStream.pipe(targetFileStream);
 
-    if (params.totalDownloadCallback || params.latestDownloadedChunkSizeCallback){
+    if (
+      params.totalDownloadCallback ||
+      params.latestDownloadedChunkSizeCallback
+    ) {
       let bytesDownloaded = 0;
       downloadStream.on("data", (chunk: any) => {
         bytesDownloaded += chunk?.length;
