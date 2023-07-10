@@ -42,10 +42,7 @@ export async function downloadFile(params: DownloadFileParams): Promise<void> {
     });
     downloadStream.pipe(targetFileStream);
 
-    if (
-      params.totalDownloadCallback ||
-      params.latestDownloadedChunkSizeCallback
-    ) {
+    if (params.totalDownloadCallback || params.latestDownloadedChunkSizeCallback){
       let bytesDownloaded = 0;
       downloadStream.on("data", (chunk: any) => {
         bytesDownloaded += chunk?.length;
