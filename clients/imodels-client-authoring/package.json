@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-client-authoring",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "iModels API client wrapper for applications that author iModels.",
   "keywords": [
     "Bentley",
