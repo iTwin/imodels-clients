@@ -2,6 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import "reflect-metadata";
 import * as fs from "fs";
 
 import { IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
