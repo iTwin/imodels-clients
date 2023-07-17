@@ -279,7 +279,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return this.findLatestV2CheckpointForChangeset(arg, previousChangesetIndex);
   }
 
-  private async resolveChangesetIndex(arg: CheckpointProps): Promise<number> {
+  private async resolveChangesetIndexFromParamsOrQueryApi(arg: CheckpointProps): Promise<number> {
     if (arg.changeset.id === this._changeSet0.id || arg.changeset.index === this._changeSet0.index)
       return this._changeSet0.index;
 
@@ -295,7 +295,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   private async queryCurrentOrPrecedingV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
-    const changesetIndex = await this.resolveChangesetIndex(arg);
+    const changesetIndex = await this.resolveChangesetIndexFromParamsOrQueryApi(arg);
     const containerAccessInfo = await this.findLatestV2CheckpointForChangeset(arg, changesetIndex);
     if (containerAccessInfo === undefined)
       return undefined;
