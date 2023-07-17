@@ -7,7 +7,7 @@ import { join } from "path";
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
   ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg,
-  IModelDb, IModelHost, IModelIdArg, IModelJsFs,  IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
+  IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
 import { BriefcaseStatus, Guid, GuidString, IModelStatus, Logger, OpenMode } from "@itwin/core-bentley";
 import {
@@ -263,7 +263,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const getSingleChangesetParams: GetSingleChangesetParams = {
       ...this.getIModelScopedOperationParams(arg),
-      ...PlatformToClientAdapter.toChangesetIdOrIndex({index: changesetIndex})
+      ...PlatformToClientAdapter.toChangesetIdOrIndex({ index: changesetIndex })
     };
 
     const changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
@@ -279,14 +279,24 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return this.findLatestV2CheckpointForChangeset(arg, previousChangesetIndex);
   }
 
-  private async queryCurrentOrPrecedingV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
+  private async resolveChangesetIndexFromParamsOrQueryApi(arg: CheckpointProps): Promise<number> {
+    if (arg.changeset.id === this._changeSet0.id || arg.changeset.index === this._changeSet0.index)
+      return this._changeSet0.index;
+
+    if (arg.changeset.index !== undefined)
+      return arg.changeset.index;
+
     const getSingleChangesetParams: GetSingleChangesetParams = {
       ...this.getIModelScopedOperationParams(arg),
-      ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset)
+      changesetId: arg.changeset.id
     };
-
     const changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
-    const containerAccessInfo = await this.findLatestV2CheckpointForChangeset(arg, changeset.index);
+    return changeset.index;
+  }
+
+  private async queryCurrentOrPrecedingV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
+    const changesetIndex = await this.resolveChangesetIndexFromParamsOrQueryApi(arg);
+    const containerAccessInfo = await this.findLatestV2CheckpointForChangeset(arg, changesetIndex);
     if (containerAccessInfo === undefined)
       return undefined;
 
