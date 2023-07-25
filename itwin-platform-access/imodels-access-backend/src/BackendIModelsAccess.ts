@@ -354,11 +354,11 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (locks.length === 0)
       return [];
 
-    var lockProperties: LockProps[] = new Array();
+    let lockProperties: LockProps[] = [];
 
     for (const locksPage of locks){
       Array.prototype.push.apply(lockProperties, ClientToPlatformAdapter.toLockProps(locksPage));
-    };
+    }
 
     return lockProperties;
   }
@@ -376,7 +376,6 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (locks.length === 0)
       return;
 
-
     for await (const locksPage of locks){
       this.setLockLevelToNone(locksPage.lockedObjects);
 
@@ -388,7 +387,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       };
 
       await this._iModelsClient.locks.update(updateLockParams);
-    };
+    }
   }
 
   public async queryIModelByName(arg: IModelNameArg): Promise<GuidString | undefined> {
