@@ -354,8 +354,13 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (locks.length === 0)
       return [];
 
-    const result: LockProps[] = ClientToPlatformAdapter.toLockProps(locks[0]);
-    return result;
+    var lockPoperties: LockProps[] = new Array();
+
+    for (const locksPage of locks){
+      Array.prototype.push.apply(lockPoperties, ClientToPlatformAdapter.toLockProps(locksPage));
+    };
+
+    return lockPoperties;
   }
 
   public async releaseAllLocks(arg: BriefcaseDbArg): Promise<void> {
@@ -371,17 +376,19 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (locks.length === 0)
       return;
 
-    const lock: Lock = locks[0];
-    this.setLockLevelToNone(lock.lockedObjects);
 
-    const updateLockParams: UpdateLockParams = {
-      ...this.getIModelScopedOperationParams(arg),
-      briefcaseId: lock.briefcaseId,
-      changesetId: arg.changeset.id,
-      lockedObjects: lock.lockedObjects
+    for await (const locksPage of locks){
+      this.setLockLevelToNone(locksPage.lockedObjects);
+
+      const updateLockParams: UpdateLockParams = {
+        ...this.getIModelScopedOperationParams(arg),
+        briefcaseId: locksPage.briefcaseId,
+        changesetId: arg.changeset.id,
+        lockedObjects: locksPage.lockedObjects
+      };
+
+      await this._iModelsClient.locks.update(updateLockParams);
     };
-
-    await this._iModelsClient.locks.update(updateLockParams);
   }
 
   public async queryIModelByName(arg: IModelNameArg): Promise<GuidString | undefined> {
