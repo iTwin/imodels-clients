@@ -450,13 +450,12 @@ describe("BackendIModelsAccess", () => {
         changeset: { id: "", index: 0 }
       };
 
-
       const locksToAcquire: LockMap = new Map<string, LockState>();
 
-      var objectIdsDec = Array.from({length: 201}, (_, i) => i + 1);
+      const objectIdsDec = Array.from({length: 201}, (_, i) => i + 1);
       for (const objectId of objectIdsDec){
-        locksToAcquire.set("0x" + objectId.toString(16), LockState.Exclusive);
-      };
+        locksToAcquire.set(`0x ${objectId.toString(16)}`, LockState.Exclusive);
+      }
 
       await backendIModelsAccess.acquireLocks(briefcaseDbParams, locksToAcquire);
       await assertLocks({
