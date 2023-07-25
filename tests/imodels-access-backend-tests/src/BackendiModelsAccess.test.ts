@@ -454,7 +454,7 @@ describe("BackendIModelsAccess", () => {
 
       const objectIdsDec = Array.from({length: 201}, (_, i) => i + 1);
       for (const objectId of objectIdsDec){
-        locksToAcquire.set(`0x ${objectId.toString(16)}`, LockState.Exclusive);
+        locksToAcquire.set(`0x${objectId.toString(16)}`, LockState.Exclusive);
       }
 
       await backendIModelsAccess.acquireLocks(briefcaseDbParams, locksToAcquire);
