@@ -354,13 +354,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (locks.length === 0)
       return [];
 
-    let lockProperties: LockProps[] = [];
-
-    for (const locksPage of locks){
-      Array.prototype.push.apply(lockProperties, ClientToPlatformAdapter.toLockProps(locksPage));
-    }
-
-    return lockProperties;
+    const result: LockProps[] = locks.flatMap(ClientToPlatformAdapter.toLockProps);
+    return result;
   }
 
   public async releaseAllLocks(arg: BriefcaseDbArg): Promise<void> {
