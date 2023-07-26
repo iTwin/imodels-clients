@@ -17,3 +17,19 @@ All submissions go through a review process.
 We use GitHub pull requests for this purpose.
 All pull requests must be approved by at least one person and must pass build checks before they can be merged to the `main` branch.
 Consult [GitHub Help](https://help.github.com/articles/about-pull-requests/) for more information on using pull requests.
+
+### Releases
+
+Releases are allowed only from the following branches ([pipeline](common/config/azure-pipelines/templates/publish.yml)):
+
+- `main`
+- `backport/*`
+
+Increasing the package version number is currently done manually, meaning we make the change in `package.json` files and merge it to `main` branch using a pull request.
+
+Backporting is also done manually. If you need to backport a change:
+
+1. Checkout a branch from the desired commit. Branch name should match the `backport/*` pattern. Push it to the remote.
+2. Create a pull request to `backport/*` branch with needed changes/fixes, merge it.
+3. Create a pull request to `backport/*` branch with increased version number (we follow [semver](https://semver.org/) rules), merge it.
+4. Kick of the release pipeline from `backport/*` branch.
