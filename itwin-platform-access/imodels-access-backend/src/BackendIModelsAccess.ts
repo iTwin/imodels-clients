@@ -33,7 +33,7 @@ import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAd
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
-  private readonly _changeSet0 = { id: "", changesType: 0, description: "initialChangeset", parentId: "", briefcaseId: 0, pushDate: "", userCreated: "", index: 0 };
+  private readonly _changeSet0 = { id: "", changesType: 0, description: "initialChangeset", parentId: "", briefcaseId: 0, pushDate: "", userCreated: "", index: 0, size: 0 };
 
   constructor(iModelsClient?: IModelsClient) {
     this._iModelsClient = iModelsClient ?? new IModelsClient();
@@ -344,7 +344,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (locks.length === 0)
       return [];
 
-    const result: LockProps[] = locks.flatMap(ClientToPlatformAdapter.toLockProps);
+    const result = [];
+    for (const lock of locks)
+      result.push(...ClientToPlatformAdapter.toLockProps(lock));
+
     return result;
   }
 
