@@ -512,7 +512,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (locksPage.length === 0)
       return;
 
-    for await (const lock of locksPage) {
+    for (const lock of locksPage) {
       this.setLockLevelToNone(lock.lockedObjects);
 
       const updateLockParams: UpdateLockParams = {
