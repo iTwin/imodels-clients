@@ -359,30 +359,15 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   public async releaseAllLocks(arg: BriefcaseDbArg): Promise<void> {
-    const getLockListParams: GetLockListParams = {
-      ...this.getIModelScopedOperationParams(arg),
-      urlParams: {
-        briefcaseId: arg.briefcaseId
-      }
-    };
+    let shouldQueryMoreLocks = true;
 
-    const locksIterator: EntityListIterator<Lock> = this._iModelsClient.locks.getList(getLockListParams);
-    const locks: Lock[] = await toArray(locksIterator);
-    if (locks.length === 0)
-      return;
+    do {
+      const locksPage: Lock[] = await this.getFirstLocksPage(arg);
+      shouldQueryMoreLocks = this.shouldQueryMoreLocks(locksPage);
 
-    for await (const locksPage of locks){
-      this.setLockLevelToNone(locksPage.lockedObjects);
+      await this.releaseLocksPage(arg, locksPage);
 
-      const updateLockParams: UpdateLockParams = {
-        ...this.getIModelScopedOperationParams(arg),
-        briefcaseId: locksPage.briefcaseId,
-        changesetId: arg.changeset.id,
-        lockedObjects: locksPage.lockedObjects
-      };
-
-      await this._iModelsClient.locks.update(updateLockParams);
-    }
+    } while (shouldQueryMoreLocks);
   }
 
   public async queryIModelByName(arg: IModelNameArg): Promise<GuidString | undefined> {
@@ -446,6 +431,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
   private setLockLevelToNone(lockedObjectsForBriefcase: LockedObjects[]): void {
     for (const lockedObjects of lockedObjectsForBriefcase) {
+      "";
       lockedObjects.lockLevel = LockLevel.None;
     }
   }
@@ -493,5 +479,51 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const changeset: Changeset = await this._iModelsClient.changesets.getSingle(getCheckpointParams);
     return changeset.getCurrentOrPrecedingCheckpoint();
+  }
+
+  private async getFirstLocksPage(arg: BriefcaseDbArg): Promise<Lock[]> {
+    const getLockListParams: GetLockListParams = {
+      ...this.getIModelScopedOperationParams(arg),
+      urlParams: {
+        briefcaseId: arg.briefcaseId
+      }
+    };
+
+    const lockPagesIterator = this._iModelsClient.locks.getList(getLockListParams).byPage();
+    for await (const lockPage of lockPagesIterator)
+      // Return the result of only a the first http request to iModels API
+      return lockPage;
+
+    return [];
+  }
+
+  private shouldQueryMoreLocks(currentResult: Lock[]): boolean {
+    // `$top` parameter in "Get iModel Locks" operation limits `objectIds` within Lock entity, not `Lock` entities themselves.
+    // https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-locks/#paging
+    // So instead of checking for `currentResult.length === pageSize` we should check if `currentResult[idx].objectIds === pageSize`
+    // which would require to iterate over all `currentResult` entities.
+
+    // To simplify logic we check for a non-empty result. This means that we will terminate iteration over Locks only
+    // after we receive an empty response.
+
+    return currentResult.length !== 0;
+  }
+
+  private async releaseLocksPage(arg: BriefcaseDbArg, locksPage: Lock[]): Promise<void> {
+    if (locksPage.length === 0)
+      return;
+
+    for await (const lock of locksPage) {
+      this.setLockLevelToNone(lock.lockedObjects);
+
+      const updateLockParams: UpdateLockParams = {
+        ...this.getIModelScopedOperationParams(arg),
+        briefcaseId: lock.briefcaseId,
+        changesetId: arg.changeset.id,
+        lockedObjects: lock.lockedObjects
+      };
+
+      await this._iModelsClient.locks.update(updateLockParams);
+    }
   }
 }
