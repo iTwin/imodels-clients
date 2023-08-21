@@ -16,6 +16,9 @@ import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIMo
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
 
+import { AxiosRestClient, OriginalError, ParseErrorFunc, ResponseInfo } from "@itwin/imodels-client-management/lib/base/internal";
+import { IModelsErrorParser as AuthoringClientIModelsErrorParser } from "@itwin/imodels-client-authoring/lib/base/internal";
+
 class TestAuthorizationClient {
   constructor(private _accessToken: string) {
   }
@@ -44,8 +47,25 @@ describe("BackendIModelsAccess", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
-    iModelsClient = new IModelsClient(iModelsClientOptions);
+
+    // ----------------------------------------------------------------------------------------------------------
+    // Sample on how to override error parsing
+
+    // 1. Construct error parsing function that logs raw Axios error
+    const defaultParseErrorFunc = AuthoringClientIModelsErrorParser.parse;
+    const customParseErrorFunc: ParseErrorFunc = (response: ResponseInfo, originalError: OriginalError) => {
+      // TODO: proper logging
+      console.log(response);
+      return defaultParseErrorFunc(response, originalError);
+    };
+
+    // 2. Construct an instance of BackendHubAccess and pass through the `customParseErrorFunc`
+    iModelsClient = new IModelsClient({
+      ...iModelsClientOptions,
+      restClient: new AxiosRestClient(customParseErrorFunc)
+    });
     backendIModelsAccess = new BackendIModelsAccess(iModelsClient);
+    // ----------------------------------------------------------------------------------------------------------
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
     authorizationCallback = authorizationProvider.getAdmin1Authorization();
@@ -145,11 +165,11 @@ describe("BackendIModelsAccess", () => {
 
       let progressReports: ProgressReport[] = [];
       const progressCallbackFor1stDownload = (downloaded: number, total: number) => {
-        progressReports.push({downloaded, total});
+        progressReports.push({ downloaded, total });
         return downloaded < total / 4 ? ProgressStatus.Continue : ProgressStatus.Abort;
       };
       const progressCallbackFor2ndDownload = (downloaded: number, total: number) => {
-        progressReports.push({downloaded, total});
+        progressReports.push({ downloaded, total });
         return ProgressStatus.Continue;
       };
 
@@ -239,7 +259,7 @@ describe("BackendIModelsAccess", () => {
       expect(v2checkpointForExactChangeset).to.be.undefined;
 
       // Act
-      const v2checkpointForChangesetAllowPrecedingParams = {...queryV2CheckpointParams, allowPreceding: true};
+      const v2checkpointForChangesetAllowPrecedingParams = { ...queryV2CheckpointParams, allowPreceding: true };
       const v2checkpointForChangesetAllowPreceding: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(v2checkpointForChangesetAllowPrecedingParams);
       // Assert
       expect(v2checkpointForChangesetAllowPreceding).to.not.be.undefined;
@@ -452,8 +472,8 @@ describe("BackendIModelsAccess", () => {
 
       const locksToAcquire: LockMap = new Map<string, LockState>();
 
-      const objectIdsDec = Array.from({length: 201}, (_, i) => i + 1);
-      for (const objectId of objectIdsDec){
+      const objectIdsDec = Array.from({ length: 201 }, (_, i) => i + 1);
+      for (const objectId of objectIdsDec) {
         locksToAcquire.set(`0x${objectId.toString(16)}`, LockState.Exclusive);
       }
 

@@ -40,6 +40,7 @@
     "@itwin/ecschema-metadata": "^4.0.0",
     "@itwin/imodels-access-backend": "workspace:*",
     "@itwin/imodels-client-authoring": "workspace:*",
+    "@itwin/imodels-client-management": "workspace:*",
     "@itwin/imodels-client-test-utils": "workspace:*",
     "dotenv": "~10.0.0",
     "inversify": "~6.0.1",
