@@ -110,7 +110,6 @@ export async function assertNamedVersion(params: {
   expectedLinks: {
     changeset: boolean;
   };
-  isGetResponse: boolean;
 }): Promise<void> {
   assertMinimalNamedVersion({
     actualNamedVersion: params.actualNamedVersion,
@@ -123,7 +122,7 @@ export async function assertNamedVersion(params: {
 
   assertApplication({
     actualApplication: params.actualNamedVersion.application,
-    expectNull: !params.isGetResponse
+    expectNull: false
   });
 
   expect(params.actualNamedVersion._links).to.exist;
