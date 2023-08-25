@@ -256,7 +256,7 @@ describe("BackendIModelsAccess", () => {
       const iModelId = "1aca14e4-32df-44d3-85d7-b892959a0fba";
       await assertHardcodedIModelExists(
         iModelId,
-        "iModel for queryV2Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test.")
+        "iModel for queryV2Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test.");
 
       const mostRecentChangeset = testIModelFileProvider.changesets[testIModelFileProvider.changesets.length - 1];
       const queryV2CheckpointParams: CheckpointProps = {
@@ -308,7 +308,7 @@ describe("BackendIModelsAccess", () => {
       expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
     });
 
-    it("should skip over a preceding v2 checkpoint in favor of finding a preceding v1 checkpoint", async() => {
+    it("should skip over a preceding v2 checkpoint in favor of finding a preceding v1 checkpoint", async () => {
       // Arrange
       // iModel has 3 checkpoints
       //  baseline             - v1 and v2
@@ -319,8 +319,8 @@ describe("BackendIModelsAccess", () => {
       const iModelId = "74eac4a1-6c04-4279-89bf-fd72218e3f1b";
       await assertHardcodedIModelExists(
         iModelId,
-        "iModel for downloadV1Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test.")
- 
+        "iModel for downloadV1Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test.");
+
       const secondToLastChangeset = testIModelFileProvider.changesets[testIModelFileProvider.changesets.length - 2];
       const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_skip_v2_checkpoint.bim");
       const downloadV1CheckpointParams: DownloadRequest = {
@@ -330,16 +330,17 @@ describe("BackendIModelsAccess", () => {
           iModelId,
           changeset: {
             id: secondToLastChangeset.id
-          },
+          }
         }
-      }
+      };
 
       // Act
+      // eslint-disable-next-line deprecation/deprecation
       const changesetIndexAndId: ChangesetIndexAndId = await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
 
       // Asssert
       expect(changesetIndexAndId.index).to.be.equal(0);
-      expect(changesetIndexAndId.id).to.be.equal('');
+      expect(changesetIndexAndId.id).to.be.equal("");
     });
 
     it("should report progress when downloading checkpoint", async () => {
