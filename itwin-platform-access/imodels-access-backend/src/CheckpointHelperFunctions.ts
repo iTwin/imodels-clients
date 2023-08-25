@@ -35,7 +35,7 @@ export async function queryCurrentOrPrecedingV2Checkpoint(
     return ClientToPlatformAdapter.toV2CheckpointAccessProps(baselineCheckpoint.containerAccessInfo);
   }
 
-  const isQueriedCheckpointValid = (queriedCheckpoint: Checkpoint) => !!queriedCheckpoint.containerAccessInfo !== null;
+  const isQueriedCheckpointValid = (queriedCheckpoint: Checkpoint) => !!queriedCheckpoint.containerAccessInfo;
   const checkpoint = await findLatestCheckpointForChangeset(iModelsClient, iModelScopedOperationParams, changesetIndex, isQueriedCheckpointValid);
   if (checkpoint === undefined)
     return undefined;
