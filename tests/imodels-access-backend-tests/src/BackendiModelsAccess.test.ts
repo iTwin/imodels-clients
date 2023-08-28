@@ -338,7 +338,7 @@ describe("BackendIModelsAccess", () => {
       // eslint-disable-next-line deprecation/deprecation
       const changesetIndexAndId: ChangesetIndexAndId = await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
 
-      // Asssert
+      // Assert
       expect(changesetIndexAndId.index).to.be.equal(0);
       expect(changesetIndexAndId.id).to.be.equal("");
     });
