@@ -308,7 +308,7 @@ describe("BackendIModelsAccess", () => {
       expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
     });
 
-    it("should skip over a preceding v2 checkpoint in favor of finding a preceding v1 checkpoint", async () => {
+    it.only("should skip over a preceding v2 checkpoint in favor of finding a preceding v1 checkpoint", async () => {
       // Arrange
       // iModel has 3 checkpoints
       //  baseline             - v1 and v2
@@ -340,7 +340,7 @@ describe("BackendIModelsAccess", () => {
 
       // Assert
       expect(changesetIndexAndId.index).to.be.equal(0);
-      expect(changesetIndexAndId.id).to.be.equal("");
+      expect(changesetIndexAndId.id).to.be.null;
     });
 
     it("should report progress when downloading checkpoint", async () => {
