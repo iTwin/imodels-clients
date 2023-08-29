@@ -9,7 +9,7 @@ import {
   ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg,
   IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
-import { BriefcaseStatus, Guid, GuidString, IModelStatus, Logger, OpenMode } from "@itwin/core-bentley";
+import { BriefcaseStatus, Guid, GuidString, IModelStatus, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
 import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion
@@ -73,7 +73,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     let downloadedChangeset: DownloadedChangeset | undefined;
     try {
+      const stopwatch = new StopWatch(`[${arg.changeset}]`, true);
+      Logger.logInfo("BackendIModelsAccess", `Starting download of changeset with id ${stopwatch.description}`);
       downloadedChangeset = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
+      Logger.logInfo("BackendIModelsAccess", `Downloaded changeset with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
     } catch (error: unknown) {
       throw ClientToPlatformAdapter.toChangesetDownloadAbortedError(error);
     }
@@ -218,6 +221,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
     const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.onProgress) ?? [];
     const totalDownloadCallback = progressCallback ? (downloaded: number) => progressCallback?.(downloaded, v1CheckpointSize) : undefined;
 
+    const stopwatch = new StopWatch(`[${checkpoint.changesetId}]`, true);
+    Logger.logInfo("BackendIModelsAccess", `Starting download of checkpoint with id ${stopwatch.description}`);
     await downloadFile({
       storage: this._iModelsClient.cloudStorage,
       url: checkpoint._links.download.href,
@@ -225,6 +230,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       totalDownloadCallback,
       abortSignal
     });
+    Logger.logInfo("BackendIModelsAccess", `Downloaded changeset with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
 
     return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
   }
