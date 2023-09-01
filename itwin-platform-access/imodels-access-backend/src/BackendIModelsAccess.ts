@@ -15,11 +15,10 @@ import {
   IModelVersion
 } from "@itwin/core-common";
 import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations";
-import axios, { AxiosResponse } from "axios";
 
 import {
-  AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset, ChangesetIdOrIndex,
-  ChangesetOrderByProperty, Checkpoint, ContainerAccessInfo, CreateChangesetParams, CreateIModelFromBaselineParams,
+  AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset,
+  ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams,
   DeleteIModelParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset,
   EntityListIterator, GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetLockListParams,
   GetNamedVersionListParams, GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode,
@@ -27,13 +26,14 @@ import {
   OrderByOperator, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
 
+import { getV1CheckpointSize, queryCurrentOrPrecedingV1Checkpoint, queryCurrentOrPrecedingV2Checkpoint } from "./CheckpointHelperFunctions";
+import { Constants } from "./Constants";
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
-  private readonly _changeSet0 = { id: "", changesType: 0, description: "initialChangeset", parentId: "", briefcaseId: 0, pushDate: "", userCreated: "", index: 0, size: 0 };
 
   constructor(iModelsClient?: IModelsClient) {
     this._iModelsClient = iModelsClient ?? new IModelsClient();
@@ -136,7 +136,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     const changesetsIterator: EntityListIterator<MinimalChangeset> = this._iModelsClient.changesets.getMinimalList(getChangesetListParams);
     const changesets: MinimalChangeset[] = await take(changesetsIterator, 1);
     if (changesets.length === 0)
-      return this._changeSet0;
+      return Constants.ChangeSet0;
     const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changesets[0]);
     return result;
   }
@@ -144,7 +144,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   public async getChangesetFromVersion(arg: IModelIdArg & { version: IModelVersion }): Promise<ChangesetProps> {
     const version = arg.version;
     if (version.isFirst)
-      return this._changeSet0;
+      return Constants.ChangeSet0;
 
     const namedVersionChangesetId = version.getAsOfChangeSet();
     if (namedVersionChangesetId)
@@ -213,11 +213,19 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
   // eslint-disable-next-line deprecation/deprecation
   public async downloadV1Checkpoint(arg: CheckpointArg): Promise<ChangesetIndexAndId> {
-    const checkpoint: Checkpoint | undefined = await this.queryCurrentOrPrecedingCheckpoint(arg);
+    const iModelScopedOperationParams: IModelScopedOperationParams = {
+      ...this.getAuthorizationParam(arg.checkpoint),
+      iModelId: arg.checkpoint.iModelId
+    };
+    const checkpoint: Checkpoint | undefined = await queryCurrentOrPrecedingV1Checkpoint(
+      this._iModelsClient,
+      iModelScopedOperationParams,
+      arg
+    );
     if (!checkpoint || !checkpoint._links?.download)
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
 
-    const v1CheckpointSize = await this.getV1CheckpointSize(checkpoint._links.download.href);
+    const v1CheckpointSize = await getV1CheckpointSize(checkpoint._links.download.href);
     const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.onProgress) ?? [];
     const totalDownloadCallback = progressCallback ? (downloaded: number) => progressCallback?.(downloaded, v1CheckpointSize) : undefined;
 
@@ -235,81 +243,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
   }
 
-  /**
-   * iModels API returns a link to a file in Azure Blob Storage. The API does not return checkpoint file size as
-   * a standalone property so we query it from Azure using the method described below.
-   *
-   * To get the total size of the file we send a GET request to the file download url with `Range: bytes=0-0` header
-   * specified which requests to get only the first byte of the file. As a response we get the first file byte in
-   * the body and `Content-Range` response header which contains information about the total file size. See
-   * https://docs.microsoft.com/en-us/rest/api/storageservices/get-blob#response-headers,
-   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range.
-   *
-   * The format of returned `Content-Range` header in this case is
-   * `<unit> <range-start>-<range-end>/<size>`, e.g. `bytes 0-0/1253376`.
-   */
-  private async getV1CheckpointSize(downloadUrl: string): Promise<number> {
-    const emptyRangeHeaderValue = "bytes=0-0";
-    const contentRangeHeaderName = "content-range";
-
-    const response: AxiosResponse = await axios.get(downloadUrl, { headers: { Range: emptyRangeHeaderValue } });
-    const rangeHeaderValue: string = response.headers[contentRangeHeaderName];
-    const rangeTotalBytesString: string = rangeHeaderValue.split("/")[1];
-    const rangeTotalBytes: number = parseInt(rangeTotalBytesString, 10);
-
-    return rangeTotalBytes;
-  }
-
-  // The imodels api does not distinguish between a v2 and a v1 checkpoint when calling getCurrentOrPrecedingCheckpoint.
-  // It is possible that a preceding v2 checkpoint exists, but earlier in the timeline than the most recent v1 checkpoint. In this case we would miss out on the preceding v2 checkpoint.
-  // To get around this, this function decrements the changesetIndex of the discovered checkpoint if it is not a v2 checkpoint and searches again.
-  private async findLatestV2CheckpointForChangeset(arg: CheckpointProps, changesetIndex: number): Promise<ContainerAccessInfo | undefined> {
-    if (changesetIndex <= 0)
-      return undefined;
-
-    const getSingleChangesetParams: GetSingleChangesetParams = {
-      ...this.getIModelScopedOperationParams(arg),
-      ...PlatformToClientAdapter.toChangesetIdOrIndex({ index: changesetIndex })
-    };
-
-    const changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
-    const checkpoint = await changeset.getCurrentOrPrecedingCheckpoint();
-
-    if (!checkpoint)
-      return undefined;
-
-    if (checkpoint.containerAccessInfo !== null)
-      return checkpoint.containerAccessInfo;
-
-    const previousChangesetIndex = checkpoint.changesetIndex - 1;
-    return this.findLatestV2CheckpointForChangeset(arg, previousChangesetIndex);
-  }
-
-  private async resolveChangesetIndexFromParamsOrQueryApi(arg: CheckpointProps): Promise<number> {
-    if (arg.changeset.id === this._changeSet0.id || arg.changeset.index === this._changeSet0.index)
-      return this._changeSet0.index;
-
-    if (arg.changeset.index !== undefined)
-      return arg.changeset.index;
-
-    const getSingleChangesetParams: GetSingleChangesetParams = {
-      ...this.getIModelScopedOperationParams(arg),
-      changesetId: arg.changeset.id
-    };
-    const changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
-    return changeset.index;
-  }
-
-  private async queryCurrentOrPrecedingV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
-    const changesetIndex = await this.resolveChangesetIndexFromParamsOrQueryApi(arg);
-    const containerAccessInfo = await this.findLatestV2CheckpointForChangeset(arg, changesetIndex);
-    if (containerAccessInfo === undefined)
-      return undefined;
-
-    return ClientToPlatformAdapter.toV2CheckpointAccessProps(containerAccessInfo);
-  }
-
   public async queryV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
+    const iModelScopedOperationParams = this.getIModelScopedOperationParams(arg);
     const getSingleCheckpointParams: GetSingleCheckpointParams = {
       ...this.getIModelScopedOperationParams(arg),
       ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset)
@@ -321,7 +256,13 @@ export class BackendIModelsAccess implements BackendHubAccess {
     } catch (error) {
       // Means that neither v1 nor v2 checkpoint exists
       if (isIModelsApiError(error) && error.code === IModelsErrorCode.CheckpointNotFound) {
-        return arg?.allowPreceding ? this.queryCurrentOrPrecedingV2Checkpoint(arg) : undefined;
+        return arg?.allowPreceding
+          ? queryCurrentOrPrecedingV2Checkpoint(
+            this._iModelsClient,
+            iModelScopedOperationParams,
+            arg
+          )
+          : undefined;
       }
 
       throw error;
@@ -329,7 +270,13 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     // Means the v2 checkpoint does not exist.
     if (checkpoint.containerAccessInfo === null) {
-      return arg?.allowPreceding ? this.queryCurrentOrPrecedingV2Checkpoint(arg) : undefined;
+      return arg?.allowPreceding
+        ? queryCurrentOrPrecedingV2Checkpoint(
+          this._iModelsClient,
+          iModelScopedOperationParams,
+          arg
+        )
+        : undefined;
     }
 
     const result = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
@@ -468,22 +415,6 @@ export class BackendIModelsAccess implements BackendHubAccess {
     }
 
     return tempBaselineFilePath;
-  }
-
-  // eslint-disable-next-line deprecation/deprecation
-  private async queryCurrentOrPrecedingCheckpoint(arg: CheckpointArg): Promise<Checkpoint | undefined> {
-    const changesetIdOrIndex: ChangesetIdOrIndex = PlatformToClientAdapter.toChangesetIdOrIndex(arg.checkpoint.changeset);
-    const getCheckpointParams: GetSingleCheckpointParams = {
-      ...this.getAuthorizationParam(arg.checkpoint),
-      iModelId: arg.checkpoint.iModelId,
-      ...changesetIdOrIndex
-    };
-
-    if (changesetIdOrIndex.changesetIndex === 0)
-      return this._iModelsClient.checkpoints.getSingle(getCheckpointParams);
-
-    const changeset: Changeset = await this._iModelsClient.changesets.getSingle(getCheckpointParams);
-    return changeset.getCurrentOrPrecedingCheckpoint();
   }
 
   private async getFirstLocksPage(arg: BriefcaseDbArg): Promise<Lock[]> {

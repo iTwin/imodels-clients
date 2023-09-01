@@ -235,8 +235,7 @@ describe("[Management] NamedVersionOperations", () => {
       },
       expectedLinks: {
         changeset: true
-      },
-      isGetResponse: true
+      }
     });
   });
 
@@ -263,8 +262,7 @@ describe("[Management] NamedVersionOperations", () => {
       },
       expectedLinks: {
         changeset: true
-      },
-      isGetResponse: true
+      }
     });
   });
 
@@ -291,8 +289,7 @@ describe("[Management] NamedVersionOperations", () => {
       },
       expectedLinks: {
         changeset: false
-      },
-      isGetResponse: false
+      }
     });
   });
 
@@ -321,8 +318,7 @@ describe("[Management] NamedVersionOperations", () => {
       },
       expectedLinks: {
         changeset: true
-      },
-      isGetResponse: false
+      }
     });
   });
 

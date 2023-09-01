@@ -7,7 +7,7 @@
 export interface ApiOptions {
   /** iModels API base url. Default value is `https://api.bentley.com/imodels`. */
   baseUrl?: string;
-  /** iModels API version. Default value is `itwin-platform.v1`. */
+  /** iModels API version. Default value is `itwin-platform.v2`. */
   version?: string;
 }
 

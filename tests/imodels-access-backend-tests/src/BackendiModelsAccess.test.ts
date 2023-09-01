@@ -6,7 +6,7 @@ import { assert } from "console";
 import * as fs from "fs";
 import * as path from "path";
 
-import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointProps, DownloadChangesetRangeArg, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction, ProgressStatus, V2CheckpointAccessProps } from "@itwin/core-backend";
+import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointProps, DownloadChangesetRangeArg, DownloadRequest, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction, ProgressStatus, V2CheckpointAccessProps } from "@itwin/core-backend";
 import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
@@ -247,22 +247,16 @@ describe("BackendIModelsAccess", () => {
 
     it("should skip over a preceding v1 checkpoint in favor of finding a preceding v2 checkpoint", async () => {
       // Arrange
-      // iModel has 3 checkpoints. changeset index 10 has only v1 checkpoint, changeset index 5 has only v1 checkpoint. iModel has only 10 changesets. baseline has v1 and v2 checkpoint.
-      // This iModel is a clone of the testIModelFileProvider aka "[do not delete][iModelsClientsTests] Reusable Test iModel" so it will have the same changesets.
+      // iModel has 3 checkpoints:
+      //  baseline             - v1 and v2
+      //  changeset index 5    - only v1 (v2 failed)
+      //  changeset index 10   - only v1 (v2 failed)
+      // This iModel is a clone of the testIModelFileProvider aka "[do not delete][iModelsClientsTests] Reusable Test iModel"
+      // so it will have the same 10 changesets in total.
       const iModelId = "1aca14e4-32df-44d3-85d7-b892959a0fba";
-      try {
-        // Make sure iModel exists since we're hardcoding this ID.
-        const iModel = await iModelsClient.iModels.getSingle({
-          iModelId,
-          authorization: authorizationCallback
-        });
-        expect(iModel).to.not.be.undefined;
-      } catch (error) {
-        if (isIModelsApiError(error) && error.code === IModelsErrorCode.IModelNotFound) {
-          throw new Error("iModel was not found. Please recreate the test iModel as described within the test, or disable the test.");
-        }
-        throw error;
-      }
+      await assertHardcodedIModelExists(
+        iModelId,
+        "iModel for queryV2Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test.");
 
       const mostRecentChangeset = testIModelFileProvider.changesets[testIModelFileProvider.changesets.length - 1];
       const queryV2CheckpointParams: CheckpointProps = {
@@ -281,7 +275,6 @@ describe("BackendIModelsAccess", () => {
       // Assert
       expect(queryCheckpoint).to.not.be.undefined;
       expect(queryCheckpoint!.dbName === "BASELINE.bim").to.be.true;
-
     });
 
     it("should download preceding checkpoint if one for current changeset does not exist", async () => {
@@ -313,6 +306,41 @@ describe("BackendIModelsAccess", () => {
       expect(downloadedCheckpoint.index).to.be.equal(firstNamedVersion.changesetIndex);
       expect(fs.existsSync(localCheckpointFilePath)).to.be.equal(true);
       expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
+    });
+
+    it("should skip over a preceding v2 checkpoint in favor of finding a preceding v1 checkpoint", async () => {
+      // Arrange
+      // iModel has 3 checkpoints
+      //  baseline             - v1 and v2
+      //  changeset index 5    - only v2 (v1 entry non existent)
+      //  changeset index 10   - v1 and v2
+      // This iModel is a clone of the testIModelFileProvider aka "[do not delete][iModelsClientsTests] Reusable Test iModel"
+      // so it will have the same 10 changesets in total.
+      const iModelId = "74eac4a1-6c04-4279-89bf-fd72218e3f1b";
+      await assertHardcodedIModelExists(
+        iModelId,
+        "iModel for downloadV1Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test.");
+
+      const secondToLastChangeset = testIModelFileProvider.changesets[testIModelFileProvider.changesets.length - 2];
+      const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_skip_v2_checkpoint.bim");
+      const downloadV1CheckpointParams: DownloadRequest = {
+        localFile: localCheckpointFilePath,
+        checkpoint: {
+          iTwinId,
+          iModelId,
+          changeset: {
+            id: secondToLastChangeset.id
+          }
+        }
+      };
+
+      // Act
+      // eslint-disable-next-line deprecation/deprecation
+      const changesetIndexAndId: ChangesetIndexAndId = await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
+
+      // Assert
+      expect(changesetIndexAndId.index).to.be.equal(0);
+      expect(changesetIndexAndId.id).to.be.null;
     });
 
     it("should report progress when downloading checkpoint", async () => {
@@ -387,6 +415,22 @@ describe("BackendIModelsAccess", () => {
       const lastReportedLog = progressLogs[progressLogs.length - 1];
       expect(lastReportedLog.total).to.be.greaterThan(fs.statSync(localCheckpointFilePath).size);
     });
+
+    async function assertHardcodedIModelExists(iModelId: string, errorMessage: string): Promise<void> {
+      try {
+        // Make sure iModel exists since we're hardcoding this ID.
+        const iModel = await iModelsClient.iModels.getSingle({
+          iModelId,
+          authorization: authorizationCallback
+        });
+        expect(iModel).to.not.be.undefined;
+      } catch (error) {
+        if (isIModelsApiError(error) && error.code === IModelsErrorCode.IModelNotFound) {
+          throw new Error(errorMessage);
+        }
+        throw error;
+      }
+    }
   });
 
   describe("locks", () => {
