@@ -238,7 +238,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       totalDownloadCallback,
       abortSignal
     });
-    Logger.logInfo("BackendIModelsAccess", `Downloaded changeset with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
+    Logger.logInfo("BackendIModelsAccess", `Downloaded checkpoint with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
 
     return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
   }
