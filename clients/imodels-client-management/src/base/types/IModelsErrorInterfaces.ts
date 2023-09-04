@@ -45,6 +45,7 @@ export enum IModelsErrorCode {
   InvalidThumbnailFormat = "InvalidThumbnailFormat",
 
   BaselineFileInitializationFailed = "BaselineFileInitializationFailed",
+  BaselineFileInitializationTimedOut = "BaselineFileInitializationTimedOut",
   IModelFromTemplateInitializationFailed = "IModelFromTemplateInitializationFailed",
   ChangesetDownloadFailed = "ChangesetDownloadFailed",
   DownloadAborted = "DownloadAborted"

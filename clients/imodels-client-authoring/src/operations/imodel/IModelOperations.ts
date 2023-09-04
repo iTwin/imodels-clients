@@ -99,7 +99,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     return waitForCondition({
       conditionToSatisfy: isBaselineInitialized,
       timeoutErrorFactory: () => new IModelsErrorImpl({
-        code: IModelsErrorCode.BaselineFileInitializationFailed,
+        code: IModelsErrorCode.BaselineFileInitializationTimedOut,
         message: "Timed out waiting for Baseline File initialization."
       }),
       timeOutInMs: params.timeOutInMs
