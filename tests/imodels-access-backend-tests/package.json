@@ -26,7 +26,8 @@
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
-    "test:integration": "mocha lib/**/*.test.js --color --timeout 180000 --exit"
+    "test:integration": "mocha lib/integration/**/*.test.js --color --timeout 180000 --exit",
+    "test:unit": "mocha lib/unit/**/*.test.js --color --timeout 180000 --exit"
   },
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
