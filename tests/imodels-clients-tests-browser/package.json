@@ -37,7 +37,7 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@cypress/request": "2.88.11",
+    "@cypress/request": "3.0.0",
     "@itwin/imodels-client-management": "workspace:*",
     "@itwin/imodels-client-test-utils": "workspace:*",
     "chai": "~4.3.4",
