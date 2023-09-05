@@ -31,6 +31,8 @@ import { Constants } from "./Constants";
 import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
+import { ErrorAdapter } from "./interface-adapters/ErrorAdapter";
+import { handleAPIErrors } from "./ErrorHandlingFunctions";
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
@@ -54,7 +56,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     try {
       downloadedChangesets = await this._iModelsClient.changesets.downloadList(downloadParams);
     } catch (error: unknown) {
-      throw ClientToPlatformAdapter.toChangesetDownloadAbortedError(error);
+      throw ErrorAdapter.toIModelError(error, "downloadChangesets");
     }
     const result: ChangesetFileProps[] = downloadedChangesets.map(ClientToPlatformAdapter.toChangesetFileProps);
     return result;
@@ -78,7 +80,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       downloadedChangeset = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
       Logger.logInfo("BackendIModelsAccess", `Downloaded changeset with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
     } catch (error: unknown) {
-      throw ClientToPlatformAdapter.toChangesetDownloadAbortedError(error);
+      throw ErrorAdapter.toIModelError(error, "downloadChangesets");
     }
     const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset);
     return result;
@@ -90,7 +92,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
       ...PlatformToClientAdapter.toChangesetIdOrIndex(arg.changeset)
     };
 
-    const changeset: Changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
+    const changeset: Changeset = await handleAPIErrors(
+      () => this._iModelsClient.changesets.getSingle(getSingleChangesetParams)
+    );
+
     const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changeset);
     return result;
   }
@@ -100,7 +105,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
     iModelOperationParams.urlParams = PlatformToClientAdapter.toChangesetRangeUrlParams(arg.range);
 
     const changesetsIterator: EntityListIterator<Changeset> = this._iModelsClient.changesets.getRepresentationList(iModelOperationParams);
-    const changesets: Changeset[] = await toArray(changesetsIterator);
+    const changesets: Changeset[] = await handleAPIErrors(() => toArray(changesetsIterator));
+
     const result: ChangesetProps[] = changesets.map(ClientToPlatformAdapter.toChangesetProps);
     return result;
   }
@@ -116,8 +122,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
       ...this.getIModelScopedOperationParams(arg),
       changesetProperties: PlatformToClientAdapter.toChangesetPropertiesForCreate(arg.changesetProps, changesetDescription)
     };
+    const createdChangeset: Changeset = await handleAPIErrors(
+      () => this._iModelsClient.changesets.create(createChangesetParams)
+    );
 
-    const createdChangeset: Changeset = await this._iModelsClient.changesets.create(createChangesetParams);
     return createdChangeset.index;
   }
 
@@ -134,7 +142,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
 
     const changesetsIterator: EntityListIterator<MinimalChangeset> = this._iModelsClient.changesets.getMinimalList(getChangesetListParams);
-    const changesets: MinimalChangeset[] = await take(changesetsIterator, 1);
+    const changesets: MinimalChangeset[] = await handleAPIErrors(() => take(changesetsIterator, 1));
+
     if (changesets.length === 0)
       return Constants.ChangeSet0;
     const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changesets[0]);
@@ -165,16 +174,21 @@ export class BackendIModelsAccess implements BackendHubAccess {
         name: arg.versionName
       }
     };
+
     const namedVersionsIterator: EntityListIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
-    const namedVersions: MinimalNamedVersion[] = await toArray(namedVersionsIterator);
+    const namedVersions: MinimalNamedVersion[] = await handleAPIErrors(() => toArray(namedVersionsIterator));
+
     if (namedVersions.length === 0 || !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
-
     const getSingleChangesetParams: GetSingleChangesetParams = {
       ...iModelOperationParams,
       changesetId: namedVersions[0].changesetId
     };
-    const changeset: MinimalChangeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
+
+    const changeset: MinimalChangeset = await handleAPIErrors(
+      () => this._iModelsClient.changesets.getSingle(getSingleChangesetParams)
+    );
+
     const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changeset);
     return result;
   }
@@ -182,7 +196,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
   public async acquireNewBriefcaseId(arg: AcquireNewBriefcaseIdArg): Promise<BriefcaseId> {
     const acquireBriefcaseParams: AcquireBriefcaseParams = this.getIModelScopedOperationParams(arg);
 
-    const briefcase: Briefcase = await this._iModelsClient.briefcases.acquire(acquireBriefcaseParams);
+    const briefcase: Briefcase = await handleAPIErrors(
+      () => this._iModelsClient.briefcases.acquire(acquireBriefcaseParams)
+    );
+
     if (!briefcase)
       throw new IModelError(BriefcaseStatus.CannotAcquire, "Could not acquire briefcase");
     return briefcase.briefcaseId;
@@ -194,7 +211,9 @@ export class BackendIModelsAccess implements BackendHubAccess {
       briefcaseId: arg.briefcaseId
     };
 
-    return this._iModelsClient.briefcases.release(releaseBriefcaseParams);
+    await handleAPIErrors(
+      () => this._iModelsClient.briefcases.release(releaseBriefcaseParams)
+    );
   }
 
   public async getMyBriefcaseIds(arg: IModelIdArg): Promise<BriefcaseId[]> {
@@ -206,7 +225,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
 
     const briefcasesIterator: EntityListIterator<Briefcase> = this._iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams);
-    const briefcases: Briefcase[] = await toArray(briefcasesIterator);
+    const briefcases: Briefcase[] = await handleAPIErrors(
+      () => toArray(briefcasesIterator)
+    );
+
     const briefcaseIds: BriefcaseId[] = briefcases.map((briefcase) => briefcase.briefcaseId);
     return briefcaseIds;
   }
@@ -265,7 +287,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
           : undefined;
       }
 
-      throw error;
+      throw ErrorAdapter.toIModelError(error);
     }
 
     // Means the v2 checkpoint does not exist.
@@ -291,7 +313,9 @@ export class BackendIModelsAccess implements BackendHubAccess {
       lockedObjects: PlatformToClientAdapter.toLockedObjects(locks)
     };
 
-    await this._iModelsClient.locks.update(updateLockParams);
+    await handleAPIErrors(
+      () => this._iModelsClient.locks.update(updateLockParams)
+    );
   }
 
   public async queryAllLocks(arg: BriefcaseDbArg): Promise<LockProps[]> {
@@ -303,10 +327,12 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
 
     const locksIterator: EntityListIterator<Lock> = this._iModelsClient.locks.getList(getLockListParams);
-    const locks: Lock[] = await toArray(locksIterator);
+    const locks: Lock[] = await handleAPIErrors(
+      () => toArray(locksIterator)
+    );
+
     if (locks.length === 0)
       return [];
-
     const result: LockProps[] = locks.flatMap(ClientToPlatformAdapter.toLockProps);
     return result;
   }
@@ -357,6 +383,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
     const deleteIModelParams: DeleteIModelParams = this.getIModelScopedOperationParams(arg);
     return this._iModelsClient.iModels.delete(deleteIModelParams);
   }
+
+
 
   private getIModelScopedOperationParams(arg: IModelIdArg): IModelScopedOperationParams {
     return {
@@ -426,11 +454,11 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
 
     const lockPagesIterator = this._iModelsClient.locks.getList(getLockListParams).byPage();
-    for await (const lockPage of lockPagesIterator)
-      // Return the result of only a the first http request to iModels API
-      return lockPage;
+    const lockPages = await handleAPIErrors(
+      () => take(lockPagesIterator, 1)
+    );
 
-    return [];
+    return lockPages[0];
   }
 
   private shouldQueryMoreLocks(currentResult: Lock[]): boolean {
@@ -459,7 +487,9 @@ export class BackendIModelsAccess implements BackendHubAccess {
         lockedObjects: lock.lockedObjects
       };
 
-      await this._iModelsClient.locks.update(updateLockParams);
+      await handleAPIErrors(
+        () => this._iModelsClient.locks.update(updateLockParams)
+      );
     }
   }
 }

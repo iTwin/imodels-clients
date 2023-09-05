@@ -7,10 +7,10 @@ import { ChangeSetStatus, IModelHubStatus } from "@itwin/core-bentley";
 import { IModelError } from "@itwin/core-common";
 import { IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
 
-export type OperationNameForErrorMapping = "acquireBriefcase" | "downloadChangesets" | undefined;
+export type OperationNameForErrorMapping = "acquireBriefcase" | "downloadChangesets";
 
 export class ErrorAdapter {
-  public static toIModelError(error: unknown, operationName: OperationNameForErrorMapping): unknown {
+  public static toIModelError(error: unknown, operationName?: OperationNameForErrorMapping): unknown {
     if (!isIModelsApiError(error)) return error;
 
     if (error.code === IModelsErrorCode.Unrecognized) return error;
@@ -19,7 +19,7 @@ export class ErrorAdapter {
     if (ErrorAdapter.isIncorrectAPIUsageError(error.code)) return error;
     if (ErrorAdapter.isAPIErrorWithoutCorrespondingStatus(error.code)) return error;
 
-    let errorNumber = ErrorAdapter.tryMapGenericErrorCodesBasedOnOperation(error.code, operationName);
+    let errorNumber = ErrorAdapter.tryMapGenericErrorCodeBasedOnOperation(error.code, operationName);
     if (!errorNumber)
       errorNumber = ErrorAdapter.mapErrorCode(error.code);
 
@@ -73,7 +73,13 @@ export class ErrorAdapter {
     }
   }
 
-  private static tryMapGenericErrorCodesBasedOnOperation(apiErrorCode: IModelsErrorCode, operationName: OperationNameForErrorMapping): IModelHubStatus | ChangeSetStatus | undefined {
+  private static tryMapGenericErrorCodeBasedOnOperation(
+    apiErrorCode: IModelsErrorCode,
+    operationName?: OperationNameForErrorMapping
+  ): IModelHubStatus | ChangeSetStatus | undefined {
+    if (!operationName)
+      return;
+
     if (apiErrorCode === IModelsErrorCode.ResourceQuotaExceeded && operationName === "acquireBriefcase")
       return IModelHubStatus.MaximumNumberOfBriefcasesPerUser;
 
@@ -82,6 +88,7 @@ export class ErrorAdapter {
 
     if (apiErrorCode === IModelsErrorCode.DownloadAborted && operationName == "downloadChangesets")
       return ChangeSetStatus.DownloadCancelled;
+
     return undefined;
   }
 
