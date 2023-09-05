@@ -53,7 +53,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
     downloadParams.abortSignal = abortSignal;
 
     const downloadedChangesets: DownloadedChangeset[] = await handleAPIErrors(
-      async () => this._iModelsClient.changesets.downloadList(downloadParams)
+      async () => this._iModelsClient.changesets.downloadList(downloadParams),
+      "downloadChangesets"
     );
 
     const result: ChangesetFileProps[] = downloadedChangesets.map(ClientToPlatformAdapter.toChangesetFileProps);
@@ -71,15 +72,18 @@ export class BackendIModelsAccess implements BackendHubAccess {
     downloadSingleChangesetParams.progressCallback = progressCallback;
     downloadSingleChangesetParams.abortSignal = abortSignal;
 
-    const downloadedChangeset: DownloadedChangeset = await handleAPIErrors(async () => {
-      const stopwatch = new StopWatch(`[${arg.changeset}]`, true);
-      Logger.logInfo("BackendIModelsAccess", `Starting download of changeset with id ${stopwatch.description}`);
+    const downloadedChangeset: DownloadedChangeset = await handleAPIErrors(
+      async () => {
+        const stopwatch = new StopWatch(`[${arg.changeset}]`, true);
+        Logger.logInfo("BackendIModelsAccess", `Starting download of changeset with id ${stopwatch.description}`);
 
-      const innerResult = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
+        const innerResult = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
 
-      Logger.logInfo("BackendIModelsAccess", `Downloaded changeset with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
-      return innerResult;
-    });
+        Logger.logInfo("BackendIModelsAccess", `Downloaded changeset with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
+        return innerResult;
+      },
+      "downloadChangesets"
+    );
 
     const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset);
     return result;
@@ -202,7 +206,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
     const acquireBriefcaseParams: AcquireBriefcaseParams = this.getIModelScopedOperationParams(arg);
 
     const briefcase: Briefcase = await handleAPIErrors(
-      async () => this._iModelsClient.briefcases.acquire(acquireBriefcaseParams)
+      async () => this._iModelsClient.briefcases.acquire(acquireBriefcaseParams),
+      "acquireBriefcase"
     );
 
     if (!briefcase)

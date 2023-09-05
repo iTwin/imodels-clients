@@ -141,7 +141,7 @@ describe("ErrorAdapter", () => {
       originalErrorCode: IModelsErrorCode.DownloadAborted,
       operationName: "acquireBriefcase" as const
     }
-  ].forEach((testCase: { originalErrorCode: IModelsErrorCode, operationName: OperationNameForErrorMapping }) => {
+  ].forEach((testCase: { originalErrorCode: IModelsErrorCode, operationName: OperationNameForErrorMapping | undefined }) => {
 
     it(`should return IModelHubStatus.Unknown specific status could not be determined (${testCase.originalErrorCode})`, () => {
       const originalErrorMessage = "test error message";
