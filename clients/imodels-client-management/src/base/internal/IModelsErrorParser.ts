@@ -92,7 +92,7 @@ export class IModelsErrorParser {
   }
 
   private static adjustErrorCodeCaseToMatchEnum(errorCode: string): string {
-    return errorCode.replace("iModel", "IModel");
+    return errorCode.replace("iModel", "IModel").replace("iTwin", "ITwin");
   }
 
   private static parseDetails(details: IModelsApiErrorDetail[] | undefined): IModelsErrorDetail[] | undefined {
