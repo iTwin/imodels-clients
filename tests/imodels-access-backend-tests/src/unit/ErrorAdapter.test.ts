@@ -2,12 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
-import { IModelsErrorCode } from "@itwin/imodels-client-management";
-import { ErrorAdapter, OperationNameForErrorMapping } from "@itwin/imodels-access-backend/lib/interface-adapters/ErrorAdapter";
-import { expect } from "chai";
-import { IModelError } from "@itwin/core-common";
 import { ChangeSetStatus, IModelHubStatus } from "@itwin/core-bentley";
+import { IModelError } from "@itwin/core-common";
+import { ErrorAdapter, OperationNameForErrorMapping } from "@itwin/imodels-access-backend/lib/interface-adapters/ErrorAdapter";
+import { IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
+import { expect } from "chai";
+
+import { IModelsErrorCode } from "@itwin/imodels-client-management";
 
 describe("ErrorAdapter", () => {
   [
@@ -48,7 +49,7 @@ describe("ErrorAdapter", () => {
     IModelsErrorCode.BaselineFileInitializationFailed,
     IModelsErrorCode.IModelFromTemplateInitializationFailed,
     IModelsErrorCode.ChangesetDownloadFailed
-  ].forEach(originalErrorCode => {
+  ].forEach((originalErrorCode) => {
 
     it(`should return original error if error code is unrecognized, indicates auth issue or does not have a corresponding status in IModelHubStatus (${originalErrorCode})`, () => {
       const error = new IModelsErrorImpl({ code: originalErrorCode, message: "" });
@@ -74,7 +75,7 @@ describe("ErrorAdapter", () => {
     { originalErrorCode: IModelsErrorCode.NamedVersionOnChangesetExists, expectedErrorNumber: IModelHubStatus.ChangeSetAlreadyHasVersion },
     { originalErrorCode: IModelsErrorCode.ConflictWithAnotherUser, expectedErrorNumber: IModelHubStatus.AnotherUserPushing },
     { originalErrorCode: IModelsErrorCode.NewerChangesExist, expectedErrorNumber: IModelHubStatus.PullIsRequired },
-    { originalErrorCode: IModelsErrorCode.BaselineFileInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout },
+    { originalErrorCode: IModelsErrorCode.BaselineFileInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout }
   ].forEach((testCase: { originalErrorCode: IModelsErrorCode, expectedErrorNumber: number }) => {
 
     it(`should return correct error number (${testCase.originalErrorCode})`, () => {
@@ -120,7 +121,7 @@ describe("ErrorAdapter", () => {
       const iModelError = result as IModelError;
       expect(iModelError.errorNumber).to.be.equal(testCase.expectedErrorNumber);
       expect(iModelError.message).to.be.equal(originalErrorMessage);
-    })
+    });
   });
 
   [
@@ -153,6 +154,6 @@ describe("ErrorAdapter", () => {
       const iModelError = result as IModelError;
       expect(iModelError.errorNumber).to.be.equal(IModelHubStatus.Unknown);
       expect(iModelError.message).to.be.equal(originalErrorMessage);
-    })
+    });
   });
 });

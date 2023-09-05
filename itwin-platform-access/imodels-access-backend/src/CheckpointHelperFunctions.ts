@@ -18,9 +18,9 @@ import {
 } from "@itwin/imodels-client-authoring";
 
 import { Constants } from "./Constants";
+import { handleAPIErrors } from "./ErrorHandlingFunctions";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
-import { handleAPIErrors } from "./ErrorHandlingFunctions";
 
 export async function queryCurrentOrPrecedingV2Checkpoint(
   iModelsClient: IModelsClient,
@@ -101,10 +101,10 @@ async function findLatestCheckpointForChangeset(
   };
 
   const changeset = await handleAPIErrors(
-    () => iModelsClient.changesets.getSingle(getSingleChangesetParams)
+    async () => iModelsClient.changesets.getSingle(getSingleChangesetParams)
   );
   const checkpoint = await handleAPIErrors(
-    () => changeset.getCurrentOrPrecedingCheckpoint()
+    async () => changeset.getCurrentOrPrecedingCheckpoint()
   );
 
   if (!checkpoint)
@@ -125,8 +125,8 @@ async function getBaselineCheckpoint(
     ...iModelScopedOperationParams,
     changesetIndex: 0
   };
-  var result = await handleAPIErrors(
-    () => iModelsClient.checkpoints.getSingle(getCheckpointParams)
+  const result = await handleAPIErrors(
+    async () => iModelsClient.checkpoints.getSingle(getCheckpointParams)
   );
   return result;
 }
@@ -148,7 +148,7 @@ async function resolveChangesetIndexFromParamsOrQueryApi(
   };
 
   const changeset = await handleAPIErrors(
-    () => iModelsClient.changesets.getSingle(getSingleChangesetParams)
+    async () => iModelsClient.changesets.getSingle(getSingleChangesetParams)
   );
 
   return changeset.index;

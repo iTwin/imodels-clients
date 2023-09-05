@@ -5,19 +5,25 @@
 
 import { ChangeSetStatus, IModelHubStatus } from "@itwin/core-bentley";
 import { IModelError } from "@itwin/core-common";
+
 import { IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
 
 export type OperationNameForErrorMapping = "acquireBriefcase" | "downloadChangesets";
 
 export class ErrorAdapter {
   public static toIModelError(error: unknown, operationName?: OperationNameForErrorMapping): unknown {
-    if (!isIModelsApiError(error)) return error;
+    if (!isIModelsApiError(error))
+      return error;
 
-    if (error.code === IModelsErrorCode.Unrecognized) return error;
+    if (error.code === IModelsErrorCode.Unrecognized)
+      return error;
 
-    if (ErrorAdapter.isAPIAuthError(error.code)) return error;
-    if (ErrorAdapter.isIncorrectAPIUsageError(error.code)) return error;
-    if (ErrorAdapter.isAPIErrorWithoutCorrespondingStatus(error.code)) return error;
+    if (ErrorAdapter.isAPIAuthError(error.code))
+      return error;
+    if (ErrorAdapter.isIncorrectAPIUsageError(error.code))
+      return error;
+    if (ErrorAdapter.isAPIErrorWithoutCorrespondingStatus(error.code))
+      return error;
 
     let errorNumber = ErrorAdapter.tryMapGenericErrorCodeBasedOnOperation(error.code, operationName);
     if (!errorNumber)
@@ -50,10 +56,8 @@ export class ErrorAdapter {
       case IModelsErrorCode.MissingRequiredProperty:
       case IModelsErrorCode.MissingRequiredParameter:
       case IModelsErrorCode.MissingRequiredHeader:
-      // returned when, for example, user attempts to complete Baseline file upload while it is not in progress
-      case IModelsErrorCode.InvalidChange:
-      // returned when, for example, user attempts to complete Baseline file upload and the declared file size does not match actual uploaded file size
-      case IModelsErrorCode.DataConflict:
+      case IModelsErrorCode.InvalidChange: // returned when, for example, user attempts to complete Baseline file upload while it is not in progress
+      case IModelsErrorCode.DataConflict: // returned when, for example, user attempts to complete Baseline file upload and the declared file size does not match actual uploaded file size
         return true;
       default:
         return false;
@@ -86,7 +90,7 @@ export class ErrorAdapter {
     if (apiErrorCode === IModelsErrorCode.RateLimitExceeded && operationName === "acquireBriefcase")
       return IModelHubStatus.MaximumNumberOfBriefcasesPerUserPerMinute;
 
-    if (apiErrorCode === IModelsErrorCode.DownloadAborted && operationName == "downloadChangesets")
+    if (apiErrorCode === IModelsErrorCode.DownloadAborted && operationName === "downloadChangesets")
       return ChangeSetStatus.DownloadCancelled;
 
     return undefined;
@@ -102,7 +106,7 @@ export class ErrorAdapter {
       case IModelsErrorCode.IModelNotFound:
         return IModelHubStatus.iModelDoesNotExist;
       case IModelsErrorCode.ChangesetNotFound:
-        return IModelHubStatus.ChangeSetDoesNotExist
+        return IModelHubStatus.ChangeSetDoesNotExist;
       case IModelsErrorCode.BriefcaseNotFound:
         return IModelHubStatus.BriefcaseDoesNotExist;
       case IModelsErrorCode.FileNotFound:
@@ -119,7 +123,7 @@ export class ErrorAdapter {
       case IModelsErrorCode.ChangesetExists:
         return IModelHubStatus.ChangeSetAlreadyExists;
       case IModelsErrorCode.NamedVersionOnChangesetExists:
-        return IModelHubStatus.ChangeSetAlreadyHasVersion
+        return IModelHubStatus.ChangeSetAlreadyHasVersion;
 
       case IModelsErrorCode.ConflictWithAnotherUser:
         return IModelHubStatus.AnotherUserPushing;
