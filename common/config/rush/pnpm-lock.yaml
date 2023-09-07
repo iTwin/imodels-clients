@@ -134,6 +134,7 @@ importers:
       '@itwin/imodels-access-backend': workspace:*
       '@itwin/imodels-client-authoring': workspace:*
       '@itwin/imodels-client-common-config': workspace:*
+      '@itwin/imodels-client-management': workspace:*
       '@itwin/imodels-client-test-utils': workspace:*
       '@types/chai': ~4.2.21
       '@types/mocha': ~9.0.0
@@ -158,6 +159,7 @@ importers:
       '@itwin/ecschema-metadata': 4.0.0_30ffdc5308dd22bc25a719275cab883f
       '@itwin/imodels-access-backend': link:../../itwin-platform-access/imodels-access-backend
       '@itwin/imodels-client-authoring': link:../../clients/imodels-client-authoring
+      '@itwin/imodels-client-management': link:../../clients/imodels-client-management
       '@itwin/imodels-client-test-utils': link:../../utils/imodels-client-test-utils
       dotenv: 10.0.0
       inversify: 6.0.1

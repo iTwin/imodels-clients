@@ -15,15 +15,7 @@ import { AuthorizationCallback, ContainingChanges, IModelsClient, IModelsClientO
 import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
-
-class TestAuthorizationClient {
-  constructor(private _accessToken: string) {
-  }
-
-  public async getAccessToken(): Promise<string> {
-    return this._accessToken;
-  }
-}
+import { TestIModelHostAuthorizationClient } from "./TestIModelHostAuthorizationClient";
 
 describe("BackendIModelsAccess", () => {
   const testRunId = createGuidValue();
@@ -51,7 +43,7 @@ describe("BackendIModelsAccess", () => {
     authorizationCallback = authorizationProvider.getAdmin1Authorization();
     const authorization = await authorizationCallback();
     accessToken = `${authorization.scheme} ${authorization.token}`;
-    IModelHost.authorizationClient = new TestAuthorizationClient(accessToken);
+    IModelHost.authorizationClient = new TestIModelHostAuthorizationClient(accessToken);
 
     const testITwinProvider = container.get(TestITwinProvider);
     iTwinId = await testITwinProvider.getOrCreate();
@@ -145,11 +137,11 @@ describe("BackendIModelsAccess", () => {
 
       let progressReports: ProgressReport[] = [];
       const progressCallbackFor1stDownload = (downloaded: number, total: number) => {
-        progressReports.push({downloaded, total});
+        progressReports.push({ downloaded, total });
         return downloaded < total / 4 ? ProgressStatus.Continue : ProgressStatus.Abort;
       };
       const progressCallbackFor2ndDownload = (downloaded: number, total: number) => {
-        progressReports.push({downloaded, total});
+        progressReports.push({ downloaded, total });
         return ProgressStatus.Continue;
       };
 
@@ -239,7 +231,7 @@ describe("BackendIModelsAccess", () => {
       expect(v2checkpointForExactChangeset).to.be.undefined;
 
       // Act
-      const v2checkpointForChangesetAllowPrecedingParams = {...queryV2CheckpointParams, allowPreceding: true};
+      const v2checkpointForChangesetAllowPrecedingParams = { ...queryV2CheckpointParams, allowPreceding: true };
       const v2checkpointForChangesetAllowPreceding: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(v2checkpointForChangesetAllowPrecedingParams);
       // Assert
       expect(v2checkpointForChangesetAllowPreceding).to.not.be.undefined;
@@ -496,8 +488,8 @@ describe("BackendIModelsAccess", () => {
 
       const locksToAcquire: LockMap = new Map<string, LockState>();
 
-      const objectIdsDec = Array.from({length: 201}, (_, i) => i + 1);
-      for (const objectId of objectIdsDec){
+      const objectIdsDec = Array.from({ length: 201 }, (_, i) => i + 1);
+      for (const objectId of objectIdsDec) {
         locksToAcquire.set(`0x${objectId.toString(16)}`, LockState.Exclusive);
       }
 
