@@ -25,7 +25,7 @@ export class ErrorAdapter {
     if (ErrorAdapter.isAPIErrorWithoutCorrespondingStatus(error.code))
       return error;
 
-    let errorNumber = ErrorAdapter.tryMapGenericErrorCodeBasedOnOperation(error.code, operationName);
+    let errorNumber = ErrorAdapter.tryMapGenericErrorCode(error.code, operationName);
     if (!errorNumber)
       errorNumber = ErrorAdapter.mapErrorCode(error.code);
 
@@ -77,7 +77,7 @@ export class ErrorAdapter {
     }
   }
 
-  private static tryMapGenericErrorCodeBasedOnOperation(
+  private static tryMapGenericErrorCode(
     apiErrorCode: IModelsErrorCode,
     operationName?: OperationNameForErrorMapping
   ): IModelHubStatus | ChangeSetStatus | undefined {
