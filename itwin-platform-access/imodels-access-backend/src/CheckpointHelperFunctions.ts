@@ -17,8 +17,8 @@ import {
   IModelsClient
 } from "@itwin/imodels-client-authoring";
 
-import { Constants } from "./Constants";
-import { handleAPIErrors } from "./ErrorHandlingFunctions";
+import { Constants } from "@itwin/imodels-access-common/lib/Constants";
+import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 

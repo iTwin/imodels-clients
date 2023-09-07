@@ -33,7 +33,8 @@
   "dependencies": {
     "@azure/abort-controller": "^1.1.0",
     "@itwin/imodels-client-authoring": "workspace:*",
-    "axios": "^1.0.0"
+    "axios": "^1.0.0",
+    "@itwin/imodels-access-common": "workspace:*"
   },
   "devDependencies": {
     "@itwin/core-backend": "^4.0.0",

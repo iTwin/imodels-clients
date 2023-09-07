@@ -28,6 +28,12 @@
       "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
+      "packageName": "@itwin/imodels-access-common",
+      "projectFolder": "itwin-platform-access/imodels-access-common",
+      "shouldPublish": true,
+      "versionPolicyName": "prerelease-monorepo-lockStep"
+    },
+    {
       "packageName": "@itwin/imodels-access-frontend",
       "projectFolder": "itwin-platform-access/imodels-access-frontend",
       "shouldPublish": true,

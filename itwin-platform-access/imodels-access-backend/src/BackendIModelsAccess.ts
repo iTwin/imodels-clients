@@ -27,12 +27,13 @@ import {
 } from "@itwin/imodels-client-authoring";
 
 import { getV1CheckpointSize, queryCurrentOrPrecedingV1Checkpoint, queryCurrentOrPrecedingV2Checkpoint } from "./CheckpointHelperFunctions";
-import { Constants } from "./Constants";
-import { handleAPIErrors } from "./ErrorHandlingFunctions";
-import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
-import { ErrorAdapter } from "./interface-adapters/ErrorAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
+
+import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter";
+import { Constants } from "@itwin/imodels-access-common/lib/Constants";
+import { ErrorAdapter } from "@itwin/imodels-access-common/lib/ErrorAdapter";
+import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
