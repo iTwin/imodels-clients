@@ -46,7 +46,7 @@ describe("FrontendIModelsAccess error handling", () => {
     );
   });
 
-  it("should throw IModelError if iModel does not exist when resolving changeset for version", async () => {
+  it("should throw IModelError if iModel does not exist when resolving changeset for version (IModelVersion.named)", async () => {
     const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -69,6 +69,19 @@ describe("FrontendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () => frontendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
       IModelStatus.NotFound
+    );
+  });
+
+  it("should throw IModelError if iModel does not exist when resolving changeset for version (IModelVersion.asOfChangeSet)", async () => {
+    const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
+      accessToken,
+      iModelId: "nonExistentiModelId",
+      version: IModelVersion.asOfChangeSet("nonExistentChangesetId")
+    };
+
+    await executeFuncAndAssertError(
+      async () => frontendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
+      IModelHubStatus.iModelDoesNotExist
     );
   });
 
