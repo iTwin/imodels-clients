@@ -14,6 +14,10 @@ import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion
 } from "@itwin/core-common";
+import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter";
+import { Constants } from "@itwin/imodels-access-common/lib/Constants";
+import { ErrorAdapter } from "@itwin/imodels-access-common/lib/ErrorAdapter";
+import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
 import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations";
 
 import {
@@ -29,11 +33,6 @@ import {
 import { getV1CheckpointSize, queryCurrentOrPrecedingV1Checkpoint, queryCurrentOrPrecedingV2Checkpoint } from "./CheckpointHelperFunctions";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
-
-import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter";
-import { Constants } from "@itwin/imodels-access-common/lib/Constants";
-import { ErrorAdapter } from "@itwin/imodels-access-common/lib/ErrorAdapter";
-import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
