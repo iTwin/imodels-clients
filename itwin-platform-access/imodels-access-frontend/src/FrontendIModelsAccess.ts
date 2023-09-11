@@ -6,9 +6,10 @@ import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
 import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter";
+import { getLatestMinimalChangesetIfExists } from "@itwin/imodels-access-common/lib/ChangesetFunctions";
 import { Constants } from "@itwin/imodels-access-common/lib/Constants";
 
-import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, NamedVersionOrderByProperty,OrderByOperator, take } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Changeset, EntityListIterator, GetNamedVersionListParams, GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, MinimalNamedVersion, NamedVersionOrderByProperty, OrderByOperator, take } from "@itwin/imodels-client-management";
 
 export class FrontendIModelsAccess implements FrontendHubAccess {
   private readonly _emptyChangeset: ChangesetIndexAndId = { index: Constants.ChangeSet0.index, id: Constants.ChangeSet0.id };
@@ -31,22 +32,15 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
   }
 
   public async getLatestChangeset(arg: IModelIdArg): Promise<ChangesetIndexAndId> {
-    const getChangesetListParams: GetChangesetListParams = {
-      ...this.getIModelScopedOperationParams(arg),
-      urlParams: {
-        $top: 1,
-        $orderBy: {
-          property: ChangesetOrderByProperty.Index,
-          operator: OrderByOperator.Descending
-        }
-      }
-    };
+    const latestChangeset = await getLatestMinimalChangesetIfExists(
+      this._iModelsClient,
+      this.getIModelScopedOperationParams(arg)
+    );
 
-    const changesetsIterator: EntityListIterator<MinimalChangeset> = this._iModelsClient.changesets.getMinimalList(getChangesetListParams);
-    const changesets: MinimalChangeset[] = await take(changesetsIterator, 1);
-    if (!changesets.length)
+    if (!latestChangeset)
       return this._emptyChangeset;
-    return { index: changesets[0].index, id: changesets[0].id };
+
+    return { index: latestChangeset.index, id: latestChangeset.id };
   }
 
   public async getChangesetFromVersion(arg: IModelIdArg & { version: IModelVersion }): Promise<ChangesetIndexAndId> {
