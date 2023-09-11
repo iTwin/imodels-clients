@@ -34,6 +34,7 @@
   "devDependencies": {
     "@itwin/core-bentley": "^4.0.0",
     "@itwin/core-common": "^4.0.0",
+    "@itwin/core-geometry": "^4.0.0",
     "@itwin/imodels-client-common-config": "workspace:*",
     "cspell": "~5.21.0",
     "eslint": "~7.31.0",

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { ChangeSetStatus, IModelHubStatus } from "@itwin/core-bentley";
 import { IModelError } from "@itwin/core-common";
-import { ErrorAdapter, OperationNameForErrorMapping } from "@itwin/imodels-access-backend/lib/interface-adapters/ErrorAdapter";
+import { ErrorAdapter, OperationNameForErrorMapping } from "@itwin/imodels-access-common/lib/ErrorAdapter";
 import { IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
 import { expect } from "chai";
 

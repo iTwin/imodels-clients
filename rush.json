@@ -66,6 +66,11 @@
       "shouldPublish": false
     },
     {
+      "packageName": "@itwin/imodels-access-common-tests",
+      "projectFolder": "tests/imodels-access-common-tests",
+      "shouldPublish": false
+    },
+    {
       "packageName": "@itwin/imodels-access-frontend-tests",
       "projectFolder": "tests/imodels-access-frontend-tests",
       "shouldPublish": false
