@@ -2,7 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, OrderByOperator, take } from "@itwin/imodels-client-management";
+import { IModelStatus } from "@itwin/core-bentley";
+import { IModelError } from "@itwin/core-common";
+
+import { Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, OrderByOperator, take, toArray } from "@itwin/imodels-client-management";
 
 import { handleAPIErrors } from "./ErrorHandlingFunctions";
 
@@ -25,6 +28,29 @@ export async function getLatestMinimalChangesetIfExists(
   return getLatestChangeset(
     (getChangesetListParams) => iModelsClient.changesets.getMinimalList(getChangesetListParams),
     iModelScopedOperationParams);
+}
+
+export async function getNamedVersionChangeset(
+  iModelsClient: IModelsClient,
+  iModelScopedOperationParams: IModelScopedOperationParams,
+  versionName: string
+): Promise<{ id: string, index: number }> {
+  const getNamedVersionListParams: GetNamedVersionListParams = {
+    ...iModelScopedOperationParams,
+    urlParams: {
+      name: versionName
+    }
+  };
+
+  const namedVersionsIterator: EntityListIterator<MinimalNamedVersion> = iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
+  const namedVersions: MinimalNamedVersion[] = await handleAPIErrors(
+    async () => toArray(namedVersionsIterator)
+  );
+
+  if (namedVersions.length === 0 || !namedVersions[0].changesetId)
+    throw new IModelError(IModelStatus.NotFound, `Named version ${versionName} not found`);
+
+  return { id: namedVersions[0].changesetId, index: namedVersions[0].changesetIndex };
 }
 
 async function getLatestChangeset<TChangeset extends MinimalChangeset>(

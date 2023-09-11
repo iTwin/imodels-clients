@@ -6,8 +6,9 @@ import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
 import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter";
-import { getLatestMinimalChangesetIfExists } from "@itwin/imodels-access-common/lib/ChangesetFunctions";
+import { getLatestMinimalChangesetIfExists, getNamedVersionChangeset } from "@itwin/imodels-access-common/lib/ChangesetFunctions";
 import { Constants } from "@itwin/imodels-access-common/lib/Constants";
+import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
 
 import { AuthorizationCallback, Changeset, EntityListIterator, GetNamedVersionListParams, GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, MinimalNamedVersion, NamedVersionOrderByProperty, OrderByOperator, take } from "@itwin/imodels-client-management";
 
@@ -25,7 +26,10 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
       changesetId: arg.changeSetId
     };
 
-    const changeset: Changeset = await this._iModelsClient.changesets.getSingle(getSingleChangesetParams);
+    const changeset: Changeset = await handleAPIErrors(
+      async () => this._iModelsClient.changesets.getSingle(getSingleChangesetParams)
+    );
+
     if (!changeset)
       throw new IModelError(IModelStatus.NotFound, `Changeset ${arg.changeSetId} not found`);
     return { index: changeset.index, id: changeset.id };
@@ -63,18 +67,11 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
     if (!arg.versionName)
       return this.getChangesetFromLatestNamedVersion(arg);
 
-    const getNamedVersionListParams: GetNamedVersionListParams = {
-      ...this.getIModelScopedOperationParams(arg),
-      urlParams: {
-        name: arg.versionName
-      }
-    };
-
-    const namedVersionsIterator: EntityListIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
-    const namedVersions: MinimalNamedVersion[] = await take(namedVersionsIterator, 1);
-    if (namedVersions.length === 0 || !namedVersions[0].changesetId)
-      throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
-    return { index: namedVersions[0].changesetIndex, id: namedVersions[0].changesetId };
+    return getNamedVersionChangeset(
+      this._iModelsClient,
+      this.getIModelScopedOperationParams(arg),
+      arg.versionName
+    );
   }
 
   private getIModelScopedOperationParams(arg: IModelIdArg): IModelScopedOperationParams {
@@ -107,7 +104,9 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
       }
     };
     const namedVersionsIterator: EntityListIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
-    const namedVersions = await take(namedVersionsIterator, 1);
+    const namedVersions = await handleAPIErrors(
+      async () => take(namedVersionsIterator, 1)
+    );
 
     if (namedVersions.length === 0 || !namedVersions[0].changesetIndex || !namedVersions[0].changesetId)
       throw new IModelError(IModelStatus.NotFound, "No named versions found");

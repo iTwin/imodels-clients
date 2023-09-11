@@ -9,13 +9,13 @@ import {
   ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg,
   IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
-import { BriefcaseStatus, Guid, GuidString, IModelStatus, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
+import { BriefcaseStatus, Guid, GuidString, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
 import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion
 } from "@itwin/core-common";
 import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter";
-import { getLatestFullChangesetIfExists } from "@itwin/imodels-access-common/lib/ChangesetFunctions";
+import { getLatestFullChangesetIfExists, getNamedVersionChangeset } from "@itwin/imodels-access-common/lib/ChangesetFunctions";
 import { Constants } from "@itwin/imodels-access-common/lib/Constants";
 import { ErrorAdapter } from "@itwin/imodels-access-common/lib/ErrorAdapter";
 import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
@@ -26,8 +26,8 @@ import {
   Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams,
   DeleteIModelParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset,
   EntityListIterator, GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetLockListParams,
-  GetNamedVersionListParams, GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode,
-  Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion,
+  GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode,
+  Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalIModel,
   ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
 
@@ -166,23 +166,15 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
   public async getChangesetFromNamedVersion(arg: IModelIdArg & { versionName: string }): Promise<ChangesetProps> {
     const iModelOperationParams: IModelScopedOperationParams = this.getIModelScopedOperationParams(arg);
-    const getNamedVersionListParams: GetNamedVersionListParams = {
-      ...iModelOperationParams,
-      urlParams: {
-        name: arg.versionName
-      }
-    };
-
-    const namedVersionsIterator: EntityListIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
-    const namedVersions: MinimalNamedVersion[] = await handleAPIErrors(
-      async () => toArray(namedVersionsIterator)
+    const namedVersionChangeset = await getNamedVersionChangeset(
+      this._iModelsClient,
+      iModelOperationParams,
+      arg.versionName
     );
 
-    if (namedVersions.length === 0 || !namedVersions[0].changesetId)
-      throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
     const getSingleChangesetParams: GetSingleChangesetParams = {
       ...iModelOperationParams,
-      changesetId: namedVersions[0].changesetId
+      changesetId: namedVersionChangeset.id
     };
 
     const changeset: MinimalChangeset = await handleAPIErrors(
