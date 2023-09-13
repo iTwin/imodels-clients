@@ -28,6 +28,12 @@
       "versionPolicyName": "prerelease-monorepo-lockStep"
     },
     {
+      "packageName": "@itwin/imodels-access-common",
+      "projectFolder": "itwin-platform-access/imodels-access-common",
+      "shouldPublish": true,
+      "versionPolicyName": "prerelease-monorepo-lockStep"
+    },
+    {
       "packageName": "@itwin/imodels-access-frontend",
       "projectFolder": "itwin-platform-access/imodels-access-frontend",
       "shouldPublish": true,
@@ -57,6 +63,11 @@
     {
       "packageName": "@itwin/imodels-clients-tests-browser",
       "projectFolder": "tests/imodels-clients-tests-browser",
+      "shouldPublish": false
+    },
+    {
+      "packageName": "@itwin/imodels-access-common-tests",
+      "projectFolder": "tests/imodels-access-common-tests",
       "shouldPublish": false
     },
     {

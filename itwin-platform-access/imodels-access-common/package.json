@@ -1,7 +1,7 @@
 {
-  "name": "@itwin/imodels-access-frontend",
+  "name": "@itwin/imodels-access-common",
   "version": "4.0.5",
-  "description": "Interoperability package between iModels API and iTwin.js library for frontend.",
+  "description": "Common code package for @itwin/imodels-access-frontend and @itwin/imodels-access-backend.",
   "keywords": [
     "Bentley",
     "iModel",
@@ -18,11 +18,8 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
-  "main": "lib/index.js",
-  "module": "lib/esm/index.js",
-  "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json 1>&2",
+    "build": "tsc 1>&2",
     "clean": "rimraf lib",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
@@ -32,20 +29,13 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-access-common": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*"
   },
   "devDependencies": {
-    "@itwin/appui-abstract": "^4.0.0",
     "@itwin/core-bentley": "^4.0.0",
     "@itwin/core-common": "^4.0.0",
-    "@itwin/core-frontend": "^4.0.0",
     "@itwin/core-geometry": "^4.0.0",
-    "@itwin/core-orbitgt": "^4.0.0",
-    "@itwin/core-quantity": "^4.0.0",
     "@itwin/imodels-client-common-config": "workspace:*",
-    "@itwin/webgl-compatibility": "^4.0.0",
-    "@types/node": "14.14.31",
     "cspell": "~5.21.0",
     "eslint": "~7.31.0",
     "rimraf": "~3.0.2",
@@ -54,7 +44,6 @@
   },
   "peerDependencies": {
     "@itwin/core-bentley": "^4.0.0",
-    "@itwin/core-common": "^4.0.0",
-    "@itwin/core-frontend": "^4.0.0"
+    "@itwin/core-common": "^4.0.0"
   }
 }

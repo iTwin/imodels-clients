@@ -6,7 +6,7 @@
 import { ChangeSetStatus, IModelHubStatus } from "@itwin/core-bentley";
 import { IModelError } from "@itwin/core-common";
 
-import { IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
 
 export type OperationNameForErrorMapping = "acquireBriefcase" | "downloadChangesets";
 

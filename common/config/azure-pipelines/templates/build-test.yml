@@ -46,6 +46,10 @@ steps:
       TEST_USERS_ADMIN1_PASSWORD: $(TEST_USERS_ADMIN1_PASSWORD)
       TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD: $(TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD)
 
+  - script: npm run test:unit
+    displayName: npm run test:unit (@itwin/imodels-access-common unit tests)
+    workingDirectory: tests/imodels-access-common-tests
+
   - script: npm run test:integration
     displayName: npm run test:integration (@itwin/imodels-access-frontend tests)
     workingDirectory: tests/imodels-access-frontend-tests
@@ -53,10 +57,6 @@ steps:
       AUTH_CLIENT_SECRET: $(AUTH_CLIENT_SECRET)
       TEST_USERS_ADMIN1_PASSWORD: $(TEST_USERS_ADMIN1_PASSWORD)
       TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD: $(TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD)
-
-  - script: npm run test:unit
-    displayName: npm run test:unit (@itwin/imodels-access-backend unit tests)
-    workingDirectory: tests/imodels-access-backend-tests
 
   - script: npm run test:integration
     displayName: npm run test:integration (@itwin/imodels-access-backend integration tests)

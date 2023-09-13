@@ -58,6 +58,7 @@ importers:
       '@itwin/core-bentley': ^4.0.0
       '@itwin/core-common': ^4.0.0
       '@itwin/core-geometry': ^4.0.0
+      '@itwin/imodels-access-common': workspace:*
       '@itwin/imodels-client-authoring': workspace:*
       '@itwin/imodels-client-common-config': workspace:*
       '@types/node': 14.14.31
@@ -70,6 +71,7 @@ importers:
       typescript: ~4.4.0
     dependencies:
       '@azure/abort-controller': 1.1.0
+      '@itwin/imodels-access-common': link:../imodels-access-common
       '@itwin/imodels-client-authoring': link:../../clients/imodels-client-authoring
       axios: 1.4.0
     devDependencies:
@@ -86,6 +88,31 @@ importers:
       sort-package-json: 1.53.1
       typescript: 4.4.4
 
+  ../../itwin-platform-access/imodels-access-common:
+    specifiers:
+      '@itwin/core-bentley': ^4.0.0
+      '@itwin/core-common': ^4.0.0
+      '@itwin/core-geometry': ^4.0.0
+      '@itwin/imodels-client-common-config': workspace:*
+      '@itwin/imodels-client-management': workspace:*
+      cspell: ~5.21.0
+      eslint: ~7.31.0
+      rimraf: ~3.0.2
+      sort-package-json: ~1.53.1
+      typescript: ~4.4.0
+    dependencies:
+      '@itwin/imodels-client-management': link:../../clients/imodels-client-management
+    devDependencies:
+      '@itwin/core-bentley': 4.0.0
+      '@itwin/core-common': 4.0.0_8b973855e889ff8da4ca85bd3eac12bb
+      '@itwin/core-geometry': 4.0.0
+      '@itwin/imodels-client-common-config': link:../../utils/imodels-client-common-config
+      cspell: 5.21.2
+      eslint: 7.31.0
+      rimraf: 3.0.2
+      sort-package-json: 1.53.1
+      typescript: 4.4.4
+
   ../../itwin-platform-access/imodels-access-frontend:
     specifiers:
       '@itwin/appui-abstract': ^4.0.0
@@ -95,6 +122,7 @@ importers:
       '@itwin/core-geometry': ^4.0.0
       '@itwin/core-orbitgt': ^4.0.0
       '@itwin/core-quantity': ^4.0.0
+      '@itwin/imodels-access-common': workspace:*
       '@itwin/imodels-client-common-config': workspace:*
       '@itwin/imodels-client-management': workspace:*
       '@itwin/webgl-compatibility': ^4.0.0
@@ -105,6 +133,7 @@ importers:
       sort-package-json: ~1.53.1
       typescript: ~4.4.0
     dependencies:
+      '@itwin/imodels-access-common': link:../imodels-access-common
       '@itwin/imodels-client-management': link:../../clients/imodels-client-management
     devDependencies:
       '@itwin/appui-abstract': 4.0.0_@itwin+core-bentley@4.0.0
@@ -166,6 +195,43 @@ importers:
       json5: 2.2.2
       mocha: 9.2.2
       reflect-metadata: 0.1.13
+    devDependencies:
+      '@itwin/imodels-client-common-config': link:../../utils/imodels-client-common-config
+      '@types/chai': 4.2.22
+      '@types/mocha': 9.0.0
+      '@types/node': 14.14.31
+      cspell: 5.21.2
+      eslint: 7.31.0
+      nyc: 15.1.0
+      rimraf: 3.0.2
+      sort-package-json: 1.53.1
+      typescript: 4.4.4
+
+  ../../tests/imodels-access-common-tests:
+    specifiers:
+      '@itwin/core-bentley': ^4.0.0
+      '@itwin/core-common': ^4.0.0
+      '@itwin/core-geometry': ^4.0.0
+      '@itwin/imodels-access-common': workspace:*
+      '@itwin/imodels-client-common-config': workspace:*
+      '@itwin/imodels-client-management': workspace:*
+      '@types/chai': ~4.2.21
+      '@types/mocha': ~9.0.0
+      '@types/node': 14.14.31
+      cspell: ~5.21.0
+      eslint: ~7.31.0
+      mocha: ~9.2.2
+      nyc: 15.1.0
+      rimraf: ~3.0.2
+      sort-package-json: ~1.53.1
+      typescript: ~4.4.0
+    dependencies:
+      '@itwin/core-bentley': 4.0.0
+      '@itwin/core-common': 4.0.0_8b973855e889ff8da4ca85bd3eac12bb
+      '@itwin/core-geometry': 4.0.0
+      '@itwin/imodels-access-common': link:../../itwin-platform-access/imodels-access-common
+      '@itwin/imodels-client-management': link:../../clients/imodels-client-management
+      mocha: 9.2.2
     devDependencies:
       '@itwin/imodels-client-common-config': link:../../utils/imodels-client-common-config
       '@types/chai': 4.2.22

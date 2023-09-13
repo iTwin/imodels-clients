@@ -5,13 +5,13 @@
 import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
+import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter";
+import { Constants } from "@itwin/imodels-access-common/lib/Constants";
 
 import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetNamedVersionListParams, GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, NamedVersionOrderByProperty,OrderByOperator, take } from "@itwin/imodels-client-management";
 
-import { AccessTokenAdapter } from "./interface-adapters/AccessTokenAdapter";
-
 export class FrontendIModelsAccess implements FrontendHubAccess {
-  private readonly _emptyChangeset: ChangesetIndexAndId = { index: 0, id: "" };
+  private readonly _emptyChangeset: ChangesetIndexAndId = { index: Constants.ChangeSet0.index, id: Constants.ChangeSet0.id };
   protected readonly _iModelsClient: IModelsClient;
 
   constructor(iModelsClient?: IModelsClient) {

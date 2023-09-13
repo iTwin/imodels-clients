@@ -1,13 +1,14 @@
 {
-  "name": "@itwin/imodels-access-frontend",
-  "version": "4.0.5",
-  "description": "Interoperability package between iModels API and iTwin.js library for frontend.",
+  "name": "@itwin/imodels-access-common-tests",
+  "version": "0.0.0",
+  "description": "Tests for @itwin/imodels-access-common.",
   "keywords": [
     "Bentley",
     "iModel",
     "iTwin",
     "iTwin platform",
-    "iTwin.js"
+    "iTwin.js",
+    "Tests"
   ],
   "repository": {
     "type": "git",
@@ -18,43 +19,36 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
-  "main": "lib/index.js",
-  "module": "lib/esm/index.js",
-  "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json 1>&2",
+    "build": "tsc 1>&2",
     "clean": "rimraf lib",
+    "cover": "nyc npm test",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
-    "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
+    "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
+    "test:unit": "mocha lib/**/*.test.js --color --timeout 180000 --exit"
   },
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-access-common": "workspace:*",
-    "@itwin/imodels-client-management": "workspace:*"
-  },
-  "devDependencies": {
-    "@itwin/appui-abstract": "^4.0.0",
     "@itwin/core-bentley": "^4.0.0",
     "@itwin/core-common": "^4.0.0",
-    "@itwin/core-frontend": "^4.0.0",
     "@itwin/core-geometry": "^4.0.0",
-    "@itwin/core-orbitgt": "^4.0.0",
-    "@itwin/core-quantity": "^4.0.0",
+    "@itwin/imodels-access-common": "workspace:*",
+    "@itwin/imodels-client-management": "workspace:*",
+    "mocha": "~9.2.2"
+  },
+  "devDependencies": {
     "@itwin/imodels-client-common-config": "workspace:*",
-    "@itwin/webgl-compatibility": "^4.0.0",
+    "@types/chai": "~4.2.21",
+    "@types/mocha": "~9.0.0",
     "@types/node": "14.14.31",
     "cspell": "~5.21.0",
     "eslint": "~7.31.0",
+    "nyc": "15.1.0",
     "rimraf": "~3.0.2",
     "sort-package-json": "~1.53.1",
     "typescript": "~4.4.0"
-  },
-  "peerDependencies": {
-    "@itwin/core-bentley": "^4.0.0",
-    "@itwin/core-common": "^4.0.0",
-    "@itwin/core-frontend": "^4.0.0"
   }
 }
