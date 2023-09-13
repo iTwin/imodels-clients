@@ -9,12 +9,13 @@ import {
   ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg,
   IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
-import { BriefcaseStatus, Guid, GuidString, IModelStatus, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
+import { BriefcaseStatus, Guid, GuidString, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
 import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion
 } from "@itwin/core-common";
 import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter";
+import { getLatestFullChangesetIfExists, getNamedVersionChangeset } from "@itwin/imodels-access-common/lib/ChangesetFunctions";
 import { Constants } from "@itwin/imodels-access-common/lib/Constants";
 import { ErrorAdapter } from "@itwin/imodels-access-common/lib/ErrorAdapter";
 import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
@@ -22,12 +23,12 @@ import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations";
 
 import {
   AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset,
-  ChangesetOrderByProperty, Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams,
+  Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams,
   DeleteIModelParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset,
   EntityListIterator, GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetLockListParams,
-  GetNamedVersionListParams, GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode,
-  Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalIModel, MinimalNamedVersion,
-  OrderByOperator, ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
+  GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode,
+  Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalIModel,
+  ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
 
 import { getV1CheckpointSize, queryCurrentOrPrecedingV1Checkpoint, queryCurrentOrPrecedingV2Checkpoint } from "./CheckpointHelperFunctions";
@@ -135,25 +136,15 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   public async getLatestChangeset(arg: IModelIdArg): Promise<ChangesetProps> {
-    const getChangesetListParams: GetChangesetListParams = {
-      ...this.getIModelScopedOperationParams(arg),
-      urlParams: {
-        $top: 1,
-        $orderBy: {
-          property: ChangesetOrderByProperty.Index,
-          operator: OrderByOperator.Descending
-        }
-      }
-    };
-
-    const changesetsIterator: EntityListIterator<MinimalChangeset> = this._iModelsClient.changesets.getMinimalList(getChangesetListParams);
-    const changesets: MinimalChangeset[] = await handleAPIErrors(
-      async () => take(changesetsIterator, 1)
+    const latestChangeset = await getLatestFullChangesetIfExists(
+      this._iModelsClient,
+      this.getIModelScopedOperationParams(arg)
     );
 
-    if (changesets.length === 0)
+    if (!latestChangeset)
       return Constants.ChangeSet0;
-    const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(changesets[0]);
+
+    const result: ChangesetProps = ClientToPlatformAdapter.toChangesetProps(latestChangeset);
     return result;
   }
 
@@ -175,23 +166,15 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
   public async getChangesetFromNamedVersion(arg: IModelIdArg & { versionName: string }): Promise<ChangesetProps> {
     const iModelOperationParams: IModelScopedOperationParams = this.getIModelScopedOperationParams(arg);
-    const getNamedVersionListParams: GetNamedVersionListParams = {
-      ...iModelOperationParams,
-      urlParams: {
-        name: arg.versionName
-      }
-    };
-
-    const namedVersionsIterator: EntityListIterator<MinimalNamedVersion> = this._iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
-    const namedVersions: MinimalNamedVersion[] = await handleAPIErrors(
-      async () => toArray(namedVersionsIterator)
+    const namedVersionChangeset = await getNamedVersionChangeset(
+      this._iModelsClient,
+      iModelOperationParams,
+      arg.versionName
     );
 
-    if (namedVersions.length === 0 || !namedVersions[0].changesetId)
-      throw new IModelError(IModelStatus.NotFound, `Named version ${arg.versionName} not found`);
     const getSingleChangesetParams: GetSingleChangesetParams = {
       ...iModelOperationParams,
-      changesetId: namedVersions[0].changesetId
+      changesetId: namedVersionChangeset.id
     };
 
     const changeset: MinimalChangeset = await handleAPIErrors(
