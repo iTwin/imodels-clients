@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-backend",
-  "version": "4.0.5",
+  "version": "4.1.0",
   "description": "Interoperability package between iModels API and iTwin.js library for backend.",
   "keywords": [
     "Bentley",
@@ -34,7 +34,7 @@
     "@azure/abort-controller": "^1.1.0",
     "@itwin/imodels-access-common": "workspace:*",
     "@itwin/imodels-client-authoring": "workspace:*",
-    "axios": "^1.0.0"
+    "axios": "1.2.2"
   },
   "devDependencies": {
     "@itwin/core-backend": "^4.0.0",
