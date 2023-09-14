@@ -34,14 +34,14 @@ importers:
     specifiers:
       '@itwin/imodels-client-common-config': workspace:*
       '@types/node': ^18.11.18
-      axios: ~1.1.0
+      axios: 1.1.0
       cspell: ~5.21.0
       eslint: ~7.31.0
       rimraf: ~3.0.2
       sort-package-json: ~1.53.1
       typescript: ~4.4.0
     dependencies:
-      axios: 1.1.3
+      axios: 1.1.0
     devDependencies:
       '@itwin/imodels-client-common-config': link:../../utils/imodels-client-common-config
       '@types/node': 18.16.16
@@ -63,7 +63,7 @@ importers:
       '@itwin/imodels-client-common-config': workspace:*
       '@types/node': 14.14.31
       '@types/ws': ^7.0.0
-      axios: ~1.1.0
+      axios: 1.1.0
       cspell: ~5.21.0
       eslint: ~7.31.0
       rimraf: ~3.0.2
@@ -73,7 +73,7 @@ importers:
       '@azure/abort-controller': 1.1.0
       '@itwin/imodels-access-common': link:../imodels-access-common
       '@itwin/imodels-client-authoring': link:../../clients/imodels-client-authoring
-      axios: 1.1.3
+      axios: 1.1.0
     devDependencies:
       '@itwin/core-backend': 4.0.0_acda798b3eb76717c9a14158b1be73d0
       '@itwin/core-bentley': 4.0.0
@@ -316,7 +316,7 @@ importers:
       '@types/node': ^18.11.18
       '@types/sinon': ^10.0.15
       '@types/sinon-chai': ^3.2.9
-      axios: ~1.1.0
+      axios: 1.1.0
       chai: ~4.3.4
       chai-as-promised: ~7.1.1
       cpx2: 4.2.0
@@ -340,7 +340,7 @@ importers:
       '@itwin/imodels-client-test-utils': link:../../utils/imodels-client-test-utils
       '@itwin/object-storage-azure': 2.0.0_90b3e846c411421b9b95929cf52f60fd
       '@itwin/object-storage-core': 2.0.0_90b3e846c411421b9b95929cf52f60fd
-      axios: 1.1.3
+      axios: 1.1.0
       chai: 4.3.7
       chai-as-promised: 7.1.1_chai@4.3.7
       dotenv: 10.0.0
@@ -433,7 +433,7 @@ importers:
       '@itwin/object-storage-core': ^2.0.0
       '@types/chai': ~4.2.21
       '@types/node': ^18.11.18
-      axios: ~1.1.0
+      axios: 1.1.0
       chai: ~4.3.4
       cpx2: 4.2.0
       cspell: ~5.21.0
@@ -449,7 +449,7 @@ importers:
       '@itwin/imodels-client-authoring': link:../../clients/imodels-client-authoring
       '@itwin/imodels-client-management': link:../../clients/imodels-client-management
       '@itwin/object-storage-core': 2.0.0_90b3e846c411421b9b95929cf52f60fd
-      axios: 1.1.3
+      axios: 1.1.0
       chai: 4.3.7
       dotenv: 10.0.0
       inversify: 6.0.1
@@ -2155,8 +2155,8 @@ packages:
     transitivePeerDependencies:
       - debug
 
-  /axios/1.1.3:
-    resolution: {integrity: sha512-00tXVRwKx/FZr/IDVFt4C+f9FYairX517WoGCL6dpOntqLkZofjhu43F/Xl44UOpqa+9sLFDrG/XAnFsUYgkDA==}
+  /axios/1.1.0:
+    resolution: {integrity: sha512-hsJgcqz4JY7f+HZ4cWTrPZ6tZNCNFPTRx1MjRqu/hbpgpHdSCUpLVuplc+jE/h7dOvyANtw/ERA3HC2Rz/QoMg==}
     dependencies:
       follow-redirects: 1.15.2
       form-data: 4.0.0
