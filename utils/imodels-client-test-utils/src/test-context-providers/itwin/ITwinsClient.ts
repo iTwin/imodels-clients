@@ -2,7 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the iTwin root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import axios, { AxiosResponse } from "axios";
+const axios = require("axios");
+
+import { AxiosResponse } from "axios";
 import { injectable } from "inversify";
 
 import { AuthorizationParam } from "@itwin/imodels-client-authoring";

@@ -2,7 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+const axios = require("axios");
+
+import { AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
 
 import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, RestClient } from "../types/RestClient";
 
@@ -74,7 +76,7 @@ export class AxiosRestClient implements RestClient {
       const response = await requestFunc();
       return response.data;
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         const parsedError: Error = this._parseErrorFunc({ statusCode: error.response?.status, body: error.response?.data }, error);
         throw parsedError;
       }

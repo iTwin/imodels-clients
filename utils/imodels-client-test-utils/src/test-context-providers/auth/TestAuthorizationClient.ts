@@ -2,10 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+const axios = require("axios");
+
 import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
 
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { injectable } from "inversify";
 import * as puppeteer from "puppeteer";
 

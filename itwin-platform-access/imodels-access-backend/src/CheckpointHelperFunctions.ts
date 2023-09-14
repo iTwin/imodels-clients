@@ -3,6 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 
+const axios = require("axios");
+
 import {
   CheckpointArg, CheckpointProps,
   V2CheckpointAccessProps
@@ -10,7 +12,7 @@ import {
 import { Logger } from "@itwin/core-bentley";
 import { Constants } from "@itwin/imodels-access-common/lib/Constants";
 import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 
 import {
   Checkpoint,
