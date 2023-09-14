@@ -59,6 +59,14 @@ export interface IModelsErrorDetail {
   message: string;
   /** Name of the property or parameter which is related to the issue. */
   target?: string;
+  /** Inner error that potentially narrows down the issue specified in the `IModelsErrorDetail.code` property. */
+  innerError?: ErrorDetailInnerError;
+}
+
+/** Additional information that extends IModelsErrorDetail. See {@link IModelsErrorDetail} . */
+export interface ErrorDetailInnerError {
+  /** Error detail code. See {@link IModelsErrorCode}. */
+  code: IModelsErrorCode;
 }
 
 /** Base interface for all errors returned from iModels API. */

@@ -5,7 +5,7 @@
 import { ChangeSetStatus, IModelHubStatus } from "@itwin/core-bentley";
 import { IModelError } from "@itwin/core-common";
 import { ErrorAdapter, OperationNameForErrorMapping } from "@itwin/imodels-access-common/lib/ErrorAdapter";
-import { IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
+import { IModelsErrorImpl, IModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
 import { expect } from "chai";
 
 import { IModelsErrorCode } from "@itwin/imodels-client-management";
@@ -94,11 +94,6 @@ describe("ErrorAdapter", () => {
 
   [
     {
-      originalErrorCode: IModelsErrorCode.ResourceQuotaExceeded,
-      operationName: "acquireBriefcase" as const,
-      expectedErrorNumber: IModelHubStatus.MaximumNumberOfBriefcasesPerUser
-    },
-    {
       originalErrorCode: IModelsErrorCode.RateLimitExceeded,
       operationName: "acquireBriefcase" as const,
       expectedErrorNumber: IModelHubStatus.MaximumNumberOfBriefcasesPerUserPerMinute
@@ -155,5 +150,63 @@ describe("ErrorAdapter", () => {
       expect(iModelError.errorNumber).to.be.equal(IModelHubStatus.Unknown);
       expect(iModelError.message).to.be.equal(originalErrorMessage);
     });
+  });
+
+  it("should correctly parse MaximumNumberOfBriefcasesPerUser error", () => {
+    const apiResponse = {
+      error: {
+        code: "InvalidiModelsRequest",
+        message: "Cannot acquire Briefcase.",
+        details: [
+          {
+            code: "foo",
+            message: "bar"
+          },
+          {
+            code: "foo",
+            message: "bar",
+            innerError: {}
+          },
+          {
+            code: "ResourceQuotaExceeded",
+            message: "Maximum number of Briefcases per user limit reached.",
+            innerError: {
+              code: "MaximumNumberOfBriefcasesPerUser"
+            }
+          }
+        ]
+      }
+    };
+    const apiError = IModelsErrorParser.parse({ statusCode: 422, body: apiResponse }, new Error());
+
+    const result = ErrorAdapter.toIModelError(apiError);
+
+    const isiModelError = result instanceof IModelError;
+    expect(isiModelError).to.be.true;
+    const iModelError = result as IModelError;
+    expect(iModelError.errorNumber).to.be.equal(IModelHubStatus.MaximumNumberOfBriefcasesPerUser);
+    expect(iModelError.message).to.be.equal(
+      "Cannot acquire Briefcase. Details:\n" +
+      "1. Unrecognized: bar\n" +
+      "2. Unrecognized: bar\n" +
+      "3. ResourceQuotaExceeded: Maximum number of Briefcases per user limit reached.\n");
+  });
+
+  it("should correctly parse MaximumNumberOfBriefcasesPerUserPerMinute error", () => {
+    const apiResponse = {
+      error: {
+        code: "RateLimitExceeded",
+        message: "Maximum number of briefcases per user per minute reached."
+      }
+    };
+    const apiError = IModelsErrorParser.parse({ statusCode: 429, body: apiResponse }, new Error());
+
+    const result = ErrorAdapter.toIModelError(apiError, "acquireBriefcase");
+
+    const isiModelError = result instanceof IModelError;
+    expect(isiModelError).to.be.true;
+    const iModelError = result as IModelError;
+    expect(iModelError.errorNumber).to.be.equal(IModelHubStatus.MaximumNumberOfBriefcasesPerUserPerMinute);
+    expect(iModelError.message).to.be.equal("Maximum number of briefcases per user per minute reached.");
   });
 });

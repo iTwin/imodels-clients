@@ -54,7 +54,7 @@ describe("BackendIModelsAccess error handling", () => {
     testIModelGroup = testIModelGroupFactory.create({
       testRunId,
       packageName: "IModelsAccessBackendTests",
-      testSuiteName: "BackendIModelsAccess"
+      testSuiteName: "BackendIModelsAccess errors"
     });
 
     const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
@@ -66,6 +66,10 @@ describe("BackendIModelsAccess error handling", () => {
 
   beforeEach(async () => {
     await cleanupDirectory(testDownloadPath);
+  });
+
+  after(async () => {
+    await testIModelGroup.cleanupIModels();
   });
 
   it("should throw IModelError if changeset does not exist when downloading a single changeset", async () => {
@@ -245,6 +249,38 @@ describe("BackendIModelsAccess error handling", () => {
       async () => backendIModelsAccess.acquireNewBriefcaseId(acquireNewBriefcaseIdParams),
       IModelHubStatus.iModelDoesNotExist
     );
+  });
+
+  it("should throw IModelError when too many briefcases per user per minute are acquired", async () => {
+    const briefcaseIds: number[] = [];
+    try {
+      const acquireNewBriefcaseIdParams: AcquireNewBriefcaseIdArg = {
+        accessToken,
+        iModelId: testIModelForWrite.id
+      };
+
+      const acquire6BriefcasesFunc = async () => {
+        for (let i = 0; i < 6; i++) {
+          const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId(acquireNewBriefcaseIdParams);
+          briefcaseIds.push(briefcaseId);
+        }
+      };
+
+      await executeFuncAndAssertError(
+        acquire6BriefcasesFunc,
+        IModelHubStatus.MaximumNumberOfBriefcasesPerUserPerMinute
+      );
+
+    } finally {
+      for (const briefcaseId of briefcaseIds) {
+        const releaseBriefcaseParams: BriefcaseIdArg = {
+          accessToken,
+          iModelId: testIModelForWrite.id,
+          briefcaseId
+        };
+        await backendIModelsAccess.releaseBriefcase(releaseBriefcaseParams);
+      }
+    }
   });
 
   it("should throw IModelError if briefcase does not exist when releasing briefcase", async () => {

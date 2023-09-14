@@ -6,7 +6,7 @@
 import { ChangeSetStatus, IModelHubStatus } from "@itwin/core-bentley";
 import { IModelError } from "@itwin/core-common";
 
-import { IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
+import { IModelsError, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
 
 export type OperationNameForErrorMapping = "acquireBriefcase" | "downloadChangesets";
 
@@ -24,6 +24,9 @@ export class ErrorAdapter {
       return error;
     if (ErrorAdapter.isAPIErrorWithoutCorrespondingStatus(error.code))
       return error;
+
+    if (error.code === IModelsErrorCode.InvalidIModelsRequest)
+      return ErrorAdapter.adaptInvalidRequestErrorIfPossible(error);
 
     let errorNumber = ErrorAdapter.tryMapGenericErrorCode(error.code, operationName);
     if (!errorNumber)
@@ -46,7 +49,6 @@ export class ErrorAdapter {
     switch (apiErrorCode) {
       case IModelsErrorCode.TooManyRequests:
       case IModelsErrorCode.RequestTooLarge:
-      case IModelsErrorCode.InvalidIModelsRequest:
       case IModelsErrorCode.InvalidValue:
       case IModelsErrorCode.InvalidHeaderValue:
       case IModelsErrorCode.InvalidRequestBody:
@@ -77,15 +79,23 @@ export class ErrorAdapter {
     }
   }
 
+  private static adaptInvalidRequestErrorIfPossible(originalError: IModelsError): IModelsError | IModelError {
+    if (!originalError.details)
+      return originalError;
+
+    for (const errorDetail of originalError.details)
+      if (errorDetail.innerError?.code === IModelsErrorCode.MaximumNumberOfBriefcasesPerUser)
+        return new IModelError(IModelHubStatus.MaximumNumberOfBriefcasesPerUser, originalError.message);
+
+    return originalError;
+  }
+
   private static tryMapGenericErrorCode(
     apiErrorCode: IModelsErrorCode,
     operationName?: OperationNameForErrorMapping
   ): IModelHubStatus | ChangeSetStatus | undefined {
     if (!operationName)
       return;
-
-    if (apiErrorCode === IModelsErrorCode.ResourceQuotaExceeded && operationName === "acquireBriefcase")
-      return IModelHubStatus.MaximumNumberOfBriefcasesPerUser;
 
     if (apiErrorCode === IModelsErrorCode.RateLimitExceeded && operationName === "acquireBriefcase")
       return IModelHubStatus.MaximumNumberOfBriefcasesPerUserPerMinute;
