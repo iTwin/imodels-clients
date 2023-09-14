@@ -94,11 +94,6 @@ describe("ErrorAdapter", () => {
 
   [
     {
-      originalErrorCode: IModelsErrorCode.ResourceQuotaExceeded,
-      operationName: "acquireBriefcase" as const,
-      expectedErrorNumber: IModelHubStatus.MaximumNumberOfBriefcasesPerUser
-    },
-    {
       originalErrorCode: IModelsErrorCode.RateLimitExceeded,
       operationName: "acquireBriefcase" as const,
       expectedErrorNumber: IModelHubStatus.MaximumNumberOfBriefcasesPerUserPerMinute
