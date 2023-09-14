@@ -60,7 +60,7 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
       url,
       contentType: params.thumbnailProperties.imageType,
       body: params.thumbnailProperties.image,
-      headers: params.headers
+      headers: { ...params.headers }
     });
   }
 }
