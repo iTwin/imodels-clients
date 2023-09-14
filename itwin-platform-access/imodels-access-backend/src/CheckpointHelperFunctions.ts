@@ -7,6 +7,7 @@ import {
   CheckpointArg, CheckpointProps,
   V2CheckpointAccessProps
 } from "@itwin/core-backend";
+import { Logger } from "@itwin/core-bentley";
 import { Constants } from "@itwin/imodels-access-common/lib/Constants";
 import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
 import axios, { AxiosResponse } from "axios";
@@ -79,7 +80,12 @@ export async function getV1CheckpointSize(downloadUrl: string): Promise<number> 
   const contentRangeHeaderName = "content-range";
 
   const response: AxiosResponse = await axios.get(downloadUrl, { headers: { Range: emptyRangeHeaderValue } });
-  const rangeHeaderValue: string = response.headers[contentRangeHeaderName];
+  const rangeHeaderValue: string | undefined = response.headers[contentRangeHeaderName];
+  if (!rangeHeaderValue) {
+    Logger.logError("BackendIModelsAccess", "Cannot determine total V1 checkpoint size");
+    return 0;
+  }
+
   const rangeTotalBytesString: string = rangeHeaderValue.split("/")[1];
   const rangeTotalBytes: number = parseInt(rangeTotalBytesString, 10);
 
