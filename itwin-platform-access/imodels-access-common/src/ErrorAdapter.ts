@@ -6,7 +6,7 @@
 import { ChangeSetStatus, IModelHubStatus } from "@itwin/core-bentley";
 import { IModelError } from "@itwin/core-common";
 
-import { IModelsError, IModelsErrorCode, IModelsErrorDetail, isIModelsApiError } from "@itwin/imodels-client-management";
+import { IModelsError, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
 
 export type OperationNameForErrorMapping = "acquireBriefcase" | "downloadChangesets";
 
@@ -80,11 +80,11 @@ export class ErrorAdapter {
   }
 
   private static adaptInvalidRequestErrorIfPossible(originalError: IModelsError): IModelsError | IModelError {
-    if (!originalError.details || originalError.details.length === 0)
+    if (!originalError.details)
       return originalError;
 
     for (const errorDetail of originalError.details)
-      if (ErrorAdapter.hasInnerErrorProperty(errorDetail) && errorDetail.innerError.code === IModelsErrorCode.MaximumNumberOfBriefcasesPerUser)
+      if (errorDetail.innerError?.code === IModelsErrorCode.MaximumNumberOfBriefcasesPerUser)
         return new IModelError(IModelHubStatus.MaximumNumberOfBriefcasesPerUser, originalError.message);
 
     return originalError;
@@ -145,9 +145,5 @@ export class ErrorAdapter {
       default:
         return IModelHubStatus.Unknown;
     }
-  }
-
-  private static hasInnerErrorProperty(errorDetail: IModelsErrorDetail): errorDetail is IModelsErrorDetail & { innerError: { code: IModelsErrorCode } } {
-    return !!errorDetail.innerError && !!errorDetail.innerError.code;
   }
 }

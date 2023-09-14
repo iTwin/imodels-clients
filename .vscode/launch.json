@@ -35,6 +35,23 @@
       ]
     },
     {
+      "name": "Common iModels Access Tests",
+      "cwd": "${workspaceFolder}/tests/imodels-access-common-tests",
+      "type": "pwa-node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "test:unit"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/*/*/lib/**/*.js"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
       "name": "Backend iModels Access Tests",
       "cwd": "${workspaceFolder}/tests/imodels-access-backend-tests",
       "type": "pwa-node",

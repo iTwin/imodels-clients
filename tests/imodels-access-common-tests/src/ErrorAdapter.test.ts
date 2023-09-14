@@ -164,6 +164,15 @@ describe("ErrorAdapter", () => {
         message: "Cannot acquire Briefcase.",
         details: [
           {
+            code: "foo",
+            message: "bar"
+          },
+          {
+            code: "foo",
+            message: "bar",
+            innerError: {}
+          },
+          {
             code: "ResourceQuotaExceeded",
             message: "Maximum number of Briefcases per user limit reached.",
             innerError: {
@@ -183,7 +192,9 @@ describe("ErrorAdapter", () => {
     expect(iModelError.errorNumber).to.be.equal(IModelHubStatus.MaximumNumberOfBriefcasesPerUser);
     expect(iModelError.message).to.be.equal(
       "Cannot acquire Briefcase. Details:\n" +
-      "1. ResourceQuotaExceeded: Maximum number of Briefcases per user limit reached.\n");
+      "1. Unrecognized: bar\n" +
+      "2. Unrecognized: bar\n" +
+      "3. ResourceQuotaExceeded: Maximum number of Briefcases per user limit reached.\n");
   });
 
   it("should correctly parse MaximumNumberOfBriefcasesPerUserPerMinute error", () => {
