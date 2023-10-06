@@ -7,7 +7,7 @@ import { join } from "path";
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
   ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg,
-  IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelNameArg, ITwinIdArg, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
+  IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelNameArg, ITwinIdArg, KnownLocations, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
 import { BriefcaseStatus, Guid, GuidString, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
 import {
@@ -417,7 +417,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   private copyAndPrepareBaselineFile(arg: CreateNewIModelProps): string {
-    const tempBaselineFilePath = join(IModelHost.cacheDir, `temp-baseline-${Guid.createValue()}.bim`);
+    const tempBaselineFilePath = join(KnownLocations.tmpdir, `temp-baseline-${Guid.createValue()}.bim`);
     IModelJsFs.removeSync(tempBaselineFilePath);
 
     const baselineFilePath = arg.version0;
@@ -426,6 +426,13 @@ export class BackendIModelsAccess implements BackendHubAccess {
       emptyBaseline.saveChanges();
       emptyBaseline.close();
     } else {
+      const db = IModelDb.openDgnDb({ path: baselineFilePath }, OpenMode.ReadWrite);
+      
+      if (IModelJsFs.existsSync(`${baselineFilePath}-wal`)) { // TODO: What if wal file exists but its 0 bytes?
+        Logger.logWarning("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", {baselineFilePath});
+        db.performCheckpoint();
+      }
+      db.closeIModel();
       IModelJsFs.copySync(baselineFilePath, tempBaselineFilePath);
     }
 
