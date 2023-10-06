@@ -40,7 +40,7 @@
     "@cypress/request": "2.88.11",
     "@itwin/imodels-client-management": "workspace:*",
     "@itwin/imodels-client-test-utils": "workspace:*",
-    "chai": "~4.3.4",
+    "chai": "~4.3.10",
     "cypress": "~12.3.0",
     "dotenv": "~10.0.0",
     "inversify": "~6.0.1",
