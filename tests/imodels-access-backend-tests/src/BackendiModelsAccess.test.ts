@@ -6,10 +6,12 @@ import { assert } from "console";
 import * as fs from "fs";
 import * as path from "path";
 
-import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointProps, DownloadChangesetRangeArg, DownloadRequest, IModelHost, IModelIdArg, LockMap, LockProps, LockState, ProgressFunction, ProgressStatus, V2CheckpointAccessProps } from "@itwin/core-backend";
-import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, LocalDirName } from "@itwin/core-common";
+import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetRangeArg, DownloadRequest, IModelHost, IModelIdArg, IModelJsFs, LockMap, LockProps, LockState, PhysicalModel, ProgressFunction, ProgressStatus, StandaloneDb, V2CheckpointAccessProps } from "@itwin/core-backend";
+import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, IModel, LocalDirName } from "@itwin/core-common";
+import { Guid, Logger } from "@itwin/core-bentley";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
+import * as sinon from "sinon";
 
 import { AuthorizationCallback, ContainingChanges, IModelsClient, IModelsClientOptions, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
@@ -180,6 +182,44 @@ describe("BackendIModelsAccess", () => {
       assertProgressReports(progressReports);
     });
   });
+
+  describe("CreateNewIModel", () => {
+    it("copyAndPrepareBaselineFile should perform a wal checkpoint", async () => {
+      const filePath = path.join(testDownloadPath, "createnewimodel.bim");
+      const walPath = `${filePath}-wal`;
+      const loggerSpy = sinon.spy(Logger, "logWarning").withArgs("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", sinon.match.any);
+      await IModelHost.startup();
+      const testIModel = StandaloneDb.createEmpty(filePath, { rootSubject: { name: "test1"}, allowEdit: JSON.stringify({ txns: true })});
+      PhysicalModel.insert(testIModel, IModel.rootSubjectId, "TestModel");
+
+      expect(testIModel.isOpen).to.be.true;
+      expect(IModelJsFs.existsSync(walPath)).to.be.true;
+      expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
+      const arg: CreateNewIModelProps = {
+        version0: filePath,
+        iModelName: "testimodel",
+        iTwinId: Guid.createValue(),
+      };
+      // Expect database locked because we didn't save changes to end our transaction.
+      expect(() => (backendIModelsAccess as any).copyAndPrepareBaselineFile(arg)).to.throw("database is locked");
+      expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
+      testIModel.saveChanges(); // end txn.
+      let tempBaselineFilePath = (backendIModelsAccess as any).copyAndPrepareBaselineFile(arg);
+      IModelJsFs.removeSync(tempBaselineFilePath);
+      expect(IModelJsFs.lstatSync(walPath)?.size).to.be.equal(0);
+      expect(loggerSpy.callCount).to.be.equal(1);
+      
+      PhysicalModel.insert(testIModel, IModel.rootSubjectId, "TestModel2");
+      testIModel.saveChanges();
+      expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
+      testIModel.performCheckpoint();
+      expect(IModelJsFs.lstatSync(walPath)?.size).to.be.equal(0);
+      tempBaselineFilePath = (backendIModelsAccess as any).copyAndPrepareBaselineFile(arg);
+      IModelJsFs.removeSync(tempBaselineFilePath);
+      expect(loggerSpy.callCount).to.be.equal(2);
+
+    });
+  })
 
   describe("checkpoints v1", () => {
     it("should download checkpoint for a specific changeset", async () => {
