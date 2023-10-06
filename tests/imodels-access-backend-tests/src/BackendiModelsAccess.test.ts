@@ -185,6 +185,7 @@ describe("BackendIModelsAccess", () => {
 
   describe("CreateNewIModel", () => {
     it("copyAndPrepareBaselineFile should perform a wal checkpoint", async () => {
+      // cspell:disable-next-line
       const filePath = path.join(testDownloadPath, "createnewimodel.bim");
       const walPath = `${filePath}-wal`;
       const loggerSpy = sinon.spy(Logger, "logWarning").withArgs("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", sinon.match.any);
