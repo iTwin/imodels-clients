@@ -7,8 +7,8 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetRangeArg, DownloadRequest, IModelHost, IModelIdArg, IModelJsFs, LockMap, LockProps, LockState, PhysicalModel, ProgressFunction, ProgressStatus, StandaloneDb, V2CheckpointAccessProps } from "@itwin/core-backend";
-import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, IModel, LocalDirName } from "@itwin/core-common";
 import { Guid, Logger } from "@itwin/core-bentley";
+import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, IModel, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 import * as sinon from "sinon";
@@ -198,7 +198,7 @@ describe("BackendIModelsAccess", () => {
       const arg: CreateNewIModelProps = {
         version0: filePath,
         iModelName: "testimodel",
-        iTwinId: Guid.createValue(),
+        iTwinId: Guid.createValue()
       };
       // Expect database locked because we didn't save changes to end our transaction.
       expect(() => (backendIModelsAccess as any).copyAndPrepareBaselineFile(arg)).to.throw("database is locked");
@@ -208,7 +208,7 @@ describe("BackendIModelsAccess", () => {
       IModelJsFs.removeSync(tempBaselineFilePath);
       expect(IModelJsFs.lstatSync(walPath)?.size).to.be.equal(0);
       expect(loggerSpy.callCount).to.be.equal(1);
-      
+
       PhysicalModel.insert(testIModel, IModel.rootSubjectId, "TestModel2");
       testIModel.saveChanges();
       expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
@@ -219,7 +219,7 @@ describe("BackendIModelsAccess", () => {
       expect(loggerSpy.callCount).to.be.equal(2);
 
     });
-  })
+  });
 
   describe("checkpoints v1", () => {
     it("should download checkpoint for a specific changeset", async () => {

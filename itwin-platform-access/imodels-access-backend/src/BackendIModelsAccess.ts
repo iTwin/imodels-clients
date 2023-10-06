@@ -427,7 +427,6 @@ export class BackendIModelsAccess implements BackendHubAccess {
       emptyBaseline.close();
     } else {
       const db = IModelDb.openDgnDb({ path: baselineFilePath }, OpenMode.ReadWrite);
-      
       if (IModelJsFs.existsSync(`${baselineFilePath}-wal`)) {
         Logger.logWarning("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", {baselineFilePath});
         db.performCheckpoint();
