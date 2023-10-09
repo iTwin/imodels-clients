@@ -188,7 +188,7 @@ describe("BackendIModelsAccess", () => {
   });
 
   describe("CreateNewIModel", () => {
-    it.only("should perform a wal checkpoint", async () => {
+    it("should perform a wal checkpoint", async () => {
       // cspell:disable-next-line
       const filePath = path.join(testDownloadPath, "createnewimodel.bim");
 
