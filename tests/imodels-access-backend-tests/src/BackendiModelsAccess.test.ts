@@ -8,16 +8,20 @@ import * as path from "path";
 
 import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetRangeArg, DownloadRequest, IModelHost, IModelIdArg, IModelJsFs, LockMap, LockProps, LockState, PhysicalModel, ProgressFunction, ProgressStatus, StandaloneDb, V2CheckpointAccessProps } from "@itwin/core-backend";
 import { Guid, Logger } from "@itwin/core-bentley";
-import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, IModel, LocalDirName } from "@itwin/core-common";
+import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, IModel as CoreIModel, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
-import { expect } from "chai";
+import { IModelOperations } from "@itwin/imodels-client-authoring/lib/operations";
+import { expect, use } from "chai";
+import * as chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 
-import { AuthorizationCallback, ContainingChanges, IModelsClient, IModelsClientOptions, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, ContainingChanges, IModel, IModelsClient, IModelsClientOptions, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
 import { TestIModelHostAuthorizationClient } from "./TestIModelHostAuthorizationClient";
+
+use(chaiAsPromised);
 
 describe("BackendIModelsAccess", () => {
   const testRunId = createGuidValue();
@@ -184,15 +188,21 @@ describe("BackendIModelsAccess", () => {
   });
 
   describe("CreateNewIModel", () => {
-    it("copyAndPrepareBaselineFile should perform a wal checkpoint", async () => {
+    it.only("should perform a wal checkpoint", async () => {
       // cspell:disable-next-line
       const filePath = path.join(testDownloadPath, "createnewimodel.bim");
+
+      // Arrange - Create an iModel and insert some data into it, so that SQLite creates a wal file with that data. https://www.sqlite.org/wal.html for more info.
       const walPath = `${filePath}-wal`;
       const loggerSpy = sinon.spy(Logger, "logWarning").withArgs("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", sinon.match.any);
-      await IModelHost.startup();
+      // No need to actually talk to the hub, so stub the call to the hub.
+      sinon.stub(IModelOperations.prototype, "createFromBaseline").callsFake(async (_params) => {
+        return ({id: Guid.createValue()} as unknown) as IModel;
+      });
+      await IModelHost.startup(); // Need to call startup to use createEmpty
       const testIModel = StandaloneDb.createEmpty(filePath, { rootSubject: { name: "test1"}, allowEdit: JSON.stringify({ txns: true })});
-      PhysicalModel.insert(testIModel, IModel.rootSubjectId, "TestModel");
-
+      PhysicalModel.insert(testIModel, CoreIModel.rootSubjectId, "TestModel");
+      testIModel.saveChanges();
       expect(testIModel.isOpen).to.be.true;
       expect(IModelJsFs.existsSync(walPath)).to.be.true;
       expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
@@ -201,24 +211,46 @@ describe("BackendIModelsAccess", () => {
         iModelName: "testimodel",
         iTwinId: Guid.createValue()
       };
-      // Expect database locked because we didn't save changes to end our transaction.
-      expect(() => (backendIModelsAccess as any).copyAndPrepareBaselineFile(arg)).to.throw("database is locked");
-      expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
-      testIModel.saveChanges(); // end txn.
-      let tempBaselineFilePath = (backendIModelsAccess as any).copyAndPrepareBaselineFile(arg);
-      IModelJsFs.removeSync(tempBaselineFilePath);
+      /**
+       * NOTE: The below 'await expect' is possibly a test case worth doing but it takes 20 seconds to test due to the busy retry.
+       * It first requires that a person does not saveChanges after performing some insert to put the database in a locked state. Commenting out the saveChanges earlier in this test would achieve that.
+       * The below line does pass in the current state of the code (itwinjs 4.x), which is useful to know because we'd want a user who is uploading an iModel to get an error
+       * that their database is locked due to them not saving changes.
+       * await expect(backendIModelsAccess.createNewIModel(arg)).to.eventually.be.rejectedWith("database is locked");
+       */
+
+      // Act
+      await backendIModelsAccess.createNewIModel(arg);
+      // Assert
       expect(IModelJsFs.lstatSync(walPath)?.size).to.be.equal(0);
       expect(loggerSpy.callCount).to.be.equal(1);
 
-      PhysicalModel.insert(testIModel, IModel.rootSubjectId, "TestModel2");
+      // Arrange
+      PhysicalModel.insert(testIModel, CoreIModel.rootSubjectId, "TestModel2");
       testIModel.saveChanges();
       expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
+
+      // Act
       testIModel.performCheckpoint();
       expect(IModelJsFs.lstatSync(walPath)?.size).to.be.equal(0);
-      tempBaselineFilePath = (backendIModelsAccess as any).copyAndPrepareBaselineFile(arg);
-      IModelJsFs.removeSync(tempBaselineFilePath);
+      await backendIModelsAccess.createNewIModel(arg);
+
+      // Assert - As I expected, the loggerSpy is called a second time below which tells me that we will perform a checkpoint on the iModel even if the WAL file has no contents.
+      // This behavior could be changed if desired by first checking the size of the wal file before performing the checkpoint.
       expect(loggerSpy.callCount).to.be.equal(2);
 
+      // Arrange
+      testIModel.close();
+      // Act
+      await backendIModelsAccess.createNewIModel(arg);
+      // Assert
+      expect(loggerSpy.callCount).to.be.equal(2);
+
+      sinon.restore();
+      testIModel.close();
+      await IModelHost.shutdown();
+      // Need to reset the authorizationClient after otherwise future tests fail.
+      IModelHost.authorizationClient = new TestIModelHostAuthorizationClient(accessToken);
     });
   });
 

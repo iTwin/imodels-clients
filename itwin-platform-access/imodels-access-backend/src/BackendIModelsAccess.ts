@@ -426,8 +426,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
       emptyBaseline.saveChanges();
       emptyBaseline.close();
     } else {
+      // Check for wal before we open because opening for readWrite will create a 0 byte wal file.
+      const foundWalFile = IModelJsFs.existsSync(`${baselineFilePath}-wal`);
       const db = IModelDb.openDgnDb({ path: baselineFilePath }, OpenMode.ReadWrite);
-      if (IModelJsFs.existsSync(`${baselineFilePath}-wal`)) {
+      if (foundWalFile) {
         Logger.logWarning("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", {baselineFilePath});
         db.performCheckpoint();
       }
