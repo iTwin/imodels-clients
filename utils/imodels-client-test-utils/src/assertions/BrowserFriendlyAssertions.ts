@@ -75,8 +75,7 @@ export async function assertBriefcase(params: {
     expect(params.actualBriefcase.briefcaseId).to.be.greaterThan(0);
 
   assertApplication({
-    actualApplication: params.actualBriefcase.application,
-    expectNull: false
+    actualApplication: params.actualBriefcase.application
   });
 
   expect(params.actualBriefcase._links).to.exist;
@@ -121,8 +120,7 @@ export async function assertNamedVersion(params: {
   expect(params.actualNamedVersion.state).to.equal(NamedVersionState.Visible);
 
   assertApplication({
-    actualApplication: params.actualNamedVersion.application,
-    expectNull: false
+    actualApplication: params.actualNamedVersion.application
   });
 
   expect(params.actualNamedVersion._links).to.exist;
@@ -261,15 +259,7 @@ export function assertOptionalLink(params: {
 
 export function assertApplication(params: {
   actualApplication: Application | null;
-  expectNull: boolean;
 }): void {
-  // TODO: remove the conditional `application` assertion when the API is fixed to return this
-  // information in POST/PATCH responses.
-  if (params.expectNull) {
-    expect(params.actualApplication).to.equal(null);
-    return;
-  }
-
   expect(params.actualApplication).to.exist;
   expect(params.actualApplication!.id).to.not.be.empty;
   expect(params.actualApplication!.name).to.not.be.empty;
