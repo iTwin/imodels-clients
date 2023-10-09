@@ -236,6 +236,7 @@ describe("BackendIModelsAccess", () => {
       await backendIModelsAccess.createNewIModel(arg);
 
       // Assert - As I expected, the loggerSpy is called a second time below which tells me that we will perform a checkpoint on the iModel even if the WAL file has no contents.
+      // This is because the iModel is still open for write, causing the wal file to still exist.
       // This behavior could be changed if desired by first checking the size of the wal file before performing the checkpoint.
       expect(loggerSpy.callCount).to.be.equal(2);
 
@@ -243,7 +244,7 @@ describe("BackendIModelsAccess", () => {
       testIModel.close();
       // Act
       await backendIModelsAccess.createNewIModel(arg);
-      // Assert
+      // Assert - Expect that the wal file is gone due to closing testIModel so logger is not called a 3rd time.
       expect(loggerSpy.callCount).to.be.equal(2);
 
       sinon.restore();
