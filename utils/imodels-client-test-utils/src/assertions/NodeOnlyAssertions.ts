@@ -84,8 +84,7 @@ export async function assertChangeset(params: {
   });
 
   assertApplication({
-    actualApplication: params.actualChangeset.application,
-    expectNull: !params.isGetResponse
+    actualApplication: params.actualChangeset.application
   });
 
   assertSynchronizationInfo({
@@ -109,7 +108,7 @@ export async function assertChangeset(params: {
     expect(params.actualChangeset._links.download!.href).to.not.be.empty;
   } else {
     // `download` link is not present in `create` method result.
-    expect(params.actualChangeset._links.download).to.be.undefined;
+    expect(params.actualChangeset._links.download).to.be.null;
   }
 
   await assertChangesetCallbacks({

@@ -299,7 +299,7 @@ describe("[Authoring] LockOperations", () => {
       authorization,
       iModelId: testIModelForWrite.id,
       briefcaseId: briefcase.briefcaseId,
-      changesetId: "invalid changeset id",
+      changesetId: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       lockedObjects: [
         {
           lockLevel: LockLevel.Shared,
@@ -374,7 +374,7 @@ describe("[Authoring] LockOperations", () => {
       expectedError: {
         code: IModelsErrorCode.ConflictWithAnotherUser,
         message:
-          "Lock(s) is owned by another briefcase. Conflicting locks:\n" +
+          "Lock(s) is owned by another Briefcase. Conflicting locks:\n" +
           `1. Object id: 0x5, lock level: shared, briefcase ids: ${briefcase1.briefcaseId}\n`
       }
     });
