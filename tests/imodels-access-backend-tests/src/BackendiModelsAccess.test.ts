@@ -191,67 +191,67 @@ describe("BackendIModelsAccess", () => {
     it("should perform a wal checkpoint", async () => {
       // cspell:disable-next-line
       const filePath = path.join(testDownloadPath, "createnewimodel.bim");
+      try {
+        // Arrange - Create an iModel and insert some data into it, so that SQLite creates a wal file with that data. https://www.sqlite.org/wal.html for more info.
+        const walPath = `${filePath}-wal`;
+        const loggerSpy = sinon.spy(Logger, "logWarning").withArgs("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", sinon.match.any);
+        // No need to actually talk to the hub, so stub the call to the hub.
+        sinon.stub(IModelOperations.prototype, "createFromBaseline").callsFake(async (_params) => {
+          return ({id: Guid.createValue()} as unknown) as IModel;
+        });
+        await IModelHost.startup(); // Need to call startup to use createEmpty
+        const testIModel = StandaloneDb.createEmpty(filePath, { rootSubject: { name: "test1"}, allowEdit: JSON.stringify({ txns: true })});
+        PhysicalModel.insert(testIModel, CoreIModel.rootSubjectId, "TestModel");
+        testIModel.saveChanges();
+        expect(testIModel.isOpen).to.be.true;
+        expect(IModelJsFs.existsSync(walPath)).to.be.true;
+        expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
+        const arg: CreateNewIModelProps = {
+          version0: filePath,
+          iModelName: "testimodel",
+          iTwinId: Guid.createValue()
+        };
+        /**
+         * NOTE: The below 'await expect' is possibly a test case worth doing but it takes 20 seconds to test due to the busy retry.
+         * It first requires that a person does not saveChanges after performing some insert to put the database in a locked state. Commenting out the saveChanges earlier in this test would achieve that.
+         * The below line does pass in the current state of the code (itwinjs 4.x), which is useful to know because we'd want a user who is uploading an iModel to get an error
+         * that their database is locked due to them not saving changes.
+         * await expect(backendIModelsAccess.createNewIModel(arg)).to.eventually.be.rejectedWith("database is locked");
+         */
 
-      // Arrange - Create an iModel and insert some data into it, so that SQLite creates a wal file with that data. https://www.sqlite.org/wal.html for more info.
-      const walPath = `${filePath}-wal`;
-      const loggerSpy = sinon.spy(Logger, "logWarning").withArgs("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", sinon.match.any);
-      // No need to actually talk to the hub, so stub the call to the hub.
-      sinon.stub(IModelOperations.prototype, "createFromBaseline").callsFake(async (_params) => {
-        return ({id: Guid.createValue()} as unknown) as IModel;
-      });
-      await IModelHost.startup(); // Need to call startup to use createEmpty
-      const testIModel = StandaloneDb.createEmpty(filePath, { rootSubject: { name: "test1"}, allowEdit: JSON.stringify({ txns: true })});
-      PhysicalModel.insert(testIModel, CoreIModel.rootSubjectId, "TestModel");
-      testIModel.saveChanges();
-      expect(testIModel.isOpen).to.be.true;
-      expect(IModelJsFs.existsSync(walPath)).to.be.true;
-      expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
-      const arg: CreateNewIModelProps = {
-        version0: filePath,
-        iModelName: "testimodel",
-        iTwinId: Guid.createValue()
-      };
-      /**
-       * NOTE: The below 'await expect' is possibly a test case worth doing but it takes 20 seconds to test due to the busy retry.
-       * It first requires that a person does not saveChanges after performing some insert to put the database in a locked state. Commenting out the saveChanges earlier in this test would achieve that.
-       * The below line does pass in the current state of the code (itwinjs 4.x), which is useful to know because we'd want a user who is uploading an iModel to get an error
-       * that their database is locked due to them not saving changes.
-       * await expect(backendIModelsAccess.createNewIModel(arg)).to.eventually.be.rejectedWith("database is locked");
-       */
+        // Act
+        await backendIModelsAccess.createNewIModel(arg);
+        // Assert
+        expect(IModelJsFs.lstatSync(walPath)?.size).to.be.equal(0);
+        expect(loggerSpy.callCount).to.be.equal(1);
 
-      // Act
-      await backendIModelsAccess.createNewIModel(arg);
-      // Assert
-      expect(IModelJsFs.lstatSync(walPath)?.size).to.be.equal(0);
-      expect(loggerSpy.callCount).to.be.equal(1);
+        // Arrange
+        PhysicalModel.insert(testIModel, CoreIModel.rootSubjectId, "TestModel2");
+        testIModel.saveChanges();
+        expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
 
-      // Arrange
-      PhysicalModel.insert(testIModel, CoreIModel.rootSubjectId, "TestModel2");
-      testIModel.saveChanges();
-      expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
+        // Act
+        testIModel.performCheckpoint();
+        expect(IModelJsFs.lstatSync(walPath)?.size).to.be.equal(0);
+        await backendIModelsAccess.createNewIModel(arg);
 
-      // Act
-      testIModel.performCheckpoint();
-      expect(IModelJsFs.lstatSync(walPath)?.size).to.be.equal(0);
-      await backendIModelsAccess.createNewIModel(arg);
+        // Assert - As I expected, the loggerSpy is called a second time below which tells me that we will perform a checkpoint on the iModel even if the WAL file has no contents.
+        // This is because the iModel is still open for write, causing the wal file to still exist.
+        // This behavior could be changed if desired by first checking the size of the wal file before performing the checkpoint.
+        expect(loggerSpy.callCount).to.be.equal(2);
 
-      // Assert - As I expected, the loggerSpy is called a second time below which tells me that we will perform a checkpoint on the iModel even if the WAL file has no contents.
-      // This is because the iModel is still open for write, causing the wal file to still exist.
-      // This behavior could be changed if desired by first checking the size of the wal file before performing the checkpoint.
-      expect(loggerSpy.callCount).to.be.equal(2);
-
-      // Arrange
-      testIModel.close();
-      // Act
-      await backendIModelsAccess.createNewIModel(arg);
-      // Assert - Expect that the wal file is gone due to closing testIModel so logger is not called a 3rd time.
-      expect(loggerSpy.callCount).to.be.equal(2);
-
-      sinon.restore();
-      testIModel.close();
-      await IModelHost.shutdown();
-      // Need to reset the authorizationClient after otherwise future tests fail.
-      IModelHost.authorizationClient = new TestIModelHostAuthorizationClient(accessToken);
+        // Arrange
+        testIModel.close();
+        // Act
+        await backendIModelsAccess.createNewIModel(arg);
+        // Assert - Expect that the wal file is gone due to closing testIModel so logger is not called a 3rd time.
+        expect(loggerSpy.callCount).to.be.equal(2);
+      } finally {
+        sinon.restore();
+        await IModelHost.shutdown();
+        // Need to reset the authorizationClient after otherwise future tests fail.
+        IModelHost.authorizationClient = new TestIModelHostAuthorizationClient(accessToken);
+      }
     });
   });
 
