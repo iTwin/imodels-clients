@@ -33,7 +33,7 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "axios": "1.6.2"
+    "axios": "~1.6.2"
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "workspace:*",
