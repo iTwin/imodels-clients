@@ -33,7 +33,7 @@
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",
     "@itwin/object-storage-core": "^2.0.0",
-    "axios": "1.2.2",
+    "axios": "~1.6.2",
     "chai": "~4.3.10",
     "dotenv": "~10.0.0",
     "inversify": "~6.0.1",
