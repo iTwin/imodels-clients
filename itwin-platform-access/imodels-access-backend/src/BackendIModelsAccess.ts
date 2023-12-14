@@ -7,7 +7,7 @@ import { join } from "path";
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
   ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg,
-  IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelJsNative, IModelNameArg, ITwinIdArg, KnownLocations, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
+  IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelNameArg, ITwinIdArg, KnownLocations, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
 import { BriefcaseStatus, Guid, GuidString, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
 import {
@@ -75,7 +75,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const downloadedChangeset: DownloadedChangeset = await handleAPIErrors(
       async () => {
-        const stopwatch = new StopWatch(`[${arg.changeset.id}]`, true);
+        const stopwatch = new StopWatch(`[${arg.changeset}]`, true);
         Logger.logInfo("BackendIModelsAccess", `Starting download of changeset with id ${stopwatch.description}`);
 
         const innerResult = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
@@ -433,7 +433,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
         Logger.logWarning("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", {baselineFilePath});
         db.performCheckpoint();
       }
-      this.closeFile(db);
+      (db as any).closeIModel();
       IModelJsFs.copySync(baselineFilePath, tempBaselineFilePath);
     }
 
@@ -447,17 +447,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
       nativeDb.saveLocalValue(BriefcaseLocalValue.NoLocking, arg.noLocks ? "true" : undefined);
       nativeDb.saveChanges();
     } finally {
-      this.closeFile(nativeDb);
+      (nativeDb as any).closeIModel();
     }
 
     return tempBaselineFilePath;
-  }
-
-  private closeFile(db: IModelJsNative.DgnDb): void {
-    if ((db as any).closeIModel)
-      (db as any).closeIModel();
-    else
-      db.closeFile();
   }
 
   private async getFirstLocksPage(arg: BriefcaseDbArg): Promise<Lock[]> {
