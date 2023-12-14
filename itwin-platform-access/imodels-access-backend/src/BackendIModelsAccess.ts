@@ -75,7 +75,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const downloadedChangeset: DownloadedChangeset = await handleAPIErrors(
       async () => {
-        const stopwatch = new StopWatch(`[${arg.changeset}]`, true);
+        const stopwatch = new StopWatch(`[${arg.changeset.id}]`, true);
         Logger.logInfo("BackendIModelsAccess", `Starting download of changeset with id ${stopwatch.description}`);
 
         const innerResult = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
