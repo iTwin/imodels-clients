@@ -7,7 +7,7 @@ import { join } from "path";
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
   ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg,
-  IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelNameArg, ITwinIdArg, KnownLocations, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
+  IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelJsNative, IModelNameArg, ITwinIdArg, KnownLocations, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
 import { BriefcaseStatus, Guid, GuidString, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
 import {
@@ -433,7 +433,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
         Logger.logWarning("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", {baselineFilePath});
         db.performCheckpoint();
       }
-      (db as any).closeIModel();
+      this.closeFile(db);
       IModelJsFs.copySync(baselineFilePath, tempBaselineFilePath);
     }
 
@@ -447,10 +447,17 @@ export class BackendIModelsAccess implements BackendHubAccess {
       nativeDb.saveLocalValue(BriefcaseLocalValue.NoLocking, arg.noLocks ? "true" : undefined);
       nativeDb.saveChanges();
     } finally {
-      (nativeDb as any).closeIModel();
+      this.closeFile(nativeDb);
     }
 
     return tempBaselineFilePath;
+  }
+
+  private closeFile(db: IModelJsNative.DgnDb): void {
+    if ((db as any).closeIModel)
+      (db as any).closeIModel();
+    else
+      db.closeFile();
   }
 
   private async getFirstLocksPage(arg: BriefcaseDbArg): Promise<Lock[]> {

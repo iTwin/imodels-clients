@@ -188,6 +188,19 @@ describe("BackendIModelsAccess", () => {
   });
 
   describe("CreateNewIModel", () => {
+    it("should create new empty iModel", async () => {
+      await IModelHost.startup();
+      const createNewIModelProps: CreateNewIModelProps = {
+        accessToken,
+        iModelName: testIModelGroup.getPrefixedUniqueIModelName("Test create empty iModel"),
+        iTwinId
+      };
+
+      const newiModelId = await backendIModelsAccess.createNewIModel(createNewIModelProps);
+
+      expect(newiModelId).to.not.be.empty;
+    });
+
     it("should perform a wal checkpoint", async () => {
       // cspell:disable-next-line
       const filePath = path.join(testDownloadPath, "createnewimodel.bim");
