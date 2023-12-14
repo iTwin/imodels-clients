@@ -126,7 +126,7 @@ describe("BackendIModelsAccess", () => {
         expect(downloadedChangeset.briefcaseId).to.be.equal(testIModelForRead.briefcase.id);
         expect(downloadedChangeset.size).to.be.equal(fs.statSync(expectedChangesetFile.filePath).size);
 
-        if (expectedChangesetFile.containingChanges === ContainingChanges.Schema)
+        if (expectedChangesetFile.containingChanges === ContainingChanges.Schema as number)
           expect(downloadedChangeset.changesType).to.be.equal(ChangesetType.Schema);
         else
           expect(downloadedChangeset.changesType).to.be.equal(ChangesetType.Regular);
@@ -193,10 +193,10 @@ describe("BackendIModelsAccess", () => {
       const createNewIModelProps: CreateNewIModelProps = {
         accessToken,
         iModelName: testIModelGroup.getPrefixedUniqueIModelName("Test create empty iModel"),
-        iTwinId: iTwinId
+        iTwinId
       };
 
-      var newiModelId = await backendIModelsAccess.createNewIModel(createNewIModelProps);
+      const newiModelId = await backendIModelsAccess.createNewIModel(createNewIModelProps);
 
       expect(newiModelId).to.not.be.empty;
     });

@@ -75,7 +75,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const downloadedChangeset: DownloadedChangeset = await handleAPIErrors(
       async () => {
-        const stopwatch = new StopWatch(`[${arg.changeset}]`, true);
+        const stopwatch = new StopWatch(`[${arg.changeset.id}]`, true);
         Logger.logInfo("BackendIModelsAccess", `Starting download of changeset with id ${stopwatch.description}`);
 
         const innerResult = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
@@ -428,12 +428,12 @@ export class BackendIModelsAccess implements BackendHubAccess {
     } else {
       // Check for wal before we open because opening for readWrite will create a 0 byte wal file.
       const foundWalFile = IModelJsFs.existsSync(`${baselineFilePath}-wal`);
-      const nativeDb = IModelDb.openDgnDb({ path: baselineFilePath }, OpenMode.ReadWrite);
+      const db = IModelDb.openDgnDb({ path: baselineFilePath }, OpenMode.ReadWrite);
       if (foundWalFile) {
         Logger.logWarning("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", {baselineFilePath});
-        nativeDb.performCheckpoint();
+        db.performCheckpoint();
       }
-      this.closeFile(nativeDb);
+      this.closeFile(db);
       IModelJsFs.copySync(baselineFilePath, tempBaselineFilePath);
     }
 
@@ -453,11 +453,11 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return tempBaselineFilePath;
   }
 
-  private closeFile(nativeDb: IModelJsNative.DgnDb): void {
-    if ((nativeDb as any).closeIModel)
-      (nativeDb as any).closeIModel();
+  private closeFile(db: IModelJsNative.DgnDb): void {
+    if ((db as any).closeIModel)
+      (db as any).closeIModel();
     else
-      nativeDb.closeFile();
+      db.closeFile();
   }
 
   private async getFirstLocksPage(arg: BriefcaseDbArg): Promise<Lock[]> {

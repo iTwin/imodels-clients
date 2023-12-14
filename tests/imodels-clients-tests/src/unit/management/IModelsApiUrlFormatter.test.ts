@@ -156,8 +156,8 @@ describe("[Management] IModelsApiUrlFormatter", () => {
         expectedChangesetIndex: 55555555
       },
       {
-        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/555555555555555555555555555555555555555",
-        expectedChangesetIndex: 555555555555555555555555555555555555555
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/9007199254740991",
+        expectedChangesetIndex: 9007199254740991
       }
     ].forEach((testCase) => {
       it(`should parse changeset url with index ${testCase.expectedChangesetIndex}`, () => {
@@ -212,8 +212,8 @@ describe("[Management] IModelsApiUrlFormatter", () => {
         expectedChangesetIndex: 55555555
       },
       {
-        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/555555555555555555555555555555555555555/checkpoint",
-        expectedChangesetIndex: 555555555555555555555555555555555555555
+        url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/9007199254740991/checkpoint",
+        expectedChangesetIndex: 9007199254740991
       }
     ].forEach((testCase) => {
       it(`should parse checkpointUrl url with index ${testCase.expectedChangesetIndex}`, () => {
