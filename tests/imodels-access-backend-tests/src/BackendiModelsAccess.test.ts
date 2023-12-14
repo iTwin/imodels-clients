@@ -188,12 +188,17 @@ describe("BackendIModelsAccess", () => {
   });
 
   describe("CreateNewIModel", () => {
-    it("should create new iModel", () => async () => {
-      const arg: CreateNewIModelProps = {
-        iModelName: "testimodel2",
-        iTwinId: Guid.createValue()
+    it("should create new empty iModel", async () => {
+      await IModelHost.startup();
+      const createNewIModelProps: CreateNewIModelProps = {
+        accessToken,
+        iModelName: testIModelGroup.getPrefixedUniqueIModelName("Test create empty iModel"),
+        iTwinId: iTwinId
       };
-      await backendIModelsAccess.createNewIModel(arg);
+
+      var newiModelId = await backendIModelsAccess.createNewIModel(createNewIModelProps);
+
+      expect(newiModelId).to.not.be.empty;
     });
 
     it("should perform a wal checkpoint", async () => {
