@@ -433,7 +433,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
         Logger.logWarning("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", {baselineFilePath});
         db.performCheckpoint();
       }
-      db.closeIModel();
+      (db as any).closeIModel();
       IModelJsFs.copySync(baselineFilePath, tempBaselineFilePath);
     }
 
@@ -447,7 +447,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       nativeDb.saveLocalValue(BriefcaseLocalValue.NoLocking, arg.noLocks ? "true" : undefined);
       nativeDb.saveChanges();
     } finally {
-      nativeDb.closeIModel();
+      (nativeDb as any).closeIModel();
     }
 
     return tempBaselineFilePath;

@@ -188,6 +188,14 @@ describe("BackendIModelsAccess", () => {
   });
 
   describe("CreateNewIModel", () => {
+    it("should create new iModel", () => async () => {
+      const arg: CreateNewIModelProps = {
+        iModelName: "testimodel2",
+        iTwinId: Guid.createValue()
+      };
+      await backendIModelsAccess.createNewIModel(arg);
+    });
+
     it("should perform a wal checkpoint", async () => {
       // cspell:disable-next-line
       const filePath = path.join(testDownloadPath, "createnewimodel.bim");
