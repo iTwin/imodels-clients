@@ -68,6 +68,8 @@ describe("BackendIModelsAccess", () => {
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModelForWrite = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
+
+    await IModelHost.startup();
   });
 
   beforeEach(async () => {
@@ -79,6 +81,8 @@ describe("BackendIModelsAccess", () => {
   });
 
   after(async () => {
+    await IModelHost.shutdown();
+
     await testIModelGroup.cleanupIModels();
   });
 
@@ -126,7 +130,7 @@ describe("BackendIModelsAccess", () => {
         expect(downloadedChangeset.briefcaseId).to.be.equal(testIModelForRead.briefcase.id);
         expect(downloadedChangeset.size).to.be.equal(fs.statSync(expectedChangesetFile.filePath).size);
 
-        if (expectedChangesetFile.containingChanges === ContainingChanges.Schema)
+        if (expectedChangesetFile.containingChanges === ContainingChanges.Schema as number)
           expect(downloadedChangeset.changesType).to.be.equal(ChangesetType.Schema);
         else
           expect(downloadedChangeset.changesType).to.be.equal(ChangesetType.Regular);
@@ -188,6 +192,18 @@ describe("BackendIModelsAccess", () => {
   });
 
   describe("CreateNewIModel", () => {
+    it("should create new empty iModel", async () => {
+      const createNewIModelProps: CreateNewIModelProps = {
+        accessToken,
+        iModelName: testIModelGroup.getPrefixedUniqueIModelName("Test create empty iModel"),
+        iTwinId
+      };
+
+      const newiModelId = await backendIModelsAccess.createNewIModel(createNewIModelProps);
+
+      expect(newiModelId).to.not.be.empty;
+    });
+
     it("should perform a wal checkpoint", async () => {
       // cspell:disable-next-line
       const filePath = path.join(testDownloadPath, "createnewimodel.bim");
@@ -199,7 +215,6 @@ describe("BackendIModelsAccess", () => {
         sinon.stub(IModelOperations.prototype, "createFromBaseline").callsFake(async (_params) => {
           return ({id: Guid.createValue()} as unknown) as IModel;
         });
-        await IModelHost.startup(); // Need to call startup to use createEmpty
         const testIModel = StandaloneDb.createEmpty(filePath, { rootSubject: { name: "test1"}, allowEdit: JSON.stringify({ txns: true })});
         PhysicalModel.insert(testIModel, CoreIModel.rootSubjectId, "TestModel");
         testIModel.saveChanges();
@@ -248,7 +263,6 @@ describe("BackendIModelsAccess", () => {
         expect(loggerSpy.callCount).to.be.equal(2);
       } finally {
         sinon.restore();
-        await IModelHost.shutdown();
         // Need to reset the authorizationClient after otherwise future tests fail.
         IModelHost.authorizationClient = new TestIModelHostAuthorizationClient(accessToken);
       }
