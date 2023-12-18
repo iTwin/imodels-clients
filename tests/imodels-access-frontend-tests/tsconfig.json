@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "./lib",
     "experimentalDecorators": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": [
     "./src/**/*.ts"
