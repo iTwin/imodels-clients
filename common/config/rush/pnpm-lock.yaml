@@ -34,14 +34,14 @@ importers:
     specifiers:
       '@itwin/imodels-client-common-config': workspace:*
       '@types/node': ^18.11.18
-      axios: ~1.6.2
+      axios: ~1.6.4
       cspell: ~5.21.0
       eslint: ~8.55.0
       rimraf: ~3.0.2
       sort-package-json: ~1.53.1
       typescript: ~5.3.3
     dependencies:
-      axios: 1.6.2
+      axios: 1.6.4
     devDependencies:
       '@itwin/imodels-client-common-config': link:../../utils/imodels-client-common-config
       '@types/node': 18.19.3
@@ -63,7 +63,7 @@ importers:
       '@itwin/imodels-client-common-config': workspace:*
       '@types/node': 14.14.31
       '@types/ws': ^7.0.0
-      axios: ~1.6.2
+      axios: ~1.6.4
       cspell: ~5.21.0
       eslint: ~8.55.0
       rimraf: ~3.0.2
@@ -73,7 +73,7 @@ importers:
       '@azure/abort-controller': 1.1.0
       '@itwin/imodels-access-common': link:../imodels-access-common
       '@itwin/imodels-client-authoring': link:../../clients/imodels-client-authoring
-      axios: 1.6.2
+      axios: 1.6.4
     devDependencies:
       '@itwin/core-backend': 4.3.1_051f04e841653e459dab6800c8d93085
       '@itwin/core-bentley': 4.3.1
@@ -324,7 +324,7 @@ importers:
       '@types/node': ^18.11.18
       '@types/sinon': ^10.0.15
       '@types/sinon-chai': ^3.2.9
-      axios: ~1.6.2
+      axios: ~1.6.4
       chai: ~4.3.10
       chai-as-promised: ~7.1.1
       cpx2: 4.2.0
@@ -348,7 +348,7 @@ importers:
       '@itwin/imodels-client-test-utils': link:../../utils/imodels-client-test-utils
       '@itwin/object-storage-azure': 2.2.1_34c8eafdcde3b02a9b1b4c0fc9e77498
       '@itwin/object-storage-core': 2.2.1_34c8eafdcde3b02a9b1b4c0fc9e77498
-      axios: 1.6.2
+      axios: 1.6.4
       chai: 4.3.10
       chai-as-promised: 7.1.1_chai@4.3.10
       dotenv: 10.0.0
@@ -441,7 +441,7 @@ importers:
       '@itwin/object-storage-core': ^2.0.0
       '@types/chai': ~4.2.21
       '@types/node': ^18.11.18
-      axios: ~1.6.2
+      axios: ~1.6.4
       chai: ~4.3.10
       cpx2: 4.2.0
       cspell: ~5.21.0
@@ -457,7 +457,7 @@ importers:
       '@itwin/imodels-client-authoring': link:../../clients/imodels-client-authoring
       '@itwin/imodels-client-management': link:../../clients/imodels-client-management
       '@itwin/object-storage-core': 2.2.1_34c8eafdcde3b02a9b1b4c0fc9e77498
-      axios: 1.6.2
+      axios: 1.6.4
       chai: 4.3.10
       dotenv: 10.0.0
       inversify: 6.0.2
@@ -1400,7 +1400,7 @@ packages:
       reflect-metadata: ^0.1.13
     dependencies:
       '@itwin/cloud-agnostic-core': 2.2.1
-      axios: 1.6.2
+      axios: 1.6.4
     transitivePeerDependencies:
       - debug
 
@@ -1412,7 +1412,7 @@ packages:
       reflect-metadata: ^0.1.13
     dependencies:
       '@itwin/cloud-agnostic-core': 2.2.1_34c8eafdcde3b02a9b1b4c0fc9e77498
-      axios: 1.6.2
+      axios: 1.6.4
       inversify: 6.0.2
       reflect-metadata: 0.1.14
     transitivePeerDependencies:
@@ -2259,10 +2259,10 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /axios/1.6.2:
-    resolution: {integrity: sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==}
+  /axios/1.6.4:
+    resolution: {integrity: sha512-heJnIs6N4aa1eSthhN9M5ioILu8Wi8vmQW9iHQ9NUvfkJb0lEEDUiIdQNAuBtfUt3FxReaKdpQA5DbmMOqzF/A==}
     dependencies:
-      follow-redirects: 1.15.3
+      follow-redirects: 1.15.4
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -3641,8 +3641,8 @@ packages:
     resolution: {integrity: sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==}
     dev: true
 
-  /follow-redirects/1.15.3:
-    resolution: {integrity: sha512-1VzOtuEM8pC9SFU1E+8KfTjZyMztRsgEfwQl44z8A25uy13jSzTj6dyK2Df52iV0vgHCfBwLhDWevLn95w5v6Q==}
+  /follow-redirects/1.15.4:
+    resolution: {integrity: sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
