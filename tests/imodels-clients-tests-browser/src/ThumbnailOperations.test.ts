@@ -28,11 +28,12 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
     testIModelForReadId = Cypress.env(FrontendTestEnvVariableKeys.testIModelForReadId);
 
     const iTwinId: string = Cypress.env(FrontendTestEnvVariableKeys.testITwinId);
+    const uniqueId = new Date().getTime();
     const testIModelForWrite = await iModelsClient.iModels.createEmpty({
       authorization,
       iModelProperties: {
         iTwinId,
-        name: "Thumbnail browser tests"
+        name: `Thumbnail browser tests [${uniqueId}]`
       }
     });
     testIModelForWriteId = testIModelForWrite.id;
