@@ -6,6 +6,7 @@ import { AxiosRestClient, IModelsErrorParser } from "./base/internal";
 import { ApiOptions, HeaderFactories, RecursiveRequired, RestClient } from "./base/types";
 import { Constants } from "./Constants";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
+import { ChangesetGroupOperations } from "./operations/changeset-group/ChangesetGroupOperations";
 import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
 import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
 import { OperationOptions } from "./operations/OperationOptions";
@@ -56,6 +57,11 @@ export class IModelsClient {
   /** Changeset operations. See {@link ChangesetOperations}. */
   public get changesets(): ChangesetOperations<OperationOptions> {
     return new ChangesetOperations(this._operationsOptions, this);
+  }
+
+  /** Changeset Group operations. See {@link ChangesetGroupOperations}. */
+  public get changesetGroups(): ChangesetGroupOperations<OperationOptions> {
+    return new ChangesetGroupOperations(this._operationsOptions, this);
   }
 
   /** Named version operations. See {@link NamedVersionOperations}. */

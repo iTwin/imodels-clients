@@ -34,6 +34,7 @@ export enum IModelsErrorCode {
   IModelNotFound = "iModelNotFound",
   NamedVersionNotFound = "NamedVersionNotFound",
   ChangesetNotFound = "ChangesetNotFound",
+  ChangesetGroupNotFound = "ChangesetGroupNotFound",
   UserNotFound = "UserNotFound",
   BriefcaseNotFound = "BriefcaseNotFound",
   MaximumNumberOfBriefcasesPerUser = "MaximumNumberOfBriefcasesPerUser",

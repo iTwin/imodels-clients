@@ -5,6 +5,7 @@
 export * from "./apiEntities/IModelInterfaces";
 export * from "./apiEntities/BriefcaseInterfaces";
 export * from "./apiEntities/ChangesetInterfaces";
+export * from "./apiEntities/ChangesetGroupInterfaces";
 export * from "./apiEntities/NamedVersionInterfaces";
 export * from "./apiEntities/CheckpointInterfaces";
 export * from "./apiEntities/ThumbnailInterfaces";

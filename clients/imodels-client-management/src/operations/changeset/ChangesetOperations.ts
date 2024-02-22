@@ -69,9 +69,10 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
   }
 
   /**
-   * Gets a single Changeset identified by either index or id. This method returns a Changeset in its full
-   * representation. Wraps the {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-changeset-details/
-   * Get iModel Changeset} operation from iModels API.
+   * Gets a single Changeset identified by either index or id. This method returns a Changeset in its full representation.
+   * Wraps the
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-changeset-details/ Get iModel Changeset}
+   * operation from iModels API.
    * @param {GetSingleChangesetParams} params parameters for this operation. See {@link GetSingleChangesetParams}.
    * @returns {Promise<Changeset>} a Changeset with specified id or index. See {@link Changeset}.
    */
@@ -112,7 +113,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
     return result;
   }
 
-  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, changeset: Changeset, headers?: HeaderFactories ): Changeset {
+  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, changeset: Changeset, headers?: HeaderFactories): Changeset {
     const getNamedVersion = async () => this.getNamedVersion(authorization, changeset._links.namedVersion?.href, headers);
     const getCurrentOrPrecedingCheckpoint = async () => this.getCurrentOrPrecedingCheckpoint(authorization, changeset._links.currentOrPrecedingCheckpoint?.href, headers);
 

@@ -16,6 +16,11 @@ export interface NamedVersionMetadata {
   changesetIndex: number;
 }
 
+export interface ChangesetGroupMetadata {
+  id: string;
+  description: string;
+}
+
 export interface IModelMetadata {
   id: string;
   name: string;
@@ -26,6 +31,7 @@ export interface ReusableIModelMetadata extends IModelMetadata {
   briefcase: BriefcaseMetadata;
   namedVersions: NamedVersionMetadata[];
   lock: Lock;
+  changesetGroups: ChangesetGroupMetadata[];
 }
 
 export interface TestIModelSetupContext extends AuthorizationParam {

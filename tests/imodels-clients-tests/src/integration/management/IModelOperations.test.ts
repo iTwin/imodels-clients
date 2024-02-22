@@ -485,7 +485,7 @@ describe("[Management] IModelOperations", () => {
       objectThrown,
       expectedError: {
         code: IModelsErrorCode.Unauthorized,
-        message: "Invalid JWT."
+        message: "Access denied due to invalid access_token. Make sure that issuer is correct, the token is not expired and is not corrupted."
       }
     });
   });

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { Briefcase, Changeset, Checkpoint, IModel, MinimalChangeset, NamedVersion, User } from "@itwin/imodels-client-authoring";
+import { Briefcase, Changeset, ChangesetGroup, Checkpoint, IModel, MinimalChangeset, NamedVersion, User } from "@itwin/imodels-client-authoring";
 
 import { assertUser } from "./BrowserFriendlyAssertions";
 
@@ -63,6 +63,17 @@ export async function assertChangesetCallbacks(params: {
     expect(checkpoint).to.exist;
   else
     expect(checkpoint).to.be.undefined;
+}
+
+export async function assertChangesetGroupCallbacks(params: {
+  changesetGroup: ChangesetGroup;
+}): Promise<void> {
+  expect(params.changesetGroup.getCreator).to.exist;
+
+  const creator: User | undefined = await params.changesetGroup.getCreator();
+  assertUser({
+    actualUser: creator!
+  });
 }
 
 export async function assertNamedVersionCallbacks(params: {

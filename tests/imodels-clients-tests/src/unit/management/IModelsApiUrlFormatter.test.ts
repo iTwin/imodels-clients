@@ -197,6 +197,30 @@ describe("[Management] IModelsApiUrlFormatter", () => {
     });
   });
 
+  describe("Changeset Group urls", () => {
+    it("should format changeset group list url", () => {
+      // Arrange
+      const getChangesetGroupListUrlParams = { iModelId: "IMODEL_ID" };
+
+      // Act
+      const changesetGroupListUrl = iModelsApiUrlFormatter.getChangesetGroupListUrl(getChangesetGroupListUrlParams);
+
+      // Assert
+      expect(changesetGroupListUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/changesetgroups");
+    });
+
+    it("should format single changeset group url", () => {
+      // Arrange
+      const getSingleChangesetGroupUrlParams = { iModelId: "IMODEL_ID", changesetGroupId: "GROUP_ID" };
+
+      // Act
+      const singleChangesetGroupUrl = iModelsApiUrlFormatter.getSingleChangesetGroupUrl(getSingleChangesetGroupUrlParams);
+
+      // Assert
+      expect(singleChangesetGroupUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/changesetgroups/GROUP_ID");
+    });
+  });
+
   describe("Checkpoint urls", () => {
     [
       {
