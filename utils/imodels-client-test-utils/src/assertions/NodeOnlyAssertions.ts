@@ -6,12 +6,12 @@ import * as fs from "fs";
 
 import { expect } from "chai";
 
-import { BaselineFile, BaselineFileState, Changeset, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, Changeset, ChangesetGroup, ChangesetGroupPropertiesForCreate, ChangesetGroupPropertiesForUpdate, ChangesetGroupState, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate, isIModelsApiError } from "@itwin/imodels-client-authoring";
 
 import { TestChangesetFile, TestIModelBaselineFile } from "../test-context-providers";
 
 import { assertApplication, assertOptionalLink, assertOptionalProperty } from "./BrowserFriendlyAssertions";
-import { assertChangesetCallbacks, assertMinimalChangesetCallbacks } from "./RelatedEntityCallbackAssertions";
+import { assertChangesetCallbacks, assertChangesetGroupCallbacks, assertMinimalChangesetCallbacks } from "./RelatedEntityCallbackAssertions";
 
 export async function assertBaselineFile(params: {
   actualBaselineFile: BaselineFile;
@@ -136,6 +136,24 @@ export async function assertDownloadedChangeset(params: {
 
   // Check if the downloaded file size matches the size of the changeset file used for test iModel creation
   expect(fs.statSync(params.actualChangeset.filePath).size).to.equal(fs.statSync(params.expectedTestChangesetFile.filePath).size);
+}
+
+export async function assertChangesetGroup(params: {
+  actualChangesetGroup: ChangesetGroup;
+  expectedChangesetGroupProperties: ChangesetGroupPropertiesForCreate & Partial<ChangesetGroupPropertiesForUpdate>;
+}): Promise<void> {
+  expect(params.actualChangesetGroup.id).to.not.be.empty;
+  expect(params.actualChangesetGroup.description).to.equal(params.expectedChangesetGroupProperties.description);
+  expect(params.actualChangesetGroup.creatorId).to.not.be.empty;
+  expect(params.actualChangesetGroup.createdDateTime).to.not.be.empty;
+  expect(params.actualChangesetGroup.state).to.equal(params.expectedChangesetGroupProperties.state ?? ChangesetGroupState.InProgress);
+  expect(params.actualChangesetGroup._links).to.exist;
+  expect(params.actualChangesetGroup._links.creator).to.exist;
+  expect(params.actualChangesetGroup._links.creator!.href).to.not.be.empty;
+
+  await assertChangesetGroupCallbacks({
+    changesetGroup: params.actualChangesetGroup
+  });
 }
 
 export function assertLock(params: {

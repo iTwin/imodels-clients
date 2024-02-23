@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Briefcase, Changeset, Checkpoint, IModel, Link, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, User } from "../types";
+import { Briefcase, Changeset, ChangesetGroup, Checkpoint, IModel, Link, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, User } from "../types";
 
 /**
  * Links that are included in all entity list page responses. They simplify pagination implementation because users
@@ -38,6 +38,10 @@ export interface ChangesetsResponse<TChangeset extends MinimalChangeset> extends
   changesets: TChangeset[];
 }
 
+export interface ChangesetGroupsResponse extends CollectionResponse {
+  changesetGroups: ChangesetGroup[];
+}
+
 export interface UsersResponse<TUser extends MinimalUser> extends CollectionResponse {
   users: TUser[];
 }
@@ -48,6 +52,10 @@ export interface BriefcaseResponse {
 
 export interface ChangesetResponse {
   changeset: Changeset;
+}
+
+export interface ChangesetGroupResponse {
+  changesetGroup: ChangesetGroup;
 }
 
 export interface CheckpointResponse {

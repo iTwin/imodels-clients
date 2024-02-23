@@ -6,6 +6,7 @@ import { CollectionRequestParams, Dictionary,OrderBy } from "../base/types";
 
 import { GetBriefcaseListUrlParams } from "./briefcase/BriefcaseOperationParams";
 import { ChangesetIdOrIndex, GetChangesetListUrlParams } from "./changeset/ChangesetOperationParams";
+import { GetChangesetGroupListUrlParams } from "./changeset-group/ChangesetGroupOperationParams";
 import { CheckpointParentEntityId } from "./checkpoint/CheckpointOperationParams";
 import { GetIModelListUrlParams } from "./imodel/IModelOperationParams";
 import { GetNamedVersionListUrlParams } from "./named-version/NamedVersionOperationParams";
@@ -57,6 +58,14 @@ export class IModelsApiUrlFormatter {
 
   public getChangesetListUrl(params: { iModelId: string, urlParams?: GetChangesetListUrlParams }): string {
     return `${this.baseUrl}/${params.iModelId}/changesets${this.formQueryString({ ...params.urlParams })}`;
+  }
+
+  public getSingleChangesetGroupUrl(params: { iModelId: string } & { changesetGroupId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}/changesetgroups/${params.changesetGroupId}`;
+  }
+
+  public getChangesetGroupListUrl(params: { iModelId: string, urlParams?: GetChangesetGroupListUrlParams }): string {
+    return `${this.baseUrl}/${params.iModelId}/changesetgroups${this.formQueryString({ ...params.urlParams })}`;
   }
 
   public parseChangesetUrl(url: string): { iModelId: string } & ChangesetIdOrIndex {

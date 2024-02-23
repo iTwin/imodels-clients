@@ -90,7 +90,7 @@ export class IModelsClientsTestsConfig {
     };
 
     this.behaviorOptions = {
-      recreateReusableIModel: false
+      recreateReusableIModel: Number(process.env.TEST_BEHAVIOR_OPTIONS_RECREATE_IMODEL) > 0
     };
   }
 
@@ -115,10 +115,21 @@ export class IModelsClientsTestsConfig {
 
     this.validateConfigValue("TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL");
     this.validateConfigValue("TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD");
+
+    this.validateConfigOptionalNumericValue("TEST_BEHAVIOR_OPTIONS_RECREATE_IMODEL");
   }
 
   private validateConfigValue(key: string): void {
     if (!process.env[key])
       throw new TestSetupError(`Invalid configuration: missing ${key} value.`);
+  }
+
+  private validateConfigOptionalNumericValue(key: string): void {
+    const value = process.env[key];
+    if (value === undefined)
+      return;
+
+    if (isNaN(Number(value)))
+      throw new TestSetupError(`Invalid configuration: ${key} value must be a number.`);
   }
 }

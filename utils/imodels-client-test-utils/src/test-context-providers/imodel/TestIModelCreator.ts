@@ -12,7 +12,7 @@ import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 import { TestITwinProvider } from "../itwin/TestITwinProvider";
 
 import { TestIModelFileProvider } from "./TestIModelFileProvider";
-import { BriefcaseMetadata, IModelMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
+import { BriefcaseMetadata, ChangesetGroupMetadata, IModelMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
 import { TestIModelsClient } from "./TestIModelsClient";
 
 @injectable()
@@ -20,6 +20,11 @@ export class TestIModelCreator {
   public static namedVersions = [
     { name: "Named version 5", changesetIndex: 5 },
     { name: "Named version 10", changesetIndex: 10 }
+  ];
+
+  public static changesetGroups = [
+    { description: "Initial group" },
+    { description: "Another one" }
   ];
 
   private readonly _iModelDescription = "Some description";
@@ -60,6 +65,7 @@ export class TestIModelCreator {
   public async createReusable(iModelName: string): Promise<ReusableIModelMetadata> {
     const iModel = await this.createEmpty(iModelName);
     const briefcase = await this.acquireBriefcase(iModel.id);
+    const changesetGroups = await this.createChangesetGroups(iModel.id);
     await this.uploadChangesets(iModel.id, briefcase.id);
     const namedVersions = await this.createNamedVersionsOnReusableIModel(iModel.id);
     const lock = await this.createLockOnReusableIModel(iModel.id, briefcase.id);
@@ -68,7 +74,8 @@ export class TestIModelCreator {
       ...iModel,
       briefcase,
       namedVersions,
-      lock
+      lock,
+      changesetGroups
     };
   }
 
@@ -131,6 +138,22 @@ export class TestIModelCreator {
         }
       });
     }
+  }
+
+  public async createChangesetGroups(iModelId: string): Promise<ChangesetGroupMetadata[]> {
+    const changesetGroups: ChangesetGroupMetadata[] = [];
+
+    for (const changesetGroupMetadata of TestIModelCreator.changesetGroups) {
+      const changesetGroup = await this._iModelsClient.changesetGroups.create({
+        authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
+        iModelId,
+        changesetGroupProperties: changesetGroupMetadata
+      });
+
+      changesetGroups.push(changesetGroup);
+    }
+
+    return changesetGroups;
   }
 
   private async acquireBriefcase(iModelId: string): Promise<BriefcaseMetadata> {

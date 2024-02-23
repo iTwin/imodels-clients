@@ -6,4 +6,5 @@ export * from "./baseline-file/BaselineFileOperations";
 export * from "./imodel/IModelOperations";
 export * from "./briefcase/BriefcaseOperations";
 export * from "./changeset/ChangesetOperations";
+export * from "./changeset-group/ChangesetGroupOperations";
 export * from "./lock/LockOperations";

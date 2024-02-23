@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { GetBriefcaseListParams, GetLockListParams, GetNamedVersionListParams, IModel, Lock, NamedVersion, toArray } from "@itwin/imodels-client-authoring";
+import { GetBriefcaseListParams, GetChangesetGroupListParams, GetLockListParams, GetNamedVersionListParams, IModel, Lock, NamedVersion, toArray } from "@itwin/imodels-client-authoring";
 
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
@@ -12,7 +12,7 @@ import { TestITwinProvider } from "../itwin/TestITwinProvider";
 
 import { TestIModelCreator } from "./TestIModelCreator";
 import { TestIModelFileProvider } from "./TestIModelFileProvider";
-import { BriefcaseMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
+import { BriefcaseMetadata, ChangesetGroupMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
 import { TestIModelsClient } from "./TestIModelsClient";
 
 @injectable()
@@ -43,6 +43,7 @@ export class TestIModelRetriever {
     const briefcase = await this.queryAndValidateBriefcase(iModel.id);
     const namedVersions = await this.queryAndValidateNamedVersions(iModel.id);
     const lock = await this.queryAndValidateLock(iModel.id);
+    const changesetGroups = await this.queryAndValidateChangesetGroups(iModel.id);
 
     return {
       id: iModel.id,
@@ -50,7 +51,8 @@ export class TestIModelRetriever {
       description: iModel.description!,
       briefcase,
       namedVersions,
-      lock
+      lock,
+      changesetGroups
     };
   }
 
@@ -103,5 +105,17 @@ export class TestIModelRetriever {
       throw new TestSetupError(`${locks.length} is an unexpected lock count for reusable test iModel.`);
 
     return locks[0];
+  }
+
+  private async queryAndValidateChangesetGroups(iModelId: string): Promise<ChangesetGroupMetadata[]> {
+    const getChangesetGroupListParams: GetChangesetGroupListParams = {
+      authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
+      iModelId
+    };
+    const changesetGroups: ChangesetGroupMetadata[] = await toArray(this._iModelsClient.changesetGroups.getList(getChangesetGroupListParams));
+    if (changesetGroups.length !== TestIModelCreator.changesetGroups.length)
+      throw new TestSetupError(`${changesetGroups.length} is an unexpected changeset group count for reusable test iModel.`);
+
+    return changesetGroups;
   }
 }
