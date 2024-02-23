@@ -2,7 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, GetChangesetGroupListParams, GetSingleChangesetGroupParams, IModelsClient, IModelsClientOptions, IModelsErrorCode } from "@itwin/imodels-client-management";
+import { expect } from "chai";
+
+import { AuthorizationCallback, GetChangesetGroupListParams, GetSingleChangesetGroupParams, IModelsClient, IModelsClientOptions, IModelsErrorCode, take } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertChangesetGroup, assertCollection, assertError } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "../common";
@@ -40,6 +42,28 @@ describe("[Management] ChangesetGroupOperations", () => {
       asyncIterable: changesetGroups,
       isEntityCountCorrect: (count) => (count > 0 && count === testIModel.changesetGroups.length)
     });
+  });
+
+  it("should get valid changeset group when querying collection", async () => {
+    // Arrange
+    const getChangesetGroupListParams: GetChangesetGroupListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $top: 1
+      }
+    };
+
+    // Act
+    const changesetGroups = iModelsClient.changesetGroups.getList(getChangesetGroupListParams);
+
+    // Assert
+    const changesetGroupList = await take(changesetGroups, 1);
+    expect(changesetGroupList.length).to.be.equal(1);
+    const actualChangesetGroup = changesetGroupList[0];
+    const expectedChangesetGroup = testIModel.changesetGroups.find((x) => x.id === actualChangesetGroup.id);
+    expect(expectedChangesetGroup).to.exist;
+    await assertChangesetGroup({ actualChangesetGroup, expectedChangesetGroupProperties: expectedChangesetGroup! });
   });
 
   it("should get changeset group by id", async () => {
