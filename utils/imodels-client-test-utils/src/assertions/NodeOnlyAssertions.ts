@@ -144,11 +144,11 @@ export async function assertChangesetGroup(params: {
 }): Promise<void> {
   expect(params.actualChangesetGroup.id).to.not.be.empty;
   expect(params.actualChangesetGroup.description).to.equal(params.expectedChangesetGroupProperties.description);
-  expect(params.actualChangesetGroup.creatorId).to.exist;
+  expect(params.actualChangesetGroup.creatorId).to.not.be.empty;
   expect(params.actualChangesetGroup.createdDateTime).to.not.be.empty;
   expect(params.actualChangesetGroup.state).to.equal(params.expectedChangesetGroupProperties.state ?? ChangesetGroupState.InProgress);
-  expect(params.actualChangesetGroup._links).to.exist;
-  expect(params.actualChangesetGroup._links.creator).to.exist;
+  expect(params.actualChangesetGroup._links).to.not.be.empty;
+  expect(params.actualChangesetGroup._links.creator).to.not.be.empty;
   expect(params.actualChangesetGroup._links.creator!.href).to.not.be.empty;
 
   await assertChangesetGroupCallbacks({

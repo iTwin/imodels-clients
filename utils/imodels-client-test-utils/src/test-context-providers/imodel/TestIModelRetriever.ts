@@ -21,8 +21,7 @@ export class TestIModelRetriever {
     private readonly _iModelsClient: TestIModelsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
     private readonly _testITwinProvider: TestITwinProvider,
-    private readonly _testIModelFileProvider: TestIModelFileProvider,
-    private readonly _testIModelCreator: TestIModelCreator
+    private readonly _testIModelFileProvider: TestIModelFileProvider
   ) { }
 
   public async findIModelByName(iModelName: string): Promise<IModel | undefined> {
@@ -44,7 +43,7 @@ export class TestIModelRetriever {
     const briefcase = await this.queryAndValidateBriefcase(iModel.id);
     const namedVersions = await this.queryAndValidateNamedVersions(iModel.id);
     const lock = await this.queryAndValidateLock(iModel.id);
-    const changesetGroups = await this.ensureChangesetGroups(iModel.id);
+    const changesetGroups = await this.queryAndValidateChangesetGroups(iModel.id);
 
     return {
       id: iModel.id,
@@ -108,16 +107,13 @@ export class TestIModelRetriever {
     return locks[0];
   }
 
-  private async ensureChangesetGroups(iModelId: string): Promise<ChangesetGroupMetadata[]> {
+  private async queryAndValidateChangesetGroups(iModelId: string): Promise<ChangesetGroupMetadata[]> {
     const getChangesetGroupListParams: GetChangesetGroupListParams = {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelId
     };
-    let changesetGroups: ChangesetGroupMetadata[] = await toArray(this._iModelsClient.changesetGroups.getList(getChangesetGroupListParams));
-
-    if (changesetGroups.length === 0)
-      changesetGroups = await this._testIModelCreator.createChangesetGroups(iModelId);
-    else if (changesetGroups.length !== TestIModelCreator.changesetGroups.length)
+    const changesetGroups: ChangesetGroupMetadata[] = await toArray(this._iModelsClient.changesetGroups.getList(getChangesetGroupListParams));
+    if (changesetGroups.length !== TestIModelCreator.changesetGroups.length)
       throw new TestSetupError(`${changesetGroups.length} is an unexpected changeset group count for reusable test iModel.`);
 
     return changesetGroups;

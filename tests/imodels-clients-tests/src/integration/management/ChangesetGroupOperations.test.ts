@@ -38,7 +38,7 @@ describe("[Management] ChangesetGroupOperations", () => {
     // Assert
     await assertCollection({
       asyncIterable: changesetGroups,
-      isEntityCountCorrect: (count) => count === testIModel.changesetGroups.length
+      isEntityCountCorrect: (count) => (count > 0 && count === testIModel.changesetGroups.length)
     });
   });
 

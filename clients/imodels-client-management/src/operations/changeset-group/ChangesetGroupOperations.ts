@@ -51,12 +51,10 @@ export class ChangesetGroupOperations<TOptions extends OperationOptions> extends
    * @returns {Promise<ChangesetGroup>} a Changeset Group with the specified id. See {@link ChangesetGroup}.
    */
   public async getSingle(params: GetSingleChangesetGroupParams): Promise<ChangesetGroup> {
-    const { authorization, iModelId, headers, changesetGroupId } = params;
-
     const response = await this.sendGetRequest<ChangesetGroupResponse>({
-      authorization,
-      url: this._options.urlFormatter.getSingleChangesetGroupUrl({iModelId, changesetGroupId}),
-      headers
+      authorization: params.authorization,
+      url: this._options.urlFormatter.getSingleChangesetGroupUrl({ iModelId: params.iModelId, changesetGroupId: params.changesetGroupId }),
+      headers: params.headers
     });
 
     const result: ChangesetGroup = this.appendRelatedEntityCallbacks(
