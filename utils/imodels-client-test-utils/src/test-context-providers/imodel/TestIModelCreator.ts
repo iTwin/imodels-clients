@@ -154,9 +154,9 @@ export class TestIModelCreator {
         changesetGroupProperties: changesetGroupMetadata
       });
 
-      changesetGroups.push({ 
-        id: changesetGroup.id, 
-        description: changesetGroup.description, 
+      changesetGroups.push({
+        id: changesetGroup.id,
+        description: changesetGroup.description,
         changesetIndexes: changesetGroupMetadata.changesetIndexes
       });
     }
