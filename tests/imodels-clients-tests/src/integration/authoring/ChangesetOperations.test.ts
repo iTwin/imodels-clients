@@ -11,7 +11,7 @@ import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object
 import { ConfigDownloadInput, UrlDownloadInput } from "@itwin/object-storage-core";
 import { expect } from "chai";
 
-import { AcquireBriefcaseParams, AuthorizationCallback, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, IModelsError, IModelsErrorCode, ProgressCallback, TargetDirectoryParam, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AuthorizationCallback, CreateChangesetGroupParams, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, IModelsError, IModelsErrorCode, ProgressCallback, TargetDirectoryParam, isIModelsApiError } from "@itwin/imodels-client-authoring";
 import { FileTransferLog, IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableClientStorage, assertChangeset, assertDownloadedChangeset, assertProgressReports, cleanupDirectory } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
@@ -100,13 +100,22 @@ describe("[Authoring] ChangesetOperations", () => {
     });
   });
 
-  it("should create changeset #2", async () => {
+  it("should create changeset #2 in a changeset group", async () => {
     // Arrange
     const acquireBriefcaseParams: AcquireBriefcaseParams = {
       authorization,
       iModelId: testIModelForWrite.id
     };
     const briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
+
+    const createChangesetGroupParams: CreateChangesetGroupParams = {
+      authorization,
+      iModelId: testIModelForWrite.id,
+      changesetGroupProperties: {
+        description: "Some group"
+      }
+    };
+    const changesetGroup = await iModelsClient.changesetGroups.create(createChangesetGroupParams);
 
     const parentChangesetFile = testIModelFileProvider.changesets[0];
     const testChangesetFile = testIModelFileProvider.changesets[1];
@@ -118,6 +127,7 @@ describe("[Authoring] ChangesetOperations", () => {
         id: testChangesetFile.id,
         parentId: parentChangesetFile.id,
         filePath: testChangesetFile.filePath,
+        groupId: changesetGroup.id,
         synchronizationInfo: {
           taskId: "11111111-1111-1111-1111-111111111111",
           changedFiles: [
@@ -164,6 +174,7 @@ describe("[Authoring] ChangesetOperations", () => {
       for (const changeset of changesets) {
         const testChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
         const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
+        const groupId = testIModelForRead.changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changeset.index))?.id;
         await assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
@@ -172,7 +183,8 @@ describe("[Authoring] ChangesetOperations", () => {
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
             containingChanges: testChangesetFile.containingChanges,
-            synchronizationInfo: testChangesetFile.synchronizationInfo
+            synchronizationInfo: testChangesetFile.synchronizationInfo,
+            groupId
           },
           expectedLinks: {
             namedVersion: changesetHasNamedVersion,
@@ -208,6 +220,7 @@ describe("[Authoring] ChangesetOperations", () => {
       for (const changeset of changesets) {
         const testChangesetFile = testIModelFileProvider.changesets.find((cs) => cs.index === changeset.index)!;
         const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
+        const groupId = testIModelForRead.changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changeset.index))?.id;
         await assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
@@ -216,7 +229,8 @@ describe("[Authoring] ChangesetOperations", () => {
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
             containingChanges: testChangesetFile.containingChanges,
-            synchronizationInfo: testChangesetFile.synchronizationInfo
+            synchronizationInfo: testChangesetFile.synchronizationInfo,
+            groupId
           },
           expectedLinks: {
             namedVersion: changesetHasNamedVersion,
@@ -270,6 +284,7 @@ describe("[Authoring] ChangesetOperations", () => {
         // Assert
         const testChangesetFile = testCase.changesetUnderTest;
         const changesetHasNamedVersion = !!testIModelForRead.namedVersions.find((version) => version.changesetIndex === changeset.index);
+        const groupId = testIModelForRead.changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changeset.index))?.id;
         await assertDownloadedChangeset({
           actualChangeset: changeset,
           expectedChangesetProperties: {
@@ -278,7 +293,8 @@ describe("[Authoring] ChangesetOperations", () => {
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
             containingChanges: testChangesetFile.containingChanges,
-            synchronizationInfo: testChangesetFile.synchronizationInfo
+            synchronizationInfo: testChangesetFile.synchronizationInfo,
+            groupId
           },
           expectedLinks: {
             namedVersion: changesetHasNamedVersion,

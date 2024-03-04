@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { GetBriefcaseListParams, GetChangesetGroupListParams, GetLockListParams, GetNamedVersionListParams, IModel, Lock, NamedVersion, toArray } from "@itwin/imodels-client-authoring";
+import { GetBriefcaseListParams, GetChangesetGroupListParams, GetChangesetListParams, GetLockListParams, GetNamedVersionListParams, IModel, Lock, NamedVersion, toArray } from "@itwin/imodels-client-authoring";
 
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
@@ -44,6 +44,7 @@ export class TestIModelRetriever {
     const namedVersions = await this.queryAndValidateNamedVersions(iModel.id);
     const lock = await this.queryAndValidateLock(iModel.id);
     const changesetGroups = await this.queryAndValidateChangesetGroups(iModel.id);
+    await this.queryAndValidateChangesets(iModel.id, changesetGroups);
 
     return {
       id: iModel.id,
@@ -112,10 +113,33 @@ export class TestIModelRetriever {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelId
     };
-    const changesetGroups: ChangesetGroupMetadata[] = await toArray(this._iModelsClient.changesetGroups.getList(getChangesetGroupListParams));
+    const changesetGroups = await toArray(this._iModelsClient.changesetGroups.getList(getChangesetGroupListParams));
     if (changesetGroups.length !== TestIModelCreator.changesetGroups.length)
       throw new TestSetupError(`${changesetGroups.length} is an unexpected changeset group count for reusable test iModel.`);
 
-    return changesetGroups;
+    return changesetGroups.map((csGroup) => {
+      const changesetIndexes = TestIModelCreator.changesetGroups.find((x) => x.description === csGroup.description)?.changesetIndexes;
+      if (!changesetIndexes)
+        throw new TestSetupError("Could not find expected changeset group by description.");
+      return { id: csGroup.id, description: csGroup.description, changesetIndexes };
+    });
+  }
+
+  private async queryAndValidateChangesets(iModelId: string, changesetGroups: ChangesetGroupMetadata[]): Promise<void> {
+    const getChangesetListParams: GetChangesetListParams = {
+      authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
+      iModelId
+    };
+    const changesets = await toArray(this._iModelsClient.changesets.getMinimalList(getChangesetListParams));
+    if (changesets.length !== this._testIModelFileProvider.changesets.length)
+      throw new TestSetupError(`${changesets.length} is an unexpected changeset count for reusable test iModel.`);
+
+    changesetGroups.forEach((csGroup) => {
+      csGroup.changesetIndexes.map((changesetIndex) => {
+        const changeset = changesets.find((cs) => cs.index === changesetIndex);
+        if (changeset?.groupId !== csGroup.id)
+          throw new TestSetupError(`Changeset with index ${changesetIndex} should belong to a Changeset Group (${csGroup.id}).`);
+      });
+    });
   }
 }

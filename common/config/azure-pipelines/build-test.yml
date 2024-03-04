@@ -18,12 +18,12 @@ jobs:
         linux-node18:
           imageName: 'ubuntu-latest'
           nodeVersion: $(node18Version)
-        mac-node18:
-          imageName: 'macos-latest'
-          nodeVersion: $(node18Version)
-        windows-node18:
-          imageName: 'windows-latest'
-          nodeVersion: $(node18Version)
+        # mac-node18:
+        #   imageName: 'macos-latest'
+        #   nodeVersion: $(node18Version)
+        # windows-node18:
+        #   imageName: 'windows-latest'
+        #   nodeVersion: $(node18Version)
     pool:
         vmImage: $(imageName)
     variables:

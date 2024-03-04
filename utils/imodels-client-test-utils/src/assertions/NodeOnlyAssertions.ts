@@ -52,6 +52,7 @@ export async function assertMinimalChangeset(params: {
   expect(params.actualChangeset.creatorId).to.exist;
   expect(params.actualChangeset.pushDateTime).to.not.be.empty;
   expect(params.actualChangeset.state).to.equal(ChangesetState.FileUploaded);
+  assertOptionalProperty(params.expectedChangesetProperties.groupId, params.actualChangeset.groupId);
 
   // Check if the changeset.fileSize property matches the size of the changeset file used for test iModel creation
   expect(params.actualChangeset.fileSize).to.equal(fs.statSync(params.expectedTestChangesetFile.filePath).size);

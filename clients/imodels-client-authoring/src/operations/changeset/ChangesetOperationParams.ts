@@ -33,6 +33,11 @@ export interface ChangesetPropertiesForCreate {
   synchronizationInfo?: SynchronizationInfoForCreate;
   /** Absolute path of the Changeset file. The file must exist. */
   filePath: string;
+  /**
+   * Id of the Changeset Group that the Changeset belongs to.
+   * `undefined` if the Changeset does not belong to a Changeset Group.
+   */
+  groupId?: string;
 }
 
 /** Parameters for create Changeset operation. */
