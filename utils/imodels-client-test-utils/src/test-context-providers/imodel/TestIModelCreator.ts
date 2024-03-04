@@ -208,7 +208,7 @@ export class TestIModelCreator {
         return;
 
       if (checkpoint.state !== CheckpointState.Scheduled && checkpoint.state !== CheckpointState.Successful)
-        throw new TestSetupError(`Checkpoint generation failed with state: ${checkpoint.state}.`);
+        throw new TestSetupError(`Checkpoint generation failed with state: ${checkpoint.state}. Response: ${JSON.stringify(checkpoint)}`);
 
       await sleep(sleepPeriodInMs);
     }
