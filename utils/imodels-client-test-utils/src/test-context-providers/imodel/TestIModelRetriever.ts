@@ -135,7 +135,7 @@ export class TestIModelRetriever {
       throw new TestSetupError(`${changesets.length} is an unexpected changeset count for reusable test iModel.`);
 
     for (const changeset of changesets) {
-      const expectedGroupId = changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changeset.index))?.id;
+      const expectedGroupId = changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changeset.index))?.id ?? null;
       if (changeset.groupId !== expectedGroupId)
         throw new TestSetupError(`Changeset with index ${changeset.index} group id is incorrect.`);
     }
