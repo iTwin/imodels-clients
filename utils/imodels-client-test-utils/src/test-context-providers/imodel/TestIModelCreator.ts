@@ -202,7 +202,6 @@ export class TestIModelCreator {
   }
 
   private async waitForNamedVersionCheckpointGenerated(iModelId: string, namedVersionId: string): Promise<void> {
-    // Wait a bit since the checkpoint might be added to the creation queue instead of being created immediately in the request scope
     await sleep(3000);
 
     const getSingleCheckpointParams: GetSingleCheckpointParams = {

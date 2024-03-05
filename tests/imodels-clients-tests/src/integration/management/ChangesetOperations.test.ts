@@ -270,7 +270,6 @@ describe("[Management] ChangesetOperations", () => {
     const firstChangesetGroup = testIModel.changesetGroups[0];
     const changesetWithGroupIndex = firstChangesetGroup.changesetIndexes[0];
     const testChangesetFile = testIModelFileProvider.changesets[changesetWithGroupIndex - 1];
-    const groupId = testIModel.changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changesetWithGroupIndex))?.id;
     const changesetHasNamedVersion = !!testIModel.namedVersions.find((version) => version.changesetIndex === changesetWithGroupIndex);
     const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
@@ -291,7 +290,7 @@ describe("[Management] ChangesetOperations", () => {
         description: testChangesetFile.description,
         containingChanges: testChangesetFile.containingChanges,
         synchronizationInfo: testChangesetFile.synchronizationInfo,
-        groupId
+        groupId: firstChangesetGroup.id
       },
       expectedTestChangesetFile: testChangesetFile,
       expectedLinks: {

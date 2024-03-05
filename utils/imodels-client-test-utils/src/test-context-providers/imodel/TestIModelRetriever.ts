@@ -134,12 +134,10 @@ export class TestIModelRetriever {
     if (changesets.length !== this._testIModelFileProvider.changesets.length)
       throw new TestSetupError(`${changesets.length} is an unexpected changeset count for reusable test iModel.`);
 
-    changesetGroups.forEach((csGroup) => {
-      csGroup.changesetIndexes.map((changesetIndex) => {
-        const changeset = changesets.find((cs) => cs.index === changesetIndex);
-        if (changeset?.groupId !== csGroup.id)
-          throw new TestSetupError(`Changeset with index ${changesetIndex} should belong to a Changeset Group (${csGroup.id}).`);
-      });
-    });
+    for (const changeset of changesets) {
+      const expectedGroupId = changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changeset.index))?.id;
+      if (changeset.groupId !== expectedGroupId)
+        throw new TestSetupError(`Changeset with index ${changeset.index} group id is incorrect.`);
+    }
   }
 }
