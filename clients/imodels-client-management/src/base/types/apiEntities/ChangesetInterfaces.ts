@@ -67,6 +67,11 @@ export interface MinimalChangeset {
   fileSize: number;
   /** Id of the Briefcase that was used to create the Changeset. */
   briefcaseId: number;
+  /**
+   * Id of the Changeset Group that the Changeset belongs to.
+   * `null` if the Changeset does not belong to a Changeset Group.
+   */
+  groupId: string | null;
   /** Changeset links. See {@link MinimalChangesetLinks}. */
   _links: MinimalChangesetLinks;
   /**

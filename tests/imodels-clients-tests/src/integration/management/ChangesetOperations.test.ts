@@ -172,6 +172,7 @@ describe("[Management] ChangesetOperations", () => {
     expect(minimalChangesetList.length).to.be.equal(1);
     const minimalChangeset = minimalChangesetList[0];
     const testChangesetFile = testIModelFileProvider.changesets[minimalChangeset.index - 1];
+    const groupId = testIModel.changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(minimalChangeset.index))?.id;
     await assertMinimalChangeset({
       actualChangeset: minimalChangeset,
       expectedChangesetProperties: {
@@ -179,7 +180,8 @@ describe("[Management] ChangesetOperations", () => {
         briefcaseId: testIModel.briefcase.id,
         parentId: testChangesetFile.parentId,
         description: testChangesetFile.description,
-        containingChanges: testChangesetFile.containingChanges
+        containingChanges: testChangesetFile.containingChanges,
+        groupId
       },
       expectedTestChangesetFile: testChangesetFile
     });
@@ -206,6 +208,7 @@ describe("[Management] ChangesetOperations", () => {
     expect(changesetList.length).to.be.equal(1);
     const changeset = changesetList[0];
     const testChangesetFile = testIModelFileProvider.changesets[changeset.index - 1];
+    const groupId = testIModel.changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changeset.index))?.id;
     await assertChangeset({
       actualChangeset: changeset,
       expectedChangesetProperties: {
@@ -214,7 +217,8 @@ describe("[Management] ChangesetOperations", () => {
         parentId: testChangesetFile.parentId,
         description: testChangesetFile.description,
         containingChanges: testChangesetFile.containingChanges,
-        synchronizationInfo: testChangesetFile.synchronizationInfo
+        synchronizationInfo: testChangesetFile.synchronizationInfo,
+        groupId
       },
       expectedTestChangesetFile: testChangesetFile,
       expectedLinks: {
@@ -230,6 +234,7 @@ describe("[Management] ChangesetOperations", () => {
     const firstNamedVersion = testIModel.namedVersions[0];
     const changesetWithNamedVersionIndex = firstNamedVersion.changesetIndex;
     const testChangesetFile = testIModelFileProvider.changesets[changesetWithNamedVersionIndex - 1];
+    const groupId = testIModel.changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changesetWithNamedVersionIndex))?.id;
     const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
       iModelId: testIModel.id,
@@ -248,11 +253,48 @@ describe("[Management] ChangesetOperations", () => {
         parentId: testChangesetFile.parentId,
         description: testChangesetFile.description,
         containingChanges: testChangesetFile.containingChanges,
-        synchronizationInfo: testChangesetFile.synchronizationInfo
+        synchronizationInfo: testChangesetFile.synchronizationInfo,
+        groupId
       },
       expectedTestChangesetFile: testChangesetFile,
       expectedLinks: {
         namedVersion: true,
+        checkpoint: true
+      },
+      isGetResponse: true
+    });
+  });
+
+  it("should get changeset that belongs to a changeset group by id", async () => {
+    // Arrange
+    const firstChangesetGroup = testIModel.changesetGroups[0];
+    const changesetWithGroupIndex = firstChangesetGroup.changesetIndexes[0];
+    const testChangesetFile = testIModelFileProvider.changesets[changesetWithGroupIndex - 1];
+    const changesetHasNamedVersion = !!testIModel.namedVersions.find((version) => version.changesetIndex === changesetWithGroupIndex);
+    const getSingleChangesetParams: GetSingleChangesetParams = {
+      authorization,
+      iModelId: testIModel.id,
+      changesetId: testChangesetFile.id
+    };
+
+    // Act
+    const changeset: Changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
+
+    // Assert
+    await assertChangeset({
+      actualChangeset: changeset,
+      expectedChangesetProperties: {
+        id: testChangesetFile.id,
+        briefcaseId: testIModel.briefcase.id,
+        parentId: testChangesetFile.parentId,
+        description: testChangesetFile.description,
+        containingChanges: testChangesetFile.containingChanges,
+        synchronizationInfo: testChangesetFile.synchronizationInfo,
+        groupId: firstChangesetGroup.id
+      },
+      expectedTestChangesetFile: testChangesetFile,
+      expectedLinks: {
+        namedVersion: changesetHasNamedVersion,
         checkpoint: true
       },
       isGetResponse: true

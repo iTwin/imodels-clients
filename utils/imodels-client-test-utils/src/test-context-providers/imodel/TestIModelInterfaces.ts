@@ -19,6 +19,7 @@ export interface NamedVersionMetadata {
 export interface ChangesetGroupMetadata {
   id: string;
   description: string;
+  changesetIndexes: number[];
 }
 
 export interface IModelMetadata {
