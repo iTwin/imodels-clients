@@ -21,8 +21,8 @@ export interface ClonedFrom {
   iModelId: string;
   /**
    * Id of the latest source iModel Changeset which was copied to this iModel.
-   * This corresponds to the Changeset specified in changesetId or changesetIndex properties when cloning an iModel.
-   * If changesetId is an empty string it means that no Changesets were copied from the source iModel to this one, only iModel Baseline.
+   * This corresponds to the Changeset specified in `changesetId` or `changesetIndex` properties when cloning an iModel.
+   * The value will be an empty string if no Changesets were copied from the source iModel to this one, only iModel Baseline.
    */
   changesetId: string;
 }

@@ -40,6 +40,6 @@ describe("[Management] OperationOperations", () => {
 
     // Assert
     expect(operationDetails.clonedFrom).to.be.null;
-    expect(operationDetails.state).to.be.oneOf([IModelCreationState.Scheduled, IModelCreationState.Successful]);
+    expect(operationDetails.state).to.equal(IModelCreationState.Successful);
   });
 });
