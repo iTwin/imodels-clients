@@ -48,7 +48,13 @@ describe("[Authoring] ChangesetGroupOperations", () => {
     const changesetGroup: ChangesetGroup = await iModelsClient.changesetGroups.create(createChangesetGroupParams);
 
     // Assert
-    await assertChangesetGroup({ actualChangesetGroup: changesetGroup, expectedChangesetGroupProperties: createChangesetGroupParams.changesetGroupProperties });
+    await assertChangesetGroup({
+      actualChangesetGroup: changesetGroup,
+      expectedChangesetGroupProperties: {
+        ...createChangesetGroupParams.changesetGroupProperties,
+        state: ChangesetGroupState.InProgress
+      }
+    });
   });
 
   it("should update changeset group", async () => {

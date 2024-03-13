@@ -5,7 +5,7 @@
 import { sleep } from "@itwin/imodels-client-management/lib/base/internal";
 import { injectable } from "inversify";
 
-import { CheckpointState, GetSingleCheckpointParams, Lock, LockLevel, LockedObjects } from "@itwin/imodels-client-authoring";
+import { ChangesetGroupState, CheckpointState, GetSingleCheckpointParams, Lock, LockLevel, LockedObjects, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
 
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
@@ -58,8 +58,7 @@ export class TestIModelCreator {
   public async createEmptyAndUploadChangesets(iModelName: string): Promise<IModelMetadata> {
     const iModel = await this.createEmpty(iModelName);
     const briefcase = await this.acquireBriefcase(iModel.id);
-    const changesetGroups = await this.createChangesetGroups(iModel.id);
-    await this.uploadChangesets(iModel.id, briefcase.id, changesetGroups);
+    await this.uploadChangesets(iModel.id, briefcase.id, []);
     return iModel;
   }
 
@@ -68,6 +67,7 @@ export class TestIModelCreator {
     const briefcase = await this.acquireBriefcase(iModel.id);
     const changesetGroups = await this.createChangesetGroups(iModel.id);
     await this.uploadChangesets(iModel.id, briefcase.id, changesetGroups);
+    await this.completeChangesetGroups(iModel.id, changesetGroups);
     const namedVersions = await this.createNamedVersionsOnReusableIModel(iModel.id);
     const lock = await this.createLockOnReusableIModel(iModel.id, briefcase.id);
 
@@ -121,7 +121,7 @@ export class TestIModelCreator {
     return acquiredLocks;
   }
 
-  public async uploadChangesets(iModelId: string, briefcaseId: number, changesetGroups: ChangesetGroupMetadata[]): Promise<void> {
+  private async uploadChangesets(iModelId: string, briefcaseId: number, changesetGroups: ChangesetGroupMetadata[]): Promise<void> {
     for (let i = 0; i < this._testIModelFileProvider.changesets.length; i++) {
       const changeset = this._testIModelFileProvider.changesets[i];
       const parentId = i === 0 ? undefined : this._testIModelFileProvider.changesets[i - 1].id;
@@ -144,7 +144,7 @@ export class TestIModelCreator {
     }
   }
 
-  public async createChangesetGroups(iModelId: string): Promise<ChangesetGroupMetadata[]> {
+  private async createChangesetGroups(iModelId: string): Promise<ChangesetGroupMetadata[]> {
     const changesetGroups: ChangesetGroupMetadata[] = [];
 
     for (const changesetGroupMetadata of TestIModelCreator.changesetGroups) {
@@ -162,6 +162,21 @@ export class TestIModelCreator {
     }
 
     return changesetGroups;
+  }
+
+  private async completeChangesetGroups(iModelId: string, changesetGroups: ChangesetGroupMetadata[]): Promise<void> {
+    for (const changesetGroup of changesetGroups) {
+      const updateChangesetGroupParams: UpdateChangesetGroupParams = {
+        authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
+        iModelId,
+        changesetGroupId: changesetGroup.id,
+        changesetGroupProperties: {
+          state: ChangesetGroupState.Completed
+        }
+      };
+
+      await this._iModelsClient.changesetGroups.update(updateChangesetGroupParams);
+    }
   }
 
   private async acquireBriefcase(iModelId: string): Promise<BriefcaseMetadata> {
