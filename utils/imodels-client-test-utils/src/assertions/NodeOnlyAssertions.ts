@@ -147,7 +147,7 @@ export async function assertChangesetGroup(params: {
   expect(params.actualChangesetGroup.description).to.equal(params.expectedChangesetGroupProperties.description);
   expect(params.actualChangesetGroup.creatorId).to.not.be.empty;
   expect(params.actualChangesetGroup.createdDateTime).to.not.be.empty;
-  expect(params.actualChangesetGroup.state).to.equal(params.expectedChangesetGroupProperties.state ?? ChangesetGroupState.InProgress);
+  expect(params.actualChangesetGroup.state).to.equal(params.expectedChangesetGroupProperties.state ?? ChangesetGroupState.Completed);
   expect(params.actualChangesetGroup._links).to.exist;
   expect(params.actualChangesetGroup._links.creator).to.exist;
   expect(params.actualChangesetGroup._links.creator!.href).to.not.be.empty;
