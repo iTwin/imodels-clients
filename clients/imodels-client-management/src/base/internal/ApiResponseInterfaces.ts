@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Briefcase, Changeset, ChangesetGroup, Checkpoint, IModel, Link, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, User } from "../types";
+import { Briefcase, Changeset, ChangesetGroup, Checkpoint, CreateIModelOperationDetails, IModel, Link, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, User } from "../types";
 
 /**
  * Links that are included in all entity list page responses. They simplify pagination implementation because users
@@ -72,4 +72,8 @@ export interface UserResponse {
 
 export interface NamedVersionResponse {
   namedVersion: NamedVersion;
+}
+
+export interface CreateIModelOperationDetailsResponse {
+  createOperation: CreateIModelOperationDetails;
 }

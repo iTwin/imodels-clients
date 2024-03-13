@@ -11,3 +11,4 @@ export * from "./checkpoint/CheckpointOperationParams";
 export * from "./thumbnail/ThumbnailOperationParams";
 export * from "./user/UserOperationParams";
 export * from "./user-permission/UserPermissionOperationParams";
+export * from "./operation/OperationParams";

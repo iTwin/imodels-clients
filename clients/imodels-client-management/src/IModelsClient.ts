@@ -5,7 +5,7 @@
 import { AxiosRestClient, IModelsErrorParser } from "./base/internal";
 import { ApiOptions, HeaderFactories, RecursiveRequired, RestClient } from "./base/types";
 import { Constants } from "./Constants";
-import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
+import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, OperationOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
 import { ChangesetGroupOperations } from "./operations/changeset-group/ChangesetGroupOperations";
 import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
 import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
@@ -87,6 +87,11 @@ export class IModelsClient {
   /** User Permission operations. See {@link UserPermissionOperations}. */
   public get userPermissions(): UserPermissionOperations<OperationOptions> {
     return new UserPermissionOperations(this._operationsOptions);
+  }
+
+  /** Operation operations. See {@link OperationOperations}. */
+  public get operations(): OperationOperations<OperationOptions> {
+    return new OperationOperations(this._operationsOptions);
   }
 
   private static fillManagementClientConfiguration(

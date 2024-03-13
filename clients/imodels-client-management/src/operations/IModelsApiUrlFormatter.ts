@@ -108,6 +108,10 @@ export class IModelsApiUrlFormatter {
     return `${this.baseUrl}/${params.iModelId}/permissions`;
   }
 
+  public getCreateIModelOperationDetailsUrl(params: { iModelId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}/operations/create`;
+  }
+
   public parseCheckpointUrl(url: string): { iModelId: string } & ChangesetIdOrIndex {
     const matchedGroups: Dictionary<string> = this._checkpointUrlRegex.exec(url)!.groups!;
     return {

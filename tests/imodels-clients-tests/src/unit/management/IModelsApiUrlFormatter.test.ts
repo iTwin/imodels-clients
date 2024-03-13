@@ -339,6 +339,19 @@ describe("[Management] IModelsApiUrlFormatter", () => {
     });
   });
 
+  describe("Operation urls", () => {
+    it("should format create iModel operation details url", () => {
+      // Arrange
+      const getIModelCreationDetailsUrl = { iModelId: "IMODEL_ID" };
+
+      // Act
+      const iModelCreationDetailsUrl = iModelsApiUrlFormatter.getCreateIModelOperationDetailsUrl(getIModelCreationDetailsUrl);
+
+      // Assert
+      expect(iModelCreationDetailsUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/operations/create");
+    });
+  });
+
   describe("Url parameter forming", () => {
     it("should append all url params", () => {
       // Arrange
