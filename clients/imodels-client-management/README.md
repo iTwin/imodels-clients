@@ -4,7 +4,7 @@ Copyright © Bentley Systems, Incorporated. All rights reserved. See [LICENSE.md
 
 ## About this package
 
-This package contains an API client that exposes a subset of [iModels v2 API](https://developer.bentley.com/apis/imodels-v2/) operations that enable applications to manage iModels - query Changesets, Locks and other related entities, create Named Versions, etc. This is a lightweight library intended to be used by iTwin management applications that do not write any data into the iModel itself.
+This package contains an API client that exposes a subset of [iModels API](https://developer.bentley.com/apis/imodels-v2/) operations that enable applications to manage iModels - query Changesets, Locks and other related entities, create Named Versions, etc. This is a lightweight library intended to be used by iTwin management applications that do not write any data into the iModel itself.
 
 Please see the [list of key methods and types](../../docs/IModelsClientManagement.md) to discover what API operations are exposed by this client package.
 
