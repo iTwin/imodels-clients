@@ -26,7 +26,7 @@ export interface IModelsClientOptions {
 
 /**
  * iModels API client for iModel management workflows. For more information on the API visit the
- * {@link https://developer.bentley.com/apis/imodels/ iModels API documentation page}.
+ * {@link https://developer.bentley.com/apis/imodels-v2/ iModels API documentation page}.
  */
 export class IModelsClient {
   protected _operationsOptions: OperationOptions;
