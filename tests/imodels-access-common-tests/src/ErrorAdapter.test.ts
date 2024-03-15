@@ -45,6 +45,7 @@ describe("ErrorAdapter", () => {
     IModelsErrorCode.DataConflict,
     IModelsErrorCode.NamedVersionNotFound,
     IModelsErrorCode.UserNotFound,
+    IModelsErrorCode.ChangesetGroupNotFound,
     IModelsErrorCode.BaselineFileNotFound,
     IModelsErrorCode.BaselineFileInitializationFailed,
     IModelsErrorCode.IModelFromTemplateInitializationFailed,

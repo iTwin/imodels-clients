@@ -70,6 +70,7 @@ export class ErrorAdapter {
     switch (apiErrorCode) {
       case IModelsErrorCode.NamedVersionNotFound:
       case IModelsErrorCode.UserNotFound:
+      case IModelsErrorCode.ChangesetGroupNotFound:
       case IModelsErrorCode.BaselineFileNotFound:
       case IModelsErrorCode.BaselineFileInitializationFailed:
       case IModelsErrorCode.IModelFromTemplateInitializationFailed:
