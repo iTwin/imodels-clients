@@ -2,9 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { CollectionResponse } from "@itwin/imodels-client-management/lib/base/internal";
+
 import { BaselineFile, Lock } from "../types";
 
-export interface LocksResponse {
+export interface LocksResponse extends CollectionResponse {
   locks: Lock[];
 }
 

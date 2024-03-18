@@ -26,6 +26,6 @@ export class OperationOperations<TOptions extends OperationOptions> extends Oper
       url: this._options.urlFormatter.getCreateIModelOperationDetailsUrl({ iModelId: params.iModelId }),
       headers: params.headers
     });
-    return response.createOperation;
+    return response.data.createOperation;
   }
 }

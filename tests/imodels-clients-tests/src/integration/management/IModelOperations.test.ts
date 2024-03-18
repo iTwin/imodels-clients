@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 
 import { expect } from "chai";
 
-import { AuthorizationCallback, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, ChangesetIdOrIndex, CloneIModelParams, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertCollection, assertError, assertIModel, assertMinimalIModel } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
@@ -333,6 +333,72 @@ describe("[Management] IModelOperations", () => {
     await assertIModel({
       actualIModel: iModel,
       expectedIModelProperties: createIModelFromTemplateParams.iModelProperties
+    });
+  });
+
+  [
+    // {
+    //   label: "without changeset id/index specified",
+    //   getChangesetIdOrIndex: (): ChangesetIdOrIndex | undefined => undefined,
+    //   getExpectedChangesetCount: () => testIModelFileProvider.changesets.length
+    // },
+    // {
+    //   label: "with empty changeset id specified",
+    //   getChangesetIdOrIndex: (): ChangesetIdOrIndex | undefined => ({ changesetId: "" }),
+    //   getExpectedChangesetCount: () => 0
+    // },
+    {
+      label: "with non-empty changeset id specified",
+      getChangesetIdOrIndex: (): ChangesetIdOrIndex | undefined => ({ changesetId: testIModelFileProvider.changesets[2].id }),
+      getExpectedChangesetCount: () => 3
+    }
+    // {
+    //   label: "with zero changeset index specified",
+    //   getChangesetIdOrIndex: (): ChangesetIdOrIndex | undefined => ({ changesetIndex: 0 }),
+    //   getExpectedChangesetCount: () => 0
+    // },
+    // {
+    //   label: "with non-zero changeset index specified",
+    //   getChangesetIdOrIndex: (): ChangesetIdOrIndex | undefined => ({ changesetIndex: testIModelFileProvider.changesets[5].index }),
+    //   getExpectedChangesetCount: () => 6
+    // }
+  ].forEach((testCase) => {
+    it(`should clone iModel (${testCase.label})`, async () => {
+      // Arrange
+      const sourceIModel = await iModelsClient.iModels.getSingle({
+        authorization,
+        iModelId: testIModelForRead.id
+      });
+      const changesetIdOrIndex = testCase.getChangesetIdOrIndex();
+      const expectedChangesetCount = testCase.getExpectedChangesetCount();
+      const cloneIModelParams: CloneIModelParams = {
+        authorization,
+        iModelId: testIModelForRead.id,
+        iModelProperties: {
+          iTwinId,
+          name: testIModelGroup.getPrefixedUniqueIModelName(`cloned iModel (${testCase.label})`),
+          ...changesetIdOrIndex
+        }
+      };
+
+      // Act
+      const newIModel = await iModelsClient.iModels.clone(cloneIModelParams);
+
+      // Assert
+      await assertIModel({
+        actualIModel: newIModel,
+        expectedIModelProperties: {
+          iTwinId,
+          name: cloneIModelParams.iModelProperties.name!,
+          description: sourceIModel.description ?? undefined,
+          extent: sourceIModel.extent ?? undefined
+        }
+      });
+      const changesets = await toArray(iModelsClient.changesets.getMinimalList({
+        authorization,
+        iModelId: newIModel.id
+      }));
+      expect(changesets.length).to.equal(expectedChangesetCount);
     });
   });
 

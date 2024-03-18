@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { ChangesetGroupResponse, ChangesetGroupsResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, EntityListIterator, HeaderFactories } from "../../base/types";
+import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse } from "../../base/types";
 import { ChangesetGroup } from "../../base/types/apiEntities/ChangesetGroupInterfaces";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
@@ -28,14 +28,14 @@ export class ChangesetGroupOperations<TOptions extends OperationOptions> extends
    * See {@link EntityListIterator}, {@link ChangesetGroup}.
    */
   public getList(params: GetChangesetGroupListParams): EntityListIterator<ChangesetGroup> {
-    const entityCollectionAccessor = (response: unknown) => {
-      const changesetGroups = (response as ChangesetGroupsResponse).changesetGroups;
+    const entityCollectionAccessor = (response: HttpResponse<ChangesetGroupsResponse>) => {
+      const changesetGroups = response.data.changesetGroups;
       const mappedChangesetGroups = changesetGroups.map((changesetGroup) =>
         this.appendRelatedEntityCallbacks(params.authorization, changesetGroup, params.headers));
       return mappedChangesetGroups;
     };
 
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<ChangesetGroup>({
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<ChangesetGroup, ChangesetGroupsResponse>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetGroupListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       entityCollectionAccessor,
@@ -59,7 +59,7 @@ export class ChangesetGroupOperations<TOptions extends OperationOptions> extends
 
     const result: ChangesetGroup = this.appendRelatedEntityCallbacks(
       params.authorization,
-      response.changesetGroup,
+      response.data.changesetGroup,
       params.headers
     );
 

@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { ChangesetResponse, ChangesetsResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, Changeset, Checkpoint, EntityListIterator, HeaderFactories, MinimalChangeset, NamedVersion, PreferReturn } from "../../base/types";
+import { AuthorizationCallback, Changeset, Checkpoint, EntityListIterator, HeaderFactories, HttpResponse, MinimalChangeset, NamedVersion, PreferReturn } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";
@@ -28,13 +28,13 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
    * {@link MinimalChangeset}.
    */
   public getMinimalList(params: GetChangesetListParams): EntityListIterator<MinimalChangeset> {
-    const entityCollectionAccessor = (response: unknown) => {
-      const changesets = (response as ChangesetsResponse<MinimalChangeset>).changesets;
+    const entityCollectionAccessor = (response: HttpResponse<ChangesetsResponse<MinimalChangeset>>) => {
+      const changesets = response.data.changesets;
       const mappedChangesets = changesets.map((changeset) => this.appendRelatedMinimalEntityCallbacks(params.authorization, changeset, params.headers));
       return mappedChangesets;
     };
 
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalChangeset>({
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalChangeset, ChangesetsResponse<MinimalChangeset>>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
@@ -53,13 +53,13 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
    * {@link Changeset}.
    */
   public getRepresentationList(params: GetChangesetListParams): EntityListIterator<Changeset> {
-    const entityCollectionAccessor = (response: unknown) => {
-      const changesets = (response as ChangesetsResponse<Changeset>).changesets;
+    const entityCollectionAccessor = (response: HttpResponse<ChangesetsResponse<Changeset>>) => {
+      const changesets = response.data.changesets;
       const mappedChangesets = changesets.map((changeset) => this.appendRelatedEntityCallbacks(params.authorization, changeset, params.headers));
       return mappedChangesets;
     };
 
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<Changeset>({
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<Changeset, ChangesetsResponse<Changeset>>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getChangesetListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
@@ -88,7 +88,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
       url: this._options.urlFormatter.getSingleChangesetUrl({ iModelId, ...changesetIdOrIndex }),
       headers
     });
-    const result: Changeset = this.appendRelatedEntityCallbacks(params.authorization, response.changeset, params.headers);
+    const result: Changeset = this.appendRelatedEntityCallbacks(params.authorization, response.data.changeset, params.headers);
     return result;
   }
 

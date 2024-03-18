@@ -3,6 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AtLeastOneProperty, AuthorizationParam, CollectionRequestParams, Extent, HeadersParam, IModel, IModelScopedOperationParams, OrderBy } from "../../base/types";
+import { ChangesetIdOrIndex } from "../OperationParamExports";
 
 /**
  * iModel entity properties that are supported in $orderBy url parameter which specifies by what property
@@ -74,6 +75,32 @@ export interface IModelPropertiesForCreateFromTemplate extends IModelProperties 
 export interface CreateIModelFromTemplateParams extends AuthorizationParam, HeadersParam {
   /** Properties of the new iModel. See {@link IModelPropertiesForCreateFromTemplate}. */
   iModelProperties: IModelPropertiesForCreateFromTemplate;
+  /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */
+  timeOutInMs?: number;
+}
+
+/** Base properties for clone iModel operation. */
+interface IModelPropertiesForCloneBase {
+  /** Id of the iTwin in which the new iModel will be created. */
+  iTwinId: string;
+  /** Name of the new iModel that will be created. If name is not provided, original iModel name will be used. */
+  name?: string;
+  /** Description of the new iModel that will be created. If description is not provided, original iModel description will be used. */
+  description?: string;
+}
+
+/**
+ * Properties that should be specified when cloning an iModel.
+ * - The provided `changesetId` or `changesetIndex` specifies the latest source iModel Changeset that should be copied to the target iModel.
+ * - If neither `changesetId` nor `changesetIndex` is provided, all existing source iModel Changesets are copied to the target iModel.
+ * - If `changesetId: ""` or `changesetIndex: 0` is provided, no Changesets are copied to the target iModel, only the source iModel's Baseline.
+ */
+export type IModelPropertiesForClone = IModelPropertiesForCloneBase & Partial<ChangesetIdOrIndex>;
+
+/** Parameters for clone iModel operation. */
+export interface CloneIModelParams extends IModelScopedOperationParams, HeadersParam {
+  /** Properties of the new iModel. See {@link IModelPropertiesForClone}. */
+  iModelProperties: IModelPropertiesForClone;
   /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */
   timeOutInMs?: number;
 }

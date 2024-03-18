@@ -17,11 +17,11 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
    * @returns {EntityListIterator<MinimalUser>} iterator for User list. See {@link EntityListIterator}, {@link MinimalUser}.
    */
   public getMinimalList(params: GetUserListParams): EntityListIterator<MinimalUser> {
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalUser>({
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalUser, UsersResponse<MinimalUser>>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getUserListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: unknown) => (response as UsersResponse<MinimalUser>).users,
+      entityCollectionAccessor: (response) => response.data.users,
       headers: params.headers
     }));
   }
@@ -35,11 +35,11 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
    * @returns {EntityListIterator<User>} iterator for User list. See {@link EntityListIterator}, {@link User}.
    */
   public getRepresentationList(params: GetUserListParams): EntityListIterator<User> {
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<User>({
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<User, UsersResponse<User>>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getUserListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor: (response: unknown) => (response as UsersResponse<User>).users,
+      entityCollectionAccessor: (response) => response.data.users,
       headers: params.headers
     }));
   }
@@ -57,6 +57,6 @@ export class UserOperations<TOptions extends OperationOptions> extends Operation
       url: this._options.urlFormatter.getSingleUserUrl({ iModelId: params.iModelId, userId: params.userId }),
       headers: params.headers
     });
-    return response.user;
+    return response.data.user;
   }
 }
