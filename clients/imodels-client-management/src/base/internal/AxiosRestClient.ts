@@ -87,6 +87,7 @@ export class AxiosRestClient implements RestClient {
               return response.headers.get(headerName);
 
             // It's most likely that header name is lowercase.
+            // https://axios-http.com/docs/res_schema
             return response.headers[headerName.toLowerCase()];
           }
         }
