@@ -49,7 +49,7 @@ export interface HttpResponseHeaders {
   get(headerName: string): unknown;
 }
 
-/**  */
+/** HTTP response. */
 export interface HttpResponse<TData> {
   /** Response data that was provided by the server. */
   data: TData;
