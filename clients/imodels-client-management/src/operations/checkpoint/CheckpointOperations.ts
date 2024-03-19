@@ -25,6 +25,6 @@ export class CheckpointOperations<TOptions extends OperationOptions> extends Ope
       url: this._options.urlFormatter.getCheckpointUrl({ iModelId, ...parentEntityId }),
       headers
     });
-    return response.data.checkpoint;
+    return response.body.checkpoint;
   }
 }

@@ -50,9 +50,9 @@ export interface HttpResponseHeaders {
 }
 
 /** HTTP response. */
-export interface HttpResponse<TData> {
-  /** Response data that was provided by the server. */
-  data: TData;
+export interface HttpResponse<TBody> {
+  /** Response body that was provided by the server. */
+  body: TBody;
   /** Headers that the server responded with. */
   headers: HttpResponseHeaders;
 }
@@ -88,7 +88,7 @@ export interface RestClient {
    * @param {HttpGetRequestParams} params parameters for this operation. See {@link HttpGetRequestParams}.
    * @throws an error if the request fails.
    */
-  sendGetRequest<TData>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<HttpResponse<TData>>;
+  sendGetRequest<TBody>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends GET HTTP request to get binary response.
@@ -102,26 +102,26 @@ export interface RestClient {
    * @param {HttpRequestWithBodyParams} params parameters for this operation. See {@link HttpRequestWithBodyParams}.
    * @throws an error if the request fails.
    */
-  sendPostRequest<TData>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TData>>;
+  sendPostRequest<TBody>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends PUT HTTP request.
    * @param {HttpPutRequestParams} params parameters for this operation. See {@link HttpRequestWithBodyParams}.
    * @throws an error if the request fails.
    */
-  sendPutRequest<TData>(params: HttpRequestWithBinaryBodyParams): Promise<HttpResponse<TData>>;
+  sendPutRequest<TBody>(params: HttpRequestWithBinaryBodyParams): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends PATCH HTTP request.
    * @param {HttpRequestWithBodyParams} params parameters for this operation. See {@link HttpRequestWithBodyParams}.
    * @throws an error if the request fails.
    */
-  sendPatchRequest<TData>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TData>>;
+  sendPatchRequest<TBody>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends DELETE HTTP request.
    * @param {HttpRequestParams} params parameters for this operation. See {@link HttpRequestParams}.
    * @throws an error if the request fails.
    */
-  sendDeleteRequest<TData>(params: HttpRequestParams): Promise<HttpResponse<TData>>;
+  sendDeleteRequest<TBody>(params: HttpRequestParams): Promise<HttpResponse<TBody>>;
 }

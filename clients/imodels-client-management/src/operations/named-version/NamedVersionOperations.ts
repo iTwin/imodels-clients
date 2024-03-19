@@ -32,7 +32,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       authorization: params.authorization,
       url: this._options.urlFormatter.getNamedVersionListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response) => response.data.namedVersions,
+      entityCollectionAccessor: (response) => response.body.namedVersions,
       headers: params.headers
     }));
   }
@@ -48,7 +48,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
    */
   public getRepresentationList(params: GetNamedVersionListParams): EntityListIterator<NamedVersion> {
     const entityCollectionAccessor = (response: HttpResponse<NamedVersionsResponse<NamedVersion>>) => {
-      const namedVersions = response.data.namedVersions;
+      const namedVersions = response.body.namedVersions;
       const mappedNamedVersions = namedVersions.map((namedVersion) => this.appendRelatedEntityCallbacks(params.authorization, namedVersion, params.headers));
       return mappedNamedVersions;
     };
@@ -75,7 +75,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       url: this._options.urlFormatter.getSingleNamedVersionUrl({ iModelId: params.iModelId, namedVersionId: params.namedVersionId }),
       headers: params.headers
     });
-    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, response.data.namedVersion, params.headers);
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, response.body.namedVersion, params.headers);
     return result;
   }
 
@@ -94,7 +94,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       body: createNamedVersionBody,
       headers: params.headers
     });
-    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, createNamedVersionResponse.data.namedVersion, params.headers);
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, createNamedVersionResponse.body.namedVersion, params.headers);
     return result;
   }
 
@@ -113,7 +113,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       body: updateNamedVersionBody,
       headers: params.headers
     });
-    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, updateNamedVersionResponse.data.namedVersion, params.headers);
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, updateNamedVersionResponse.body.namedVersion, params.headers);
     return result;
   }
 

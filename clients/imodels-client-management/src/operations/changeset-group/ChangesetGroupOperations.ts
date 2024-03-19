@@ -29,7 +29,7 @@ export class ChangesetGroupOperations<TOptions extends OperationOptions> extends
    */
   public getList(params: GetChangesetGroupListParams): EntityListIterator<ChangesetGroup> {
     const entityCollectionAccessor = (response: HttpResponse<ChangesetGroupsResponse>) => {
-      const changesetGroups = response.data.changesetGroups;
+      const changesetGroups = response.body.changesetGroups;
       const mappedChangesetGroups = changesetGroups.map((changesetGroup) =>
         this.appendRelatedEntityCallbacks(params.authorization, changesetGroup, params.headers));
       return mappedChangesetGroups;
@@ -59,7 +59,7 @@ export class ChangesetGroupOperations<TOptions extends OperationOptions> extends
 
     const result: ChangesetGroup = this.appendRelatedEntityCallbacks(
       params.authorization,
-      response.data.changesetGroup,
+      response.body.changesetGroup,
       params.headers
     );
 

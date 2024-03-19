@@ -32,7 +32,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
       authorization: params.authorization,
       url: this._options.urlFormatter.getBriefcaseListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response) => response.data.briefcases,
+      entityCollectionAccessor: (response) => response.body.briefcases,
       headers: params.headers
     }));
   }
@@ -47,7 +47,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
    */
   public getRepresentationList(params: GetBriefcaseListParams): EntityListIterator<Briefcase> {
     const entityCollectionAccessor = (response: HttpResponse<BriefcasesResponse<Briefcase>>) => {
-      const briefcases = response.data.briefcases;
+      const briefcases = response.body.briefcases;
       const mappedBriefcases = briefcases.map((briefcase) => this.appendRelatedEntityCallbacks(params.authorization, briefcase, params.headers));
       return mappedBriefcases;
     };
@@ -74,7 +74,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
       url: this._options.urlFormatter.getSingleBriefcaseUrl({ iModelId: params.iModelId, briefcaseId: params.briefcaseId }),
       headers: params.headers
     });
-    const result: Briefcase = this.appendRelatedEntityCallbacks(params.authorization, response.data.briefcase, params.headers);
+    const result: Briefcase = this.appendRelatedEntityCallbacks(params.authorization, response.body.briefcase, params.headers);
     return result;
   }
 

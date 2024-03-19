@@ -30,7 +30,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       authorization: params.authorization,
       url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response) => response.data.iModels,
+      entityCollectionAccessor: (response) => response.body.iModels,
       headers: params.headers
     }));
   }
@@ -44,7 +44,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    */
   public getRepresentationList(params: GetIModelListParams): EntityListIterator<IModel> {
     const entityCollectionAccessor = (response: HttpResponse<IModelsResponse<IModel>>) => {
-      const iModels = response.data.iModels;
+      const iModels = response.body.iModels;
       const mappedIModels = iModels.map((iModel) => this.appendRelatedEntityCallbacks(params.authorization, iModel, params.headers));
       return mappedIModels;
     };
@@ -70,7 +70,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId }),
       headers: params.headers
     });
-    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, response.data.iModel, params.headers);
+    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, response.body.iModel, params.headers);
     return result;
   }
 
@@ -165,7 +165,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       body: updateIModelBody,
       headers: params.headers
     });
-    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, updateIModelResponse.data.iModel, params.headers);
+    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, updateIModelResponse.body.iModel, params.headers);
     return result;
   }
 
@@ -210,7 +210,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       body: createIModelBody,
       headers
     });
-    return createIModelResponse.data.iModel;
+    return createIModelResponse.body.iModel;
   }
 
   private async getCreator(authorization: AuthorizationCallback, creatorLink: string | undefined, headers?: HeaderFactories): Promise<User | undefined> {

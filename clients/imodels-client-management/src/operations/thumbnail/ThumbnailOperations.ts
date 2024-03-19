@@ -42,7 +42,7 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
     return {
       size: urlParams.size,
       imageType: ContentType.Png,
-      image: response.data
+      image: response.body
     };
   }
 

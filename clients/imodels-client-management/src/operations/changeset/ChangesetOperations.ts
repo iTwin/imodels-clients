@@ -29,7 +29,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
    */
   public getMinimalList(params: GetChangesetListParams): EntityListIterator<MinimalChangeset> {
     const entityCollectionAccessor = (response: HttpResponse<ChangesetsResponse<MinimalChangeset>>) => {
-      const changesets = response.data.changesets;
+      const changesets = response.body.changesets;
       const mappedChangesets = changesets.map((changeset) => this.appendRelatedMinimalEntityCallbacks(params.authorization, changeset, params.headers));
       return mappedChangesets;
     };
@@ -54,7 +54,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
    */
   public getRepresentationList(params: GetChangesetListParams): EntityListIterator<Changeset> {
     const entityCollectionAccessor = (response: HttpResponse<ChangesetsResponse<Changeset>>) => {
-      const changesets = response.data.changesets;
+      const changesets = response.body.changesets;
       const mappedChangesets = changesets.map((changeset) => this.appendRelatedEntityCallbacks(params.authorization, changeset, params.headers));
       return mappedChangesets;
     };
@@ -88,7 +88,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Oper
       url: this._options.urlFormatter.getSingleChangesetUrl({ iModelId, ...changesetIdOrIndex }),
       headers
     });
-    const result: Changeset = this.appendRelatedEntityCallbacks(params.authorization, response.data.changeset, params.headers);
+    const result: Changeset = this.appendRelatedEntityCallbacks(params.authorization, response.body.changeset, params.headers);
     return result;
   }
 

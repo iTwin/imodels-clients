@@ -24,9 +24,9 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   constructor(protected _options: TOptions) {
   }
 
-  protected async sendGetRequest<TData>(params: SendGetRequestParams & { responseType?: ContentType.Json }): Promise<HttpResponse<TData>>;
+  protected async sendGetRequest<TBody>(params: SendGetRequestParams & { responseType?: ContentType.Json }): Promise<HttpResponse<TBody>>;
   protected async sendGetRequest(params: SendGetRequestParams & { responseType: ContentType.Png }): Promise<HttpResponse<Uint8Array>>;
-  protected async sendGetRequest<TData>(params: SendGetRequestParams): Promise<HttpResponse<TData | Uint8Array>> {
+  protected async sendGetRequest<TBody>(params: SendGetRequestParams): Promise<HttpResponse<TBody | Uint8Array>> {
     const urlAndHeaders = {
       url: params.url,
       headers: await this.formHeaders(params)
@@ -38,14 +38,14 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
         ...urlAndHeaders
       });
 
-    return this._options.restClient.sendGetRequest<TData>({
+    return this._options.restClient.sendGetRequest<TBody>({
       responseType: params.responseType ?? ContentType.Json,
       ...urlAndHeaders
     });
   }
 
-  protected async sendPostRequest<TData>(params: SendPostRequestParams): Promise<HttpResponse<TData>> {
-    return this._options.restClient.sendPostRequest<TData>({
+  protected async sendPostRequest<TBody>(params: SendPostRequestParams): Promise<HttpResponse<TBody>> {
+    return this._options.restClient.sendPostRequest<TBody>({
       url: params.url,
       body: {
         contentType: ContentType.Json,
@@ -55,8 +55,8 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     });
   }
 
-  protected async sendPutRequest<TData>(params: SendPutRequestParams): Promise<HttpResponse<TData>> {
-    return this._options.restClient.sendPutRequest<TData>({
+  protected async sendPutRequest<TBody>(params: SendPutRequestParams): Promise<HttpResponse<TBody>> {
+    return this._options.restClient.sendPutRequest<TBody>({
       url: params.url,
       body: {
         contentType: params.contentType,
@@ -66,8 +66,8 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     });
   }
 
-  protected async sendPatchRequest<TData>(params: SendPatchRequestParams): Promise<HttpResponse<TData>> {
-    return this._options.restClient.sendPatchRequest<TData>({
+  protected async sendPatchRequest<TBody>(params: SendPatchRequestParams): Promise<HttpResponse<TBody>> {
+    return this._options.restClient.sendPatchRequest<TBody>({
       url: params.url,
       body: {
         contentType: ContentType.Json,
@@ -77,8 +77,8 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     });
   }
 
-  protected async sendDeleteRequest<TData>(params: SendDeleteRequestParams): Promise<HttpResponse<TData>> {
-    return this._options.restClient.sendDeleteRequest<TData>({
+  protected async sendDeleteRequest<TBody>(params: SendDeleteRequestParams): Promise<HttpResponse<TBody>> {
+    return this._options.restClient.sendDeleteRequest<TBody>({
       url: params.url,
       headers: await this.formHeaders(params)
     });
@@ -92,8 +92,8 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     const response = await this.sendGetRequest<TResponse>(params);
     return {
       entities: params.entityCollectionAccessor(response),
-      next: response.data._links.next
-        ? async () => this.getEntityCollectionPage({ ...params, url: response.data._links.next!.href })
+      next: response.body._links.next
+        ? async () => this.getEntityCollectionPage({ ...params, url: response.body._links.next!.href })
         : undefined
     };
   }
