@@ -4,8 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { Dictionary } from "../types";
-import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, HttpResponseHeaders, RestClient } from "../types/RestClient";
+import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, RestClient } from "../types/RestClient";
+
+import { AxiosResponseHeadersAdapter } from "./AxiosResponseHeadersAdapter";
 
 /**
  * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the
@@ -13,19 +14,12 @@ import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBi
  */
 export type ParseErrorFunc = (response: { statusCode?: number, body?: unknown }, originalError: Error & { code?: string }) => Error;
 
-/** A factory for creating {@link HttpResponseHeaders} from {@link AxiosResponse}. */
-export interface HttpResponseHeadersFactory {
-  create(response: AxiosResponse): HttpResponseHeaders;
-}
-
 /** Default implementation for {@link RestClient} interface that uses `axios` library for sending the requests. */
 export class AxiosRestClient implements RestClient {
   private _parseErrorFunc: ParseErrorFunc;
-  private _responseHeadersFactory: HttpResponseHeadersFactory;
 
-  constructor(parseErrorFunc: ParseErrorFunc, responseHeadersFactory: HttpResponseHeadersFactory) {
+  constructor(parseErrorFunc: ParseErrorFunc) {
     this._parseErrorFunc = parseErrorFunc;
-    this._responseHeadersFactory = responseHeadersFactory;
   }
 
   public sendGetRequest<TBody>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<HttpResponse<TBody>>;
@@ -87,7 +81,7 @@ export class AxiosRestClient implements RestClient {
 
       return {
         body: response.data,
-        headers: this._responseHeadersFactory.create(response)
+        headers: new AxiosResponseHeadersAdapter(response)
       };
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -99,33 +93,3 @@ export class AxiosRestClient implements RestClient {
   }
 }
 
-/** Default implementation for {@link HttpResponseHeadersFactory}. */
-export class AxiosHeadersAdapterFactory implements HttpResponseHeadersFactory {
-  public create(response: AxiosResponse): HttpResponseHeaders {
-    return new AxiosHeadersAdapter(response);
-  }
-}
-
-/** Default implementation for {@link HttpResponseHeaders} interface, which adapts `axios` HTTP response headers to headers expected by the iModels Client. */
-export class AxiosHeadersAdapter implements HttpResponseHeaders {
-  private _response: AxiosResponse;
-
-  constructor(response: AxiosResponse) {
-    this._response = response;
-  }
-
-  public get(headerName: string): unknown {
-    // Directly manipulating headers object is deprecated.
-    // https://github.com/axios/axios?tab=readme-ov-file#-axiosheaders
-    if (this._response.headers.get instanceof Function)
-      return this._response.headers.get(headerName);
-
-    // It's most likely that header name is lowercase.
-    // https://axios-http.com/docs/res_schema
-    return this._response.headers[headerName.toLowerCase()];
-  }
-
-  public getAll(): Dictionary<unknown> {
-    return this._response.headers;
-  }
-}
