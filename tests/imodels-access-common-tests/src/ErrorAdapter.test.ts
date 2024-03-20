@@ -77,6 +77,7 @@ describe("ErrorAdapter", () => {
     { originalErrorCode: IModelsErrorCode.ConflictWithAnotherUser, expectedErrorNumber: IModelHubStatus.AnotherUserPushing },
     { originalErrorCode: IModelsErrorCode.NewerChangesExist, expectedErrorNumber: IModelHubStatus.PullIsRequired },
     { originalErrorCode: IModelsErrorCode.BaselineFileInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout },
+    { originalErrorCode: IModelsErrorCode.IModelFromTemplateInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout },
     { originalErrorCode: IModelsErrorCode.ClonedIModelInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout }
   ].forEach((testCase: { originalErrorCode: IModelsErrorCode, expectedErrorNumber: number }) => {
 

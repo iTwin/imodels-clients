@@ -1,4 +1,4 @@
-import { AxiosRestClient, IModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
+import { AxiosHeadersAdapterFactory, AxiosRestClient, IModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { expect } from "chai";
@@ -22,21 +22,21 @@ describe("[Management] AxiosRestClient", () => {
         contentType: ContentType.Json
       }
     };
-    const responseData = {
+    const responseBody = {
       iModelId: "IMODEL_ID"
     };
     const responseHeaders = {
       "location": "https://some-url.com",
       "retry-after": 60
     };
-    axiosMock.onPost(requestParams.url).reply(200, responseData, responseHeaders);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse);
+    axiosMock.onPost(requestParams.url).reply(200, responseBody, responseHeaders);
+    const restClient = new AxiosRestClient(IModelsErrorParser.parse, new AxiosHeadersAdapterFactory());
 
     // Act
     const response = await restClient.sendPostRequest(requestParams);
 
     // Assert
-    expect(response.data).to.deep.equal(responseData);
+    expect(response.body).to.deep.equal(responseBody);
     expect(response.headers.get("location")).to.equal("https://some-url.com");
     expect(response.headers.get("Location")).to.equal("https://some-url.com");
     expect(response.headers.get("LOCATION")).to.equal("https://some-url.com");

@@ -141,6 +141,7 @@ export class ErrorAdapter {
       case IModelsErrorCode.NewerChangesExist:
         return IModelHubStatus.PullIsRequired;
       case IModelsErrorCode.BaselineFileInitializationTimedOut:
+      case IModelsErrorCode.IModelFromTemplateInitializationTimedOut:
       case IModelsErrorCode.ClonedIModelInitializationTimedOut:
         return IModelHubStatus.InitializationTimeout;
 

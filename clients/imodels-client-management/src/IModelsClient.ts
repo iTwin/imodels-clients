@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, IModelsErrorParser } from "./base/internal";
+import { AxiosHeadersAdapterFactory, AxiosRestClient, IModelsErrorParser } from "./base/internal";
 import { ApiOptions, HeaderFactories, RecursiveRequired, RestClient } from "./base/types";
 import { Constants } from "./Constants";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, OperationOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
@@ -99,7 +99,7 @@ export class IModelsClient {
   ): RecursiveRequired<IModelsClientOptions> {
     return {
       api: this.fillApiConfiguration(options?.api),
-      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse),
+      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse, new AxiosHeadersAdapterFactory()),
       headers: options?.headers ?? {}
     };
   }

@@ -27,7 +27,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Mana
       body: acquireBriefcaseBody,
       headers: params.headers
     });
-    const result = this.appendRelatedEntityCallbacks(params.authorization, acquireBriefcaseResponse.data.briefcase, params.headers);
+    const result = this.appendRelatedEntityCallbacks(params.authorization, acquireBriefcaseResponse.body.briefcase, params.headers);
     return result;
   }
 

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import "reflect-metadata";
 
-import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
+import { AxiosHeadersAdapterFactory, AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
 
@@ -100,7 +100,7 @@ export class IModelsClient extends ManagementIModelsClient {
   ): RecursiveRequired<IModelsClientOptions> {
     return {
       api: this.fillApiConfiguration(options?.api),
-      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse),
+      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse, new AxiosHeadersAdapterFactory()),
       localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
       cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory()),
       headers: options?.headers ?? {}

@@ -292,7 +292,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
         headers: params.headers
       }),
       timeoutErrorFactory: () => new IModelsErrorImpl({
-        code: IModelsErrorCode.IModelFromTemplateInitializationFailed,
+        code: IModelsErrorCode.IModelFromTemplateInitializationTimedOut,
         message: "Timed out waiting for Baseline File initialization."
       }),
       timeOutInMs: params.timeOutInMs

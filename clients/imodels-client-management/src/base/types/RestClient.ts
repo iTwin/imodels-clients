@@ -45,8 +45,13 @@ export interface HttpRequestParams {
 
 /** Abstraction for accessing HTTP response headers that the server responded with. */
 export interface HttpResponseHeaders {
-  /** Gets HTTP response header's value by the specified {@link headerName}. */
+  /**
+   * Gets HTTP response header's value by the specified {@link headerName}.
+   * It is expected that the header name matcher is case-insensitive.
+   */
   get(headerName: string): unknown;
+  /** Gets all HTTP response headers. */
+  getAll(): Dictionary<unknown>;
 }
 
 /** HTTP response. */
