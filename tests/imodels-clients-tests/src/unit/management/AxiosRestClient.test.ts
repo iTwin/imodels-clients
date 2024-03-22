@@ -96,8 +96,8 @@ describe("[Management] AxiosRestClient", () => {
     // Act
     const response = await restClient.sendPostRequest(requestParams);
     const actualHeaders = response.headers.getAll();
-
+    
     // Assert
-    expect(JSON.stringify(actualHeaders)).to.deep.equal(JSON.stringify(expectedHeaders));
+    expect(Object.assign({}, actualHeaders)).to.deep.equal(expectedHeaders);
   });
 });
