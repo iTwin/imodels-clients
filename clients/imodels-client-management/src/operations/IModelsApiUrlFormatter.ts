@@ -28,12 +28,17 @@ export class IModelsApiUrlFormatter {
   private readonly _checkpointUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIdOrIndex}>.*)/checkpoint`, this._regexIgnoreCaseOption);
   private readonly _namedVersionUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/namedversions/(?<${this._groupNames.namedVersionId}>[^/]*)`, this._regexIgnoreCaseOption);
   private readonly _userUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>.*)/users/(?<${this._groupNames.userId}>[^/]*)`, this._regexIgnoreCaseOption);
+  private readonly _iModelUrlRegex = new RegExp(`/iModels/(?<${this._groupNames.iModelId}>[^/]*)`, this._regexIgnoreCaseOption);
 
   constructor(protected readonly baseUrl: string) {
   }
 
   public getCreateIModelUrl(): string {
     return this.baseUrl;
+  }
+
+  public getCloneIModelUrl(params: { iModelId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}/clone`;
   }
 
   public getSingleIModelUrl(params: { iModelId: string }): string {
@@ -133,6 +138,13 @@ export class IModelsApiUrlFormatter {
     return {
       iModelId: matchedGroups[this._groupNames.iModelId],
       userId: matchedGroups[this._groupNames.userId]
+    };
+  }
+
+  public parseIModelUrl(url: string): { iModelId: string } {
+    const matchedGroups: Dictionary<string> = this._iModelUrlRegex.exec(url)!.groups!;
+    return {
+      iModelId: matchedGroups[this._groupNames.iModelId]
     };
   }
 

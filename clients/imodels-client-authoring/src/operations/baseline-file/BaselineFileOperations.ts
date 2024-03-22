@@ -24,6 +24,6 @@ export class BaselineFileOperations<TOptions extends OperationOptions> extends O
       url: this._options.urlFormatter.getBaselineUrl({ iModelId: params.iModelId }),
       headers: params.headers
     });
-    return response.baselineFile;
+    return response.body.baselineFile;
   }
 }

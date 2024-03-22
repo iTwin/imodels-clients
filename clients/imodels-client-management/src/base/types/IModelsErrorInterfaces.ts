@@ -48,6 +48,9 @@ export enum IModelsErrorCode {
   BaselineFileInitializationFailed = "BaselineFileInitializationFailed",
   BaselineFileInitializationTimedOut = "BaselineFileInitializationTimedOut",
   IModelFromTemplateInitializationFailed = "IModelFromTemplateInitializationFailed",
+  IModelFromTemplateInitializationTimedOut = "IModelFromTemplateInitializationTimedOut",
+  ClonedIModelInitializationFailed = "ClonedIModelInitializationFailed",
+  ClonedIModelInitializationTimedOut = "ClonedIModelInitializationTimedOut",
   ChangesetDownloadFailed = "ChangesetDownloadFailed",
   DownloadAborted = "DownloadAborted"
 }

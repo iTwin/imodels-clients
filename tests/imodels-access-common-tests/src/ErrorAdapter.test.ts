@@ -49,6 +49,7 @@ describe("ErrorAdapter", () => {
     IModelsErrorCode.BaselineFileNotFound,
     IModelsErrorCode.BaselineFileInitializationFailed,
     IModelsErrorCode.IModelFromTemplateInitializationFailed,
+    IModelsErrorCode.ClonedIModelInitializationFailed,
     IModelsErrorCode.ChangesetDownloadFailed
   ].forEach((originalErrorCode) => {
 
@@ -76,7 +77,9 @@ describe("ErrorAdapter", () => {
     { originalErrorCode: IModelsErrorCode.NamedVersionOnChangesetExists, expectedErrorNumber: IModelHubStatus.ChangeSetAlreadyHasVersion },
     { originalErrorCode: IModelsErrorCode.ConflictWithAnotherUser, expectedErrorNumber: IModelHubStatus.AnotherUserPushing },
     { originalErrorCode: IModelsErrorCode.NewerChangesExist, expectedErrorNumber: IModelHubStatus.PullIsRequired },
-    { originalErrorCode: IModelsErrorCode.BaselineFileInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout }
+    { originalErrorCode: IModelsErrorCode.BaselineFileInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout },
+    { originalErrorCode: IModelsErrorCode.IModelFromTemplateInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout },
+    { originalErrorCode: IModelsErrorCode.ClonedIModelInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout }
   ].forEach((testCase: { originalErrorCode: IModelsErrorCode, expectedErrorNumber: number }) => {
 
     it(`should return correct error number (${testCase.originalErrorCode})`, () => {

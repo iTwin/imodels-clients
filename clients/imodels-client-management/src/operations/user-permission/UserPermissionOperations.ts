@@ -25,6 +25,6 @@ export class UserPermissionOperations<TOptions extends OperationOptions> extends
       url: this._options.urlFormatter.getUserPermissionsUrl({ iModelId: params.iModelId }),
       headers: params.headers
     });
-    return response;
+    return response.body;
   }
 }

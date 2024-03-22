@@ -25,6 +25,17 @@ describe("[Management] IModelsApiUrlFormatter", () => {
       expect(createIModelUrl).to.be.equal("https://api.bentley.com/imodels");
     });
 
+    it("should format clone iModel url", () => {
+      // Arrange
+      const getCloneIModelUrlParams = { iModelId: "IMODEL_ID" };
+
+      // Act
+      const cloneIModelUrl = iModelsApiUrlFormatter.getCloneIModelUrl(getCloneIModelUrlParams);
+
+      // Assert
+      expect(cloneIModelUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/clone");
+    });
+
     it("should format single iModel url", () => {
       // Arrange
       const getSingleIModelUrlParams = { iModelId: "IMODEL_ID" };
@@ -45,6 +56,17 @@ describe("[Management] IModelsApiUrlFormatter", () => {
 
       // Assert
       expect(iModelListUrl).to.equal("https://api.bentley.com/imodels?iTwinId=ITWIN_ID");
+    });
+
+    it("should parse iModel url", () => {
+      // Arrange
+      const iModelUrl = "https://api.bentley.com/imodels/IMODEL_ID";
+
+      // Act
+      const { iModelId } = iModelsApiUrlFormatter.parseIModelUrl(iModelUrl);
+
+      // Assert
+      expect(iModelId).to.be.equal("IMODEL_ID");
     });
   });
 

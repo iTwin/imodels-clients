@@ -27,7 +27,7 @@ export class ChangesetGroupOperations<TOptions extends OperationOptions> extends
       body: createChangesetGroupBody,
       headers: params.headers
     });
-    const result = this.appendRelatedEntityCallbacks(params.authorization, createChangesetGroupResponse.changesetGroup, params.headers);
+    const result = this.appendRelatedEntityCallbacks(params.authorization, createChangesetGroupResponse.body.changesetGroup, params.headers);
     return result;
   }
 
@@ -46,7 +46,7 @@ export class ChangesetGroupOperations<TOptions extends OperationOptions> extends
       body: updateChangesetGroupBody,
       headers: params.headers
     });
-    const result = this.appendRelatedEntityCallbacks(params.authorization, updateChangesetGroupResponse.changesetGroup, params.headers);
+    const result = this.appendRelatedEntityCallbacks(params.authorization, updateChangesetGroupResponse.body.changesetGroup, params.headers);
     return result;
   }
 

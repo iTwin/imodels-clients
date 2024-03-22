@@ -26,3 +26,9 @@ export async function getUser(
     headers
   });
 }
+
+export function assertStringHeaderValue(headerName: string, headerValue: unknown): asserts headerValue is string {
+  const isString = typeof headerValue === "string" || headerValue instanceof String;
+  if (!isString)
+    throw new Error(`Assertion failed: header's ${headerName} value is not a string.`);
+}

@@ -2,6 +2,7 @@
   "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
+    "esModuleInterop": true,
     "experimentalDecorators": true
   },
   "include": [

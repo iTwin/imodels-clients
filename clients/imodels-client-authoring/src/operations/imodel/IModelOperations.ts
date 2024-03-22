@@ -30,10 +30,11 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
   * file upload and then repeatedly queries the Baseline file state until the iModel is initialized. The execution of
   * this method can take up to several minutes due to waiting for initialization to complete. It also depends on the
   * Baseline file size - the larger the file, the longer the upload will take.
-  * @param {CreateiModelFromBaselineParams} params parameters for this operation. See {@link CreateiModelFromBaselineParams}.
-  * @returns {Promise<iModel>} newly created iModel. See {@link iModel}.
-  * @throws an error that implements `iModelsError` interface with code `iModelsErrorCode.BaselineFileInitializationFailed` if Baseline file initialization failed
-  * or did not complete in time. See {@link iModelsErrorCode}.
+  * @param {CreateIModelFromBaselineParams} params parameters for this operation. See {@link CreateIModelFromBaselineParams}.
+  * @returns {Promise<IModel>} newly created iModel. See {@link IModel}.
+  * @throws an error that implements `iModelsError` interface with code {@link IModelsErrorCode.BaselineFileInitializationFailed} if
+  * Baseline file initialization failed or {@link IModelsErrorCode.BaselineFileInitializationTimedOut} if the operation did not complete in time.
+  * See {@link IModelsErrorCode}.
   */
   public async createFromBaseline(params: CreateIModelFromBaselineParams): Promise<IModel> {
     const baselineFileSize = await this._options.localFileSystem.getFileSize(params.iModelProperties.filePath);
@@ -82,18 +83,18 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
 
   private async waitForBaselineFileInitialization(params: AuthorizationParam & HeadersParam & { iModelId: string, timeOutInMs?: number }): Promise<void> {
     const isBaselineInitialized: () => Promise<boolean> = async () => {
-      const baselineFileState = (await this._baselineFileOperations.getSingle(params)).state;
+      const { state } = await this._baselineFileOperations.getSingle(params);
 
-      if (baselineFileState !== BaselineFileState.Initialized &&
-        baselineFileState !== BaselineFileState.WaitingForFile &&
-        baselineFileState !== BaselineFileState.InitializationScheduled
+      if (state !== BaselineFileState.Initialized &&
+        state !== BaselineFileState.WaitingForFile &&
+        state !== BaselineFileState.InitializationScheduled
       )
         throw new IModelsErrorImpl({
           code: IModelsErrorCode.BaselineFileInitializationFailed,
-          message: `Baseline File initialization failed with state '${baselineFileState}.'`
+          message: `Baseline File initialization failed with state '${state}.'`
         });
 
-      return baselineFileState === BaselineFileState.Initialized;
+      return state === BaselineFileState.Initialized;
     };
 
     return waitForCondition({

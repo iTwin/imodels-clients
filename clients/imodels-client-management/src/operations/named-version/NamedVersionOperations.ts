@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { EntityListIteratorImpl, NamedVersionResponse, NamedVersionsResponse, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, Changeset, EntityListIterator, HeaderFactories, MinimalNamedVersion, NamedVersion, PreferReturn } from "../../base/types";
+import { AuthorizationCallback, Changeset, EntityListIterator, HeaderFactories, HttpResponse, MinimalNamedVersion, NamedVersion, PreferReturn } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";
@@ -28,11 +28,11 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
    * {@link MinimalNamedVersion}.
    */
   public getMinimalList(params: GetNamedVersionListParams): EntityListIterator<MinimalNamedVersion> {
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalNamedVersion>({
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalNamedVersion, NamedVersionsResponse<MinimalNamedVersion>>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getNamedVersionListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: unknown) => (response as NamedVersionsResponse<MinimalNamedVersion>).namedVersions,
+      entityCollectionAccessor: (response) => response.body.namedVersions,
       headers: params.headers
     }));
   }
@@ -47,13 +47,13 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
    * {@link NamedVersion}.
    */
   public getRepresentationList(params: GetNamedVersionListParams): EntityListIterator<NamedVersion> {
-    const entityCollectionAccessor = (response: unknown) => {
-      const namedVersions = (response as NamedVersionsResponse<NamedVersion>).namedVersions;
+    const entityCollectionAccessor = (response: HttpResponse<NamedVersionsResponse<NamedVersion>>) => {
+      const namedVersions = response.body.namedVersions;
       const mappedNamedVersions = namedVersions.map((namedVersion) => this.appendRelatedEntityCallbacks(params.authorization, namedVersion, params.headers));
       return mappedNamedVersions;
     };
 
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<NamedVersion>({
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<NamedVersion, NamedVersionsResponse<NamedVersion>>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getNamedVersionListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
@@ -75,7 +75,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       url: this._options.urlFormatter.getSingleNamedVersionUrl({ iModelId: params.iModelId, namedVersionId: params.namedVersionId }),
       headers: params.headers
     });
-    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, response.namedVersion, params.headers);
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, response.body.namedVersion, params.headers);
     return result;
   }
 
@@ -94,7 +94,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       body: createNamedVersionBody,
       headers: params.headers
     });
-    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, createNamedVersionResponse.namedVersion, params.headers);
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, createNamedVersionResponse.body.namedVersion, params.headers);
     return result;
   }
 
@@ -113,7 +113,7 @@ export class NamedVersionOperations<TOptions extends OperationOptions> extends O
       body: updateNamedVersionBody,
       headers: params.headers
     });
-    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, updateNamedVersionResponse.namedVersion, params.headers);
+    const result: NamedVersion = this.appendRelatedEntityCallbacks(params.authorization, updateNamedVersionResponse.body.namedVersion, params.headers);
     return result;
   }
 

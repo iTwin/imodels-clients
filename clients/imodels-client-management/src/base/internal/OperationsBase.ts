@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../../Constants";
-import { AuthorizationParam, BinaryContentType, ContentType, Dictionary, HeaderFactories, HeadersParam, PreferReturn, RestClient, SupportedGetResponseTypes } from "../types";
+import { AuthorizationParam, BinaryContentType, ContentType, Dictionary, HeaderFactories, HeadersParam, HttpResponse, PreferReturn, RestClient, SupportedGetResponseTypes } from "../types";
 
 import { CollectionResponse } from "./ApiResponseInterfaces";
 import { EntityCollectionPage } from "./UtilityTypes";
@@ -24,9 +24,9 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   constructor(protected _options: TOptions) {
   }
 
-  protected async sendGetRequest<TResponse>(params: SendGetRequestParams & { responseType?: ContentType.Json }): Promise<TResponse>;
-  protected async sendGetRequest(params: SendGetRequestParams & { responseType: ContentType.Png }): Promise<Uint8Array>;
-  protected async sendGetRequest<TResponse>(params: SendGetRequestParams): Promise<TResponse | Uint8Array> {
+  protected async sendGetRequest<TBody>(params: SendGetRequestParams & { responseType?: ContentType.Json }): Promise<HttpResponse<TBody>>;
+  protected async sendGetRequest(params: SendGetRequestParams & { responseType: ContentType.Png }): Promise<HttpResponse<Uint8Array>>;
+  protected async sendGetRequest<TBody>(params: SendGetRequestParams): Promise<HttpResponse<TBody | Uint8Array>> {
     const urlAndHeaders = {
       url: params.url,
       headers: await this.formHeaders(params)
@@ -38,14 +38,14 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
         ...urlAndHeaders
       });
 
-    return this._options.restClient.sendGetRequest<TResponse>({
+    return this._options.restClient.sendGetRequest<TBody>({
       responseType: params.responseType ?? ContentType.Json,
       ...urlAndHeaders
     });
   }
 
-  protected async sendPostRequest<TResponse>(params: SendPostRequestParams): Promise<TResponse> {
-    return this._options.restClient.sendPostRequest<TResponse>({
+  protected async sendPostRequest<TBody>(params: SendPostRequestParams): Promise<HttpResponse<TBody>> {
+    return this._options.restClient.sendPostRequest<TBody>({
       url: params.url,
       body: {
         contentType: ContentType.Json,
@@ -55,8 +55,8 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     });
   }
 
-  protected async sendPutRequest<TResponse>(params: SendPutRequestParams): Promise<TResponse> {
-    return this._options.restClient.sendPutRequest<TResponse>({
+  protected async sendPutRequest<TBody>(params: SendPutRequestParams): Promise<HttpResponse<TBody>> {
+    return this._options.restClient.sendPutRequest<TBody>({
       url: params.url,
       body: {
         contentType: params.contentType,
@@ -66,8 +66,8 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     });
   }
 
-  protected async sendPatchRequest<TResponse>(params: SendPatchRequestParams): Promise<TResponse> {
-    return this._options.restClient.sendPatchRequest<TResponse>({
+  protected async sendPatchRequest<TBody>(params: SendPatchRequestParams): Promise<HttpResponse<TBody>> {
+    return this._options.restClient.sendPatchRequest<TBody>({
       url: params.url,
       body: {
         contentType: ContentType.Json,
@@ -77,23 +77,23 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     });
   }
 
-  protected async sendDeleteRequest<TResponse>(params: SendDeleteRequestParams): Promise<TResponse> {
-    return this._options.restClient.sendDeleteRequest<TResponse>({
+  protected async sendDeleteRequest<TBody>(params: SendDeleteRequestParams): Promise<HttpResponse<TBody>> {
+    return this._options.restClient.sendDeleteRequest<TBody>({
       url: params.url,
       headers: await this.formHeaders(params)
     });
   }
 
-  protected async getEntityCollectionPage<TEntity>(params: CommonRequestParams & {
+  protected async getEntityCollectionPage<TEntity, TResponse extends CollectionResponse>(params: CommonRequestParams & {
     url: string;
     preferReturn?: PreferReturn;
-    entityCollectionAccessor: (response: unknown) => TEntity[];
+    entityCollectionAccessor: (response: HttpResponse<TResponse>) => TEntity[];
   }): Promise<EntityCollectionPage<TEntity>> {
-    const response = await this.sendGetRequest<CollectionResponse>(params);
+    const response = await this.sendGetRequest<TResponse>(params);
     return {
       entities: params.entityCollectionAccessor(response),
-      next: response._links.next
-        ? async () => this.getEntityCollectionPage({ ...params, url: response._links.next!.href })
+      next: response.body._links.next
+        ? async () => this.getEntityCollectionPage({ ...params, url: response.body._links.next!.href })
         : undefined
     };
   }

@@ -4,7 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, RestClient } from "../types/RestClient";
+import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, RestClient } from "../types/RestClient";
+
+import { AxiosResponseHeadersAdapter } from "./AxiosResponseHeadersAdapter";
 
 /**
  * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the
@@ -20,25 +22,28 @@ export class AxiosRestClient implements RestClient {
     this._parseErrorFunc = parseErrorFunc;
   }
 
-  public sendGetRequest<TResponse>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<TResponse>;
-  public sendGetRequest(params: HttpGetRequestParams & { responseType: ContentType.Png }): Promise<Uint8Array>;
-  public async sendGetRequest<TResponse>(params: HttpGetRequestParams): Promise<TResponse | Uint8Array> {
+  public sendGetRequest<TBody>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<HttpResponse<TBody>>;
+  public sendGetRequest(params: HttpGetRequestParams & { responseType: ContentType.Png }): Promise<HttpResponse<Uint8Array>>;
+  public async sendGetRequest<TBody>(params: HttpGetRequestParams): Promise<HttpResponse<TBody | Uint8Array>> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
 
     if (params.responseType === ContentType.Png) {
       requestConfig.responseType = "arraybuffer";
-      const responseData: Buffer | ArrayBuffer = await this.executeRequest(async () => axios.get(params.url, requestConfig));
-      if (responseData instanceof ArrayBuffer)
-        return new Uint8Array(responseData);
-      return responseData;
+      const response = await this.executeRequest(async () => axios.get(params.url, requestConfig));
+
+      const data: Buffer | ArrayBuffer = response.body;
+      if (data instanceof ArrayBuffer)
+        return { ...response, body: new Uint8Array(data) };
+
+      return response;
     }
 
     return this.executeRequest(async () => axios.get(params.url, requestConfig));
   }
 
-  public async sendPostRequest<TResponse>(params: HttpRequestWithJsonBodyParams): Promise<TResponse> {
+  public async sendPostRequest<TBody>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TBody>> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
@@ -46,7 +51,7 @@ export class AxiosRestClient implements RestClient {
     return this.executeRequest(async () => axios.post(params.url, params.body.content ?? {}, requestConfig));
   }
 
-  public async sendPutRequest<TResponse>(params: HttpRequestWithBinaryBodyParams): Promise<TResponse> {
+  public async sendPutRequest<TBody>(params: HttpRequestWithBinaryBodyParams): Promise<HttpResponse<TBody>> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
@@ -54,7 +59,7 @@ export class AxiosRestClient implements RestClient {
     return this.executeRequest(async () => axios.put(params.url, params.body.content, requestConfig));
   }
 
-  public async sendPatchRequest<TResponse>(params: HttpRequestWithJsonBodyParams): Promise<TResponse> {
+  public async sendPatchRequest<TBody>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TBody>> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
@@ -62,17 +67,22 @@ export class AxiosRestClient implements RestClient {
     return this.executeRequest(async () => axios.patch(params.url, params.body.content ?? {}, requestConfig));
   }
 
-  public async sendDeleteRequest<TResponse>(params: HttpRequestParams): Promise<TResponse> {
+  public async sendDeleteRequest<TBody>(params: HttpRequestParams): Promise<HttpResponse<TBody>> {
     const requestConfig: AxiosRequestConfig = {
       headers: params.headers
     };
+
     return this.executeRequest(async () => axios.delete(params.url, requestConfig));
   }
 
-  private async executeRequest<TResponse>(requestFunc: () => Promise<AxiosResponse<TResponse>>): Promise<TResponse> {
+  private async executeRequest<TBody>(requestFunc: () => Promise<AxiosResponse<TBody>>): Promise<HttpResponse<TBody>> {
     try {
       const response = await requestFunc();
-      return response.data;
+
+      return {
+        body: response.data,
+        headers: new AxiosResponseHeadersAdapter(response)
+      };
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         const parsedError: Error = this._parseErrorFunc({ statusCode: error.response?.status, body: error.response?.data }, error);
@@ -82,3 +92,4 @@ export class AxiosRestClient implements RestClient {
     }
   }
 }
+

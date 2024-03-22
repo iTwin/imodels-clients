@@ -5,13 +5,13 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import { expect, use } from "chai";
-import * as chaiAsPromised from "chai-as-promised";
+import chai, { expect } from "chai";
+import chaiAsPromised from "chai-as-promised";
 
 import { AuthorizationCallback, ContentType, DownloadThumbnailParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, Thumbnail, ThumbnailSize, UploadThumbnailParams } from "@itwin/imodels-client-management";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertThumbnail, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
-use(chaiAsPromised);
+chai.use(chaiAsPromised);
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 

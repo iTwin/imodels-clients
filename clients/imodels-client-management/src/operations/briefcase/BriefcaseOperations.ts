@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { BriefcaseResponse, BriefcasesResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, Briefcase, EntityListIterator, HeaderFactories, MinimalBriefcase, PreferReturn } from "../../base/types";
+import { AuthorizationCallback, Briefcase, EntityListIterator, HeaderFactories, HttpResponse, MinimalBriefcase, PreferReturn } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";
@@ -28,11 +28,11 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
    * {@link MinimalBriefcase}.
    */
   public getMinimalList(params: GetBriefcaseListParams): EntityListIterator<MinimalBriefcase> {
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalBriefcase>({
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalBriefcase, BriefcasesResponse<MinimalBriefcase>>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getBriefcaseListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response: unknown) => (response as BriefcasesResponse<MinimalBriefcase>).briefcases,
+      entityCollectionAccessor: (response) => response.body.briefcases,
       headers: params.headers
     }));
   }
@@ -46,13 +46,13 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
    * @returns {EntityListIterator<Briefcase>} iterator for Briefcase list. See {@link EntityListIterator}, {@link Briefcase}.
    */
   public getRepresentationList(params: GetBriefcaseListParams): EntityListIterator<Briefcase> {
-    const entityCollectionAccessor = (response: unknown) => {
-      const briefcases = (response as BriefcasesResponse<Briefcase>).briefcases;
+    const entityCollectionAccessor = (response: HttpResponse<BriefcasesResponse<Briefcase>>) => {
+      const briefcases = response.body.briefcases;
       const mappedBriefcases = briefcases.map((briefcase) => this.appendRelatedEntityCallbacks(params.authorization, briefcase, params.headers));
       return mappedBriefcases;
     };
 
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<Briefcase>({
+    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<Briefcase, BriefcasesResponse<Briefcase>>({
       authorization: params.authorization,
       url: this._options.urlFormatter.getBriefcaseListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
       preferReturn: PreferReturn.Representation,
@@ -74,7 +74,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
       url: this._options.urlFormatter.getSingleBriefcaseUrl({ iModelId: params.iModelId, briefcaseId: params.briefcaseId }),
       headers: params.headers
     });
-    const result: Briefcase = this.appendRelatedEntityCallbacks(params.authorization, response.briefcase, params.headers);
+    const result: Briefcase = this.appendRelatedEntityCallbacks(params.authorization, response.body.briefcase, params.headers);
     return result;
   }
 
