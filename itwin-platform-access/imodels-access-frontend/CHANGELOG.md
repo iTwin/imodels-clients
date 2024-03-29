@@ -1,5 +1,9 @@
 # Change Log - @itwin/imodels-access-frontend
 
+## 5.0.0
+
+This release contains no changes compared to the previous package version.
+
 ## 4.0.0
 
 Breaking changes:
