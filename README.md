@@ -18,3 +18,11 @@ This repository contains multiple packages:
 - [`@itwin/imodels-client-common-config`](utils/imodels-client-common-config/README.md) package is used internally to share common configuration across the API clients.
 - [`@itwin/imodels-clients-tests`](tests/imodels-clients-tests/README.md) package is used internally for `@itwin/imodels-client-management` and `@itwin/imodels-client-authoring` package testing.
 - [`@itwin/imodels-access-backend-tests`](tests/imodels-access-backend-tests/README.md) package is used internally for API client testing.
+
+## iTwin.js versions supported by @itwin/imodels-access-* packages
+| iTwin.js version | @itwin/imodels-access-* version |
+|------------------|---------------------------------|
+| ^3.0.0           | >=1.0.1 <2.1.0                  |
+| ^3.3.0           | >=2.1.0 <3.0.0                  |
+| ^3.6.0           | >=3.0.0 <4.0.0                  |
+| ^4.0.0           | >=4.0.0                         |
