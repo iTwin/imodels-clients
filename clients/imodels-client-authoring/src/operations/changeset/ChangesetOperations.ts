@@ -50,14 +50,14 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       headers: params.headers
     });
 
-    const uploadLink = createChangesetResponse.changeset._links.upload;
+    const uploadLink = createChangesetResponse.body.changeset._links.upload;
     assertLink(uploadLink);
     await this._options.cloudStorage.upload({
       url: uploadLink.href,
       data: params.changesetProperties.filePath
     });
 
-    const completeLink = createChangesetResponse.changeset._links.complete;
+    const completeLink = createChangesetResponse.body.changeset._links.complete;
     assertLink(completeLink);
     const confirmUploadBody = this.getConfirmUploadRequestBody(params.changesetProperties);
     const confirmUploadResponse = await this.sendPatchRequest<ChangesetResponse>({
@@ -67,7 +67,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       headers: params.headers
     });
 
-    const result = this.appendRelatedEntityCallbacks(params.authorization, confirmUploadResponse.changeset, params.headers);
+    const result = this.appendRelatedEntityCallbacks(params.authorization, confirmUploadResponse.body.changeset, params.headers);
     return result;
   }
 

@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 
 import { expect } from "chai";
 
-import { AuthorizationCallback, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, CloneIModelParams, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertCollection, assertError, assertIModel, assertMinimalIModel } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
@@ -334,6 +334,43 @@ describe("[Management] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: createIModelFromTemplateParams.iModelProperties
     });
+  });
+
+  it("should clone iModel (with non-empty changeset index specified)", async () => {
+    // Arrange
+    const sourceIModel = await iModelsClient.iModels.getSingle({
+      authorization,
+      iModelId: testIModelForRead.id
+    });
+    const changesetIndex = 3;
+    const cloneIModelParams: CloneIModelParams = {
+      authorization,
+      iModelId: testIModelForRead.id,
+      iModelProperties: {
+        iTwinId,
+        name: testIModelGroup.getPrefixedUniqueIModelName("cloned iModel"),
+        changesetIndex
+      }
+    };
+
+    // Act
+    const newIModel = await iModelsClient.iModels.clone(cloneIModelParams);
+
+    // Assert
+    await assertIModel({
+      actualIModel: newIModel,
+      expectedIModelProperties: {
+        iTwinId,
+        name: cloneIModelParams.iModelProperties.name!,
+        description: sourceIModel.description ?? undefined,
+        extent: sourceIModel.extent ?? undefined
+      }
+    });
+    const changesets = await toArray(iModelsClient.changesets.getMinimalList({
+      authorization,
+      iModelId: newIModel.id
+    }));
+    expect(changesets.length).to.equal(changesetIndex);
   });
 
   it("should update iModel name", async () => {

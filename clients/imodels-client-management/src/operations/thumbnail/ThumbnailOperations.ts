@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { OperationsBase } from "../../base/internal";
-import { ContentType, Thumbnail, ThumbnailSize } from "../../base/types";
+import { ContentType, HttpResponse, Thumbnail, ThumbnailSize } from "../../base/types";
 import { OperationOptions } from "../OperationOptions";
 
 import { DownloadThumbnailParams, UploadThumbnailParams } from "./ThumbnailOperationParams";
@@ -32,7 +32,7 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
       size: params.urlParams?.size ?? ThumbnailSize.Small
     };
     const url = this._options.urlFormatter.getThumbnailUrl({ iModelId: params.iModelId, urlParams });
-    const response: Uint8Array = await this.sendGetRequest({
+    const response: HttpResponse<Uint8Array> = await this.sendGetRequest({
       authorization: params.authorization,
       url,
       responseType: ContentType.Png,
@@ -42,7 +42,7 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
     return {
       size: urlParams.size,
       imageType: ContentType.Png,
-      image: response
+      image: response.body
     };
   }
 

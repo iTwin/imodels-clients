@@ -74,6 +74,7 @@ export class ErrorAdapter {
       case IModelsErrorCode.BaselineFileNotFound:
       case IModelsErrorCode.BaselineFileInitializationFailed:
       case IModelsErrorCode.IModelFromTemplateInitializationFailed:
+      case IModelsErrorCode.ClonedIModelInitializationFailed:
       case IModelsErrorCode.ChangesetDownloadFailed:
         return true;
       default: return false;
@@ -141,6 +142,8 @@ export class ErrorAdapter {
       case IModelsErrorCode.NewerChangesExist:
         return IModelHubStatus.PullIsRequired;
       case IModelsErrorCode.BaselineFileInitializationTimedOut:
+      case IModelsErrorCode.IModelFromTemplateInitializationTimedOut:
+      case IModelsErrorCode.ClonedIModelInitializationTimedOut:
         return IModelHubStatus.InitializationTimeout;
 
       default:

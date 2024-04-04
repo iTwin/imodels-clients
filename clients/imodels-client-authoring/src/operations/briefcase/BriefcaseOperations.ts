@@ -27,7 +27,7 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Mana
       body: acquireBriefcaseBody,
       headers: params.headers
     });
-    const result = this.appendRelatedEntityCallbacks(params.authorization, acquireBriefcaseResponse.briefcase, params.headers);
+    const result = this.appendRelatedEntityCallbacks(params.authorization, acquireBriefcaseResponse.body.briefcase, params.headers);
     return result;
   }
 
@@ -36,10 +36,10 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Mana
    * {@link https://developer.bentley.com/apis/imodels-v2/operations/release-imodel-briefcase/ Release iModel Briefcase}
    * operation from iModels API.
    * @param {ReleaseBriefcaseParams} params parameters for this operation. See {@link ReleaseBriefcaseParams}.
-   * @returns {Promise<Briefcase>} a promise that resolves after operation completes.
+   * @returns {Promise<void>} a promise that resolves after operation completes.
    */
   public async release(params: ReleaseBriefcaseParams): Promise<void> {
-    return this.sendDeleteRequest({
+    await this.sendDeleteRequest({
       authorization: params.authorization,
       url: this._options.urlFormatter.getSingleBriefcaseUrl({ iModelId: params.iModelId, briefcaseId: params.briefcaseId }),
       headers: params.headers

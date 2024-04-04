@@ -43,6 +43,25 @@ export interface HttpRequestParams {
   headers: Dictionary<string>;
 }
 
+/** Abstraction for accessing HTTP response headers that the server responded with. */
+export interface HttpResponseHeaders {
+  /**
+   * Gets HTTP response header's value by the specified {@link headerName}.
+   * It is expected that the header name matcher is case-insensitive.
+   */
+  get(headerName: string): unknown;
+  /** Gets all HTTP response headers. */
+  getAll(): Dictionary<unknown>;
+}
+
+/** HTTP response. */
+export interface HttpResponse<TBody> {
+  /** Response body that was provided by the server. */
+  body: TBody;
+  /** Headers that the server responded with. */
+  headers: HttpResponseHeaders;
+}
+
 /** Common parameters for HTTP GET request operation. */
 export interface HttpGetRequestParams extends HttpRequestParams {
   /**
@@ -74,40 +93,40 @@ export interface RestClient {
    * @param {HttpGetRequestParams} params parameters for this operation. See {@link HttpGetRequestParams}.
    * @throws an error if the request fails.
    */
-  sendGetRequest<TResponse>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<TResponse>;
+  sendGetRequest<TBody>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends GET HTTP request to get binary response.
    * @param {HttpGetRequestParams} params parameters for this operation. See {@link HttpGetRequestParams}.
    * @throws an error if the request fails.
    */
-  sendGetRequest(params: HttpGetRequestParams & { responseType: ContentType.Png }): Promise<Uint8Array>;
+  sendGetRequest(params: HttpGetRequestParams & { responseType: ContentType.Png }): Promise<HttpResponse<Uint8Array>>;
 
   /**
    * Sends POST HTTP request.
    * @param {HttpRequestWithBodyParams} params parameters for this operation. See {@link HttpRequestWithBodyParams}.
    * @throws an error if the request fails.
    */
-  sendPostRequest<TResponse>(params: HttpRequestWithJsonBodyParams): Promise<TResponse>;
+  sendPostRequest<TBody>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends PUT HTTP request.
    * @param {HttpPutRequestParams} params parameters for this operation. See {@link HttpRequestWithBodyParams}.
    * @throws an error if the request fails.
    */
-  sendPutRequest<TResponse>(params: HttpRequestWithBinaryBodyParams): Promise<TResponse>;
+  sendPutRequest<TBody>(params: HttpRequestWithBinaryBodyParams): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends PATCH HTTP request.
    * @param {HttpRequestWithBodyParams} params parameters for this operation. See {@link HttpRequestWithBodyParams}.
    * @throws an error if the request fails.
    */
-  sendPatchRequest<TResponse>(params: HttpRequestWithJsonBodyParams): Promise<TResponse>;
+  sendPatchRequest<TBody>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends DELETE HTTP request.
    * @param {HttpRequestParams} params parameters for this operation. See {@link HttpRequestParams}.
    * @throws an error if the request fails.
    */
-  sendDeleteRequest<TResponse>(params: HttpRequestParams): Promise<TResponse>;
+  sendDeleteRequest<TBody>(params: HttpRequestParams): Promise<HttpResponse<TBody>>;
 }
