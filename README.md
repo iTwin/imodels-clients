@@ -10,7 +10,7 @@ iModels API is a part of [iTwin Platform](https://developer.bentley.com/). iTwin
 
 This repository contains multiple packages:
 
-- [`@itwin/imodels-client-management`](clients/imodels-client-management/README.md) is an API client that exposes a subset of iModels API operations and is intended to use in iModel management applications. Such applications do not edit the iModel file itself, they allow user to perform administrative tasks - create Named Versions, view Changeset metadata and such. An example of iTwin management application is the [iTwin Demo Portal](https://itwindemo.bentley.com/).
+- [`@itwin/imodels-client-management`](clients/imodels-client-management/README.md) is an API client that exposes a subset of iModels API operations and is intended to use in iModel management applications. Such applications do not edit the iModel file itself, they allow user to perform administrative tasks - create Named Versions, view Changeset metadata and such.
 
 - [`@itwin/imodels-client-authoring`](clients/imodels-client-authoring/README.md) is an API client that extends `@itwin/imodels-client-management` and exposes additional API operations to facilitate iModel editing workflows. This client should not be used directly as the operations it exposes can only be used meaningfully via [iTwin.js](https://www.itwinjs.org/) library.
 - [`@itwin/imodels-access-frontend`](itwin-platform-access/imodels-access-frontend/README.md) package contains an implementation of [`FrontendHubAccess`](https://github.com/iTwin/itwinjs-core/blob/master/core/frontend/src/FrontendHubAccess.ts) interface which enables the iTwin.js platform to use iModels API.
