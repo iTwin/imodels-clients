@@ -1,5 +1,11 @@
 # Change Log - @itwin/imodels-client-management 
 
+## 5.0.0
+
+Breaking changes:
+- Updated `RestClient` interface. Classes implementing `RestClient` interface must now return HTTP response headers in addition to the response body.
+- Updated `createFromTemplate` iModel operation error handling. If iModel initialization times out, the error code of the thrown error will now be `IModelFromTemplateInitializationTimedOut` instead of `IModelFromTemplateInitializationFailed`.
+
 ## 4.0.0
 
 Breaking changes:

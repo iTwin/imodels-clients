@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-common",
-  "version": "4.1.6",
+  "version": "5.0.0",
   "description": "Common code package for @itwin/imodels-access-frontend and @itwin/imodels-access-backend.",
   "keywords": [
     "Bentley",
