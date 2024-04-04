@@ -6,7 +6,7 @@ Copyright © Bentley Systems, Incorporated. All rights reserved. See [LICENSE.md
 
 This repository contains packages that help consumption of iModels API. Please visit the [iModels API documentation page](https://developer.bentley.com/apis/imodels-v2/) on iTwin developer portal to learn more about the iModels service and its APIs. API clients contain methods that either act as a thin wrapper for sending a single request to the API or combine several requests to execute a more complex operation.
 
-iModels API is a part of [iTwin Platform](https://developer.bentley.com/). iTwin platform together with an open source [iTwin.js](https://www.itwinjs.org/) library provides capabilities for creating, querying, modifying, and displaying Infrastructure Digital Twins.
+iModels API is a part of [iTwin Platform](https://developer.bentley.com/). iTwin platform together with an open source [iTwin.js][iTwinJS] library provides capabilities for creating, querying, modifying, and displaying Infrastructure Digital Twins.
 
 This repository contains multiple packages:
 
@@ -20,9 +20,14 @@ This repository contains multiple packages:
 - [`@itwin/imodels-access-backend-tests`](tests/imodels-access-backend-tests/README.md) package is used internally for API client testing.
 
 ## iTwin.js versions supported by @itwin/imodels-access-* packages
+Please refer to the table below for guidance on which versions of `@itwin/imodels-access-frontend` and `@itwin/imodels-access-backend` packages are compatible with a specific [iTwin.js][iTwinJS] version.
+
 | iTwin.js version | @itwin/imodels-access-* version |
 |------------------|---------------------------------|
-| ^3.0.0           | >=1.0.1 <2.1.0                  |
-| ^3.3.0           | >=2.1.0 <3.0.0                  |
-| ^3.6.0           | >=3.0.0 <4.0.0                  |
-| ^4.0.0           | >=4.0.0                         |
+| >=3.0.0 <3.3.0   | >=1.0.1 <2.0.0                  |
+| >=3.3.0 <3.6.0   | >=2.0.0 <3.0.0                  |
+| >=3.6.0 <4.0.0   | >=3.0.0 <4.0.0                  |
+| >=4.0.0          | >=4.0.0, >=5.0.0                |
+
+<!-- Links -->
+[iTwinJS]: https://www.itwinjs.org/
