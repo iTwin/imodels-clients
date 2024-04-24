@@ -10,7 +10,8 @@ import { ChangesetIdOrIndex } from "../OperationParamExports";
  * entities are ordered in a collection.
  */
 export enum IModelOrderByProperty {
-  Name = "name"
+  Name = "name",
+  CreatedDateTime = "createdDateTime",
 }
 
 /** Url parameters supported in iModel list query. */
