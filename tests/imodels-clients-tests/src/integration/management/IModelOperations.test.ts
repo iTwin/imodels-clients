@@ -216,7 +216,7 @@ describe("[Management] IModelOperations", () => {
 
     // Act
     const ascendingIModelArray = await toArray(iModelsClient.iModels.getRepresentationList(getAscendingIModelListParams));
-   
+
     // Assert
     expect(ascendingIModelArray.length).to.be.greaterThanOrEqual(2);
     const firstAscendingArrayItem = ascendingIModelArray[0];
