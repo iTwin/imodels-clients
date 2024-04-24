@@ -107,7 +107,7 @@ describe("[Management] IModelOperations", () => {
     });
   });
 
-  it("should return items in ascending/descending order when querying representation collection", async () => {
+  it("should return items in ascending/descending order by name when querying representation collection", async () => {
     // Arrange
     const correlationId = randomUUID();
     await iModelsClient.iModels.createEmpty({
@@ -184,6 +184,54 @@ describe("[Management] IModelOperations", () => {
     expect(lastIModelIndex).to.not.be.equal(-1);
     return { firstIModelIndex, lastIModelIndex };
   }
+
+  it("should return items in ascending/descending order by createdDateTime when querying representation collection", async () => {
+    // Arrange
+    const correlationId = randomUUID();
+    const getAscendingIModelListParams: GetIModelListParams = {
+      authorization,
+      urlParams: {
+        iTwinId,
+        $orderBy: {
+          property: IModelOrderByProperty.CreatedDateTime
+        }
+      },
+      headers: {
+        "X-Correlation-Id": correlationId
+      }
+    };
+    const getDescendingIModelListParams: GetIModelListParams = {
+      authorization,
+      urlParams: {
+        iTwinId,
+        $orderBy: {
+          property: IModelOrderByProperty.CreatedDateTime,
+          operator: OrderByOperator.Descending
+        }
+      },
+      headers: {
+        "X-Correlation-Id": correlationId
+      }
+    };
+
+    // Act
+    const ascendingIModelArray = await toArray(iModelsClient.iModels.getRepresentationList(getAscendingIModelListParams));
+
+    // Assert
+    expect(ascendingIModelArray.length).to.be.greaterThanOrEqual(2);
+    const firstAscendingArrayItem = ascendingIModelArray[0];
+    const lastAscendingArrayItem = ascendingIModelArray[ascendingIModelArray.length - 1];
+    expect(new Date(firstAscendingArrayItem.createdDateTime)).to.be.lessThan(new Date(lastAscendingArrayItem.createdDateTime));
+
+    // Act
+    const descendingIModelArray = await toArray(iModelsClient.iModels.getRepresentationList(getDescendingIModelListParams));
+
+    // Assert
+    expect(descendingIModelArray.length).to.be.greaterThanOrEqual(2);
+    const firstDescendingArrayItem = descendingIModelArray[0];
+    const lastDescendingArrayItem = descendingIModelArray[descendingIModelArray.length - 1];
+    expect(new Date(firstDescendingArrayItem.createdDateTime)).to.be.greaterThan(new Date(lastDescendingArrayItem.createdDateTime));
+  });
 
   it("should return iModels that match the name filter when querying representation collection", async () => {
     // Arrange
