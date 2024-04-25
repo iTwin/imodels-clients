@@ -27,6 +27,20 @@ export interface ClonedFrom {
   changesetId: string;
 }
 
+/** Information about the source iModel of an iModel Fork. */
+export interface ForkedFrom {
+  /** Id of the source iModel. */
+  iModelId: string;
+  /**
+   * Id of the latest source iModel Changeset which was copied to this iModel when creating an iModel Fork.
+   * This corresponds to the Changeset specified in `changesetId` or `changesetIndex` properties when forking an iModel.
+   * If `changesetId` is an empty string it means that no Changesets were copied from the source iModel to this one, only iModel Baseline.
+   */
+  changesetId: string;
+  /** Id of the Relationship entity that links source and Fork iModels. */
+  relationshipId: string;
+}
+
 /** Information about iModel creation process. */
 export interface CreateIModelOperationDetails {
   /** Indicates the current state of the iModel creation process. See {@link IModelCreationState}. */
@@ -36,4 +50,9 @@ export interface CreateIModelOperationDetails {
    * If the iModel was not created using Clone iModel operation, the value of this property will be `null`.
    */
   clonedFrom: ClonedFrom | null;
+  /**
+   * Information about the source iModel of an iModel Fork (see {@link ForkedFrom}).
+   * If the iModel was not created using Fork iModel operation, the value of this property will be `null`.
+   */
+  forkedFrom: ForkedFrom | null;
 }
