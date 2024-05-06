@@ -51,6 +51,9 @@ export enum IModelsErrorCode {
   IModelFromTemplateInitializationTimedOut = "IModelFromTemplateInitializationTimedOut",
   ClonedIModelInitializationFailed = "ClonedIModelInitializationFailed",
   ClonedIModelInitializationTimedOut = "ClonedIModelInitializationTimedOut",
+  IModelForkInitializationFailed = "IModelForkInitializationFailed",
+  IModelForkInitializationTimedOut = "IModelForkInitializationTimedOut",
+  SourceIsMissingFederationGuids = "SourceIsMissingFederationGuids",
   ChangesetDownloadFailed = "ChangesetDownloadFailed",
   DownloadAborted = "DownloadAborted"
 }

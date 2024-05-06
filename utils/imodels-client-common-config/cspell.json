@@ -19,7 +19,8 @@
     "datetime",
     "inversify",
     "bootstrapper",
-    "ITWINS"
+    "ITWINS",
+    "Guids"
   ],
   "ignoreRegExpList": [
     "/imodel.*/i"
