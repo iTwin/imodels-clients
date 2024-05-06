@@ -41,6 +41,10 @@ export class IModelsApiUrlFormatter {
     return `${this.baseUrl}/${params.iModelId}/clone`;
   }
 
+  public getForkIModelUrl(params: { iModelId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}/fork`;
+  }
+
   public getSingleIModelUrl(params: { iModelId: string }): string {
     return `${this.baseUrl}/${params.iModelId}`;
   }

@@ -9,7 +9,7 @@ import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { assertStringHeaderValue } from "../SharedFunctions";
 
-import { CloneIModelParams, CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForClone, IModelPropertiesForCreateFromTemplate, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams";
+import { CloneIModelParams, CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelParams, ForkIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForClone, IModelPropertiesForCreateFromTemplate, IModelPropertiesForFork, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams";
 
 export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   constructor(
@@ -151,6 +151,30 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     });
   }
 
+  public async fork(params: ForkIModelParams): Promise<IModel> {
+    const forkIModelBody = this.getForkIModelRequestBody(params.iModelProperties);
+    const forkIModelResponse = await this.sendPostRequest<void>({
+      authorization: params.authorization,
+      url: this._options.urlFormatter.getForkIModelUrl({ iModelId: params.iModelId }),
+      body: forkIModelBody,
+      headers: params.headers
+    });
+
+    const locationHeaderValue = forkIModelResponse.headers.get(Constants.headers.location);
+    assertStringHeaderValue(Constants.headers.location, locationHeaderValue);
+    const { iModelId: forkIModelId } = this._options.urlFormatter.parseIModelUrl(locationHeaderValue);
+
+    await this.waitForForkIModelInitialization({
+      authorization: params.authorization,
+      iModelId: forkIModelId
+    });
+
+    return this.getSingle({
+      authorization: params.authorization,
+      iModelId: forkIModelId
+    });
+  }
+
   /**
    * Updates iModel properties. Wraps the
    * {@link https://developer.bentley.com/apis/imodels-v2/operations/update-imodel/ Update iModel} operation from iModels API.
@@ -246,6 +270,17 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     };
   }
 
+  private getForkIModelRequestBody(iModelProperties: IModelPropertiesForFork): object {
+    return {
+      iTwinId: iModelProperties.iTwinId,
+      name: iModelProperties.name,
+      description: iModelProperties.description,
+      changesetId: iModelProperties.changesetId,
+      changesetIndex: iModelProperties.changesetIndex,
+      preserveHistory: iModelProperties.preserveHistory
+    };
+  }
+
   private getUpdateIModelRequestBody(iModelProperties: IModelPropertiesForUpdate): object {
     return {
       name: iModelProperties.name,
@@ -273,6 +308,35 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       throw new IModelsErrorImpl({
         code: params.errorCodeOnFailure,
         message: `iModel initialization failed with state '${state}'`
+      });
+
+    return state === IModelCreationState.Successful;
+  }
+
+  private async isForkIModelInitialized(params: {
+    authorization: AuthorizationCallback;
+    iModelId: string;
+    headers?: HeaderFactories;
+  }): Promise<boolean> {
+    const { state } = await this._iModelsClient.operations.getCreateIModelDetails({
+      authorization: params.authorization,
+      iModelId: params.iModelId,
+      headers: params.headers
+    });
+
+    if (state === IModelCreationState.SourceIsMissingFederationGuids)
+      throw new IModelsErrorImpl({
+        code: IModelsErrorCode.SourceIsMissingFederationGuids,
+        message: "iModel Fork initialization failed because some elements in the source iModel do not have FederationGuid property set."
+      });
+
+    if (state !== IModelCreationState.Scheduled &&
+      state !== IModelCreationState.WaitingForFile &&
+      state !== IModelCreationState.Successful
+    )
+      throw new IModelsErrorImpl({
+        code: IModelsErrorCode.IModelForkInitializationFailed,
+        message: `iModel Fork initialization failed with state '${state}'`
       });
 
     return state === IModelCreationState.Successful;
@@ -315,6 +379,26 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       timeoutErrorFactory: () => new IModelsErrorImpl({
         code: IModelsErrorCode.ClonedIModelInitializationTimedOut,
         message: "Timed out waiting for Cloned iModel initialization."
+      }),
+      timeOutInMs: params.timeOutInMs
+    });
+  }
+
+  private async waitForForkIModelInitialization(params: {
+    authorization: AuthorizationCallback;
+    iModelId: string;
+    timeOutInMs?: number;
+    headers?: HeaderFactories;
+  }): Promise<void> {
+    return waitForCondition({
+      conditionToSatisfy: async () => this.isForkIModelInitialized({
+        authorization: params.authorization,
+        iModelId: params.iModelId,
+        headers: params.headers
+      }),
+      timeoutErrorFactory: () => new IModelsErrorImpl({
+        code: IModelsErrorCode.IModelForkInitializationTimedOut,
+        message: "Timed out waiting for iModel Fork initialization."
       }),
       timeOutInMs: params.timeOutInMs
     });
