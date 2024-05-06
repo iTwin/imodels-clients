@@ -421,7 +421,7 @@ describe("[Management] IModelOperations", () => {
     expect(changesets.length).to.equal(changesetIndex);
   });
 
-  it.only("should fork iModel", async () => {
+  it("should fork iModel", async () => {
     // Arrange
     const sourceIModel = await iModelsClient.iModels.getSingle({
       authorization,
