@@ -427,7 +427,6 @@ describe("[Management] IModelOperations", () => {
       authorization,
       iModelId: testIModelForRead.id
     });
-    // const changesetIndex = 3;
     const forkIModelParams: ForkIModelParams = {
       authorization,
       iModelId: testIModelForRead.id,
