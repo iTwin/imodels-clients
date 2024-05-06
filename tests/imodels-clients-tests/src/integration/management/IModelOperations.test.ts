@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 
 import { expect } from "chai";
 
-import { AuthorizationCallback, CloneIModelParams, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, CloneIModelParams, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, ForkIModelParams, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertCollection, assertError, assertIModel, assertMinimalIModel } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
@@ -419,6 +419,43 @@ describe("[Management] IModelOperations", () => {
       iModelId: newIModel.id
     }));
     expect(changesets.length).to.equal(changesetIndex);
+  });
+
+  it.only("should fork iModel", async () => {
+    // Arrange
+    const sourceIModel = await iModelsClient.iModels.getSingle({
+      authorization,
+      iModelId: testIModelForRead.id
+    });
+    // const changesetIndex = 3;
+    const forkIModelParams: ForkIModelParams = {
+      authorization,
+      iModelId: testIModelForRead.id,
+      iModelProperties: {
+        iTwinId,
+        name: testIModelGroup.getPrefixedUniqueIModelName("iModel Fork"),
+        preserveHistory: true
+      }
+    };
+
+    // Act
+    const iModelFork = await iModelsClient.iModels.fork(forkIModelParams);
+
+    // Assert
+    await assertIModel({
+      actualIModel: iModelFork,
+      expectedIModelProperties: {
+        iTwinId,
+        name: forkIModelParams.iModelProperties.name!,
+        description: sourceIModel.description!,
+        extent: undefined
+      }
+    });
+    const changesets = await toArray(iModelsClient.changesets.getMinimalList({
+      authorization,
+      iModelId: iModelFork.id
+    }));
+    expect(changesets.length).to.equal(testIModelFileProvider.changesets.length);
   });
 
   it("should update iModel name", async () => {

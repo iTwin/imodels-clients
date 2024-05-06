@@ -46,7 +46,7 @@
     "chai": "~4.3.10",
     "chai-as-promised": "~7.1.1",
     "dotenv": "~10.0.0",
-    "inversify": "~6.0.1",
+    "inversify": "~6.0.2",
     "mocha": "~9.2.2",
     "reflect-metadata": "~0.1.13"
   },
