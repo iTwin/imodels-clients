@@ -41,6 +41,7 @@
     "@itwin/imodels-client-common-config": "workspace:*",
     "cspell": "~5.21.0",
     "eslint": "~8.55.0",
+    "inversify": "~6.0.2",
     "rimraf": "~3.0.2",
     "sort-package-json": "~1.53.1",
     "typescript": "~5.3.3"

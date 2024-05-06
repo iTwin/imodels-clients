@@ -14,18 +14,20 @@ importers:
       '@itwin/object-storage-core': ^2.0.0
       cspell: ~5.21.0
       eslint: ~8.55.0
+      inversify: ~6.0.2
       rimraf: ~3.0.2
       sort-package-json: ~1.53.1
       typescript: ~5.3.3
     dependencies:
       '@azure/storage-blob': 12.17.0
       '@itwin/imodels-client-management': link:../imodels-client-management
-      '@itwin/object-storage-azure': 2.2.1
-      '@itwin/object-storage-core': 2.2.1
+      '@itwin/object-storage-azure': 2.2.1_inversify@6.0.2
+      '@itwin/object-storage-core': 2.2.1_inversify@6.0.2
     devDependencies:
       '@itwin/imodels-client-common-config': link:../../utils/imodels-client-common-config
       cspell: 5.21.2
       eslint: 8.55.0
+      inversify: 6.0.2
       rimraf: 3.0.2
       sort-package-json: 1.53.1
       typescript: 5.3.3
@@ -174,7 +176,7 @@ importers:
       cspell: ~5.21.0
       dotenv: ~10.0.0
       eslint: ~8.55.0
-      inversify: ~6.0.1
+      inversify: ~6.0.2
       json5: 2.2.2
       mocha: ~9.2.2
       nyc: 15.1.0
@@ -273,7 +275,7 @@ importers:
       dotenv: ~10.0.0
       eslint: ~8.55.0
       formidable: 3.2.4
-      inversify: ~6.0.1
+      inversify: ~6.0.2
       mocha: ~9.2.2
       nyc: 15.1.0
       reflect-metadata: ~0.1.13
@@ -332,7 +334,7 @@ importers:
       cspell: ~5.21.0
       dotenv: ~10.0.0
       eslint: ~8.55.0
-      inversify: ~6.0.1
+      inversify: ~6.0.2
       mocha: ~9.2.2
       nyc: 15.1.0
       reflect-metadata: ~0.1.13
@@ -390,7 +392,7 @@ importers:
       cypress: ~13.3.0
       dotenv: ~10.0.0
       eslint: ~8.55.0
-      inversify: ~6.0.1
+      inversify: ~6.0.2
       reflect-metadata: ~0.1.13
       rimraf: ~3.0.2
       sort-package-json: ~1.53.1
@@ -449,7 +451,7 @@ importers:
       cspell: ~5.21.0
       dotenv: ~10.0.0
       eslint: ~8.55.0
-      inversify: ~6.0.1
+      inversify: ~6.0.2
       puppeteer: ~13.5.1
       reflect-metadata: ~0.1.13
       rimraf: ~3.0.2
@@ -1164,6 +1166,7 @@ packages:
     peerDependencies:
       inversify: ^6.0.1
       reflect-metadata: ^0.1.13
+    dev: true
 
   /@itwin/cloud-agnostic-core/2.2.1_34c8eafdcde3b02a9b1b4c0fc9e77498:
     resolution: {integrity: sha512-Macw2d7d8VTa7B/xy/YWAbYKxiCu8XXtAT1s9yqcV9tQw5Z/6E97kimz/IWjBi6P+4rHLtEXZfF2wuR8mmr8Bw==}
@@ -1174,6 +1177,16 @@ packages:
     dependencies:
       inversify: 6.0.2
       reflect-metadata: 0.1.14
+
+  /@itwin/cloud-agnostic-core/2.2.1_inversify@6.0.2:
+    resolution: {integrity: sha512-Macw2d7d8VTa7B/xy/YWAbYKxiCu8XXtAT1s9yqcV9tQw5Z/6E97kimz/IWjBi6P+4rHLtEXZfF2wuR8mmr8Bw==}
+    engines: {node: '>=12.20 <19.0.0'}
+    peerDependencies:
+      inversify: ^6.0.1
+      reflect-metadata: ^0.1.13
+    dependencies:
+      inversify: 6.0.2
+    dev: false
 
   /@itwin/core-backend/4.3.1_051f04e841653e459dab6800c8d93085:
     resolution: {integrity: sha512-+OyCB10HDbt8f60mAugmvjl6Oey3jitU/fucGivLee6J9saZz18yAiqi72nn8V1r5TS7P5QbhxmV6iiB2ioR8A==}
@@ -1361,22 +1374,6 @@ packages:
       - supports-color
     dev: true
 
-  /@itwin/object-storage-azure/2.2.1:
-    resolution: {integrity: sha512-THPSJ/nuVpujS95HCbEpbwFCDOLpHkh6Y2DuzGXChpA39B8zAXN4R2Ma33ckoZAmJeewTDhBE8YSr2yGisYBKA==}
-    engines: {node: '>=12.20 <19.0.0'}
-    peerDependencies:
-      inversify: ^6.0.1
-      reflect-metadata: ^0.1.13
-    dependencies:
-      '@azure/core-paging': 1.5.0
-      '@azure/storage-blob': 12.13.0
-      '@itwin/cloud-agnostic-core': 2.2.1
-      '@itwin/object-storage-core': 2.2.1
-    transitivePeerDependencies:
-      - debug
-      - encoding
-    dev: false
-
   /@itwin/object-storage-azure/2.2.1_34c8eafdcde3b02a9b1b4c0fc9e77498:
     resolution: {integrity: sha512-THPSJ/nuVpujS95HCbEpbwFCDOLpHkh6Y2DuzGXChpA39B8zAXN4R2Ma33ckoZAmJeewTDhBE8YSr2yGisYBKA==}
     engines: {node: '>=12.20 <19.0.0'}
@@ -1394,6 +1391,23 @@ packages:
       - debug
       - encoding
 
+  /@itwin/object-storage-azure/2.2.1_inversify@6.0.2:
+    resolution: {integrity: sha512-THPSJ/nuVpujS95HCbEpbwFCDOLpHkh6Y2DuzGXChpA39B8zAXN4R2Ma33ckoZAmJeewTDhBE8YSr2yGisYBKA==}
+    engines: {node: '>=12.20 <19.0.0'}
+    peerDependencies:
+      inversify: ^6.0.1
+      reflect-metadata: ^0.1.13
+    dependencies:
+      '@azure/core-paging': 1.5.0
+      '@azure/storage-blob': 12.13.0
+      '@itwin/cloud-agnostic-core': 2.2.1_inversify@6.0.2
+      '@itwin/object-storage-core': 2.2.1_inversify@6.0.2
+      inversify: 6.0.2
+    transitivePeerDependencies:
+      - debug
+      - encoding
+    dev: false
+
   /@itwin/object-storage-core/2.2.1:
     resolution: {integrity: sha512-DHyjg3Z8/SExS2LV7gOgiQqjTebH8pPihGszP2b9nly9IXo+diK8U3xwszb2qOBX6KZzfBAkNfnbY/P7kHmYhw==}
     engines: {node: '>=12.20 <19.0.0'}
@@ -1405,6 +1419,7 @@ packages:
       axios: 1.6.4
     transitivePeerDependencies:
       - debug
+    dev: true
 
   /@itwin/object-storage-core/2.2.1_34c8eafdcde3b02a9b1b4c0fc9e77498:
     resolution: {integrity: sha512-DHyjg3Z8/SExS2LV7gOgiQqjTebH8pPihGszP2b9nly9IXo+diK8U3xwszb2qOBX6KZzfBAkNfnbY/P7kHmYhw==}
@@ -1419,6 +1434,20 @@ packages:
       reflect-metadata: 0.1.14
     transitivePeerDependencies:
       - debug
+
+  /@itwin/object-storage-core/2.2.1_inversify@6.0.2:
+    resolution: {integrity: sha512-DHyjg3Z8/SExS2LV7gOgiQqjTebH8pPihGszP2b9nly9IXo+diK8U3xwszb2qOBX6KZzfBAkNfnbY/P7kHmYhw==}
+    engines: {node: '>=12.20 <19.0.0'}
+    peerDependencies:
+      inversify: ^6.0.1
+      reflect-metadata: ^0.1.13
+    dependencies:
+      '@itwin/cloud-agnostic-core': 2.2.1_inversify@6.0.2
+      axios: 1.6.4
+      inversify: 6.0.2
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /@itwin/webgl-compatibility/4.3.1:
     resolution: {integrity: sha512-NeTvSTTRF+xxIXDPCHxGhBVZg+tX6K0FvbSSUqGXE9qsfz+FyaHOixNLYsAMK8/W1xxLHWCWvHndDgi9ripzLg==}
