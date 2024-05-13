@@ -53,7 +53,7 @@ export enum IModelsErrorCode {
   ClonedIModelInitializationTimedOut = "ClonedIModelInitializationTimedOut",
   IModelForkInitializationFailed = "IModelForkInitializationFailed",
   IModelForkInitializationTimedOut = "IModelForkInitializationTimedOut",
-  SourceIsMissingFederationGuids = "SourceIsMissingFederationGuids",
+  MainIModelIsMissingFederationGuids = "MainIModelIsMissingFederationGuids",
   ChangesetDownloadFailed = "ChangesetDownloadFailed",
   DownloadAborted = "DownloadAborted"
 }

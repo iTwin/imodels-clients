@@ -13,8 +13,8 @@ export enum IModelCreationState {
   Scheduled = "scheduled",
   /** iModel creation process failed. */
   Failed = "failed",
-  /** iModel Fork creation failed because some elements in the source iModel do not have FederationGuid property set. */
-  SourceIsMissingFederationGuids = "sourceIsMissingFederationGuids",
+  /** iModel Fork creation failed because some elements in the main iModel do not have FederationGuid property set. */
+  MainIModelIsMissingFederationGuids = "mainIModelIsMissingFederationGuids",
 }
 
 /** Information about the source iModel of an iModel clone. */
