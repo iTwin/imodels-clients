@@ -151,6 +151,19 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     });
   }
 
+  /**
+   * Forks the specified iModel. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/fork-imodel/ Fork iModel} operation from iModels API.
+   * Internally this method forks the iModel and then repeatedly queries the new iModel's creation state until it is succeeded.
+   * The execution of this method can take up to several minutes due to waiting for initialization to complete.
+   * @param {ForkIModelParams} params parameters for this operation. See {@link ForkIModelParams}.
+   * @returns {Promise<IModel>} newly created iModel. See {@link IModel}.
+   * @throws an error that implements `iModelsError` interface with code {@link IModelsErrorCode.IModelForkInitializationFailed} if
+   * iModel initialization failed, {@link IModelsErrorCode.IModelForkInitializationTimedOut} if operation did not complete in time or
+   * {@link IModelsErrorCode.MainIModelIsMissingFederationGuids} if the iModel from which user is attempting to create a Fork does not
+   * have {@link https://www.itwinjs.org/bis/guide/fundamentals/federationguids/ FederationGuid} property set on all its elements.
+   * See {@link IModelsErrorCode}.
+   */
   public async fork(params: ForkIModelParams): Promise<IModel> {
     const forkIModelBody = this.getForkIModelRequestBody(params.iModelProperties);
     const forkIModelResponse = await this.sendPostRequest<void>({
@@ -324,9 +337,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       headers: params.headers
     });
 
-    if (state === IModelCreationState.SourceIsMissingFederationGuids)
+    if (state === IModelCreationState.MainIModelIsMissingFederationGuids)
       throw new IModelsErrorImpl({
-        code: IModelsErrorCode.SourceIsMissingFederationGuids,
+        code: IModelsErrorCode.MainIModelIsMissingFederationGuids,
         message: "iModel Fork initialization failed because some elements in the source iModel do not have FederationGuid property set."
       });
 
