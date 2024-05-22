@@ -5,7 +5,7 @@
 import { sleep } from "@itwin/imodels-client-management/lib/base/internal";
 import { injectable } from "inversify";
 
-import { ChangesetGroupState, CheckpointState, GetSingleCheckpointParams, Lock, LockLevel, LockedObjects, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
+import { ChangesetGroupState, CheckpointState, ContainerTypes, GetSingleCheckpointParams, Lock, LockLevel, LockedObjects, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
 
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
@@ -44,7 +44,8 @@ export class TestIModelCreator {
       iModelProperties: {
         iTwinId,
         name: iModelName,
-        description: this._iModelDescription
+        description: this._iModelDescription,
+        containersEnabled: ContainerTypes.None
       }
     });
 

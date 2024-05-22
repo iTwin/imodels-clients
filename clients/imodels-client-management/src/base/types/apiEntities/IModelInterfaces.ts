@@ -25,6 +25,14 @@ export interface Point {
   longitude: number;
 }
 
+/** A flag enum used to specify which containers are enabled for the iModel. */
+export enum ContainerTypes {
+  None = 0,
+  SchemaSync = 1 << 0,
+  CodeStore = 1 << 1,
+  ViewStore = 1 << 2,
+}
+
 /**
  * The maximum rectangular area on the Earth which encloses the iModel. The maximum extent is used to help keep your
  * iModel clean. When new elements are imported, those outside the extent will be flagged for further processing. This
@@ -83,6 +91,8 @@ export interface IModel extends MinimalIModel {
   iTwinId: string;
   /** iModel extent. See {@link Extent}. */
   extent: Extent | null;
+  /** iModel container types. See {@link ContainerTypes}. */
+  containersEnabled: ContainerTypes;
   /** iModel links. See {@link IModelLinks}.*/
   _links: IModelLinks;
   /**

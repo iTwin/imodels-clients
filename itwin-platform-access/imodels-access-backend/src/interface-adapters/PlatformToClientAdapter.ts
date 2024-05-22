@@ -39,11 +39,13 @@ export class PlatformToClientAdapter {
   }
 
   public static toContainingChanges(changesType: ChangesetType): ContainingChanges {
-    switch (changesType) {
-      case ChangesetType.Regular:
+    switch (changesType as number) {
+      case ChangesetType.Regular as number:
         return ContainingChanges.Regular;
-      case ChangesetType.Schema:
+      case ChangesetType.Schema as number:
         return ContainingChanges.Schema;
+      case (ContainingChanges.Schema | ContainingChanges.SchemaSync):
+        return ContainingChanges.Schema | ContainingChanges.SchemaSync;
       default:
         throw new IModelError(RepositoryStatus.InvalidRequest, "Unsupported ContainingChanges");
     }

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AtLeastOneProperty, AuthorizationParam, CollectionRequestParams, Extent, HeadersParam, IModel, IModelScopedOperationParams, OrderBy } from "../../base/types";
+import { AtLeastOneProperty, AuthorizationParam, CollectionRequestParams, ContainerTypes, Extent, HeadersParam, IModel, IModelScopedOperationParams, OrderBy } from "../../base/types";
 import { ChangesetIdOrIndex } from "../OperationParamExports";
 
 /**
@@ -46,6 +46,8 @@ export interface IModelProperties {
   description?: string;
   /** iModel extent. See {@link Extent}. */
   extent?: Extent;
+  /** iModel container types. See {@link ContainerTypes}. */
+  containersEnabled?: ContainerTypes;
 }
 
 /** Parameters for create iModel operation. */
@@ -88,6 +90,8 @@ interface IModelPropertiesForCloneBase {
   name?: string;
   /** Description of the new iModel that will be created. If description is not provided, original iModel description will be used. */
   description?: string;
+  /** iModel container types. See {@link ContainerTypes}. */
+  containersEnabled?: ContainerTypes;
 }
 
 /**

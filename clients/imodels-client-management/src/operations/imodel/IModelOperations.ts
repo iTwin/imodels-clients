@@ -236,7 +236,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       iTwinId: iModelProperties.iTwinId,
       name: iModelProperties.name,
       description: iModelProperties.description,
-      extent: iModelProperties.extent
+      extent: iModelProperties.extent,
+      containersEnabled: iModelProperties.containersEnabled
     };
   }
 
@@ -279,7 +280,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       name: iModelProperties.name,
       description: iModelProperties.description,
       changesetId: iModelProperties.changesetId,
-      changesetIndex: iModelProperties.changesetIndex
+      changesetIndex: iModelProperties.changesetIndex,
+      containersEnabled: iModelProperties.containersEnabled
     };
   }
 
@@ -290,7 +292,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       description: iModelProperties.description,
       changesetId: iModelProperties.changesetId,
       changesetIndex: iModelProperties.changesetIndex,
-      preserveHistory: iModelProperties.preserveHistory
+      preserveHistory: iModelProperties.preserveHistory,
+      containersEnabled: iModelProperties.containersEnabled
     };
   }
 

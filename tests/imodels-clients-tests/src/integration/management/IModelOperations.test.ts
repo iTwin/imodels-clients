@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 
 import { expect } from "chai";
 
-import { AuthorizationCallback, CloneIModelParams, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, ForkIModelParams, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, CloneIModelParams, ContainerTypes, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, ForkIModelParams, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertCollection, assertError, assertIModel, assertMinimalIModel } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
@@ -102,7 +102,8 @@ describe("[Management] IModelOperations", () => {
       expectedIModelProperties: {
         iTwinId,
         name: testIModelForRead.name,
-        description: testIModelForRead.description
+        description: testIModelForRead.description,
+        containersEnabled: ContainerTypes.None
       }
     });
   });
@@ -314,7 +315,8 @@ describe("[Management] IModelOperations", () => {
         extent: {
           southWest: { latitude: 1, longitude: 2 },
           northEast: { latitude: 3, longitude: 4 }
-        }
+        },
+        containersEnabled: ContainerTypes.SchemaSync | ContainerTypes.CodeStore | ContainerTypes.ViewStore
       },
       headers: {
         "X-Correlation-Id": randomUUID()
@@ -340,7 +342,8 @@ describe("[Management] IModelOperations", () => {
         name: testIModelGroup.getPrefixedUniqueIModelName("iModel from template (without changeset)"),
         template: {
           iModelId: testIModelForRead.id
-        }
+        },
+        containersEnabled: ContainerTypes.SchemaSync | ContainerTypes.CodeStore | ContainerTypes.ViewStore
       },
       headers: {
         "X-Correlation-Id": randomUUID()
@@ -367,7 +370,8 @@ describe("[Management] IModelOperations", () => {
         template: {
           iModelId: testIModelForRead.id,
           changesetId: testIModelFileProvider.changesets[5].id
-        }
+        },
+        containersEnabled: ContainerTypes.SchemaSync | ContainerTypes.CodeStore | ContainerTypes.ViewStore
       },
       headers: {
         "X-Correlation-Id": randomUUID()
@@ -397,7 +401,8 @@ describe("[Management] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("cloned iModel"),
-        changesetIndex
+        changesetIndex,
+        containersEnabled: ContainerTypes.SchemaSync | ContainerTypes.CodeStore | ContainerTypes.ViewStore
       }
     };
 
@@ -411,7 +416,8 @@ describe("[Management] IModelOperations", () => {
         iTwinId,
         name: cloneIModelParams.iModelProperties.name!,
         description: sourceIModel.description ?? undefined,
-        extent: sourceIModel.extent ?? undefined
+        extent: sourceIModel.extent ?? undefined,
+        containersEnabled: cloneIModelParams.iModelProperties.containersEnabled
       }
     });
     const changesets = await toArray(iModelsClient.changesets.getMinimalList({
@@ -433,7 +439,8 @@ describe("[Management] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("iModel Fork"),
-        preserveHistory: true
+        preserveHistory: true,
+        containersEnabled: ContainerTypes.SchemaSync | ContainerTypes.CodeStore | ContainerTypes.ViewStore
       }
     };
 
@@ -447,7 +454,8 @@ describe("[Management] IModelOperations", () => {
         iTwinId,
         name: forkIModelParams.iModelProperties.name!,
         description: sourceIModel.description!,
-        extent: undefined
+        extent: undefined,
+        containersEnabled: forkIModelParams.iModelProperties.containersEnabled
       }
     });
     const changesets = await toArray(iModelsClient.changesets.getMinimalList({
@@ -490,7 +498,8 @@ describe("[Management] IModelOperations", () => {
         name: newIModelName,
         iTwinId: iModelBeforeUpdate.iTwinId,
         description: iModelBeforeUpdate.description!,
-        extent: iModelBeforeUpdate.extent!
+        extent: iModelBeforeUpdate.extent!,
+        containersEnabled: iModelBeforeUpdate.containersEnabled
       }
     });
   });
@@ -528,7 +537,8 @@ describe("[Management] IModelOperations", () => {
         name: iModelBeforeUpdate.name,
         iTwinId: iModelBeforeUpdate.iTwinId,
         description: newIModelDescription,
-        extent: iModelBeforeUpdate.extent!
+        extent: iModelBeforeUpdate.extent!,
+        containersEnabled: iModelBeforeUpdate.containersEnabled
       }
     });
   });
@@ -575,7 +585,8 @@ describe("[Management] IModelOperations", () => {
         name: iModelBeforeUpdate.name,
         iTwinId: iModelBeforeUpdate.iTwinId,
         description: iModelBeforeUpdate.description!,
-        extent: newIModelExtent
+        extent: newIModelExtent,
+        containersEnabled: iModelBeforeUpdate.containersEnabled
       }
     });
   });
