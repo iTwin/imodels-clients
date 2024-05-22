@@ -237,7 +237,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       name: iModelProperties.name,
       description: iModelProperties.description,
       extent: iModelProperties.extent,
-      containersEnabled: iModelProperties.containersEnabled,
+      containersEnabled: iModelProperties.containersEnabled
     };
   }
 
@@ -281,7 +281,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       description: iModelProperties.description,
       changesetId: iModelProperties.changesetId,
       changesetIndex: iModelProperties.changesetIndex,
-      containersEnabled: iModelProperties.containersEnabled,
+      containersEnabled: iModelProperties.containersEnabled
     };
   }
 

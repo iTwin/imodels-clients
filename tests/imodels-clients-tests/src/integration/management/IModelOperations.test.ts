@@ -320,7 +320,7 @@ describe("[Management] IModelOperations", () => {
       },
       headers: {
         "X-Correlation-Id": randomUUID()
-      },
+      }
     };
 
     // Act
@@ -417,7 +417,7 @@ describe("[Management] IModelOperations", () => {
         name: cloneIModelParams.iModelProperties.name!,
         description: sourceIModel.description ?? undefined,
         extent: sourceIModel.extent ?? undefined,
-        containersEnabled: cloneIModelParams.iModelProperties.containersEnabled,
+        containersEnabled: cloneIModelParams.iModelProperties.containersEnabled
       }
     });
     const changesets = await toArray(iModelsClient.changesets.getMinimalList({
@@ -499,7 +499,7 @@ describe("[Management] IModelOperations", () => {
         iTwinId: iModelBeforeUpdate.iTwinId,
         description: iModelBeforeUpdate.description!,
         extent: iModelBeforeUpdate.extent!,
-        containersEnabled: iModelBeforeUpdate.containersEnabled,
+        containersEnabled: iModelBeforeUpdate.containersEnabled
       }
     });
   });
@@ -538,7 +538,7 @@ describe("[Management] IModelOperations", () => {
         iTwinId: iModelBeforeUpdate.iTwinId,
         description: newIModelDescription,
         extent: iModelBeforeUpdate.extent!,
-        containersEnabled: iModelBeforeUpdate.containersEnabled,
+        containersEnabled: iModelBeforeUpdate.containersEnabled
       }
     });
   });
@@ -586,7 +586,7 @@ describe("[Management] IModelOperations", () => {
         iTwinId: iModelBeforeUpdate.iTwinId,
         description: iModelBeforeUpdate.description!,
         extent: newIModelExtent,
-        containersEnabled: iModelBeforeUpdate.containersEnabled,
+        containersEnabled: iModelBeforeUpdate.containersEnabled
       }
     });
   });
