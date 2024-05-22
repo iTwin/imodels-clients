@@ -24,7 +24,8 @@ export enum ContainingChanges {
   SpatialData = 1 << 2,
   SheetsAndDrawings = 1 << 3,
   ViewsAndModels = 1 << 4,
-  GlobalProperties = 1 << 5
+  GlobalProperties = 1 << 5,
+  SchemaSync = 1 << 6
 }
 
 /** Synchronization information. */

@@ -39,6 +39,7 @@ export async function assertIModel(params: {
   expect(params.actualIModel.name).to.equal(params.expectedIModelProperties.name);
   assertOptionalProperty(params.expectedIModelProperties.description, params.actualIModel.description);
   assertOptionalProperty(params.expectedIModelProperties.extent, params.actualIModel.extent);
+  expect(params.actualIModel.containersEnabled).to.equal(params.expectedIModelProperties.containersEnabled);
   expect(params.actualIModel.createdDateTime).to.not.be.empty;
   expect(params.actualIModel.state).to.equal(IModelState.Initialized);
 

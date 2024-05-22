@@ -26,7 +26,7 @@ export interface ChangesetPropertiesForCreate {
   briefcaseId: number;
   /**
    * Type of changes that the Changeset contains. This property is flag value, therefore all change types, except
-   * Schema, can be combined See {@link ContainingChanges}.
+   * Schema and SchemaSync, can be combined See {@link ContainingChanges}.
    */
   containingChanges?: ContainingChanges;
   /** Information about the current synchronization process that is creating the changeset. */

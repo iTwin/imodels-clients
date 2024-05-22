@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { randomUUID } from "crypto";
 
-import { AuthorizationCallback, CreateIModelFromBaselineParams, IModel, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, ContainerTypes, CreateIModelFromBaselineParams, IModel, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
 import { TestAuthorizationProvider, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertIModel } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
@@ -46,7 +46,8 @@ describe("[Authoring] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel from baseline"),
-        filePath: testIModelFileProvider.iModel.filePath
+        filePath: testIModelFileProvider.iModel.filePath,
+        containersEnabled: ContainerTypes.SchemaSync | ContainerTypes.CodeStore | ContainerTypes.ViewStore,
       },
       headers: {
         "X-Correlation-Id": randomUUID()
