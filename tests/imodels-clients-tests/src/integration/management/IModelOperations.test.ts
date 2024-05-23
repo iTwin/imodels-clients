@@ -438,7 +438,7 @@ describe("[Management] IModelOperations", () => {
       iModelId: testIModelForRead.id,
       iModelProperties: {
         iTwinId,
-        name: testIModelGroup.getPrefixedUniqueIModelName("iModel Fork"),
+        name: testIModelGroup.getPrefixedUniqueIModelName("iModel fork"),
         preserveHistory: true,
         containersEnabled: ContainerTypes.SchemaSync | ContainerTypes.CodeStore | ContainerTypes.ViewStore
       }
