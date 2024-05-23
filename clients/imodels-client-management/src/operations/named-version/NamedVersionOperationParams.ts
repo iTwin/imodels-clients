@@ -16,6 +16,8 @@ export enum NamedVersionOrderByProperty {
 export interface GetNamedVersionListUrlParams extends CollectionRequestParams {
   /** Specifies in what order should entities be returned. See {@link OrderBy}. */
   $orderBy?: OrderBy<NamedVersion, NamedVersionOrderByProperty>;
+  /** Filters Named Versions whose name or description property contains the specified search value. */
+  $search?: string;
   /** Filters Named Versions with a specific name. */
   name?: string;
 }

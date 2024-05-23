@@ -171,6 +171,48 @@ describe("[Management] NamedVersionOperations", () => {
     expect(namedVersionArray.length).to.equal(0);
   });
 
+  it("should return versions that match the search filter when querying representation collection", async () => {
+    // Arrange
+    const expectedNamedVersions = namedVersionsCreatedInSetup.filter((version) => version.changesetIndex === 1);
+    expect(expectedNamedVersions.length).to.equal(1);
+
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $search: "Stone 1"
+      }
+    };
+
+    // Act
+    const namedVersions = iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
+
+    // Assert
+    const namedVersionArray = await toArray(namedVersions);
+    expect(namedVersionArray.length).to.equal(expectedNamedVersions.length);
+    expect(namedVersionArray.map((version) => version.id)).to.have.members(
+      expectedNamedVersions.map((version) => version.id)
+    );
+  });
+
+  it("should not return versions if none match the search filter when querying representation collection", async () => {
+    // Arrange
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $search: "Non existent"
+      }
+    };
+
+    // Act
+    const namedVersions = iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
+
+    // Assert
+    const namedVersionArray = await toArray(namedVersions);
+    expect(namedVersionArray.length).to.equal(0);
+  });
+
   it("should get valid minimal named version when querying minimal collection", async () => {
     // Arrange
     const getNamedVersionListParams: GetNamedVersionListParams = {
