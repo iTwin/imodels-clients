@@ -20,6 +20,7 @@ describe("[Management] IModelOperations", () => {
   let testIModelGroup: TestIModelGroup;
   let testIModelForRead: ReusableIModelMetadata;
   let testIModelForUpdate: IModelMetadata;
+  let testIModelForSearch: IModelMetadata;
 
   before(async () => {
     const container = getTestDIContainer();
@@ -43,6 +44,7 @@ describe("[Management] IModelOperations", () => {
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModelForUpdate = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for update"));
+    testIModelForSearch = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for search"));
   });
 
   after(async () => {
@@ -254,8 +256,31 @@ describe("[Management] IModelOperations", () => {
     const iModelArray = await toArray(iModels);
     expect(iModelArray.length).to.equal(1);
     const iModel = iModelArray[0];
-    expect(iModel.id).to.equal(iModel.id);
-    expect(iModel.name).to.equal(iModel.name);
+    expect(iModel.id).to.equal(testIModelForRead.id);
+    expect(iModel.name).to.equal(testIModelForRead.name);
+  });
+
+  it("should return iModels that match the search filter when querying representation collection", async () => {
+    // Arrange
+    const getIModelListParams: GetIModelListParams = {
+      authorization,
+      urlParams: {
+        iTwinId,
+        $search: "For search"
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
+      }
+    };
+
+    // Act
+    const iModels = iModelsClient.iModels.getRepresentationList(getIModelListParams);
+
+    // Assert
+    const iModelArray = await toArray(iModels);
+    expect(iModelArray.length).to.equal(1);
+    const iModel = iModelArray[0];
+    expect(iModel.id).to.equal(testIModelForSearch.id);
   });
 
   it("should get minimal iModel", async () => {
@@ -290,6 +315,27 @@ describe("[Management] IModelOperations", () => {
       urlParams: {
         iTwinId,
         name: "Non existent name"
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
+      }
+    };
+
+    // Act
+    const iModels = iModelsClient.iModels.getRepresentationList(getIModelListParams);
+
+    // Assert
+    const iModelArray = await toArray(iModels);
+    expect(iModelArray.length).to.equal(0);
+  });
+
+  it("should not return iModels if none match the search filter when querying representation collection", async () => {
+    // Arrange
+    const getIModelListParams: GetIModelListParams = {
+      authorization,
+      urlParams: {
+        iTwinId,
+        $search: "Non existent"
       },
       headers: {
         "X-Correlation-Id": randomUUID()
