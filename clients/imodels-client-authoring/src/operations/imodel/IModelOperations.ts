@@ -60,7 +60,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     await this.waitForBaselineFileInitialization({
       authorization: params.authorization,
       iModelId: createdIModel.id,
-      headers: params.headers
+      headers: params.headers,
+      timeOutInMs: params.timeOutInMs
     });
     return this.getSingle({
       authorization: params.authorization,

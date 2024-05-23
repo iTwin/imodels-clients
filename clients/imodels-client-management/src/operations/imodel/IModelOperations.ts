@@ -105,8 +105,8 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     await this.waitForTemplatedIModelInitialization({
       authorization: params.authorization,
       iModelId: createdIModel.id,
-      timeOutInMs: params.timeOutInMs,
-      headers: params.headers
+      headers: params.headers,
+      timeOutInMs: params.timeOutInMs
     });
 
     return this.getSingle({
@@ -142,7 +142,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
 
     await this.waitForClonedIModelInitialization({
       authorization: params.authorization,
-      iModelId: clonedIModelId
+      iModelId: clonedIModelId,
+      headers: params.headers,
+      timeOutInMs: params.timeOutInMs
     });
 
     return this.getSingle({
@@ -179,7 +181,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
 
     await this.waitForForkIModelInitialization({
       authorization: params.authorization,
-      iModelId: forkIModelId
+      iModelId: forkIModelId,
+      headers: params.headers,
+      timeOutInMs: params.timeOutInMs
     });
 
     return this.getSingle({
