@@ -189,10 +189,8 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Assert
     const namedVersionArray = await toArray(namedVersions);
-    expect(namedVersionArray.length).to.equal(expectedNamedVersions.length);
-    expect(namedVersionArray.map((version) => version.id)).to.have.members(
-      expectedNamedVersions.map((version) => version.id)
-    );
+    expect(namedVersionArray.length).to.equal(1);
+    expect(namedVersionArray[0].id).to.equal(expectedNamedVersions[0].id);
   });
 
   it("should not return versions if none match the search filter when querying representation collection", async () => {
