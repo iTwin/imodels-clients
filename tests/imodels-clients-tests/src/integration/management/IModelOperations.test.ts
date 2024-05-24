@@ -20,7 +20,6 @@ describe("[Management] IModelOperations", () => {
   let testIModelGroup: TestIModelGroup;
   let testIModelForRead: ReusableIModelMetadata;
   let testIModelForUpdate: IModelMetadata;
-  let testIModelForSearch: IModelMetadata;
 
   before(async () => {
     const container = getTestDIContainer();
@@ -43,8 +42,7 @@ describe("[Management] IModelOperations", () => {
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
 
     const testIModelCreator = container.get(TestIModelCreator);
-    testIModelForUpdate = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for update"));
-    testIModelForSearch = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for search"));
+    testIModelForUpdate = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for update and for search"));
   });
 
   after(async () => {
@@ -280,7 +278,7 @@ describe("[Management] IModelOperations", () => {
     const iModelArray = await toArray(iModels);
     expect(iModelArray.length).to.equal(1);
     const iModel = iModelArray[0];
-    expect(iModel.id).to.equal(testIModelForSearch.id);
+    expect(iModel.id).to.equal(testIModelForUpdate.id);
   });
 
   it("should get minimal iModel", async () => {
@@ -522,7 +520,7 @@ describe("[Management] IModelOperations", () => {
       }
     });
 
-    const newIModelName = testIModelGroup.getPrefixedUniqueIModelName("new iModel name");
+    const newIModelName = testIModelGroup.getPrefixedUniqueIModelName("new iModel name for search");
     const updateIModelParams: UpdateIModelParams = {
       authorization,
       iModelId: testIModelForUpdate.id,
