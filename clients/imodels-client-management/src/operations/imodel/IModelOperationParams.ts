@@ -18,6 +18,8 @@ export enum IModelOrderByProperty {
 export interface GetIModelListUrlParams extends CollectionRequestParams {
   /** Specifies in what order should entities be returned. See {@link OrderBy}. */
   $orderBy?: OrderBy<IModel, IModelOrderByProperty>;
+  /** Filters iModels whose name or description property contains the specified search value. */
+  $search?: string;
   /** Filters iModels for a specific iTwin. */
   iTwinId: string;
   /** Filters iModels with a specific name. */
