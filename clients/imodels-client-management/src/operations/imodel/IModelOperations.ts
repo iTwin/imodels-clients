@@ -162,7 +162,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * @returns {Promise<IModel>} newly created iModel. See {@link IModel}.
    * @throws an error that implements `iModelsError` interface with code {@link IModelsErrorCode.IModelForkInitializationFailed} if
    * iModel initialization failed, {@link IModelsErrorCode.IModelForkInitializationTimedOut} if operation did not complete in time or
-   * {@link IModelsErrorCode.MainIModelIsMissingFederationGuids} if the iModel from which user is attempting to create a Fork does not
+   * {@link IModelsErrorCode.MainIModelIsMissingFederationGuids} if the iModel from which user is attempting to create a fork does not
    * have {@link https://www.itwinjs.org/bis/guide/fundamentals/federationguids/ FederationGuid} property set on all its elements.
    * See {@link IModelsErrorCode}.
    */
@@ -179,7 +179,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     assertStringHeaderValue(Constants.headers.location, locationHeaderValue);
     const { iModelId: forkIModelId } = this._options.urlFormatter.parseIModelUrl(locationHeaderValue);
 
-    await this.waitForForkIModelInitialization({
+    await this.waitForIModelForkInitialization({
       authorization: params.authorization,
       iModelId: forkIModelId,
       headers: params.headers,
@@ -333,7 +333,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     return state === IModelCreationState.Successful;
   }
 
-  private async isForkIModelInitialized(params: {
+  private async isIModelForkInitialized(params: {
     authorization: AuthorizationCallback;
     iModelId: string;
     headers?: HeaderFactories;
@@ -347,7 +347,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     if (state === IModelCreationState.MainIModelIsMissingFederationGuids)
       throw new IModelsErrorImpl({
         code: IModelsErrorCode.MainIModelIsMissingFederationGuids,
-        message: "iModel Fork initialization failed because some elements in the source iModel do not have FederationGuid property set."
+        message: "iModel fork initialization failed because some elements in the main iModel do not have FederationGuid property set."
       });
 
     if (state !== IModelCreationState.Scheduled &&
@@ -356,7 +356,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     )
       throw new IModelsErrorImpl({
         code: IModelsErrorCode.IModelForkInitializationFailed,
-        message: `iModel Fork initialization failed with state '${state}'`
+        message: `iModel fork initialization failed with state '${state}'`
       });
 
     return state === IModelCreationState.Successful;
@@ -404,21 +404,21 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     });
   }
 
-  private async waitForForkIModelInitialization(params: {
+  private async waitForIModelForkInitialization(params: {
     authorization: AuthorizationCallback;
     iModelId: string;
     timeOutInMs?: number;
     headers?: HeaderFactories;
   }): Promise<void> {
     return waitForCondition({
-      conditionToSatisfy: async () => this.isForkIModelInitialized({
+      conditionToSatisfy: async () => this.isIModelForkInitialized({
         authorization: params.authorization,
         iModelId: params.iModelId,
         headers: params.headers
       }),
       timeoutErrorFactory: () => new IModelsErrorImpl({
         code: IModelsErrorCode.IModelForkInitializationTimedOut,
-        message: "Timed out waiting for iModel Fork initialization."
+        message: "Timed out waiting for iModel fork initialization."
       }),
       timeOutInMs: params.timeOutInMs
     });

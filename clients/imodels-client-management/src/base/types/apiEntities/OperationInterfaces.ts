@@ -13,7 +13,7 @@ export enum IModelCreationState {
   Scheduled = "scheduled",
   /** iModel creation process failed. */
   Failed = "failed",
-  /** iModel Fork creation failed because some elements in the main iModel do not have FederationGuid property set. */
+  /** iModel fork creation failed because some elements in the main iModel do not have FederationGuid property set. */
   MainIModelIsMissingFederationGuids = "mainIModelIsMissingFederationGuids",
 }
 
@@ -29,17 +29,17 @@ export interface ClonedFrom {
   changesetId: string;
 }
 
-/** Information about the source iModel of an iModel Fork. */
+/** Information about the source iModel of an iModel fork. */
 export interface ForkedFrom {
   /** Id of the source iModel. */
   iModelId: string;
   /**
-   * Id of the latest source iModel Changeset which was copied to this iModel when creating an iModel Fork.
+   * Id of the latest source iModel Changeset which was copied to this iModel when creating an iModel fork.
    * This corresponds to the Changeset specified in `changesetId` or `changesetIndex` properties when forking an iModel.
    * If `changesetId` is an empty string it means that no Changesets were copied from the source iModel to this one, only iModel Baseline.
    */
   changesetId: string;
-  /** Id of the Relationship entity that links source and Fork iModels. */
+  /** Id of the Relationship entity that links main and fork iModels. */
   relationshipId: string;
 }
 
