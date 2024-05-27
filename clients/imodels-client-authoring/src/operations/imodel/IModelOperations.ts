@@ -92,7 +92,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
       )
         throw new IModelsErrorImpl({
           code: IModelsErrorCode.BaselineFileInitializationFailed,
-          message: `Baseline File initialization failed with state '${state}.'`
+          message: `Baseline File initialization failed with state '${state}.'`,
+          statusCode: undefined,
+          details: undefined
         });
 
       return state === BaselineFileState.Initialized;
@@ -102,7 +104,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
       conditionToSatisfy: isBaselineInitialized,
       timeoutErrorFactory: () => new IModelsErrorImpl({
         code: IModelsErrorCode.BaselineFileInitializationTimedOut,
-        message: "Timed out waiting for Baseline File initialization."
+        message: "Timed out waiting for Baseline File initialization.",
+        statusCode: undefined,
+        details: undefined
       }),
       timeOutInMs: params.timeOutInMs
     });

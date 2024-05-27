@@ -39,7 +39,12 @@ export class IModelsErrorImpl extends IModelsErrorBaseImpl implements IModelsErr
   public details?: IModelsErrorDetail[];
   public statusCode?: number;
 
-  constructor(params: { code: IModelsErrorCode, message: string, details?: IModelsErrorDetail[], statusCode?: number }) {
+  constructor(params: { 
+    code: IModelsErrorCode, 
+    message: string, 
+    details: IModelsErrorDetail[] | undefined, 
+    statusCode: number | undefined
+  }) {
     super(params);
     this.details = params.details;
     this.statusCode = params.statusCode;
@@ -132,7 +137,8 @@ export class IModelsErrorParser {
         `Original error message: ${originalError.message},\n` +
         `original error code: ${originalError.code},\n` +
         `response status code: ${response.statusCode},\n` +
-        `response body: ${JSON.stringify(response.body)}`
+        `response body: ${JSON.stringify(response.body)}`,
+      details: undefined
     });
   }
 
@@ -143,7 +149,8 @@ export class IModelsErrorParser {
     return new IModelsErrorImpl({
       code: IModelsErrorCode.Unauthorized,
       statusCode: response.statusCode,
-      message: errorMessage
+      message: errorMessage,
+      details: undefined
     });
   }
 }

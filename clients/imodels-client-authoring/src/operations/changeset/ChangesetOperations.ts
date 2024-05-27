@@ -225,7 +225,9 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
 
         throw new IModelsErrorImpl({
           code: IModelsErrorCode.ChangesetDownloadFailed,
-          message: `Failed to download changeset. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}, error: ${JSON.stringify(errorAfterRetry)}.`
+          message: `Failed to download changeset. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}, error: ${JSON.stringify(errorAfterRetry)}.`,
+          statusCode: undefined,
+          details: undefined
         });
       }
     }
