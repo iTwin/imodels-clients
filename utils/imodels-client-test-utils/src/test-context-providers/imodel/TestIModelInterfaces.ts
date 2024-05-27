@@ -16,6 +16,12 @@ export interface NamedVersionMetadata {
   changesetIndex: number;
 }
 
+export interface ChangesetExtendedDataMetadata {
+  changesetId: string;
+  changesetIndex: number;
+  data: object;
+}
+
 export interface ChangesetGroupMetadata {
   id: string;
   description: string;
@@ -32,6 +38,7 @@ export interface ReusableIModelMetadata extends IModelMetadata {
   briefcase: BriefcaseMetadata;
   namedVersions: NamedVersionMetadata[];
   lock: Lock;
+  changesetExtendedData: ChangesetExtendedDataMetadata[];
   changesetGroups: ChangesetGroupMetadata[];
 }
 

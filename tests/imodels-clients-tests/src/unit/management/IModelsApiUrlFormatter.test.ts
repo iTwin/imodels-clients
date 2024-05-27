@@ -219,6 +219,19 @@ describe("[Management] IModelsApiUrlFormatter", () => {
     });
   });
 
+  describe("Changeset Extended Data urls", () => {
+    it("should format changeset extended data list url", () => {
+      // Arrange
+      const getChangesetExtendedDataListUrlParams = { iModelId: "IMODEL_ID" };
+
+      // Act
+      const changesetExtendedDataListUrl = iModelsApiUrlFormatter.getChangesetExtendedDataListUrl(getChangesetExtendedDataListUrlParams);
+
+      // Assert
+      expect(changesetExtendedDataListUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/changesets/extendeddata");
+    });
+  });
+
   describe("Changeset Group urls", () => {
     it("should format changeset group list url", () => {
       // Arrange

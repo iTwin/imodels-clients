@@ -12,7 +12,7 @@ import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 import { TestITwinProvider } from "../itwin/TestITwinProvider";
 
 import { TestIModelFileProvider } from "./TestIModelFileProvider";
-import { BriefcaseMetadata, ChangesetGroupMetadata, IModelMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
+import { BriefcaseMetadata, ChangesetExtendedDataMetadata, ChangesetGroupMetadata, IModelMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
 import { TestIModelsClient } from "./TestIModelsClient";
 
 @injectable()
@@ -20,6 +20,11 @@ export class TestIModelCreator {
   public static namedVersions = [
     { name: "Named version 5", changesetIndex: 5 },
     { name: "Named version 10", changesetIndex: 10 }
+  ];
+
+  public static changesetExtendedData = [
+    { changesetIndex: 1, data: { someKey: "someValue"} },
+    { changesetIndex: 2, data: { someKey: "someValue2"} }
   ];
 
   public static changesetGroups = [
@@ -69,6 +74,7 @@ export class TestIModelCreator {
     const changesetGroups = await this.createChangesetGroups(iModel.id);
     await this.uploadChangesets(iModel.id, briefcase.id, changesetGroups);
     await this.completeChangesetGroups(iModel.id, changesetGroups);
+    const changesetExtendedData = await this.createChangesetExtendedData(iModel.id);
     const namedVersions = await this.createNamedVersionsOnReusableIModel(iModel.id);
     const lock = await this.createLockOnReusableIModel(iModel.id, briefcase.id);
 
@@ -77,7 +83,8 @@ export class TestIModelCreator {
       briefcase,
       namedVersions,
       lock,
-      changesetGroups
+      changesetGroups,
+      changesetExtendedData
     };
   }
 
@@ -143,6 +150,29 @@ export class TestIModelCreator {
         }
       });
     }
+  }
+
+  private async createChangesetExtendedData(iModelId: string): Promise<ChangesetExtendedDataMetadata[]> {
+    const changesetExtendedDataList: ChangesetExtendedDataMetadata[] = [];
+    for (const changesetExtendedDataMetadata of TestIModelCreator.changesetExtendedData) {
+      const changesetMetadata = this._testIModelFileProvider.changesets[changesetExtendedDataMetadata.changesetIndex - 1];
+      const changesetExtendedData = await this._iModelsClient.changesetExtendedData.create({
+        authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
+        iModelId,
+        changesetExtendedDataProperties: {
+          data: changesetExtendedDataMetadata.data
+        },
+        changeset: { changesetIndex: changesetExtendedDataMetadata.changesetIndex }
+      });
+
+      changesetExtendedDataList.push({
+        changesetId: changesetMetadata.id,
+        changesetIndex: changesetExtendedDataMetadata.changesetIndex,
+        data: changesetExtendedData.data
+      });
+    }
+
+    return changesetExtendedDataList;
   }
 
   private async createChangesetGroups(iModelId: string): Promise<ChangesetGroupMetadata[]> {

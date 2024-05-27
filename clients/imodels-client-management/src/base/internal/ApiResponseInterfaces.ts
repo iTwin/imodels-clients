@@ -18,6 +18,15 @@ export interface CollectionLinks {
   next: Link | null;
 }
 
+export interface ChangesetExtendedDataServer {
+  /** Changeset id. */
+  changesetId: string;
+  /** Changeset index. */
+  changesetIndex: number;
+  /** Changeset extended data base64 encoded json object. */
+  data: string;
+}
+
 export interface CollectionResponse {
   _links: CollectionLinks;
 }
@@ -38,6 +47,10 @@ export interface ChangesetsResponse<TChangeset extends MinimalChangeset> extends
   changesets: TChangeset[];
 }
 
+export interface ChangesetExtendedDataListResponse extends CollectionResponse {
+  extendedData: ChangesetExtendedDataServer[];
+}
+
 export interface ChangesetGroupsResponse extends CollectionResponse {
   changesetGroups: ChangesetGroup[];
 }
@@ -52,6 +65,10 @@ export interface BriefcaseResponse {
 
 export interface ChangesetResponse {
   changeset: Changeset;
+}
+
+export interface ChangesetExtendedDataResponse {
+  extendedData: ChangesetExtendedDataServer;
 }
 
 export interface ChangesetGroupResponse {
