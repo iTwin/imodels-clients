@@ -37,6 +37,7 @@ describe("ErrorAdapter", () => {
     IModelsErrorCode.InvalidRequestBody,
     IModelsErrorCode.InvalidThumbnailFormat,
     IModelsErrorCode.MutuallyExclusivePropertiesProvided,
+    IModelsErrorCode.MutuallyExclusiveParametersProvided,
     IModelsErrorCode.MissingRequestBody,
     IModelsErrorCode.MissingRequiredProperty,
     IModelsErrorCode.MissingRequiredParameter,
@@ -84,7 +85,7 @@ describe("ErrorAdapter", () => {
 
     it(`should return correct error number (${testCase.originalErrorCode})`, () => {
       const originalErrorMessage = "test error message";
-      const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, message: originalErrorMessage });
+      const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, statusCode: 400, message: originalErrorMessage });
 
       const result = ErrorAdapter.toIModelError(originalError, undefined);
 
