@@ -39,11 +39,11 @@ export class IModelsErrorImpl extends IModelsErrorBaseImpl implements IModelsErr
   public details?: IModelsErrorDetail[];
   public statusCode?: number;
 
-  constructor(params: { 
-    code: IModelsErrorCode, 
-    message: string, 
-    details: IModelsErrorDetail[] | undefined, 
-    statusCode: number | undefined
+  constructor(params: {
+    code: IModelsErrorCode;
+    message: string;
+    details: IModelsErrorDetail[] | undefined;
+    statusCode: number | undefined;
   }) {
     super(params);
     this.details = params.details;
