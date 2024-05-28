@@ -8,9 +8,9 @@ import { IModelError } from "@itwin/core-common";
 
 import { IModelsError, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
 
-export type OperationNameForErrorMapping 
-  = "acquireBriefcase" 
-  | "downloadChangesets" 
+export type OperationNameForErrorMapping
+  = "acquireBriefcase"
+  | "downloadChangesets"
   | "updateLocks"
   | "createChangeset";
 
@@ -108,7 +108,7 @@ export class ErrorAdapter {
 
     if (apiErrorCode === IModelsErrorCode.DownloadAborted && operationName === "downloadChangesets")
       return ChangeSetStatus.DownloadCancelled;
-  
+
     if (apiErrorCode === IModelsErrorCode.ConflictWithAnotherUser) {
       if (operationName === "createChangeset")
         return IModelHubStatus.AnotherUserPushing;
