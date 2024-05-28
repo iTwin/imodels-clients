@@ -8,7 +8,11 @@ import { IModelError } from "@itwin/core-common";
 
 import { IModelsError, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
 
-export type OperationNameForErrorMapping = "acquireBriefcase" | "downloadChangesets";
+export type OperationNameForErrorMapping 
+  = "acquireBriefcase" 
+  | "downloadChangesets" 
+  | "updateLocks"
+  | "createChangeset";
 
 export class ErrorAdapter {
   public static toIModelError(error: unknown, operationName?: OperationNameForErrorMapping): unknown {
@@ -104,6 +108,13 @@ export class ErrorAdapter {
 
     if (apiErrorCode === IModelsErrorCode.DownloadAborted && operationName === "downloadChangesets")
       return ChangeSetStatus.DownloadCancelled;
+  
+    if (apiErrorCode === IModelsErrorCode.ConflictWithAnotherUser) {
+      if (operationName === "createChangeset")
+        return IModelHubStatus.AnotherUserPushing;
+      else if (operationName === "updateLocks")
+        return IModelHubStatus.LockOwnedByAnotherBriefcase;
+    }
 
     return undefined;
   }
@@ -137,8 +148,6 @@ export class ErrorAdapter {
       case IModelsErrorCode.NamedVersionOnChangesetExists:
         return IModelHubStatus.ChangeSetAlreadyHasVersion;
 
-      case IModelsErrorCode.ConflictWithAnotherUser:
-        return IModelHubStatus.AnotherUserPushing;
       case IModelsErrorCode.NewerChangesExist:
         return IModelHubStatus.PullIsRequired;
       case IModelsErrorCode.BaselineFileInitializationTimedOut:
