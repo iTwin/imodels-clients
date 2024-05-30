@@ -23,6 +23,8 @@ export interface IModelsClientOptions {
   api?: ApiOptions;
   /** Additional headers to add to each request. See {@link HeaderFactories}. */
   headers?: HeaderFactories;
+  /** Flag used to enable experimental features.*/
+  useExperimental?: boolean;
 }
 
 /**
@@ -106,7 +108,8 @@ export class IModelsClient {
     return {
       api: this.fillApiConfiguration(options?.api),
       restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse),
-      headers: options?.headers ?? {}
+      headers: options?.headers ?? {},
+      useExperimental: options?.useExperimental ?? false
     };
   }
 

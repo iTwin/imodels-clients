@@ -12,12 +12,21 @@ import { OperationOptions } from "../OperationOptions";
 import { ChangesetExtendedDataPropertiesForCreate, CreateChangesetExtendedDataParams } from "./ChangesetExtendedDataOperationsParams";
 
 export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> extends ManagementChangesetExtendedDataOperations<TOptions> {
+  constructor(
+    options: TOptions
+  ) {
+    super(options);
+
+    if (!this._options.useExperimental)
+      throw new Error("This operation is experimental and requires the useExperimental flag to be set to true in the client options.");
+  }
   /**
   * Creates Changeset Extended Data. Wraps the
   * {@link https://developer.bentley.com/apis/imodels-v2/operations/create-imodel-changeset-extended-data/ Create Changeset Extended Data}
   * operation from iModels API.
   * @param {CreateChangesetExtendedDataParams} params parameters for this operation. See {@link CreateChangesetExtendedDataParams}.
   * @returns {Promise<ChangesetExtendedData>} newly created Changeset Extended Data. See {@link ChangesetExtendedData}.
+  * @alpha
   */
   public async create(params: CreateChangesetExtendedDataParams): Promise<ChangesetExtendedData> {
     const { authorization, iModelId, headers, changesetExtendedDataProperties, changeset } = params;

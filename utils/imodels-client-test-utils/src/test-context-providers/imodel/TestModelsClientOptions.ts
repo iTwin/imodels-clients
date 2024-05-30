@@ -11,10 +11,12 @@ import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
 @injectable()
 export class TestIModelsClientOptions implements IModelsClientOptions {
   public api: ApiOptions;
+  public useExperimental: boolean;
 
   constructor(
     config: IModelsClientsTestsConfig
   ) {
     this.api = { baseUrl: config.apis.iModels.baseUrl };
+    this.useExperimental = true;
   }
 }

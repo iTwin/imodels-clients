@@ -9,13 +9,21 @@ import { OperationOptions } from "../OperationOptions";
 import { GetChangesetExtendedDataListParams, GetSingleChangesetExtendedDataParams } from "./ChangesetExtendedDataOperationParams";
 
 export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
+  constructor(
+    options: TOptions
+  ) {
+    super(options);
 
+    if (!this._options.useExperimental)
+      throw new Error("This operation is experimental and requires the useExperimental flag to be set to true in the client options.");
+  }
   /**
    * Gets Changesets Extended Data for a specific iModel. Wraps the
    * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-changesets-extended-data/ Get iModel Changesets Extended Data}
    * operation from iModels API.
    * @param {GetChangesetExtendedDataListParams} params parameters for this operation. See {@link GetChangesetExtendedDataListParams}.
    * @returns {EntityListIterator<ChangesetExtendedData>} iterator for Changeset Extended Data list. See {@link EntityListIterator}.
+   * @alpha
    */
   public getList(params: GetChangesetExtendedDataListParams): EntityListIterator<ChangesetExtendedData> {
     const entityCollectionAccessor = (response: HttpResponse<ChangesetExtendedDataListResponse>) => {
@@ -37,6 +45,7 @@ export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> 
    * operation from iModels API.
    * @param {GetSingleChangesetExtendedDataParams} params parameters for this operation. See {@link GetSingleChangesetExtendedDataParams}.
    * @returns {Promise<ChangesetExtendedData>} a Changeset Extended Data with the specified changeset id or index. See {@link ChangesetExtendedData}.
+   * @alpha
    */
   public async getSingle(params: GetSingleChangesetExtendedDataParams): Promise<ChangesetExtendedData> {
     const { authorization, iModelId, headers, ...changesetIdOrIndex } = params;

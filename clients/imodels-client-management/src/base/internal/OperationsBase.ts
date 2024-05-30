@@ -18,6 +18,7 @@ export interface OperationsBaseOptions {
   restClient: RestClient;
   api: { version: string };
   headers: HeaderFactories;
+  useExperimental: boolean;
 }
 
 export class OperationsBase<TOptions extends OperationsBaseOptions> {
