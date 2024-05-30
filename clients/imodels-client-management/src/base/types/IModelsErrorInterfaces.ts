@@ -17,6 +17,7 @@ export enum IModelsErrorCode {
   ResourceQuotaExceeded = "ResourceQuotaExceeded",
   DataConflict = "DataConflict",
   MutuallyExclusivePropertiesProvided = "MutuallyExclusivePropertiesProvided",
+  MutuallyExclusiveParametersProvided = "MutuallyExclusiveParametersProvided",
   MissingRequiredProperty = "MissingRequiredProperty",
   MissingRequiredParameter = "MissingRequiredParameter",
   MissingRequiredHeader = "MissingRequiredHeader",
@@ -90,6 +91,8 @@ export interface IModelsErrorBase extends Error {
 export interface IModelsError extends IModelsErrorBase {
   /** Data that describes the error in more detail. See {@link iModelsErrorDetail}. */
   details?: IModelsErrorDetail[];
+  /** HTTP response status code. */
+  statusCode?: number;
 }
 
 export function isIModelsApiError(error: unknown): error is IModelsError {

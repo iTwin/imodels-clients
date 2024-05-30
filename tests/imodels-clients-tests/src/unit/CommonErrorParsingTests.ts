@@ -34,7 +34,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, 
     };
 
     // Act
-    const parsedError: IModelsError = testedFunction({ body: errorResponse }, new Error()) as IModelsError;
+    const parsedError: IModelsError = testedFunction({ statusCode: 422, body: errorResponse }, new Error()) as IModelsError;
 
     // Assert
     const expectedErrorMessage = "Cannot create iModel. Details:\n" +
@@ -45,6 +45,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, 
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.InvalidIModelsRequest,
+        statusCode: 422,
         message: expectedErrorMessage,
         details: [
           {
@@ -83,6 +84,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, 
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unauthorized,
+        statusCode: 422,
         message: "iModels API message"
       }
     });
@@ -103,6 +105,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, 
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unauthorized,
+        statusCode: 401,
         message: "unwrapped error message"
       }
     });
@@ -120,6 +123,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, 
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unauthorized,
+        statusCode: 401,
         message: "Authorization failed"
       }
     });
@@ -172,6 +176,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, 
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unrecognized,
+        statusCode: 444,
         message: "Unknown error occurred.\n"+
           "Original error message: originalErrorMessage,\n"+
           "original error code: undefined,\n"+
@@ -190,6 +195,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, 
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unrecognized,
+        statusCode: 445,
         message: "Unknown error occurred.\n"+
           "Original error message: originalErrorMessage,\n"+
           "original error code: undefined,\n"+
@@ -211,6 +217,7 @@ export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, 
       objectThrown: parsedError,
       expectedError: {
         code: IModelsErrorCode.Unrecognized,
+        statusCode: 446,
         message: "Unknown error occurred.\n"+
           "Original error message: originalErrorMessage,\n"+
           "original error code: undefined,\n"+

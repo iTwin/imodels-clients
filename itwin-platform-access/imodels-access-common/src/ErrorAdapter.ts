@@ -54,6 +54,7 @@ export class ErrorAdapter {
       case IModelsErrorCode.InvalidRequestBody:
       case IModelsErrorCode.InvalidThumbnailFormat:
       case IModelsErrorCode.MutuallyExclusivePropertiesProvided:
+      case IModelsErrorCode.MutuallyExclusiveParametersProvided:
       case IModelsErrorCode.MissingRequestBody:
       case IModelsErrorCode.MissingRequiredProperty:
       case IModelsErrorCode.MissingRequiredParameter:

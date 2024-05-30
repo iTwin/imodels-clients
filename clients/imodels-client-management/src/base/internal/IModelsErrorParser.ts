@@ -14,6 +14,7 @@ interface IModelsApiErrorWrapper {
 
 export interface IModelsApiError {
   code: string;
+  statusCode?: number;
   message?: string;
   details?: IModelsApiErrorDetail[];
 }
@@ -36,10 +37,17 @@ export class IModelsErrorBaseImpl extends Error {
 
 export class IModelsErrorImpl extends IModelsErrorBaseImpl implements IModelsError {
   public details?: IModelsErrorDetail[];
+  public statusCode?: number;
 
-  constructor(params: { code: IModelsErrorCode, message: string, details?: IModelsErrorDetail[] }) {
+  constructor(params: {
+    code: IModelsErrorCode;
+    message: string;
+    details: IModelsErrorDetail[] | undefined;
+    statusCode: number | undefined;
+  }) {
     super(params);
     this.details = params.details;
+    this.statusCode = params.statusCode;
   }
 }
 
@@ -74,6 +82,7 @@ export class IModelsErrorParser {
 
     return new IModelsErrorImpl({
       code: errorCode,
+      statusCode: response.statusCode,
       message: errorMessage,
       details: errorDetails
     });
@@ -123,11 +132,13 @@ export class IModelsErrorParser {
   private static createUnrecognizedError(response: ResponseInfo, originalError: OriginalError): Error {
     return new IModelsErrorImpl({
       code: IModelsErrorCode.Unrecognized,
+      statusCode: response.statusCode,
       message: `${IModelsErrorParser._defaultErrorMessage}.\n` +
         `Original error message: ${originalError.message},\n` +
         `original error code: ${originalError.code},\n` +
         `response status code: ${response.statusCode},\n` +
-        `response body: ${JSON.stringify(response.body)}`
+        `response body: ${JSON.stringify(response.body)}`,
+      details: undefined
     });
   }
 
@@ -137,7 +148,9 @@ export class IModelsErrorParser {
       ?? IModelsErrorParser._defaultUnauthorizedMessage;
     return new IModelsErrorImpl({
       code: IModelsErrorCode.Unauthorized,
-      message: errorMessage
+      statusCode: response.statusCode,
+      message: errorMessage,
+      details: undefined
     });
   }
 }
