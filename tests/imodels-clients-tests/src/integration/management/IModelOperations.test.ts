@@ -520,7 +520,7 @@ describe("[Management] IModelOperations", () => {
       }
     });
 
-    const newIModelName = testIModelGroup.getPrefixedUniqueIModelName("TEST iModel for update and for search Updated");
+    const newIModelName = testIModelGroup.getPrefixedUniqueIModelName("Test iModel for update and for search updated");
     const updateIModelParams: UpdateIModelParams = {
       authorization,
       iModelId: testIModelForUpdate.id,
