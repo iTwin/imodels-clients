@@ -76,7 +76,6 @@ describe("ErrorAdapter", () => {
     { originalErrorCode: IModelsErrorCode.VersionExists, expectedErrorNumber: IModelHubStatus.VersionAlreadyExists },
     { originalErrorCode: IModelsErrorCode.ChangesetExists, expectedErrorNumber: IModelHubStatus.ChangeSetAlreadyExists },
     { originalErrorCode: IModelsErrorCode.NamedVersionOnChangesetExists, expectedErrorNumber: IModelHubStatus.ChangeSetAlreadyHasVersion },
-    { originalErrorCode: IModelsErrorCode.ConflictWithAnotherUser, expectedErrorNumber: IModelHubStatus.AnotherUserPushing },
     { originalErrorCode: IModelsErrorCode.NewerChangesExist, expectedErrorNumber: IModelHubStatus.PullIsRequired },
     { originalErrorCode: IModelsErrorCode.BaselineFileInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout },
     { originalErrorCode: IModelsErrorCode.IModelFromTemplateInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout },
@@ -107,10 +106,20 @@ describe("ErrorAdapter", () => {
       originalErrorCode: IModelsErrorCode.DownloadAborted,
       operationName: "downloadChangesets" as const,
       expectedErrorNumber: ChangeSetStatus.DownloadCancelled
+    },
+    {
+      originalErrorCode: IModelsErrorCode.ConflictWithAnotherUser,
+      operationName: "createChangeset" as const,
+      expectedErrorNumber: IModelHubStatus.AnotherUserPushing
+    },
+    {
+      originalErrorCode: IModelsErrorCode.ConflictWithAnotherUser,
+      operationName: "updateLocks" as const,
+      expectedErrorNumber: IModelHubStatus.LockOwnedByAnotherBriefcase
     }
   ].forEach((testCase: { originalErrorCode: IModelsErrorCode, operationName: OperationNameForErrorMapping, expectedErrorNumber: number }) => {
 
-    it(`should handle generic error codes for specific operation (${testCase.originalErrorCode})`, () => {
+    it(`should handle generic error codes for specific operation (${testCase.originalErrorCode}, ${testCase.operationName})`, () => {
       const originalErrorMessage = "test error message";
       const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, message: originalErrorMessage, statusCode: undefined, details: undefined });
 
@@ -139,6 +148,10 @@ describe("ErrorAdapter", () => {
     },
     {
       originalErrorCode: IModelsErrorCode.DownloadAborted,
+      operationName: "acquireBriefcase" as const
+    },
+    {
+      originalErrorCode: IModelsErrorCode.ConflictWithAnotherUser,
       operationName: "acquireBriefcase" as const
     }
   ].forEach((testCase: { originalErrorCode: IModelsErrorCode, operationName: OperationNameForErrorMapping | undefined }) => {
