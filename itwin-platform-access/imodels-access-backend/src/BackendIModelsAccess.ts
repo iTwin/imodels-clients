@@ -129,7 +129,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
       changesetProperties: PlatformToClientAdapter.toChangesetPropertiesForCreate(arg.changesetProps, changesetDescription)
     };
     const createdChangeset: Changeset = await handleAPIErrors(
-      async () => this._iModelsClient.changesets.create(createChangesetParams)
+      async () => this._iModelsClient.changesets.create(createChangesetParams),
+      "createChangeset"
     );
 
     return createdChangeset.index;
@@ -307,7 +308,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
 
     await handleAPIErrors(
-      async () => this._iModelsClient.locks.update(updateLockParams)
+      async () => this._iModelsClient.locks.update(updateLockParams),
+      "updateLocks"
     );
   }
 
@@ -503,7 +505,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
       };
 
       await handleAPIErrors(
-        async () => this._iModelsClient.locks.update(updateLockParams)
+        async () => this._iModelsClient.locks.update(updateLockParams),
+        "updateLocks"
       );
     }
   }

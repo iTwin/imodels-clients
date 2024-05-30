@@ -5,25 +5,6 @@
 
 /** Possible error codes. */
 export enum IModelsErrorCode {
-  DataConflict = "DataConflict",
-  InsufficientPermissions = "InsufficientPermissions",
-  InvalidHeaderValue = "InvalidHeaderValue",
-  InvalidIModelsRequest = "InvalidiModelsRequest",
-  InvalidRequestBody = "InvalidRequestBody",
-  InvalidValue = "InvalidValue",
-  MissingRequestBody = "MissingRequestBody",
-  MissingRequiredHeader = "MissingRequiredHeader",
-  MissingRequiredParameter = "MissingRequiredParameter",
-  MissingRequiredProperty = "MissingRequiredProperty",
-  MutuallyExclusivePropertiesProvided = "MutuallyExclusivePropertiesProvided",
-  RateLimitExceeded = "RateLimitExceeded",
-  RequestTooLarge = "RequestTooLarge",
-  ResourceQuotaExceeded = "ResourceQuotaExceeded",
-  TooManyRequests = "TooManyRequests",
-  Unauthorized = "Unauthorized",
-  Unknown = "Unknown",
-  Unrecognized = "Unrecognized",
-
   BaselineFileInitializationFailed = "BaselineFileInitializationFailed",
   BaselineFileInitializationTimedOut = "BaselineFileInitializationTimedOut",
   BaselineFileNotFound = "BaselineFileNotFound",
@@ -37,6 +18,7 @@ export enum IModelsErrorCode {
   ClonedIModelInitializationFailed = "ClonedIModelInitializationFailed",
   ClonedIModelInitializationTimedOut = "ClonedIModelInitializationTimedOut",
   ConflictWithAnotherUser = "ConflictWithAnotherUser",
+  DataConflict = "DataConflict",
   DownloadAborted = "DownloadAborted",
   FileNotFound = "FileNotFound",
   IModelExists = "iModelExists",
@@ -45,15 +27,33 @@ export enum IModelsErrorCode {
   IModelFromTemplateInitializationFailed = "IModelFromTemplateInitializationFailed",
   IModelFromTemplateInitializationTimedOut = "IModelFromTemplateInitializationTimedOut",
   IModelNotFound = "iModelNotFound",
+  InsufficientPermissions = "InsufficientPermissions",
   InvalidChange = "InvalidChange",
+  InvalidHeaderValue = "InvalidHeaderValue",
+  InvalidIModelsRequest = "InvalidiModelsRequest",
+  InvalidRequestBody = "InvalidRequestBody",
   InvalidThumbnailFormat = "InvalidThumbnailFormat",
+  InvalidValue = "InvalidValue",
   ITwinNotFound = "iTwinNotFound",
   LockNotFound = "LockNotFound",
   MainIModelIsMissingFederationGuids = "MainIModelIsMissingFederationGuids",
   MaximumNumberOfBriefcasesPerUser = "MaximumNumberOfBriefcasesPerUser",
+  MissingRequestBody = "MissingRequestBody",
+  MissingRequiredHeader = "MissingRequiredHeader",
+  MissingRequiredParameter = "MissingRequiredParameter",
+  MissingRequiredProperty = "MissingRequiredProperty",
+  MutuallyExclusiveParametersProvided = "MutuallyExclusiveParametersProvided",
+  MutuallyExclusivePropertiesProvided = "MutuallyExclusivePropertiesProvided",
   NamedVersionNotFound = "NamedVersionNotFound",
   NamedVersionOnChangesetExists = "NamedVersionOnChangesetExists",
   NewerChangesExist = "NewerChangesExist",
+  RateLimitExceeded = "RateLimitExceeded",
+  RequestTooLarge = "RequestTooLarge",
+  ResourceQuotaExceeded = "ResourceQuotaExceeded",
+  TooManyRequests = "TooManyRequests",
+  Unauthorized = "Unauthorized",
+  Unknown = "Unknown",
+  Unrecognized = "Unrecognized",
   UserNotFound = "UserNotFound",
   VersionExists = "NamedVersionExists"
 }
@@ -90,6 +90,8 @@ export interface IModelsErrorBase extends Error {
 export interface IModelsError extends IModelsErrorBase {
   /** Data that describes the error in more detail. See {@link iModelsErrorDetail}. */
   details?: IModelsErrorDetail[];
+  /** HTTP response status code. */
+  statusCode?: number;
 }
 
 export function isIModelsApiError(error: unknown): error is IModelsError {

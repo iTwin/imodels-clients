@@ -327,7 +327,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     )
       throw new IModelsErrorImpl({
         code: params.errorCodeOnFailure,
-        message: `iModel initialization failed with state '${state}'`
+        message: `iModel initialization failed with state '${state}'`,
+        statusCode: undefined,
+        details: undefined
       });
 
     return state === IModelCreationState.Successful;
@@ -347,7 +349,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     if (state === IModelCreationState.MainIModelIsMissingFederationGuids)
       throw new IModelsErrorImpl({
         code: IModelsErrorCode.MainIModelIsMissingFederationGuids,
-        message: "iModel fork initialization failed because some elements in the main iModel do not have FederationGuid property set."
+        message: "iModel fork initialization failed because some elements in the main iModel do not have FederationGuid property set.",
+        statusCode: undefined,
+        details: undefined
       });
 
     if (state !== IModelCreationState.Scheduled &&
@@ -356,7 +360,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     )
       throw new IModelsErrorImpl({
         code: IModelsErrorCode.IModelForkInitializationFailed,
-        message: `iModel fork initialization failed with state '${state}'`
+        message: `iModel fork initialization failed with state '${state}'`,
+        statusCode: undefined,
+        details: undefined
       });
 
     return state === IModelCreationState.Successful;
@@ -377,7 +383,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       }),
       timeoutErrorFactory: () => new IModelsErrorImpl({
         code: IModelsErrorCode.IModelFromTemplateInitializationTimedOut,
-        message: "Timed out waiting for Baseline File initialization."
+        message: "Timed out waiting for Baseline File initialization.",
+        statusCode: undefined,
+        details: undefined
       }),
       timeOutInMs: params.timeOutInMs
     });
@@ -398,7 +406,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       }),
       timeoutErrorFactory: () => new IModelsErrorImpl({
         code: IModelsErrorCode.ClonedIModelInitializationTimedOut,
-        message: "Timed out waiting for Cloned iModel initialization."
+        message: "Timed out waiting for Cloned iModel initialization.",
+        statusCode: undefined,
+        details: undefined
       }),
       timeOutInMs: params.timeOutInMs
     });
@@ -418,7 +428,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       }),
       timeoutErrorFactory: () => new IModelsErrorImpl({
         code: IModelsErrorCode.IModelForkInitializationTimedOut,
-        message: "Timed out waiting for iModel fork initialization."
+        message: "Timed out waiting for iModel fork initialization.",
+        statusCode: undefined,
+        details: undefined
       }),
       timeOutInMs: params.timeOutInMs
     });

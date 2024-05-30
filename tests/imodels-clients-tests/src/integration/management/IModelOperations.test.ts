@@ -264,7 +264,7 @@ describe("[Management] IModelOperations", () => {
       authorization,
       urlParams: {
         iTwinId,
-        $search: "For search"
+        $search: testIModelGroup.getPrefixedUniqueIModelName("test iModel for update and for Sear")
       },
       headers: {
         "X-Correlation-Id": randomUUID()
@@ -520,7 +520,7 @@ describe("[Management] IModelOperations", () => {
       }
     });
 
-    const newIModelName = testIModelGroup.getPrefixedUniqueIModelName("new iModel name for search");
+    const newIModelName = testIModelGroup.getPrefixedUniqueIModelName("Test iModel for update and for search updated");
     const updateIModelParams: UpdateIModelParams = {
       authorization,
       iModelId: testIModelForUpdate.id,

@@ -7,12 +7,13 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, RestClient } from "../types/RestClient";
 
 import { AxiosResponseHeadersAdapter } from "./AxiosResponseHeadersAdapter";
+import { ResponseInfo } from "./IModelsErrorParser";
 
 /**
  * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the
  * methods in {@link RestClient}.
  */
-export type ParseErrorFunc = (response: { statusCode?: number, body?: unknown }, originalError: Error & { code?: string }) => Error;
+export type ParseErrorFunc = (response: ResponseInfo, originalError: Error & { code?: string }) => Error;
 
 /** Default implementation for {@link RestClient} interface that uses `axios` library for sending the requests. */
 export class AxiosRestClient implements RestClient {
