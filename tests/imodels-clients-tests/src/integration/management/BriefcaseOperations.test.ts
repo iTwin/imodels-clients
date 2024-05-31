@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { AuthorizationCallback, Briefcase, EntityListIterator, GetBriefcaseListParams, GetSingleBriefcaseParams, IModelsClient, IModelsClientOptions, SPECIAL_VALUES_ME, take, toArray } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Briefcase, BriefcaseOrderByProperty, EntityListIterator, GetBriefcaseListParams, GetSingleBriefcaseParams, IModelsClient, IModelsClientOptions, OrderByOperator, SPECIAL_VALUES_ME, take, toArray } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertBriefcase, assertCollection, assertMinimalBriefcase } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "../common";
@@ -55,7 +55,7 @@ describe("[Management] BriefcaseOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: briefcases,
-        isEntityCountCorrect: (count) => count === 1
+        isEntityCountCorrect: (count) => count === testIModel.briefcases.length
       });
     });
   });
@@ -66,7 +66,10 @@ describe("[Management] BriefcaseOperations", () => {
       authorization,
       iModelId: testIModel.id,
       urlParams: {
-        ownerId: SPECIAL_VALUES_ME
+        ownerId: SPECIAL_VALUES_ME,
+        $orderBy: {
+          property: BriefcaseOrderByProperty.AcquiredDateTime
+        }
       }
     };
 
@@ -75,9 +78,16 @@ describe("[Management] BriefcaseOperations", () => {
 
     // Assert
     const briefcaseList = await toArray(briefcases);
-    expect(briefcaseList.length).to.equal(1);
-    const briefcase = briefcaseList[0];
-    expect(briefcase.briefcaseId).to.equal(testIModel.briefcase.id);
+    expect(briefcaseList.length).to.equal(testIModel.briefcases.length);
+    for (let i = 0; i < briefcaseList.length; i++) {
+      assertBriefcase({
+        actualBriefcase: briefcaseList[i],
+        expectedBriefcaseProperties: {
+          briefcaseId: testIModel.briefcases[i].id,
+          deviceName: testIModel.briefcases[i].deviceName
+        }
+      });
+    }
   });
 
   it("should not return user owned briefcases if user does not own any when querying representation collection", async () => {
@@ -127,7 +137,10 @@ describe("[Management] BriefcaseOperations", () => {
       authorization,
       iModelId: testIModel.id,
       urlParams: {
-        $top: 1
+        $top: 1,
+        $orderBy: {
+          property: BriefcaseOrderByProperty.AcquiredDateTime
+        }
       }
     };
 
@@ -142,18 +155,19 @@ describe("[Management] BriefcaseOperations", () => {
     await assertBriefcase({
       actualBriefcase: briefcase,
       expectedBriefcaseProperties: {
-        briefcaseId: testIModel.briefcase.id,
-        deviceName: testIModel.briefcase.deviceName
+        briefcaseId: testIModel.briefcases[0].id,
+        deviceName: testIModel.briefcases[0].deviceName
       }
     });
   });
 
   it("should get briefcase by id", async () => {
     // Arrange
+    const expectedBriefcase = testIModel.briefcases[0];
     const getSingleBriefcaseParams: GetSingleBriefcaseParams = {
       authorization,
       iModelId: testIModel.id,
-      briefcaseId: testIModel.briefcase.id
+      briefcaseId: expectedBriefcase.id
     };
 
     // Act
@@ -163,9 +177,52 @@ describe("[Management] BriefcaseOperations", () => {
     await assertBriefcase({
       actualBriefcase: briefcase,
       expectedBriefcaseProperties: {
-        briefcaseId: testIModel.briefcase.id,
-        deviceName: testIModel.briefcase.deviceName
+        briefcaseId: expectedBriefcase.id,
+        deviceName: expectedBriefcase.deviceName
       }
     });
+  });
+
+  it("should order items by createdDateTime when querying representation collection (ascending order)", async () => {
+    // Arrange
+    const getBriefcaseListParams: GetBriefcaseListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $orderBy: {
+          property: BriefcaseOrderByProperty.AcquiredDateTime
+        }
+      }
+    };
+
+    // Act
+    const briefcases = await toArray(iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams));
+
+    // Assert
+    expect(briefcases.length).to.equal(testIModel.briefcases.length);
+    for (let i = 0; i < briefcases.length - 1; i++)
+      expect(new Date(briefcases[i].acquiredDateTime)).to.be.lessThan(new Date(briefcases[i + 1].acquiredDateTime));
+  });
+
+  it("should order items by createdDateTime when querying representation collection (descending order)", async () => {
+    // Arrange
+    const getBriefcaseListParams: GetBriefcaseListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $orderBy: {
+          property: BriefcaseOrderByProperty.AcquiredDateTime,
+          operator: OrderByOperator.Descending
+        }
+      }
+    };
+
+    // Act
+    const briefcases = await toArray(iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams));
+
+    // Assert
+    expect(briefcases.length).to.equal(testIModel.briefcases.length);
+    for (let i = 0; i < briefcases.length - 1; i++)
+      expect(new Date(briefcases[i].acquiredDateTime)).to.be.greaterThan(new Date(briefcases[i + 1].acquiredDateTime));
   });
 });

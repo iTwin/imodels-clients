@@ -9,7 +9,8 @@ import { AtLeastOneProperty, CollectionRequestParams, IModelScopedOperationParam
  * entities are ordered in a collection.
  */
 export enum NamedVersionOrderByProperty {
-  ChangesetIndex = "changesetIndex"
+  ChangesetIndex = "changesetIndex",
+  CreatedDateTime = "createdDateTime"
 }
 
 /** Url parameters supported in Named Version list query. */

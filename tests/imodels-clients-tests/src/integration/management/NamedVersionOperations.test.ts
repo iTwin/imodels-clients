@@ -131,6 +131,49 @@ describe("[Management] NamedVersionOperations", () => {
       expect(namedVersionChangesetIndexes[i]).to.be.greaterThan(namedVersionChangesetIndexes[i + 1]);
   });
 
+  it("should order items by createdDateTime when querying representation collection (ascending order)", async () => {
+    // Arrange
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $orderBy: {
+          property: NamedVersionOrderByProperty.CreatedDateTime
+        }
+      }
+    };
+
+    // Act
+    const namedVersions = await toArray(iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams));
+
+    // Assert
+    expect(namedVersions.length).to.equal(namedVersionsCreatedInSetup.length)
+    for (let i = 0; i < namedVersions.length - 1; i++)
+      expect(new Date(namedVersions[i].createdDateTime)).to.be.lessThan(new Date(namedVersions[i + 1].createdDateTime));
+  });
+
+  it("should order items by createdDateTime when querying representation collection (descending order)", async () => {
+    // Arrange
+    const getNamedVersionListParams: GetNamedVersionListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        $orderBy: {
+          property: NamedVersionOrderByProperty.CreatedDateTime,
+          operator: OrderByOperator.Descending
+        }
+      }
+    };
+
+    // Act
+    const namedVersions = await toArray(iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams));
+
+    // Assert
+    expect(namedVersions.length).to.equal(namedVersionsCreatedInSetup.length)
+    for (let i = 0; i < namedVersions.length - 1; i++)
+      expect(new Date(namedVersions[i].createdDateTime)).to.be.greaterThan(new Date(namedVersions[i + 1].createdDateTime));
+  });
+
   it("should return versions that match the name filter when querying representation collection", async () => {
     // Arrange
     const existingNamedVersion = namedVersionsCreatedInSetup[0];
