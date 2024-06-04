@@ -18,12 +18,9 @@ export interface CollectionLinks {
   next: Link | null;
 }
 
-export interface ChangesetExtendedDataServer {
-  /** Changeset id. */
+export interface ChangesetExtendedDataApiResponse {
   changesetId: string;
-  /** Changeset index. */
   changesetIndex: number;
-  /** Changeset extended data base64 encoded json object. */
   data: string;
 }
 
@@ -48,7 +45,7 @@ export interface ChangesetsResponse<TChangeset extends MinimalChangeset> extends
 }
 
 export interface ChangesetExtendedDataListResponse extends CollectionResponse {
-  extendedData: ChangesetExtendedDataServer[];
+  extendedData: ChangesetExtendedDataApiResponse[];
 }
 
 export interface ChangesetGroupsResponse extends CollectionResponse {
@@ -68,7 +65,7 @@ export interface ChangesetResponse {
 }
 
 export interface ChangesetExtendedDataResponse {
-  extendedData: ChangesetExtendedDataServer;
+  extendedData: ChangesetExtendedDataApiResponse;
 }
 
 export interface ChangesetGroupResponse {

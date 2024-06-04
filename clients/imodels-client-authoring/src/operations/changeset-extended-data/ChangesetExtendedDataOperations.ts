@@ -18,7 +18,7 @@ export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> 
     super(options);
 
     if (!this._options.useExperimental)
-      throw new Error("This operation is experimental and requires the useExperimental flag to be set to true in the client options.");
+      throw new Error("This operation is experimental and requires the useExperimental flag to be set to `true` in the client options.");
   }
   /**
   * Creates Changeset Extended Data. Wraps the
@@ -29,11 +29,11 @@ export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> 
   * @alpha
   */
   public async create(params: CreateChangesetExtendedDataParams): Promise<ChangesetExtendedData> {
-    const { authorization, iModelId, headers, changesetExtendedDataProperties, changeset } = params;
+    const { authorization, iModelId, headers, changesetExtendedDataProperties, ...changesetIdOrIndex } = params;
     const createChangesetExtendedDataBody = this.getCreateChangesetExtendedDataRequestBody(changesetExtendedDataProperties);
     const createChangesetExtendedDataResponse = await this.sendPostRequest<ChangesetExtendedDataResponse>({
       authorization,
-      url: this._options.urlFormatter.getSingleChangesetExtendedDataUrl({ iModelId, ...changeset }),
+      url: this._options.urlFormatter.getSingleChangesetExtendedDataUrl({ iModelId, ...changesetIdOrIndex}),
       body: createChangesetExtendedDataBody,
       headers
     });

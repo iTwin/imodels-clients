@@ -7,7 +7,7 @@ import * as sinon from "sinon";
 
 import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
 
-describe("[Authoring] UseExperimental features", () => {
+describe("[Authoring] Experimental features", () => {
   it("changeset extended data operation should execute when useExperimental=true", async () => {
     // Arrange
     const iModelsClientOptions: IModelsClientOptions = {
@@ -43,6 +43,6 @@ describe("[Authoring] UseExperimental features", () => {
     expect(objectThrown).to.be.not.undefined;
     expect(objectThrown instanceof Error);
     const error = objectThrown as Error;
-    expect(error.message).to.be.equal("This operation is experimental and requires the useExperimental flag to be set to true in the client options.");
+    expect(error.message).to.be.equal("This operation is experimental and requires the useExperimental flag to be set to `true` in the client options.");
   });
 });

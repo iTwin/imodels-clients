@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetExtendedDataListResponse, ChangesetExtendedDataResponse, ChangesetExtendedDataServer, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
+import { ChangesetExtendedDataApiResponse, ChangesetExtendedDataListResponse, ChangesetExtendedDataResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
 import { ChangesetExtendedData, EntityListIterator, HttpResponse } from "../../base/types";
 import { OperationOptions } from "../OperationOptions";
 
@@ -15,8 +15,9 @@ export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> 
     super(options);
 
     if (!this._options.useExperimental)
-      throw new Error("This operation is experimental and requires the useExperimental flag to be set to true in the client options.");
+      throw new Error("This operation is experimental and requires the useExperimental flag to be set to `true` in the client options.");
   }
+
   /**
    * Gets Changesets Extended Data for a specific iModel. Wraps the
    * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-changesets-extended-data/ Get iModel Changesets Extended Data}
@@ -27,8 +28,8 @@ export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> 
    */
   public getList(params: GetChangesetExtendedDataListParams): EntityListIterator<ChangesetExtendedData> {
     const entityCollectionAccessor = (response: HttpResponse<ChangesetExtendedDataListResponse>) => {
-      const changesetExtendedDataServer = response.body.extendedData;
-      const mappedChangesetExtendedData = changesetExtendedDataServer.map((extendedData) => this.convertToChangesetExtendedData(extendedData));
+      const apiResponse = response.body.extendedData;
+      const mappedChangesetExtendedData = apiResponse.map((extendedData) => this.convertToChangesetExtendedData(extendedData));
       return mappedChangesetExtendedData;
     };
     return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<ChangesetExtendedData, ChangesetExtendedDataListResponse>({
@@ -58,16 +59,22 @@ export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> 
     return this.convertToChangesetExtendedData(response.body.extendedData);
   }
 
-  protected convertToChangesetExtendedData(changesetExtendedDataServer: ChangesetExtendedDataServer): ChangesetExtendedData {
+  protected convertToChangesetExtendedData(changesetExtendedDataApiResponse: ChangesetExtendedDataApiResponse): ChangesetExtendedData {
     return {
-      changesetId: changesetExtendedDataServer.changesetId,
-      changesetIndex: changesetExtendedDataServer.changesetIndex,
-      data: this.convertBase64StringToJSON(changesetExtendedDataServer.data)
+      changesetId: changesetExtendedDataApiResponse.changesetId,
+      changesetIndex: changesetExtendedDataApiResponse.changesetIndex,
+      data: this.convertBase64StringToJSON(changesetExtendedDataApiResponse.data)
     };
   }
 
   private convertBase64StringToJSON(input: string): object {
-    const decodedString = Buffer.from(input, "base64").toString("utf8");
-    return JSON.parse(decodedString);
+    if (typeof window !== "undefined") {
+      const binString = atob(input);
+      const bytes = Uint8Array.from(binString, (m) => m.charCodeAt(0));
+      return JSON.parse(new TextDecoder().decode(bytes));
+    } else {
+      const decodedString = Buffer.from(input, "base64").toString("utf8");
+      return JSON.parse(decodedString);
+    }
   }
 }

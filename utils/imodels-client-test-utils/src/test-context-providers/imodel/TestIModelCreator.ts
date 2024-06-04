@@ -23,8 +23,8 @@ export class TestIModelCreator {
   ];
 
   public static changesetExtendedData = [
-    { changesetIndex: 1, data: { someKey: "someValue"} },
-    { changesetIndex: 2, data: { someKey: "someValue2"} }
+    { changesetIndex: 1, data: { someKey: "someValue" } },
+    { changesetIndex: 2, data: { someKey: "someValue2" } }
   ];
 
   public static changesetGroups = [
@@ -162,7 +162,7 @@ export class TestIModelCreator {
         changesetExtendedDataProperties: {
           data: changesetExtendedDataMetadata.data
         },
-        changeset: { changesetIndex: changesetExtendedDataMetadata.changesetIndex }
+        changesetIndex: changesetExtendedDataMetadata.changesetIndex
       });
 
       changesetExtendedDataList.push({

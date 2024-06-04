@@ -23,7 +23,7 @@ export interface IModelsClientOptions {
   api?: ApiOptions;
   /** Additional headers to add to each request. See {@link HeaderFactories}. */
   headers?: HeaderFactories;
-  /** Flag used to enable experimental features.*/
+  /** Flag used to enable experimental features marked with `@alpha` tag. */
   useExperimental?: boolean;
 }
 

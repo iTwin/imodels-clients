@@ -39,8 +39,7 @@ describe("[Authoring] ChangesetExtendedDataOperations", () => {
 
   it("create changeset extended data", async () => {
     // Arrange
-    const applicationJsonString = "{\"some key\": \"some value\"}";
-    const expectedDataObject: object = JSON.parse(applicationJsonString);
+    const expectedDataObject: object = { "some key": "some value" };
     const expectedChangesetExtendedData = {
       changesetId: testIModelFileProvider.changesets[0].id,
       changesetIndex: 1,
@@ -50,28 +49,32 @@ describe("[Authoring] ChangesetExtendedDataOperations", () => {
     const createChangesetExtendedDataParams: CreateChangesetExtendedDataParams = {
       authorization,
       iModelId: testIModel.id,
+      changesetIndex: expectedChangesetExtendedData.changesetIndex,
       changesetExtendedDataProperties: {
         data: expectedDataObject
-      },
-      changeset: { changesetIndex: expectedChangesetExtendedData.changesetIndex }
+      }
     };
 
     // Act
     const changesetExtendedData: ChangesetExtendedData = await iModelsClient.changesetExtendedData.create(createChangesetExtendedDataParams);
 
+    // Assert
     assertChangesetExtendedData({
       actualChangesetExtendedData: changesetExtendedData,
       expectedChangesetExtendedData
     });
 
+    // Arrange
     const getSingleChangesetExtendedDataParams: GetSingleChangesetExtendedDataParams = {
       authorization,
       iModelId: testIModel.id,
       changesetIndex: expectedChangesetExtendedData.changesetIndex
     };
 
+    // Act
     const singleChangesetExtendedData: ChangesetExtendedData = await iModelsClient.changesetExtendedData.getSingle(getSingleChangesetExtendedDataParams);
 
+    // Assert
     assertChangesetExtendedData({
       actualChangesetExtendedData: singleChangesetExtendedData,
       expectedChangesetExtendedData
