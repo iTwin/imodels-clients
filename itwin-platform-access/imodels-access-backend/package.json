@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-backend",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "description": "Interoperability package between iModels API and iTwin.js library for backend.",
   "keywords": [
     "Bentley",
@@ -41,11 +41,17 @@
     "@itwin/core-bentley": "^4.0.0",
     "@itwin/core-common": "^4.0.0",
     "@itwin/core-geometry": "^4.0.0",
+    "@itwin/eslint-plugin": "~3.7.8",
     "@itwin/imodels-client-common-config": "workspace:*",
     "@types/node": "14.14.31",
     "@types/ws": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "~6.14.0",
     "cspell": "~5.21.0",
     "eslint": "~8.55.0",
+    "eslint-plugin-deprecation": "~1.5.0",
+    "eslint-plugin-import": "~2.29.0",
+    "eslint-plugin-mocha": "~10.2.0",
+    "eslint-plugin-prefer-arrow": "~1.2.3",
     "rimraf": "~3.0.2",
     "sort-package-json": "~1.53.1",
     "typescript": "~5.3.3"
