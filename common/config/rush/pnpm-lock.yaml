@@ -25,15 +25,33 @@ importers:
         specifier: ^2.0.0
         version: 2.2.3(inversify@6.0.2)(reflect-metadata@0.1.14)
     devDependencies:
+      '@itwin/eslint-plugin':
+        specifier: ~3.7.8
+        version: 3.7.17(eslint@8.55.0)(typescript@5.3.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
+      '@typescript-eslint/eslint-plugin':
+        specifier: ~6.14.0
+        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       cspell:
         specifier: ~5.21.0
         version: 5.21.2
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.3.3)
+      eslint-plugin-import:
+        specifier: ~2.29.0
+        version: 2.29.1(eslint@8.55.0)
+      eslint-plugin-mocha:
+        specifier: ~10.2.0
+        version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
       inversify:
         specifier: ~6.0.2
         version: 6.0.2
@@ -53,18 +71,36 @@ importers:
         specifier: ~1.6.4
         version: 1.6.8
     devDependencies:
+      '@itwin/eslint-plugin':
+        specifier: ~3.7.8
+        version: 3.7.17(eslint@8.55.0)(typescript@5.3.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
       '@types/node':
         specifier: ^18.11.18
         version: 18.19.34
+      '@typescript-eslint/eslint-plugin':
+        specifier: ~6.14.0
+        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       cspell:
         specifier: ~5.21.0
         version: 5.21.2
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.3.3)
+      eslint-plugin-import:
+        specifier: ~2.29.0
+        version: 2.29.1(eslint@8.55.0)
+      eslint-plugin-mocha:
+        specifier: ~10.2.0
+        version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
       rimraf:
         specifier: ~3.0.2
         version: 3.0.2
@@ -102,6 +138,9 @@ importers:
       '@itwin/core-geometry':
         specifier: ^4.0.0
         version: 4.6.1
+      '@itwin/eslint-plugin':
+        specifier: ~3.7.8
+        version: 3.7.17(eslint@8.55.0)(typescript@5.3.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
@@ -111,12 +150,27 @@ importers:
       '@types/ws':
         specifier: ^7.0.0
         version: 7.4.7
+      '@typescript-eslint/eslint-plugin':
+        specifier: ~6.14.0
+        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       cspell:
         specifier: ~5.21.0
         version: 5.21.2
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.3.3)
+      eslint-plugin-import:
+        specifier: ~2.29.0
+        version: 2.29.1(eslint@8.55.0)
+      eslint-plugin-mocha:
+        specifier: ~10.2.0
+        version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
       rimraf:
         specifier: ~3.0.2
         version: 3.0.2
@@ -142,15 +196,33 @@ importers:
       '@itwin/core-geometry':
         specifier: ^4.0.0
         version: 4.6.1
+      '@itwin/eslint-plugin':
+        specifier: ~3.7.8
+        version: 3.7.17(eslint@8.55.0)(typescript@5.3.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
+      '@typescript-eslint/eslint-plugin':
+        specifier: ~6.14.0
+        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       cspell:
         specifier: ~5.21.0
         version: 5.21.2
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.3.3)
+      eslint-plugin-import:
+        specifier: ~2.29.0
+        version: 2.29.1(eslint@8.55.0)
+      eslint-plugin-mocha:
+        specifier: ~10.2.0
+        version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
       rimraf:
         specifier: ~3.0.2
         version: 3.0.2
@@ -191,6 +263,9 @@ importers:
       '@itwin/core-quantity':
         specifier: ^4.0.0
         version: 4.6.1(@itwin/core-bentley@4.6.1)
+      '@itwin/eslint-plugin':
+        specifier: ~3.7.8
+        version: 3.7.17(eslint@8.55.0)(typescript@5.3.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
@@ -200,12 +275,27 @@ importers:
       '@types/node':
         specifier: 14.14.31
         version: 14.14.31
+      '@typescript-eslint/eslint-plugin':
+        specifier: ~6.14.0
+        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       cspell:
         specifier: ~5.21.0
         version: 5.21.2
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.3.3)
+      eslint-plugin-import:
+        specifier: ~2.29.0
+        version: 2.29.1(eslint@8.55.0)
+      eslint-plugin-mocha:
+        specifier: ~10.2.0
+        version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
       rimraf:
         specifier: ~3.0.2
         version: 3.0.2
@@ -264,6 +354,9 @@ importers:
         specifier: ~0.1.13
         version: 0.1.14
     devDependencies:
+      '@itwin/eslint-plugin':
+        specifier: ~3.7.8
+        version: 3.7.17(eslint@8.55.0)(typescript@5.3.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
@@ -282,6 +375,9 @@ importers:
       '@types/sinon':
         specifier: ^10.0.15
         version: 10.0.20
+      '@typescript-eslint/eslint-plugin':
+        specifier: ~6.14.0
+        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       chai-as-promised:
         specifier: ~7.1.1
         version: 7.1.2(chai@4.3.10)
@@ -291,6 +387,18 @@ importers:
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.3.3)
+      eslint-plugin-import:
+        specifier: ~2.29.0
+        version: 2.29.1(eslint@8.55.0)
+      eslint-plugin-mocha:
+        specifier: ~10.2.0
+        version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
       nyc:
         specifier: 15.1.0
         version: 15.1.0
@@ -328,6 +436,9 @@ importers:
         specifier: ~9.2.2
         version: 9.2.2
     devDependencies:
+      '@itwin/eslint-plugin':
+        specifier: ~3.7.8
+        version: 3.7.17(eslint@8.55.0)(typescript@5.3.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
@@ -340,12 +451,27 @@ importers:
       '@types/node':
         specifier: 14.14.31
         version: 14.14.31
+      '@typescript-eslint/eslint-plugin':
+        specifier: ~6.14.0
+        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       cspell:
         specifier: ~5.21.0
         version: 5.21.2
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.3.3)
+      eslint-plugin-import:
+        specifier: ~2.29.0
+        version: 2.29.1(eslint@8.55.0)
+      eslint-plugin-mocha:
+        specifier: ~10.2.0
+        version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
       nyc:
         specifier: 15.1.0
         version: 15.1.0
@@ -410,6 +536,9 @@ importers:
         specifier: ~0.1.13
         version: 0.1.14
     devDependencies:
+      '@itwin/eslint-plugin':
+        specifier: ~3.7.8
+        version: 3.7.17(eslint@8.55.0)(typescript@5.3.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
@@ -422,12 +551,27 @@ importers:
       '@types/node':
         specifier: 14.14.31
         version: 14.14.31
+      '@typescript-eslint/eslint-plugin':
+        specifier: ~6.14.0
+        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       cspell:
         specifier: ~5.21.0
         version: 5.21.2
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.3.3)
+      eslint-plugin-import:
+        specifier: ~2.29.0
+        version: 2.29.1(eslint@8.55.0)
+      eslint-plugin-mocha:
+        specifier: ~10.2.0
+        version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
       nyc:
         specifier: 15.1.0
         version: 15.1.0
@@ -483,6 +627,9 @@ importers:
         specifier: ~0.1.13
         version: 0.1.14
     devDependencies:
+      '@itwin/eslint-plugin':
+        specifier: ~3.7.8
+        version: 3.7.17(eslint@8.55.0)(typescript@5.3.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
@@ -504,6 +651,9 @@ importers:
       '@types/sinon-chai':
         specifier: ^3.2.9
         version: 3.2.12
+      '@typescript-eslint/eslint-plugin':
+        specifier: ~6.14.0
+        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       axios-mock-adapter:
         specifier: ~1.22.0
         version: 1.22.0(axios@1.6.8)
@@ -516,6 +666,18 @@ importers:
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.3.3)
+      eslint-plugin-import:
+        specifier: ~2.29.0
+        version: 2.29.1(eslint@8.55.0)
+      eslint-plugin-mocha:
+        specifier: ~10.2.0
+        version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
       nyc:
         specifier: 15.1.0
         version: 15.1.0
@@ -565,6 +727,9 @@ importers:
         specifier: ~0.1.13
         version: 0.1.14
     devDependencies:
+      '@itwin/eslint-plugin':
+        specifier: ~3.7.8
+        version: 3.7.17(eslint@8.55.0)(typescript@5.3.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
@@ -574,6 +739,9 @@ importers:
       '@types/node':
         specifier: ^18.11.18
         version: 18.19.34
+      '@typescript-eslint/eslint-plugin':
+        specifier: ~6.14.0
+        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       cpx2:
         specifier: 4.2.0
         version: 4.2.0
@@ -583,6 +751,18 @@ importers:
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.3.3)
+      eslint-plugin-import:
+        specifier: ~2.29.0
+        version: 2.29.1(eslint@8.55.0)
+      eslint-plugin-mocha:
+        specifier: ~10.2.0
+        version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
       rimraf:
         specifier: ~3.0.2
         version: 3.0.2
@@ -650,6 +830,9 @@ importers:
         specifier: ~0.1.13
         version: 0.1.14
     devDependencies:
+      '@itwin/eslint-plugin':
+        specifier: ~3.7.8
+        version: 3.7.17(eslint@8.55.0)(typescript@5.3.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../imodels-client-common-config
@@ -659,6 +842,9 @@ importers:
       '@types/node':
         specifier: ^18.11.18
         version: 18.19.34
+      '@typescript-eslint/eslint-plugin':
+        specifier: ~6.14.0
+        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       cpx2:
         specifier: 4.2.0
         version: 4.2.0
@@ -668,6 +854,18 @@ importers:
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.3.3)
+      eslint-plugin-import:
+        specifier: ~2.29.0
+        version: 2.29.1(eslint@8.55.0)
+      eslint-plugin-mocha:
+        specifier: ~10.2.0
+        version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
       rimraf:
         specifier: ~3.0.2
         version: 3.0.2
@@ -4804,7 +5002,7 @@ snapshots:
 
   agent-base@6.0.2:
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.5(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -5384,9 +5582,11 @@ snapshots:
     optionalDependencies:
       supports-color: 8.1.1
 
-  debug@4.3.4:
+  debug@4.3.4(supports-color@8.1.1):
     dependencies:
       ms: 2.1.2
+    optionalDependencies:
+      supports-color: 8.1.1
 
   debug@4.3.5(supports-color@8.1.1):
     dependencies:
@@ -5832,19 +6032,9 @@ snapshots:
 
   extend@3.0.2: {}
 
-  extract-zip@2.0.1:
-    dependencies:
-      debug: 4.3.4
-      get-stream: 5.2.0
-      yauzl: 2.10.0
-    optionalDependencies:
-      '@types/yauzl': 2.10.3
-    transitivePeerDependencies:
-      - supports-color
-
   extract-zip@2.0.1(supports-color@8.1.1):
     dependencies:
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.4(supports-color@8.1.1)
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -6190,7 +6380,7 @@ snapshots:
   https-proxy-agent@5.0.0:
     dependencies:
       agent-base: 6.0.2
-      debug: 4.3.4
+      debug: 4.3.4(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -6906,9 +7096,9 @@ snapshots:
   puppeteer@13.5.2:
     dependencies:
       cross-fetch: 3.1.5
-      debug: 4.3.4
+      debug: 4.3.4(supports-color@8.1.1)
       devtools-protocol: 0.0.969999
-      extract-zip: 2.0.1
+      extract-zip: 2.0.1(supports-color@8.1.1)
       https-proxy-agent: 5.0.0
       pkg-dir: 4.2.0
       progress: 2.0.3
