@@ -113,7 +113,7 @@ describe("[Authoring] LockOperations", () => {
   });
 
   ([LockLevel.Shared, LockLevel.Exclusive] as LockLevelFilter[]).forEach((lockLevel) => {
-    it(`should return correct values when querying collection with lockLevel filter ${lockLevel}`, async () => {
+    it(`should return correct values when querying collection with lockLevel filter (${lockLevel})`, async () => {
       // Arrange
       const expectedLock: Lock = {
         briefcaseId: testIModelForRead.lock.briefcaseId,
