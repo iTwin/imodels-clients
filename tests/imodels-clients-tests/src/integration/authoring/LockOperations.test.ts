@@ -78,7 +78,7 @@ describe("[Authoring] LockOperations", () => {
       authorization,
       iModelId: testIModelForRead.id,
       urlParams: {
-        briefcaseId: testIModelForRead.briefcase.id
+        briefcaseId: testIModelForRead.briefcases[0].id
       }
     };
 

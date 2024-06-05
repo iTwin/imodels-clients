@@ -17,6 +17,8 @@ import { TestIModelsClient } from "./TestIModelsClient";
 
 @injectable()
 export class TestIModelCreator {
+  public static briefcaseCount = 3;
+
   public static namedVersions = [
     { name: "Named version 5", changesetIndex: 5 },
     { name: "Named version 10", changesetIndex: 10 }
@@ -58,23 +60,23 @@ export class TestIModelCreator {
 
   public async createEmptyAndUploadChangesets(iModelName: string): Promise<IModelMetadata> {
     const iModel = await this.createEmpty(iModelName);
-    const briefcase = await this.acquireBriefcase(iModel.id);
-    await this.uploadChangesets(iModel.id, briefcase.id, []);
+    const briefcases = await this.acquireBriefcases(iModel.id, TestIModelCreator.briefcaseCount);
+    await this.uploadChangesets(iModel.id, briefcases[0].id, []);
     return iModel;
   }
 
   public async createReusable(iModelName: string): Promise<ReusableIModelMetadata> {
     const iModel = await this.createEmpty(iModelName);
-    const briefcase = await this.acquireBriefcase(iModel.id);
+    const briefcases = await this.acquireBriefcases(iModel.id, TestIModelCreator.briefcaseCount);
     const changesetGroups = await this.createChangesetGroups(iModel.id);
-    await this.uploadChangesets(iModel.id, briefcase.id, changesetGroups);
+    await this.uploadChangesets(iModel.id, briefcases[0].id, changesetGroups);
     await this.completeChangesetGroups(iModel.id, changesetGroups);
     const namedVersions = await this.createNamedVersionsOnReusableIModel(iModel.id);
-    const lock = await this.createLockOnReusableIModel(iModel.id, briefcase.id);
+    const lock = await this.createLockOnReusableIModel(iModel.id, briefcases[0].id);
 
     return {
       ...iModel,
-      briefcase,
+      briefcases,
       namedVersions,
       lock,
       changesetGroups
@@ -178,6 +180,15 @@ export class TestIModelCreator {
 
       await this._iModelsClient.changesetGroups.update(updateChangesetGroupParams);
     }
+  }
+
+  private async acquireBriefcases(iModelId: string, briefcaseCount: number): Promise<BriefcaseMetadata[]> {
+    const briefcases: BriefcaseMetadata[] = [];
+    for (let i = 1; i <= briefcaseCount; i++) {
+      const briefcase = await this.acquireBriefcase(iModelId);
+      briefcases.push(briefcase);
+    }
+    return briefcases;
   }
 
   private async acquireBriefcase(iModelId: string): Promise<BriefcaseMetadata> {
