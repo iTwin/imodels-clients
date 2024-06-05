@@ -29,8 +29,8 @@ export class TestIModelCreator {
     { description: "Another one", changesetIndexes: [4, 5, 6] }
   ];
 
-  private readonly _nonInitializedIModelDescription = "Initializing iModel";
-  private readonly _initializedIModelDescription = "Some description";
+  private readonly _reusableIModelCreationInProgressDescription = "Reusable iModel creation in progress";
+  private readonly _reusableIModelCreationCompletedDescription = "Reusable iModel creation completed";
   private readonly _briefcaseDeviceName = "Some device name";
 
   constructor(
@@ -40,7 +40,7 @@ export class TestIModelCreator {
     private readonly _testIModelFileProvider: TestIModelFileProvider
   ) { }
 
-  public async createEmpty(iModelName: string, iModelDescription: string = this._initializedIModelDescription): Promise<IModelMetadata> {
+  public async createEmpty(iModelName: string, iModelDescription: string = "Some description"): Promise<IModelMetadata> {
     const iTwinId = await this._testITwinProvider.getOrCreate();
     const iModel = await this._iModelsClient.iModels.createEmpty({
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
@@ -67,7 +67,7 @@ export class TestIModelCreator {
   }
 
   public async createReusable(iModelName: string): Promise<ReusableIModelMetadata> {
-    const iModel = await this.createEmpty(iModelName, this._nonInitializedIModelDescription);
+    const iModel = await this.createEmpty(iModelName, this._reusableIModelCreationInProgressDescription);
     const briefcases = await this.acquireBriefcases(iModel.id, TestIModelCreator.briefcaseCount);
     const changesetGroups = await this.createChangesetGroups(iModel.id);
     await this.uploadChangesets(iModel.id, briefcases[0].id, changesetGroups);
@@ -78,7 +78,7 @@ export class TestIModelCreator {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelId: iModel.id,
       iModelProperties: {
-        description: this._initializedIModelDescription
+        description: this._reusableIModelCreationCompletedDescription
       }
     });
 
@@ -93,7 +93,7 @@ export class TestIModelCreator {
   }
 
   public isReusableIModelInitialized(iModel: IModel): boolean {
-    return iModel.description === this._initializedIModelDescription;
+    return iModel.description === this._reusableIModelCreationCompletedDescription;
   }
 
   private async createNamedVersionsOnReusableIModel(iModelId: string): Promise<NamedVersionMetadata[]> {
