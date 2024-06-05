@@ -5,7 +5,7 @@
 import { sleep } from "@itwin/imodels-client-management/lib/base/internal";
 import { injectable } from "inversify";
 
-import { ChangesetGroupState, CheckpointState, ContainerTypes, GetSingleCheckpointParams, Lock, LockLevel, LockedObjects, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
+import { ChangesetGroupState, CheckpointState, ContainerTypes, GetSingleCheckpointParams, IModel, Lock, LockLevel, LockedObjects, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
 
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
@@ -29,7 +29,8 @@ export class TestIModelCreator {
     { description: "Another one", changesetIndexes: [4, 5, 6] }
   ];
 
-  private readonly _iModelDescription = "Some description";
+  private readonly _nonInitializedIModelDescription = "Initializing iModel";
+  private readonly _initializedIModelDescription = "Some description";
   private readonly _briefcaseDeviceName = "Some device name";
 
   constructor(
@@ -39,14 +40,14 @@ export class TestIModelCreator {
     private readonly _testIModelFileProvider: TestIModelFileProvider
   ) { }
 
-  public async createEmpty(iModelName: string): Promise<IModelMetadata> {
+  public async createEmpty(iModelName: string, iModelDescription: string = this._initializedIModelDescription): Promise<IModelMetadata> {
     const iTwinId = await this._testITwinProvider.getOrCreate();
     const iModel = await this._iModelsClient.iModels.createEmpty({
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelProperties: {
         iTwinId,
         name: iModelName,
-        description: this._iModelDescription,
+        description: iModelDescription,
         containersEnabled: ContainerTypes.None
       }
     });
@@ -66,21 +67,33 @@ export class TestIModelCreator {
   }
 
   public async createReusable(iModelName: string): Promise<ReusableIModelMetadata> {
-    const iModel = await this.createEmpty(iModelName);
+    const iModel = await this.createEmpty(iModelName, this._nonInitializedIModelDescription);
     const briefcases = await this.acquireBriefcases(iModel.id, TestIModelCreator.briefcaseCount);
     const changesetGroups = await this.createChangesetGroups(iModel.id);
     await this.uploadChangesets(iModel.id, briefcases[0].id, changesetGroups);
     await this.completeChangesetGroups(iModel.id, changesetGroups);
     const namedVersions = await this.createNamedVersionsOnReusableIModel(iModel.id);
     const lock = await this.createLockOnReusableIModel(iModel.id, briefcases[0].id);
+    const initializedIModel = await this._iModelsClient.iModels.update({
+      authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
+      iModelId: iModel.id,
+      iModelProperties: {
+        description: this._initializedIModelDescription
+      }
+    });
 
     return {
       ...iModel,
+      description: initializedIModel.description!,
       briefcases,
       namedVersions,
       lock,
       changesetGroups
     };
+  }
+
+  public isReusableIModelInitialized(iModel: IModel): boolean {
+    return iModel.description === this._initializedIModelDescription;
   }
 
   private async createNamedVersionsOnReusableIModel(iModelId: string): Promise<NamedVersionMetadata[]> {
