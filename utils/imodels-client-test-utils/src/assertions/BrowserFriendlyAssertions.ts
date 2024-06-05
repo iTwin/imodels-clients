@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { Application, Briefcase, Checkpoint, CheckpointState, ContentType, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, MinimalBriefcase, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, Thumbnail, ThumbnailSize, User, UserPermissions } from "@itwin/imodels-client-management";
+import { Application, Briefcase, ChangesetExtendedData, Checkpoint, CheckpointState, ContentType, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, MinimalBriefcase, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, Thumbnail, ThumbnailSize, User, UserPermissions } from "@itwin/imodels-client-management";
 
 import { assertBriefcaseCallbacks, assertIModelCallbacks, assertNamedVersionCallbacks } from "./RelatedEntityCallbackAssertions";
 
@@ -211,6 +211,19 @@ export function assertUserPermissions(params: {
     const isCurrentPermissionExpected = params.expectedPermissions.includes(actualIModelPermission);
     expect(isCurrentPermissionExpected).to.equal(true);
   }
+}
+
+export function assertChangesetExtendedDataBrowser(params: {
+  actualChangesetExtendedData: ChangesetExtendedData;
+  expectedChangesetExtendedData: {
+    changesetIndex: number;
+    data: object;
+  };
+}): void {
+  expect(params.actualChangesetExtendedData).to.exist;
+  expect(params.actualChangesetExtendedData.changesetId).to.not.be.empty;
+  expect(params.actualChangesetExtendedData.changesetIndex).to.equal(params.expectedChangesetExtendedData.changesetIndex);
+  expect(params.actualChangesetExtendedData.data).to.deep.equal(params.expectedChangesetExtendedData.data);
 }
 
 export function assertError(params: { objectThrown: unknown, expectedError: Partial<IModelsError> }): void {

@@ -17,7 +17,7 @@ import {
 import { NodeLocalFileSystem } from "./base/internal";
 import { IModelsErrorParser } from "./base/internal/IModelsErrorParser";
 import { LocalFileSystem } from "./base/types";
-import { BaselineFileOperations, BriefcaseOperations, ChangesetGroupOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
+import { BaselineFileOperations, BriefcaseOperations, ChangesetExtendedDataOperations, ChangesetGroupOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions extends ManagementIModelsClientOptions {
@@ -83,6 +83,11 @@ export class IModelsClient extends ManagementIModelsClient {
   /** Changeset operations. See {@link ChangesetOperations}. */
   public override get changesets(): ChangesetOperations<OperationOptions> {
     return new ChangesetOperations(this._operationsOptions, this);
+  }
+
+  /** Changeset Extended Data operations. See {@link ChangesetExtendedDataOperations}. */
+  public override get changesetExtendedData(): ChangesetExtendedDataOperations<OperationOptions> {
+    return new ChangesetExtendedDataOperations(this._operationsOptions);
   }
 
   /** Changeset Group operations. See {@link ChangesetGroupOperations}. */

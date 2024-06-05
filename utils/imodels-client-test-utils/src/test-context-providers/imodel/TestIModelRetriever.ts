@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { GetBriefcaseListParams, GetChangesetGroupListParams, GetChangesetListParams, GetLockListParams, GetNamedVersionListParams, IModel, Lock, NamedVersion, toArray } from "@itwin/imodels-client-authoring";
+import { GetBriefcaseListParams, GetChangesetExtendedDataListParams, GetChangesetGroupListParams, GetChangesetListParams, GetLockListParams, GetNamedVersionListParams, IModel, Lock, NamedVersion, toArray } from "@itwin/imodels-client-authoring";
 
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
@@ -12,7 +12,7 @@ import { TestITwinProvider } from "../itwin/TestITwinProvider";
 
 import { TestIModelCreator } from "./TestIModelCreator";
 import { TestIModelFileProvider } from "./TestIModelFileProvider";
-import { BriefcaseMetadata, ChangesetGroupMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
+import { BriefcaseMetadata, ChangesetExtendedDataMetadata, ChangesetGroupMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
 import { TestIModelsClient } from "./TestIModelsClient";
 
 @injectable()
@@ -44,6 +44,7 @@ export class TestIModelRetriever {
     const namedVersions = await this.queryAndValidateNamedVersions(iModel.id);
     const lock = await this.queryAndValidateLock(iModel.id);
     const changesetGroups = await this.queryAndValidateChangesetGroups(iModel.id);
+    const changesetExtendedData = await this.queryAndValidateChangesetExtendedData(iModel.id);
     await this.queryAndValidateChangesets(iModel.id, changesetGroups);
 
     return {
@@ -53,7 +54,8 @@ export class TestIModelRetriever {
       briefcases,
       namedVersions,
       lock,
-      changesetGroups
+      changesetGroups,
+      changesetExtendedData
     };
   }
 
@@ -64,7 +66,7 @@ export class TestIModelRetriever {
     };
     const briefcases = await toArray(this._iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams));
     if (briefcases.length !== TestIModelCreator.briefcaseCount)
-      throw new TestSetupError(`${briefcases.length} is an unexpected briefcase count for reusable test IModel.`);
+      throw new TestSetupError(`${briefcases.length} is an unexpected briefcase count for reusable test iModel.`);
 
     return briefcases.map((briefcase) => ({ id: briefcase.briefcaseId, deviceName: briefcase.deviceName! }));
   }
@@ -106,6 +108,22 @@ export class TestIModelRetriever {
       throw new TestSetupError(`${locks.length} is an unexpected lock count for reusable test iModel.`);
 
     return locks[0];
+  }
+
+  private async queryAndValidateChangesetExtendedData(iModelId: string): Promise<ChangesetExtendedDataMetadata[]> {
+    const getChangesetExtendedDataListParams: GetChangesetExtendedDataListParams = {
+      authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
+      iModelId
+    };
+    const changesetExtendedDataList = await toArray(this._iModelsClient.changesetExtendedData.getList(getChangesetExtendedDataListParams));
+    if (changesetExtendedDataList.length !== TestIModelCreator.changesetExtendedData.length)
+      throw new TestSetupError(`${changesetExtendedDataList.length} is an unexpected changeset extended data count for reusable test iModel.`);
+
+    return changesetExtendedDataList.map((csExtendedData) => ({
+      changesetId: csExtendedData.changesetId,
+      changesetIndex: csExtendedData.changesetIndex,
+      data: csExtendedData.data
+    }));
   }
 
   private async queryAndValidateChangesetGroups(iModelId: string): Promise<ChangesetGroupMetadata[]> {

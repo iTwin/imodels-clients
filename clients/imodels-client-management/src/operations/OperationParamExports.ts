@@ -5,6 +5,7 @@
 export * from "./imodel/IModelOperationParams";
 export * from "./briefcase/BriefcaseOperationParams";
 export * from "./changeset/ChangesetOperationParams";
+export * from "./changeset-extended-data/ChangesetExtendedDataOperationParams";
 export * from "./changeset-group/ChangesetGroupOperationParams";
 export * from "./named-version/NamedVersionOperationParams";
 export * from "./checkpoint/CheckpointOperationParams";

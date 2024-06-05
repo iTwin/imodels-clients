@@ -6,7 +6,7 @@ import * as fs from "fs";
 
 import { expect } from "chai";
 
-import { BaselineFile, BaselineFileState, Changeset, ChangesetGroup, ChangesetGroupPropertiesForCreate, ChangesetGroupPropertiesForUpdate, ChangesetGroupState, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, Changeset, ChangesetExtendedData, ChangesetGroup, ChangesetGroupPropertiesForCreate, ChangesetGroupPropertiesForUpdate, ChangesetGroupState, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate, isIModelsApiError } from "@itwin/imodels-client-authoring";
 
 import { TestChangesetFile, TestIModelBaselineFile } from "../test-context-providers";
 
@@ -137,6 +137,16 @@ export async function assertDownloadedChangeset(params: {
 
   // Check if the downloaded file size matches the size of the changeset file used for test iModel creation
   expect(fs.statSync(params.actualChangeset.filePath).size).to.equal(fs.statSync(params.expectedTestChangesetFile.filePath).size);
+}
+
+export function assertChangesetExtendedData(params: {
+  actualChangesetExtendedData: ChangesetExtendedData;
+  expectedChangesetExtendedData: ChangesetExtendedData;
+}): void {
+  expect(params.actualChangesetExtendedData).to.exist;
+  expect(params.actualChangesetExtendedData.changesetId).to.equal(params.expectedChangesetExtendedData.changesetId);
+  expect(params.actualChangesetExtendedData.changesetIndex).to.equal(params.expectedChangesetExtendedData.changesetIndex);
+  expect(params.actualChangesetExtendedData.data).to.be.deep.eq(params.expectedChangesetExtendedData.data);
 }
 
 export async function assertChangesetGroup(params: {

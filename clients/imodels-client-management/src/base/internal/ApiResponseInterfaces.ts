@@ -18,6 +18,12 @@ export interface CollectionLinks {
   next: Link | null;
 }
 
+export interface ChangesetExtendedDataApiResponse {
+  changesetId: string;
+  changesetIndex: number;
+  data: string;
+}
+
 export interface CollectionResponse {
   _links: CollectionLinks;
 }
@@ -38,6 +44,10 @@ export interface ChangesetsResponse<TChangeset extends MinimalChangeset> extends
   changesets: TChangeset[];
 }
 
+export interface ChangesetExtendedDataListResponse extends CollectionResponse {
+  extendedData: ChangesetExtendedDataApiResponse[];
+}
+
 export interface ChangesetGroupsResponse extends CollectionResponse {
   changesetGroups: ChangesetGroup[];
 }
@@ -52,6 +62,10 @@ export interface BriefcaseResponse {
 
 export interface ChangesetResponse {
   changeset: Changeset;
+}
+
+export interface ChangesetExtendedDataResponse {
+  extendedData: ChangesetExtendedDataApiResponse;
 }
 
 export interface ChangesetGroupResponse {
