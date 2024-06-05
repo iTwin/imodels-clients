@@ -21,6 +21,8 @@ export interface GetNamedVersionListUrlParams extends CollectionRequestParams {
   $search?: string;
   /** Filters Named Versions with a specific name. */
   name?: string;
+  /** Filters Named Versions with a specific state. See {@link NamedVersionState}. */
+  state?: NamedVersionState;
 }
 
 /** Parameters for get Named Version list operation. */

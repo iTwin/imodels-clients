@@ -51,6 +51,16 @@ describe("[Management] NamedVersionOperations", () => {
         }
       }));
     }
+
+    const hiddenNamedVersion = namedVersionsCreatedInSetup[1];
+    await iModelsClient.namedVersions.update({
+      authorization,
+      iModelId: testIModel.id,
+      namedVersionId: hiddenNamedVersion.id,
+      namedVersionProperties: {
+        state: NamedVersionState.Hidden
+      }
+    });
   });
 
   after(async () => {
@@ -213,6 +223,30 @@ describe("[Management] NamedVersionOperations", () => {
     const namedVersionArray = await toArray(namedVersions);
     expect(namedVersionArray.length).to.equal(0);
   });
+
+  [NamedVersionState.Hidden, NamedVersionState.Visible].forEach((state) => {
+    it(`should return versions that match the state filter (${state}) when querying representation collection`, async () => {
+      // Arrange
+      const getNamedVersionListParams: GetNamedVersionListParams = {
+        authorization,
+        iModelId: testIModel.id,
+        urlParams: {
+          state
+        }
+      };
+  
+      // Act
+      const namedVersions = iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
+  
+      // Assert
+      const namedVersionArray = await toArray(namedVersions);
+      expect(namedVersionArray.length).to.be.greaterThan(0);
+      expect(namedVersionArray.length).to.not.equal(namedVersionsCreatedInSetup.length);
+      for (const namedVersion of namedVersionArray) {
+        expect(namedVersion.state).to.be.equal(state);
+      }
+    });
+  })
 
   it("should return versions that match the search filter when querying representation collection", async () => {
     // Arrange
@@ -452,6 +486,8 @@ describe("[Management] NamedVersionOperations", () => {
   it("should update named version state", async () => {
     // Arrange
     const namedVersionToUpdate = namedVersionsCreatedInSetup[updatedNamedVersions++];
+    expect(namedVersionToUpdate.state).to.be.equal(NamedVersionState.Visible);
+
     const newNamedVersionState = NamedVersionState.Hidden;
     const updateNamedVersionParams: UpdateNamedVersionParams = {
       authorization,
