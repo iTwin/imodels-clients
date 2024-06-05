@@ -40,7 +40,7 @@ export class TestIModelRetriever {
   }
 
   public async queryRelatedData(iModel: IModel): Promise<ReusableIModelMetadata> {
-    const briefcase = await this.queryAndValidateBriefcase(iModel.id);
+    const briefcases = await this.queryAndValidateBriefcases(iModel.id);
     const namedVersions = await this.queryAndValidateNamedVersions(iModel.id);
     const lock = await this.queryAndValidateLock(iModel.id);
     const changesetGroups = await this.queryAndValidateChangesetGroups(iModel.id);
@@ -51,7 +51,7 @@ export class TestIModelRetriever {
       id: iModel.id,
       name: iModel.name,
       description: iModel.description!,
-      briefcase,
+      briefcases,
       namedVersions,
       lock,
       changesetGroups,
@@ -59,16 +59,16 @@ export class TestIModelRetriever {
     };
   }
 
-  private async queryAndValidateBriefcase(iModelId: string): Promise<BriefcaseMetadata> {
+  private async queryAndValidateBriefcases(iModelId: string): Promise<BriefcaseMetadata[]> {
     const getBriefcaseListParams: GetBriefcaseListParams = {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelId
     };
     const briefcases = await toArray(this._iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams));
-    if (briefcases.length !== 1)
+    if (briefcases.length !== TestIModelCreator.briefcaseCount)
       throw new TestSetupError(`${briefcases.length} is an unexpected briefcase count for reusable test iModel.`);
 
-    return { id: briefcases[0].briefcaseId, deviceName: briefcases[0].deviceName! };
+    return briefcases.map((briefcase) => ({ id: briefcase.briefcaseId, deviceName: briefcase.deviceName! }));
   }
 
   private async queryAndValidateNamedVersions(iModelId: string): Promise<NamedVersionMetadata[]> {

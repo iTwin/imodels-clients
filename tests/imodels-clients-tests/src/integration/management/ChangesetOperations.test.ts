@@ -177,7 +177,7 @@ describe("[Management] ChangesetOperations", () => {
       actualChangeset: minimalChangeset,
       expectedChangesetProperties: {
         id: testChangesetFile.id,
-        briefcaseId: testIModel.briefcase.id,
+        briefcaseId: testIModel.briefcases[0].id,
         parentId: testChangesetFile.parentId,
         description: testChangesetFile.description,
         containingChanges: testChangesetFile.containingChanges,
@@ -213,7 +213,7 @@ describe("[Management] ChangesetOperations", () => {
       actualChangeset: changeset,
       expectedChangesetProperties: {
         id: testChangesetFile.id,
-        briefcaseId: testIModel.briefcase.id,
+        briefcaseId: testIModel.briefcases[0].id,
         parentId: testChangesetFile.parentId,
         description: testChangesetFile.description,
         containingChanges: testChangesetFile.containingChanges,
@@ -249,7 +249,7 @@ describe("[Management] ChangesetOperations", () => {
       actualChangeset: changeset,
       expectedChangesetProperties: {
         id: testChangesetFile.id,
-        briefcaseId: testIModel.briefcase.id,
+        briefcaseId: testIModel.briefcases[0].id,
         parentId: testChangesetFile.parentId,
         description: testChangesetFile.description,
         containingChanges: testChangesetFile.containingChanges,
@@ -285,7 +285,7 @@ describe("[Management] ChangesetOperations", () => {
       actualChangeset: changeset,
       expectedChangesetProperties: {
         id: testChangesetFile.id,
-        briefcaseId: testIModel.briefcase.id,
+        briefcaseId: testIModel.briefcases[0].id,
         parentId: testChangesetFile.parentId,
         description: testChangesetFile.description,
         containingChanges: testChangesetFile.containingChanges,

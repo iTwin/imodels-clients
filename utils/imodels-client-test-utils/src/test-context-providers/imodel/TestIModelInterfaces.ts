@@ -35,7 +35,7 @@ export interface IModelMetadata {
 }
 
 export interface ReusableIModelMetadata extends IModelMetadata {
-  briefcase: BriefcaseMetadata;
+  briefcases: BriefcaseMetadata[];
   namedVersions: NamedVersionMetadata[];
   lock: Lock;
   changesetExtendedData: ChangesetExtendedDataMetadata[];

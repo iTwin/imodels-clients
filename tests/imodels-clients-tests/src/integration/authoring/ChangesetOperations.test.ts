@@ -179,7 +179,7 @@ describe("[Authoring] ChangesetOperations", () => {
           actualChangeset: changeset,
           expectedChangesetProperties: {
             id: testChangesetFile.id,
-            briefcaseId: testIModelForRead.briefcase.id,
+            briefcaseId: testIModelForRead.briefcases[0].id,
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
             containingChanges: testChangesetFile.containingChanges,
@@ -225,7 +225,7 @@ describe("[Authoring] ChangesetOperations", () => {
           actualChangeset: changeset,
           expectedChangesetProperties: {
             id: testChangesetFile.id,
-            briefcaseId: testIModelForRead.briefcase.id,
+            briefcaseId: testIModelForRead.briefcases[0].id,
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
             containingChanges: testChangesetFile.containingChanges,
@@ -289,7 +289,7 @@ describe("[Authoring] ChangesetOperations", () => {
           actualChangeset: changeset,
           expectedChangesetProperties: {
             id: testChangesetFile.id,
-            briefcaseId: testIModelForRead.briefcase.id,
+            briefcaseId: testIModelForRead.briefcases[0].id,
             parentId: testChangesetFile.parentId,
             description: testChangesetFile.description,
             containingChanges: testChangesetFile.containingChanges,

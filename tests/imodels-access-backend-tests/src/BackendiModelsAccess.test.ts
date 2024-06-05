@@ -89,6 +89,7 @@ describe("BackendIModelsAccess", () => {
   describe("briefcases", () => {
     it("should get current user briefcase ids", async () => {
       // Arrange
+      const expectedBriefcaseIds = testIModelForRead.briefcases.map((briefcase) => briefcase.id);
       const getMyBriefcaseIdsParams: IModelIdArg = {
         accessToken,
         iModelId: testIModelForRead.id
@@ -98,9 +99,8 @@ describe("BackendIModelsAccess", () => {
       const briefcaseIds: BriefcaseId[] = await backendIModelsAccess.getMyBriefcaseIds(getMyBriefcaseIdsParams);
 
       // Assert
-      expect(briefcaseIds.length).to.equal(1);
-      const briefcaseId = briefcaseIds[0];
-      expect(briefcaseId).to.equal(testIModelForRead.briefcase.id);
+      expect(briefcaseIds.length).to.equal(expectedBriefcaseIds.length);
+      expect(briefcaseIds).to.have.members(expectedBriefcaseIds);
     });
   });
 
@@ -127,7 +127,7 @@ describe("BackendIModelsAccess", () => {
         expect(downloadedChangeset.index).to.be.equal(expectedChangesetFile.index);
         expect(downloadedChangeset.parentId).to.be.equal(expectedChangesetFile.parentId);
         expect(downloadedChangeset.description).to.be.equal(expectedChangesetFile.description);
-        expect(downloadedChangeset.briefcaseId).to.be.equal(testIModelForRead.briefcase.id);
+        expect(downloadedChangeset.briefcaseId).to.be.equal(testIModelForRead.briefcases[0].id);
         expect(downloadedChangeset.size).to.be.equal(fs.statSync(expectedChangesetFile.filePath).size);
 
         if (expectedChangesetFile.containingChanges === ContainingChanges.Schema as number)
