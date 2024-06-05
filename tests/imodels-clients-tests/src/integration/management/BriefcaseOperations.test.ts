@@ -80,7 +80,7 @@ describe("[Management] BriefcaseOperations", () => {
     const briefcaseList = await toArray(briefcases);
     expect(briefcaseList.length).to.equal(testIModel.briefcases.length);
     for (let i = 0; i < briefcaseList.length; i++) {
-      assertBriefcase({
+      await assertBriefcase({
         actualBriefcase: briefcaseList[i],
         expectedBriefcaseProperties: {
           briefcaseId: testIModel.briefcases[i].id,

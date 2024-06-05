@@ -147,7 +147,7 @@ describe("[Management] NamedVersionOperations", () => {
     const namedVersions = await toArray(iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams));
 
     // Assert
-    expect(namedVersions.length).to.equal(namedVersionsCreatedInSetup.length)
+    expect(namedVersions.length).to.equal(namedVersionsCreatedInSetup.length);
     for (let i = 0; i < namedVersions.length - 1; i++)
       expect(new Date(namedVersions[i].createdDateTime)).to.be.lessThan(new Date(namedVersions[i + 1].createdDateTime));
   });
@@ -169,7 +169,7 @@ describe("[Management] NamedVersionOperations", () => {
     const namedVersions = await toArray(iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams));
 
     // Assert
-    expect(namedVersions.length).to.equal(namedVersionsCreatedInSetup.length)
+    expect(namedVersions.length).to.equal(namedVersionsCreatedInSetup.length);
     for (let i = 0; i < namedVersions.length - 1; i++)
       expect(new Date(namedVersions[i].createdDateTime)).to.be.greaterThan(new Date(namedVersions[i + 1].createdDateTime));
   });
