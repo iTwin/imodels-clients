@@ -58,11 +58,11 @@ export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> 
     return {
       changesetId: changesetExtendedDataApiResponse.changesetId,
       changesetIndex: changesetExtendedDataApiResponse.changesetIndex,
-      data: this.convertBase64StringToJSON(changesetExtendedDataApiResponse.data)
+      data: this.convertBase64StringToObject(changesetExtendedDataApiResponse.data)
     };
   }
 
-  private convertBase64StringToJSON(input: string): object {
+  private convertBase64StringToObject(input: string): object {
     if (typeof window !== "undefined") {
       const binString = atob(input);
       const bytes = Uint8Array.from(binString, (m) => m.charCodeAt(0));
