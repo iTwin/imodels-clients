@@ -4,12 +4,17 @@
  *--------------------------------------------------------------------------------------------*/
 import { CollectionRequestParams, IModelScopedOperationParams } from "@itwin/imodels-client-management";
 
-import { LockedObjects } from "../../base/types";
+import { LockLevel, LockedObjects } from "../../base/types";
+
+/** Valid values for Lock filtering by their level. */
+export type LockLevelFilter = LockLevel.Shared | LockLevel.Exclusive;
 
 /** Url parameters supported in Lock list query. */
 export interface GetLockListUrlParams extends CollectionRequestParams {
   /** Filters Locks by a specific Briefcase. */
   briefcaseId?: number;
+  /** Filters Locks by their level. See {@link LockLevelFilter}. */
+  lockLevel?: LockLevelFilter;
 }
 
 /** Parameters for get Lock list operation. */

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { AuthorizationCallback, ConflictingLock, ConflictingLocksError, GetLockListParams, IModelsClient, IModelsClientOptions, IModelsErrorCode, LockLevel, LocksError, UpdateLockParams, toArray } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, ConflictingLock, ConflictingLocksError, GetLockListParams, IModelsClient, IModelsClientOptions, IModelsErrorCode, Lock, LockLevel, LockLevelFilter, LocksError, UpdateLockParams, toArray } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertCollection, assertError, assertLock } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
@@ -110,6 +110,38 @@ describe("[Authoring] LockOperations", () => {
     // Assert
     const lockArray = await toArray(locks);
     expect(lockArray.length).to.equal(0);
+  });
+
+  ([LockLevel.Shared, LockLevel.Exclusive] as LockLevelFilter[]).forEach((lockLevel) => {
+    it(`should return correct values when querying collection with lockLevel filter ${lockLevel}`, async () => {
+      // Arrange
+      const expectedLock: Lock = {
+        briefcaseId: testIModelForRead.lock.briefcaseId,
+        lockedObjects: testIModelForRead.lock.lockedObjects.filter((lockedObject) => lockedObject.lockLevel === lockLevel)
+      };
+      expect(expectedLock.lockedObjects.length).to.be.greaterThan(0);
+
+      const getLockListParams: GetLockListParams = {
+        authorization,
+        iModelId: testIModelForRead.id,
+        urlParams: {
+          lockLevel
+        }
+      };
+
+      // Act
+      const locks = iModelsClient.locks.getList(getLockListParams);
+
+      // Assert
+      const lockArray = await toArray(locks);
+      expect(lockArray.length).to.be.equal(1);
+      const actualLock = lockArray[0];
+      assertLock({
+        actualLock,
+        expectedLock,
+        lockLevel
+      });
+    });
   });
 
   it("should acquire new locks", async () => {

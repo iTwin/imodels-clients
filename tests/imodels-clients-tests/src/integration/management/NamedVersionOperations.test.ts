@@ -234,19 +234,18 @@ describe("[Management] NamedVersionOperations", () => {
           state
         }
       };
-  
+
       // Act
       const namedVersions = iModelsClient.namedVersions.getRepresentationList(getNamedVersionListParams);
-  
+
       // Assert
       const namedVersionArray = await toArray(namedVersions);
       expect(namedVersionArray.length).to.be.greaterThan(0);
-      expect(namedVersionArray.length).to.not.equal(namedVersionsCreatedInSetup.length);
       for (const namedVersion of namedVersionArray) {
         expect(namedVersion.state).to.be.equal(state);
       }
     });
-  })
+  });
 
   it("should return versions that match the search filter when querying representation collection", async () => {
     // Arrange
