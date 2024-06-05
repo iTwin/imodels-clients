@@ -6,7 +6,7 @@ import { ChangesetIdOrIndex, IModelScopedOperationParams } from "@itwin/imodels-
 
 /** Properties that should be specified when creating a new Changeset Extended Data. */
 export interface ChangesetExtendedDataPropertiesForCreate {
-  /** Application specific valid json object. Maximum supported size is 204800 bytes. */
+  /** Changeset application specific data. Maximum supported size is 204800 bytes. */
   data: object;
 }
 
