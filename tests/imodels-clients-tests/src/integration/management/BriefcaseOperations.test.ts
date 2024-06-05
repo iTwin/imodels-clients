@@ -183,7 +183,7 @@ describe("[Management] BriefcaseOperations", () => {
     });
   });
 
-  it("should order items by createdDateTime when querying representation collection (ascending order)", async () => {
+  it("should order items by acquiredDateTime when querying representation collection (ascending order)", async () => {
     // Arrange
     const getBriefcaseListParams: GetBriefcaseListParams = {
       authorization,
@@ -204,7 +204,7 @@ describe("[Management] BriefcaseOperations", () => {
       expect(new Date(briefcases[i].acquiredDateTime)).to.be.lessThan(new Date(briefcases[i + 1].acquiredDateTime));
   });
 
-  it("should order items by createdDateTime when querying representation collection (descending order)", async () => {
+  it("should order items by acquiredDateTime when querying representation collection (descending order)", async () => {
     // Arrange
     const getBriefcaseListParams: GetBriefcaseListParams = {
       authorization,
