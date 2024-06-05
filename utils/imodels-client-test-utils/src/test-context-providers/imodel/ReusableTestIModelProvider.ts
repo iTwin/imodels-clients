@@ -44,7 +44,7 @@ export class ReusableTestIModelProvider {
       return this._testIModelCreator.createReusable(this._config.testIModelName);
     }
 
-    return await this.waitForInitializedIModel(existingReusableIModel);
+    return this.waitForInitializedIModel(existingReusableIModel);
   }
 
   private async waitForInitializedIModel(iModel: IModel): Promise<ReusableIModelMetadata> {
