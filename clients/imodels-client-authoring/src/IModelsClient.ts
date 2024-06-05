@@ -108,8 +108,7 @@ export class IModelsClient extends ManagementIModelsClient {
       restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse),
       localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
       cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory()),
-      headers: options?.headers ?? {},
-      useExperimental: options?.useExperimental ?? false
+      headers: options?.headers ?? {}
     };
   }
 }

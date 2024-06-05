@@ -112,8 +112,7 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor,
-          useExperimental: false
+          headers: headersPassedToConstructor
         });
 
       // Act
@@ -133,8 +132,7 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor,
-          useExperimental: false
+          headers: headersPassedToConstructor
         });
 
       // Act
@@ -155,8 +153,7 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor,
-          useExperimental: false
+          headers: headersPassedToConstructor
         });
 
       // Act
@@ -178,8 +175,7 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor,
-          useExperimental: false
+          headers: headersPassedToConstructor
         });
 
       // Act
@@ -199,8 +195,7 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor,
-          useExperimental: false
+          headers: headersPassedToConstructor
         });
 
       // Act

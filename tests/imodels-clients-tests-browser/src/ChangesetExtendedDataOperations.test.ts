@@ -17,7 +17,7 @@ describe(`[Management] ${ChangesetExtendedDataOperations.name}`, () => {
 
   before(async () => {
     const iModelsClientApiOptions: ApiOptions = JSON.parse(Cypress.env(FrontendTestEnvVariableKeys.iModelsClientApiOptions));
-    iModelsClient = new IModelsClient({ api: iModelsClientApiOptions, useExperimental: true });
+    iModelsClient = new IModelsClient({ api: iModelsClientApiOptions });
 
     const admin1AuthorizationInfo: Authorization = JSON.parse(Cypress.env(FrontendTestEnvVariableKeys.admin1AuthorizationInfo));
     authorization = async () => admin1AuthorizationInfo;
