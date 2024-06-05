@@ -9,6 +9,6 @@ export interface ChangesetExtendedData {
   changesetId: string;
   /** Changeset index. */
   changesetIndex: number;
-  /** Changeset extended data json object. */
+  /** Changeset application specific data. */
   data: object;
 }
