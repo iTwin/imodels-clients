@@ -12,7 +12,7 @@ export const SPECIAL_VALUES_ME = "me";
  * - `me` keyword, which specifies to reference the current user. Current user is the user that the access token used for request belongs to;
  * - User id.
  */
-export type ValidOwnerIdValue = "me" | string;
+export type ValidOwnerIdValue = typeof SPECIAL_VALUES_ME | string;
 
 /**
  * Briefcase entity properties that are supported in $orderBy url parameter which specifies by what property
