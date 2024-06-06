@@ -7,6 +7,7 @@ import { AuthorizationParam, IModelsClient, Lock } from "@itwin/imodels-client-a
 export interface BriefcaseMetadata {
   id: number;
   deviceName: string;
+  ownerId: string;
 }
 
 export interface NamedVersionMetadata {

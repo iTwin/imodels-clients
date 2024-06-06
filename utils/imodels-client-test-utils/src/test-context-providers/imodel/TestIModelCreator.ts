@@ -245,7 +245,8 @@ export class TestIModelCreator {
 
     return {
       id: briefcase.briefcaseId,
-      deviceName: briefcase.deviceName!
+      deviceName: briefcase.deviceName!,
+      ownerId: briefcase.ownerId
     };
   }
 

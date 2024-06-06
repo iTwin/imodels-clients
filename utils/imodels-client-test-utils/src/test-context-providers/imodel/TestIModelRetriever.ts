@@ -68,7 +68,11 @@ export class TestIModelRetriever {
     if (briefcases.length !== TestIModelCreator.briefcaseCount)
       throw new TestSetupError(`${briefcases.length} is an unexpected briefcase count for reusable test iModel.`);
 
-    return briefcases.map((briefcase) => ({ id: briefcase.briefcaseId, deviceName: briefcase.deviceName! }));
+    return briefcases.map((briefcase) => ({
+      id: briefcase.briefcaseId,
+      deviceName: briefcase.deviceName!,
+      ownerId: briefcase.ownerId
+    }));
   }
 
   private async queryAndValidateNamedVersions(iModelId: string): Promise<NamedVersionMetadata[]> {

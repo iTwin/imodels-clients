@@ -5,7 +5,7 @@
 import { expect } from "chai";
 
 import { AuthorizationCallback, Briefcase, BriefcaseOrderByProperty, EntityListIterator, GetBriefcaseListParams, GetSingleBriefcaseParams, IModelsClient, IModelsClientOptions, OrderByOperator, SPECIAL_VALUES_ME, take, toArray } from "@itwin/imodels-client-management";
-import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertBriefcase, assertCollection, assertMinimalBriefcase } from "@itwin/imodels-client-test-utils";
+import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertBriefcase, assertCollection, assertMinimalBriefcase, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "../common";
 
@@ -82,10 +82,7 @@ describe("[Management] BriefcaseOperations", () => {
     for (let i = 0; i < briefcaseList.length; i++) {
       await assertBriefcase({
         actualBriefcase: briefcaseList[i],
-        expectedBriefcaseProperties: {
-          briefcaseId: testIModel.briefcases[i].id,
-          deviceName: testIModel.briefcases[i].deviceName
-        }
+        expectedBriefcaseProperties: testIModel.briefcases[i]
       });
     }
   });
@@ -98,6 +95,52 @@ describe("[Management] BriefcaseOperations", () => {
       iModelId: testIModel.id,
       urlParams: {
         ownerId: SPECIAL_VALUES_ME
+      }
+    };
+
+    // Act
+    const briefcases = iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams);
+
+    // Assert
+    const briefcasesArray = await toArray(briefcases);
+    expect(briefcasesArray.length).to.equal(0);
+  });
+
+  it("should return briefcases that match ownerId filter when querying representation collection", async () => {
+    // Arrange
+    const ownerId = testIModel.briefcases[0].ownerId;
+    const getBriefcaseListParams: GetBriefcaseListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        ownerId
+      }
+    };
+
+    // Act
+    const briefcases = iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams);
+
+    // Assert
+    const briefcasesArray = await toArray(briefcases);
+    expect(briefcasesArray.length).to.be.greaterThan(0);
+    for (const actualBriefcase of briefcasesArray) {
+      const expectedBriefcase = testIModel.briefcases.find((briefcase) => briefcase.id === actualBriefcase.briefcaseId);
+      expect(expectedBriefcase).to.exist;
+      await assertBriefcase({
+        actualBriefcase,
+        expectedBriefcaseProperties: expectedBriefcase!
+      });
+    }
+  });
+
+  it("should not return briefcases if none match the ownerId filter when querying representation collection", async () => {
+    // Arrange
+    const ownerId = createGuidValue();
+    const getBriefcaseListParams: GetBriefcaseListParams = {
+      authorization,
+      iModelId: testIModel.id,
+      urlParams: {
+        ownerId
       }
     };
 
@@ -133,6 +176,7 @@ describe("[Management] BriefcaseOperations", () => {
 
   it("should get valid full named version when querying representation collection", async () => {
     // Arrange
+    const expectedBriefcase = testIModel.briefcases[0];
     const getBriefcaseListParams: GetBriefcaseListParams = {
       authorization,
       iModelId: testIModel.id,
@@ -154,10 +198,7 @@ describe("[Management] BriefcaseOperations", () => {
     const briefcase = briefcaseList[0];
     await assertBriefcase({
       actualBriefcase: briefcase,
-      expectedBriefcaseProperties: {
-        briefcaseId: testIModel.briefcases[0].id,
-        deviceName: testIModel.briefcases[0].deviceName
-      }
+      expectedBriefcaseProperties: expectedBriefcase
     });
   });
 
@@ -176,10 +217,7 @@ describe("[Management] BriefcaseOperations", () => {
     // Assert
     await assertBriefcase({
       actualBriefcase: briefcase,
-      expectedBriefcaseProperties: {
-        briefcaseId: expectedBriefcase.id,
-        deviceName: expectedBriefcase.deviceName
-      }
+      expectedBriefcaseProperties: expectedBriefcase
     });
   });
 
