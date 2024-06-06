@@ -1,4 +1,4 @@
-# Change Log - @itwin/imodels-access-backend
+# Change Log - @itwin/imodels-access-common
 
 This log was last generated on Thu, 4 Apr 2024 13:39:29 GMT and should not be manually modified.
 

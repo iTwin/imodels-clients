@@ -1,7 +1,7 @@
 parameters:
-- name: runRushAudit
-  type: boolean
-  default: true
+  - name: runRushAudit
+    type: boolean
+    default: true
 
 steps:
   - task: NodeTool@0
@@ -9,6 +9,9 @@ steps:
     inputs:
       versionSpec: $(nodeVersion)
       checkLatest: true
+
+  - script: node common/scripts/install-run-rush.js change -v
+    displayName: rush change -v
 
   - script: node common/scripts/install-run-rush.js install --purge
     displayName: rush install

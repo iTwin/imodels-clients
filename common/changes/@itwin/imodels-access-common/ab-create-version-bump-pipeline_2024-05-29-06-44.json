@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-access-common",
+      "comment": "Fix ConflictWithAnotherUser error code handling in ErrorAdapter.",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-common"
+}

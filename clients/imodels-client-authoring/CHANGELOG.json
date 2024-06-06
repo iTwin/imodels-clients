@@ -1,0 +1,70 @@
+{
+  "name": "@itwin/imodels-client-authoring",
+  "entries": [
+    {
+      "version": "5.0.0",
+      "tag": "",
+      "date": "Thu, 4 Apr 2024 13:39:29 GMT",
+      "comments": {
+        "major": [
+          {
+            "comment": "Update `RestClient` interface. Classes implementing `RestClient` interface must now return HTTP response headers in addition to the response body."
+          },
+          {
+            "comment": "Update `createFromTemplate` iModel operation error handling. If iModel initialization times out, the error code of the thrown error will now be `IModelFromTemplateInitializationTimedOut` instead of `IModelFromTemplateInitializationFailed`."
+          }
+        ]
+      }
+    },
+    {
+      "version": "4.0.0",
+      "tag": "",
+      "date": "Tue, 23 May 2023 15:57:54 GMT",
+      "comments": {
+        "major": [
+          {
+            "comment": "Drop support for Node.js versions older than 18.12.0."
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.0.0",
+      "tag": "",
+      "date": "Thu, 23 Feb 2023 16:27:30 GMT",
+      "comments": {
+        "major": [
+          {
+            "comment": "Update client to use [iModels API V2](https://developer.bentley.com/apis/imodels-v2/overview/) by default. All references to the term 'Project' were updated to use 'iTwin' (`projectId` -> `iTwinId`, ...)."
+          }
+        ]
+      }
+    },
+    {
+      "version": "2.0.0",
+      "tag": "",
+      "date": "Fri, 22 July 2022 14:42:36 GMT",
+      "comments": {
+        "major": [
+          {
+            "comment": "Remove internal code exports from the main `index.ts` file that should not be used directly by package users. The following components are no longer part of the public package API: \n  - Operation classes (`IModelOperations`, `ChangesetOperations`, etc.) \n  - Utility types (raw API response interfaces, etc.) \n  - Default IModelsClient option implementations (`AxiosRestClient`) \n  - Default iModels API parser class"
+          },
+          {
+            "comment": "Change `_links` property type in entity interfaces from `Link` to `Link | null` as per iModels API definition."
+          }
+        ],
+        "minor": [
+          {
+            "comment": "Surface more iModels API operations. Please see the package documentation for an updated list of supported operations and entities: [link to docs](https://github.com/iTwin/imodels-clients/blob/main/docs/IModelsClientAuthoring.md)."
+          }
+        ]
+      }
+    },
+    {
+      "version": "1.0.0",
+      "tag": "",
+      "date": "Tue, 18 Jan 2022 14:43:04 GMT",
+      "comments": {}
+    }
+  ]
+}

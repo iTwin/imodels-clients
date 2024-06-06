@@ -1,21 +1,36 @@
 # Change Log - @itwin/imodels-access-frontend
 
-## 5.0.0
+This log was last generated on Thu, 4 Apr 2024 13:39:29 GMT and should not be manually modified.
 
-This release contains no changes compared to the previous package version.
+## 5.0.0
+Thu, 4 Apr 2024 13:39:29 GMT
+
+_Version update only_
 
 ## 4.0.0
+Tue, 23 May 2023 15:57:54 GMT
 
-Breaking changes:
-- Updated iTwin.js peer dependencies to version 4.0.0.
-- Dropped support for Node.js versions older than 18.12.0.
+### Breaking changes
+
+- Update iTwin.js peer dependencies to version 4.0.0.
+- Drop support for Node.js versions older than 18.12.0.
 
 ## 3.0.0
+Thu, 23 Feb 2023 16:27:30 GMT
 
-Breaking changes:
-- Updated iTwin.js peer dependencies to version 3.6.0.
+### Breaking changes
+
+- Update iTwin.js peer dependencies to version 3.6.0.
 
 ## 2.0.0
+Fri, 22 July 2022 14:42:36 GMT
 
-Breaking changes:
-- Updated iTwin.js peer dependencies to version 3.3.0.
+### Breaking changes
+
+- Update iTwin.js peer dependencies to version 3.3.0.
+
+## 1.0.0
+Tue, 18 Jan 2022 14:43:04 GMT
+
+_Initial release_
+
