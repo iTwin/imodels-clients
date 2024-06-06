@@ -9,10 +9,10 @@ export const SPECIAL_VALUES_ME = "me";
 
 /**
  * Valid owner id values are:
- * - User id;
- * - `me` keyword, which specifies to reference the current user. Current user is the user that the access token used for request belongs to.
+ * - `me` keyword, which specifies to reference the current user. Current user is the user that the access token used for request belongs to;
+ * - User id.
  */
-export type ValidOwnerIdValue = string;
+export type ValidOwnerIdValue = "me" | string;
 
 /**
  * Briefcase entity properties that are supported in $orderBy url parameter which specifies by what property
