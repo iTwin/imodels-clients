@@ -138,8 +138,7 @@ describe("[Authoring] LockOperations", () => {
       const actualLock = lockArray[0];
       assertLock({
         actualLock,
-        expectedLock,
-        lockLevel
+        expectedLock
       });
     });
   });

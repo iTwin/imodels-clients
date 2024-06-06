@@ -6,7 +6,7 @@ import * as fs from "fs";
 
 import { expect } from "chai";
 
-import { BaselineFile, BaselineFileState, Changeset, ChangesetExtendedData, ChangesetGroup, ChangesetGroupPropertiesForCreate, ChangesetGroupPropertiesForUpdate, ChangesetGroupState, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, Lock, LockLevel, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, Changeset, ChangesetExtendedData, ChangesetGroup, ChangesetGroupPropertiesForCreate, ChangesetGroupPropertiesForUpdate, ChangesetGroupState, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate, isIModelsApiError } from "@itwin/imodels-client-authoring";
 
 import { TestChangesetFile, TestIModelBaselineFile } from "../test-context-providers";
 
@@ -170,7 +170,6 @@ export async function assertChangesetGroup(params: {
 export function assertLock(params: {
   actualLock: Lock;
   expectedLock: Lock;
-  lockLevel?: LockLevel;
 }): void {
   expect(params.actualLock.briefcaseId).to.equal(params.expectedLock.briefcaseId);
 
@@ -178,15 +177,12 @@ export function assertLock(params: {
   for (const lockedObjects of params.actualLock.lockedObjects) {
     const expectedLockedObjects = params.expectedLock.lockedObjects.find((l) => l.lockLevel === lockedObjects.lockLevel);
     expect(expectedLockedObjects).to.exist;
-
+    
+    expect(lockedObjects.lockLevel).to.equal(expectedLockedObjects!.lockLevel);
     expect(lockedObjects.objectIds.length).to.equal(expectedLockedObjects!.objectIds.length);
     for (const objectId of lockedObjects.objectIds) {
       const expectedLockedObjectId = expectedLockedObjects!.objectIds.find((id) => id === objectId);
       expect(expectedLockedObjectId).to.exist;
-    }
-
-    if (params.lockLevel) {
-      expect(lockedObjects.lockLevel).to.equal(params.lockLevel);
     }
   }
 }
