@@ -177,7 +177,7 @@ export function assertLock(params: {
   for (const lockedObjects of params.actualLock.lockedObjects) {
     const expectedLockedObjects = params.expectedLock.lockedObjects.find((l) => l.lockLevel === lockedObjects.lockLevel);
     expect(expectedLockedObjects).to.exist;
-    
+
     expect(lockedObjects.lockLevel).to.equal(expectedLockedObjects!.lockLevel);
     expect(lockedObjects.objectIds.length).to.equal(expectedLockedObjects!.objectIds.length);
     for (const objectId of lockedObjects.objectIds) {
