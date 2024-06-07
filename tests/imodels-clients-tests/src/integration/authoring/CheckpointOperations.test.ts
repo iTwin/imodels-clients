@@ -94,6 +94,28 @@ describe("[Authoring] CheckpointOperations", () => {
     });
   });
 
+  it("should get latest", async () => {
+    // Arrange
+    const expectedNamedVersion = testIModel.namedVersions[testIModel.namedVersions.length - 1];
+    const getSingleCheckpointParams: GetSingleCheckpointParams = {
+      authorization,
+      iModelId: testIModel.id
+    };
+
+    // Act
+    const checkpoint = await iModelsClient.checkpoints.getSingle(getSingleCheckpointParams);
+
+    // Assert
+    assertCheckpoint({
+      actualCheckpoint: checkpoint,
+      expectedCheckpointProperties: {
+        changesetId: expectedNamedVersion.changesetId,
+        changesetIndex: expectedNamedVersion.changesetIndex,
+        state: CheckpointState.Successful
+      }
+    });
+  });
+
   [
     {
       label: "by changeset id",
@@ -118,6 +140,10 @@ describe("[Authoring] CheckpointOperations", () => {
           ...params,
           namedVersionId: testIModelNamedVersion.id
         })
+    },
+    {
+      label: "(latest)",
+      functionUnderTest: async (params: IModelScopedOperationParams) => iModelsClient.checkpoints.getSingle(params)
     }
   ].forEach((testCase) => {
     it(`should not find checkpoint ${testCase.label} if iModel does not exist`, async () => {

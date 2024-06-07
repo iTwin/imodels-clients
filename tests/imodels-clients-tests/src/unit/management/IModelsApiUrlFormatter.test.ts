@@ -259,6 +259,33 @@ describe("[Management] IModelsApiUrlFormatter", () => {
   describe("Checkpoint urls", () => {
     [
       {
+        params: { iModelId: "IMODEL_ID" },
+        expectedUrl: "https://api.bentley.com/imodels/IMODEL_ID/briefcases/checkpoint"
+      },
+      {
+        params: { iModelId: "IMODEL_ID", namedVersionId: "NAMED_VERSION_ID" },
+        expectedUrl: "https://api.bentley.com/imodels/IMODEL_ID/namedversions/NAMED_VERSION_ID/checkpoint"
+      },
+      {
+        params: { iModelId: "IMODEL_ID", changesetId: "CHANGESET_ID" },
+        expectedUrl: "https://api.bentley.com/imodels/IMODEL_ID/changesets/CHANGESET_ID/checkpoint"
+      },
+      {
+        params: { iModelId: "IMODEL_ID", changesetIndex: 17 },
+        expectedUrl: "https://api.bentley.com/imodels/IMODEL_ID/changesets/17/checkpoint"
+      }
+    ].forEach((testCase) => {
+      it("should format checkpoint url", () => {
+        // Act
+        const checkpointUrl = iModelsApiUrlFormatter.getCheckpointUrl(testCase.params);
+
+        // Assert
+        expect(checkpointUrl).to.be.equal(testCase.expectedUrl);
+      });
+    });
+
+    [
+      {
         url: "https://api.bentley.com/imodels/IMODEL_ID/changesets/5/checkpoint",
         expectedChangesetIndex: 5
       },
