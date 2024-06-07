@@ -106,7 +106,7 @@ export class IModelsApiUrlFormatter {
     let parentEntityUrlPath: string;
     if (params.namedVersionId)
       parentEntityUrlPath = `namedversions/${params.namedVersionId}`;
-    else if (params.changesetId || params.changesetIndex)
+    else if (params.changesetId || params.changesetIndex != null)
       parentEntityUrlPath = `changesets/${params.changesetId ?? params.changesetIndex}`;
     else
       parentEntityUrlPath = "briefcases";

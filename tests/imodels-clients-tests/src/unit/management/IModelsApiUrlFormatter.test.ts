@@ -271,6 +271,10 @@ describe("[Management] IModelsApiUrlFormatter", () => {
         expectedUrl: "https://api.bentley.com/imodels/IMODEL_ID/changesets/CHANGESET_ID/checkpoint"
       },
       {
+        params: { iModelId: "IMODEL_ID", changesetIndex: 0 },
+        expectedUrl: "https://api.bentley.com/imodels/IMODEL_ID/changesets/0/checkpoint"
+      },
+      {
         params: { iModelId: "IMODEL_ID", changesetIndex: 17 },
         expectedUrl: "https://api.bentley.com/imodels/IMODEL_ID/changesets/17/checkpoint"
       }
