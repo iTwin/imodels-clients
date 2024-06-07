@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, HeaderFactories, User } from "../base/types";
+import { AuthorizationCallback, HeaderFactories, Link, User } from "../base/types";
 
 import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
 import { OperationOptions } from "./OperationOptions";
@@ -31,4 +31,9 @@ export function assertStringHeaderValue(headerName: string, headerValue: unknown
   const isString = typeof headerValue === "string" || headerValue instanceof String;
   if (!isString)
     throw new Error(`Assertion failed: header's ${headerName} value is not a string.`);
+}
+
+export function assertLink(link: Link | null | undefined): asserts link is Link {
+  if (!link || !link.href)
+    throw new Error("Assertion failed: link is falsy.");
 }

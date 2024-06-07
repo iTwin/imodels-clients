@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { Briefcase, Changeset, ChangesetGroup, Checkpoint, IModel, MinimalChangeset, NamedVersion, User } from "@itwin/imodels-client-authoring";
+import { Briefcase, Changeset, ChangesetGroup, Checkpoint, CheckpointState, IModel, MinimalChangeset, NamedVersion, User } from "@itwin/imodels-client-authoring";
 
-import { assertUser } from "./BrowserFriendlyAssertions";
+import { assertCheckpoint, assertUser } from "./BrowserFriendlyAssertions";
 
 export async function assertIModelCallbacks(params: {
   iModel: IModel;
@@ -27,6 +27,16 @@ export async function assertBriefcaseCallbacks(params: {
   const owner: User | undefined = await params.briefcase.getOwner();
   assertUser({
     actualUser: owner!
+  });
+
+  expect(params.briefcase.getCheckpoint).to.exist;
+
+  const checkpoint: Checkpoint = await params.briefcase.getCheckpoint();
+  assertCheckpoint({
+    actualCheckpoint: checkpoint,
+    expectedCheckpointProperties: {
+      state: CheckpointState.Successful
+    }
   });
 }
 

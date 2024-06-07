@@ -91,6 +91,8 @@ export async function assertBriefcase(params: {
   expect(params.actualBriefcase._links).to.exist;
   expect(params.actualBriefcase._links.owner).to.exist;
   expect(params.actualBriefcase._links.owner!.href).to.not.be.empty;
+  expect(params.actualBriefcase._links.checkpoint).to.exist;
+  expect(params.actualBriefcase._links.checkpoint!.href).to.not.be.empty;
 
   await assertBriefcaseCallbacks({
     briefcase: params.actualBriefcase
@@ -150,13 +152,19 @@ export async function assertNamedVersion(params: {
 export function assertCheckpoint(params: {
   actualCheckpoint: Checkpoint;
   expectedCheckpointProperties: {
-    changesetId: string;
-    changesetIndex: number;
+    changesetId?: string;
+    changesetIndex?: number;
     state: CheckpointState;
   };
 }): void {
-  expect(params.actualCheckpoint.changesetId).to.equal(params.expectedCheckpointProperties.changesetId);
-  expect(params.actualCheckpoint.changesetIndex).to.equal(params.expectedCheckpointProperties.changesetIndex);
+  if (params.expectedCheckpointProperties.changesetId)
+    expect(params.actualCheckpoint.changesetId).to.equal(params.expectedCheckpointProperties.changesetId);
+
+  if (params.expectedCheckpointProperties.changesetIndex != null)
+    expect(params.actualCheckpoint.changesetIndex).to.equal(params.expectedCheckpointProperties.changesetIndex);
+  else
+    expect(params.actualCheckpoint.changesetIndex).to.be.greaterThanOrEqual(0);
+
   expect(params.actualCheckpoint.state).to.equal(params.expectedCheckpointProperties.state);
 
   expect(params.actualCheckpoint.containerAccessInfo).to.not.be.null;

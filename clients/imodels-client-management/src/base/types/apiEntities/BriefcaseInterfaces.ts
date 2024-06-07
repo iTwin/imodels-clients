@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { Application, Link } from "../CommonInterfaces";
 
+import { Checkpoint } from "./CheckpointInterfaces";
 import { User } from "./UserInterfaces";
 
 /** Minimal representation of a Briefcase. */
@@ -18,6 +19,8 @@ export interface MinimalBriefcase {
 export interface BriefcaseLinks {
   /** Link to the User which acquired the Briefcase. Link points to a specific User in iModels API. */
   owner: Link | null;
+  /** Link to the latest Checkpoint for the iModel. */
+  checkpoint: Link | null;
 }
 
 export interface Briefcase extends MinimalBriefcase {
@@ -41,4 +44,10 @@ export interface Briefcase extends MinimalBriefcase {
    * operation that originally queried the Briefcase from API.
    */
   getOwner: () => Promise<User | undefined>;
+  /**
+   * Function to query the latest Checkpoint for the iModel.
+   * This function reuses authorization information passed to specific Briefcase
+   * operation that originally queried the Briefcase from API.
+   */
+  getCheckpoint: () => Promise<Checkpoint>;
 }
