@@ -8,10 +8,11 @@ import { Briefcase, CollectionRequestParams, IModelScopedOperationParams, OrderB
 export const SPECIAL_VALUES_ME = "me";
 
 /**
- * Valid values for Briefcase owner id filter. Currently the only supported value is `me` which allows to query
- * Briefcases owned by the current user making the request.
+ * Valid owner id values are:
+ * - `me` keyword, which specifies to reference the current user. Current user is the user that the access token used for request belongs to;
+ * - User id.
  */
-export type ValidOwnerIdValue = typeof SPECIAL_VALUES_ME;
+export type ValidOwnerIdValue = string;
 
 /**
  * Briefcase entity properties that are supported in $orderBy url parameter which specifies by what property

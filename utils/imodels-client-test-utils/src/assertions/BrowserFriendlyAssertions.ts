@@ -58,13 +58,21 @@ export function assertMinimalBriefcase(params: {
 
 export async function assertBriefcase(params: {
   actualBriefcase: Briefcase;
-  expectedBriefcaseProperties: Pick<Briefcase, "deviceName"> & { briefcaseId?: number };
+  expectedBriefcaseProperties: {
+    deviceName: string;
+    briefcaseId?: number;
+    ownerId?: string;
+  };
 }): Promise<void> {
   assertMinimalBriefcase({
     actualBriefcase: params.actualBriefcase
   });
 
-  expect(params.actualBriefcase.ownerId).to.not.be.empty;
+  if (params.expectedBriefcaseProperties.ownerId)
+    expect(params.actualBriefcase.ownerId).to.be.equal(params.expectedBriefcaseProperties.ownerId);
+  else
+    expect(params.actualBriefcase.ownerId).to.not.be.empty;
+
   expect(params.actualBriefcase.acquiredDateTime).to.not.be.empty;
 
   expect(params.actualBriefcase.fileSize).to.be.greaterThan(0);
