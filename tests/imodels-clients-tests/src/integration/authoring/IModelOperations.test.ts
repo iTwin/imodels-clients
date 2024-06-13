@@ -47,7 +47,7 @@ describe("[Authoring] IModelOperations", () => {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel from baseline"),
         filePath: testIModelFileProvider.iModel.filePath,
-        containersEnabled: ContainerTypes.SchemaSync | ContainerTypes.CodeStore | ContainerTypes.ViewStore
+        containersEnabled: ContainerTypes.None
       },
       headers: {
         "X-Correlation-Id": randomUUID()
