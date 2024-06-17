@@ -1,10 +1,9 @@
-name:
-  $(Date:yyyy.M.d)$(Rev:.r)
+name: $(Date:yyyy.M.d)$(Rev:.r)
 
 parameters:
-- name: runRushAudit
-  type: boolean
-  default: true
+  - name: runRushAudit
+    type: boolean
+    default: true
 
 trigger: none
 
@@ -25,13 +24,13 @@ jobs:
           imageName: 'windows-latest'
           nodeVersion: $(node18Version)
     pool:
-        vmImage: $(imageName)
+      vmImage: $(imageName)
     variables:
       - group: iModels Clients 3.0 - Integration Tests - DEV
     workspace:
       clean: all
 
     steps:
-    - template: templates/build-test.yml
-      parameters:
-        runRushAudit: ${{ parameters.runRushAudit }}
+      - template: templates/build-test.yml
+        parameters:
+          runRushAudit: ${{ parameters.runRushAudit }}

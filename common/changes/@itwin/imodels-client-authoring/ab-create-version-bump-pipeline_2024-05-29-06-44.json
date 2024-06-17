@@ -1,0 +1,55 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Add `forkedFrom` response property in `CreateIModelOperationDetails`.",
+      "type": "minor"
+    },
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Add fork iModel operation.",
+      "type": "minor"
+    },
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Add `containersEnabled` property.",
+      "type": "minor"
+    },
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Fix consumer provided `timeOutInMs` not being respected in iModel operations.",
+      "type": "minor"
+    },
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Add Named Version `$search` query parameter.",
+      "type": "minor"
+    },
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Add iModel `$search` query parameter.",
+      "type": "minor"
+    },
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Add HTTP status code to iModelsError.",
+      "type": "minor"
+    },
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Add Changeset Extended Data operations.",
+      "type": "minor"
+    },
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Add ordering by `createdDateTime` for Named Versions.",
+      "type": "minor"
+    },
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Add ordering by `acquiredDateTime` for Briefcases.",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-authoring"
+}
