@@ -78,5 +78,5 @@ jobs:
           }
         displayName: git commit and tag
       
-      - bash: git push --follow-tags https://$(GITHUBTOKEN)@github.com/iTwin/imodels-clients $(Build.SourceBranchName) -q
+      - bash: git push --follow-tags https://$(GITHUBTOKEN)@github.com/iTwin/imodels-clients HEAD:$(Build.SourceBranchName) -q
         displayName: git push
