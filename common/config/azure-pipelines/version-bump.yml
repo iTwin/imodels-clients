@@ -71,12 +71,12 @@ jobs:
           Write-Host Committing version bump...
           Write-Host $commitMessage
 
-          git commit -m "$commitMessage"
+          git commit -m "$commitMessage" --author="imodeljs-admin <imodeljs-admin@users.noreply.github.com>"
           git tag -a interop/$newInteropPackagesVersion -m "Interop v$newInteropPackagesVersion"
           if ($areClientsBumped) {
             git tag -a clients/$newClientPackagesVersion -m "Clients v$newClientPackagesVersion"
           }
         displayName: git commit and tag
       
-      - bash: git push --follow-tags https://$(GITHUBTOKEN)@github.com/iTwin/imodels-clients HEAD:$(Build.SourceBranchName) -q
+      - bash: git push --follow-tags https://$(GITHUBTOKEN)@github.com/iTwin/imodels-clients HEAD:$(Build.SourceBranchName) --verbose
         displayName: git push
