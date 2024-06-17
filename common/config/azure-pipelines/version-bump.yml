@@ -72,9 +72,9 @@ jobs:
           Write-Host $commitMessage
 
           git commit -m "$commitMessage"
-          git tag -a interop/$(newInteropPackagesVersion) -m "Interop v$(newInteropPackagesVersion)"
+          git tag -a interop/$newInteropPackagesVersion -m "Interop v$newInteropPackagesVersion"
           if ($areClientsBumped) {
-            git tag -a clients/$(newClientPackagesVersion) -m "Clients v$(newClientPackagesVersion)"
+            git tag -a clients/$newClientPackagesVersion -m "Clients v$newClientPackagesVersion"
           }
         displayName: git commit and tag
       
