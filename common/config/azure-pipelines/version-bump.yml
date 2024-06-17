@@ -43,7 +43,7 @@ jobs:
           versionSpec: $(node18Version)
       
       - bash: |
-          git config --local user.email imodeljs-admin@users.noreply.github.com
+          git config --local user.email 38288322+imodeljs-admin@users.noreply.github.com
           git config --local user.name imodeljs-admin
         displayName: Setup Git
 
@@ -71,7 +71,7 @@ jobs:
           Write-Host Committing version bump...
           Write-Host $commitMessage
 
-          git commit -m "$commitMessage" --author="imodeljs-admin <imodeljs-admin@users.noreply.github.com>"
+          git commit -m "$commitMessage" --author="imodeljs-admin <38288322+imodeljs-admin@users.noreply.github.com>"
           git tag -a interop/$newInteropPackagesVersion -m "Interop v$newInteropPackagesVersion"
           if ($areClientsBumped) {
             git tag -a clients/$newClientPackagesVersion -m "Clients v$newClientPackagesVersion"
