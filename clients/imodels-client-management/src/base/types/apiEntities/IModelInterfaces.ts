@@ -93,6 +93,8 @@ export interface IModel extends MinimalIModel {
   extent: Extent | null;
   /** iModel container types. See {@link ContainerTypes}. */
   containersEnabled: ContainerTypes;
+  /** The data center where the data for the iModel is persisted. */
+  dataCenterLocation: string;
   /** iModel links. See {@link IModelLinks}.*/
   _links: IModelLinks;
   /**

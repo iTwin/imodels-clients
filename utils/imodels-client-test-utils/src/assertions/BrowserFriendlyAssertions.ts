@@ -42,6 +42,7 @@ export async function assertIModel(params: {
   expect(params.actualIModel.containersEnabled).to.equal(params.expectedIModelProperties.containersEnabled);
   expect(params.actualIModel.createdDateTime).to.not.be.empty;
   expect(params.actualIModel.state).to.equal(IModelState.Initialized);
+  expect(params.actualIModel.dataCenterLocation).to.not.be.empty;
 
   await assertIModelCallbacks({
     iModel: params.actualIModel
