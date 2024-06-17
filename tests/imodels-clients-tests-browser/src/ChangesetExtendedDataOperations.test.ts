@@ -2,6 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import "reflect-metadata";
+
 import { ChangesetExtendedDataOperations } from "@itwin/imodels-client-management/lib/esm/operations";
 import { assertChangesetExtendedDataBrowser, assertCollection } from "@itwin/imodels-client-test-utils/lib/assertions/BrowserFriendlyAssertions";
 
