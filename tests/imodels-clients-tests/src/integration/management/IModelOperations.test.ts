@@ -360,7 +360,7 @@ describe("[Management] IModelOperations", () => {
           southWest: { latitude: 1, longitude: 2 },
           northEast: { latitude: 3, longitude: 4 }
         },
-        containersEnabled: ContainerTypes.SchemaSync | ContainerTypes.CodeStore | ContainerTypes.ViewStore
+        containersEnabled: ContainerTypes.None
       },
       headers: {
         "X-Correlation-Id": randomUUID()
