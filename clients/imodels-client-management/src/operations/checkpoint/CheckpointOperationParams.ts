@@ -22,11 +22,18 @@ interface NamedVersionIdParam {
   namedVersionId: string;
 }
 
+interface LatestCheckpointParam {
+  changesetId?: never;
+  changesetIndex?: never;
+  namedVersionId?: never;
+}
+
 /**
  * Supported Checkpoint parent entity (Changeset, Named Version) identifiers. Only one of the following properties can
  * be specified to reference a single Checkpoint by its parent entity: `changesetId`, `changesetIndex`, `namedVersionId`.
+ * To reference iModel's latest Checkpoint, do not specify any of the parent entity identifiers.
  */
-export type CheckpointParentEntityId = ChangesetIdParam | ChangesetIndexParam | NamedVersionIdParam;
+export type CheckpointParentEntityId = ChangesetIdParam | ChangesetIndexParam | NamedVersionIdParam | LatestCheckpointParam;
 
 /** Parameters for get single Checkpoint operation. */
 export type GetSingleCheckpointParams = IModelScopedOperationParams & CheckpointParentEntityId;

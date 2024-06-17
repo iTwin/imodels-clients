@@ -103,9 +103,13 @@ export class IModelsApiUrlFormatter {
   }
 
   public getCheckpointUrl(params: { iModelId: string } & CheckpointParentEntityId): string {
-    const parentEntityUrlPath = params.namedVersionId
-      ? `namedversions/${params.namedVersionId}`
-      : `changesets/${params.changesetId ?? params.changesetIndex}`;
+    let parentEntityUrlPath: string;
+    if (params.namedVersionId)
+      parentEntityUrlPath = `namedversions/${params.namedVersionId}`;
+    else if (params.changesetId || params.changesetIndex != null)
+      parentEntityUrlPath = `changesets/${params.changesetId ?? params.changesetIndex}`;
+    else
+      parentEntityUrlPath = "briefcases";
 
     return `${this.baseUrl}/${params.iModelId}/${parentEntityUrlPath}/checkpoint`;
   }

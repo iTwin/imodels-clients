@@ -2,11 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BriefcaseResponse, BriefcasesResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
+import { BriefcaseResponse, BriefcasesResponse, CheckpointResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
 import { AuthorizationCallback, Briefcase, EntityListIterator, HeaderFactories, HttpResponse, MinimalBriefcase, PreferReturn } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
-import { getUser } from "../SharedFunctions";
+import { assertLink, getUser } from "../SharedFunctions";
 
 import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOperationParams";
 
@@ -87,9 +87,21 @@ export class BriefcaseOperations<TOptions extends OperationOptions> extends Oper
       headers
     );
 
+    const checkpointLink = briefcase._links.checkpoint;
+    assertLink(checkpointLink);
+    const getCheckpoint = async () => {
+      const response = await this.sendGetRequest<CheckpointResponse>({
+        authorization,
+        url: checkpointLink.href,
+        headers
+      });
+      return response.body.checkpoint;
+    };
+
     const result: Briefcase = {
       ...briefcase,
-      getOwner
+      getOwner,
+      getCheckpoint
     };
 
     return result;

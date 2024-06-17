@@ -3,14 +3,13 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { IModelsErrorImpl, waitForCondition } from "@itwin/imodels-client-management/lib/base/internal";
-import { IModelOperations as ManagementIModelOperations } from "@itwin/imodels-client-management/lib/operations";
+import { IModelOperations as ManagementIModelOperations, assertLink } from "@itwin/imodels-client-management/lib/operations";
 
 import { AuthorizationParam, HeadersParam, IModel, IModelsErrorCode } from "@itwin/imodels-client-management";
 
 import { BaselineFileState } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
 import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations";
-import { assertLink } from "../CommonFunctions";
 import { OperationOptions } from "../OperationOptions";
 
 import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline } from "./IModelOperationParams";

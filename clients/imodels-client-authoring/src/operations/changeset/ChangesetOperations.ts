@@ -5,12 +5,11 @@
 import * as path from "path";
 
 import { ChangesetResponse, IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
-import { ChangesetOperations as ManagementChangesetOperations } from "@itwin/imodels-client-management/lib/operations";
+import { ChangesetOperations as ManagementChangesetOperations, assertLink } from "@itwin/imodels-client-management/lib/operations";
 
 import { Changeset, ChangesetState, IModelScopedOperationParams, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
 
 import { DownloadProgressParam, DownloadedChangeset, GenericAbortSignal, TargetDirectoryParam } from "../../base/types";
-import { assertLink } from "../CommonFunctions";
 import { DownloadFileParams, downloadFile } from "../FileDownload";
 import { OperationOptions } from "../OperationOptions";
 
