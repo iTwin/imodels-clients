@@ -1,7 +1,7 @@
 {
   "name": "@itwin/imodels-clients-tests",
   "version": "0.0.0",
-  "description": "Tests for iModels API client wrappers  ",
+  "description": "Tests for iModels API client wrappers",
   "keywords": [
     "Bentley",
     "iModel",
