@@ -1,6 +1,18 @@
 # Change Log - @itwin/imodels-access-common
 
-This log was last generated on Thu, 4 Apr 2024 13:39:29 GMT and should not be manually modified.
+This log was last generated on Tue, 18 Jun 2024 11:18:41 GMT and should not be manually modified.
+
+## 5.1.3
+Tue, 18 Jun 2024 11:18:41 GMT
+
+_Version update only_
+
+## 5.1.2
+Tue, 18 Jun 2024 11:18:40 GMT
+
+### Patches
+
+- Fix ConflictWithAnotherUser error code handling in ErrorAdapter.
 
 ## 5.0.0
 Thu, 4 Apr 2024 13:39:29 GMT

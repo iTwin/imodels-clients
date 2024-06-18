@@ -1,6 +1,24 @@
 # Change Log - @itwin/imodels-client-management
 
-This log was last generated on Thu, 4 Apr 2024 13:39:29 GMT and should not be manually modified.
+This log was last generated on Tue, 18 Jun 2024 11:18:40 GMT and should not be manually modified.
+
+## 5.7.0
+Tue, 18 Jun 2024 11:18:40 GMT
+
+### Minor changes
+
+- Add `forkedFrom` response property in `CreateIModelOperationDetails`.
+- Add fork iModel operation.
+- Add `containersEnabled` property.
+- Fix consumer provided `timeOutInMs` not being respected in iModel operations.
+- Add Named Version `$search` query parameter.
+- Add iModel `$search` query parameter.
+- Add HTTP status code to iModelsError.
+- Add Changeset Extended Data operations.
+- Add ordering by `createdDateTime` for Named Versions.
+- Add ordering by `acquiredDateTime` for Briefcases.
+- Add latest checkpoint link to Briefcase entity
+- Add Get Briefcase Checkpoint operation
 
 ## 5.0.0
 Thu, 4 Apr 2024 13:39:29 GMT
@@ -29,7 +47,6 @@ Fri, 22 July 2022 14:42:36 GMT
 
 ### Breaking changes
 
-- Remove `FileHandler` interface and default `AzureFileHandler` implementation. Storage operations now use [`@itwin/object-storage-core`](https://www.npmjs.com/package/@itwin/object-storage-core) and [`@itwin/object-storage-azure`](https://www.npmjs.com/package/@itwin/object-storage-azure) packages.
 - Remove internal code exports from the main `index.ts` file that should not be used directly by package users. The following components are no longer part of the public package API: 
   - Operation classes (`IModelOperations`, `ChangesetOperations`, etc.) 
   - Utility types (raw API response interfaces, etc.) 
