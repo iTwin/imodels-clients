@@ -27,6 +27,7 @@ variables:
 jobs:
   - job: BumpPackages
     displayName: Bump package versions
+    environment: imodels-api-clients
     pool:
       vmImage: 'ubuntu-latest'
     variables:
