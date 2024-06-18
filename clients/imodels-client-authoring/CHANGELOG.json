@@ -2,6 +2,51 @@
   "name": "@itwin/imodels-client-authoring",
   "entries": [
     {
+      "version": "5.7.0",
+      "tag": "@itwin/imodels-client-authoring_v5.7.0",
+      "date": "Tue, 18 Jun 2024 09:48:03 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Add `forkedFrom` response property in `CreateIModelOperationDetails`."
+          },
+          {
+            "comment": "Add fork iModel operation."
+          },
+          {
+            "comment": "Add `containersEnabled` property."
+          },
+          {
+            "comment": "Fix consumer provided `timeOutInMs` not being respected in iModel operations."
+          },
+          {
+            "comment": "Add Named Version `$search` query parameter."
+          },
+          {
+            "comment": "Add iModel `$search` query parameter."
+          },
+          {
+            "comment": "Add HTTP status code to iModelsError."
+          },
+          {
+            "comment": "Add Changeset Extended Data operations."
+          },
+          {
+            "comment": "Add ordering by `createdDateTime` for Named Versions."
+          },
+          {
+            "comment": "Add ordering by `acquiredDateTime` for Briefcases."
+          },
+          {
+            "comment": "Add latest checkpoint link to Briefcase entity"
+          },
+          {
+            "comment": "Add Get Briefcase Checkpoint operation"
+          }
+        ]
+      }
+    },
+    {
       "version": "5.0.0",
       "tag": "",
       "date": "Thu, 4 Apr 2024 13:39:29 GMT",
@@ -46,6 +91,9 @@
       "date": "Fri, 22 July 2022 14:42:36 GMT",
       "comments": {
         "major": [
+          {
+            "comment": "Remove `FileHandler` interface and default `AzureFileHandler` implementation. Storage operations now use [`@itwin/object-storage-core`](https://www.npmjs.com/package/@itwin/object-storage-core) and [`@itwin/object-storage-azure`](https://www.npmjs.com/package/@itwin/object-storage-azure) packages."
+          },
           {
             "comment": "Remove internal code exports from the main `index.ts` file that should not be used directly by package users. The following components are no longer part of the public package API: \n  - Operation classes (`IModelOperations`, `ChangesetOperations`, etc.) \n  - Utility types (raw API response interfaces, etc.) \n  - Default IModelsClient option implementations (`AxiosRestClient`) \n  - Default iModels API parser class"
           },
