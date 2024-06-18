@@ -10,9 +10,6 @@
     "defaultBranch": "main",
     "defaultRemote": "origin"
   },
-  "pnpmOptions": {
-    "useWorkspaces": true
-  },
   "projects": [
     {
       "packageName": "@itwin/imodels-client-management",
