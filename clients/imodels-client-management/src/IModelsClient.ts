@@ -110,7 +110,13 @@ export class IModelsClient {
   private static fillManagementClientConfiguration(
     options: IModelsClientOptions | undefined
   ): RecursiveRequired<IModelsClientOptions> {
-    const retryPolicy = options?.retryPolicy ?? new AxiosRetryPolicy(new ExponentialBackoffAlgorithm());
+    const retryPolicy = options?.retryPolicy ?? new AxiosRetryPolicy({
+      maxRetries: Constants.retryPolicy.maxRetries,
+      backoffAlgorithm: new ExponentialBackoffAlgorithm({
+        baseDelayInMs: Constants.retryPolicy.baseDelayInMs,
+        factor: Constants.retryPolicy.delayFactor
+      })
+    });
 
     return {
       api: this.fillApiConfiguration(options?.api),

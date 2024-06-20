@@ -5,6 +5,7 @@
 import "reflect-metadata";
 
 import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/internal";
+import { Constants } from "@itwin/imodels-client-management/lib/Constants";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
 
@@ -103,7 +104,13 @@ export class IModelsClient extends ManagementIModelsClient {
   private static fillAuthoringClientConfiguration(
     options: IModelsClientOptions | undefined
   ): RecursiveRequired<IModelsClientOptions> {
-    const retryPolicy = options?.retryPolicy ?? new AxiosRetryPolicy(new ExponentialBackoffAlgorithm());
+    const retryPolicy = options?.retryPolicy ?? new AxiosRetryPolicy({
+      maxRetries: Constants.retryPolicy.maxRetries,
+      backoffAlgorithm: new ExponentialBackoffAlgorithm({
+        baseDelayInMs: Constants.retryPolicy.baseDelayInMs,
+        factor: Constants.retryPolicy.delayFactor
+      })
+    });
 
     return {
       api: this.fillApiConfiguration(options?.api),

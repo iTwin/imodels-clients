@@ -20,7 +20,10 @@ describe("[Management] AxiosRetryPolicy", () => {
 
   it("should use provided backoff algorithm when calculating sleep duration", () => {
     // Arrange
-    const testedClass = new AxiosRetryPolicy(backoffAlgorithmStub);
+    const testedClass = new AxiosRetryPolicy({
+      backoffAlgorithm: backoffAlgorithmStub,
+      maxRetries: 3
+    });
     const params: GetSleepDurationInMsParams = { retriesInvoked: 2 };
     const expectedSleepDuration = 1000;
     backoffAlgorithmStub.getSleepDurationInMs.withArgs(params.retriesInvoked).returns(expectedSleepDuration);
@@ -58,7 +61,7 @@ describe("[Management] AxiosRetryPolicy", () => {
     {
       label: "axios 408 error",
       error: createAxiosError(408),
-      expectedShouldRetry: true
+      expectedShouldRetry: false
     },
     {
       label: "axios 429 error",
@@ -83,7 +86,10 @@ describe("[Management] AxiosRetryPolicy", () => {
   ].forEach((testCase) => {
     it(`should return ${testCase.expectedShouldRetry} when HTTP request fails with ${testCase.label}`, () => {
       // Arrange
-      const testedClass = new AxiosRetryPolicy(backoffAlgorithmStub);
+      const testedClass = new AxiosRetryPolicy({
+        backoffAlgorithm: backoffAlgorithmStub,
+        maxRetries: 3
+      });
 
       // Act & Assert
       expect(testedClass.shouldRetry({ retriesInvoked: 0, error: testCase.error })).to.be.equal(testCase.expectedShouldRetry);

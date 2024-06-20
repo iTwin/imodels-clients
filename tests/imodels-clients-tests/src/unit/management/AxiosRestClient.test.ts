@@ -25,8 +25,7 @@ describe("[Management] AxiosRestClient", () => {
   });
 
   afterEach(() => {
-    axiosMock.resetHandlers();
-    axiosMock.resetHistory();
+    axiosMock.reset();
     sleepStub.resetHistory();
     retryPolicyStub.getSleepDurationInMs.reset();
     retryPolicyStub.shouldRetry.reset();

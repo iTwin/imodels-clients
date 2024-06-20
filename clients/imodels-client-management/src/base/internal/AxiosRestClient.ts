@@ -19,6 +19,8 @@ export type ParseErrorFunc = (response: ResponseInfo, originalError: Error & { c
 
 /** Default implementation for {@link RestClient} interface that uses `axios` library for sending the requests. */
 export class AxiosRestClient implements RestClient {
+  private static readonly retryCountUpperBound = 10;
+
   private _parseErrorFunc: ParseErrorFunc;
   private _retryPolicy: HttpRequestRetryPolicy | null;
 
@@ -106,7 +108,7 @@ export class AxiosRestClient implements RestClient {
         if (
           this._retryPolicy === null ||
           retriesInvoked >= this._retryPolicy.maxRetries ||
-          retriesInvoked >= 10 ||
+          retriesInvoked >= AxiosRestClient.retryCountUpperBound ||
           !(await this._retryPolicy.shouldRetry({ retriesInvoked, error }))
         ) {
           throw error;

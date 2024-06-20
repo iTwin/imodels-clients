@@ -7,7 +7,10 @@ import { expect } from "chai";
 
 describe("[Management] ExponentialBackoffAlgorithm", () => {
   it("should calculate sleep duration correctly", () => {
-    const testedClass = new ExponentialBackoffAlgorithm();
+    const testedClass = new ExponentialBackoffAlgorithm({
+      baseDelayInMs: 300,
+      factor: 3
+    });
 
     expect(testedClass.getSleepDurationInMs(0)).to.be.equal(300);
     expect(testedClass.getSleepDurationInMs(1)).to.be.equal(900);

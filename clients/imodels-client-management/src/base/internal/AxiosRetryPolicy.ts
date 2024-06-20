@@ -13,22 +13,19 @@ import { BackoffAlgorithm } from "./ExponentialBackoffAlgorithm";
 export class AxiosRetryPolicy implements HttpRequestRetryPolicy {
   private readonly _backoffAlgorithm: BackoffAlgorithm;
 
-  public constructor(
+  public constructor(params: {
+    maxRetries: number
     backoffAlgorithm: BackoffAlgorithm,
-    maxRetries: number = 3
-  ) {
-    this.maxRetries = maxRetries;
-    this._backoffAlgorithm = backoffAlgorithm;
+  }) {
+    this.maxRetries = params.maxRetries;
+    this._backoffAlgorithm = params.backoffAlgorithm;
   }
 
   public readonly maxRetries: number;
 
   public shouldRetry(params: ShouldRetryParams): boolean {
     if (isAxiosError(params.error) && params.error.response?.status != null) {
-      return (
-        params.error.response.status === Constants.httpStatusCodes.requestTimeout ||
-        params.error.response.status >= Constants.httpStatusCodes.internalServerError
-      );
+      return params.error.response.status >= Constants.httpStatusCodes.internalServerError;
     }
 
     return true;
