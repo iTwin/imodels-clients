@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Changeset, CollectionRequestParams, IModelScopedOperationParams, OrderBy } from "../../base/types";
+import { Changeset, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types";
 
 /**
  * Changeset entity properties that are supported in $orderBy url parameter which specifies by what property
@@ -13,9 +13,7 @@ export enum ChangesetOrderByProperty {
 }
 
 /** Url parameters supported in Changeset list query. */
-export interface GetChangesetListUrlParams extends CollectionRequestParams {
-  /** Specifies in what order should entities be returned. See {@link OrderBy}. */
-  $orderBy?: OrderBy<Changeset, ChangesetOrderByProperty>;
+export interface GetChangesetListUrlParams extends OrderableCollectionRequestParams<Changeset, ChangesetOrderByProperty> {
   /**
    * Filters Changesets which have an index greater than specified in `afterIndex` property. For example,
    * `afterIndex: 5` will return all Changesets that have an index equal or greater than 6. This option can be

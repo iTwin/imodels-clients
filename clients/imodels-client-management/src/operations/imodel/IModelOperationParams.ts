@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AtLeastOneProperty, AuthorizationParam, CollectionRequestParams, ContainerTypes, Extent, HeadersParam, IModel, IModelScopedOperationParams, OrderBy } from "../../base/types";
+import { AtLeastOneProperty, AuthorizationParam, ContainerTypes, Extent, HeadersParam, IModel, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types";
 import { ChangesetIdOrIndex } from "../OperationParamExports";
 
 /**
@@ -15,9 +15,7 @@ export enum IModelOrderByProperty {
 }
 
 /** Url parameters supported in iModel list query. */
-export interface GetIModelListUrlParams extends CollectionRequestParams {
-  /** Specifies in what order should entities be returned. See {@link OrderBy}. */
-  $orderBy?: OrderBy<IModel, IModelOrderByProperty>;
+export interface GetIModelListUrlParams extends OrderableCollectionRequestParams<IModel, IModelOrderByProperty> {
   /** Filters iModels whose name or description property contains the specified search value. */
   $search?: string;
   /** Filters iModels for a specific iTwin. */
