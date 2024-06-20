@@ -15,7 +15,7 @@ export async function waitForCondition(params: {
   timeOutInMs?: number;
 }): Promise<void> {
   const sleepPeriodInMs = Constants.time.sleepPeriodInMs;
-  const timeOutInMs = params.timeOutInMs ?? Constants.time.iModelInitiazationTimeOutInMs;
+  const timeOutInMs = params.timeOutInMs ?? Constants.time.iModelInitializationTimeOutInMs;
 
   for (let retries = Math.ceil(timeOutInMs / sleepPeriodInMs); retries > 0; --retries) {
     const isTargetStateReached = await params.conditionToSatisfy();

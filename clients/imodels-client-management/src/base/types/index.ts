@@ -21,3 +21,4 @@ export * from "./RestClient";
 export * from "./CommonInterfaces";
 export * from "./UtilityTypes";
 export * from "./IModelsErrorInterfaces";
+export * from "./HttpRequestRetryPolicy";

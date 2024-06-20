@@ -4,10 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
+import { HttpRequestRetryPolicy } from "../types";
 import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, RestClient } from "../types/RestClient";
 
 import { AxiosResponseHeadersAdapter } from "./AxiosResponseHeadersAdapter";
 import { ResponseInfo } from "./IModelsErrorParser";
+import { sleep } from "./UtilityFunctions";
 
 /**
  * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the
@@ -17,10 +19,14 @@ export type ParseErrorFunc = (response: ResponseInfo, originalError: Error & { c
 
 /** Default implementation for {@link RestClient} interface that uses `axios` library for sending the requests. */
 export class AxiosRestClient implements RestClient {
-  private _parseErrorFunc: ParseErrorFunc;
+  private static readonly retryCountUpperBound = 10;
 
-  constructor(parseErrorFunc: ParseErrorFunc) {
+  private _parseErrorFunc: ParseErrorFunc;
+  private _retryPolicy: HttpRequestRetryPolicy | null;
+
+  constructor(parseErrorFunc: ParseErrorFunc, retryPolicy: HttpRequestRetryPolicy | null) {
     this._parseErrorFunc = parseErrorFunc;
+    this._retryPolicy = retryPolicy;
   }
 
   public sendGetRequest<TBody>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<HttpResponse<TBody>>;
@@ -78,7 +84,7 @@ export class AxiosRestClient implements RestClient {
 
   private async executeRequest<TBody>(requestFunc: () => Promise<AxiosResponse<TBody>>): Promise<HttpResponse<TBody>> {
     try {
-      const response = await requestFunc();
+      const response = await this.executeWithRetry(requestFunc);
 
       return {
         body: response.data,
@@ -90,6 +96,29 @@ export class AxiosRestClient implements RestClient {
         throw parsedError;
       }
       throw error;
+    }
+  }
+
+  private async executeWithRetry<TBody>(requestFunc: () => Promise<AxiosResponse<TBody>>): Promise<AxiosResponse<TBody>> {
+    let retriesInvoked = 0;
+    for (;;) {
+      try {
+        return await requestFunc();
+      } catch (error: unknown) {
+        if (
+          this._retryPolicy === null ||
+          retriesInvoked >= this._retryPolicy.maxRetries ||
+          retriesInvoked >= AxiosRestClient.retryCountUpperBound ||
+          !(await this._retryPolicy.shouldRetry({ retriesInvoked, error }))
+        ) {
+          throw error;
+        }
+
+        const sleepDurationInMs = this._retryPolicy.getSleepDurationInMs({ retriesInvoked: retriesInvoked++ });
+        if (sleepDurationInMs > 0) {
+          await sleep(sleepDurationInMs);
+        }
+      }
     }
   }
 }
