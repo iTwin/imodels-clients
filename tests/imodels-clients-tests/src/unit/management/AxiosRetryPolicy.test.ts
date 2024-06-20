@@ -3,14 +3,13 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/internal";
+import { AxiosError, AxiosHeaders } from "axios";
 import { expect } from "chai";
 import sinon from "sinon";
-import { AxiosHeaders } from 'axios'
 
 import { GetSleepDurationInMsParams } from "@itwin/imodels-client-management";
 
 import { createStub } from "../Stubs";
-import { AxiosError } from "axios";
 
 describe("[Management] AxiosRetryPolicy", () => {
   let backoffAlgorithmStub: sinon.SinonStubbedInstance<ExponentialBackoffAlgorithm>;

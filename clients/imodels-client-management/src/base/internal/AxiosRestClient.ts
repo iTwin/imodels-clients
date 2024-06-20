@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
+import { HttpRequestRetryPolicy } from "../types";
 import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, RestClient } from "../types/RestClient";
 
 import { AxiosResponseHeadersAdapter } from "./AxiosResponseHeadersAdapter";
 import { ResponseInfo } from "./IModelsErrorParser";
-import { HttpRequestRetryPolicy } from "../types";
 import { sleep } from "./UtilityFunctions";
 
 /**
