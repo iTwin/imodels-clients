@@ -25,57 +25,60 @@ variables:
   node18Version: '18.12.0'
 
 jobs:
-  - job: BumpPackages
+  - deployment: iModelsApiClientsVersionBump
     displayName: Bump package versions
+    environment: imodels-api-clients
     pool:
       vmImage: 'ubuntu-latest'
     variables:
       - group: Caleb - iTwin GitHub Token
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+              clean: true
 
-    steps:
-      - checkout: self
-        clean: true
+            - task: NodeTool@0
+              displayName: Install Node@$(node18Version)
+              inputs:
+                versionSpec: $(node18Version)
+            
+            - bash: |
+                git config --local user.email 38288322+imodeljs-admin@users.noreply.github.com
+                git config --local user.name imodeljs-admin
+              displayName: Setup Git
 
-      - task: NodeTool@0
-        displayName: Install Node@$(node18Version)
-        inputs:
-          versionSpec: $(node18Version)
-      
-      - bash: |
-          git config --local user.email 38288322+imodeljs-admin@users.noreply.github.com
-          git config --local user.name imodeljs-admin
-        displayName: Setup Git
+            - bash: node common/scripts/install-run-rush version --bump --override-bump ${{ parameters.clientPackagesBumpType }} --version-policy clientPackagesLockStep
+              displayName: Bump client packages
+              condition: and(succeeded(), ${{ ne(parameters.clientPackagesBumpType, 'none') }})
 
-      - bash: node common/scripts/install-run-rush version --bump --override-bump ${{ parameters.clientPackagesBumpType }} --version-policy clientPackagesLockStep
-        displayName: Bump client packages
-        condition: and(succeeded(), ${{ ne(parameters.clientPackagesBumpType, 'none') }})
+            - bash: node common/scripts/install-run-rush version --bump --override-bump ${{ parameters.interopPackagesBumpType }} --version-policy interopPackagesLockStep
+              displayName: Bump interop packages
+            
+            - bash: git add .
+              displayName: git add
+            
+            - powershell: |
+                $json = Get-Content -Raw -Path common/config/rush/version-policies.json | ConvertFrom-Json
+                $newClientPackagesVersion = ($json | where {$_.policyName -eq 'clientPackagesLockStep'}).version
+                $newInteropPackagesVersion = ($json | where {$_.policyName -eq 'interopPackagesLockStep'}).version
 
-      - bash: node common/scripts/install-run-rush version --bump --override-bump ${{ parameters.interopPackagesBumpType }} --version-policy interopPackagesLockStep
-        displayName: Bump interop packages
-      
-      - bash: git add .
-        displayName: git add
-      
-      - powershell: |
-          $json = Get-Content -Raw -Path common/config/rush/version-policies.json | ConvertFrom-Json
-          $newClientPackagesVersion = ($json | where {$_.policyName -eq 'clientPackagesLockStep'}).version
-          $newInteropPackagesVersion = ($json | where {$_.policyName -eq 'interopPackagesLockStep'}).version
+                $areClientsBumped = $($env:CLIENTPACKAGESBUMPTYPE) -ne 'none'
+                $commitMessage = "Version bump: Interop packages $newInteropPackagesVersion"
+                if ($areClientsBumped) {
+                  $commitMessage += ", Client packages $newClientPackagesVersion"
+                }
 
-          $areClientsBumped = $($env:CLIENTPACKAGESBUMPTYPE) -ne 'none'
-          $commitMessage = "Version bump: Interop packages $newInteropPackagesVersion"
-          if ($areClientsBumped) {
-            $commitMessage += ", Client packages $newClientPackagesVersion"
-          }
+                Write-Host Committing version bump...
+                Write-Host $commitMessage
 
-          Write-Host Committing version bump...
-          Write-Host $commitMessage
-
-          git commit -m "$commitMessage" --author="imodeljs-admin <38288322+imodeljs-admin@users.noreply.github.com>"
-          git tag -a interop/$newInteropPackagesVersion -m "Interop v$newInteropPackagesVersion"
-          if ($areClientsBumped) {
-            git tag -a clients/$newClientPackagesVersion -m "Clients v$newClientPackagesVersion"
-          }
-        displayName: git commit and tag
-      
-      - bash: git push --follow-tags https://$(GITHUBTOKEN)@github.com/iTwin/imodels-clients HEAD:$(Build.SourceBranchName) --verbose
-        displayName: git push
+                git commit -m "$commitMessage" --author="imodeljs-admin <38288322+imodeljs-admin@users.noreply.github.com>"
+                git tag -a interop/$newInteropPackagesVersion -m "Interop v$newInteropPackagesVersion"
+                if ($areClientsBumped) {
+                  git tag -a clients/$newClientPackagesVersion -m "Clients v$newClientPackagesVersion"
+                }
+              displayName: git commit and tag
+            
+            - bash: git push --follow-tags https://$(GITHUBTOKEN)@github.com/iTwin/imodels-clients HEAD:$(Build.SourceBranchName) --verbose
+              displayName: git push
