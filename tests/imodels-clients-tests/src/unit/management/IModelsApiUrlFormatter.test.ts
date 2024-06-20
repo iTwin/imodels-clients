@@ -445,6 +445,56 @@ describe("[Management] IModelsApiUrlFormatter", () => {
 
     [
       {
+        label: "single property asc",
+        orderBy: { property: IModelOrderByProperty.Name, operator: OrderByOperator.Ascending },
+        expectedUrlParams: "$orderBy=name asc"
+      },
+      {
+        label: "single property desc",
+        orderBy: { property: IModelOrderByProperty.Name, operator: OrderByOperator.Descending },
+        expectedUrlParams: "$orderBy=name desc"
+      },
+      {
+        label: "single property with no operator",
+        orderBy: { property: IModelOrderByProperty.Name },
+        expectedUrlParams: "$orderBy=name"
+      },
+      {
+        label: "multiple properties",
+        orderBy: [
+          { property: IModelOrderByProperty.Name, operator: OrderByOperator.Ascending },
+          { property: IModelOrderByProperty.CreatedDateTime, operator: OrderByOperator.Descending }
+        ],
+        expectedUrlParams: "$orderBy=name asc,createdDateTime desc"
+      },
+      {
+        label: "multiple properties with no operator",
+        orderBy: [
+          { property: IModelOrderByProperty.Name },
+          { property: IModelOrderByProperty.CreatedDateTime }
+        ],
+        expectedUrlParams: "$orderBy=name,createdDateTime"
+      }
+    ].forEach((testCase) => {
+      it(`should append $orderBy correctly (${testCase.label})`, () => {
+        // Arrange
+        const getIModelListUrlParams = {
+          urlParams: {
+            iTwinId: "ITWIN_ID",
+            $orderBy: testCase.orderBy
+          }
+        };
+
+        // Act
+        const iModelListUrl = iModelsApiUrlFormatter.getIModelListUrl(getIModelListUrlParams);
+
+        // Assert
+        expect(iModelListUrl).to.be.equal(`https://api.bentley.com/imodels?iTwinId=ITWIN_ID&${testCase.expectedUrlParams}`);
+      });
+    });
+
+    [
+      {
         label: "null",
         valueUnderTest: null
       },

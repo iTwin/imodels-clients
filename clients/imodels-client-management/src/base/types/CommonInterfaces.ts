@@ -78,6 +78,12 @@ export interface CollectionRequestParams {
   $top?: number;
 }
 
+/** Common url parameters that are supported for orderable entity list requests. */
+export interface OrderableCollectionRequestParams<TEntity, TProperties extends keyof TEntity> extends CollectionRequestParams {
+  /** Specifies in what order should entities be returned. See {@link OrderBy}. */
+  $orderBy?: OrderBy<TEntity, TProperties> | OrderBy<TEntity, TProperties>[];
+}
+
 /** Entity list ordering operators that are supported in $orderBy url parameter. */
 export enum OrderByOperator {
   /** Ascending. Entities will be returned in ascending order. */

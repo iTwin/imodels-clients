@@ -13,7 +13,9 @@ import { GetIModelListUrlParams } from "./imodel/IModelOperationParams";
 import { GetNamedVersionListUrlParams } from "./named-version/NamedVersionOperationParams";
 import { DownloadThumbnailUrlParams } from "./OperationParamExports";
 
-type OrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
+type SingleOrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
+type MultipleOrderByForAnyEntity = SingleOrderByForAnyEntity[];
+type OrderByForAnyEntity = SingleOrderByForAnyEntity | MultipleOrderByForAnyEntity;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
 
 export class IModelsApiUrlFormatter {
@@ -214,18 +216,35 @@ export class IModelsApiUrlFormatter {
   }
 
   private stringify(urlParameterValue: UrlParameterValue): string {
-    if (this.isOrderBy(urlParameterValue)) {
-      let result: string = urlParameterValue.property;
-      if (urlParameterValue.operator)
-        result += ` ${urlParameterValue.operator}`;
-
-      return result;
+    if (this.isSingleOrderBy(urlParameterValue)) {
+      return this.stringifyOrderByParameterValue([urlParameterValue]);
+    } else if (this.isMultipleOrderBy(urlParameterValue)) {
+      return this.stringifyOrderByParameterValue(urlParameterValue);
     }
 
     return urlParameterValue.toString();
   }
 
-  private isOrderBy(parameterValue: UrlParameterValue): parameterValue is OrderByForAnyEntity {
-    return (parameterValue as OrderByForAnyEntity).property !== undefined;
+  private isSingleOrderBy(parameterValue: UrlParameterValue): parameterValue is SingleOrderByForAnyEntity {
+    return (parameterValue as SingleOrderByForAnyEntity).property !== undefined;
+  }
+
+  private isMultipleOrderBy(parameterValue: UrlParameterValue): parameterValue is MultipleOrderByForAnyEntity {
+    return (parameterValue as MultipleOrderByForAnyEntity)?.[0]?.property !== undefined;
+  }
+
+  private stringifyOrderByParameterValue(orderByCriteria: MultipleOrderByForAnyEntity): string {
+    let result = "";
+    for (let i = 0; i < orderByCriteria.length; i++) {
+      if (i !== 0)
+        result += ",";
+
+      const criterion = orderByCriteria[i];
+      result += criterion.property;
+      if (criterion.operator !== undefined)
+        result += ` ${criterion.operator}`;
+    }
+
+    return result;
   }
 }
