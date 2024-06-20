@@ -14,8 +14,8 @@ export class AxiosRetryPolicy implements HttpRequestRetryPolicy {
   private readonly _backoffAlgorithm: BackoffAlgorithm;
 
   public constructor(params: {
-    maxRetries: number
-    backoffAlgorithm: BackoffAlgorithm,
+    maxRetries: number;
+    backoffAlgorithm: BackoffAlgorithm;
   }) {
     this.maxRetries = params.maxRetries;
     this._backoffAlgorithm = params.backoffAlgorithm;
