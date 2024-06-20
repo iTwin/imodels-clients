@@ -1,15 +1,6 @@
 # Change Log - @itwin/imodels-client-management
 
-This log was last generated on Thu, 20 Jun 2024 14:12:38 GMT and should not be manually modified.
-
-## 5.8.0
-Thu, 20 Jun 2024 14:12:38 GMT
-
-### Minor changes
-
-- Add failed HTTP request retry policy.
-- Add ordering by multiple properties.
-- Add ordering for User by GivenName and Surname.
+This log was last generated on Tue, 18 Jun 2024 11:18:40 GMT and should not be manually modified.
 
 ## 5.7.0
 Tue, 18 Jun 2024 11:18:40 GMT
