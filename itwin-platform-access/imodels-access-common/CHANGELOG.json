@@ -2,6 +2,12 @@
   "name": "@itwin/imodels-access-common",
   "entries": [
     {
+      "version": "5.1.4",
+      "tag": "@itwin/imodels-access-common_v5.1.4",
+      "date": "Thu, 20 Jun 2024 14:12:40 GMT",
+      "comments": {}
+    },
+    {
       "version": "5.1.3",
       "tag": "@itwin/imodels-access-common_v5.1.3",
       "date": "Tue, 18 Jun 2024 11:18:41 GMT",
