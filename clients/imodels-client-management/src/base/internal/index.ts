@@ -10,3 +10,5 @@ export * from "./IModelsErrorParser";
 export * from "./OperationsBase";
 export * from "./UtilityTypes";
 export * from "./UtilityFunctions";
+export * from "./AxiosRetryPolicy";
+export * from "./ExponentialBackoffAlgorithm";

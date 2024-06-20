@@ -18,6 +18,11 @@ export class Constants {
 
   public static time = {
     sleepPeriodInMs: 1000,
-    iModelInitiazationTimeOutInMs: 5 * 60 * 1000
+    iModelInitializationTimeOutInMs: 5 * 60 * 1000
+  };
+
+  public static httpStatusCodes = {
+    requestTimeout: 408,
+    internalServerError: 500
   };
 }

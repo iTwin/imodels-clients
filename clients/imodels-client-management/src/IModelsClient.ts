@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, IModelsErrorParser } from "./base/internal";
-import { ApiOptions, HeaderFactories, RecursiveRequired, RestClient } from "./base/types";
+import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm, IModelsErrorParser } from "./base/internal";
+import { ApiOptions, HeaderFactories, HttpRequestRetryPolicy, RecursiveRequired, RestClient } from "./base/types";
 import { Constants } from "./Constants";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, OperationOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
 import { ChangesetExtendedDataOperations } from "./operations/changeset-extended-data/ChangesetExtendedDataOperations";
@@ -23,6 +23,13 @@ export interface IModelsClientOptions {
   api?: ApiOptions;
   /** Additional headers to add to each request. See {@link HeaderFactories}. */
   headers?: HeaderFactories;
+  /**
+   * Retry policy that is used with {@link AxiosRestClient} when HTTP request sending fails.
+   * If `undefined` the default implementation is used with exponential backoff algorithm
+   * (3 retries with incremental sleep durations of 300ms, 900ms and 2700ms).
+   * See {@link AxiosRetryPolicy} and {@link ExponentialBackoffAlgorithm}.
+   */
+  retryPolicy?: HttpRequestRetryPolicy;
 }
 
 /**
@@ -103,10 +110,13 @@ export class IModelsClient {
   private static fillManagementClientConfiguration(
     options: IModelsClientOptions | undefined
   ): RecursiveRequired<IModelsClientOptions> {
+    const retryPolicy = options?.retryPolicy ?? new AxiosRetryPolicy(new ExponentialBackoffAlgorithm());
+
     return {
       api: this.fillApiConfiguration(options?.api),
-      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse),
-      headers: options?.headers ?? {}
+      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse, retryPolicy),
+      headers: options?.headers ?? {},
+      retryPolicy
     };
   }
 

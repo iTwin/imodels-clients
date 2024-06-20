@@ -20,7 +20,8 @@
     "inversify",
     "bootstrapper",
     "ITWINS",
-    "Guids"
+    "Guids",
+    "backoff"
   ],
   "ignoreRegExpList": [
     "/imodel.*/i"

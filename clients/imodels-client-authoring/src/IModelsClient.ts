@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import "reflect-metadata";
 
-import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
+import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/internal";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
 
@@ -103,12 +103,15 @@ export class IModelsClient extends ManagementIModelsClient {
   private static fillAuthoringClientConfiguration(
     options: IModelsClientOptions | undefined
   ): RecursiveRequired<IModelsClientOptions> {
+    const retryPolicy = options?.retryPolicy ?? new AxiosRetryPolicy(new ExponentialBackoffAlgorithm());
+
     return {
       api: this.fillApiConfiguration(options?.api),
-      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse),
+      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse, retryPolicy),
       localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
       cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory()),
-      headers: options?.headers ?? {}
+      headers: options?.headers ?? {},
+      retryPolicy
     };
   }
 }
