@@ -6,7 +6,6 @@
 import { IModelsClient, IModelsErrorCode } from "@itwin/imodels-client-management";
 import {  assertError } from "@itwin/imodels-client-test-utils";
 
-
 describe("[Management] IModelsClient", () => {
   it("should return original error information in case of network issue", async () => {
     // Arrange

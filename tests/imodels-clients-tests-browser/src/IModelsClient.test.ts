@@ -3,12 +3,12 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 
-import { IModelsClient } from "@itwin/imodels-client-management/lib/esm/IModelsClient";
 import { IModelsErrorCode } from "@itwin/imodels-client-management/lib/esm/base/types";
+import { IModelsClient } from "@itwin/imodels-client-management/lib/esm/IModelsClient";
 import { assertError } from "@itwin/imodels-client-test-utils/lib/assertions/BrowserFriendlyAssertions";
 
 describe(`[Management] ${IModelsClient.name}`, () => {
-  it("should return original error information in case of network issue", function(done) {
+  it("should return original error information in case of network issue", function (done) {
     // Arrange
     const iModelsClient = new IModelsClient({
       api: { baseUrl: "http://foo.bar" }
@@ -18,7 +18,7 @@ describe(`[Management] ${IModelsClient.name}`, () => {
     iModelsClient.iModels.getSingle({
       authorization: async () => ({ scheme: "", token: "" }),
       iModelId: "foo"
-    }).catch(err => {
+    }).catch((err) => {
 
       // Assert
       assertError({
