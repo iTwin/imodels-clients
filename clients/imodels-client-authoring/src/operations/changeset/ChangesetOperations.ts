@@ -222,9 +222,14 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       } catch (errorAfterRetry) {
         this.throwIfAbortError(error, params.changeset);
 
+        let originalError: Error | undefined;
+        if (errorAfterRetry instanceof Error)
+          originalError = errorAfterRetry;
+
         throw new IModelsErrorImpl({
           code: IModelsErrorCode.ChangesetDownloadFailed,
           message: `Failed to download changeset. Changeset id: ${params.changeset.id}, changeset index: ${params.changeset.index}, error: ${JSON.stringify(errorAfterRetry)}.`,
+          originalError,
           statusCode: undefined,
           details: undefined
         });

@@ -267,6 +267,12 @@ export function assertError(params: { objectThrown: unknown, expectedError: Part
   } else {
     expect(iModelsError.details).to.be.undefined;
   }
+
+  if (params.expectedError.originalError) {
+    expect(iModelsError.originalError).to.exist;
+    expect(iModelsError.originalError!.code).to.equal(params.expectedError.originalError.code);
+    expect(iModelsError.originalError!.message).to.equal(params.expectedError.originalError.message);
+  }
 }
 
 export function assertOptionalProperty<TPropertyType>(expectedValue: TPropertyType, actualValue: TPropertyType): void {

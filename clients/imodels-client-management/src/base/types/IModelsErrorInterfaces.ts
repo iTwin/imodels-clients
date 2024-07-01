@@ -76,10 +76,22 @@ export interface ErrorDetailInnerError {
   code: IModelsErrorCode;
 }
 
+/**
+ * Original error that is thrown from `RestClient` implementation in case of http failure.
+ * This error can be platform-dependent and vary based on `RestClient` implementation, so users should be
+ * careful when implementing error handling.
+ */
+export interface IModelsOriginalError extends Error {
+  /** Original error code. */
+  code?: string;
+}
+
 /** Base interface for all errors returned from iModels API. */
 export interface IModelsErrorBase extends Error {
   /** Error code. See {@link iModelsErrorCode}. */
   code: IModelsErrorCode;
+  /** Original error thrown when sending http request. */
+  originalError?: IModelsOriginalError;
 }
 
 /**

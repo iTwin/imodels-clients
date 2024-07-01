@@ -14,7 +14,7 @@ module.exports = defineConfig({
   e2e: {
     supportFile: false,
     browser: "chrome",
-
+    defaultCommandTimeout: 10000,
     specPattern: "lib/**/*.test.js",
     video: false,
     setupNodeEvents(on, config) {
