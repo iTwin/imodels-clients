@@ -61,7 +61,7 @@ export enum IModelsErrorCode {
 /** Error detail information. */
 export interface IModelsErrorDetail {
   /** Error detail code. See {@link IModelsErrorCode}. */
-  code: IModelsErrorCode | string;
+  code: IModelsErrorCode;
   /** Message that describes the error detail. */
   message: string;
   /** Name of the property or parameter which is related to the issue. */
@@ -76,7 +76,13 @@ export interface ErrorDetailInnerError {
   code: IModelsErrorCode;
 }
 
+/** 
+ * Original error that is thrown from `RestClient` implementation in case of http failure.
+ * This error can be platform-dependent and vary based on `RestClient` implementation, so users should be
+ * careful when implementing error handling.
+ */
 export interface IModelsOriginalError extends Error {
+  /** Original error code. */
   code?: string;
 }
 
