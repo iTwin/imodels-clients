@@ -8,7 +8,7 @@ import { TestUtilTypes, assertError } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "../common";
 
-describe("[Management] IModelsErrorParser", () => {
+describe("[Management] IModelsClient", () => {
   let iModelsClientOptions: IModelsClientOptions;
 
   before(async () => {
