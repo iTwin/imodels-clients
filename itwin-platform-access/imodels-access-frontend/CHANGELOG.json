@@ -2,6 +2,12 @@
   "name": "@itwin/imodels-access-frontend",
   "entries": [
     {
+      "version": "5.2.0",
+      "tag": "@itwin/imodels-access-frontend_v5.2.0",
+      "date": "Mon, 01 Jul 2024 14:05:46 GMT",
+      "comments": {}
+    },
+    {
       "version": "5.1.3",
       "tag": "@itwin/imodels-access-frontend_v5.1.3",
       "date": "Tue, 18 Jun 2024 11:18:41 GMT",

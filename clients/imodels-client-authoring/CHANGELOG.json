@@ -2,6 +2,23 @@
   "name": "@itwin/imodels-client-authoring",
   "entries": [
     {
+      "version": "5.8.0",
+      "tag": "@itwin/imodels-client-authoring_v5.8.0",
+      "date": "Mon, 01 Jul 2024 14:05:44 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Add failed HTTP request retry policy."
+          }
+        ],
+        "none": [
+          {
+            "comment": "Add `originalError` property to `IModelsError`"
+          }
+        ]
+      }
+    },
+    {
       "version": "5.7.0",
       "tag": "@itwin/imodels-client-authoring_v5.7.0",
       "date": "Tue, 18 Jun 2024 11:18:40 GMT",
