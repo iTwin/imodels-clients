@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { IModelsApiError, IModelsErrorBaseImpl, IModelsErrorParser as ManagementIModelsErrorParser, ResponseInfo } from "@itwin/imodels-client-management/lib/base/internal";
 
-import { IModelsErrorCode,IModelsOriginalError } from "@itwin/imodels-client-management";
+import { IModelsErrorCode, IModelsOriginalError } from "@itwin/imodels-client-management";
 
 import { ConflictingLock, ConflictingLocksError, LocksError } from "../types/apiEntities/LockErrorInterfaces";
 
