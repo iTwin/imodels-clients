@@ -13,7 +13,7 @@ import { IModelsErrorCode } from "@itwin/imodels-client-management";
 describe("ErrorAdapter", () => {
   [
     { foo: "bar" },
-    new IModelsErrorImpl({ code: 5 as any, message: "", statusCode: undefined, details: undefined })
+    new IModelsErrorImpl({ code: 5 as any, message: "", originalError: undefined, statusCode: undefined, details: undefined })
   ].forEach((originalError: unknown) => {
 
     it("should return original error if it does not have a string error code", () => {
@@ -55,7 +55,7 @@ describe("ErrorAdapter", () => {
   ].forEach((originalErrorCode) => {
 
     it(`should return original error if error code is unrecognized, indicates auth issue or does not have a corresponding status in IModelHubStatus (${originalErrorCode})`, () => {
-      const error = new IModelsErrorImpl({ code: originalErrorCode, message: "", statusCode: undefined, details: undefined });
+      const error = new IModelsErrorImpl({ code: originalErrorCode, message: "", originalError: new Error(), statusCode: undefined, details: undefined });
 
       const result = ErrorAdapter.toIModelError(error, undefined);
 
@@ -84,7 +84,7 @@ describe("ErrorAdapter", () => {
 
     it(`should return correct error number (${testCase.originalErrorCode})`, () => {
       const originalErrorMessage = "test error message";
-      const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, statusCode: 400, message: originalErrorMessage, details: undefined });
+      const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, message: originalErrorMessage, originalError: new Error(), statusCode: 400, details: undefined });
 
       const result = ErrorAdapter.toIModelError(originalError, undefined);
 
@@ -121,7 +121,7 @@ describe("ErrorAdapter", () => {
 
     it(`should handle generic error codes for specific operation (${testCase.originalErrorCode}, ${testCase.operationName})`, () => {
       const originalErrorMessage = "test error message";
-      const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, message: originalErrorMessage, statusCode: undefined, details: undefined });
+      const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, message: originalErrorMessage, originalError: new Error(), statusCode: undefined, details: undefined });
 
       const result = ErrorAdapter.toIModelError(originalError, testCase.operationName);
 
@@ -158,7 +158,7 @@ describe("ErrorAdapter", () => {
 
     it(`should return IModelHubStatus.Unknown specific status could not be determined (${testCase.originalErrorCode})`, () => {
       const originalErrorMessage = "test error message";
-      const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, message: originalErrorMessage, statusCode: undefined, details: undefined });
+      const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, message: originalErrorMessage, statusCode: undefined, originalError: new Error(), details: undefined });
 
       const result = ErrorAdapter.toIModelError(originalError, testCase.operationName);
 

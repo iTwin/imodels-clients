@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsError, IModelsErrorCode, IModelsErrorDetail } from "../types";
+import { IModelsError, IModelsErrorCode, IModelsErrorDetail, IModelsOriginalError } from "../types";
 
 interface UnwrappedError {
   message: string;
@@ -27,11 +27,13 @@ interface IModelsApiErrorDetail {
 
 export class IModelsErrorBaseImpl extends Error {
   public code: IModelsErrorCode;
+  public originalError: IModelsOriginalError | undefined;
 
-  constructor(params: { code: IModelsErrorCode, message: string }) {
+  constructor(params: { code: IModelsErrorCode, message: string, originalError: IModelsOriginalError | undefined }) {
     super();
     this.name = this.code = params.code;
     this.message = params.message;
+    this.originalError = params.originalError;
   }
 }
 
@@ -42,6 +44,7 @@ export class IModelsErrorImpl extends IModelsErrorBaseImpl implements IModelsErr
   constructor(params: {
     code: IModelsErrorCode;
     message: string;
+    originalError: IModelsOriginalError | undefined;
     details: IModelsErrorDetail[] | undefined;
     statusCode: number | undefined;
   }) {
@@ -56,20 +59,16 @@ export interface ResponseInfo {
   body?: unknown;
 }
 
-export interface OriginalError extends Error {
-  code?: string;
-}
-
 export class IModelsErrorParser {
   protected static readonly _defaultErrorMessage = "Unknown error occurred";
   protected static readonly _defaultUnauthorizedMessage = "Authorization failed";
 
-  public static parse(response: ResponseInfo, originalError: OriginalError): Error {
+  public static parse(response: ResponseInfo, originalError: IModelsOriginalError): Error {
     if (!response.body)
       return IModelsErrorParser.createUnrecognizedError(response, originalError);
 
     if (response.statusCode === 401)
-      return IModelsErrorParser.createUnauthorizedError(response);
+      return IModelsErrorParser.createUnauthorizedError(response, originalError);
 
     const errorFromApi: IModelsApiErrorWrapper | undefined = response.body as IModelsApiErrorWrapper;
     const errorCode: IModelsErrorCode = IModelsErrorParser.parseCode(errorFromApi?.error?.code);
@@ -83,6 +82,7 @@ export class IModelsErrorParser {
     return new IModelsErrorImpl({
       code: errorCode,
       statusCode: response.statusCode,
+      originalError,
       message: errorMessage,
       details: errorDetails
     });
@@ -129,10 +129,11 @@ export class IModelsErrorParser {
     return result;
   }
 
-  private static createUnrecognizedError(response: ResponseInfo, originalError: OriginalError): Error {
+  private static createUnrecognizedError(response: ResponseInfo, originalError: IModelsOriginalError): Error {
     return new IModelsErrorImpl({
       code: IModelsErrorCode.Unrecognized,
       statusCode: response.statusCode,
+      originalError,
       message: `${IModelsErrorParser._defaultErrorMessage}.\n` +
         `Original error message: ${originalError.message},\n` +
         `original error code: ${originalError.code},\n` +
@@ -142,13 +143,14 @@ export class IModelsErrorParser {
     });
   }
 
-  private static createUnauthorizedError(response: ResponseInfo): Error {
+  private static createUnauthorizedError(response: ResponseInfo, originalError: IModelsOriginalError): Error {
     const errorMessage = (response.body as IModelsApiErrorWrapper)?.error?.message
       ?? (response.body as UnwrappedError)?.message
       ?? IModelsErrorParser._defaultUnauthorizedMessage;
     return new IModelsErrorImpl({
       code: IModelsErrorCode.Unauthorized,
       statusCode: response.statusCode,
+      originalError,
       message: errorMessage,
       details: undefined
     });

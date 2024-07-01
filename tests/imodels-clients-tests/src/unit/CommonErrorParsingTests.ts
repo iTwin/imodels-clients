@@ -2,12 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OriginalError, ResponseInfo } from "@itwin/imodels-client-management/lib/base/internal";
+import { ResponseInfo } from "@itwin/imodels-client-management/lib/base/internal";
 
-import { IModelsError, IModelsErrorCode } from "@itwin/imodels-client-management";
+import { IModelsError, IModelsErrorCode, IModelsOriginalError } from "@itwin/imodels-client-management";
 import { assertError } from "@itwin/imodels-client-test-utils";
 
-export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, originalError: OriginalError) => Error): void {
+export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, originalError: IModelsOriginalError) => Error): void {
   it("should parse valid iModels API error", () => {
     // Arrange
     const errorResponse: unknown = {

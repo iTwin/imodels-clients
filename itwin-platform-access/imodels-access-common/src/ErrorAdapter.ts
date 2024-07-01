@@ -19,7 +19,7 @@ export class ErrorAdapter {
     if (!isIModelsApiError(error))
       return error;
 
-    if (error.code === IModelsErrorCode.Unrecognized)
+    if (error.code === IModelsErrorCode.Unrecognized) // TODO: extend with known error codes
       return error;
 
     if (ErrorAdapter.isAPIAuthError(error.code))

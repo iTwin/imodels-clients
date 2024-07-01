@@ -68,6 +68,7 @@ function adaptAbortError(error: unknown): unknown {
   return new IModelsErrorImpl({
     code: IModelsErrorCode.DownloadAborted,
     message: `Download was aborted. Message: ${error.message}}.`,
+    originalError: error,
     statusCode: undefined,
     details: undefined
   });

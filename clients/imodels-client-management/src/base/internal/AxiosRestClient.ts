@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { HttpRequestRetryPolicy } from "../types";
+import { HttpRequestRetryPolicy, IModelsOriginalError } from "../types";
 import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, RestClient } from "../types/RestClient";
 
 import { AxiosResponseHeadersAdapter } from "./AxiosResponseHeadersAdapter";
@@ -15,7 +15,7 @@ import { sleep } from "./UtilityFunctions";
  * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the
  * methods in {@link RestClient}.
  */
-export type ParseErrorFunc = (response: ResponseInfo, originalError: Error & { code?: string }) => Error;
+export type ParseErrorFunc = (response: ResponseInfo, originalError: IModelsOriginalError) => Error;
 
 /** Default implementation for {@link RestClient} interface that uses `axios` library for sending the requests. */
 export class AxiosRestClient implements RestClient {

@@ -328,6 +328,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       throw new IModelsErrorImpl({
         code: params.errorCodeOnFailure,
         message: `iModel initialization failed with state '${state}'`,
+        originalError: undefined,
         statusCode: undefined,
         details: undefined
       });
@@ -350,6 +351,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       throw new IModelsErrorImpl({
         code: IModelsErrorCode.MainIModelIsMissingFederationGuids,
         message: "iModel fork initialization failed because some elements in the main iModel do not have FederationGuid property set.",
+        originalError: undefined,
         statusCode: undefined,
         details: undefined
       });
@@ -361,6 +363,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       throw new IModelsErrorImpl({
         code: IModelsErrorCode.IModelForkInitializationFailed,
         message: `iModel fork initialization failed with state '${state}'`,
+        originalError: undefined,
         statusCode: undefined,
         details: undefined
       });
@@ -384,6 +387,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       timeoutErrorFactory: () => new IModelsErrorImpl({
         code: IModelsErrorCode.IModelFromTemplateInitializationTimedOut,
         message: "Timed out waiting for Baseline File initialization.",
+        originalError: undefined,
         statusCode: undefined,
         details: undefined
       }),
@@ -407,6 +411,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       timeoutErrorFactory: () => new IModelsErrorImpl({
         code: IModelsErrorCode.ClonedIModelInitializationTimedOut,
         message: "Timed out waiting for Cloned iModel initialization.",
+        originalError: undefined,
         statusCode: undefined,
         details: undefined
       }),
@@ -429,6 +434,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       timeoutErrorFactory: () => new IModelsErrorImpl({
         code: IModelsErrorCode.IModelForkInitializationTimedOut,
         message: "Timed out waiting for iModel fork initialization.",
+        originalError: undefined,
         statusCode: undefined,
         details: undefined
       }),

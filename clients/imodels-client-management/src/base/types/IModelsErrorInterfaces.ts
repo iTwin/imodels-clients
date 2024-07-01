@@ -61,7 +61,7 @@ export enum IModelsErrorCode {
 /** Error detail information. */
 export interface IModelsErrorDetail {
   /** Error detail code. See {@link IModelsErrorCode}. */
-  code: IModelsErrorCode;
+  code: IModelsErrorCode | string;
   /** Message that describes the error detail. */
   message: string;
   /** Name of the property or parameter which is related to the issue. */
@@ -76,10 +76,16 @@ export interface ErrorDetailInnerError {
   code: IModelsErrorCode;
 }
 
+export interface IModelsOriginalError extends Error {
+  code?: string;
+}
+
 /** Base interface for all errors returned from iModels API. */
 export interface IModelsErrorBase extends Error {
   /** Error code. See {@link iModelsErrorCode}. */
   code: IModelsErrorCode;
+  /** Original error thrown when sending http request. */
+  originalError?: IModelsOriginalError;
 }
 
 /**

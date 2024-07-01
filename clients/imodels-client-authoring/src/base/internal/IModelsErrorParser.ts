@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsApiError, IModelsErrorBaseImpl, IModelsErrorParser as ManagementIModelsErrorParser, OriginalError, ResponseInfo } from "@itwin/imodels-client-management/lib/base/internal";
+import { IModelsApiError, IModelsErrorBaseImpl, IModelsErrorParser as ManagementIModelsErrorParser, ResponseInfo } from "@itwin/imodels-client-management/lib/base/internal";
 
-import { IModelsErrorCode } from "@itwin/imodels-client-management";
+import { IModelsErrorCode,IModelsOriginalError } from "@itwin/imodels-client-management";
 
 import { ConflictingLock, ConflictingLocksError, LocksError } from "../types/apiEntities/LockErrorInterfaces";
 
@@ -23,6 +23,7 @@ class LocksErrorImpl extends IModelsErrorBaseImpl implements LocksError {
   constructor(params: {
     code: IModelsErrorCode;
     message: string;
+    originalError: IModelsOriginalError | undefined;
     objectIds?: string[];
   }) {
     super(params);
@@ -36,6 +37,7 @@ class ConflictingLocksErrorImpl extends IModelsErrorBaseImpl implements Conflict
   constructor(params: {
     code: IModelsErrorCode;
     message: string;
+    originalError: IModelsOriginalError | undefined;
     conflictingLocks?: ConflictingLock[];
   }) {
     super(params);
@@ -44,7 +46,7 @@ class ConflictingLocksErrorImpl extends IModelsErrorBaseImpl implements Conflict
 }
 
 export class IModelsErrorParser extends ManagementIModelsErrorParser {
-  public static override parse(response: ResponseInfo, originalError: OriginalError): Error {
+  public static override parse(response: ResponseInfo, originalError: IModelsOriginalError): Error {
     const errorFromApi: AuthoringIModelsApiErrorWrapper | undefined =
       response.body as AuthoringIModelsApiErrorWrapper;
     const errorCode: IModelsErrorCode = IModelsErrorParser.parseCode(errorFromApi?.error?.code);
@@ -57,6 +59,7 @@ export class IModelsErrorParser extends ManagementIModelsErrorParser {
       return new LocksErrorImpl({
         code: errorCode,
         message: errorMessage,
+        originalError,
         objectIds: errorFromApi?.error?.objectIds
       });
     }
@@ -69,6 +72,7 @@ export class IModelsErrorParser extends ManagementIModelsErrorParser {
       return new ConflictingLocksErrorImpl({
         code: errorCode,
         message: errorMessage,
+        originalError,
         conflictingLocks: errorFromApi?.error?.conflictingLocks
       });
     }
