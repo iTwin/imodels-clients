@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import "reflect-metadata";
 
-import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/internal";
+import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm, IModelsErrorParser } from "@itwin/imodels-client-management/lib/base/exported-type-implementations";
 import { Constants } from "@itwin/imodels-client-management/lib/Constants";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
@@ -16,7 +16,6 @@ import {
 } from "@itwin/imodels-client-management";
 
 import { NodeLocalFileSystem } from "./base/internal";
-import { IModelsErrorParser } from "./base/internal/IModelsErrorParser";
 import { LocalFileSystem } from "./base/types";
 import { BaselineFileOperations, BriefcaseOperations, ChangesetExtendedDataOperations, ChangesetGroupOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
 

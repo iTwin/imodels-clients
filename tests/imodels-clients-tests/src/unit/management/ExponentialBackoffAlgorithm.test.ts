@@ -2,8 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/internal";
 import { expect } from "chai";
+
+import { ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management";
 
 describe("[Management] ExponentialBackoffAlgorithm", () => {
   it("should calculate sleep duration correctly", () => {

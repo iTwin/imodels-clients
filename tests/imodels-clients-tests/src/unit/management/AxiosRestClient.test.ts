@@ -2,14 +2,14 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, AxiosRetryPolicy, IModelsApiError, IModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
+import {IModelsApiError } from "@itwin/imodels-client-management/lib/base/internal";
 import * as utilityFunctions from "@itwin/imodels-client-management/lib/base/internal/UtilityFunctions";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { expect } from "chai";
 import sinon from "sinon";
 
-import { ContentType, HttpRequestWithJsonBodyParams } from "@itwin/imodels-client-management";
+import { AxiosRestClient, AxiosRetryPolicy, ContentType, HttpRequestWithJsonBodyParams, IModelsErrorParser } from "@itwin/imodels-client-management";
 
 import { createStub } from "../Stubs";
 

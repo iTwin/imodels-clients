@@ -2,9 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ResponseInfo } from "@itwin/imodels-client-management/lib/base/internal";
 
-import { IModelsError, IModelsErrorCode, IModelsOriginalError } from "@itwin/imodels-client-management";
+import { IModelsError, IModelsErrorCode, IModelsOriginalError, ResponseInfo } from "@itwin/imodels-client-management";
 import { assertError } from "@itwin/imodels-client-test-utils";
 
 export function testIModelsErrorParser(testedFunction: (response: ResponseInfo, originalError: IModelsOriginalError) => Error): void {

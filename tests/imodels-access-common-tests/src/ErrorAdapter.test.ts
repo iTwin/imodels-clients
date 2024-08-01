@@ -5,10 +5,10 @@
 import { ChangeSetStatus, IModelHubStatus } from "@itwin/core-bentley";
 import { IModelError } from "@itwin/core-common";
 import { ErrorAdapter, OperationNameForErrorMapping } from "@itwin/imodels-access-common/lib/ErrorAdapter";
-import { IModelsErrorImpl, IModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
+import { IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
 import { expect } from "chai";
 
-import { IModelsErrorCode } from "@itwin/imodels-client-management";
+import { IModelsErrorCode, IModelsErrorParser } from "@itwin/imodels-client-management";
 
 describe("ErrorAdapter", () => {
   [

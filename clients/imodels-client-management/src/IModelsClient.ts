@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm, IModelsErrorParser } from "./base/internal";
+import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm, IModelsErrorParser } from "./base/exported-type-implementations";
 import { ApiOptions, HeaderFactories, HttpRequestRetryPolicy, RecursiveRequired, RestClient } from "./base/types";
 import { Constants } from "./Constants";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, OperationOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
