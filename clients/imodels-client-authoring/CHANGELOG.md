@@ -1,6 +1,13 @@
 # Change Log - @itwin/imodels-client-authoring
 
-This log was last generated on Mon, 01 Jul 2024 14:05:44 GMT and should not be manually modified.
+This log was last generated on Wed, 14 Aug 2024 14:41:07 GMT and should not be manually modified.
+
+## 5.8.1
+Wed, 14 Aug 2024 14:41:07 GMT
+
+### Updates
+
+- Update dependency to @itwin/object-storage-* and axios packages.
 
 ## 5.8.0
 Mon, 01 Jul 2024 14:05:44 GMT

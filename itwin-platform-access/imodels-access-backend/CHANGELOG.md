@@ -1,6 +1,13 @@
 # Change Log - @itwin/imodels-access-backend
 
-This log was last generated on Mon, 01 Jul 2024 14:05:46 GMT and should not be manually modified.
+This log was last generated on Wed, 14 Aug 2024 14:41:09 GMT and should not be manually modified.
+
+## 5.2.1
+Wed, 14 Aug 2024 14:41:09 GMT
+
+### Updates
+
+- Update dependencies to @itwin/object-storage-* and axios packages.
 
 ## 5.2.0
 Mon, 01 Jul 2024 14:05:46 GMT
