@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-access-backend",
+      "comment": "Update dependencies to @itwin/object-storage-* and axios packages.",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-backend"
+}

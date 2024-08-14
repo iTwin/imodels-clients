@@ -353,9 +353,13 @@ describe("BackendIModelsAccess error handling", () => {
       briefcaseId: 555,
       changeset: { id: "", index: 0 }
     };
+    // eslint-disable-next-line deprecation/deprecation
     const locksToAcquire: LockMap = new Map<string, LockState>([
+      // eslint-disable-next-line deprecation/deprecation
       ["0x1", LockState.Exclusive],
+      // eslint-disable-next-line deprecation/deprecation
       ["0x2", LockState.Exclusive],
+      // eslint-disable-next-line deprecation/deprecation
       ["0x3", LockState.Shared]
     ]);
 

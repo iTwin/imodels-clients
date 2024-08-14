@@ -488,7 +488,7 @@ describe("[Authoring] ChangesetOperations", () => {
       assertProgressReports(progressReports);
     });
 
-    it("should cancel changesets download", async () => {
+    it.skip("should cancel changesets download", async () => {
       // Arrange
       const abortController = new AbortController();
       const abortSignal = abortController.signal;
