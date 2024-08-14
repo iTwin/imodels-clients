@@ -60,13 +60,17 @@ export class ClientToPlatformAdapter {
     return new IModelError(errorNumber, error.message);
   }
 
+  // eslint-disable-next-line deprecation/deprecation
   private static toLockState(lockLevel: LockLevel): LockState {
     switch (lockLevel) {
       case LockLevel.None:
+        // eslint-disable-next-line deprecation/deprecation
         return LockState.None;
       case LockLevel.Shared:
+        // eslint-disable-next-line deprecation/deprecation
         return LockState.Shared;
       case LockLevel.Exclusive:
+        // eslint-disable-next-line deprecation/deprecation
         return LockState.Exclusive;
       default:
         throw new IModelError(RepositoryStatus.InvalidResponse, "Unsupported LockLevel");

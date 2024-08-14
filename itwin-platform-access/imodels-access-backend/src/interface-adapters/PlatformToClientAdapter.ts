@@ -91,12 +91,16 @@ export class PlatformToClientAdapter {
     return [convertedProgressCallback, abortController.signal];
   }
 
+  // eslint-disable-next-line deprecation/deprecation
   private static toLockLevel(lockState: LockState): LockLevel {
     switch (lockState) {
+      // eslint-disable-next-line deprecation/deprecation
       case LockState.None:
         return LockLevel.None;
+        // eslint-disable-next-line deprecation/deprecation
       case LockState.Shared:
         return LockLevel.Shared;
+        // eslint-disable-next-line deprecation/deprecation
       case LockState.Exclusive:
         return LockLevel.Exclusive;
       default:

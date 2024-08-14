@@ -40,8 +40,8 @@
   "devDependencies": {
     "@itwin/eslint-plugin": "~3.7.8",
     "@itwin/imodels-client-common-config": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "~6.14.0",
     "@types/node": "^22.3.0",
+    "@typescript-eslint/eslint-plugin": "~6.14.0",
     "cspell": "~5.21.0",
     "eslint": "~8.55.0",
     "eslint-plugin-deprecation": "~1.5.0",
