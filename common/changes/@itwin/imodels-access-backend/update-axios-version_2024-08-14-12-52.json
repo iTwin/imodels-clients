@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-access-backend",
+      "comment": "Update `axios` version to resolve security vulnerability",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-backend"
+}
