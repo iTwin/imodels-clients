@@ -44,7 +44,7 @@
     "@itwin/eslint-plugin": "~3.7.8",
     "@itwin/imodels-client-common-config": "workspace:*",
     "@types/chai": "~4.2.21",
-    "@types/node": "^22.3.0",
+    "@types/node": "^20.14.8",
     "@typescript-eslint/eslint-plugin": "~6.14.0",
     "cpx2": "4.2.0",
     "cspell": "~5.21.0",

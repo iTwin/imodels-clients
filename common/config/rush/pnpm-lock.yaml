@@ -35,8 +35,8 @@ importers:
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
       '@types/node':
-        specifier: ^22.3.0
-        version: 22.3.0
+        specifier: ^20.14.8
+        version: 20.14.15
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
@@ -84,8 +84,8 @@ importers:
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
       '@types/node':
-        specifier: ^22.3.0
-        version: 22.3.0
+        specifier: ^20.14.8
+        version: 20.14.15
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
@@ -649,8 +649,8 @@ importers:
         specifier: ~9.0.0
         version: 9.0.0
       '@types/node':
-        specifier: ^22.3.0
-        version: 22.3.0
+        specifier: ^20.14.8
+        version: 20.14.15
       '@types/sinon':
         specifier: ^10.0.15
         version: 10.0.20
@@ -743,8 +743,8 @@ importers:
         specifier: ~4.2.21
         version: 4.2.22
       '@types/node':
-        specifier: ^22.3.0
-        version: 22.3.0
+        specifier: ^20.14.8
+        version: 20.14.15
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
@@ -846,8 +846,8 @@ importers:
         specifier: ~4.2.21
         version: 4.2.22
       '@types/node':
-        specifier: ^22.3.0
-        version: 22.3.0
+        specifier: ^20.14.8
+        version: 20.14.15
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
@@ -1406,6 +1406,9 @@ packages:
 
   '@types/node@14.14.31':
     resolution: {integrity: sha512-vFHy/ezP5qI0rFgJ7aQnjDXwAMrG0KqqIH7tQG5PPv3BWBayOPIQNBjVc/P6hhdZfMx51REc6tfDNXHUio893g==}
+
+  '@types/node@20.14.15':
+    resolution: {integrity: sha512-Fz1xDMCF/B00/tYSVMlmK7hVeLh7jE5f3B7X1/hmV0MJBwE27KlS7EvD/Yp+z1lm8mVhwV5w+n8jOZG8AfTlKw==}
 
   '@types/node@22.3.0':
     resolution: {integrity: sha512-nrWpWVaDZuaVc5X84xJ0vNrLvomM205oQyLsRt7OHNZbSHslcWsvgFR7O7hire2ZonjLrWBbedmotmIlJDVd6g==}
@@ -3883,6 +3886,9 @@ packages:
   unbzip2-stream@1.4.3:
     resolution: {integrity: sha512-mlExGW4w71ebDJviH16lQLtZS32VKqsSfk80GCfUlwT/4/hNRFsoscrF/c++9xinkMzECL1uL9DDwXqFWkruPg==}
 
+  undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+
   undici-types@6.18.2:
     resolution: {integrity: sha512-5ruQbENj95yDYJNS3TvcaxPMshV7aizdv/hWYjGIKoANWKjhWNBsr2YEuYZKodQulB1b8l7ILOuDQep3afowQQ==}
 
@@ -4750,7 +4756,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 22.3.0
+      '@types/node': 20.14.15
 
   '@types/json-schema@7.0.15': {}
 
@@ -4762,9 +4768,14 @@ snapshots:
 
   '@types/node@14.14.31': {}
 
+  '@types/node@20.14.15':
+    dependencies:
+      undici-types: 5.26.5
+
   '@types/node@22.3.0':
     dependencies:
       undici-types: 6.18.2
+    optional: true
 
   '@types/parse-json@4.0.2': {}
 
@@ -4791,7 +4802,7 @@ snapshots:
 
   '@types/ws@7.4.7':
     dependencies:
-      '@types/node': 22.3.0
+      '@types/node': 20.14.15
 
   '@types/yauzl@2.10.3':
     dependencies:
@@ -7670,7 +7681,10 @@ snapshots:
       buffer: 5.7.1
       through: 2.3.8
 
-  undici-types@6.18.2: {}
+  undici-types@5.26.5: {}
+
+  undici-types@6.18.2:
+    optional: true
 
   unicode-trie@2.0.0:
     dependencies:
