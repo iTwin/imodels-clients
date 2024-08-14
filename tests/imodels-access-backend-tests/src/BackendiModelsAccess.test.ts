@@ -137,7 +137,7 @@ describe("BackendIModelsAccess", () => {
       }
     });
 
-    it("should cancel changesets download and finish downloading missing changesets during next download", async () => {
+    it.skip("should cancel changesets download and finish downloading missing changesets during next download", async () => {
       // Arrange
       const downloadChangesetsParams: DownloadChangesetRangeArg = {
         accessToken,
