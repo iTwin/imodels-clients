@@ -71,8 +71,8 @@ importers:
   ../../clients/imodels-client-management:
     dependencies:
       axios:
-        specifier: ~1.6.4
-        version: 1.6.8
+        specifier: ^1.7.4
+        version: 1.7.4
     devDependencies:
       '@itwin/eslint-plugin':
         specifier: ~3.7.8
@@ -81,8 +81,8 @@ importers:
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
       '@types/node':
-        specifier: ^18.11.18
-        version: 18.19.34
+        specifier: ^22.3.0
+        version: 22.3.0
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
@@ -126,8 +126,8 @@ importers:
         specifier: workspace:*
         version: link:../../clients/imodels-client-authoring
       axios:
-        specifier: ~1.6.4
-        version: 1.6.8
+        specifier: ^1.7.4
+        version: 1.7.4
     devDependencies:
       '@itwin/core-backend':
         specifier: ^4.0.0
@@ -609,8 +609,8 @@ importers:
         specifier: ^2.0.0
         version: 2.2.3(inversify@6.0.2)(reflect-metadata@0.1.14)
       axios:
-        specifier: ~1.6.4
-        version: 1.6.8
+        specifier: ^1.7.4
+        version: 1.7.4
       chai:
         specifier: ~4.3.10
         version: 4.3.10
@@ -646,8 +646,8 @@ importers:
         specifier: ~9.0.0
         version: 9.0.0
       '@types/node':
-        specifier: ^18.11.18
-        version: 18.19.34
+        specifier: ^22.3.0
+        version: 22.3.0
       '@types/sinon':
         specifier: ^10.0.15
         version: 10.0.20
@@ -659,7 +659,7 @@ importers:
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
       axios-mock-adapter:
         specifier: ~1.22.0
-        version: 1.22.0(axios@1.6.8)
+        version: 1.22.0(axios@1.7.4)
       cpx2:
         specifier: 4.2.0
         version: 4.2.0
@@ -740,8 +740,8 @@ importers:
         specifier: ~4.2.21
         version: 4.2.22
       '@types/node':
-        specifier: ^18.11.18
-        version: 18.19.34
+        specifier: ^22.3.0
+        version: 22.3.0
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
@@ -815,8 +815,8 @@ importers:
         specifier: ^2.0.0
         version: 2.2.3(inversify@6.0.2)(reflect-metadata@0.1.14)
       axios:
-        specifier: ~1.6.4
-        version: 1.6.8
+        specifier: ^1.7.4
+        version: 1.7.4
       chai:
         specifier: ~4.3.10
         version: 4.3.10
@@ -843,8 +843,8 @@ importers:
         specifier: ~4.2.21
         version: 4.2.22
       '@types/node':
-        specifier: ^18.11.18
-        version: 18.19.34
+        specifier: ^22.3.0
+        version: 22.3.0
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)
@@ -1415,8 +1415,8 @@ packages:
   '@types/node@14.14.31':
     resolution: {integrity: sha512-vFHy/ezP5qI0rFgJ7aQnjDXwAMrG0KqqIH7tQG5PPv3BWBayOPIQNBjVc/P6hhdZfMx51REc6tfDNXHUio893g==}
 
-  '@types/node@18.19.34':
-    resolution: {integrity: sha512-eXF4pfBNV5DAMKGbI02NnDtWrQ40hAN558/2vvS4gMpMIxaf6JmD7YjnZbq0Q9TDSSkKBamime8ewRoomHdt4g==}
+  '@types/node@22.3.0':
+    resolution: {integrity: sha512-nrWpWVaDZuaVc5X84xJ0vNrLvomM205oQyLsRt7OHNZbSHslcWsvgFR7O7hire2ZonjLrWBbedmotmIlJDVd6g==}
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
@@ -1754,6 +1754,9 @@ packages:
 
   axios@1.6.8:
     resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
+
+  axios@1.7.4:
+    resolution: {integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==}
 
   axobject-query@3.2.1:
     resolution: {integrity: sha512-jsyHu61e6N4Vbz/v18DHwWYKK0bSWLqn47eeDSKPB7m8tqMHF9YJ+mhIk2lVteyZrY8tnSj/jHOv4YiTCuCJgg==}
@@ -3858,8 +3861,8 @@ packages:
   unbzip2-stream@1.4.3:
     resolution: {integrity: sha512-mlExGW4w71ebDJviH16lQLtZS32VKqsSfk80GCfUlwT/4/hNRFsoscrF/c++9xinkMzECL1uL9DDwXqFWkruPg==}
 
-  undici-types@5.26.5:
-    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+  undici-types@6.18.2:
+    resolution: {integrity: sha512-5ruQbENj95yDYJNS3TvcaxPMshV7aizdv/hWYjGIKoANWKjhWNBsr2YEuYZKodQulB1b8l7ILOuDQep3afowQQ==}
 
   unique-string@2.0.0:
     resolution: {integrity: sha512-uNaeirEPvpZWSgzwsPGtU2zVSTrn/8L5q/IexZmH0eH6SA73CmAA5U4GwORTxQAZs95TAXLNqeLoPPNO5gZfWg==}
@@ -4731,7 +4734,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 18.19.34
+      '@types/node': 22.3.0
 
   '@types/json-schema@7.0.15': {}
 
@@ -4743,14 +4746,14 @@ snapshots:
 
   '@types/node-fetch@2.6.11':
     dependencies:
-      '@types/node': 18.19.34
+      '@types/node': 22.3.0
       form-data: 4.0.0
 
   '@types/node@14.14.31': {}
 
-  '@types/node@18.19.34':
+  '@types/node@22.3.0':
     dependencies:
-      undici-types: 5.26.5
+      undici-types: 6.18.2
 
   '@types/parse-json@4.0.2': {}
 
@@ -4777,15 +4780,15 @@ snapshots:
 
   '@types/tunnel@0.0.3':
     dependencies:
-      '@types/node': 18.19.34
+      '@types/node': 22.3.0
 
   '@types/ws@7.4.7':
     dependencies:
-      '@types/node': 18.19.34
+      '@types/node': 22.3.0
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 18.19.34
+      '@types/node': 22.3.0
     optional: true
 
   '@typescript-eslint/eslint-plugin@4.31.2(@typescript-eslint/parser@4.31.2(eslint@8.55.0)(typescript@5.3.3))(eslint@8.55.0)(typescript@5.3.3)':
@@ -5158,13 +5161,21 @@ snapshots:
 
   axe-core@4.7.0: {}
 
-  axios-mock-adapter@1.22.0(axios@1.6.8):
+  axios-mock-adapter@1.22.0(axios@1.7.4):
     dependencies:
-      axios: 1.6.8
+      axios: 1.7.4
       fast-deep-equal: 3.1.3
       is-buffer: 2.0.5
 
   axios@1.6.8:
+    dependencies:
+      follow-redirects: 1.15.6
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.7.4:
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0
@@ -7589,7 +7600,7 @@ snapshots:
       buffer: 5.7.1
       through: 2.3.8
 
-  undici-types@5.26.5: {}
+  undici-types@6.18.2: {}
 
   unique-string@2.0.0:
     dependencies:
