@@ -488,17 +488,28 @@ describe("[Authoring] ChangesetOperations", () => {
       assertProgressReports(progressReports);
     });
 
-    it.skip("should cancel changesets download", async () => {
+    it.only("should cancel changesets download", async () => {
       // Arrange
       const abortController = new AbortController();
       const abortSignal = abortController.signal;
+
+      // `waitForSomeProgressReportedPromise` is used to wait before aborting the download to ensure that some files have been downloaded.
+      // Its `resolve` function is saved into `waitForSomeProgressReportedPromiseResolveFunc` variable and called once we download some changesets,
+      // `waitForSomeProgressReportedPromise` resolves and we can then immediately call `abortController.abort`.
+      // We have to do this instead of calling `abortController.abort` inside `progressCallback` function because `progressCallback` is called inside "on `data`"
+      // event handler of the download stream, which is out of the execution context of the `downloadList` function. That results in an unhandled exception.
+      let waitForSomeProgressReportedPromiseResolveFunc: () => void = undefined!;
+      const waitForSomeProgressReportedPromise = new Promise<void>(resolve => {
+        waitForSomeProgressReportedPromiseResolveFunc = resolve;
+      });
 
       const progressReports: ProgressReport[] = [];
       const progressCallback: ProgressCallback = (downloaded, total) => {
         progressReports.push({downloaded, total});
         if (downloaded > total / 2)
-          abortController.abort();
+          waitForSomeProgressReportedPromiseResolveFunc();
       };
+
 
       const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "cancel changesets download");
       const downloadChangesetListParams: DownloadChangesetListParams = {
@@ -512,7 +523,12 @@ describe("[Authoring] ChangesetOperations", () => {
       // Act
       let thrownError: unknown;
       try {
-        await iModelsClient.changesets.downloadList(downloadChangesetListParams);
+        const testedFunctionPromise = iModelsClient.changesets.downloadList(downloadChangesetListParams);
+
+        await waitForSomeProgressReportedPromise;
+        abortController.abort();
+
+        await testedFunctionPromise;
       } catch (error: unknown) {
         thrownError = error;
       }
