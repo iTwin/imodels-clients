@@ -2,15 +2,18 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AbortController, AbortSignal } from "@azure/abort-controller";
+import { AbortController } from "@azure/abort-controller";
 import { CreateNewIModelProps, LockMap, LockState, ProgressFunction, ProgressStatus } from "@itwin/core-backend";
 import { RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetRange, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
 
 import {
-  ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties,
-  LockLevel, LockedObjects, ProgressCallback
+  ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, DownloadProgressParam, GetChangesetListUrlParams, IModelProperties,
+  LockLevel, LockedObjects
 } from "@itwin/imodels-client-authoring";
+
+type DownloadAbortWatchdogFuncParams = { shouldAbort: boolean };
+export type DownloadAbortWatchdogFunc = (params: DownloadAbortWatchdogFuncParams) => void;
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
@@ -76,7 +79,7 @@ export class PlatformToClientAdapter {
     };
   }
 
-  public static toProgressCallback(progressCallback?: ProgressFunction): [ProgressCallback, AbortSignal, (shouldAbort: boolean) => void] | undefined {
+  public static toDownloadProgressParam(progressCallback?: ProgressFunction): (DownloadProgressParam & { downloadAbortWatchdogFunc: DownloadAbortWatchdogFunc }) | undefined {
     if (!progressCallback)
       return;
 
@@ -84,26 +87,33 @@ export class PlatformToClientAdapter {
 
     // We construct a promise that will resolve when the `cancel !== ProgressStatus.Continue` condition inside progress callback is met.
     // Once it resolves, it will call `abortController.abort` to cancel the download.
-
     // We have to do this instead of calling `abortController.abort` inside `progressCallback` function because `progressCallback` is called inside "on `data`"
     // event handler of the download stream, which is out of the execution context of the `iModelsClient.changesets.downloadList` function.
     // That results in an unhandled exception.
-    let triggerDownloadCancellationFunc: (shouldAbort: boolean) => void = undefined!;
-    new Promise<boolean>((resolve, reject) => {
-      triggerDownloadCancellationFunc = resolve;
-    }).then((shouldAbort: boolean) => {
-      if (shouldAbort)
+    let downloadAbortWatchdogFunc: DownloadAbortWatchdogFunc = undefined!;
+    new Promise<DownloadAbortWatchdogFuncParams>((resolve) => {
+      downloadAbortWatchdogFunc = resolve;
+    }).then((params: DownloadAbortWatchdogFuncParams) => {
+      console.log("inside then");
+      if (params.shouldAbort) {
+        console.log("aborting")
         abortController.abort();
+      } else {
+        console.log("not aborting")
+      }
     });
 
     const convertedProgressCallback = (downloaded: number, total: number) => {
       const cancel = progressCallback(downloaded, total);
-
       if (cancel !== ProgressStatus.Continue)
-        triggerDownloadCancellationFunc(true);
+        downloadAbortWatchdogFunc({ shouldAbort: true });
     };
 
-    return [convertedProgressCallback, abortController.signal, triggerDownloadCancellationFunc];
+    return {
+      progressCallback: convertedProgressCallback,
+      abortSignal: abortController.signal,
+      downloadAbortWatchdogFunc
+    };
   }
 
   // eslint-disable-next-line deprecation/deprecation
