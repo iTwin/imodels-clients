@@ -93,11 +93,14 @@ export class PlatformToClientAdapter {
     void new Promise<DownloadAbortWatchdogFuncParams>((resolve) => {
       downloadAbortWatchdogFunc = resolve;
     }).then((params: DownloadAbortWatchdogFuncParams) => {
+      // eslint-disable-next-line no-console
       console.log("inside then");
       if (params.shouldAbort) {
+        // eslint-disable-next-line no-console
         console.log("aborting");
         abortController.abort();
       } else {
+        // eslint-disable-next-line no-console
         console.log("not aborting");
       }
     });
