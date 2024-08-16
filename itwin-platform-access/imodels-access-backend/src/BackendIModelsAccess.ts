@@ -49,7 +49,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
     downloadParams.urlParams = PlatformToClientAdapter.toChangesetRangeUrlParams(arg.range);
 
-    const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.progressCallback) ?? [];
+    let triggerDownloadCancellationFunc: ((shouldCancel: boolean) => void) | undefined;
+
+
+    [const progressCallback, const abortSignal, triggerDownloadCancellationFunc] = PlatformToClientAdapter.toProgressCallback(arg.progressCallback) ?? [];
     downloadParams.progressCallback = progressCallback;
     downloadParams.abortSignal = abortSignal;
 

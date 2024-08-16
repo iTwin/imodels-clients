@@ -76,19 +76,34 @@ export class PlatformToClientAdapter {
     };
   }
 
-  public static toProgressCallback(progressCallback?: ProgressFunction): [ProgressCallback, AbortSignal] | undefined {
+  public static toProgressCallback(progressCallback?: ProgressFunction): [ProgressCallback, AbortSignal, (shouldAbort: boolean) => void] | undefined {
     if (!progressCallback)
       return;
 
     const abortController = new AbortController();
+
+    // We construct a promise that will resolve when the `cancel !== ProgressStatus.Continue` condition inside progress callback is met.
+    // Once it resolves, it will call `abortController.abort` to cancel the download.
+
+    // We have to do this instead of calling `abortController.abort` inside `progressCallback` function because `progressCallback` is called inside "on `data`"
+    // event handler of the download stream, which is out of the execution context of the `iModelsClient.changesets.downloadList` function.
+    // That results in an unhandled exception.
+    let triggerDownloadCancellationFunc: (shouldAbort: boolean) => void = undefined!;
+    new Promise<boolean>((resolve, reject) => {
+      triggerDownloadCancellationFunc = resolve;
+    }).then((shouldAbort: boolean) => {
+      if (shouldAbort)
+        abortController.abort();
+    });
+
     const convertedProgressCallback = (downloaded: number, total: number) => {
       const cancel = progressCallback(downloaded, total);
 
       if (cancel !== ProgressStatus.Continue)
-        abortController.abort();
+        triggerDownloadCancellationFunc(true);
     };
 
-    return [convertedProgressCallback, abortController.signal];
+    return [convertedProgressCallback, abortController.signal, triggerDownloadCancellationFunc];
   }
 
   // eslint-disable-next-line deprecation/deprecation
@@ -97,10 +112,10 @@ export class PlatformToClientAdapter {
       // eslint-disable-next-line deprecation/deprecation
       case LockState.None:
         return LockLevel.None;
-        // eslint-disable-next-line deprecation/deprecation
+      // eslint-disable-next-line deprecation/deprecation
       case LockState.Shared:
         return LockLevel.Shared;
-        // eslint-disable-next-line deprecation/deprecation
+      // eslint-disable-next-line deprecation/deprecation
       case LockState.Exclusive:
         return LockLevel.Exclusive;
       default:
