@@ -97,16 +97,8 @@ export class PlatformToClientAdapter {
     void new Promise<DownloadCancellationMonitorFuncParams>((resolve) => {
       downloadCancellationMonitorFunc = resolve;
     }).then((params: DownloadCancellationMonitorFuncParams) => {
-      // eslint-disable-next-line no-console
-      console.log("inside then");
-      if (params.shouldCancel) {
-        // eslint-disable-next-line no-console
-        console.log("aborting");
+      if (params.shouldCancel)
         abortController.abort();
-      } else {
-        // eslint-disable-next-line no-console
-        console.log("not aborting");
-      }
     });
 
     const convertedProgressCallback = (downloaded: number, total: number) => {
