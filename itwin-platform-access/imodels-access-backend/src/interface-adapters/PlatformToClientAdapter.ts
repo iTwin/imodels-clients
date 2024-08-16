@@ -12,8 +12,8 @@ import {
   LockLevel, LockedObjects
 } from "@itwin/imodels-client-authoring";
 
-interface DownloadAbortWatchdogFuncParams { shouldAbort: boolean }
-export type DownloadAbortWatchdogFunc = (params: DownloadAbortWatchdogFuncParams) => void;
+interface DownloadCancellationMonitorFuncParams { shouldCancel: boolean }
+export type DownloadCancellationMonitorFunc = (params: DownloadCancellationMonitorFuncParams) => void;
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
@@ -80,26 +80,26 @@ export class PlatformToClientAdapter {
   }
 
   /**
-   * @returns `progressCallback` and `abortSignal` instances to pass to iModels client functions, and `downloadAbortWatchdogFunc`.
-   * IMPORTANT: `downloadAbortWatchdogFunc` must be called at least once to not leave pending promises.
+   * @returns `progressCallback` and `abortSignal` instances to pass to iModels client functions, and `downloadCancellationMonitorFunc`.
+   * IMPORTANT: `downloadCancellationMonitorFunc` must be called at least once to not leave pending promises.
    */
-  public static toDownloadProgressParam(progressCallback?: ProgressFunction): (DownloadProgressParam & { downloadAbortWatchdogFunc: DownloadAbortWatchdogFunc }) | undefined {
+  public static toDownloadProgressParam(progressCallback?: ProgressFunction): (DownloadProgressParam & { downloadCancellationMonitorFunc: DownloadCancellationMonitorFunc }) | undefined {
     if (!progressCallback)
       return;
 
     const abortController = new AbortController();
 
-    // We construct a promise which, if resolved with `{ shouldAbort: true }`, will abort the download.
+    // We construct a promise which, if resolved with `{ shouldCancel: true }`, will cancel the download.
     // We have to do this instead of calling `abortController.abort` inside `progressCallback` function because `progressCallback` is called inside "on `data`"
     // event handler of the download stream, which is out of the execution context of the `iModelsClient.changesets.downloadList` function. That results in an
     // unhandled exception.
-    let downloadAbortWatchdogFunc: DownloadAbortWatchdogFunc = undefined!;
-    void new Promise<DownloadAbortWatchdogFuncParams>((resolve) => {
-      downloadAbortWatchdogFunc = resolve;
-    }).then((params: DownloadAbortWatchdogFuncParams) => {
+    let downloadCancellationMonitorFunc: DownloadCancellationMonitorFunc = undefined!;
+    void new Promise<DownloadCancellationMonitorFuncParams>((resolve) => {
+      downloadCancellationMonitorFunc = resolve;
+    }).then((params: DownloadCancellationMonitorFuncParams) => {
       // eslint-disable-next-line no-console
       console.log("inside then");
-      if (params.shouldAbort) {
+      if (params.shouldCancel) {
         // eslint-disable-next-line no-console
         console.log("aborting");
         abortController.abort();
@@ -112,13 +112,13 @@ export class PlatformToClientAdapter {
     const convertedProgressCallback = (downloaded: number, total: number) => {
       const cancel = progressCallback(downloaded, total);
       if (cancel !== ProgressStatus.Continue)
-        downloadAbortWatchdogFunc({ shouldAbort: true });
+        downloadCancellationMonitorFunc({ shouldCancel: true });
     };
 
     return {
       progressCallback: convertedProgressCallback,
       abortSignal: abortController.signal,
-      downloadAbortWatchdogFunc
+      downloadCancellationMonitorFunc
     };
   }
 

@@ -33,7 +33,7 @@ import {
 
 import { getV1CheckpointSize, queryCurrentOrPrecedingV1Checkpoint, queryCurrentOrPrecedingV2Checkpoint } from "./CheckpointHelperFunctions";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
-import { DownloadAbortWatchdogFunc, PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
+import { DownloadCancellationMonitorFunc, PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
@@ -49,10 +49,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
     downloadParams.urlParams = PlatformToClientAdapter.toChangesetRangeUrlParams(arg.range);
 
-    let downloadAbortWatchdogFunc: DownloadAbortWatchdogFunc | undefined;
+    let downloadCancellationMonitorFunc: DownloadCancellationMonitorFunc | undefined;
     try {
       const downloadProgressParams = PlatformToClientAdapter.toDownloadProgressParam(arg.progressCallback);
-      downloadAbortWatchdogFunc = downloadProgressParams?.downloadAbortWatchdogFunc;
+      downloadCancellationMonitorFunc = downloadProgressParams?.downloadCancellationMonitorFunc;
       downloadParams.progressCallback = downloadProgressParams?.progressCallback;
       downloadParams.abortSignal = downloadProgressParams?.abortSignal;
 
@@ -64,7 +64,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       const result: ChangesetFileProps[] = downloadedChangesets.map(ClientToPlatformAdapter.toChangesetFileProps);
       return result;
     } finally {
-      downloadAbortWatchdogFunc?.({ shouldAbort: false });
+      downloadCancellationMonitorFunc?.({ shouldCancel: false });
     }
   }
 
@@ -75,10 +75,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
       targetDirectoryPath: arg.targetDir
     };
 
-    let downloadAbortWatchdogFunc: DownloadAbortWatchdogFunc | undefined;
+    let downloadCancellationMonitorFunc: DownloadCancellationMonitorFunc | undefined;
     try {
       const downloadProgressParams = PlatformToClientAdapter.toDownloadProgressParam(arg.progressCallback);
-      downloadAbortWatchdogFunc = downloadProgressParams?.downloadAbortWatchdogFunc;
+      downloadCancellationMonitorFunc = downloadProgressParams?.downloadCancellationMonitorFunc;
       downloadSingleChangesetParams.progressCallback = downloadProgressParams?.progressCallback;
       downloadSingleChangesetParams.abortSignal = downloadProgressParams?.abortSignal;
 
@@ -98,7 +98,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset);
       return result;
     } finally {
-      downloadAbortWatchdogFunc?.({ shouldAbort: false });
+      downloadCancellationMonitorFunc?.({ shouldCancel: false });
     }
   }
 
@@ -255,10 +255,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const v1CheckpointSize = await getV1CheckpointSize(checkpoint._links.download.href);
 
-    let downloadAbortWatchdogFunc: DownloadAbortWatchdogFunc | undefined;
+    let downloadCancellationMonitorFunc: DownloadCancellationMonitorFunc | undefined;
     try {
       const downloadProgressParams = PlatformToClientAdapter.toDownloadProgressParam(arg.onProgress);
-      downloadAbortWatchdogFunc = downloadProgressParams?.downloadAbortWatchdogFunc;
+      downloadCancellationMonitorFunc = downloadProgressParams?.downloadCancellationMonitorFunc;
       const totalDownloadCallback = downloadProgressParams?.progressCallback
         ? (downloaded: number) => downloadProgressParams.progressCallback?.(downloaded, v1CheckpointSize)
         : undefined;
@@ -276,7 +276,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
       return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
     } finally {
-      downloadAbortWatchdogFunc?.({ shouldAbort: false });
+      downloadCancellationMonitorFunc?.({ shouldCancel: false });
     }
   }
 
