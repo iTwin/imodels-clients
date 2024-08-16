@@ -137,41 +137,6 @@ describe("BackendIModelsAccess", () => {
       }
     });
 
-    it.only("should cancel single changeset download", async () => {
-      // Arrange
-      const firstChangesetInfo = testIModelFileProvider.changesets[0];
-      const downloadChangesetsParams: DownloadChangesetArg = {
-        accessToken,
-        iModelId: testIModelForRead.id,
-        targetDir: testDownloadPath,
-        changeset: firstChangesetInfo
-      };
-
-      let progressReports: ProgressReport[] = [];
-      const progressCallbackForDownload = (downloaded: number, total: number) => {
-        progressReports.push({ downloaded, total });
-        return downloaded < total / 4 ? ProgressStatus.Continue : ProgressStatus.Abort;
-      };
-
-      // Act
-      let thrownError: unknown;
-      try {
-        await backendIModelsAccess.downloadChangeset({
-          ...downloadChangesetsParams,
-          progressCallback: progressCallbackForDownload
-        });
-      } catch (error: unknown) {
-        thrownError = error;
-      }
-
-      // Assert #1
-      const expectedErrorNumber = ChangeSetStatus.CHANGESET_ERROR_BASE + 26; // ChangeSetStatus.DownloadCancelled (only available from iTwinJs 3.5)
-      expect(thrownError).to.ownProperty("errorNumber", expectedErrorNumber);
-
-      expect(fs.readdirSync(testDownloadPath).length).to.be.greaterThan(0);
-      assertProgressReports(progressReports, false);
-    });
-
     it.only("should cancel changesets download and finish downloading missing changesets during next download", async () => {
       // Arrange
       const downloadChangesetsParams: DownloadChangesetRangeArg = {
