@@ -79,6 +79,10 @@ export class PlatformToClientAdapter {
     };
   }
 
+  /**
+   * @returns `progressCallback` and `abortSignal` instances to pass to iModels client functions, and `downloadAbortWatchdogFunc`.
+   * IMPORTANT: `downloadAbortWatchdogFunc` must be called at least once to not leave pending promises.
+   */
   public static toDownloadProgressParam(progressCallback?: ProgressFunction): (DownloadProgressParam & { downloadAbortWatchdogFunc: DownloadAbortWatchdogFunc }) | undefined {
     if (!progressCallback)
       return;
