@@ -493,13 +493,11 @@ describe("[Authoring] ChangesetOperations", () => {
       const abortController = new AbortController();
       const abortSignal = abortController.signal;
 
-      // `triggerDownloadCancellationPromise` is used to wait before aborting the download to ensure that some files have been downloaded.
-      // Its `resolve` function is saved into `triggerDownloadCancellation` variable and called once we download some changesets,
-      // `triggerDownloadCancellationPromise` resolves and we can then immediately call `abortController.abort`.
-      // We have to do this instead of calling `abortController.abort` inside `progressCallback` function because `progressCallback` is called inside "on `data`"
-      // event handler of the download stream, which is out of the execution context of the `downloadList` function. That results in an unhandled exception.
+      // Promise construction below mimics the cancellation workflow implemented in
+      // `PlatformToClientAdapter.toDownloadProgressParam` function `@itwin/imodels-access-backend` package.
+      // Refer to that for an explanation on why this is needed.
       let triggerDownloadCancellation: () => void = undefined!;
-      const triggerDownloadCancellationPromise = new Promise<void>(resolve => {
+      const triggerDownloadCancellationPromise = new Promise<void>((resolve) => {
         triggerDownloadCancellation = resolve;
       });
 

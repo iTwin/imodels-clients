@@ -12,7 +12,7 @@ import {
   LockLevel, LockedObjects
 } from "@itwin/imodels-client-authoring";
 
-type DownloadAbortWatchdogFuncParams = { shouldAbort: boolean };
+interface DownloadAbortWatchdogFuncParams { shouldAbort: boolean }
 export type DownloadAbortWatchdogFunc = (params: DownloadAbortWatchdogFuncParams) => void;
 
 export class PlatformToClientAdapter {
@@ -85,21 +85,20 @@ export class PlatformToClientAdapter {
 
     const abortController = new AbortController();
 
-    // We construct a promise that will resolve when the `cancel !== ProgressStatus.Continue` condition inside progress callback is met.
-    // Once it resolves, it will call `abortController.abort` to cancel the download.
+    // We construct a promise which, if resolved with `{ shouldAbort: true }`, will abort the download.
     // We have to do this instead of calling `abortController.abort` inside `progressCallback` function because `progressCallback` is called inside "on `data`"
-    // event handler of the download stream, which is out of the execution context of the `iModelsClient.changesets.downloadList` function.
-    // That results in an unhandled exception.
+    // event handler of the download stream, which is out of the execution context of the `iModelsClient.changesets.downloadList` function. That results in an
+    // unhandled exception.
     let downloadAbortWatchdogFunc: DownloadAbortWatchdogFunc = undefined!;
-    new Promise<DownloadAbortWatchdogFuncParams>((resolve) => {
+    void new Promise<DownloadAbortWatchdogFuncParams>((resolve) => {
       downloadAbortWatchdogFunc = resolve;
     }).then((params: DownloadAbortWatchdogFuncParams) => {
       console.log("inside then");
       if (params.shouldAbort) {
-        console.log("aborting")
+        console.log("aborting");
         abortController.abort();
       } else {
-        console.log("not aborting")
+        console.log("not aborting");
       }
     });
 

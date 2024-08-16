@@ -262,7 +262,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       const totalDownloadCallback = downloadProgressParams?.progressCallback
         ? (downloaded: number) => downloadProgressParams.progressCallback?.(downloaded, v1CheckpointSize)
         : undefined;
-  
+
       const stopwatch = new StopWatch(`[${checkpoint.changesetId}]`, true);
       Logger.logInfo("BackendIModelsAccess", `Starting download of checkpoint with id ${stopwatch.description}`);
       await downloadFile({
@@ -273,7 +273,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
         abortSignal: downloadProgressParams?.abortSignal
       });
       Logger.logInfo("BackendIModelsAccess", `Downloaded checkpoint with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
-  
+
       return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
     } finally {
       downloadAbortWatchdogFunc?.({ shouldAbort: false });
