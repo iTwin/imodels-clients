@@ -26,7 +26,10 @@ export type ProgressCallback = (downloaded: number, total: number) => void;
 
 /** Common parameters for progress reporting download operations. */
 export interface DownloadProgressParam {
-  /** Function called to report download progress. */
+  /**
+   * Function called to report download progress.
+   * IMPORTANT: This function should never throw an error or cancel the download, otherwise it may result in unexpected behavior.
+   */
   progressCallback?: ProgressCallback;
   /** Abort signal for cancelling download. */
   abortSignal?: GenericAbortSignal;

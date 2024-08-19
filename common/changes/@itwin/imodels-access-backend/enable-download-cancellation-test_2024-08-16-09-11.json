@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-access-backend",
+      "comment": "Fix file download cancellation handling.",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-backend"
+}

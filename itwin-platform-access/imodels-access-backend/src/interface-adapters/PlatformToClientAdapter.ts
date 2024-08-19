@@ -2,15 +2,18 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AbortController, AbortSignal } from "@azure/abort-controller";
+import { AbortController } from "@azure/abort-controller";
 import { CreateNewIModelProps, LockMap, LockState, ProgressFunction, ProgressStatus } from "@itwin/core-backend";
 import { RepositoryStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetRange, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
 
 import {
-  ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties,
-  LockLevel, LockedObjects, ProgressCallback
+  ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, DownloadProgressParam, GetChangesetListUrlParams, IModelProperties,
+  LockLevel, LockedObjects
 } from "@itwin/imodels-client-authoring";
+
+interface DownloadCancellationMonitorFuncParams { shouldCancel: boolean }
+export type DownloadCancellationMonitorFunc = (params: DownloadCancellationMonitorFuncParams) => void;
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(changesetFileProps: ChangesetFileProps, changesetDescription: string): ChangesetPropertiesForCreate {
@@ -76,19 +79,39 @@ export class PlatformToClientAdapter {
     };
   }
 
-  public static toProgressCallback(progressCallback?: ProgressFunction): [ProgressCallback, AbortSignal] | undefined {
+  /**
+   * @returns `progressCallback` and `abortSignal` instances to pass to iModels client functions, and `downloadCancellationMonitorFunc`.
+   * IMPORTANT: `downloadCancellationMonitorFunc` must be called at least once to not leave pending promises.
+   */
+  public static toDownloadProgressParam(progressCallback?: ProgressFunction): (DownloadProgressParam & { downloadCancellationMonitorFunc: DownloadCancellationMonitorFunc }) | undefined {
     if (!progressCallback)
       return;
 
     const abortController = new AbortController();
+
+    // We construct a promise which, if resolved with `{ shouldCancel: true }`, will cancel the download.
+    // We have to do this instead of calling `abortController.abort` inside `progressCallback` function because `progressCallback` is called inside "on `data`"
+    // event handler of the download stream, which is out of the execution context of the `iModelsClient.changesets.downloadList` function. That results in an
+    // unhandled exception.
+    let downloadCancellationMonitorFunc: DownloadCancellationMonitorFunc = undefined!;
+    void new Promise<DownloadCancellationMonitorFuncParams>((resolve) => {
+      downloadCancellationMonitorFunc = resolve;
+    }).then((params: DownloadCancellationMonitorFuncParams) => {
+      if (params.shouldCancel)
+        abortController.abort();
+    });
+
     const convertedProgressCallback = (downloaded: number, total: number) => {
       const cancel = progressCallback(downloaded, total);
-
       if (cancel !== ProgressStatus.Continue)
-        abortController.abort();
+        downloadCancellationMonitorFunc({ shouldCancel: true });
     };
 
-    return [convertedProgressCallback, abortController.signal];
+    return {
+      progressCallback: convertedProgressCallback,
+      abortSignal: abortController.signal,
+      downloadCancellationMonitorFunc
+    };
   }
 
   // eslint-disable-next-line deprecation/deprecation
@@ -97,10 +120,10 @@ export class PlatformToClientAdapter {
       // eslint-disable-next-line deprecation/deprecation
       case LockState.None:
         return LockLevel.None;
-        // eslint-disable-next-line deprecation/deprecation
+      // eslint-disable-next-line deprecation/deprecation
       case LockState.Shared:
         return LockLevel.Shared;
-        // eslint-disable-next-line deprecation/deprecation
+      // eslint-disable-next-line deprecation/deprecation
       case LockState.Exclusive:
         return LockLevel.Exclusive;
       default:

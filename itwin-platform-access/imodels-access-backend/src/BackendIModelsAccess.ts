@@ -33,7 +33,7 @@ import {
 
 import { getV1CheckpointSize, queryCurrentOrPrecedingV1Checkpoint, queryCurrentOrPrecedingV2Checkpoint } from "./CheckpointHelperFunctions";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
-import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
+import { DownloadCancellationMonitorFunc, PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
@@ -49,17 +49,23 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
     downloadParams.urlParams = PlatformToClientAdapter.toChangesetRangeUrlParams(arg.range);
 
-    const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.progressCallback) ?? [];
-    downloadParams.progressCallback = progressCallback;
-    downloadParams.abortSignal = abortSignal;
+    let downloadCancellationMonitorFunc: DownloadCancellationMonitorFunc | undefined;
+    try {
+      const downloadProgressParams = PlatformToClientAdapter.toDownloadProgressParam(arg.progressCallback);
+      downloadCancellationMonitorFunc = downloadProgressParams?.downloadCancellationMonitorFunc;
+      downloadParams.progressCallback = downloadProgressParams?.progressCallback;
+      downloadParams.abortSignal = downloadProgressParams?.abortSignal;
 
-    const downloadedChangesets: DownloadedChangeset[] = await handleAPIErrors(
-      async () => this._iModelsClient.changesets.downloadList(downloadParams),
-      "downloadChangesets"
-    );
+      const downloadedChangesets: DownloadedChangeset[] = await handleAPIErrors(
+        async () => this._iModelsClient.changesets.downloadList(downloadParams),
+        "downloadChangesets"
+      );
 
-    const result: ChangesetFileProps[] = downloadedChangesets.map(ClientToPlatformAdapter.toChangesetFileProps);
-    return result;
+      const result: ChangesetFileProps[] = downloadedChangesets.map(ClientToPlatformAdapter.toChangesetFileProps);
+      return result;
+    } finally {
+      downloadCancellationMonitorFunc?.({ shouldCancel: false });
+    }
   }
 
   public async downloadChangeset(arg: DownloadChangesetArg): Promise<ChangesetFileProps> {
@@ -69,25 +75,31 @@ export class BackendIModelsAccess implements BackendHubAccess {
       targetDirectoryPath: arg.targetDir
     };
 
-    const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.progressCallback) ?? [];
-    downloadSingleChangesetParams.progressCallback = progressCallback;
-    downloadSingleChangesetParams.abortSignal = abortSignal;
+    let downloadCancellationMonitorFunc: DownloadCancellationMonitorFunc | undefined;
+    try {
+      const downloadProgressParams = PlatformToClientAdapter.toDownloadProgressParam(arg.progressCallback);
+      downloadCancellationMonitorFunc = downloadProgressParams?.downloadCancellationMonitorFunc;
+      downloadSingleChangesetParams.progressCallback = downloadProgressParams?.progressCallback;
+      downloadSingleChangesetParams.abortSignal = downloadProgressParams?.abortSignal;
 
-    const downloadedChangeset: DownloadedChangeset = await handleAPIErrors(
-      async () => {
-        const stopwatch = new StopWatch(`[${arg.changeset.id}]`, true);
-        Logger.logInfo("BackendIModelsAccess", `Starting download of changeset with id ${stopwatch.description}`);
+      const downloadedChangeset: DownloadedChangeset = await handleAPIErrors(
+        async () => {
+          const stopwatch = new StopWatch(`[${arg.changeset.id}]`, true);
+          Logger.logInfo("BackendIModelsAccess", `Starting download of changeset with id ${stopwatch.description}`);
 
-        const innerResult = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
+          const innerResult = await this._iModelsClient.changesets.downloadSingle(downloadSingleChangesetParams);
 
-        Logger.logInfo("BackendIModelsAccess", `Downloaded changeset with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
-        return innerResult;
-      },
-      "downloadChangesets"
-    );
+          Logger.logInfo("BackendIModelsAccess", `Downloaded changeset with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
+          return innerResult;
+        },
+        "downloadChangesets"
+      );
 
-    const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset);
-    return result;
+      const result: ChangesetFileProps = ClientToPlatformAdapter.toChangesetFileProps(downloadedChangeset);
+      return result;
+    } finally {
+      downloadCancellationMonitorFunc?.({ shouldCancel: false });
+    }
   }
 
   public async queryChangeset(arg: ChangesetArg): Promise<ChangesetProps> {
@@ -242,21 +254,30 @@ export class BackendIModelsAccess implements BackendHubAccess {
       throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
 
     const v1CheckpointSize = await getV1CheckpointSize(checkpoint._links.download.href);
-    const [progressCallback, abortSignal] = PlatformToClientAdapter.toProgressCallback(arg.onProgress) ?? [];
-    const totalDownloadCallback = progressCallback ? (downloaded: number) => progressCallback?.(downloaded, v1CheckpointSize) : undefined;
 
-    const stopwatch = new StopWatch(`[${checkpoint.changesetId}]`, true);
-    Logger.logInfo("BackendIModelsAccess", `Starting download of checkpoint with id ${stopwatch.description}`);
-    await downloadFile({
-      storage: this._iModelsClient.cloudStorage,
-      url: checkpoint._links.download.href,
-      localPath: arg.localFile,
-      totalDownloadCallback,
-      abortSignal
-    });
-    Logger.logInfo("BackendIModelsAccess", `Downloaded checkpoint with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
+    let downloadCancellationMonitorFunc: DownloadCancellationMonitorFunc | undefined;
+    try {
+      const downloadProgressParams = PlatformToClientAdapter.toDownloadProgressParam(arg.onProgress);
+      downloadCancellationMonitorFunc = downloadProgressParams?.downloadCancellationMonitorFunc;
+      const totalDownloadCallback = downloadProgressParams?.progressCallback
+        ? (downloaded: number) => downloadProgressParams.progressCallback?.(downloaded, v1CheckpointSize)
+        : undefined;
 
-    return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
+      const stopwatch = new StopWatch(`[${checkpoint.changesetId}]`, true);
+      Logger.logInfo("BackendIModelsAccess", `Starting download of checkpoint with id ${stopwatch.description}`);
+      await downloadFile({
+        storage: this._iModelsClient.cloudStorage,
+        url: checkpoint._links.download.href,
+        localPath: arg.localFile,
+        totalDownloadCallback,
+        abortSignal: downloadProgressParams?.abortSignal
+      });
+      Logger.logInfo("BackendIModelsAccess", `Downloaded checkpoint with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`);
+
+      return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
+    } finally {
+      downloadCancellationMonitorFunc?.({ shouldCancel: false });
+    }
   }
 
   public async queryV2Checkpoint(arg: CheckpointProps): Promise<V2CheckpointAccessProps | undefined> {
@@ -432,7 +453,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       const foundWalFile = IModelJsFs.existsSync(`${baselineFilePath}-wal`);
       const db = IModelDb.openDgnDb({ path: baselineFilePath }, OpenMode.ReadWrite);
       if (foundWalFile) {
-        Logger.logWarning("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", {baselineFilePath});
+        Logger.logWarning("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", { baselineFilePath });
         db.performCheckpoint();
       }
       this.closeFile(db);

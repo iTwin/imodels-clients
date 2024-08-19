@@ -488,16 +488,24 @@ describe("[Authoring] ChangesetOperations", () => {
       assertProgressReports(progressReports);
     });
 
-    it.skip("should cancel changesets download", async () => {
+    it("should cancel changesets download", async () => {
       // Arrange
       const abortController = new AbortController();
       const abortSignal = abortController.signal;
+
+      // Promise construction below mimics the cancellation workflow implemented in
+      // `PlatformToClientAdapter.toDownloadProgressParam` function `@itwin/imodels-access-backend` package.
+      // Refer to that for an explanation on why this is needed.
+      let triggerDownloadCancellation: () => void = undefined!;
+      const triggerDownloadCancellationPromise = new Promise<void>((resolve) => {
+        triggerDownloadCancellation = resolve;
+      });
 
       const progressReports: ProgressReport[] = [];
       const progressCallback: ProgressCallback = (downloaded, total) => {
         progressReports.push({downloaded, total});
         if (downloaded > total / 2)
-          abortController.abort();
+          triggerDownloadCancellation();
       };
 
       const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", "cancel changesets download");
@@ -512,7 +520,12 @@ describe("[Authoring] ChangesetOperations", () => {
       // Act
       let thrownError: unknown;
       try {
-        await iModelsClient.changesets.downloadList(downloadChangesetListParams);
+        const testedFunctionPromise = iModelsClient.changesets.downloadList(downloadChangesetListParams);
+
+        await triggerDownloadCancellationPromise;
+        abortController.abort();
+
+        await testedFunctionPromise;
       } catch (error: unknown) {
         thrownError = error;
       }
