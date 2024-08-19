@@ -1,6 +1,13 @@
 # Change Log - @itwin/imodels-access-backend
 
-This log was last generated on Wed, 14 Aug 2024 14:41:09 GMT and should not be manually modified.
+This log was last generated on Mon, 19 Aug 2024 06:58:47 GMT and should not be manually modified.
+
+## 5.2.2
+Mon, 19 Aug 2024 06:58:47 GMT
+
+### Updates
+
+- Fix file download cancellation handling.
 
 ## 5.2.1
 Wed, 14 Aug 2024 14:41:09 GMT

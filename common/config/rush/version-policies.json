@@ -2,13 +2,13 @@
   {
     "policyName": "clientPackagesLockStep",
     "definitionName": "lockStepVersion",
-    "version": "5.8.1",
+    "version": "5.8.2",
     "nextBump": "patch"
   },
   {
     "policyName": "interopPackagesLockStep",
     "definitionName": "lockStepVersion",
-    "version": "5.2.1",
+    "version": "5.2.2",
     "nextBump": "patch"
   }
 ]

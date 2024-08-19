@@ -1,6 +1,13 @@
 # Change Log - @itwin/imodels-client-authoring
 
-This log was last generated on Wed, 14 Aug 2024 14:41:07 GMT and should not be manually modified.
+This log was last generated on Mon, 19 Aug 2024 06:58:46 GMT and should not be manually modified.
+
+## 5.8.2
+Mon, 19 Aug 2024 06:58:46 GMT
+
+### Updates
+
+- Add a documentation comment to inform users to not throw errors inside progress callback functions passed to operations that download files.
 
 ## 5.8.1
 Wed, 14 Aug 2024 14:41:07 GMT
