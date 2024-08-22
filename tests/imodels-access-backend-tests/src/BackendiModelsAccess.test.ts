@@ -213,9 +213,9 @@ describe("BackendIModelsAccess", () => {
         const loggerSpy = sinon.spy(Logger, "logWarning").withArgs("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", sinon.match.any);
         // No need to actually talk to the hub, so stub the call to the hub.
         sinon.stub(IModelOperations.prototype, "createFromBaseline").callsFake(async (_params) => {
-          return ({id: Guid.createValue()} as unknown) as IModel;
+          return ({ id: Guid.createValue() } as unknown) as IModel;
         });
-        const testIModel = StandaloneDb.createEmpty(filePath, { rootSubject: { name: "test1"}, allowEdit: JSON.stringify({ txns: true })});
+        const testIModel = StandaloneDb.createEmpty(filePath, { rootSubject: { name: "test1" }, allowEdit: JSON.stringify({ txns: true }) });
         PhysicalModel.insert(testIModel, CoreIModel.rootSubjectId, "TestModel");
         testIModel.saveChanges();
         expect(testIModel.isOpen).to.be.true;
@@ -542,9 +542,13 @@ describe("BackendIModelsAccess", () => {
         briefcaseId,
         changeset: { id: "", index: 0 }
       };
+      // eslint-disable-next-line deprecation/deprecation
       const locksToAcquire: LockMap = new Map<string, LockState>([
+        // eslint-disable-next-line deprecation/deprecation
         ["0x1", LockState.Exclusive],
+        // eslint-disable-next-line deprecation/deprecation
         ["0x2", LockState.Exclusive],
+        // eslint-disable-next-line deprecation/deprecation
         ["0x3", LockState.Shared]
       ]);
 
@@ -574,10 +578,12 @@ describe("BackendIModelsAccess", () => {
         changeset: { id: "", index: 0 }
       };
 
+      // eslint-disable-next-line deprecation/deprecation
       const locksToAcquire: LockMap = new Map<string, LockState>();
 
       const objectIdsDec = Array.from({ length: 201 }, (_, i) => i + 1);
       for (const objectId of objectIdsDec) {
+        // eslint-disable-next-line deprecation/deprecation
         locksToAcquire.set(`0x${objectId.toString(16)}`, LockState.Exclusive);
       }
 

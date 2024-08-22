@@ -41,12 +41,18 @@
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
+    "@itwin/eslint-plugin": "~3.7.8",
     "@itwin/imodels-client-common-config": "workspace:*",
     "@types/chai": "~4.2.21",
     "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "~6.14.0",
     "cpx2": "4.2.0",
     "cspell": "~5.21.0",
     "eslint": "~8.55.0",
+    "eslint-plugin-deprecation": "~1.5.0",
+    "eslint-plugin-import": "~2.29.0",
+    "eslint-plugin-mocha": "~10.2.0",
+    "eslint-plugin-prefer-arrow": "~1.2.3",
     "rimraf": "~3.0.2",
     "sort-package-json": "~1.53.1",
     "typescript": "~5.3.3"
