@@ -1,0 +1,6 @@
+{
+  "useWorkspaces": true,
+  "globalOverrides": {
+    "ws":"8.18.0"
+  }
+}
