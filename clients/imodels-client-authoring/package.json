@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@itwin/imodels-client-common-config": "workspace:*",
+    "@types/node": "^18.11.18",
     "cspell": "~5.21.0",
     "eslint": "~8.55.0",
     "rimraf": "~3.0.2",

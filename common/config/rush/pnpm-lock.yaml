@@ -1,13 +1,13 @@
 lockfileVersion: '9.0'
 
 settings:
-  autoInstallPeers: true
+  autoInstallPeers: false
   excludeLinksFromLockfile: false
 
 overrides:
   ws: 8.18.0
 
-pnpmfileChecksum: bah4qk2ariqsqdnx47kcwtwinq
+pnpmfileChecksum: jmsifwrxg4slleckty7qyuymte
 
 importers:
 
@@ -31,6 +31,9 @@ importers:
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
+      '@types/node':
+        specifier: ^18.11.18
+        version: 18.19.45
       cspell:
         specifier: ~5.21.0
         version: 5.21.2
