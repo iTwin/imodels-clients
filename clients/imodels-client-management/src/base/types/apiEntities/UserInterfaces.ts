@@ -25,7 +25,7 @@ export interface UserStatistics {
   /** Number of changesets pushed by the user. */
   pushedChangesetsCount: number;
   /** Universal datetime value of the last time a changeset was pushed to the iModel by the user. */
-  lastChangesetPushDate: string;
+  lastChangesetPushDate: string | null;
   /** Number of named versions created by the user. */
   createdVersionsCount: number;
   /** Number of briefcases owned by the user. */
