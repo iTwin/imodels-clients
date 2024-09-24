@@ -214,6 +214,12 @@ export function assertUser(params: {
   expect(params.actualUser.givenName).to.not.be.empty;
   expect(params.actualUser.surname).to.not.be.empty;
   expect(params.actualUser.email).to.not.be.empty;
+
+  expect(params.actualUser.statistics).to.exist;
+  expect(params.actualUser.statistics.pushedChangesetsCount).to.be.equal(0);
+  expect(params.actualUser.statistics.lastChangesetPushDate).to.be.null;
+  expect(params.actualUser.statistics.createdVersionsCount).to.be.equal(2);
+  expect(params.actualUser.statistics.briefcasesCount).to.equal(0);
 }
 
 export function assertUserPermissions(params: {
