@@ -5,7 +5,7 @@
 import { expect } from "chai";
 
 import { AuthorizationCallback, EntityListIterator, GetSingleUserParams, GetUserListParams, IModelsClient, IModelsClientOptions, MinimalUser, OrderByOperator, User, UserOrderByProperty, take, toArray } from "@itwin/imodels-client-management";
-import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertCollection, assertMinimalUser, assertUser } from "@itwin/imodels-client-test-utils";
+import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertCollection, assertMinimalUser, assertUser, assertUserStatistics } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "../common";
 
@@ -94,6 +94,17 @@ describe("[Management] UserOperations", () => {
     // Assert
     assertUser({
       actualUser: user
+    });
+
+    // Assert user statistics
+    assertUserStatistics({
+      actualUser: user,
+      expectedUserStatistics: {
+        briefcasesCount: 0,
+        createdVersionsCount: 2,
+        lastChangesetPushDate: null,
+        pushedChangesetsCount: 0
+      }
     });
   });
 
