@@ -1,6 +1,11 @@
 # Change Log - @itwin/imodels-client-authoring
 
-This log was last generated on Mon, 19 Aug 2024 06:58:46 GMT and should not be manually modified.
+This log was last generated on Wed, 25 Sep 2024 14:09:09 GMT and should not be manually modified.
+
+## 5.9.0
+Wed, 25 Sep 2024 14:09:09 GMT
+
+_Version update only_
 
 ## 5.8.2
 Mon, 19 Aug 2024 06:58:46 GMT

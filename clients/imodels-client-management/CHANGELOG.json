@@ -2,6 +2,18 @@
   "name": "@itwin/imodels-client-management",
   "entries": [
     {
+      "version": "5.9.0",
+      "tag": "@itwin/imodels-client-management_v5.9.0",
+      "date": "Wed, 25 Sep 2024 14:09:09 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add user statistics"
+          }
+        ]
+      }
+    },
+    {
       "version": "5.8.2",
       "tag": "@itwin/imodels-client-management_v5.8.2",
       "date": "Mon, 19 Aug 2024 06:58:46 GMT",
