@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-management",
+      "comment": "Add user statistics",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-management"
+}

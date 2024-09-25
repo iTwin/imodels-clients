@@ -333,7 +333,7 @@ describe("BackendIModelsAccess", () => {
       //  changeset index 10   - only v1 (v2 failed)
       // This iModel is a clone of the testIModelFileProvider aka "[do not delete][iModelsClientsTests] Reusable Test iModel"
       // so it will have the same 10 changesets in total.
-      const iModelId = "4cdf1c96-2901-46c5-b251-3da2e19b919b";
+      const iModelId = "e71f4085-75a6-479c-bab8-dce19b9352f6";
       await assertHardcodedIModelExists(
         iModelId,
         "iModel for queryV2Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test.");
@@ -396,7 +396,7 @@ describe("BackendIModelsAccess", () => {
       //  changeset index 10   - v1 and v2
       // This iModel is a clone of the testIModelFileProvider aka "[do not delete][iModelsClientsTests] Reusable Test iModel"
       // so it will have the same 10 changesets in total.
-      const iModelId = "deeefc49-251b-4399-af51-8c8db2d22c83";
+      const iModelId = "c53e6b49-020f-4bf6-804b-d320463c5e00";
       await assertHardcodedIModelExists(
         iModelId,
         "iModel for downloadV1Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test.");

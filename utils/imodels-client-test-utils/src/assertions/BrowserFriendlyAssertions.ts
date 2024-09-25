@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { Application, Briefcase, ChangesetExtendedData, Checkpoint, CheckpointState, ContentType, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, MinimalBriefcase, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, Thumbnail, ThumbnailSize, User, UserPermissions } from "@itwin/imodels-client-management";
+import { Application, Briefcase, ChangesetExtendedData, Checkpoint, CheckpointState, ContentType, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, MinimalBriefcase, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, Thumbnail, ThumbnailSize, User, UserPermissions, UserStatistics } from "@itwin/imodels-client-management";
 
 import { assertBriefcaseCallbacks, assertIModelCallbacks, assertNamedVersionCallbacks } from "./RelatedEntityCallbackAssertions";
 
@@ -214,6 +214,22 @@ export function assertUser(params: {
   expect(params.actualUser.givenName).to.not.be.empty;
   expect(params.actualUser.surname).to.not.be.empty;
   expect(params.actualUser.email).to.not.be.empty;
+
+  expect(params.actualUser.statistics).to.exist;
+  expect(params.actualUser.statistics.pushedChangesetsCount).to.be.greaterThanOrEqual(0);
+  expect(params.actualUser.statistics.createdVersionsCount).to.be.greaterThanOrEqual(0);
+  expect(params.actualUser.statistics.briefcasesCount).to.greaterThanOrEqual(0);
+}
+
+export function assertUserStatistics(params: {
+  actualUser: User;
+  expectedUserStatistics: UserStatistics;
+}): void {
+  expect(params.actualUser.statistics).to.exist;
+  expect(params.actualUser.statistics.pushedChangesetsCount).to.equal(params.expectedUserStatistics.pushedChangesetsCount);
+  expect(params.actualUser.statistics.createdVersionsCount).to.equal(params.expectedUserStatistics.createdVersionsCount);
+  assertOptionalProperty(params.expectedUserStatistics.lastChangesetPushDate, params.actualUser.statistics.lastChangesetPushDate);
+  expect(params.actualUser.statistics.briefcasesCount).to.equal(params.expectedUserStatistics.briefcasesCount);
 }
 
 export function assertUserPermissions(params: {
