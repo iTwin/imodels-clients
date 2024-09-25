@@ -20,15 +20,15 @@ export interface MinimalUser {
   _links: MinimalUserLinks;
 }
 
-/** User statistics */
+/** User Statistics */
 export interface UserStatistics {
-  /** Number of changesets pushed by the user. */
+  /** Number of Changesets pushed by the user. */
   pushedChangesetsCount: number;
-  /** Universal datetime value of the last time a changeset was pushed to the iModel by the user. */
+  /** Universal datetime value of the last time a Changeset was pushed to the iModel by the user. */
   lastChangesetPushDate: string | null;
-  /** Number of named versions created by the user. */
+  /** Number of Named Versions created by the user. */
   createdVersionsCount: number;
-  /** Number of briefcases owned by the user. */
+  /** Number of Briefcases owned by the user. */
   briefcasesCount: number;
 }
 
@@ -40,6 +40,6 @@ export interface User extends MinimalUser {
   surname: string;
   /** User email address. */
   email: string;
-  /** User statistics */
+  /** User Statistics */
   statistics: UserStatistics;
 }
