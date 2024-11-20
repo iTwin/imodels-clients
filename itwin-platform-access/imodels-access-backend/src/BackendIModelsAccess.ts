@@ -9,7 +9,7 @@ import {
   ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg,
   IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelJsNative, IModelNameArg, ITwinIdArg, KnownLocations, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
-import { BriefcaseStatus, Guid, GuidString, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
+import { AccessToken, BriefcaseStatus, Guid, GuidString, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
 import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion
@@ -418,19 +418,16 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
   private getAuthorizationParam(tokenArg: TokenArg): AuthorizationParam {
     const authorizationCallback: AuthorizationCallback = tokenArg.accessToken
-      ? AccessTokenAdapter.toAuthorizationCallback(tokenArg.accessToken)
-      : this.getAuthorizationCallbackFromIModelHost();
+      ? this.getAuthorizationCallbackFromToken(tokenArg.accessToken)
+      : AccessTokenAdapter.toAuthorizationCallback(IModelHost.getAccessToken);
 
     return {
       authorization: authorizationCallback
     };
   }
 
-  private getAuthorizationCallbackFromIModelHost(): AuthorizationCallback {
-    return async () => {
-      const token = await IModelHost.getAccessToken();
-      return AccessTokenAdapter.toAuthorization(token);
-    };
+  private getAuthorizationCallbackFromToken(accessToken: AccessToken): AuthorizationCallback {
+    return async () => AccessTokenAdapter.toAuthorization(accessToken);
   }
 
   private setLockLevelToNone(lockedObjectsForBriefcase: LockedObjects[]): void {
