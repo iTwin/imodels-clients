@@ -3,7 +3,7 @@
     {
       "packageName": "@itwin/imodels-client-authoring",
       "comment": "Update documentation",
-      "type": "none"
+      "type": "minor"
     }
   ],
   "packageName": "@itwin/imodels-client-authoring"

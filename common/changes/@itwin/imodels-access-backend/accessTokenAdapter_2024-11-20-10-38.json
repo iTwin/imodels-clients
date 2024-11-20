@@ -3,7 +3,7 @@
     {
       "packageName": "@itwin/imodels-access-backend",
       "comment": "Remove use of deprecated AccessTokenAdapter.toAuthorizationCallback",
-      "type": "none"
+      "type": "minor"
     }
   ],
   "packageName": "@itwin/imodels-access-backend"
