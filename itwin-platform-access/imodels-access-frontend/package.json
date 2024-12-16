@@ -62,5 +62,14 @@
     "@itwin/core-bentley": "^4.0.0",
     "@itwin/core-common": "^4.0.0",
     "@itwin/core-frontend": "^4.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "micromatch@<4.0.8": ">=4.0.8",
+      "path-to-regexp@>=4.0.0 <6.3.0": ">=6.3.0",
+      "path-to-regexp@>=0.2.0 <1.9.0": ">=1.9.0",
+      "cross-spawn@>=7.0.0 <7.0.5": ">=7.0.5",
+      "nanoid@<3.3.8": ">=3.3.8"
+    }
   }
 }
