@@ -15,9 +15,7 @@ Please see the [list of key methods and types](../../docs/IModelsClientManagemen
 ```typescript
 const iModelIterator: EntityListIterator<MinimalIModel> =
   iModelsClient.iModels.getMinimalList({
-    authorization: AccessTokenAdapter.toAuthorizationCallback(
-      await IModelApp.getAccessToken()
-    ),
+    authorization: AccessTokenAdapter.toAuthorizationCallback(IModelApp.getAccessToken),
     urlParams: {
       projectId: "8a1fcd73-8c23-460d-a392-8b4afc00affc",
     },

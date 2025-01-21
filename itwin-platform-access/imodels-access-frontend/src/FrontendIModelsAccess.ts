@@ -76,19 +76,12 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
 
   private getIModelScopedOperationParams(arg: IModelIdArg): IModelScopedOperationParams {
     const authorizationCallback: AuthorizationCallback = arg.accessToken
-      ? AccessTokenAdapter.toAuthorizationCallback(arg.accessToken)
-      : this.getAuthorizationCallbackFromIModelApp();
+      ? async () => AccessTokenAdapter.toAuthorization(arg.accessToken)
+      : AccessTokenAdapter.toAuthorizationCallback(IModelApp.getAccessToken);
 
     return {
       authorization: authorizationCallback,
       iModelId: arg.iModelId
-    };
-  }
-
-  private getAuthorizationCallbackFromIModelApp(): AuthorizationCallback {
-    return async () => {
-      const token = await IModelApp.getAccessToken();
-      return AccessTokenAdapter.toAuthorization(token);
     };
   }
 

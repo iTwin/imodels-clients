@@ -47,7 +47,7 @@ Since the `@itwin/imodels-client-authoring` package extends the `@itwin/imodels-
 `IModelsClient` expects the authorization info to be passed in a form of an asynchronous callback that returns authorization info. It is a common use case to consume `IModelsClient` in iTwin.js platform based applications which use `IModelApp.getAccessToken` or `IModelHost.getAccessToken` to get the authorization header value returned as a string. The authorization header value specifies the schema and access token e.g. `Bearer ey...`. To convert this value into the format that `IModelsClients` expect users can use `AccessTokenAdapter` class which is exported by both [`@itwin/imodels-access-frontend`](../itwin-platform-access/imodels-access-frontend/src/interface-adapters/AccessTokenAdapter.ts) and [`@itwin/imodels-access-backend`](../itwin-platform-access/imodels-access-backend/src/interface-adapters/AccessTokenAdapter.ts) packages.
 ```typescript
 const iModelIterator: EntityListIterator<MinimalIModel> = iModelsClient.iModels.getMinimalList({
-  authorization: AccessTokenAdapter.toAuthorizationCallback(await IModelHost.getAccessToken()),
+  authorization: AccessTokenAdapter.toAuthorizationCallback(IModelHost.getAccessToken),
   urlParams: {
     iTwinId: "8a1fcd73-8c23-460d-a392-8b4afc00affc"
   }

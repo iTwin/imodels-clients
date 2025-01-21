@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-management",
+      "comment": "Update documentation",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-management"
+}

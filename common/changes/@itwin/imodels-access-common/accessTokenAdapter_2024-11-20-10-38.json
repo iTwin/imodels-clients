@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-access-common",
+      "comment": "Deprecate AccessTokenAdapter.toAuthorizationCallback",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-common"
+}
