@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-access-frontend",
+      "comment": "Using ES Modules from @itwin/imodels-access-common",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-frontend"
+}

@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-access-common",
+      "comment": "Adding ES Module output",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-common"
+}

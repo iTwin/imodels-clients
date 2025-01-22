@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-common",
-  "version": "5.2.3",
+  "version": "5.2.4",
   "description": "Common code package for @itwin/imodels-access-frontend and @itwin/imodels-access-backend.",
   "keywords": [
     "Bentley",
@@ -18,8 +18,11 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
+  "main": "lib/index.js",
+  "module": "lib/esm/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc 1>&2",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json 1>&2",
     "clean": "rimraf lib",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
@@ -51,5 +54,14 @@
   "peerDependencies": {
     "@itwin/core-bentley": "^4.0.0",
     "@itwin/core-common": "^4.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "micromatch@<4.0.8": ">=4.0.8",
+      "path-to-regexp@>=4.0.0 <6.3.0": ">=6.3.0",
+      "path-to-regexp@>=0.2.0 <1.9.0": ">=1.9.0",
+      "cross-spawn@>=7.0.0 <7.0.5": ">=7.0.5",
+      "nanoid@<3.3.8": ">=3.3.8"
+    }
   }
 }
