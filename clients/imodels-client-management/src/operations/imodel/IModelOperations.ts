@@ -82,7 +82,16 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    */
   public async createEmpty(params: CreateEmptyIModelParams): Promise<IModel> {
     const createIModelBody = this.getCreateEmptyIModelRequestBody(params.iModelProperties);
-    const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headers);
+    let createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headers);
+    
+    if (params.iModelProperties.creationMode) {
+      await this.waitForEmptyIModelInitialization({authorization: params.authorization, iModelId: createdIModel.id, headers: params.headers, timeOutInMs: params.timeOutInMs});
+      createdIModel = await this.getSingle({
+        authorization: params.authorization,
+        iModelId: createdIModel.id,
+      });
+    }
+
     const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, createdIModel, params.headers);
     return result;
   }
@@ -235,14 +244,21 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     return result;
   }
 
-  protected getCreateEmptyIModelRequestBody(iModelProperties: IModelProperties): object {
-    return {
+  protected getCreateEmptyIModelRequestBody(iModelProperties: IModelProperties): IModelProperties {
+    const result: IModelProperties = {
       iTwinId: iModelProperties.iTwinId,
       name: iModelProperties.name,
       description: iModelProperties.description,
       extent: iModelProperties.extent,
-      containersEnabled: iModelProperties.containersEnabled
+      containersEnabled: iModelProperties.containersEnabled,
+      creationMode: iModelProperties.creationMode
     };
+
+    if (iModelProperties.geographicCoordinateSystem && iModelProperties.creationMode === "empty") {
+      result["geographicCoordinateSystem"] = iModelProperties.geographicCoordinateSystem;
+    }
+    
+    return result
   }
 
   protected async sendIModelPostRequest(authorization: AuthorizationCallback, createIModelBody: object, headers?: HeaderFactories): Promise<IModel> {
@@ -269,8 +285,9 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
   }
 
   private getCreateIModelFromTemplateRequestBody(iModelProperties: IModelPropertiesForCreateFromTemplate): object {
+    const emptyIModelParams = this.getCreateEmptyIModelRequestBody(iModelProperties);
     return {
-      ...this.getCreateEmptyIModelRequestBody(iModelProperties),
+      ...emptyIModelParams,
       template: {
         iModelId: iModelProperties.template.iModelId,
         changesetId: iModelProperties.template.changesetId
@@ -369,6 +386,30 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       });
 
     return state === IModelCreationState.Successful;
+  }
+
+  private async waitForEmptyIModelInitialization(params: {
+    authorization: AuthorizationCallback;
+    iModelId: string;
+    timeOutInMs?: number;
+    headers?: HeaderFactories;
+  }): Promise<void> {
+    return waitForCondition({
+      conditionToSatisfy: async () => this.isIModelInitialized({
+        authorization: params.authorization,
+        iModelId: params.iModelId,
+        errorCodeOnFailure: IModelsErrorCode.EmptyIModelInitializationFailed,
+        headers: params.headers
+      }),
+      timeoutErrorFactory: () => new IModelsErrorImpl({
+        code: IModelsErrorCode.EmptyIModelInitializationFailed,
+        message: "Timed out waiting for empty iModel initialization.",
+        originalError: undefined,
+        statusCode: undefined,
+        details: undefined
+      }),
+      timeOutInMs: params.timeOutInMs
+    });
   }
 
   private async waitForTemplatedIModelInitialization(params: {

@@ -45,6 +45,12 @@ export interface Extent {
   northEast: Point;
 }
 
+/** The GeographicCoordinateSystem is used to determine how to spatially locate the iModel on the Earth's surface. */
+export interface GeographicCoordinateSystem {
+  /** A string identifier corresponding to a horizontal Coordinate Reference System in iTwin.js. */
+  horizontalCRSId: string;
+}
+
 /** Minimal representation of an iModel. */
 export interface MinimalIModel {
   /** iModel id. */

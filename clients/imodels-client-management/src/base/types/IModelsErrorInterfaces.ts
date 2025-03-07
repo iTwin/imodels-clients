@@ -20,6 +20,7 @@ export enum IModelsErrorCode {
   ConflictWithAnotherUser = "ConflictWithAnotherUser",
   DataConflict = "DataConflict",
   DownloadAborted = "DownloadAborted",
+  EmptyIModelInitializationFailed = "EmptyIModelInitializationFailed",
   FileNotFound = "FileNotFound",
   IModelExists = "iModelExists",
   IModelForkInitializationFailed = "IModelForkInitializationFailed",

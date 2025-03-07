@@ -21,7 +21,8 @@
     "bootstrapper",
     "ITWINS",
     "Guids",
-    "backoff"
+    "backoff",
+    "epsg"
   ],
   "ignoreRegExpList": [
     "/imodel.*/i"
