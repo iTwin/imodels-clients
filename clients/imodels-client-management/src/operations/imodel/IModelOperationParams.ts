@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AtLeastOneProperty, AuthorizationParam, ContainerTypes, Extent, GeographicCoordinateSystem, HeadersParam, IModel, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types";
+import { AtLeastOneProperty, AuthorizationParam, ContainerTypes, Extent, GeographicCoordinateSystem, HeadersParam, IModel, IModelCreationMode, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types";
 import { ChangesetIdOrIndex } from "../OperationParamExports";
 
 /**
@@ -13,11 +13,6 @@ export enum IModelOrderByProperty {
   Name = "name",
   CreatedDateTime = "createdDateTime",
 }
-
-/**
- * The mode of iModel creation.
- */
-export type IModelCreationMode = "empty" | "fromIModelVersion" | "fromBaseline";
 
 /** Url parameters supported in iModel list query. */
 export interface GetIModelListUrlParams extends OrderableCollectionRequestParams<IModel, IModelOrderByProperty> {

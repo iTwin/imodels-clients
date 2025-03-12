@@ -31,6 +31,7 @@ export enum IModelsErrorCode {
   InsufficientPermissions = "InsufficientPermissions",
   InvalidChange = "InvalidChange",
   InvalidHeaderValue = "InvalidHeaderValue",
+  InvalidIModelGCSCreationMode = "InvalidIModelGCSCreationMode",
   InvalidIModelsRequest = "InvalidiModelsRequest",
   InvalidRequestBody = "InvalidRequestBody",
   InvalidThumbnailFormat = "InvalidThumbnailFormat",

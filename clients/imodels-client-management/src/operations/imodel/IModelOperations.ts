@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { EntityListIteratorImpl, IModelResponse, IModelsErrorImpl, IModelsResponse, OperationsBase, waitForCondition } from "../../base/internal";
-import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse, IModel, IModelCreationState, IModelsErrorCode, MinimalIModel, PreferReturn, User } from "../../base/types";
+import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse, IModel, IModelCreationState, IModelsErrorCode, IModelState, MinimalIModel, PreferReturn, User } from "../../base/types";
 import { Constants } from "../../Constants";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
@@ -82,10 +82,26 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    */
   public async createEmpty(params: CreateEmptyIModelParams): Promise<IModel> {
     const createIModelBody = this.getCreateEmptyIModelRequestBody(params.iModelProperties);
+    if (createIModelBody.geographicCoordinateSystem && createIModelBody.creationMode !== "empty") {
+      throw new IModelsErrorImpl({
+        code: IModelsErrorCode.InvalidIModelGCSCreationMode,
+        message: "For empty iModels, GeographicCoordinateSystem can only be set when creationMode is 'empty'.",
+        originalError: undefined,
+        statusCode: undefined,
+        details: undefined
+      });
+    }
+    
     let createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headers);
     
-    if (params.iModelProperties.creationMode) {
-      await this.waitForEmptyIModelInitialization({authorization: params.authorization, iModelId: createdIModel.id, headers: params.headers, timeOutInMs: params.timeOutInMs});
+    if (createdIModel.state === IModelState.NotInitialized) {
+      await this.waitForEmptyIModelInitialization({
+        authorization: params.authorization, 
+        headers: params.headers,
+        iModelId: createdIModel.id, 
+        timeOutInMs: params.timeOutInMs
+      });
+
       createdIModel = await this.getSingle({
         authorization: params.authorization,
         iModelId: createdIModel.id,
@@ -251,13 +267,10 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       description: iModelProperties.description,
       extent: iModelProperties.extent,
       containersEnabled: iModelProperties.containersEnabled,
-      creationMode: iModelProperties.creationMode
+      creationMode: iModelProperties.creationMode,
+      geographicCoordinateSystem: iModelProperties.geographicCoordinateSystem
     };
 
-    if (iModelProperties.geographicCoordinateSystem && iModelProperties.creationMode === "empty") {
-      result["geographicCoordinateSystem"] = iModelProperties.geographicCoordinateSystem;
-    }
-    
     return result
   }
 

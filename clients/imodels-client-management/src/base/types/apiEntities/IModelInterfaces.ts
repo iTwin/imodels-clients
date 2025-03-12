@@ -51,6 +51,11 @@ export interface GeographicCoordinateSystem {
   horizontalCRSId: string;
 }
 
+/**
+ * The mode of iModel creation.
+ */
+export type IModelCreationMode = "empty" | "fromIModelVersion" | "fromBaseline";
+
 /** Minimal representation of an iModel. */
 export interface MinimalIModel {
   /** iModel id. */
