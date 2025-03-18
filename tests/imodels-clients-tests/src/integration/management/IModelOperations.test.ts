@@ -386,11 +386,11 @@ describe("[Management] IModelOperations", () => {
         description: "Sample iModel description",
         extent: {
           southWest: { latitude: 1, longitude: 2 },
-          northEast: { latitude: 3, longitude: 4 },
+          northEast: { latitude: 3, longitude: 4 }
         },
         containersEnabled: ContainerTypes.None,
         geographicCoordinateSystem: {
-          horizontalCRSId: "EPSG:3857",
+          horizontalCRSId: "EPSG:3857"
         },
         creationMode: "empty"
       },
@@ -405,7 +405,7 @@ describe("[Management] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: createIModelParams.iModelProperties
     });
-  })
+  });
 
   it("should create iModel from template (without changeset id specified)", async () => {
     // Arrange

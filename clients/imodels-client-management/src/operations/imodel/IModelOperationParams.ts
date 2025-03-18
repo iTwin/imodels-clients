@@ -66,7 +66,7 @@ export interface CreateEmptyIModelParams extends AuthorizationParam, HeadersPara
   /** Properties of the new iModel. See {@link IModelProperties}. */
   iModelProperties: IModelProperties;
   /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */
-  timeOutInMs?: number
+  timeOutInMs?: number;
 }
 
 /** A set of properties that define the source iModel for creating a new iModel from template. */

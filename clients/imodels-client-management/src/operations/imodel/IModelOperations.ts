@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { EntityListIteratorImpl, IModelResponse, IModelsErrorImpl, IModelsResponse, OperationsBase, waitForCondition } from "../../base/internal";
-import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse, IModel, IModelCreationState, IModelsErrorCode, IModelState, MinimalIModel, PreferReturn, User } from "../../base/types";
+import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse, IModel, IModelCreationState, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn, User } from "../../base/types";
 import { Constants } from "../../Constants";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
@@ -104,7 +104,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
 
       createdIModel = await this.getSingle({
         authorization: params.authorization,
-        iModelId: createdIModel.id,
+        iModelId: createdIModel.id
       });
     }
 
@@ -271,7 +271,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       geographicCoordinateSystem: iModelProperties.geographicCoordinateSystem
     };
 
-    return result
+    return result;
   }
 
   protected async sendIModelPostRequest(authorization: AuthorizationCallback, createIModelBody: object, headers?: HeaderFactories): Promise<IModel> {
