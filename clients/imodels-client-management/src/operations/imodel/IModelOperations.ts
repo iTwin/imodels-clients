@@ -91,14 +91,14 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
         details: undefined
       });
     }
-    
+
     let createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headers);
-    
+
     if (createdIModel.state === IModelState.NotInitialized) {
       await this.waitForEmptyIModelInitialization({
-        authorization: params.authorization, 
+        authorization: params.authorization,
         headers: params.headers,
-        iModelId: createdIModel.id, 
+        iModelId: createdIModel.id,
         timeOutInMs: params.timeOutInMs
       });
 

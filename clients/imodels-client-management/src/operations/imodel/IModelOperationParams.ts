@@ -48,16 +48,16 @@ export interface IModelProperties {
   extent?: Extent;
   /** iModel container types. See {@link ContainerTypes}. */
   containersEnabled?: ContainerTypes;
-  /** 
-   * iModel GCS. If provided, {@link creationMode} must be set or value will be ignored. 
-   * See {@link GeographicCoordinateSystem}. 
-   */  
+  /**
+   * iModel GCS. If provided, {@link creationMode} must be set or value will be ignored.
+   * See {@link GeographicCoordinateSystem}.
+   */
   geographicCoordinateSystem?: GeographicCoordinateSystem;
-  /** 
-   * The mode of iModel creation. Possible values: 'empty', 'fromiModelVersion', 'fromBaseline'. 
+  /**
+   * The mode of iModel creation. Possible values: 'empty', 'fromiModelVersion', 'fromBaseline'.
    * If not provided empty instantly initialized iModel is created.
-   * However, instant iModel creation has been deprecated and might be removed in a future version. 
-   */  
+   * However, instant iModel creation has been deprecated and might be removed in a future version.
+   */
   creationMode?: IModelCreationMode;
 }
 
