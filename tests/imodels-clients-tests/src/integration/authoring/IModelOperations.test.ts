@@ -74,7 +74,7 @@ describe("[Authoring] IModelOperations", () => {
         filePath: testIModelFileProvider.iModel.filePath,
         containersEnabled: ContainerTypes.None,
         geographicCoordinateSystem: {
-          horizontalCRSId: "EPSG:3857",
+          horizontalCRSId: "EPSG:3857"
         }
       },
       headers: {
