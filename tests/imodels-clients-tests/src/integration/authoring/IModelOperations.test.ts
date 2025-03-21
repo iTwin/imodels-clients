@@ -63,4 +63,32 @@ describe("[Authoring] IModelOperations", () => {
       expectedIModelProperties: createIModelParams.iModelProperties
     });
   });
+
+  it("should create an iModel from baseline with GCS", async () => {
+    // Arrange
+    const createIModelParams: CreateIModelFromBaselineParams = {
+      authorization,
+      iModelProperties: {
+        iTwinId,
+        name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel from baseline with horizontal CRS"),
+        filePath: testIModelFileProvider.iModel.filePath,
+        containersEnabled: ContainerTypes.None,
+        geographicCoordinateSystem: {
+          horizontalCRSId: "EPSG:3857",
+        }
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
+      }
+    };
+
+    // Act
+    const iModel: IModel = await iModelsClient.iModels.createFromBaseline(createIModelParams);
+
+    // Assert
+    await assertIModel({
+      actualIModel: iModel,
+      expectedIModelProperties: createIModelParams.iModelProperties
+    });
+  });
 });

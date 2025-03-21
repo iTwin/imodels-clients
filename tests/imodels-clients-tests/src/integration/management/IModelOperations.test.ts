@@ -434,6 +434,36 @@ describe("[Management] IModelOperations", () => {
     });
   });
 
+  it("should create iModel from template (without changeset id specified and with defined GCS)", async () => {
+    // Arrange
+    const createIModelFromTemplateParams: CreateIModelFromTemplateParams = {
+      authorization,
+      iModelProperties: {
+        iTwinId,
+        name: testIModelGroup.getPrefixedUniqueIModelName("iModel from template (without changeset) (with GCS)"),
+        template: {
+          iModelId: testIModelForRead.id
+        },
+        geographicCoordinateSystem: {
+          horizontalCRSId: "EPSG:3857"
+        },
+        containersEnabled: ContainerTypes.SchemaSync | ContainerTypes.CodeStore | ContainerTypes.ViewStore
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID()
+      }
+    };
+
+    // Act
+    const iModel: IModel = await iModelsClient.iModels.createFromTemplate(createIModelFromTemplateParams);
+
+    // Assert
+    await assertIModel({
+      actualIModel: iModel,
+      expectedIModelProperties: createIModelFromTemplateParams.iModelProperties
+    });
+  });
+
   it("should create iModel from template (with changeset id specified)", async () => {
     // Arrange
     const createIModelFromTemplateParams: CreateIModelFromTemplateParams = {
