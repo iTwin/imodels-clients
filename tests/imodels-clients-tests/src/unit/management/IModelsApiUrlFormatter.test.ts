@@ -427,6 +427,7 @@ describe("[Management] IModelsApiUrlFormatter", () => {
           name: "IMODEL_NAME",
           $skip: 1,
           $top: 2,
+          $continuationToken: "TOKEN",
           $orderBy: {
             property: IModelOrderByProperty.Name,
             operator: OrderByOperator.Ascending
@@ -440,7 +441,7 @@ describe("[Management] IModelsApiUrlFormatter", () => {
       const iModelListUrl = iModelsApiUrlFormatter.getIModelListUrl(getIModelListUrlParams);
 
       // Assert
-      expect(iModelListUrl).to.be.equal("https://api.bentley.com/imodels?iTwinId=ITWIN_ID&name=IMODEL_NAME&$skip=1&$top=2&$orderBy=name asc&testParam1=1&testParam2=param2");
+      expect(iModelListUrl).to.be.equal("https://api.bentley.com/imodels?iTwinId=ITWIN_ID&name=IMODEL_NAME&$skip=1&$top=2&$continuationToken=TOKEN&$orderBy=name asc&testParam1=1&testParam2=param2");
     });
 
     [

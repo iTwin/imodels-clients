@@ -76,6 +76,8 @@ export interface CollectionRequestParams {
    * If not specified 100 entities per page will be returned.
    */
   $top?: number;
+  /** Specifies token to retrieve next page in paginated response */
+  $continuationToken?: string;
 }
 
 /** Common url parameters that are supported for orderable entity list requests. */
