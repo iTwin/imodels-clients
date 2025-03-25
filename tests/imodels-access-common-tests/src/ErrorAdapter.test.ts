@@ -49,6 +49,7 @@ describe("ErrorAdapter", () => {
     IModelsErrorCode.ChangesetGroupNotFound,
     IModelsErrorCode.BaselineFileNotFound,
     IModelsErrorCode.BaselineFileInitializationFailed,
+    IModelsErrorCode.EmptyIModelInitializationFailed,
     IModelsErrorCode.IModelFromTemplateInitializationFailed,
     IModelsErrorCode.ClonedIModelInitializationFailed,
     IModelsErrorCode.ChangesetDownloadFailed

@@ -79,6 +79,7 @@ export class ErrorAdapter {
       case IModelsErrorCode.BaselineFileNotFound:
       case IModelsErrorCode.BaselineFileInitializationFailed:
       case IModelsErrorCode.IModelFromTemplateInitializationFailed:
+      case IModelsErrorCode.EmptyIModelInitializationFailed:
       case IModelsErrorCode.ClonedIModelInitializationFailed:
       case IModelsErrorCode.ChangesetDownloadFailed:
         return true;

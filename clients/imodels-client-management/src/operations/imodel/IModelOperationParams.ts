@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AtLeastOneProperty, AuthorizationParam, ContainerTypes, Extent, HeadersParam, IModel, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types";
+import { AtLeastOneProperty, AuthorizationParam, ContainerTypes, Extent, GeographicCoordinateSystem, HeadersParam, IModel, IModelCreationMode, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types";
 import { ChangesetIdOrIndex } from "../OperationParamExports";
 
 /**
@@ -48,12 +48,25 @@ export interface IModelProperties {
   extent?: Extent;
   /** iModel container types. See {@link ContainerTypes}. */
   containersEnabled?: ContainerTypes;
+  /**
+   * iModel GCS. If provided, {@link creationMode} must be set or value will be ignored.
+   * See {@link GeographicCoordinateSystem}.
+   */
+  geographicCoordinateSystem?: GeographicCoordinateSystem;
+  /**
+   * The mode of iModel creation. Possible values: 'empty', 'fromiModelVersion', 'fromBaseline'.
+   * If not provided empty instantly initialized iModel is created.
+   * However, instant iModel creation has been deprecated and might be removed in a future version.
+   */
+  creationMode?: IModelCreationMode;
 }
 
 /** Parameters for create iModel operation. */
-export interface CreateEmptyIModelParams extends AuthorizationParam, HeadersParam {
+export interface CreateEmptyIModelParams extends AuthorizationParam, HeadersParam  {
   /** Properties of the new iModel. See {@link IModelProperties}. */
   iModelProperties: IModelProperties;
+  /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */
+  timeOutInMs?: number;
 }
 
 /** A set of properties that define the source iModel for creating a new iModel from template. */
