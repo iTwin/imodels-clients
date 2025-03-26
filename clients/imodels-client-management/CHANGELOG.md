@@ -1,6 +1,18 @@
 # Change Log - @itwin/imodels-client-management
 
-This log was last generated on Wed, 25 Sep 2024 14:09:09 GMT and should not be manually modified.
+This log was last generated on Wed, 26 Mar 2025 11:41:32 GMT and should not be manually modified.
+
+## 5.10.0
+Wed, 26 Mar 2025 11:41:32 GMT
+
+### Minor changes
+
+- Update documentation
+
+### Updates
+
+- Add support for setting horizontal CRS on
+- Add continuation token to collection queries
 
 ## 5.9.0
 Wed, 25 Sep 2024 14:09:09 GMT

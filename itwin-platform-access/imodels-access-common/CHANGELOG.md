@@ -1,6 +1,17 @@
 # Change Log - @itwin/imodels-access-common
 
-This log was last generated on Wed, 25 Sep 2024 14:09:10 GMT and should not be manually modified.
+This log was last generated on Wed, 26 Mar 2025 11:41:33 GMT and should not be manually modified.
+
+## 5.3.0
+Wed, 26 Mar 2025 11:41:33 GMT
+
+### Minor changes
+
+- Deprecate AccessTokenAdapter.toAuthorizationCallback
+
+### Updates
+
+- Add support for setting horizontal CRS on iModel creation
 
 ## 5.2.3
 Wed, 25 Sep 2024 14:09:10 GMT
