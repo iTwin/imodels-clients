@@ -69,7 +69,10 @@ export interface IModelScopedOperationParams extends AuthorizationParam, Headers
 
 /** Common url parameters that are supported for all entity list requests. */
 export interface CollectionRequestParams {
-  /** Specifies how many entities should be skipped in an entity page. The value must not exceed 1000. */
+  /**
+   * @deprecated in 5.9. Use {@link $continuationToken} instead. 
+   * Specifies how many entities should be skipped in an entity page. The value must not exceed 1000. 
+  */
   $skip?: number;
   /**
    * Specifies how many entities should be returned in an entity page. The value must not exceed 1000.
