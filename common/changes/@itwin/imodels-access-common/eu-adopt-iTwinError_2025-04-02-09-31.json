@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-access-common",
+      "comment": "Adopt iTwinError instead of iModelError",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-common"
+}
