@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@itwin/appui-abstract": "^4.0.0",
-    "@itwin/core-bentley": "^4.0.0",
+    "@itwin/core-bentley": "^5.0.0-dev.0",
     "@itwin/core-common": "^4.0.0",
     "@itwin/core-frontend": "^4.0.0",
     "@itwin/core-geometry": "^4.0.0",

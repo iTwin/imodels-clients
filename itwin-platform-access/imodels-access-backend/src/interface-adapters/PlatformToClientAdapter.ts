@@ -4,11 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { AbortController } from "@azure/abort-controller";
 import { CreateNewIModelProps, LockMap, LockState, ProgressFunction, ProgressStatus } from "@itwin/core-backend";
-import { RepositoryStatus } from "@itwin/core-bentley";
-import { ChangesetFileProps, ChangesetRange, ChangesetType, IModelError, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
+import { ITwinError } from "@itwin/core-bentley";
+import { ChangesetFileProps, ChangesetRange, ChangesetType, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
 
 import {
   ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, DownloadProgressParam, GetChangesetListUrlParams, IModelProperties,
+  IModelsErrorCode, IModelsErrorScope,
   LockLevel, LockedObjects
 } from "@itwin/imodels-client-authoring";
 
@@ -50,7 +51,13 @@ export class PlatformToClientAdapter {
       case (ContainingChanges.Schema | ContainingChanges.SchemaSync):
         return ContainingChanges.Schema | ContainingChanges.SchemaSync;
       default:
-        throw new IModelError(RepositoryStatus.InvalidRequest, "Unsupported ContainingChanges");
+        ITwinError.throwError({
+          iTwinErrorId: {
+            key: IModelsErrorCode.InvalidIModelsRequest,
+            scope: IModelsErrorScope
+          },
+          message: "Unsupported ContainingChanges"
+        });
     }
   }
 
@@ -63,7 +70,13 @@ export class PlatformToClientAdapter {
     if (changeset.id)
       return { changesetId: changeset.id };
 
-    throw new IModelError(RepositoryStatus.InvalidRequest, "Both changeset id and index are undefined");
+    ITwinError.throwError({
+      iTwinErrorId: {
+        key: IModelsErrorCode.InvalidIModelsRequest,
+        scope: IModelsErrorScope
+      },
+      message: "Both changeset id and index are undefined"
+    });
   }
 
   public static toChangesetRangeUrlParams(changesetRange?: ChangesetRange): Partial<GetChangesetListUrlParams> | undefined {
@@ -127,7 +140,13 @@ export class PlatformToClientAdapter {
       case LockState.Exclusive:
         return LockLevel.Exclusive;
       default:
-        throw new IModelError(RepositoryStatus.InvalidRequest, "Unsupported LockState");
+        ITwinError.throwError({
+          iTwinErrorId: {
+            key: IModelsErrorCode.InvalidIModelsRequest,
+            scope: IModelsErrorScope
+          },
+          message: "Unsupported LockState"
+        });
     }
   }
 
