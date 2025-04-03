@@ -12,6 +12,6 @@ export async function handleAPIErrors<TResult>(
     const result = await func();
     return result;
   } catch (error: unknown) {
-    throw ErrorAdapter.toIModelError(error, operationName);
+    throw ErrorAdapter.toITwinError(error, operationName);
   }
 }

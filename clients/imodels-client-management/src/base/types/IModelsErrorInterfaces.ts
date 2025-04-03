@@ -3,12 +3,17 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 
+/** Error scope */
+export const IModelsErrorScope = "imodels-clients";
+
 /** Possible error codes. */
 export enum IModelsErrorCode {
+  AnotherUserPushing = "AnotherUserPushing",
   BaselineFileInitializationFailed = "BaselineFileInitializationFailed",
   BaselineFileInitializationTimedOut = "BaselineFileInitializationTimedOut",
   BaselineFileNotFound = "BaselineFileNotFound",
   BriefcaseNotFound = "BriefcaseNotFound",
+  CannotAcquire = "CannotAcquire",
   ChangesetDownloadFailed = "ChangesetDownloadFailed",
   ChangesetExists = "ChangesetExists",
   ChangesetExtendedDataNotFound = "ChangesetExtendedDataNotFound",
@@ -20,6 +25,7 @@ export enum IModelsErrorCode {
   ConflictWithAnotherUser = "ConflictWithAnotherUser",
   DataConflict = "DataConflict",
   DownloadAborted = "DownloadAborted",
+  DownloadCancelled = "DownloadCancelled",
   EmptyIModelInitializationFailed = "EmptyIModelInitializationFailed",
   FileNotFound = "FileNotFound",
   IModelExists = "iModelExists",
@@ -38,8 +44,10 @@ export enum IModelsErrorCode {
   InvalidValue = "InvalidValue",
   ITwinNotFound = "iTwinNotFound",
   LockNotFound = "LockNotFound",
+  LockOwnedByAnotherBriefcase = "LockOwnedByAnotherBriefcase",
   MainIModelIsMissingFederationGuids = "MainIModelIsMissingFederationGuids",
   MaximumNumberOfBriefcasesPerUser = "MaximumNumberOfBriefcasesPerUser",
+  MaximumNumberOfBriefcasesPerUserPerMinute = "MaximumNumberOfBriefcasesPerUserPerMinute",
   MissingRequestBody = "MissingRequestBody",
   MissingRequiredHeader = "MissingRequiredHeader",
   MissingRequiredParameter = "MissingRequiredParameter",

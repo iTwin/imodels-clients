@@ -7,15 +7,15 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetRangeArg, DownloadRequest, IModelHost, IModelIdArg, IModelJsFs, LockMap, LockProps, LockState, PhysicalModel, ProgressFunction, ProgressStatus, StandaloneDb, V2CheckpointAccessProps } from "@itwin/core-backend";
-import { Guid, Logger } from "@itwin/core-bentley";
-import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, IModel as CoreIModel, LocalDirName } from "@itwin/core-common";
+import { Guid, ITwinError, Logger } from "@itwin/core-bentley";
+import { BriefcaseId, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, IModel as CoreIModel, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { IModelOperations } from "@itwin/imodels-client-authoring/lib/operations";
 import { expect, use } from "chai";
 import * as chaiAsPromised from "chai-as-promised";
 import * as sinon from "sinon";
 
-import { AuthorizationCallback, ContainingChanges, IModel, IModelsClient, IModelsClientOptions, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, ContainingChanges, IModel, IModelsClient, IModelsClientOptions, IModelsErrorCode, IModelsErrorScope, isIModelsApiError } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
@@ -167,8 +167,8 @@ describe("BackendIModelsAccess", () => {
       }
 
       // Assert #1
-      const expectedErrorNumber = ChangeSetStatus.CHANGESET_ERROR_BASE + 26; // ChangeSetStatus.DownloadCancelled (only available from iTwinJs 3.5)
-      expect(thrownError).to.ownProperty("errorNumber", expectedErrorNumber);
+      const expectedErrorCode = IModelsErrorCode.DownloadCancelled;
+      expect(ITwinError.isError(thrownError, IModelsErrorScope, expectedErrorCode)).to.be.true;
 
       expect(fs.readdirSync(testDownloadPath).length).to.be.greaterThan(0);
       assertProgressReports(progressReports, false);
