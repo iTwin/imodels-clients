@@ -6,7 +6,7 @@ import { join } from "path";
 
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
-  ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg,
+  ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg, DownloadRequest,
   IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelJsNative, IModelNameArg, ITwinIdArg, KnownLocations, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
 import { AccessToken, Guid, GuidString, ITwinError, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
@@ -246,7 +246,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   // eslint-disable-next-line deprecation/deprecation
-  public async downloadV1Checkpoint(arg: CheckpointArg): Promise<ChangesetIndexAndId> {
+  public async downloadV1Checkpoint(arg: DownloadRequest): Promise<ChangesetIndexAndId> {
     const iModelScopedOperationParams: IModelScopedOperationParams = {
       ...this.getAuthorizationParam(arg.checkpoint),
       iModelId: arg.checkpoint.iModelId
