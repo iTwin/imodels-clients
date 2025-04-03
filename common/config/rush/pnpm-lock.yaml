@@ -1219,7 +1219,7 @@ packages:
 
   '@itwin/core-backend@5.0.0-dev.96':
     resolution: {integrity: sha512-R91mdEnU3ZtbJFF9JwV9MPyA2G74+6nRjUUCNSgjeRKsezKm3x3TyWiXLpzPGPB3sdXM1VDbKLa6Jfih2DsQoA==}
-    engines: {node: ^20.0.0 || ^22.0.0}
+    engines: {node: ^18.0.0 || ^20.0.0}
     peerDependencies:
       '@itwin/core-bentley': 5.0.0-dev.96
       '@itwin/core-common': 5.0.0-dev.96
