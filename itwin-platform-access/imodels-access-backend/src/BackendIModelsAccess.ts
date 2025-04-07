@@ -259,7 +259,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     if (!checkpoint || !checkpoint._links?.download)
       ITwinError.throwError({
         iTwinErrorId: {
-          key: IModelsErrorCode.BriefcaseNotFound,
+          key: IModelsErrorCode.CheckpointNotFound,
           scope: IModelsErrorScope
         },
         message: "V1 checkpoint not found"

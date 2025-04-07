@@ -3,7 +3,7 @@
     {
       "packageName": "@itwin/imodels-access-common",
       "comment": "Adopt iTwinError instead of iModelError",
-      "type": "minor"
+      "type": "major"
     }
   ],
   "packageName": "@itwin/imodels-access-common"
