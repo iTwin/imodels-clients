@@ -4,28 +4,18 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { HttpRequestRetryPolicy, IModelsOriginalError } from "../types";
+import { AxiosResponseHeadersAdapter } from "../internal/AxiosResponseHeadersAdapter";
+import { sleep } from "../internal/UtilityFunctions";
+import { HttpRequestRetryPolicy } from "../types";
 import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, RestClient } from "../types/RestClient";
-
-import { AxiosResponseHeadersAdapter } from "./AxiosResponseHeadersAdapter";
-import { ResponseInfo } from "./IModelsErrorParser";
-import { sleep } from "./UtilityFunctions";
-
-/**
- * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the
- * methods in {@link RestClient}.
- */
-export type ParseErrorFunc = (response: ResponseInfo, originalError: IModelsOriginalError) => Error;
 
 /** Default implementation for {@link RestClient} interface that uses `axios` library for sending the requests. */
 export class AxiosRestClient implements RestClient {
   private static readonly retryCountUpperBound = 10;
 
-  private _parseErrorFunc: ParseErrorFunc;
   private _retryPolicy: HttpRequestRetryPolicy | null;
 
-  constructor(parseErrorFunc: ParseErrorFunc, retryPolicy: HttpRequestRetryPolicy | null) {
-    this._parseErrorFunc = parseErrorFunc;
+  constructor(retryPolicy: HttpRequestRetryPolicy | null) {
     this._retryPolicy = retryPolicy;
   }
 
@@ -83,20 +73,11 @@ export class AxiosRestClient implements RestClient {
   }
 
   private async executeRequest<TBody>(requestFunc: () => Promise<AxiosResponse<TBody>>): Promise<HttpResponse<TBody>> {
-    try {
-      const response = await this.executeWithRetry(requestFunc);
-
-      return {
-        body: response.data,
-        headers: new AxiosResponseHeadersAdapter(response)
-      };
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        const parsedError: Error = this._parseErrorFunc({ statusCode: error.response?.status, body: error.response?.data }, error);
-        throw parsedError;
-      }
-      throw error;
-    }
+    const response = await this.executeWithRetry(requestFunc);
+    return {
+      body: response.data,
+      headers: new AxiosResponseHeadersAdapter(response)
+    };
   }
 
   private async executeWithRetry<TBody>(requestFunc: () => Promise<AxiosResponse<TBody>>): Promise<AxiosResponse<TBody>> {

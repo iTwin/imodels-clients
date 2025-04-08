@@ -17,6 +17,9 @@ export * from "./apiEntities/OperationInterfaces";
 export * from "./iterators/EntityListIterator";
 export * from "./iterators/IteratorUtilFunctions";
 
+export * from "./AxiosRestClient";
+export * from "./AxiosRetryPolicy";
+export * from "./ExponentialBackoffAlgorithm";
 export * from "./RestClient";
 export * from "./CommonInterfaces";
 export * from "./UtilityTypes";
