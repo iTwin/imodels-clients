@@ -3,13 +3,13 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CheckpointArg, CheckpointProps,
+import { CheckpointProps,
+  DownloadRequest,
   V2CheckpointAccessProps
 } from "@itwin/core-backend";
 import { Logger } from "@itwin/core-bentley";
-import { Constants } from "@itwin/imodels-access-common/lib/Constants";
-import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
+import { Constants } from "@itwin/imodels-access-common/lib/Constants.js";
+import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions.js";
 import axios, { AxiosResponse } from "axios";
 
 import {
@@ -20,8 +20,8 @@ import {
   IModelsClient
 } from "@itwin/imodels-client-authoring";
 
-import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
-import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
+import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter.js";
+import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter.js";
 
 export async function queryCurrentOrPrecedingV2Checkpoint(
   iModelsClient: IModelsClient,
@@ -47,8 +47,7 @@ export async function queryCurrentOrPrecedingV2Checkpoint(
 export async function queryCurrentOrPrecedingV1Checkpoint(
   iModelsClient: IModelsClient,
   iModelScopedOperationParams: IModelScopedOperationParams,
-  // eslint-disable-next-line deprecation/deprecation
-  checkpointArg: CheckpointArg
+  checkpointArg: DownloadRequest
 ): Promise<Checkpoint | undefined> {
   const changesetIndex = await resolveChangesetIndexFromParamsOrQueryApi(iModelsClient, iModelScopedOperationParams, checkpointArg.checkpoint);
 

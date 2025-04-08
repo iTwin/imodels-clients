@@ -6,7 +6,7 @@ import { join } from "path";
 
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
-  ChangesetRangeArg, CheckpointArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg,
+  ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadRequest, DownloadChangesetArg, DownloadChangesetRangeArg,
   IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelJsNative, IModelNameArg, ITwinIdArg, KnownLocations, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
 import { AccessToken, BriefcaseStatus, Guid, GuidString, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
@@ -14,11 +14,11 @@ import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion
 } from "@itwin/core-common";
-import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter";
-import { getLatestFullChangesetIfExists, getNamedVersionChangeset } from "@itwin/imodels-access-common/lib/ChangesetFunctions";
-import { Constants } from "@itwin/imodels-access-common/lib/Constants";
-import { ErrorAdapter } from "@itwin/imodels-access-common/lib/ErrorAdapter";
-import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
+import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter.js";
+import { getLatestFullChangesetIfExists, getNamedVersionChangeset } from "@itwin/imodels-access-common/lib/ChangesetFunctions.js";
+import { Constants } from "@itwin/imodels-access-common/lib/Constants.js";
+import { ErrorAdapter } from "@itwin/imodels-access-common/lib/ErrorAdapter.js";
+import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions.js";
 import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations";
 
 import {
@@ -31,9 +31,9 @@ import {
   ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
 
-import { getV1CheckpointSize, queryCurrentOrPrecedingV1Checkpoint, queryCurrentOrPrecedingV2Checkpoint } from "./CheckpointHelperFunctions";
-import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
-import { DownloadCancellationMonitorFunc, PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";
+import { getV1CheckpointSize, queryCurrentOrPrecedingV1Checkpoint, queryCurrentOrPrecedingV2Checkpoint } from "./CheckpointHelperFunctions.js";
+import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter.js";
+import { DownloadCancellationMonitorFunc, PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter.js";
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
@@ -240,7 +240,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   // eslint-disable-next-line deprecation/deprecation
-  public async downloadV1Checkpoint(arg: CheckpointArg): Promise<ChangesetIndexAndId> {
+  public async downloadV1Checkpoint(arg: DownloadRequest): Promise<ChangesetIndexAndId> {
     const iModelScopedOperationParams: IModelScopedOperationParams = {
       ...this.getAuthorizationParam(arg.checkpoint),
       iModelId: arg.checkpoint.iModelId
