@@ -10,7 +10,7 @@ import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, Checkpoint
 import { Guid, Logger } from "@itwin/core-bentley";
 import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, IModel as CoreIModel, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
-import { IModelOperations } from "@itwin/imodels-client-authoring/lib/operations/index.js";
+import { IModelOperations } from "@itwin/imodels-client-authoring";
 import { expect, use } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import sinon from "sinon";
