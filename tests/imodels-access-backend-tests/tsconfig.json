@@ -1,9 +1,12 @@
 {
   "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib",
     "experimentalDecorators": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
   },
   "include": [
     "./src/**/*.ts"

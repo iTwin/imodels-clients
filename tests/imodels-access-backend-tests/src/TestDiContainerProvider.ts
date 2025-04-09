@@ -2,11 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import * as path from "path";
+import path from "node:path";
 
 import { Container } from "inversify";
 
 import { TestUtilBootstrapper } from "@itwin/imodels-client-test-utils";
+import { fileURLToPath } from "node:url";
 
 let container: Container;
 export function getTestDIContainer(): Container {
@@ -14,7 +15,7 @@ export function getTestDIContainer(): Container {
     return container;
 
   container = new Container();
-  TestUtilBootstrapper.bind(container, path.join(__dirname, "..", ".env"));
+  TestUtilBootstrapper.bind(container, path.join(path.dirname(fileURLToPath(import.meta.url)), "..", ".env"));
 
   return container;
 }

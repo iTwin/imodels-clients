@@ -2,8 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import path = require("path");
-
+import path from "node:path";
 import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, BriefcaseIdArg, ChangesetArg, ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadRequest, IModelHost, IModelIdArg, IModelNameArg, ITwinIdArg, LockMap, LockState } from "@itwin/core-backend";
 import { IModelHubStatus, IModelStatus } from "@itwin/core-bentley";
 import { ChangesetFileProps, IModelError, IModelVersion } from "@itwin/core-common";
@@ -13,8 +12,9 @@ import { expect } from "chai";
 import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
-import { getTestDIContainer } from "./TestDiContainerProvider";
-import { TestIModelHostAuthorizationClient } from "./TestIModelHostAuthorizationClient";
+import { getTestDIContainer } from "./TestDiContainerProvider.js";
+import { TestIModelHostAuthorizationClient } from "./TestIModelHostAuthorizationClient.js";
+import { fileURLToPath } from "node:url";
 
 describe("BackendIModelsAccess error handling", () => {
   const testRunId = createGuidValue();
@@ -29,7 +29,7 @@ describe("BackendIModelsAccess error handling", () => {
   let testIModelForRead: ReusableIModelMetadata;
   let testIModelForWrite: IModelMetadata;
 
-  const testDownloadPath = path.join(__dirname, "../lib/testDownloads");
+  const testDownloadPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "../lib/testDownloads");
 
   before(async () => {
     const container = getTestDIContainer();

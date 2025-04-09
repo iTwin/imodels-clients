@@ -19,7 +19,7 @@ import { getLatestFullChangesetIfExists, getNamedVersionChangeset } from "@itwin
 import { Constants } from "@itwin/imodels-access-common/lib/Constants.js";
 import { ErrorAdapter } from "@itwin/imodels-access-common/lib/ErrorAdapter.js";
 import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions.js";
-import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations";
+import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations/index.js";
 
 import {
   AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset,

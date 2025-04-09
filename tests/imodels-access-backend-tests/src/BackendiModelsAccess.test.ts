@@ -3,23 +3,24 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { assert } from "console";
-import * as fs from "fs";
-import * as path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetRangeArg, DownloadRequest, IModelHost, IModelIdArg, IModelJsFs, LockMap, LockProps, LockState, PhysicalModel, ProgressFunction, ProgressStatus, StandaloneDb, V2CheckpointAccessProps } from "@itwin/core-backend";
 import { Guid, Logger } from "@itwin/core-bentley";
 import { BriefcaseId, ChangeSetStatus, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, IModel as CoreIModel, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
-import { IModelOperations } from "@itwin/imodels-client-authoring/lib/operations";
+import { IModelOperations } from "@itwin/imodels-client-authoring/lib/operations/index.js";
 import { expect, use } from "chai";
-import * as chaiAsPromised from "chai-as-promised";
-import * as sinon from "sinon";
+import chaiAsPromised from "chai-as-promised";
+import sinon from "sinon";
 
 import { AuthorizationCallback, ContainingChanges, IModel, IModelsClient, IModelsClientOptions, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
-import { getTestDIContainer } from "./TestDiContainerProvider";
-import { TestIModelHostAuthorizationClient } from "./TestIModelHostAuthorizationClient";
+import { getTestDIContainer } from "./TestDiContainerProvider.js";
+import { TestIModelHostAuthorizationClient } from "./TestIModelHostAuthorizationClient.js";
+import { fileURLToPath } from "node:url";
 
 use(chaiAsPromised);
 
@@ -36,7 +37,7 @@ describe("BackendIModelsAccess", () => {
   let testIModelGroup: TestIModelGroup;
   let testIModelForRead: ReusableIModelMetadata;
   let testIModelForWrite: IModelMetadata;
-  const testDownloadPath = path.join(__dirname, "../lib/testDownloads");
+  const testDownloadPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "../lib/testDownloads");
 
   before(async () => {
     const container = getTestDIContainer();
