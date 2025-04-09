@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { CollectionRequestParams, IModelScopedOperationParams } from "@itwin/imodels-client-management";
 
-import { LockLevel, LockedObjects } from "../../base/types";
+import { LockLevel, LockedObjects } from "../../base/types/index.js";
 
 /** Valid values for Lock filtering by their level. */
 export type LockLevelFilter = LockLevel.Shared | LockLevel.Exclusive;

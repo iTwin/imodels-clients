@@ -2,17 +2,14 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsErrorImpl, waitForCondition } from "@itwin/imodels-client-management/lib/base/internal";
-import { IModelOperations as ManagementIModelOperations, assertLink } from "@itwin/imodels-client-management/lib/operations";
+import { assertLink, AuthorizationParam, HeadersParam, IModel, IModelsErrorCode, IModelsErrorImpl, IModelOperations as ManagementIModelOperations, waitForCondition } from "@itwin/imodels-client-management";
 
-import { AuthorizationParam, HeadersParam, IModel, IModelsErrorCode } from "@itwin/imodels-client-management";
+import { BaselineFileState } from "../../base/types/index.js";
+import { IModelsClient } from "../../IModelsClient.js";
+import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations.js";
+import { OperationOptions } from "../OperationOptions.js";
 
-import { BaselineFileState } from "../../base/types";
-import { IModelsClient } from "../../IModelsClient";
-import { BaselineFileOperations } from "../baseline-file/BaselineFileOperations";
-import { OperationOptions } from "../OperationOptions";
-
-import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline } from "./IModelOperationParams";
+import { CreateIModelFromBaselineParams, IModelPropertiesForCreateFromBaseline } from "./IModelOperationParams.js";
 
 export class IModelOperations<TOptions extends OperationOptions> extends ManagementIModelOperations<TOptions> {
   private _baselineFileOperations: BaselineFileOperations<TOptions>;

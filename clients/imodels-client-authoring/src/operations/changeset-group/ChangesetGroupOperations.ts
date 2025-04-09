@@ -2,14 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetGroupResponse } from "@itwin/imodels-client-management/lib/base/internal";
-import { ChangesetGroupOperations as ManagementChangesetGroupOperations } from "@itwin/imodels-client-management/lib/operations";
+import { ChangesetGroup, ChangesetGroupResponse, ChangesetGroupOperations as ManagementChangesetGroupOperations } from "@itwin/imodels-client-management";
 
-import { ChangesetGroup } from "@itwin/imodels-client-management";
+import { OperationOptions } from "../OperationOptions.js";
 
-import { OperationOptions } from "../OperationOptions";
-
-import { ChangesetGroupPropertiesForCreate, ChangesetGroupPropertiesForUpdate, CreateChangesetGroupParams, UpdateChangesetGroupParams } from "./ChangesetGroupOperationParams";
+import { ChangesetGroupPropertiesForCreate, ChangesetGroupPropertiesForUpdate, CreateChangesetGroupParams, UpdateChangesetGroupParams } from "./ChangesetGroupOperationParams.js";
 
 export class ChangesetGroupOperations<TOptions extends OperationOptions> extends ManagementChangesetGroupOperations<TOptions> {
   /**

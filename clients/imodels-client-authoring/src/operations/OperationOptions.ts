@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import "reflect-metadata";
 
-import { OperationOptions as ManagementOperationOptions } from "@itwin/imodels-client-management/lib/operations";
+import { OperationOptions as ManagementOperationOptions } from "@itwin/imodels-client-management";
 import { ClientStorage } from "@itwin/object-storage-core";
 
-import { LocalFileSystem } from "../base/types";
+import { LocalFileSystem } from "../base/types/index.js";
 
-import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
+import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter.js";
 
 export interface OperationOptions extends ManagementOperationOptions {
   urlFormatter: IModelsApiUrlFormatter;

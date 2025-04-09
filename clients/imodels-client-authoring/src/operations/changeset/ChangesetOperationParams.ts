@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { ContainingChanges, GetChangesetListParams, GetSingleChangesetParams, IModelScopedOperationParams, SynchronizationInfo } from "@itwin/imodels-client-management";
 
-import { DownloadProgressParam, TargetDirectoryParam } from "../../base/types";
+import { DownloadProgressParam, TargetDirectoryParam } from "../../base/types/index.js";
 
 export type SynchronizationInfoForCreate = Omit<SynchronizationInfo, "changedFiles"> & {
   /** Optional list of files that were processed by the synchronization. The array, if specified, must not be empty. */

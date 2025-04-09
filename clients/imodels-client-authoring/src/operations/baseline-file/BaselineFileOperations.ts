@@ -2,13 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OperationsBase } from "@itwin/imodels-client-management/lib/base/internal";
+import { OperationsBase } from "@itwin/imodels-client-management";
 
-import { BaselineFileResponse } from "../../base/internal";
-import { BaselineFile } from "../../base/types";
-import { OperationOptions } from "../OperationOptions";
+import { BaselineFileResponse } from "../../base/internal/index.js";
+import { BaselineFile } from "../../base/types/index.js";
+import { OperationOptions } from "../OperationOptions.js";
 
-import { GetSingleBaselineFileParams } from "./BaselineFileOperationParams";
+import { GetSingleBaselineFileParams } from "./BaselineFileOperationParams.js";
 
 export class BaselineFileOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**

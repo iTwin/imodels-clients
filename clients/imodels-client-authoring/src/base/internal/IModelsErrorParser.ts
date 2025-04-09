@@ -2,11 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsApiError, IModelsErrorBaseImpl, IModelsErrorParser as ManagementIModelsErrorParser, ResponseInfo } from "@itwin/imodels-client-management/lib/base/internal";
+import { IModelsApiError, IModelsErrorCode, IModelsErrorBaseImpl, IModelsErrorParser as ManagementIModelsErrorParser, IModelsOriginalError, ResponseInfo } from "@itwin/imodels-client-management";
 
-import { IModelsErrorCode, IModelsOriginalError } from "@itwin/imodels-client-management";
-
-import { ConflictingLock, ConflictingLocksError, LocksError } from "../types/apiEntities/LockErrorInterfaces";
+import { ConflictingLock, ConflictingLocksError, LocksError } from "../types/apiEntities/LockErrorInterfaces.js";
 
 interface AuthoringIModelsApiErrorWrapper {
   error: AuthoringIModelsApiError;

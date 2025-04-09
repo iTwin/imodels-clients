@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { constants, promises } from "fs";
 
-import { LocalFileSystem } from "../types";
+import { LocalFileSystem } from "../types/index.js";
 
 export class NodeLocalFileSystem implements LocalFileSystem {
   public async createDirectory(directory: string): Promise<void> {

@@ -2,15 +2,15 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIteratorImpl, OperationsBase } from "@itwin/imodels-client-management/lib/base/internal";
+import { EntityListIteratorImpl, OperationsBase } from "@itwin/imodels-client-management";
 
 import { EntityListIterator } from "@itwin/imodels-client-management";
 
-import { LockResponse, LocksResponse } from "../../base/internal";
-import { Lock } from "../../base/types";
-import { OperationOptions } from "../OperationOptions";
+import { LockResponse, LocksResponse } from "../../base/internal/index.js";
+import { Lock } from "../../base/types/index.js";
+import { OperationOptions } from "../OperationOptions.js";
 
-import { GetLockListParams, UpdateLockParams } from "./LockOperationParams";
+import { GetLockListParams, UpdateLockParams } from "./LockOperationParams.js";
 
 export class LockOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**

@@ -2,14 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetExtendedDataResponse } from "@itwin/imodels-client-management/lib/base/internal";
-import { ChangesetExtendedDataOperations as ManagementChangesetExtendedDataOperations } from "@itwin/imodels-client-management/lib/operations";
+import { ChangesetExtendedDataResponse, ChangesetExtendedDataOperations as ManagementChangesetExtendedDataOperations } from "@itwin/imodels-client-management";
 
 import { ChangesetExtendedData } from "@itwin/imodels-client-management";
 
-import { OperationOptions } from "../OperationOptions";
+import { OperationOptions } from "../OperationOptions.js";
 
-import { ChangesetExtendedDataPropertiesForCreate, CreateChangesetExtendedDataParams } from "./ChangesetExtendedDataOperationsParams";
+import { ChangesetExtendedDataPropertiesForCreate, CreateChangesetExtendedDataParams } from "./ChangesetExtendedDataOperationsParams.js";
 
 export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> extends ManagementChangesetExtendedDataOperations<TOptions> {
   /**

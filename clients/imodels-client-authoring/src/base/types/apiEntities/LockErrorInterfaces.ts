@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { IModelsErrorBase } from "@itwin/imodels-client-management";
 
-import { LockLevel } from "./LockInterfaces";
+import { LockLevel } from "./LockInterfaces.js";
 
 /** Error thrown by Lock update operation. */
 export interface LocksError extends IModelsErrorBase {

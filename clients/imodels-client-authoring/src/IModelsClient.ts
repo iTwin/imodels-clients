@@ -4,8 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import "reflect-metadata";
 
-import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/internal";
-import { Constants } from "@itwin/imodels-client-management/lib/Constants";
+import { AxiosRestClient, AxiosRetryPolicy, Constants, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
 
@@ -15,10 +14,10 @@ import {
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 
-import { NodeLocalFileSystem } from "./base/internal";
-import { IModelsErrorParser } from "./base/internal/IModelsErrorParser";
-import { LocalFileSystem } from "./base/types";
-import { BaselineFileOperations, BriefcaseOperations, ChangesetExtendedDataOperations, ChangesetGroupOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
+import { NodeLocalFileSystem } from "./base/internal/index.js";
+import { IModelsErrorParser } from "./base/internal/IModelsErrorParser.js";
+import { LocalFileSystem } from "./base/types/index.js";
+import { BaselineFileOperations, BriefcaseOperations, ChangesetExtendedDataOperations, ChangesetGroupOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations/index.js";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions extends ManagementIModelsClientOptions {

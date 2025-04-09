@@ -5,12 +5,12 @@
 import "reflect-metadata";
 import * as fs from "fs";
 
-import { IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
+import { IModelsErrorImpl } from "@itwin/imodels-client-management";
 import { ClientStorage } from "@itwin/object-storage-core";
 
 import { IModelsErrorCode } from "@itwin/imodels-client-management";
 
-import { GenericAbortSignal } from "../base/types";
+import { GenericAbortSignal } from "../base/types/index.js";
 
 /** Function for reporting progress of the download. */
 export type DownloadCallback = (bytesDownloaded: number) => void;

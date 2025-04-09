@@ -4,17 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 import * as path from "path";
 
-import { ChangesetResponse, IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
-import { ChangesetOperations as ManagementChangesetOperations, assertLink } from "@itwin/imodels-client-management/lib/operations";
+import { assertLink, Changeset, ChangesetState, ChangesetResponse, ChangesetOperations as ManagementChangesetOperations, IModelsErrorCode, IModelsErrorImpl, IModelScopedOperationParams, isIModelsApiError } from "@itwin/imodels-client-management";
 
-import { Changeset, ChangesetState, IModelScopedOperationParams, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
+import { DownloadProgressParam, DownloadedChangeset, GenericAbortSignal, TargetDirectoryParam } from "../../base/types/index.js";
+import { DownloadFileParams, downloadFile } from "../FileDownload.js";
+import { OperationOptions } from "../OperationOptions.js";
 
-import { DownloadProgressParam, DownloadedChangeset, GenericAbortSignal, TargetDirectoryParam } from "../../base/types";
-import { DownloadFileParams, downloadFile } from "../FileDownload";
-import { OperationOptions } from "../OperationOptions";
-
-import { ChangesetPropertiesForCreate, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams } from "./ChangesetOperationParams";
-import { LimitedParallelQueue } from "./LimitedParallelQueue";
+import { ChangesetPropertiesForCreate, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams } from "./ChangesetOperationParams.js";
+import { LimitedParallelQueue } from "./LimitedParallelQueue.js";
 
 /** Function called to report how many bytes were downloaded since the last time this function was called. */
 type DownloadCallback = (bytesDownloaded: number) => void;
