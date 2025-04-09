@@ -5,7 +5,10 @@
 
 import { ITwinError } from "@itwin/core-bentley";
 
+import { ConflictingLock } from "@itwin/imodels-client-authoring";
 import { IModelsError, IModelsErrorCode, IModelsErrorScope, isIModelsApiError } from "@itwin/imodels-client-management";
+
+import { ConflictingLocksError } from "./IModelsClientsErrorInterfaces";
 
 export type OperationNameForErrorMapping
   = "acquireBriefcase"
@@ -36,13 +39,13 @@ export class ErrorAdapter {
       errorCode = ErrorAdapter.mapErrorCode(error.code);
 
     if ("conflictingLocks" in error)
-      return ITwinError.create<ITwinError & { conflictingLocks?: unknown }>({
+      return ITwinError.create<ConflictingLocksError>({
         iTwinErrorId: {
           key: errorCode,
           scope: IModelsErrorScope
         },
         message: error.message,
-        conflictingLocks: error.conflictingLocks
+        conflictingLocks: error.conflictingLocks as ConflictingLock[]
       });
 
     return ITwinError.create({ iTwinErrorId: { key: errorCode, scope: IModelsErrorScope }, message: error.message });

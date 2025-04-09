@@ -29,7 +29,8 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-client-management": "workspace:*"
+    "@itwin/imodels-client-management": "workspace:*",
+    "@itwin/imodels-client-authoring": "workspace:*"
   },
   "devDependencies": {
     "@itwin/core-bentley": "^5.0.0-dev.0",

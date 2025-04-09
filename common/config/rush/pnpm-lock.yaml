@@ -191,6 +191,9 @@ importers:
 
   ../../itwin-platform-access/imodels-access-common:
     dependencies:
+      '@itwin/imodels-client-authoring':
+        specifier: workspace:*
+        version: link:../../clients/imodels-client-authoring
       '@itwin/imodels-client-management':
         specifier: workspace:*
         version: link:../../clients/imodels-client-management
@@ -1020,7 +1023,7 @@ packages:
     resolution: {integrity: sha512-YTnYtra7W9e6/oAZEHj0bJehPRUlLH9/fbpT5LfB0NhQXyALCRkRs3zH9v07IYhkgpqX6Z78FnuccZr/l4Fs4Q==}
     engines: {node: '>=6.9.0'}
 
-  '@bentley/imodeljs-native@4.10.36':
+  '@bentley/imodeljs-native@5.0.86':
     resolution: {integrity: sha512-ubD0BP9eFftlGt8d1wSTEPQuXaE8sVNL558eWVXTsEda0Fw5VMFWkObgNiq7MJPcSpeNcNtcZdFzIn5eNpfCSQ==}
 
   '@colors/colors@1.5.0':
@@ -1233,7 +1236,7 @@ packages:
 
   '@itwin/core-backend@5.0.0-dev.97':
     resolution: {integrity: sha512-dec5140Tpaprk8JP9/iPNYW6qxDmHjAT3zMNqKwfhsSFanjvvyXKZoMvOvmxv61/wIDL9WJicSEfZ1FG/Tkeiw==}
-    engines: {node: ^18.0.0 || ^20.0.0}
+    engines: {node: ^20.0.0 || ^22.0.0}
     peerDependencies:
       '@itwin/core-bentley': 5.0.0-dev.97
       '@itwin/core-common': 5.0.0-dev.97
@@ -4355,7 +4358,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  '@bentley/imodeljs-native@4.10.36': {}
+  '@bentley/imodeljs-native@5.0.86': {}
 
   '@colors/colors@1.5.0':
     optional: true
@@ -4580,7 +4583,7 @@ snapshots:
 
   '@itwin/core-backend@5.0.0-dev.97(@itwin/core-bentley@5.0.0-dev.97)(@itwin/core-common@5.0.0-dev.97(@itwin/core-bentley@5.0.0-dev.97)(@itwin/core-geometry@5.0.0-dev.97))(@itwin/core-geometry@5.0.0-dev.97)(@itwin/ecschema-metadata@4.8.1(@itwin/core-bentley@5.0.0-dev.97)(@itwin/core-quantity@5.0.0-dev.97(@itwin/core-bentley@5.0.0-dev.97)))':
     dependencies:
-      '@bentley/imodeljs-native': 4.10.36
+      '@bentley/imodeljs-native': 5.0.86
       '@itwin/cloud-agnostic-core': 2.2.5(inversify@6.0.2)(reflect-metadata@0.1.14)
       '@itwin/core-bentley': 5.0.0-dev.97
       '@itwin/core-common': 5.0.0-dev.97(@itwin/core-bentley@5.0.0-dev.97)(@itwin/core-geometry@5.0.0-dev.97)
