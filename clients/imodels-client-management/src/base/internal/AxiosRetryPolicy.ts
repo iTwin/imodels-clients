@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import { isAxiosError } from "axios";
 
-import { Constants } from "../../Constants";
-import { GetSleepDurationInMsParams, HttpRequestRetryPolicy, ShouldRetryParams } from "../types";
+import { Constants } from "../../Constants.js";
+import { GetSleepDurationInMsParams, HttpRequestRetryPolicy, ShouldRetryParams } from "../types/index.js";
 
-import { BackoffAlgorithm } from "./ExponentialBackoffAlgorithm";
+import { BackoffAlgorithm } from "./ExponentialBackoffAlgorithm.js";
 
 /** Default implementation for {@link HttpRequestRetryPolicy}. */
 export class AxiosRetryPolicy implements HttpRequestRetryPolicy {

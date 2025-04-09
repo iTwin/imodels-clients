@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Dictionary } from "./UtilityTypes";
+import { Dictionary } from "./UtilityTypes.js";
 
 /**
  * Content-Type header values that are used with for iModels API.

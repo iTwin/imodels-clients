@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIterator, flatten } from "../../types";
-import { EntityPageQueryFunc } from "../UtilityTypes";
+import { EntityListIterator, flatten } from "../../types/index.js";
+import { EntityPageQueryFunc } from "../UtilityTypes.js";
 
-import { EntityPageListIterator } from "./EntityPageListIterator";
+import { EntityPageListIterator } from "./EntityPageListIterator.js";
 
 export class EntityListIteratorImpl<TEntity> implements EntityListIterator<TEntity> {
   private _entityPages: EntityPageListIterator<TEntity>;

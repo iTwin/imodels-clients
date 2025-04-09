@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Link } from "../CommonInterfaces";
+import { Link } from "../CommonInterfaces.js";
 
-import { User } from "./UserInterfaces";
+import { User } from "./UserInterfaces.js";
 
 /** Possible iModel states. */
 export enum IModelState {

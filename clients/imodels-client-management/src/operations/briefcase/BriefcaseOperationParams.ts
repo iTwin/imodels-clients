@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Briefcase, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types";
+import { Briefcase, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types/index.js";
 
 /** Special value to indicate the id of current user who is making the request. */
 export const SPECIAL_VALUES_ME = "me";

@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { HttpRequestRetryPolicy, IModelsOriginalError } from "../types";
-import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, RestClient } from "../types/RestClient";
+import { HttpRequestRetryPolicy, IModelsOriginalError } from "../types/index.js";
+import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, RestClient } from "../types/RestClient.js";
 
-import { AxiosResponseHeadersAdapter } from "./AxiosResponseHeadersAdapter";
-import { ResponseInfo } from "./IModelsErrorParser";
-import { sleep } from "./UtilityFunctions";
+import { AxiosResponseHeadersAdapter } from "./AxiosResponseHeadersAdapter.js";
+import { ResponseInfo } from "./IModelsErrorParser.js";
+import { sleep } from "./UtilityFunctions.js";
 
 /**
  * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the

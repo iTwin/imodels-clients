@@ -2,14 +2,14 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetGroupResponse, ChangesetGroupsResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse } from "../../base/types";
-import { ChangesetGroup } from "../../base/types/apiEntities/ChangesetGroupInterfaces";
-import { IModelsClient } from "../../IModelsClient";
-import { OperationOptions } from "../OperationOptions";
-import { getUser } from "../SharedFunctions";
+import { ChangesetGroupResponse, ChangesetGroupsResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal/index.js";
+import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse } from "../../base/types/index.js";
+import { ChangesetGroup } from "../../base/types/apiEntities/ChangesetGroupInterfaces.js";
+import { IModelsClient } from "../../IModelsClient.js";
+import { OperationOptions } from "../OperationOptions.js";
+import { getUser } from "../SharedFunctions.js";
 
-import { GetChangesetGroupListParams, GetSingleChangesetGroupParams } from "./ChangesetGroupOperationParams";
+import { GetChangesetGroupListParams, GetSingleChangesetGroupParams } from "./ChangesetGroupOperationParams.js";
 
 export class ChangesetGroupOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   constructor(

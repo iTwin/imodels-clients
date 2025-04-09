@@ -2,11 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Constants } from "../../Constants";
-import { AuthorizationParam, BinaryContentType, ContentType, Dictionary, HeaderFactories, HeadersParam, HttpResponse, PreferReturn, RestClient, SupportedGetResponseTypes } from "../types";
+import { Constants } from "../../Constants.js";
+import { AuthorizationParam, BinaryContentType, ContentType, Dictionary, HeaderFactories, HeadersParam, HttpResponse, PreferReturn, RestClient, SupportedGetResponseTypes } from "../types/index.js";
 
-import { CollectionResponse } from "./ApiResponseInterfaces";
-import { EntityCollectionPage } from "./UtilityTypes";
+import { CollectionResponse } from "./ApiResponseInterfaces.js";
+import { EntityCollectionPage } from "./UtilityTypes.js";
 
 type CommonRequestParams = AuthorizationParam & HeadersParam;
 export type SendGetRequestParams = CommonRequestParams & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };

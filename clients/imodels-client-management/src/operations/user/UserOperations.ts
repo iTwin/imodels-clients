@@ -2,11 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIteratorImpl, OperationsBase, UserResponse, UsersResponse } from "../../base/internal";
-import { EntityListIterator, MinimalUser, PreferReturn, User } from "../../base/types";
-import { OperationOptions } from "../OperationOptions";
+import { EntityListIteratorImpl, OperationsBase, UserResponse, UsersResponse } from "../../base/internal/index.js";
+import { EntityListIterator, MinimalUser, PreferReturn, User } from "../../base/types/index.js";
+import { OperationOptions } from "../OperationOptions.js";
 
-import { GetSingleUserParams, GetUserListParams } from "./UserOperationParams";
+import { GetSingleUserParams, GetUserListParams } from "./UserOperationParams.js";
 
 export class UserOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /** Gets Users who have ever been connected to the iModel specified by the iModel id. This method returns Users in

@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, IModelScopedOperationParams } from "../../base/types";
-import { ChangesetIdOrIndex } from "../OperationParamExports";
+import { CollectionRequestParams, IModelScopedOperationParams } from "../../base/types/index.js";
+import { ChangesetIdOrIndex } from "../OperationParamExports.js";
 
 /** Url parameters supported in Changeset Extended Data list query. */
 export type GetChangesetExtendedDataListUrlParams = CollectionRequestParams;

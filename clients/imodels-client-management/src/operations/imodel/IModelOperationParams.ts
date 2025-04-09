@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AtLeastOneProperty, AuthorizationParam, ContainerTypes, Extent, GeographicCoordinateSystem, HeadersParam, IModel, IModelCreationMode, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types";
-import { ChangesetIdOrIndex } from "../OperationParamExports";
+import { AtLeastOneProperty, AuthorizationParam, ContainerTypes, Extent, GeographicCoordinateSystem, HeadersParam, IModel, IModelCreationMode, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types/index.js";
+import { ChangesetIdOrIndex } from "../OperationParamExports.js";
 
 /**
  * iModel entity properties that are supported in $orderBy url parameter which specifies by what property

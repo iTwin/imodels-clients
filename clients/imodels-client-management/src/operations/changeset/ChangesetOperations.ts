@@ -2,13 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetResponse, ChangesetsResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, Changeset, Checkpoint, EntityListIterator, HeaderFactories, HttpResponse, MinimalChangeset, NamedVersion, PreferReturn } from "../../base/types";
-import { IModelsClient } from "../../IModelsClient";
-import { OperationOptions } from "../OperationOptions";
-import { getUser } from "../SharedFunctions";
+import { ChangesetResponse, ChangesetsResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal/index.js";
+import { AuthorizationCallback, Changeset, Checkpoint, EntityListIterator, HeaderFactories, HttpResponse, MinimalChangeset, NamedVersion, PreferReturn } from "../../base/types/index.js";
+import { IModelsClient } from "../../IModelsClient.js";
+import { OperationOptions } from "../OperationOptions.js";
+import { getUser } from "../SharedFunctions.js";
 
-import { GetChangesetListParams, GetSingleChangesetParams } from "./ChangesetOperationParams";
+import { GetChangesetListParams, GetSingleChangesetParams } from "./ChangesetOperationParams.js";
 
 export class ChangesetOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   constructor(

@@ -2,13 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BriefcaseResponse, BriefcasesResponse, CheckpointResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, Briefcase, EntityListIterator, HeaderFactories, HttpResponse, MinimalBriefcase, PreferReturn } from "../../base/types";
-import { IModelsClient } from "../../IModelsClient";
-import { OperationOptions } from "../OperationOptions";
-import { assertLink, getUser } from "../SharedFunctions";
+import { BriefcaseResponse, BriefcasesResponse, CheckpointResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal/index.js";
+import { AuthorizationCallback, Briefcase, EntityListIterator, HeaderFactories, HttpResponse, MinimalBriefcase, PreferReturn } from "../../base/types/index.js";
+import { IModelsClient } from "../../IModelsClient.js";
+import { OperationOptions } from "../OperationOptions.js";
+import { assertLink, getUser } from "../SharedFunctions.js";
 
-import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOperationParams";
+import { GetBriefcaseListParams, GetSingleBriefcaseParams } from "./BriefcaseOperationParams.js";
 
 export class BriefcaseOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   constructor(

@@ -2,11 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetExtendedDataApiResponse, ChangesetExtendedDataListResponse, ChangesetExtendedDataResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { ChangesetExtendedData, EntityListIterator, HttpResponse } from "../../base/types";
-import { OperationOptions } from "../OperationOptions";
+import { ChangesetExtendedDataApiResponse, ChangesetExtendedDataListResponse, ChangesetExtendedDataResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal/index.js";
+import { ChangesetExtendedData, EntityListIterator, HttpResponse } from "../../base/types/index.js";
+import { OperationOptions } from "../OperationOptions.js";
 
-import { GetChangesetExtendedDataListParams, GetSingleChangesetExtendedDataParams } from "./ChangesetExtendedDataOperationParams";
+import { GetChangesetExtendedDataListParams, GetSingleChangesetExtendedDataParams } from "./ChangesetExtendedDataOperationParams.js";
 
 export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   constructor(

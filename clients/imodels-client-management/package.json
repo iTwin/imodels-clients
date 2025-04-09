@@ -19,11 +19,25 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
-  "main": "lib/index.js",
+  "type": "module",
+  "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
-  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/esm/index",
+        "default": "./lib/esm/index.js"
+      },
+      "require": {
+        "types": "./lib/cjs/index",
+        "default": "./lib/cjs/index.js"
+      }
+    }
+  },
   "scripts": {
-    "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json 1>&2",
+    "build": "npm run -s build:cjs && npm run -s build:esm",
+    "build:cjs": "tsc -p tsconfig.json 1>&2",
+    "build:esm": "tsc -p tsconfig.esm.json 1>&2",
     "clean": "rimraf lib",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",

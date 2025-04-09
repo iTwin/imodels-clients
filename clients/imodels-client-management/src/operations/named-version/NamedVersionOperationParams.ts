@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AtLeastOneProperty, IModelScopedOperationParams, NamedVersion, NamedVersionState, OrderableCollectionRequestParams } from "../../base/types";
+import { AtLeastOneProperty, IModelScopedOperationParams, NamedVersion, NamedVersionState, OrderableCollectionRequestParams } from "../../base/types/index.js";
 
 /**
  * Named Versions entity properties that are supported in $orderBy url parameter which specifies by what property

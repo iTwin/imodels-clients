@@ -2,11 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OperationsBase } from "../../base/internal";
-import { ContentType, HttpResponse, Thumbnail, ThumbnailSize } from "../../base/types";
-import { OperationOptions } from "../OperationOptions";
+import { OperationsBase } from "../../base/internal/index.js";
+import { ContentType, HttpResponse, Thumbnail, ThumbnailSize } from "../../base/types/index.js";
+import { OperationOptions } from "../OperationOptions.js";
 
-import { DownloadThumbnailParams, UploadThumbnailParams } from "./ThumbnailOperationParams";
+import { DownloadThumbnailParams, UploadThumbnailParams } from "./ThumbnailOperationParams.js";
 
 export class ThumbnailOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   /**

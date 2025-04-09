@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { AxiosResponse } from "axios";
 
-import { HttpResponseHeaders } from "../types/RestClient";
-import { Dictionary } from "../types/UtilityTypes";
+import { HttpResponseHeaders } from "../types/RestClient.js";
+import { Dictionary } from "../types/UtilityTypes.js";
 
 /** Default implementation for {@link HttpResponseHeaders} interface, which adapts `axios` HTTP response headers to headers expected by the iModels Client. */
 export class AxiosResponseHeadersAdapter implements HttpResponseHeaders {

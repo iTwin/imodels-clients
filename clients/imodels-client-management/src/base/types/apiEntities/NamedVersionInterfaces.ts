@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Application, Link } from "../CommonInterfaces";
+import { Application, Link } from "../CommonInterfaces.js";
 
-import { Changeset } from "./ChangesetInterfaces";
-import { User } from "./UserInterfaces";
+import { Changeset } from "./ChangesetInterfaces.js";
+import { User } from "./UserInterfaces.js";
 
 /** Possible Named Version states. */
 export enum NamedVersionState {

@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Application, Link } from "../CommonInterfaces";
+import { Application, Link } from "../CommonInterfaces.js";
 
-import { Checkpoint } from "./CheckpointInterfaces";
-import { User } from "./UserInterfaces";
+import { Checkpoint } from "./CheckpointInterfaces.js";
+import { User } from "./UserInterfaces.js";
 
 /** Minimal representation of a Briefcase. */
 export interface MinimalBriefcase {

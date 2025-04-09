@@ -2,14 +2,14 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIteratorImpl, IModelResponse, IModelsErrorImpl, IModelsResponse, OperationsBase, waitForCondition } from "../../base/internal";
-import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse, IModel, IModelCreationState, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn, User } from "../../base/types";
-import { Constants } from "../../Constants";
-import { IModelsClient } from "../../IModelsClient";
-import { OperationOptions } from "../OperationOptions";
-import { assertStringHeaderValue } from "../SharedFunctions";
+import { EntityListIteratorImpl, IModelResponse, IModelsErrorImpl, IModelsResponse, OperationsBase, waitForCondition } from "../../base/internal/index.js";
+import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse, IModel, IModelCreationState, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn, User } from "../../base/types/index.js";
+import { Constants } from "../../Constants.js";
+import { IModelsClient } from "../../IModelsClient.js";
+import { OperationOptions } from "../OperationOptions.js";
+import { assertStringHeaderValue } from "../SharedFunctions.js";
 
-import { CloneIModelParams, CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelParams, ForkIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForClone, IModelPropertiesForCreateFromTemplate, IModelPropertiesForFork, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams";
+import { CloneIModelParams, CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelParams, ForkIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForClone, IModelPropertiesForCreateFromTemplate, IModelPropertiesForFork, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams.js";
 
 export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
   constructor(

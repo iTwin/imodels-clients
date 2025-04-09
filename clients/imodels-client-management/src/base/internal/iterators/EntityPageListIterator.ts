@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityCollectionPage, EntityPageQueryFunc } from "../UtilityTypes";
+import { EntityCollectionPage, EntityPageQueryFunc } from "../UtilityTypes.js";
 
 export class EntityPageListIterator<TEntity> implements AsyncIterableIterator<TEntity[]> {
   private _entityPages: AsyncIterableIterator<TEntity[]>;

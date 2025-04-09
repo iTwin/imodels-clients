@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, IModelScopedOperationParams } from "../../base/types";
+import { CollectionRequestParams, IModelScopedOperationParams } from "../../base/types/index.js";
 
 /** Url parameters supported in Changeset Group list query. */
 export type GetChangesetGroupListUrlParams = CollectionRequestParams;

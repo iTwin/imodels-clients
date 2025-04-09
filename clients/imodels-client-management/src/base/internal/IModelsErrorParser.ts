@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsError, IModelsErrorCode, IModelsErrorDetail, IModelsOriginalError } from "../types";
+import { IModelsError, IModelsErrorCode, IModelsErrorDetail, IModelsOriginalError } from "../types/index.js";
 
 interface UnwrappedError {
   message: string;

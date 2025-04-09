@@ -2,11 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Application, Link } from "../CommonInterfaces";
+import { Application, Link } from "../CommonInterfaces.js";
 
-import { Checkpoint } from "./CheckpointInterfaces";
-import { NamedVersion } from "./NamedVersionInterfaces";
-import { User } from "./UserInterfaces";
+import { Checkpoint } from "./CheckpointInterfaces.js";
+import { NamedVersion } from "./NamedVersionInterfaces.js";
+import { User } from "./UserInterfaces.js";
 
 /** Possible Changeset states. */
 export enum ChangesetState {

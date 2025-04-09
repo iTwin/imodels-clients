@@ -2,15 +2,15 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm, IModelsErrorParser } from "./base/internal";
-import { ApiOptions, HeaderFactories, HttpRequestRetryPolicy, RecursiveRequired, RestClient } from "./base/types";
-import { Constants } from "./Constants";
-import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, OperationOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
-import { ChangesetExtendedDataOperations } from "./operations/changeset-extended-data/ChangesetExtendedDataOperations";
-import { ChangesetGroupOperations } from "./operations/changeset-group/ChangesetGroupOperations";
-import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
-import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter";
-import { OperationOptions } from "./operations/OperationOptions";
+import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm, IModelsErrorParser } from "./base/internal/index.js";
+import { ApiOptions, HeaderFactories, HttpRequestRetryPolicy, RecursiveRequired, RestClient } from "./base/types/index.js";
+import { Constants } from "./Constants.js";
+import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, OperationOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations/index.js";
+import { ChangesetExtendedDataOperations } from "./operations/changeset-extended-data/ChangesetExtendedDataOperations.js";
+import { ChangesetGroupOperations } from "./operations/changeset-group/ChangesetGroupOperations.js";
+import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations.js";
+import { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter.js";
+import { OperationOptions } from "./operations/OperationOptions.js";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions {

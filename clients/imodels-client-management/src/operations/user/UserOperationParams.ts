@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelScopedOperationParams, OrderableCollectionRequestParams, User } from "../../base/types";
+import { IModelScopedOperationParams, OrderableCollectionRequestParams, User } from "../../base/types/index.js";
 
 /**
  * User entity properties that are supported in $orderBy url parameter which specifies by what property

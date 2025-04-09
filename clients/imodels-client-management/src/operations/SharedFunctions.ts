@@ -2,11 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, HeaderFactories, Link, User } from "../base/types";
+import { AuthorizationCallback, HeaderFactories, Link, User } from "../base/types/index.js";
 
-import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
-import { OperationOptions } from "./OperationOptions";
-import { UserOperations } from "./user/UserOperations";
+import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter.js";
+import { OperationOptions } from "./OperationOptions.js";
+import { UserOperations } from "./user/UserOperations.js";
 
 export async function getUser(
   authorization: AuthorizationCallback,

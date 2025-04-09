@@ -2,16 +2,16 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CollectionRequestParams, Dictionary,OrderBy } from "../base/types";
+import { CollectionRequestParams, Dictionary,OrderBy } from "../base/types/index.js";
 
-import { GetBriefcaseListUrlParams } from "./briefcase/BriefcaseOperationParams";
-import { ChangesetIdOrIndex, GetChangesetListUrlParams } from "./changeset/ChangesetOperationParams";
-import { GetChangesetExtendedDataListUrlParams } from "./changeset-extended-data/ChangesetExtendedDataOperationParams";
-import { GetChangesetGroupListUrlParams } from "./changeset-group/ChangesetGroupOperationParams";
-import { CheckpointParentEntityId } from "./checkpoint/CheckpointOperationParams";
-import { GetIModelListUrlParams } from "./imodel/IModelOperationParams";
-import { GetNamedVersionListUrlParams } from "./named-version/NamedVersionOperationParams";
-import { DownloadThumbnailUrlParams } from "./OperationParamExports";
+import { GetBriefcaseListUrlParams } from "./briefcase/BriefcaseOperationParams.js";
+import { ChangesetIdOrIndex, GetChangesetListUrlParams } from "./changeset/ChangesetOperationParams.js";
+import { GetChangesetExtendedDataListUrlParams } from "./changeset-extended-data/ChangesetExtendedDataOperationParams.js";
+import { GetChangesetGroupListUrlParams } from "./changeset-group/ChangesetGroupOperationParams.js";
+import { CheckpointParentEntityId } from "./checkpoint/CheckpointOperationParams.js";
+import { GetIModelListUrlParams } from "./imodel/IModelOperationParams.js";
+import { GetNamedVersionListUrlParams } from "./named-version/NamedVersionOperationParams.js";
+import { DownloadThumbnailUrlParams } from "./OperationParamExports.js";
 
 type SingleOrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type MultipleOrderByForAnyEntity = SingleOrderByForAnyEntity[];
