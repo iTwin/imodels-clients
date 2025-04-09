@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import "reflect-metadata";
 
-import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/types";
+import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/axios";
 import { Constants } from "@itwin/imodels-client-management/lib/Constants";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";

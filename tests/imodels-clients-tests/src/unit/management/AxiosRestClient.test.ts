@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import { AxiosRestClient, AxiosRetryPolicy } from "@itwin/imodels-client-management/lib/base/axios";
 import * as utilityFunctions from "@itwin/imodels-client-management/lib/base/internal/UtilityFunctions";
-import { AxiosRestClient, AxiosRetryPolicy } from "@itwin/imodels-client-management/lib/base/types";
 import axios, { AxiosError } from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { expect } from "chai";

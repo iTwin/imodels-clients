@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/types";
+import { AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/axios";
 import { AxiosError, AxiosHeaders } from "axios";
 import { expect } from "chai";
 import sinon from "sinon";
