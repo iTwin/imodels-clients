@@ -5,10 +5,10 @@
 import { IModelStatus } from "@itwin/core-bentley";
 import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
-import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter";
-import { getLatestMinimalChangesetIfExists, getNamedVersionChangeset } from "@itwin/imodels-access-common/lib/ChangesetFunctions";
-import { Constants } from "@itwin/imodels-access-common/lib/Constants";
-import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
+import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter.js";
+import { getLatestMinimalChangesetIfExists, getNamedVersionChangeset } from "@itwin/imodels-access-common/lib/ChangesetFunctions.js";
+import { Constants } from "@itwin/imodels-access-common/lib/Constants.js";
+import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions.js";
 
 import { AuthorizationCallback, Changeset, EntityListIterator, GetNamedVersionListParams, GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, MinimalNamedVersion, NamedVersionOrderByProperty, OrderByOperator, take } from "@itwin/imodels-client-management";
 

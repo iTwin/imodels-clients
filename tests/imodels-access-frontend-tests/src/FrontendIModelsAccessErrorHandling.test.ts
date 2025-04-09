@@ -11,7 +11,7 @@ import { expect } from "chai";
 import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes } from "@itwin/imodels-client-test-utils";
 
-import { getTestDIContainer } from "./TestDiContainerProvider";
+import { getTestDIContainer } from "./TestDiContainerProvider.js";
 
 describe("FrontendIModelsAccess error handling", () => {
   let frontendIModelsAccess: FrontendIModelsAccess;

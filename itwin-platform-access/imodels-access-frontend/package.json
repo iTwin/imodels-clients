@@ -18,9 +18,21 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
-  "main": "lib/index.js",
+  "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
-  "types": "lib/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/esm/index",
+        "default": "./lib/esm/index.js"
+      },
+      "require": {
+        "types": "./lib/cjs/index",
+        "default": "./lib/cjs/index.js"
+      }
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json 1>&2",
     "clean": "rimraf lib",
