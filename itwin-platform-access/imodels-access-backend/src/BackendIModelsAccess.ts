@@ -14,12 +14,8 @@ import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
   IModelVersion
 } from "@itwin/core-common";
-import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter.js";
-import { getLatestFullChangesetIfExists, getNamedVersionChangeset } from "@itwin/imodels-access-common/lib/ChangesetFunctions.js";
-import { Constants } from "@itwin/imodels-access-common/lib/Constants.js";
-import { ErrorAdapter } from "@itwin/imodels-access-common/lib/ErrorAdapter.js";
-import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions.js";
-import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations/index.js";
+import { AccessTokenAdapter, Constants, getLatestFullChangesetIfExists, getNamedVersionChangeset, ErrorAdapter, handleAPIErrors} from "@itwin/imodels-access-common";
+import { downloadFile } from "@itwin/imodels-client-authoring";
 
 import {
   AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset,

@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ErrorAdapter, OperationNameForErrorMapping } from "./ErrorAdapter";
+import { ErrorAdapter, OperationNameForErrorMapping } from "./ErrorAdapter.js";
 
 export async function handleAPIErrors<TResult>(
   func: () => Promise<TResult>,

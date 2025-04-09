@@ -7,7 +7,7 @@ import { IModelError } from "@itwin/core-common";
 
 import { Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, OrderByOperator, take, toArray } from "@itwin/imodels-client-management";
 
-import { handleAPIErrors } from "./ErrorHandlingFunctions";
+import { handleAPIErrors } from "./ErrorHandlingFunctions.js";
 
 export async function getLatestFullChangesetIfExists(
   iModelsClient: IModelsClient,

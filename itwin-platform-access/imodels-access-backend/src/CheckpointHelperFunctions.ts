@@ -8,8 +8,7 @@ import { CheckpointProps,
   V2CheckpointAccessProps
 } from "@itwin/core-backend";
 import { Logger } from "@itwin/core-bentley";
-import { Constants } from "@itwin/imodels-access-common/lib/Constants.js";
-import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions.js";
+import { Constants,handleAPIErrors } from "@itwin/imodels-access-common";
 import axios, { AxiosResponse } from "axios";
 
 import {
