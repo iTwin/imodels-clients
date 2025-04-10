@@ -7,7 +7,7 @@ import { URLSearchParams, parse } from "url";
 
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
-import { launch, type Browser, type ElementHandle, type HTTPRequest, type LaunchOptions, type Page, type PuppeteerLifeCycleEvent } from "puppeteer";
+import { type Browser, type ElementHandle, type HTTPRequest, launch, type LaunchOptions, type Page, type PuppeteerLifeCycleEvent } from "puppeteer";
 
 import { TestSetupError } from "../../CommonTestUtils";
 
@@ -49,8 +49,8 @@ export class TestAuthorizationClient {
       headless: true,
       defaultViewport: {
         width: 800,
-        height: 1200,
-      },
+        height: 1200
+      }
     };
     const browser: Browser = await launch(browserLaunchOptions);
     const browserPage: Page = await browser.newPage();
