@@ -7,7 +7,7 @@ import { URLSearchParams, parse } from "url";
 
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
-import * as puppeteer from "puppeteer";
+import { launch, type Browser, type ElementHandle, type HTTPRequest, type LaunchOptions, type Page, type PuppeteerLifeCycleEvent } from "puppeteer";
 
 import { TestSetupError } from "../../CommonTestUtils";
 
@@ -26,7 +26,7 @@ interface AccessTokenResponse {
 @injectable()
 export class TestAuthorizationClient {
   // cspell:disable-next-line
-  private _pageLoadedEvent: puppeteer.PuppeteerLifeCycleEvent = "networkidle2";
+  private _pageLoadedEvent: PuppeteerLifeCycleEvent = "networkidle2";
   private _consentPageTitle = "Permissions";
   private _pageElementIds = {
     fields: {
@@ -45,15 +45,15 @@ export class TestAuthorizationClient {
   ) { }
 
   public async getAccessToken(testUserCredentials: TestUserCredentials): Promise<string> {
-    const browserLaunchOptions: puppeteer.BrowserLaunchArgumentOptions & puppeteer.BrowserConnectOptions = {
+    const browserLaunchOptions: LaunchOptions = {
       headless: true,
       defaultViewport: {
         width: 800,
-        height: 1200
-      }
+        height: 1200,
+      },
     };
-    const browser: puppeteer.Browser = await puppeteer.launch(browserLaunchOptions);
-    const browserPage: puppeteer.Page = await browser.newPage();
+    const browser: Browser = await launch(browserLaunchOptions);
+    const browserPage: Page = await browser.newPage();
 
     const authorizationCodePromise = this.interceptRedirectAndGetAuthorizationCode(browserPage);
 
@@ -74,7 +74,7 @@ export class TestAuthorizationClient {
       `redirect_uri=${encodeURIComponent(this._authConfig.redirectUrl)}`;
   }
 
-  private async fillCredentials(browserPage: puppeteer.Page, testUserCredentials: TestUserCredentials): Promise<void> {
+  private async fillCredentials(browserPage: Page, testUserCredentials: TestUserCredentials): Promise<void> {
     const emailField = await this.captureElement(browserPage, this._pageElementIds.fields.email);
     await emailField.type(testUserCredentials.email);
 
@@ -91,7 +91,7 @@ export class TestAuthorizationClient {
     ]);
   }
 
-  private async consentIfNeeded(browserPage: puppeteer.Page): Promise<void> {
+  private async consentIfNeeded(browserPage: Page): Promise<void> {
     const isConsentPage = await browserPage.title() === this._consentPageTitle;
     if (!isConsentPage)
       return;
@@ -122,7 +122,7 @@ export class TestAuthorizationClient {
     return response.data.access_token;
   }
 
-  private async interceptRedirectAndGetAuthorizationCode(browserPage: puppeteer.Page): Promise<string> {
+  private async interceptRedirectAndGetAuthorizationCode(browserPage: Page): Promise<string> {
     await browserPage.setRequestInterception(true);
     return new Promise<string>((resolve) => {
       browserPage.on("request", async (interceptedRequest) => {
@@ -137,7 +137,7 @@ export class TestAuthorizationClient {
     });
   }
 
-  private async respondSuccess(request: puppeteer.HTTPRequest): Promise<void> {
+  private async respondSuccess(request: HTTPRequest): Promise<void> {
     await request.respond({
       status: 200,
       contentType: "text/html",
@@ -153,7 +153,7 @@ export class TestAuthorizationClient {
     return urlQuery.code.toString();
   }
 
-  private async captureElement(browserPage: puppeteer.Page, selector: string): Promise<puppeteer.ElementHandle<Element>> {
+  private async captureElement(browserPage: Page, selector: string): Promise<ElementHandle<Element>> {
     const element = await browserPage.waitForSelector(selector);
     if (!element)
       throw new TestSetupError(`Sign in failed: could not find element with selector '${selector}'.`);

@@ -37,7 +37,7 @@
     "chai": "~4.3.10",
     "dotenv": "~10.0.0",
     "inversify": "~6.0.2",
-    "puppeteer": "~13.5.1",
+    "puppeteer": "^24.6.1",
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
