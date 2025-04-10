@@ -8,7 +8,7 @@ import { expect } from "chai";
 import { AuthorizationCallback, ClonedFrom, GetCreateIModelOperationDetailsParams, IModelCreationState, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes } from "@itwin/imodels-client-test-utils";
 
-import { Constants, getTestDIContainer, getTestRunId } from "../common";
+import { Constants, getTestDIContainer, getTestRunId } from "../common/index.js";
 
 describe("[Management] OperationOperations", () => {
   let iModelsClient: IModelsClient;

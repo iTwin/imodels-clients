@@ -9,7 +9,7 @@ import { expect } from "chai";
 import { AuthorizationCallback, CloneIModelParams, ContainerTypes, CreateEmptyIModelParams, CreateIModelFromTemplateParams, EntityListIterator, Extent, ForkIModelParams, GetIModelListParams, GetSingleIModelParams, IModel, IModelOrderByProperty, IModelsClient, IModelsClientOptions, IModelsErrorCode, MinimalIModel, OrderByOperator, UpdateIModelParams, take, toArray } from "@itwin/imodels-client-management";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertCollection, assertError, assertIModel, assertMinimalIModel } from "@itwin/imodels-client-test-utils";
 
-import { Constants, getTestDIContainer, getTestRunId } from "../common";
+import { Constants, getTestDIContainer, getTestRunId } from "../common/index.js";
 
 describe("[Management] IModelOperations", () => {
   let iModelsClient: IModelsClient;

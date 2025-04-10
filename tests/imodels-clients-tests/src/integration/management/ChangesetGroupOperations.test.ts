@@ -7,7 +7,7 @@ import { expect } from "chai";
 import { AuthorizationCallback, GetChangesetGroupListParams, GetSingleChangesetGroupParams, IModelsClient, IModelsClientOptions, IModelsErrorCode, take } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertChangesetGroup, assertCollection, assertError } from "@itwin/imodels-client-test-utils";
 
-import { getTestDIContainer } from "../common";
+import { getTestDIContainer } from "../common/index.js";
 
 describe("[Management] ChangesetGroupOperations", () => {
   let iModelsClient: IModelsClient;

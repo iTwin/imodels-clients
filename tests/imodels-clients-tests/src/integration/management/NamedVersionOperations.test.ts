@@ -7,7 +7,7 @@ import { expect } from "chai";
 import { AuthorizationCallback, CreateNamedVersionParams, EntityListIterator, GetNamedVersionListParams, GetSingleNamedVersionParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, MinimalNamedVersion, NamedVersion, NamedVersionOrderByProperty, NamedVersionState, OrderByOperator, UpdateNamedVersionParams, take, toArray } from "@itwin/imodels-client-management";
 import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestSetupError, TestUtilTypes, assertCollection, assertMinimalNamedVersion, assertNamedVersion } from "@itwin/imodels-client-test-utils";
 
-import { Constants, getTestDIContainer, getTestRunId } from "../common";
+import { Constants, getTestDIContainer, getTestRunId } from "../common/index.js";
 
 describe("[Management] NamedVersionOperations", () => {
   let iModelsClient: IModelsClient;

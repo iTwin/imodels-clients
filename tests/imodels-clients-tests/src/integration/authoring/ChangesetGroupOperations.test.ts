@@ -5,7 +5,7 @@
 import { AuthorizationCallback, ChangesetGroup, ChangesetGroupState, CreateChangesetGroupParams, IModelsClient, IModelsClientOptions, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertChangesetGroup } from "@itwin/imodels-client-test-utils";
 
-import { Constants, getTestDIContainer, getTestRunId } from "../common";
+import { Constants, getTestDIContainer, getTestRunId } from "../common/index.js";
 
 describe("[Authoring] ChangesetGroupOperations", () => {
   let iModelsClient: IModelsClient;

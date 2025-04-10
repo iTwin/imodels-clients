@@ -28,6 +28,9 @@ importers:
       '@itwin/object-storage-core':
         specifier: ^2.2.5
         version: 2.2.5(inversify@6.0.2)(reflect-metadata@0.1.14)
+      reflect-metadata:
+        specifier: ~0.1.13
+        version: 0.1.14
     devDependencies:
       '@itwin/eslint-plugin':
         specifier: ~3.7.8

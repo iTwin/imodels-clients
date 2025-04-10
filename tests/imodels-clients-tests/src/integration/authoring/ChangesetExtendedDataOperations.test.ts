@@ -5,7 +5,7 @@
 import { AuthorizationCallback, ChangesetExtendedData, CreateChangesetExtendedDataParams, GetSingleChangesetExtendedDataParams, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertChangesetExtendedData } from "@itwin/imodels-client-test-utils";
 
-import { Constants, getTestDIContainer, getTestRunId } from "../common";
+import { Constants, getTestDIContainer, getTestRunId } from "../common/index.js";
 
 describe("[Authoring] ChangesetExtendedDataOperations", () => {
   let iModelsClient: IModelsClient;

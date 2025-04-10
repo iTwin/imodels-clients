@@ -5,7 +5,7 @@
 import { AuthorizationCallback, CheckpointState, GetSingleCheckpointParams, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, IModelsErrorCode } from "@itwin/imodels-client-authoring";
 import { NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertCheckpoint, assertError } from "@itwin/imodels-client-test-utils";
 
-import { getTestDIContainer } from "../common";
+import { getTestDIContainer } from "../common/index.js";
 
 describe("[Authoring] CheckpointOperations", () => {
   let iModelsClient: IModelsClient;

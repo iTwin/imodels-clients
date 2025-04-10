@@ -2,8 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, AxiosRetryPolicy, IModelsApiError, IModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
-import * as utilityFunctions from "@itwin/imodels-client-management/lib/base/internal/UtilityFunctions";
+import { AxiosRestClient, AxiosRetryPolicy, IModelsApiError, IModelsErrorParser } from "@itwin/imodels-client-management";
+import { waitForCondition , sleep } from "@itwin/imodels-client-management";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { expect } from "chai";
@@ -11,15 +11,19 @@ import sinon from "sinon";
 
 import { ContentType, HttpRequestWithJsonBodyParams } from "@itwin/imodels-client-management";
 
-import { createStub } from "../Stubs";
+import { createStub } from "../Stubs.js";
 
 describe("[Management] AxiosRestClient", () => {
   let axiosMock: MockAdapter;
   let retryPolicyStub: sinon.SinonStubbedInstance<AxiosRetryPolicy>;
   let sleepStub: sinon.SinonStub;
-
+  const utilityFunctions = {
+    sleep,
+    waitForCondition
+  };
   before(() => {
-    axiosMock = new MockAdapter(axios);
+    const axiosInstance = axios.create();
+    axiosMock = new (MockAdapter as any)(axiosInstance);
     retryPolicyStub = createStub(AxiosRetryPolicy);
     sleepStub = sinon.stub(utilityFunctions, "sleep");
   });

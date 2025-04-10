@@ -2,14 +2,14 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/internal";
+import { AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management";
 import { AxiosError, AxiosHeaders } from "axios";
 import { expect } from "chai";
 import sinon from "sinon";
 
 import { GetSleepDurationInMsParams } from "@itwin/imodels-client-management";
 
-import { createStub } from "../Stubs";
+import { createStub } from "../Stubs.js";
 
 describe("[Management] AxiosRetryPolicy", () => {
   let backoffAlgorithmStub: sinon.SinonStubbedInstance<ExponentialBackoffAlgorithm>;

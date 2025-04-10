@@ -7,7 +7,7 @@ import { expect } from "chai";
 import { AuthorizationCallback, Briefcase, BriefcaseOrderByProperty, EntityListIterator, GetBriefcaseListParams, GetSingleBriefcaseParams, IModelsClient, IModelsClientOptions, OrderByOperator, SPECIAL_VALUES_ME, take, toArray } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertBriefcase, assertCollection, assertMinimalBriefcase, createGuidValue } from "@itwin/imodels-client-test-utils";
 
-import { getTestDIContainer } from "../common";
+import { getTestDIContainer } from "../common/index.js";
 
 describe("[Management] BriefcaseOperations", () => {
   let iModelsClient: IModelsClient;

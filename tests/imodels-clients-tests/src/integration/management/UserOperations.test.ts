@@ -7,7 +7,7 @@ import { expect } from "chai";
 import { AuthorizationCallback, EntityListIterator, GetSingleUserParams, GetUserListParams, IModelsClient, IModelsClientOptions, MinimalUser, OrderByOperator, User, UserOrderByProperty, take, toArray } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertCollection, assertMinimalUser, assertUser, assertUserStatistics } from "@itwin/imodels-client-test-utils";
 
-import { getTestDIContainer } from "../common";
+import { getTestDIContainer } from "../common/index.js";
 
 describe("[Management] UserOperations", () => {
   let iModelsClient: IModelsClient;

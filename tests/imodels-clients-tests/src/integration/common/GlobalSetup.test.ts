@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { TestIModelGroupFactory, cleanupDirectory, createDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
-import { Constants } from "./Constants";
-import { getTestDIContainer } from "./TestDiContainerProvider";
+import { Constants } from "./Constants.js";
+import { getTestDIContainer } from "./TestDiContainerProvider.js";
 
 let testRunId: string;
 export function getTestRunId(): string {

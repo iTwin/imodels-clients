@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 // cspell:ignore StubbableType
-import * as sinon from "sinon";
+import sinon from "sinon";
 
 export function createStub<T>(
   constructor: sinon.StubbableType<T> & { prototype: T }

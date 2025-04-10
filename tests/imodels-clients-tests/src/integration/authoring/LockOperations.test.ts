@@ -7,7 +7,7 @@ import { expect } from "chai";
 import { AuthorizationCallback, ConflictingLock, ConflictingLocksError, GetLockListParams, IModelsClient, IModelsClientOptions, IModelsErrorCode, Lock, LockLevel, LockLevelFilter, LocksError, UpdateLockParams, toArray } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertCollection, assertError, assertLock } from "@itwin/imodels-client-test-utils";
 
-import { Constants, getTestDIContainer, getTestRunId } from "../common";
+import { Constants, getTestDIContainer, getTestRunId } from "../common/index.js";
 
 describe("[Authoring] LockOperations", () => {
   let iModelsClient: IModelsClient;

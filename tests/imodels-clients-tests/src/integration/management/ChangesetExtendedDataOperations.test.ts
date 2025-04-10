@@ -7,7 +7,7 @@ import { expect } from "chai";
 import { AuthorizationCallback, GetChangesetExtendedDataListParams, GetSingleChangesetExtendedDataParams, IModelsClient, IModelsClientOptions, IModelsErrorCode, take } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertChangesetExtendedData, assertCollection, assertError } from "@itwin/imodels-client-test-utils";
 
-import { getTestDIContainer } from "../common";
+import { getTestDIContainer } from "../common/index.js";
 
 describe("[Management] ChangesetExtendedDataOperations", () => {
   let iModelsClient: IModelsClient;

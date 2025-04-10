@@ -13,7 +13,7 @@ import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, Tes
 
 chai.use(chaiAsPromised);
 
-import { Constants, getTestDIContainer, getTestRunId } from "../common";
+import { Constants, getTestDIContainer, getTestRunId } from "../common/index.js";
 
 describe("[Management] ThumbnailOperations", () => {
   let iModelsClient: IModelsClient;

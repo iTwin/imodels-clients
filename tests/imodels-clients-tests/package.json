@@ -19,18 +19,26 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
-  "main": "lib/iModelsClientsTestsExports.js",
-  "typings": "lib/iModelsClientsTestsExports",
+  "type": "module",
+  "module": "lib/esm/iModelsClientsTestsExports.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/esm/iModelsClientsTestsExports",
+        "default": "./lib/esm/iModelsClientsTestsExports.js"
+      }
+    }
+  },
   "scripts": {
     "build": "tsc 1>&2 && npm run build:copy-assets",
-    "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
+    "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/esm/assets",
     "clean": "rimraf lib",
     "cover": "nyc npm test",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
-    "test:integration": "mocha lib/integration/**/*.test.js --color --timeout 180000 --exit",
-    "test:unit": "mocha lib/unit/**/*.test.js --color --timeout 180000 --exit"
+    "test:integration": "mocha lib/esm/integration/**/*.test.js --color --timeout 180000 --exit",
+    "test:unit": "mocha lib/esm/unit/**/*.test.js --color --timeout 180000 --exit"
   },
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"

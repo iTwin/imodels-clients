@@ -1,5 +1,5 @@
-import { OperationsBase, OperationsBaseOptions, SendDeleteRequestParams, SendGetRequestParams, SendPatchRequestParams, SendPostRequestParams, SendPutRequestParams } from "@itwin/imodels-client-management/lib/base/internal";
-import { ContentType, HttpResponse } from "@itwin/imodels-client-management/lib/base/types";
+import { OperationsBase, OperationsBaseOptions, SendDeleteRequestParams, SendGetRequestParams, SendPatchRequestParams, SendPostRequestParams, SendPutRequestParams } from "@itwin/imodels-client-management";
+import { ContentType, HttpResponse } from "@itwin/imodels-client-management";
 
 export class TestOperationsWrapper extends OperationsBase<OperationsBaseOptions> {
   public constructor(options: OperationsBaseOptions) {

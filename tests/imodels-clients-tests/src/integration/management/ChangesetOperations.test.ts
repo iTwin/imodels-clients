@@ -7,7 +7,7 @@ import { expect } from "chai";
 import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetSingleChangesetParams, IModelsClient, IModelsClientOptions, MinimalChangeset, OrderByOperator, toArray } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertChangeset, assertCollection, assertMinimalChangeset } from "@itwin/imodels-client-test-utils";
 
-import { getTestDIContainer } from "../common";
+import { getTestDIContainer } from "../common/index.js";
 
 describe("[Management] ChangesetOperations", () => {
   let iModelsClient: IModelsClient;

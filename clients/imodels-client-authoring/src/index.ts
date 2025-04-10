@@ -28,3 +28,5 @@ export * from "./IModelsClient.js";
 export { downloadFile } from "./operations/FileDownload.js";
 export { NodeLocalFileSystem } from "./base/internal/NodeLocalFileSystem.js";
 export { IModelOperations } from "./operations/imodel/IModelOperations.js"
+export { IModelsApiUrlFormatter } from "./operations/IModelsApiUrlFormatter.js"
+export * from "./base/internal/IModelsErrorParser.js"

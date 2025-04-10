@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsErrorParser as AuthoringIModelsErrorParser } from "@itwin/imodels-client-authoring/lib/base/internal";
+import { IModelsErrorParser as AuthoringIModelsErrorParser } from "@itwin/imodels-client-authoring";
 
-import { testIModelsErrorParser } from "../CommonErrorParsingTests";
+import { testIModelsErrorParser } from "../CommonErrorParsingTests.js";
 
 describe("[Authoring] IModelsErrorParser", () => {
   testIModelsErrorParser(AuthoringIModelsErrorParser.parse);

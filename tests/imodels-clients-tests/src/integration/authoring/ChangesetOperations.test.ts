@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import "reflect-metadata";
+import "reflect-metadata/Reflect.js";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -14,7 +14,7 @@ import { expect } from "chai";
 import { AcquireBriefcaseParams, AuthorizationCallback, CreateChangesetGroupParams, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, IModelScopedOperationParams, IModelsClient, IModelsClientOptions, IModelsError, IModelsErrorCode, ProgressCallback, TargetDirectoryParam, isIModelsApiError } from "@itwin/imodels-client-authoring";
 import { FileTransferLog, IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableClientStorage, assertChangeset, assertDownloadedChangeset, assertProgressReports, cleanupDirectory } from "@itwin/imodels-client-test-utils";
 
-import { Constants, getTestDIContainer, getTestRunId } from "../common";
+import { Constants, getTestDIContainer, getTestRunId } from "../common/index.js";
 
 type CommonDownloadParams = IModelScopedOperationParams & TargetDirectoryParam;
 
