@@ -23,6 +23,10 @@ export interface ConflictingLocksError extends IModelsClientsError {
   conflictingLocks: ConflictingLock[];
 }
 
-export function isError<T extends ITwinError>(error: unknown, key?: string): error is T {
+export function isIModelsClientsError(error: unknown, key?: string): error is IModelsClientsError {
   return ITwinError.isError(error, IModelsErrorScope, key);
+}
+
+export function isConflictingLocksError(error: unknown): error is ConflictingLocksError {
+  return ITwinError.isError<ConflictingLocksError>(error, IModelsErrorScope) && "conflictingLocks" in error;
 }
