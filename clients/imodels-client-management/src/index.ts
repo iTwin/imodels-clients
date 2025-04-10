@@ -15,3 +15,4 @@ export * from "./operations/changeset-extended-data/ChangesetExtendedDataOperati
 export * from "./operations/IModelsApiUrlFormatter.js" // used in client-authoring
 export * from "./operations/imodel/IModelOperations.js" // used in client-authoring
 export * from "./operations/changeset-group/ChangesetGroupOperations.js" // used in client-authoring
+export { ThumbnailOperations } from "./operations/thumbnail/ThumbnailOperations.js"

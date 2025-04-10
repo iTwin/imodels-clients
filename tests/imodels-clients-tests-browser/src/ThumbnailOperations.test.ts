@@ -2,12 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ThumbnailOperations } from "@itwin/imodels-client-management/lib/esm/operations";
-import { assertThumbnail } from "@itwin/imodels-client-test-utils/lib/assertions/BrowserFriendlyAssertions";
+import { ThumbnailOperations } from "@itwin/imodels-client-management";
+import { assertThumbnail } from "@itwin/imodels-client-test-utils";
 
 import { ApiOptions, Authorization, AuthorizationCallback, ContentType, DownloadThumbnailParams, IModelScopedOperationParams, IModelsClient, Thumbnail, ThumbnailSize, UploadThumbnailParams } from "@itwin/imodels-client-management";
 
-import { FrontendTestEnvVariableKeys } from "./setup/FrontendTestEnvVariableKeys";
+import { FrontendTestEnvVariableKeys } from "./setup/FrontendTestEnvVariableKeys.js";
 
 describe(`[Management] ${ThumbnailOperations.name}`, () => {
   let iModelsClient: IModelsClient;

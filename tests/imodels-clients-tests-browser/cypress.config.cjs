@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 const { defineConfig } = require("cypress");
-const { setupIntegrationTests } = require("./lib/CypressSetup.js");
+// const { setupIntegrationTests } = require("./lib/esm/CypressSetup.js");
 
 module.exports = defineConfig({
 
@@ -17,7 +17,8 @@ module.exports = defineConfig({
     defaultCommandTimeout: 10000,
     specPattern: "lib/**/*.test.js",
     video: false,
-    setupNodeEvents(on, config) {
+    async setupNodeEvents(on, config) {
+      const { setupIntegrationTests } = await import("./lib/esm/CypressSetup.js");
       return setupIntegrationTests(on, config);
     },
   },

@@ -14,6 +14,7 @@
     "type": "git",
     "url": "https://github.com/iTwin/imodels-clients"
   },
+  "type": "module",
   "license": "MIT",
   "author": {
     "name": "Bentley Systems, Inc.",
@@ -21,7 +22,7 @@
   },
   "scripts": {
     "build": "npm run build:tests && npm run build:tests-setup && npm run build:copy-assets",
-    "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
+    "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/esm/assets",
     "build:tests": "tsc 1>&2",
     "build:tests-setup": "tsc --p cjs.tsconfig.json 1>&2",
     "clean": "rimraf lib",

@@ -9,11 +9,11 @@ import { Container } from "inversify";
 import { IModelsClientOptions } from "@itwin/imodels-client-management";
 import { ReusableTestIModelProvider, TestAuthorizationProvider, TestITwinProvider, TestUtilBootstrapper, TestUtilTypes } from "@itwin/imodels-client-test-utils";
 
-import { FrontendTestEnvVariableKeys } from "./FrontendTestEnvVariableKeys";
+import { FrontendTestEnvVariableKeys } from "./FrontendTestEnvVariableKeys.js";
 
 export async function setupIntegrationTests(_on: unknown, config: { env: any }): Promise<unknown> {
   const container = new Container();
-  TestUtilBootstrapper.bind(container, path.join(__dirname, "..", ".env"));
+  TestUtilBootstrapper.bind(container, path.join(import.meta.dirname, "..", ".env"));
 
   const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
   config.env[FrontendTestEnvVariableKeys.iModelsClientApiOptions] = JSON.stringify(iModelsClientOptions.api);
@@ -31,7 +31,7 @@ export async function setupIntegrationTests(_on: unknown, config: { env: any }):
   const testIModelForRead = await reusableTestIModelProvider.getOrCreate();
   config.env[FrontendTestEnvVariableKeys.testIModelForReadId] = testIModelForRead.id;
 
-  config.env[FrontendTestEnvVariableKeys.testPngFilePath] = path.join(__dirname, "assets", "Sample.png");
+  config.env[FrontendTestEnvVariableKeys.testPngFilePath] = path.join(import.meta.dirname, "assets", "Sample.png");
 
   return config;
 }
