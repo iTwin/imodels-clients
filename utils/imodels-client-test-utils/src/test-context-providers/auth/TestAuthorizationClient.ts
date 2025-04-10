@@ -7,7 +7,7 @@ import { URLSearchParams, parse } from "url";
 
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
-import { type Browser, type ElementHandle, type HTTPRequest, type LaunchOptions, launch, type Page, type PuppeteerLifeCycleEvent } from "puppeteer";
+import { type Browser, type ElementHandle, type HTTPRequest, type LaunchOptions, type Page, type PuppeteerLifeCycleEvent, launch } from "puppeteer";
 
 import { TestSetupError } from "../../CommonTestUtils";
 
