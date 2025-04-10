@@ -2,13 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import * as fs from "fs";
+import fs from "node:fs";
 
 import { injectable } from "inversify";
 
 import { SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
 
-import { TestSetupError } from "../../CommonTestUtils";
+import { TestSetupError } from "../../CommonTestUtils.js";
 
 export interface TestIModelBaselineFile {
   filePath: string;

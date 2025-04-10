@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { TestAuthorizationProvider, TestIModelsClient, TestITwinProvider } from "../test-context-providers";
+import { TestAuthorizationProvider, TestIModelsClient, TestITwinProvider } from "../test-context-providers/index.js";
 
 export interface TestRunContext {
   testRunId: string;

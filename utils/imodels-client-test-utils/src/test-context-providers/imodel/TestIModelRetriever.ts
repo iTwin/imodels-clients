@@ -6,14 +6,14 @@ import { injectable } from "inversify";
 
 import { GetBriefcaseListParams, GetChangesetExtendedDataListParams, GetChangesetGroupListParams, GetChangesetListParams, GetLockListParams, GetNamedVersionListParams, IModel, Lock, NamedVersion, toArray } from "@itwin/imodels-client-authoring";
 
-import { TestSetupError } from "../../CommonTestUtils";
-import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
-import { TestITwinProvider } from "../itwin/TestITwinProvider";
+import { TestSetupError } from "../../CommonTestUtils.js";
+import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider.js";
+import { TestITwinProvider } from "../itwin/TestITwinProvider.js";
 
-import { TestIModelCreator } from "./TestIModelCreator";
-import { TestIModelFileProvider } from "./TestIModelFileProvider";
-import { BriefcaseMetadata, ChangesetExtendedDataMetadata, ChangesetGroupMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
-import { TestIModelsClient } from "./TestIModelsClient";
+import { TestIModelCreator } from "./TestIModelCreator.js";
+import { TestIModelFileProvider } from "./TestIModelFileProvider.js";
+import { BriefcaseMetadata, ChangesetExtendedDataMetadata, ChangesetGroupMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces.js";
+import { TestIModelsClient } from "./TestIModelsClient.js";
 
 @injectable()
 export class TestIModelRetriever {

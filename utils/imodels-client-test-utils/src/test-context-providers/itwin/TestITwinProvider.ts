@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
+import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider.js";
 
-import { ITwinsClient } from "./ITwinsClient";
-import { TestITwinProviderConfig } from "./TestITwinProviderConfig";
+import { ITwinsClient } from "./ITwinsClient.js";
+import { TestITwinProviderConfig } from "./TestITwinProviderConfig.js";
 
 @injectable()
 export class TestITwinProvider {

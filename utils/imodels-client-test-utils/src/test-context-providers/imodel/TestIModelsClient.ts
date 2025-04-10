@@ -6,7 +6,7 @@ import { decorate, inject, injectable } from "inversify";
 
 import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
 
-import { TestUtilTypes } from "../../TestUtilTypes";
+import { TestUtilTypes } from "../../TestUtilTypes.js";
 
 decorate(injectable(), IModelsClient);
 

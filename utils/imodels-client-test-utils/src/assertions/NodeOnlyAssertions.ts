@@ -2,16 +2,16 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import * as fs from "fs";
+import fs from "node:fs";
 
 import { expect } from "chai";
 
 import { BaselineFile, BaselineFileState, Changeset, ChangesetExtendedData, ChangesetGroup, ChangesetGroupPropertiesForCreate, ChangesetGroupPropertiesForUpdate, ChangesetGroupState, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate, isIModelsApiError } from "@itwin/imodels-client-authoring";
 
-import { TestChangesetFile, TestIModelBaselineFile } from "../test-context-providers";
+import { TestChangesetFile, TestIModelBaselineFile } from "../test-context-providers/index.js";
 
-import { assertApplication, assertOptionalLink, assertOptionalProperty } from "./BrowserFriendlyAssertions";
-import { assertChangesetCallbacks, assertChangesetGroupCallbacks, assertMinimalChangesetCallbacks } from "./RelatedEntityCallbackAssertions";
+import { assertApplication, assertOptionalLink, assertOptionalProperty } from "./BrowserFriendlyAssertions.js";
+import { assertChangesetCallbacks, assertChangesetGroupCallbacks, assertMinimalChangesetCallbacks } from "./RelatedEntityCallbackAssertions.js";
 
 export async function assertBaselineFile(params: {
   actualBaselineFile: BaselineFile;

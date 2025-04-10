@@ -7,13 +7,13 @@ import { injectable } from "inversify";
 
 import { ChangesetGroupState, CheckpointState, ContainerTypes, GetSingleCheckpointParams, IModel, Lock, LockLevel, LockedObjects, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
 
-import { TestSetupError } from "../../CommonTestUtils";
-import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
-import { TestITwinProvider } from "../itwin/TestITwinProvider";
+import { TestSetupError } from "../../CommonTestUtils.js";
+import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider.js";
+import { TestITwinProvider } from "../itwin/TestITwinProvider.js";
 
-import { TestIModelFileProvider } from "./TestIModelFileProvider";
-import { BriefcaseMetadata, ChangesetExtendedDataMetadata, ChangesetGroupMetadata, IModelMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
-import { TestIModelsClient } from "./TestIModelsClient";
+import { TestIModelFileProvider } from "./TestIModelFileProvider.js";
+import { BriefcaseMetadata, ChangesetExtendedDataMetadata, ChangesetGroupMetadata, IModelMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces.js";
+import { TestIModelsClient } from "./TestIModelsClient.js";
 
 @injectable()
 export class TestIModelCreator {

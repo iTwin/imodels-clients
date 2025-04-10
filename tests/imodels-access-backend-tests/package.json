@@ -43,7 +43,7 @@
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",
     "@itwin/imodels-client-test-utils": "workspace:*",
-    "dotenv": "~10.0.0",
+    "dotenv": "~16.4.7",
     "inversify": "~6.0.2",
     "json5": "2.2.2",
     "mocha": "~9.2.2",

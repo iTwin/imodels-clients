@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import * as fs from "fs";
-import * as path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
-import { testLocalFileSystem } from "./TestLocalFileSystem";
+import { testLocalFileSystem } from "./TestLocalFileSystem.js";
 
 export class TestSetupError extends Error {
   constructor(message: string) {

@@ -6,11 +6,11 @@ import { Container } from "inversify";
 
 import { IModelsClientOptions } from "@itwin/imodels-client-authoring";
 
-import { IModelsClientsTestsConfig } from "./IModelsClientsTestsConfig";
-import { ITwinsClient, ITwinsClientConfig, ReusableTestIModelProvider, ReusableTestIModelProviderConfig, TestAuthorizationClient, TestAuthorizationClientConfig, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelRetriever, TestIModelsClient, TestIModelsClientOptions, TestITwinProvider, TestITwinProviderConfig } from "./test-context-providers";
-import { TestAuthorizationProviderConfig } from "./test-context-providers/auth/TestAuthorizationProviderConfig";
-import { TestIModelGroupFactory } from "./test-imodel-group/TestIModelGroupFactory";
-import { TestUtilTypes } from "./TestUtilTypes";
+import { IModelsClientsTestsConfig } from "./IModelsClientsTestsConfig.js";
+import { ITwinsClient, ITwinsClientConfig, ReusableTestIModelProvider, ReusableTestIModelProviderConfig, TestAuthorizationClient, TestAuthorizationClientConfig, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelRetriever, TestIModelsClient, TestIModelsClientOptions, TestITwinProvider, TestITwinProviderConfig } from "./test-context-providers/index.js";
+import { TestAuthorizationProviderConfig } from "./test-context-providers/auth/TestAuthorizationProviderConfig.js";
+import { TestIModelGroupFactory } from "./test-imodel-group/TestIModelGroupFactory.js";
+import { TestUtilTypes } from "./TestUtilTypes.js";
 
 export class TestUtilBootstrapper {
   public static bind(container: Container, envFilePath: string): void {

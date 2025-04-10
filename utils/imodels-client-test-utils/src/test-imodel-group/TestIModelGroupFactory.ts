@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { TestAuthorizationProvider, TestIModelsClient, TestITwinProvider } from "../test-context-providers";
+import { TestAuthorizationProvider, TestIModelsClient, TestITwinProvider } from "../test-context-providers/index.js";
 
-import { TestIModelGroup } from "./TestIModelGroup";
+import { TestIModelGroup } from "./TestIModelGroup.js";
 
 @injectable()
 export class TestIModelGroupFactory {

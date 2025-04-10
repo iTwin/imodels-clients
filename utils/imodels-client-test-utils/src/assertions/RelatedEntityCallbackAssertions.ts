@@ -6,7 +6,7 @@ import { expect } from "chai";
 
 import { Briefcase, Changeset, ChangesetGroup, Checkpoint, CheckpointState, IModel, MinimalChangeset, NamedVersion, User } from "@itwin/imodels-client-management";
 
-import { assertCheckpoint, assertUser } from "./BrowserFriendlyAssertions";
+import { assertCheckpoint, assertUser } from "./BrowserFriendlyAssertions.js";
 
 export async function assertIModelCallbacks(params: {
   iModel: IModel;

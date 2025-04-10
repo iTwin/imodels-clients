@@ -15,8 +15,16 @@
     "url": "https://github.com/iTwin/imodels-clients"
   },
   "license": "MIT",
-  "main": "lib/index.js",
-  "typings": "lib/index",
+  "type": "module",
+  "module": "lib/esm/index.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/esm/index",
+        "default": "./lib/esm/index.js"
+      }
+    }
+  },
   "scripts": {
     "build": "tsc 1>&2 && npm run build:copy-assets",
     "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
@@ -35,7 +43,7 @@
     "@itwin/object-storage-core": "^2.2.5",
     "axios": "^1.8.2",
     "chai": "~4.3.10",
-    "dotenv": "~10.0.0",
+    "dotenv": "~16.4.7",
     "inversify": "~6.0.2",
     "puppeteer": "~13.5.1",
     "reflect-metadata": "~0.1.13"

@@ -346,8 +346,8 @@ importers:
         specifier: workspace:*
         version: link:../../utils/imodels-client-test-utils
       dotenv:
-        specifier: ~10.0.0
-        version: 10.0.0
+        specifier: ~16.4.7
+        version: 16.4.7
       inversify:
         specifier: ~6.0.2
         version: 6.0.2
@@ -534,8 +534,8 @@ importers:
         specifier: ^4.0.0
         version: 4.8.1
       dotenv:
-        specifier: ~10.0.0
-        version: 10.0.0
+        specifier: ~16.4.7
+        version: 16.4.7
       formidable:
         specifier: 3.2.4
         version: 3.2.4
@@ -631,8 +631,8 @@ importers:
         specifier: ~7.1.1
         version: 7.1.2(chai@4.3.10)
       dotenv:
-        specifier: ~10.0.0
-        version: 10.0.0
+        specifier: ~16.4.7
+        version: 16.4.7
       inversify:
         specifier: ~6.0.2
         version: 6.0.2
@@ -734,8 +734,8 @@ importers:
         specifier: ~13.10.0
         version: 13.10.0
       dotenv:
-        specifier: ~10.0.0
-        version: 10.0.0
+        specifier: ~16.4.7
+        version: 16.4.7
       inversify:
         specifier: ~6.0.2
         version: 6.0.2
@@ -834,8 +834,8 @@ importers:
         specifier: ~4.3.10
         version: 4.3.10
       dotenv:
-        specifier: ~10.0.0
-        version: 10.0.0
+        specifier: ~16.4.7
+        version: 16.4.7
       inversify:
         specifier: ~6.0.2
         version: 6.0.2
@@ -2151,9 +2151,9 @@ packages:
     resolution: {integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==}
     engines: {node: '>=8'}
 
-  dotenv@10.0.0:
-    resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
-    engines: {node: '>=10'}
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
 
   draco3d@1.5.5:
     resolution: {integrity: sha512-JVuNV0EJzD3LBYhGyIXJLeBID/EVtmFO1ZNhAYflTgiMiAJlbhXQmRRda/azjc8MRVMHh0gqGhiqHUo5dIXM8Q==}
@@ -5688,7 +5688,7 @@ snapshots:
     dependencies:
       is-obj: 2.0.0
 
-  dotenv@10.0.0: {}
+  dotenv@16.4.7: {}
 
   draco3d@1.5.5: {}
 

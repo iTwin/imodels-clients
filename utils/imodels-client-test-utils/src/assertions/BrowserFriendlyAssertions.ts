@@ -6,7 +6,7 @@ import { expect } from "chai";
 
 import { Application, Briefcase, ChangesetExtendedData, Checkpoint, CheckpointState, ContentType, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, MinimalBriefcase, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, Thumbnail, ThumbnailSize, User, UserPermissions, UserStatistics } from "@itwin/imodels-client-management";
 
-import { assertBriefcaseCallbacks, assertIModelCallbacks, assertNamedVersionCallbacks } from "./RelatedEntityCallbackAssertions";
+import { assertBriefcaseCallbacks, assertIModelCallbacks, assertNamedVersionCallbacks } from "./RelatedEntityCallbackAssertions.js";
 
 export async function assertCollection<T>(params: {
   asyncIterable: EntityListIterator<T>;

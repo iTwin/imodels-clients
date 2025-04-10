@@ -6,7 +6,7 @@ import { injectable } from "inversify";
 
 import { ApiOptions, IModelsClientOptions } from "@itwin/imodels-client-authoring";
 
-import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
+import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig.js";
 
 @injectable()
 export class TestIModelsClientOptions implements IModelsClientOptions {

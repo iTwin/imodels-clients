@@ -7,11 +7,11 @@ import { URLSearchParams, parse } from "url";
 
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
-import * as puppeteer from "puppeteer";
+import puppeteer from "puppeteer";
 
-import { TestSetupError } from "../../CommonTestUtils";
+import { TestSetupError } from "../../CommonTestUtils.js";
 
-import { TestAuthorizationClientConfig } from "./TestAuthorizationClientConfigImpl";
+import { TestAuthorizationClientConfig } from "./TestAuthorizationClientConfigImpl.js";
 
 export interface TestUserCredentials {
   email: string;

@@ -7,7 +7,7 @@ import { injectable } from "inversify";
 
 import { AuthorizationParam } from "@itwin/imodels-client-authoring";
 
-import { ITwinsClientConfig } from "./ITwinsClientConfig";
+import { ITwinsClientConfig } from "./ITwinsClientConfig.js";
 
 interface iTwin {
   id: string;

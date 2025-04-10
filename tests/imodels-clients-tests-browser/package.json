@@ -42,7 +42,7 @@
     "@itwin/imodels-client-test-utils": "workspace:*",
     "chai": "~4.3.10",
     "cypress": "~13.10.0",
-    "dotenv": "~10.0.0",
+    "dotenv": "~16.4.7",
     "inversify": "~6.0.2",
     "reflect-metadata": "~0.1.13"
   },

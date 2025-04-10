@@ -4,17 +4,17 @@
  *--------------------------------------------------------------------------------------------*/
 import "reflect-metadata";
 
-export * from "./test-context-providers";
-export * from "./test-imodel-group/TestIModelGroup";
-export * from "./test-imodel-group/TestIModelGroupFactory";
+export * from "./test-context-providers/index.js";
+export * from "./test-imodel-group/TestIModelGroup.js";
+export * from "./test-imodel-group/TestIModelGroupFactory.js";
 
-export * from "./TestUtilTypes";
-export * from "./TestUtilBootstrapper";
-export * from "./IModelsClientsTestsConfig";
+export * from "./TestUtilTypes.js";
+export * from "./TestUtilBootstrapper.js";
+export * from "./IModelsClientsTestsConfig.js";
 
-export * from "./assertions/BrowserFriendlyAssertions";
-export * from "./assertions/NodeOnlyAssertions";
-export * from "./assertions/RelatedEntityCallbackAssertions";
-export * from "./CommonTestUtils";
+export * from "./assertions/BrowserFriendlyAssertions.js";
+export * from "./assertions/NodeOnlyAssertions.js";
+export * from "./assertions/RelatedEntityCallbackAssertions.js";
+export * from "./CommonTestUtils.js";
 
-export * from "./TrackableClientStorage";
+export * from "./TrackableClientStorage.js";

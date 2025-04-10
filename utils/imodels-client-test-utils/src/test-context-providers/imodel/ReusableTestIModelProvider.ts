@@ -7,13 +7,13 @@ import { injectable } from "inversify";
 
 import { DeleteIModelParams, IModel } from "@itwin/imodels-client-authoring";
 
-import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
+import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider.js";
 
-import { ReusableTestIModelProviderConfig } from "./ReusableTestIModelProviderConfig";
-import { TestIModelCreator } from "./TestIModelCreator";
-import { ReusableIModelMetadata } from "./TestIModelInterfaces";
-import { TestIModelRetriever } from "./TestIModelRetriever";
-import { TestIModelsClient } from "./TestIModelsClient";
+import { ReusableTestIModelProviderConfig } from "./ReusableTestIModelProviderConfig.js";
+import { TestIModelCreator } from "./TestIModelCreator.js";
+import { ReusableIModelMetadata } from "./TestIModelInterfaces.js";
+import { TestIModelRetriever } from "./TestIModelRetriever.js";
+import { TestIModelsClient } from "./TestIModelsClient.js";
 
 @injectable()
 export class ReusableTestIModelProvider {

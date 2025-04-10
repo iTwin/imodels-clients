@@ -1,7 +1,7 @@
 {
-  "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.json",
+  "extends": "./node_modules/@itwin/imodels-client-common-config/tsconfig.esm.json",
   "compilerOptions": {
-    "outDir": "./lib",
+    "outDir": "./lib/esm",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },

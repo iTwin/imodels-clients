@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import * as dotenv from "dotenv";
+import dotenv from "dotenv";
 import { injectable } from "inversify";
 
-import { TestSetupError } from "./CommonTestUtils";
+import { TestSetupError } from "./CommonTestUtils.js";
 
 export interface AuthConfigValues {
   authority: string;

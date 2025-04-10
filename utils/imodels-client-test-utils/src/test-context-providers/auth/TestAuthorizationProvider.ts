@@ -6,8 +6,8 @@ import { injectable } from "inversify";
 
 import { Authorization, AuthorizationCallback } from "@itwin/imodels-client-authoring";
 
-import { TestAuthorizationClient } from "./TestAuthorizationClient";
-import { TestAuthorizationProviderConfig } from "./TestAuthorizationProviderConfig";
+import { TestAuthorizationClient } from "./TestAuthorizationClient.js";
+import { TestAuthorizationProviderConfig } from "./TestAuthorizationProviderConfig.js";
 
 @injectable()
 export class TestAuthorizationProvider {

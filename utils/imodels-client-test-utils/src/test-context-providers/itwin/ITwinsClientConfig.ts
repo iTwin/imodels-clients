@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
+import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig.js";
 
 @injectable()
 export class ITwinsClientConfig {

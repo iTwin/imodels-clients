@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { BehaviorOptions, IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
+import { BehaviorOptions, IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig.js";
 
 @injectable()
 export class ReusableTestIModelProviderConfig {

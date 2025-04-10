@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { IModelsClientsTestsConfig, TestUsersConfigValues } from "../../IModelsClientsTestsConfig";
+import { IModelsClientsTestsConfig, TestUsersConfigValues } from "../../IModelsClientsTestsConfig.js";
 
 interface ApiScopes {
   iModels: string;
