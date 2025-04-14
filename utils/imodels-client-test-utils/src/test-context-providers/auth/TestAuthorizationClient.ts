@@ -51,7 +51,7 @@ export class TestAuthorizationClient {
         width: 800,
         height: 1200
       },
-      args: ["--no-sandbox", "--disabled-setupid-sandbox"]
+      args: ["--no-sandbox"]
     };
     const browser: puppeteer.Browser = await puppeteer.launch(browserLaunchOptions);
     const browserPage: puppeteer.Page = await browser.newPage();
