@@ -38,7 +38,7 @@ jobs:
         parameters:
           runRushAudit: ${{ parameters.runRushAudit }}
 
-  - job: BuildAndTest macArm64
+  - job: BuildAndTest_macArm64
     pool:
       name: iModelTechMacArm
       demands:
