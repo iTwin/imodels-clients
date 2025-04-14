@@ -8,7 +8,7 @@ parameters:
 trigger: none
 
 variables:
-  node18Version: '18.12.0'
+  nodeVersion: '18.12.0'
 
 jobs:
   - job: BuildAndTest
@@ -16,10 +16,8 @@ jobs:
       matrix:
         linux-node18:
           imageName: 'ubuntu-latest'
-          nodeVersion: $(node18Version)
         windows-node18:
           imageName: 'windows-latest'
-          nodeVersion: $(node18Version)
     pool:
       vmImage: $(imageName)
     variables:
@@ -39,7 +37,6 @@ jobs:
         - Agent.OS -equals Darwin
     variables:
       - group: iModels Clients 3.0 - Integration Tests - DEV
-    nodeVersion: $(node18Version)
     workspace:
       clean: all
 

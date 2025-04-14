@@ -1,8 +1,8 @@
 steps:
   - task: NodeTool@0
-    displayName: Install Node@$(node18Version)
+    displayName: Install Node@$(nodeVersion)
     inputs:
-      versionSpec: $(node18Version)
+      versionSpec: $(nodeVersion)
       checkLatest: true
 
   - script: node common/scripts/install-run-rush.js install --purge
