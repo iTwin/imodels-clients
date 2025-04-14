@@ -39,6 +39,7 @@ jobs:
         - Agent.OS -equals Darwin
     variables:
       - group: iModels Clients 3.0 - Integration Tests - DEV
+    nodeVersion: $(node18Version)
     workspace:
       clean: all
 
