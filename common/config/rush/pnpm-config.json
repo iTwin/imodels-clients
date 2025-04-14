@@ -4,6 +4,6 @@
   "globalOverrides": {
     "ws": "^8.17.1", // Fix for vulnerability: https://github.com/puppeteer/puppeteer/pull/12605
     "cross-spawn": "^7.0.5", // imodels-clients-tests-browser > cypress@13.17.0 > execa@4.1.0 > cross-spawn@7.0.3 -> CVE: https://github.com/advisories/GHSA-3xgq-45jj-v275
-    "tar-fs": "^3.0.8" // imodels-client-test-utils > puppeteer@13.5.2 > tar-fs@2.1.1 -> CVE: https://github.com/advisories/GHSA-pq67-2wwv-3xjx
+    "tar-fs": "^2.1.2" // imodels-client-test-utils > puppeteer@13.5.2 > tar-fs@2.1.1 -> CVE: https://github.com/advisories/GHSA-pq67-2wwv-3xjx
   } 
 }
