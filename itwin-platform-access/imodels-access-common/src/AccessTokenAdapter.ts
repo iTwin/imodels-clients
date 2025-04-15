@@ -2,16 +2,21 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AccessToken, RepositoryStatus } from "@itwin/core-bentley";
-import { IModelError } from "@itwin/core-common";
+import { AccessToken, ITwinError } from "@itwin/core-bentley";
 
-import { Authorization, AuthorizationCallback } from "@itwin/imodels-client-management";
+import { Authorization, AuthorizationCallback, IModelsErrorCode, IModelsErrorScope } from "@itwin/imodels-client-management";
 
 export class AccessTokenAdapter {
   public static toAuthorization(accessToken: AccessToken): Authorization {
     const splitAccessToken = accessToken.split(" ");
     if (splitAccessToken.length !== 2)
-      throw new IModelError(RepositoryStatus.InvalidRequest, "Unsupported access token format");
+      ITwinError.throwError({
+        iTwinErrorId: {
+          key: IModelsErrorCode.InvalidIModelsRequest,
+          scope: IModelsErrorScope
+        },
+        message: "Unsupported access token format"
+      });
 
     return {
       scheme: splitAccessToken[0],
