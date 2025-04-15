@@ -65,7 +65,8 @@ export class TestAuthorizationClient {
         width: 800,
         height: 1200
       },
-      args: ["--no-sandbox"]
+      // cspell:disable-next-line
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
     };
     const browser: puppeteer.Browser = await puppeteer.launch(browserLaunchOptions);
     const browserPage: puppeteer.Page = await browser.newPage();
