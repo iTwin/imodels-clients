@@ -5,7 +5,7 @@
 import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
 
-import { Browser, ChromeReleaseChannel, computeSystemExecutablePath, install } from "@puppeteer/browsers";
+import { Browser, BrowserPlatform, BrowserTag, ChromeReleaseChannel, computeSystemExecutablePath, detectBrowserPlatform, install, resolveBuildId } from "@puppeteer/browsers";
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
 import * as puppeteer from "puppeteer";
@@ -53,10 +53,14 @@ export class TestAuthorizationClient {
         channel: ChromeReleaseChannel.STABLE
       });
     } catch(e) {
-      const targetRevision = "970485";
+      const buildId = await resolveBuildId(
+        Browser.CHROMIUM,
+        detectBrowserPlatform() as BrowserPlatform,
+        BrowserTag.LATEST
+      );
       const installedBrowser = await install({
         browser: Browser.CHROMIUM,
-        buildId: targetRevision,
+        buildId,
         cacheDir: "../../common/temp"
       });
       executablePath = installedBrowser.executablePath;
