@@ -45,21 +45,7 @@ export class TestAuthorizationClient {
   ) { }
 
   public async getAccessToken(testUserCredentials: TestUserCredentials): Promise<string> {
-    const browserFetcher: puppeteer.BrowserFetcher = (puppeteer as unknown as puppeteer.PuppeteerNode).createBrowserFetcher(
-      {
-        platform: undefined,
-        product: undefined,
-        path: undefined,
-        host: undefined
-      });
-    const targetRevision = "970485";
-    const availableRevisions = await browserFetcher.localRevisions();
-    const revisionInfo = availableRevisions.includes(targetRevision) ?
-      browserFetcher.revisionInfo(targetRevision) :
-      await browserFetcher.download(targetRevision);
-
-    const browserLaunchOptions: puppeteer.LaunchOptions & puppeteer.BrowserLaunchArgumentOptions & puppeteer.BrowserConnectOptions = {
-      executablePath: revisionInfo.executablePath,
+    const browserLaunchOptions: puppeteer.LaunchOptions & puppeteer.ConnectOptions = {
       headless: true,
       defaultViewport: {
         width: 800,
