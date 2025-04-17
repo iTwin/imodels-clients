@@ -2,6 +2,5 @@
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/pnpm-config.schema.json",
   "useWorkspaces": true,
   "globalOverrides": {
-    "cross-spawn": "^7.0.5" // imodels-clients-tests-browser > cypress@13.17.0 > execa@4.1.0 > cross-spawn@7.0.3 -> CVE: https://github.com/advisories/GHSA-3xgq-45jj-v275
   } 
 }
