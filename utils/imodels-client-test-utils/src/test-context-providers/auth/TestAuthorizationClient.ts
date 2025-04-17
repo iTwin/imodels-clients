@@ -5,6 +5,7 @@
 import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
 
+import { Browser, BrowserPlatform, BrowserTag, ChromeReleaseChannel, computeSystemExecutablePath, detectBrowserPlatform, install, resolveBuildId } from "@puppeteer/browsers";
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
 import * as puppeteer from "puppeteer";
@@ -45,21 +46,28 @@ export class TestAuthorizationClient {
   ) { }
 
   public async getAccessToken(testUserCredentials: TestUserCredentials): Promise<string> {
-    const browserFetcher: puppeteer.BrowserFetcher = (puppeteer as unknown as puppeteer.PuppeteerNode).createBrowserFetcher(
-      {
-        platform: undefined,
-        product: undefined,
-        path: undefined,
-        host: undefined
+    let executablePath;
+    try{
+      executablePath = computeSystemExecutablePath({
+        browser: Browser.CHROME,
+        channel: ChromeReleaseChannel.STABLE
       });
-    const targetRevision = "970485";
-    const availableRevisions = await browserFetcher.localRevisions();
-    const revisionInfo = availableRevisions.includes(targetRevision) ?
-      browserFetcher.revisionInfo(targetRevision) :
-      await browserFetcher.download(targetRevision);
+    } catch(e) {
+      const buildId = await resolveBuildId(
+        Browser.CHROMIUM,
+        detectBrowserPlatform() as BrowserPlatform,
+        BrowserTag.LATEST
+      );
+      const installedBrowser = await install({
+        browser: Browser.CHROMIUM,
+        buildId,
+        cacheDir: "../../common/temp"
+      });
+      executablePath = installedBrowser.executablePath;
+    }
 
-    const browserLaunchOptions: puppeteer.LaunchOptions & puppeteer.BrowserLaunchArgumentOptions & puppeteer.BrowserConnectOptions = {
-      executablePath: revisionInfo.executablePath,
+    const browserLaunchOptions: puppeteer.LaunchOptions & puppeteer.ConnectOptions = {
+      executablePath,
       headless: true,
       defaultViewport: {
         width: 800,
