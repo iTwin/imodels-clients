@@ -4,10 +4,7 @@ settings:
   autoInstallPeers: false
   excludeLinksFromLockfile: false
 
-overrides:
-  cross-spawn: ^7.0.5
-
-pnpmfileChecksum: jmsifwrxg4slleckty7qyuymte
+pnpmfileChecksum: avk5jcsa6uxo2n5cahoirjiuw4
 
 importers:
 
