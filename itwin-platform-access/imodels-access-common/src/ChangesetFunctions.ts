@@ -2,10 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelStatus } from "@itwin/core-bentley";
-import { IModelError } from "@itwin/core-common";
+import { ITwinError } from "@itwin/core-bentley";
 
-import { Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, MinimalChangeset, MinimalNamedVersion, OrderByOperator, take, toArray } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetNamedVersionListParams, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, IModelsErrorScope, MinimalChangeset, MinimalNamedVersion, OrderByOperator, take, toArray } from "@itwin/imodels-client-management";
 
 import { handleAPIErrors } from "./ErrorHandlingFunctions";
 
@@ -48,7 +47,13 @@ export async function getNamedVersionChangeset(
   );
 
   if (namedVersions.length === 0 || !namedVersions[0].changesetId)
-    throw new IModelError(IModelStatus.NotFound, `Named version ${versionName} not found`);
+    ITwinError.throwError({
+      iTwinErrorId: {
+        key: IModelsErrorCode.NamedVersionNotFound,
+        scope: IModelsErrorScope
+      },
+      message: `Named version ${versionName} not found`
+    });
 
   return { id: namedVersions[0].changesetId, index: namedVersions[0].changesetIndex };
 }

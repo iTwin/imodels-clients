@@ -3,10 +3,10 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { LockProps, LockState, V2CheckpointAccessProps } from "@itwin/core-backend";
-import { ChangeSetStatus, IModelStatus, RepositoryStatus } from "@itwin/core-bentley";
-import { ChangesetFileProps, ChangesetProps, ChangesetType, IModelError } from "@itwin/core-common";
+import { ITwinError } from "@itwin/core-bentley";
+import { ChangesetFileProps, ChangesetProps, ChangesetType } from "@itwin/core-common";
 
-import { ContainerAccessInfo, ContainingChanges, DownloadedChangeset, IModelsErrorCode, Lock, LockLevel, MinimalChangeset, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { ContainerAccessInfo, ContainingChanges, DownloadedChangeset, IModelsErrorCode, IModelsErrorScope, Lock, LockLevel, MinimalChangeset, isIModelsApiError } from "@itwin/imodels-client-authoring";
 
 export class ClientToPlatformAdapter {
   public static toChangesetProps(changeset: MinimalChangeset): ChangesetProps {
@@ -41,7 +41,13 @@ export class ClientToPlatformAdapter {
 
   public static toV2CheckpointAccessProps(containerAccessInfo: ContainerAccessInfo): V2CheckpointAccessProps {
     if (!containerAccessInfo.container || !containerAccessInfo.sas || !containerAccessInfo.account || !containerAccessInfo.dbName)
-      throw new IModelError(IModelStatus.NotFound, "Invalid V2 checkpoint");
+      ITwinError.throwError({
+        iTwinErrorId: {
+          key: IModelsErrorCode.CheckpointNotFound,
+          scope: IModelsErrorScope
+        },
+        message: "Invalid V2 checkpoint"
+      });
 
     return {
       containerId: containerAccessInfo.container,
@@ -56,8 +62,7 @@ export class ClientToPlatformAdapter {
     if (!isIModelsApiError(error) || error.code !== IModelsErrorCode.DownloadAborted)
       return error;
 
-    const errorNumber = ChangeSetStatus.CHANGESET_ERROR_BASE + 26; // ChangeSetStatus.DownloadCancelled (only available from iTwinJs 3.5)
-    return new IModelError(errorNumber, error.message);
+    return ITwinError.create({ iTwinErrorId: { key: IModelsErrorCode.DownloadCancelled, scope: IModelsErrorScope }, message: error.message });
   }
 
   // eslint-disable-next-line deprecation/deprecation
@@ -73,7 +78,13 @@ export class ClientToPlatformAdapter {
         // eslint-disable-next-line deprecation/deprecation
         return LockState.Exclusive;
       default:
-        throw new IModelError(RepositoryStatus.InvalidResponse, "Unsupported LockLevel");
+        ITwinError.throwError({
+          iTwinErrorId: {
+            key: IModelsErrorCode.InvalidIModelsRequest,
+            scope: IModelsErrorScope
+          },
+          message: "Unsupported LockLevel"
+        });
     }
   }
 

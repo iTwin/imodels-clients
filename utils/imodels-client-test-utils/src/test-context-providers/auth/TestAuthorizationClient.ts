@@ -5,6 +5,7 @@
 import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
 
+import { Browser, BrowserPlatform, BrowserTag, ChromeReleaseChannel, computeSystemExecutablePath, detectBrowserPlatform, install, resolveBuildId } from "@puppeteer/browsers";
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
 import { type Browser, type ElementHandle, type HTTPRequest, type LaunchOptions, type Page, type PuppeteerLifeCycleEvent, launch } from "puppeteer";
@@ -45,12 +46,35 @@ export class TestAuthorizationClient {
   ) { }
 
   public async getAccessToken(testUserCredentials: TestUserCredentials): Promise<string> {
-    const browserLaunchOptions: LaunchOptions = {
+    let executablePath;
+    try{
+      executablePath = computeSystemExecutablePath({
+        browser: Browser.CHROME,
+        channel: ChromeReleaseChannel.STABLE
+      });
+    } catch(e) {
+      const buildId = await resolveBuildId(
+        Browser.CHROMIUM,
+        detectBrowserPlatform() as BrowserPlatform,
+        BrowserTag.LATEST
+      );
+      const installedBrowser = await install({
+        browser: Browser.CHROMIUM,
+        buildId,
+        cacheDir: "../../common/temp"
+      });
+      executablePath = installedBrowser.executablePath;
+    }
+
+    const browserLaunchOptions: puppeteer.LaunchOptions & puppeteer.ConnectOptions = {
+      executablePath,
       headless: true,
       defaultViewport: {
         width: 800,
         height: 1200
-      }
+      },
+      // cspell:disable-next-line
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
     };
     const browser: Browser = await launch(browserLaunchOptions);
     const browserPage: Page = await browser.newPage();

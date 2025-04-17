@@ -33,11 +33,12 @@
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",
     "@itwin/object-storage-core": "^2.2.5",
+    "@puppeteer/browsers": "^2.10.0",
     "axios": "^1.8.2",
     "chai": "~4.3.10",
     "dotenv": "~10.0.0",
     "inversify": "~6.0.2",
-    "puppeteer": "^24.6.1",
+    "puppeteer": "~24.6.1",
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
