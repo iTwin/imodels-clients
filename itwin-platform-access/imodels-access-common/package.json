@@ -46,12 +46,13 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
   },
   "dependencies": {
-    "@itwin/imodels-client-management": "workspace:*"
+    "@itwin/imodels-client-management": "workspace:*",
+    "@itwin/imodels-client-authoring": "workspace:*"
   },
   "devDependencies": {
-    "@itwin/core-bentley": "^4.0.0",
-    "@itwin/core-common": "^4.0.0",
-    "@itwin/core-geometry": "^4.0.0",
+    "@itwin/core-bentley": "^5.0.0-dev.0",
+    "@itwin/core-common": "^5.0.0-dev.0",
+    "@itwin/core-geometry": "^5.0.0-dev.0",
     "@itwin/eslint-plugin": "~3.7.8",
     "@itwin/imodels-client-common-config": "workspace:*",
     "@typescript-eslint/eslint-plugin": "~6.14.0",
@@ -66,7 +67,7 @@
     "typescript": "~5.3.3"
   },
   "peerDependencies": {
-    "@itwin/core-bentley": "^4.0.0",
-    "@itwin/core-common": "^4.0.0"
+    "@itwin/core-bentley": "^5.0.0-dev.0",
+    "@itwin/core-common": "^5.0.0-dev.0"
   }
 }

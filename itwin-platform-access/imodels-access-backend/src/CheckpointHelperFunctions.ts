@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 
-import { CheckpointProps,
-  DownloadRequest,
+import {
+  CheckpointProps, DownloadRequest,
   V2CheckpointAccessProps
 } from "@itwin/core-backend";
 import { Logger } from "@itwin/core-bentley";
@@ -46,6 +46,7 @@ export async function queryCurrentOrPrecedingV2Checkpoint(
 export async function queryCurrentOrPrecedingV1Checkpoint(
   iModelsClient: IModelsClient,
   iModelScopedOperationParams: IModelScopedOperationParams,
+  // eslint-disable-next-line deprecation/deprecation
   checkpointArg: DownloadRequest
 ): Promise<Checkpoint | undefined> {
   const changesetIndex = await resolveChangesetIndexFromParamsOrQueryApi(iModelsClient, iModelScopedOperationParams, checkpointArg.checkpoint);

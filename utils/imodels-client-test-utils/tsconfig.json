@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "./lib/esm",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true
   },
   "types": [
     "reflect-metadata"

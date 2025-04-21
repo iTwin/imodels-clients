@@ -3,10 +3,12 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 
-import { ChangeSetStatus, IModelHubStatus } from "@itwin/core-bentley";
-import { IModelError } from "@itwin/core-common";
+import { ITwinError } from "@itwin/core-bentley";
 
-import { IModelsError, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
+import { ConflictingLock } from "@itwin/imodels-client-authoring";
+import { IModelsError, IModelsErrorCode, IModelsErrorScope, isIModelsApiError } from "@itwin/imodels-client-management";
+
+import { ConflictingLocksError } from "./IModelsClientsErrorInterfaces.js";
 
 export type OperationNameForErrorMapping
   = "acquireBriefcase"
@@ -15,7 +17,7 @@ export type OperationNameForErrorMapping
   | "createChangeset";
 
 export class ErrorAdapter {
-  public static toIModelError(error: unknown, operationName?: OperationNameForErrorMapping): unknown {
+  public static toITwinError(error: unknown, operationName?: OperationNameForErrorMapping): unknown {
     if (!isIModelsApiError(error))
       return error;
 
@@ -32,11 +34,21 @@ export class ErrorAdapter {
     if (error.code === IModelsErrorCode.InvalidIModelsRequest)
       return ErrorAdapter.adaptInvalidRequestErrorIfPossible(error);
 
-    let errorNumber = ErrorAdapter.tryMapGenericErrorCode(error.code, operationName);
-    if (!errorNumber)
-      errorNumber = ErrorAdapter.mapErrorCode(error.code);
+    let errorCode = ErrorAdapter.tryMapGenericErrorCode(error.code, operationName);
+    if (!errorCode)
+      errorCode = ErrorAdapter.mapErrorCode(error.code);
 
-    return new IModelError(errorNumber, error.message);
+    if ("conflictingLocks" in error)
+      return ITwinError.create<ConflictingLocksError>({
+        iTwinErrorId: {
+          key: errorCode,
+          scope: IModelsErrorScope
+        },
+        message: error.message,
+        conflictingLocks: error.conflictingLocks as ConflictingLock[]
+      });
+
+    return ITwinError.create({ iTwinErrorId: { key: errorCode, scope: IModelsErrorScope }, message: error.message });
   }
 
   private static isAPIAuthError(apiErrorCode: IModelsErrorCode): boolean {
@@ -87,13 +99,19 @@ export class ErrorAdapter {
     }
   }
 
-  private static adaptInvalidRequestErrorIfPossible(originalError: IModelsError): IModelsError | IModelError {
+  private static adaptInvalidRequestErrorIfPossible(originalError: IModelsError): IModelsError | ITwinError {
     if (!originalError.details)
       return originalError;
 
     for (const errorDetail of originalError.details)
       if (errorDetail.innerError?.code === IModelsErrorCode.MaximumNumberOfBriefcasesPerUser)
-        return new IModelError(IModelHubStatus.MaximumNumberOfBriefcasesPerUser, originalError.message);
+        return ITwinError.create<ITwinError>({
+          iTwinErrorId: {
+            key: IModelsErrorCode.MaximumNumberOfBriefcasesPerUser,
+            scope: IModelsErrorScope
+          },
+          message: originalError.message
+        });
 
     return originalError;
   }
@@ -101,64 +119,48 @@ export class ErrorAdapter {
   private static tryMapGenericErrorCode(
     apiErrorCode: IModelsErrorCode,
     operationName?: OperationNameForErrorMapping
-  ): IModelHubStatus | ChangeSetStatus | undefined {
+  ): IModelsErrorCode | undefined {
     if (!operationName)
       return;
 
     if (apiErrorCode === IModelsErrorCode.RateLimitExceeded && operationName === "acquireBriefcase")
-      return IModelHubStatus.MaximumNumberOfBriefcasesPerUserPerMinute;
+      return IModelsErrorCode.MaximumNumberOfBriefcasesPerUserPerMinute;
 
     if (apiErrorCode === IModelsErrorCode.DownloadAborted && operationName === "downloadChangesets")
-      return ChangeSetStatus.DownloadCancelled;
+      return IModelsErrorCode.DownloadCancelled;
 
     if (apiErrorCode === IModelsErrorCode.ConflictWithAnotherUser) {
       if (operationName === "createChangeset")
-        return IModelHubStatus.AnotherUserPushing;
+        return IModelsErrorCode.AnotherUserPushing;
       else if (operationName === "updateLocks")
-        return IModelHubStatus.LockOwnedByAnotherBriefcase;
+        return IModelsErrorCode.LockOwnedByAnotherBriefcase;
     }
 
     return undefined;
   }
 
-  private static mapErrorCode(apiErrorCode: IModelsErrorCode): IModelHubStatus {
+  private static mapErrorCode(apiErrorCode: IModelsErrorCode): IModelsErrorCode {
     switch (apiErrorCode) {
       case IModelsErrorCode.Unknown:
-        return IModelHubStatus.OperationFailed;
-
       case IModelsErrorCode.ITwinNotFound:
-        return IModelHubStatus.ITwinDoesNotExist;
       case IModelsErrorCode.IModelNotFound:
-        return IModelHubStatus.iModelDoesNotExist;
       case IModelsErrorCode.ChangesetNotFound:
-        return IModelHubStatus.ChangeSetDoesNotExist;
       case IModelsErrorCode.BriefcaseNotFound:
-        return IModelHubStatus.BriefcaseDoesNotExist;
       case IModelsErrorCode.FileNotFound:
-        return IModelHubStatus.FileDoesNotExist;
       case IModelsErrorCode.CheckpointNotFound:
-        return IModelHubStatus.CheckpointDoesNotExist;
       case IModelsErrorCode.LockNotFound:
-        return IModelHubStatus.LockDoesNotExist;
-
       case IModelsErrorCode.IModelExists:
-        return IModelHubStatus.iModelAlreadyExists;
       case IModelsErrorCode.VersionExists:
-        return IModelHubStatus.VersionAlreadyExists;
       case IModelsErrorCode.ChangesetExists:
-        return IModelHubStatus.ChangeSetAlreadyExists;
       case IModelsErrorCode.NamedVersionOnChangesetExists:
-        return IModelHubStatus.ChangeSetAlreadyHasVersion;
-
       case IModelsErrorCode.NewerChangesExist:
-        return IModelHubStatus.PullIsRequired;
       case IModelsErrorCode.BaselineFileInitializationTimedOut:
       case IModelsErrorCode.IModelFromTemplateInitializationTimedOut:
       case IModelsErrorCode.ClonedIModelInitializationTimedOut:
-        return IModelHubStatus.InitializationTimeout;
+        return apiErrorCode;
 
       default:
-        return IModelHubStatus.Unknown;
+        return IModelsErrorCode.Unknown;
     }
   }
 }

@@ -2,13 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelHubStatus, IModelStatus } from "@itwin/core-bentley";
-import { IModelError, IModelVersion } from "@itwin/core-common";
+import { ITwinError } from "@itwin/core-bentley";
+import { IModelVersion } from "@itwin/core-common";
 import { IModelIdArg } from "@itwin/core-frontend";
 import { FrontendIModelsAccess } from "@itwin/imodels-access-frontend";
 import { expect } from "chai";
 
-import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-management";
+import { IModelsClient, IModelsClientOptions, IModelsErrorCode, IModelsErrorScope } from "@itwin/imodels-client-management";
 import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider.js";
@@ -34,7 +34,7 @@ describe("FrontendIModelsAccess error handling", () => {
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
   });
 
-  it("should throw IModelError if iModel does not exist when querying latest changeset", async () => {
+  it("should throw ITwinError if iModel does not exist when querying latest changeset", async () => {
     const getLatestChangesetParams: IModelIdArg = {
       accessToken,
       iModelId: "nonExistentiModelId"
@@ -42,11 +42,11 @@ describe("FrontendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => frontendIModelsAccess.getLatestChangeset(getLatestChangesetParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when resolving changeset for version (IModelVersion.named)", async () => {
+  it("should throw ITwinError if iModel does not exist when resolving changeset for version (IModelVersion.named)", async () => {
     const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -55,11 +55,11 @@ describe("FrontendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => frontendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if named version does not exist when resolving changeset from version", async () => {
+  it("should throw ITwinError if named version does not exist when resolving changeset from version", async () => {
     const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
       accessToken,
       iModelId: testIModelForRead.id,
@@ -68,11 +68,11 @@ describe("FrontendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => frontendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
-      IModelStatus.NotFound
+      IModelsErrorCode.NamedVersionNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when resolving changeset for version (IModelVersion.asOfChangeSet)", async () => {
+  it("should throw ITwinError if iModel does not exist when resolving changeset for version (IModelVersion.asOfChangeSet)", async () => {
     const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -81,11 +81,11 @@ describe("FrontendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => frontendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if changeset does not exist when resolving changeset from version", async () => {
+  it("should throw ITwinError if changeset does not exist when resolving changeset from version", async () => {
     const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
       accessToken,
       iModelId: testIModelForRead.id,
@@ -94,11 +94,11 @@ describe("FrontendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => frontendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
-      IModelHubStatus.ChangeSetDoesNotExist
+      IModelsErrorCode.ChangesetNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when resolving changeset from latest version", async () => {
+  it("should throw ITwinError if iModel does not exist when resolving changeset from latest version", async () => {
     const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -107,11 +107,11 @@ describe("FrontendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => frontendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if IModel does not exist when querying changeset for named version", async () => {
+  it("should throw ITwinError if IModel does not exist when querying changeset for named version", async () => {
     const getChangesetFromNamedVersionParams: IModelIdArg & { versionName: string } = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -120,11 +120,11 @@ describe("FrontendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => frontendIModelsAccess.getChangesetFromNamedVersion(getChangesetFromNamedVersionParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if Named Version does not exist when querying changeset for named version", async () => {
+  it("should throw ITwinError if Named Version does not exist when querying changeset for named version", async () => {
     const getChangesetFromNamedVersionParams: IModelIdArg & { versionName: string } = {
       accessToken,
       iModelId: testIModelForRead.id,
@@ -133,11 +133,11 @@ describe("FrontendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => frontendIModelsAccess.getChangesetFromNamedVersion(getChangesetFromNamedVersionParams),
-      IModelStatus.NotFound
+      IModelsErrorCode.NamedVersionNotFound
     );
   });
 
-  async function executeFuncAndAssertError(func: () => (Promise<void> | Promise<unknown>), expectedErrorNumber: number): Promise<void> {
+  async function executeFuncAndAssertError(func: () => (Promise<void> | Promise<unknown>), expectedErrorCode: string): Promise<void> {
     let thrownError: unknown;
     try {
       await func();
@@ -145,9 +145,8 @@ describe("FrontendIModelsAccess error handling", () => {
       thrownError = error;
     }
 
+    expect(ITwinError.isError(thrownError, IModelsErrorScope, expectedErrorCode)).to.be.true;
     expect(thrownError).to.not.be.undefined;
-    expect(thrownError).to.be.instanceOf(IModelError);
-    expect((thrownError as IModelError).errorNumber).to.be.equal(expectedErrorNumber);
-    expect((thrownError as IModelError).message).to.not.be.empty;
+    expect((thrownError as ITwinError).message).to.not.be.empty;
   }
 });

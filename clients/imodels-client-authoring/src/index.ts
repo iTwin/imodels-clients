@@ -19,7 +19,7 @@ export {
   GetSingleChangesetGroupParams, NamedVersionOrderByProperty, GetNamedVersionListParams, GetNamedVersionListUrlParams, GetSingleNamedVersionParams,
   NamedVersionPropertiesForCreate, CreateNamedVersionParams, EditableNamedVersionProperties, NamedVersionPropertiesForUpdate, UpdateNamedVersionParams, CheckpointParentEntityId, GetSingleCheckpointParams,
   DownloadThumbnailParams, DownloadThumbnailUrlParams, ThumbnailPropertiesForUpload, UploadThumbnailParams, UserOrderByProperty, GetUserListParams, GetSingleUserParams, GetUserPermissionsParams,
-  GetCreateIModelOperationDetailsParams, MinimalIModel, ChangesetState, ChangesetGroup
+  GetCreateIModelOperationDetailsParams, MinimalIModel, ChangesetState, ChangesetGroup, IModelsErrorScope
 } from "@itwin/imodels-client-management";
 
 export * from "./base/types/index.js";

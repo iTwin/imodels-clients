@@ -2,11 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelStatus } from "@itwin/core-bentley";
-import { ChangesetIndexAndId, IModelError, IModelVersion } from "@itwin/core-common";
+import { ITwinError } from "@itwin/core-bentley";
+import { ChangesetIndexAndId, IModelVersion } from "@itwin/core-common";
 import { FrontendHubAccess, IModelApp, IModelIdArg } from "@itwin/core-frontend";
 import { AccessTokenAdapter, Constants, getLatestMinimalChangesetIfExists, getNamedVersionChangeset, handleAPIErrors} from "@itwin/imodels-access-common";
-import { AuthorizationCallback, Changeset, EntityListIterator, GetNamedVersionListParams, GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, MinimalNamedVersion, NamedVersionOrderByProperty, OrderByOperator, take } from "@itwin/imodels-client-management";
+import { AuthorizationCallback, Changeset, EntityListIterator, GetNamedVersionListParams, GetSingleChangesetParams, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, IModelsErrorScope, MinimalNamedVersion, NamedVersionOrderByProperty, OrderByOperator, take } from "@itwin/imodels-client-management";
 
 export class FrontendIModelsAccess implements FrontendHubAccess {
   private readonly _emptyChangeset: ChangesetIndexAndId = { index: Constants.ChangeSet0.index, id: Constants.ChangeSet0.id };
@@ -27,7 +27,14 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
     );
 
     if (!changeset)
-      throw new IModelError(IModelStatus.NotFound, `Changeset ${arg.changeSetId} not found`);
+      ITwinError.throwError({
+        iTwinErrorId: {
+          key: IModelsErrorCode.ChangesetNotFound,
+          scope: IModelsErrorScope
+        },
+        message: `Changeset ${arg.changeSetId} not found`
+      });
+
     return { index: changeset.index, id: changeset.id };
   }
 
@@ -98,7 +105,13 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
     );
 
     if (namedVersions.length === 0 || !namedVersions[0].changesetIndex || !namedVersions[0].changesetId)
-      throw new IModelError(IModelStatus.NotFound, "No named versions found");
+      ITwinError.throwError({
+        iTwinErrorId: {
+          key: IModelsErrorCode.NamedVersionNotFound,
+          scope: IModelsErrorScope
+        },
+        message: "No named versions found"
+      });
 
     return { index: namedVersions[0].changesetIndex, id: namedVersions[0].changesetId };
   }

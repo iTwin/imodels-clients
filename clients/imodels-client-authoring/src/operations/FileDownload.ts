@@ -51,9 +51,9 @@ export async function downloadFile(params: DownloadFileParams): Promise<void> {
       });
     }
 
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       downloadStream.on("error", reject);
-      targetFileStream.on("close", () => resolve(undefined));
+      targetFileStream.on("close", () => resolve());
     });
   } catch (error: unknown) {
     targetFileStream.end();

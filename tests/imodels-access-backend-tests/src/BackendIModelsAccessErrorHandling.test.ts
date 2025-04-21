@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import path from "node:path";
 import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, BriefcaseIdArg, ChangesetArg, ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadRequest, IModelHost, IModelIdArg, IModelNameArg, ITwinIdArg, LockMap, LockState } from "@itwin/core-backend";
-import { IModelHubStatus, IModelStatus } from "@itwin/core-bentley";
-import { ChangesetFileProps, IModelError, IModelVersion } from "@itwin/core-common";
+import { ITwinError } from "@itwin/core-bentley";
+import { ChangesetFileProps, IModelVersion } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 
-import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { IModelsClient, IModelsClientOptions, IModelsErrorCode, IModelsErrorScope } from "@itwin/imodels-client-authoring";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider.js";
@@ -72,7 +72,7 @@ describe("BackendIModelsAccess error handling", () => {
     await testIModelGroup.cleanupIModels();
   });
 
-  it("should throw IModelError if changeset does not exist when downloading a single changeset", async () => {
+  it("should throw ITwinError if changeset does not exist when downloading a single changeset", async () => {
     const downloadChangesetParams: DownloadChangesetArg = {
       accessToken,
       iModelId: testIModelForRead.id,
@@ -82,11 +82,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.downloadChangeset(downloadChangesetParams),
-      IModelHubStatus.ChangeSetDoesNotExist
+      IModelsErrorCode.ChangesetNotFound
     );
   });
 
-  it("should throw IModelError if changeset does not exist when querying a single changeset", async () => {
+  it("should throw ITwinError if changeset does not exist when querying a single changeset", async () => {
     const queryChangesetParams: ChangesetArg = {
       accessToken,
       iModelId: testIModelForRead.id,
@@ -95,11 +95,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.queryChangeset(queryChangesetParams),
-      IModelHubStatus.ChangeSetDoesNotExist
+      IModelsErrorCode.ChangesetNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when querying changesets", async () => {
+  it("should throw ITwinError if iModel does not exist when querying changesets", async () => {
     const queryChangesetsParams: ChangesetRangeArg = {
       accessToken,
       iModelId: "nonExistentiModelId"
@@ -107,11 +107,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.queryChangesets(queryChangesetsParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if Briefcase does not exist when pushing changeset", async () => {
+  it("should throw ITwinError if Briefcase does not exist when pushing changeset", async () => {
     const testIModelChangeset = testIModelFileProvider.changesets[0];
     const pushChangesetParams: IModelIdArg & { changesetProps: ChangesetFileProps } = {
       accessToken,
@@ -132,11 +132,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.pushChangeset(pushChangesetParams),
-      IModelHubStatus.BriefcaseDoesNotExist
+      IModelsErrorCode.BriefcaseNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when querying latest changeset", async () => {
+  it("should throw ITwinError if iModel does not exist when querying latest changeset", async () => {
     const getLatestChangesetParams: IModelIdArg = {
       accessToken,
       iModelId: "nonExistentiModelId"
@@ -144,11 +144,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.getLatestChangeset(getLatestChangesetParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when resolving changeset for version (IModelVersion.named)", async () => {
+  it("should throw ITwinError if iModel does not exist when resolving changeset for version (IModelVersion.named)", async () => {
     const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -157,11 +157,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if named version does not exist when resolving changeset from version", async () => {
+  it("should throw ITwinError if named version does not exist when resolving changeset from version", async () => {
     const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
       accessToken,
       iModelId: testIModelForWrite.id,
@@ -170,11 +170,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
-      IModelStatus.NotFound
+      IModelsErrorCode.NamedVersionNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when resolving changeset for version (IModelVersion.asOfChangeSet)", async () => {
+  it("should throw ITwinError if iModel does not exist when resolving changeset for version (IModelVersion.asOfChangeSet)", async () => {
     const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -183,11 +183,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if changeset does not exist when resolving changeset from version", async () => {
+  it("should throw ITwinError if changeset does not exist when resolving changeset from version", async () => {
     const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
       accessToken,
       iModelId: testIModelForWrite.id,
@@ -196,11 +196,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
-      IModelHubStatus.ChangeSetDoesNotExist
+      IModelsErrorCode.ChangesetNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when resolving changeset from latest version", async () => {
+  it("should throw ITwinError if iModel does not exist when resolving changeset from latest version", async () => {
     const getChangesetFromVersionParams: IModelIdArg & { version: IModelVersion } = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -209,11 +209,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.getChangesetFromVersion(getChangesetFromVersionParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if IModel does not exist when querying changeset for named version", async () => {
+  it("should throw ITwinError if IModel does not exist when querying changeset for named version", async () => {
     const getChangesetFromNamedVersionParams: IModelIdArg & { versionName: string } = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -222,11 +222,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.getChangesetFromNamedVersion(getChangesetFromNamedVersionParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if Named Version does not exist when querying changeset for named version", async () => {
+  it("should throw ITwinError if Named Version does not exist when querying changeset for named version", async () => {
     const getChangesetFromNamedVersionParams: IModelIdArg & { versionName: string } = {
       accessToken,
       iModelId: testIModelForWrite.id,
@@ -235,11 +235,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.getChangesetFromNamedVersion(getChangesetFromNamedVersionParams),
-      IModelStatus.NotFound
+      IModelsErrorCode.NamedVersionNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when acquiring briefcase", async () => {
+  it("should throw ITwinError if iModel does not exist when acquiring briefcase", async () => {
     const acquireNewBriefcaseIdParams: AcquireNewBriefcaseIdArg = {
       accessToken,
       iModelId: "nonExistentiModelId"
@@ -247,11 +247,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.acquireNewBriefcaseId(acquireNewBriefcaseIdParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError when too many briefcases per user per minute are acquired", async () => {
+  it("should throw ITwinError when too many briefcases per user per minute are acquired", async () => {
     const briefcaseIds: number[] = [];
     try {
       const acquireNewBriefcaseIdParams: AcquireNewBriefcaseIdArg = {
@@ -268,7 +268,7 @@ describe("BackendIModelsAccess error handling", () => {
 
       await executeFuncAndAssertError(
         acquire6BriefcasesFunc,
-        IModelHubStatus.MaximumNumberOfBriefcasesPerUserPerMinute
+        IModelsErrorCode.MaximumNumberOfBriefcasesPerUserPerMinute
       );
 
     } finally {
@@ -283,7 +283,7 @@ describe("BackendIModelsAccess error handling", () => {
     }
   });
 
-  it("should throw IModelError if briefcase does not exist when releasing briefcase", async () => {
+  it("should throw ITwinError if briefcase does not exist when releasing briefcase", async () => {
     const releaseBriefcaseParams: BriefcaseIdArg = {
       accessToken,
       iModelId: testIModelForWrite.id,
@@ -292,11 +292,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.releaseBriefcase(releaseBriefcaseParams),
-      IModelHubStatus.BriefcaseDoesNotExist
+      IModelsErrorCode.BriefcaseNotFound
     );
   });
 
-  it("should throw IModelError if changeset does not exist when downloading V1 checkpoint for specific changeset", async () => {
+  it("should throw ITwinError if changeset does not exist when downloading V1 checkpoint for specific changeset", async () => {
     const downloadV1CheckpointParams: DownloadRequest = {
       localFile: path.join(testDownloadPath, "error handling v1.bim"),
       checkpoint: {
@@ -310,11 +310,11 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       // eslint-disable-next-line deprecation/deprecation
       async () => backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams),
-      IModelHubStatus.ChangeSetDoesNotExist
+      IModelsErrorCode.ChangesetNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when downloading baseline V1 checkpoint", async () => {
+  it("should throw ITwinError if iModel does not exist when downloading baseline V1 checkpoint", async () => {
     const downloadV1CheckpointParams: DownloadRequest = {
       localFile: path.join(testDownloadPath, "error handling v1.bim"),
       checkpoint: {
@@ -328,11 +328,11 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       // eslint-disable-next-line deprecation/deprecation
       async () => backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when querying V2 checkpoint", async () => {
+  it("should throw ITwinError if iModel does not exist when querying V2 checkpoint", async () => {
     const queryV2CheckpointParams: CheckpointProps = {
       accessToken,
       iTwinId: "",
@@ -342,11 +342,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if briefcase does not exist when acquiring locks", async () => {
+  it("should throw ITwinError if briefcase does not exist when acquiring locks", async () => {
     const briefcaseDbParams: BriefcaseDbArg = {
       accessToken,
       iModelId: testIModelForWrite.id,
@@ -365,11 +365,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.acquireLocks(briefcaseDbParams, locksToAcquire),
-      IModelHubStatus.BriefcaseDoesNotExist
+      IModelsErrorCode.BriefcaseNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when querying all locks", async () => {
+  it("should throw ITwinError if iModel does not exist when querying all locks", async () => {
     const queryAllLocksParams: BriefcaseDbArg = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -378,11 +378,11 @@ describe("BackendIModelsAccess error handling", () => {
     };
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.queryAllLocks(queryAllLocksParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if iModel does not exist when releasing all locks", async () => {
+  it("should throw ITwinError if iModel does not exist when releasing all locks", async () => {
     const briefcaseDbParams: BriefcaseDbArg = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -392,11 +392,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.releaseAllLocks(briefcaseDbParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  it("should throw IModelError if iTwin does not exist when querying iModel with specific name", async () => {
+  it("should throw ITwinError if iTwin does not exist when querying iModel with specific name", async () => {
     const queryIModelByNameParams: IModelNameArg = {
       accessToken,
       iTwinId: createGuidValue(),
@@ -405,11 +405,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.queryIModelByName(queryIModelByNameParams),
-      IModelHubStatus.ITwinDoesNotExist
+      IModelsErrorCode.ITwinNotFound
     );
   });
 
-  it("should throw IModelError if user attempts to create iModel with duplicate name", async () => {
+  it("should throw ITwinError if user attempts to create iModel with duplicate name", async () => {
     const createNewIModelParams: CreateNewIModelProps = {
       accessToken,
       iTwinId,
@@ -418,11 +418,11 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.createNewIModel(createNewIModelParams),
-      IModelHubStatus.iModelAlreadyExists
+      IModelsErrorCode.IModelExists
     );
   });
 
-  it("should throw IModelError if user attempts to delete nonexistent iModel", async () => {
+  it("should throw ITwinError if user attempts to delete nonexistent iModel", async () => {
     const deleteIModelParams: IModelIdArg & ITwinIdArg = {
       accessToken,
       iModelId: "nonExistentiModelId",
@@ -430,11 +430,11 @@ describe("BackendIModelsAccess error handling", () => {
     };
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.deleteIModel(deleteIModelParams),
-      IModelHubStatus.iModelDoesNotExist
+      IModelsErrorCode.IModelNotFound
     );
   });
 
-  async function executeFuncAndAssertError(func: () => (Promise<void> | Promise<unknown>), expectedErrorNumber: number): Promise<void> {
+  async function executeFuncAndAssertError(func: () => (Promise<void> | Promise<unknown>), expectedErrorCode: string): Promise<void> {
     let thrownError: unknown;
     try {
       await func();
@@ -443,8 +443,7 @@ describe("BackendIModelsAccess error handling", () => {
     }
 
     expect(thrownError).to.not.be.undefined;
-    expect(thrownError).to.be.instanceOf(IModelError);
-    expect((thrownError as IModelError).errorNumber).to.be.equal(expectedErrorNumber);
-    expect((thrownError as IModelError).message).to.not.be.empty;
+    expect(ITwinError.isError(thrownError, IModelsErrorScope, expectedErrorCode)).to.be.true;
+    expect((thrownError as ITwinError).message).to.not.be.empty;
   }
 });

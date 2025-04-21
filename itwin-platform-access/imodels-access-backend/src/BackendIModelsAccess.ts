@@ -6,13 +6,12 @@ import { join } from "path";
 
 import {
   AcquireNewBriefcaseIdArg, BackendHubAccess, BriefcaseDbArg, BriefcaseIdArg, BriefcaseLocalValue, ChangesetArg,
-  ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadRequest, DownloadChangesetArg, DownloadChangesetRangeArg,
+  ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetArg, DownloadChangesetRangeArg, DownloadRequest,
   IModelDb, IModelHost, IModelIdArg, IModelJsFs, IModelJsNative, IModelNameArg, ITwinIdArg, KnownLocations, LockMap, LockProps, SnapshotDb, TokenArg, V2CheckpointAccessProps
 } from "@itwin/core-backend";
-import { AccessToken, BriefcaseStatus, Guid, GuidString, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
+import { AccessToken, Guid, GuidString, ITwinError, Logger, OpenMode, StopWatch } from "@itwin/core-bentley";
 import {
-  BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelError,
-  IModelVersion
+  BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelVersion
 } from "@itwin/core-common";
 import { AccessTokenAdapter, Constants, getLatestFullChangesetIfExists, getNamedVersionChangeset, ErrorAdapter, handleAPIErrors} from "@itwin/imodels-access-common";
 import { downloadFile } from "@itwin/imodels-client-authoring";
@@ -22,7 +21,7 @@ import {
   Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams,
   DeleteIModelParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset,
   EntityListIterator, GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetLockListParams,
-  GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode,
+  GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, IModelsErrorScope,
   Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalIModel,
   ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
 } from "@itwin/imodels-client-authoring";
@@ -203,7 +202,14 @@ export class BackendIModelsAccess implements BackendHubAccess {
     );
 
     if (!briefcase)
-      throw new IModelError(BriefcaseStatus.CannotAcquire, "Could not acquire briefcase");
+      ITwinError.throwError({
+        iTwinErrorId: {
+          key: IModelsErrorCode.CannotAcquire,
+          scope: IModelsErrorScope
+        },
+        message: "Could not acquire briefcase"
+      });
+
     return briefcase.briefcaseId;
   }
 
@@ -247,7 +253,13 @@ export class BackendIModelsAccess implements BackendHubAccess {
       arg
     );
     if (!checkpoint || !checkpoint._links?.download)
-      throw new IModelError(BriefcaseStatus.VersionNotFound, "V1 checkpoint not found");
+      ITwinError.throwError({
+        iTwinErrorId: {
+          key: IModelsErrorCode.CheckpointNotFound,
+          scope: IModelsErrorScope
+        },
+        message: "V1 checkpoint not found"
+      });
 
     const v1CheckpointSize = await getV1CheckpointSize(checkpoint._links.download.href);
 
@@ -298,7 +310,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
           : undefined;
       }
 
-      throw ErrorAdapter.toIModelError(error);
+      throw ErrorAdapter.toITwinError(error);
     }
 
     // Means the v2 checkpoint does not exist.
