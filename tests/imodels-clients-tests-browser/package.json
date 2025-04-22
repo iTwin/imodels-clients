@@ -29,8 +29,8 @@
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
-    "test:integration": "cypress run --browser chrome",
-    "test:integration:debug": "cypress open --browser chrome",
+    "test:integration": "cypress run",
+    "test:integration:debug": "cypress open",
     "test:unit": ""
   },
   "eslintConfig": {

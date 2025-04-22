@@ -2,13 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangeSetStatus, IModelHubStatus } from "@itwin/core-bentley";
-import { IModelError } from "@itwin/core-common";
+import { ITwinError } from "@itwin/core-bentley";
 import { ErrorAdapter, OperationNameForErrorMapping } from "@itwin/imodels-access-common/lib/ErrorAdapter";
+import { IModelsErrorParser as AuthoringIModelsErrorParser } from "@itwin/imodels-client-authoring/lib/base/internal";
 import { IModelsErrorImpl, IModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
 import { expect } from "chai";
 
-import { IModelsErrorCode } from "@itwin/imodels-client-management";
+import { IModelsErrorCode, IModelsErrorScope } from "@itwin/imodels-client-management";
 
 describe("ErrorAdapter", () => {
   [
@@ -17,7 +17,7 @@ describe("ErrorAdapter", () => {
   ].forEach((originalError: unknown) => {
 
     it("should return original error if it does not have a string error code", () => {
-      const result = ErrorAdapter.toIModelError(originalError, undefined);
+      const result = ErrorAdapter.toITwinError(originalError, undefined);
 
       expect(result).to.be.equal(originalError);
     });
@@ -58,42 +58,41 @@ describe("ErrorAdapter", () => {
     it(`should return original error if error code is unrecognized, indicates auth issue or does not have a corresponding status in IModelHubStatus (${originalErrorCode})`, () => {
       const error = new IModelsErrorImpl({ code: originalErrorCode, message: "", originalError: new Error(), statusCode: undefined, details: undefined });
 
-      const result = ErrorAdapter.toIModelError(error, undefined);
+      const result = ErrorAdapter.toITwinError(error, undefined);
 
       expect(result).to.be.equal(error);
     });
   });
 
   [
-    { originalErrorCode: IModelsErrorCode.Unknown, expectedErrorNumber: IModelHubStatus.OperationFailed },
-    { originalErrorCode: IModelsErrorCode.ITwinNotFound, expectedErrorNumber: IModelHubStatus.ITwinDoesNotExist },
-    { originalErrorCode: IModelsErrorCode.IModelNotFound, expectedErrorNumber: IModelHubStatus.iModelDoesNotExist },
-    { originalErrorCode: IModelsErrorCode.ChangesetNotFound, expectedErrorNumber: IModelHubStatus.ChangeSetDoesNotExist },
-    { originalErrorCode: IModelsErrorCode.BriefcaseNotFound, expectedErrorNumber: IModelHubStatus.BriefcaseDoesNotExist },
-    { originalErrorCode: IModelsErrorCode.FileNotFound, expectedErrorNumber: IModelHubStatus.FileDoesNotExist },
-    { originalErrorCode: IModelsErrorCode.CheckpointNotFound, expectedErrorNumber: IModelHubStatus.CheckpointDoesNotExist },
-    { originalErrorCode: IModelsErrorCode.LockNotFound, expectedErrorNumber: IModelHubStatus.LockDoesNotExist },
-    { originalErrorCode: IModelsErrorCode.IModelExists, expectedErrorNumber: IModelHubStatus.iModelAlreadyExists },
-    { originalErrorCode: IModelsErrorCode.VersionExists, expectedErrorNumber: IModelHubStatus.VersionAlreadyExists },
-    { originalErrorCode: IModelsErrorCode.ChangesetExists, expectedErrorNumber: IModelHubStatus.ChangeSetAlreadyExists },
-    { originalErrorCode: IModelsErrorCode.NamedVersionOnChangesetExists, expectedErrorNumber: IModelHubStatus.ChangeSetAlreadyHasVersion },
-    { originalErrorCode: IModelsErrorCode.NewerChangesExist, expectedErrorNumber: IModelHubStatus.PullIsRequired },
-    { originalErrorCode: IModelsErrorCode.BaselineFileInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout },
-    { originalErrorCode: IModelsErrorCode.IModelFromTemplateInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout },
-    { originalErrorCode: IModelsErrorCode.ClonedIModelInitializationTimedOut, expectedErrorNumber: IModelHubStatus.InitializationTimeout }
-  ].forEach((testCase: { originalErrorCode: IModelsErrorCode, expectedErrorNumber: number }) => {
+    IModelsErrorCode.Unknown,
+    IModelsErrorCode.ITwinNotFound,
+    IModelsErrorCode.IModelNotFound,
+    IModelsErrorCode.ChangesetNotFound,
+    IModelsErrorCode.BriefcaseNotFound,
+    IModelsErrorCode.FileNotFound,
+    IModelsErrorCode.CheckpointNotFound,
+    IModelsErrorCode.LockNotFound,
+    IModelsErrorCode.IModelExists,
+    IModelsErrorCode.VersionExists,
+    IModelsErrorCode.ChangesetExists,
+    IModelsErrorCode.NamedVersionOnChangesetExists,
+    IModelsErrorCode.NewerChangesExist,
+    IModelsErrorCode.BaselineFileInitializationTimedOut,
+    IModelsErrorCode.IModelFromTemplateInitializationTimedOut,
+    IModelsErrorCode.ClonedIModelInitializationTimedOut
+  ].forEach((originalErrorCode: IModelsErrorCode) => {
 
-    it(`should return correct error number (${testCase.originalErrorCode})`, () => {
+    it(`should return correct error code (${originalErrorCode})`, () => {
       const originalErrorMessage = "test error message";
-      const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, message: originalErrorMessage, originalError: new Error(), statusCode: 400, details: undefined });
+      const originalError = new IModelsErrorImpl({ code: originalErrorCode, message: originalErrorMessage, originalError: new Error(), statusCode: 400, details: undefined });
 
-      const result = ErrorAdapter.toIModelError(originalError, undefined);
+      const result = ErrorAdapter.toITwinError(originalError, undefined);
 
-      const isiModelError = result instanceof IModelError;
-      expect(isiModelError).to.be.true;
-      const iModelError = result as IModelError;
-      expect(iModelError.errorNumber).to.be.equal(testCase.expectedErrorNumber);
-      expect(iModelError.message).to.be.equal(originalErrorMessage);
+      const isiTwinError = ITwinError.isError(result, IModelsErrorScope, originalErrorCode);
+      expect(isiTwinError).to.be.true;
+      const iTwinError = result as ITwinError;
+      expect(iTwinError.message).to.be.equal(originalErrorMessage);
     });
   });
 
@@ -101,36 +100,35 @@ describe("ErrorAdapter", () => {
     {
       originalErrorCode: IModelsErrorCode.RateLimitExceeded,
       operationName: "acquireBriefcase" as const,
-      expectedErrorNumber: IModelHubStatus.MaximumNumberOfBriefcasesPerUserPerMinute
+      expectedErrorCode: IModelsErrorCode.MaximumNumberOfBriefcasesPerUserPerMinute
     },
     {
       originalErrorCode: IModelsErrorCode.DownloadAborted,
       operationName: "downloadChangesets" as const,
-      expectedErrorNumber: ChangeSetStatus.DownloadCancelled
+      expectedErrorCode: IModelsErrorCode.DownloadCancelled
     },
     {
       originalErrorCode: IModelsErrorCode.ConflictWithAnotherUser,
       operationName: "createChangeset" as const,
-      expectedErrorNumber: IModelHubStatus.AnotherUserPushing
+      expectedErrorCode: IModelsErrorCode.AnotherUserPushing
     },
     {
       originalErrorCode: IModelsErrorCode.ConflictWithAnotherUser,
       operationName: "updateLocks" as const,
-      expectedErrorNumber: IModelHubStatus.LockOwnedByAnotherBriefcase
+      expectedErrorCode: IModelsErrorCode.LockOwnedByAnotherBriefcase
     }
-  ].forEach((testCase: { originalErrorCode: IModelsErrorCode, operationName: OperationNameForErrorMapping, expectedErrorNumber: number }) => {
+  ].forEach((testCase: { originalErrorCode: IModelsErrorCode, operationName: OperationNameForErrorMapping, expectedErrorCode: IModelsErrorCode }) => {
 
     it(`should handle generic error codes for specific operation (${testCase.originalErrorCode}, ${testCase.operationName})`, () => {
       const originalErrorMessage = "test error message";
       const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, message: originalErrorMessage, originalError: new Error(), statusCode: undefined, details: undefined });
 
-      const result = ErrorAdapter.toIModelError(originalError, testCase.operationName);
+      const result = ErrorAdapter.toITwinError(originalError, testCase.operationName);
 
-      const isiModelError = result instanceof IModelError;
-      expect(isiModelError).to.be.true;
-      const iModelError = result as IModelError;
-      expect(iModelError.errorNumber).to.be.equal(testCase.expectedErrorNumber);
-      expect(iModelError.message).to.be.equal(originalErrorMessage);
+      const isiTwinError = ITwinError.isError(result, IModelsErrorScope, testCase.expectedErrorCode);
+      expect(isiTwinError).to.be.true;
+      const iTwinError = result as ITwinError;
+      expect(iTwinError.message).to.be.equal(originalErrorMessage);
     });
   });
 
@@ -157,17 +155,16 @@ describe("ErrorAdapter", () => {
     }
   ].forEach((testCase: { originalErrorCode: IModelsErrorCode, operationName: OperationNameForErrorMapping | undefined }) => {
 
-    it(`should return IModelHubStatus.Unknown specific status could not be determined (${testCase.originalErrorCode})`, () => {
+    it(`should return IModelsErrorCode.Unknown specific status could not be determined (${testCase.originalErrorCode})`, () => {
       const originalErrorMessage = "test error message";
       const originalError = new IModelsErrorImpl({ code: testCase.originalErrorCode, message: originalErrorMessage, statusCode: undefined, originalError: new Error(), details: undefined });
 
-      const result = ErrorAdapter.toIModelError(originalError, testCase.operationName);
+      const result = ErrorAdapter.toITwinError(originalError, testCase.operationName);
 
-      const isiModelError = result instanceof IModelError;
-      expect(isiModelError).to.be.true;
-      const iModelError = result as IModelError;
-      expect(iModelError.errorNumber).to.be.equal(IModelHubStatus.Unknown);
-      expect(iModelError.message).to.be.equal(originalErrorMessage);
+      const isiTwinError = ITwinError.isError(result, IModelsErrorScope, IModelsErrorCode.Unknown);
+      expect(isiTwinError).to.be.true;
+      const iTwinError = result as ITwinError;
+      expect(iTwinError.message).to.be.equal(originalErrorMessage);
     });
   });
 
@@ -198,13 +195,12 @@ describe("ErrorAdapter", () => {
     };
     const apiError = IModelsErrorParser.parse({ statusCode: 422, body: apiResponse }, new Error());
 
-    const result = ErrorAdapter.toIModelError(apiError);
+    const result = ErrorAdapter.toITwinError(apiError);
 
-    const isiModelError = result instanceof IModelError;
-    expect(isiModelError).to.be.true;
-    const iModelError = result as IModelError;
-    expect(iModelError.errorNumber).to.be.equal(IModelHubStatus.MaximumNumberOfBriefcasesPerUser);
-    expect(iModelError.message).to.be.equal(
+    const isiTwinError = ITwinError.isError(result, IModelsErrorScope, IModelsErrorCode.MaximumNumberOfBriefcasesPerUser);
+    expect(isiTwinError).to.be.true;
+    const iTwinError = result as ITwinError;
+    expect(iTwinError.message).to.be.equal(
       "Cannot acquire Briefcase. Details:\n" +
       "1. Unrecognized: bar\n" +
       "2. Unrecognized: bar\n" +
@@ -220,12 +216,39 @@ describe("ErrorAdapter", () => {
     };
     const apiError = IModelsErrorParser.parse({ statusCode: 429, body: apiResponse }, new Error());
 
-    const result = ErrorAdapter.toIModelError(apiError, "acquireBriefcase");
+    const result = ErrorAdapter.toITwinError(apiError, "acquireBriefcase");
 
-    const isiModelError = result instanceof IModelError;
-    expect(isiModelError).to.be.true;
-    const iModelError = result as IModelError;
-    expect(iModelError.errorNumber).to.be.equal(IModelHubStatus.MaximumNumberOfBriefcasesPerUserPerMinute);
-    expect(iModelError.message).to.be.equal("Maximum number of briefcases per user per minute reached.");
+    const isiTwinError = ITwinError.isError(result, IModelsErrorScope, IModelsErrorCode.MaximumNumberOfBriefcasesPerUserPerMinute);
+    expect(isiTwinError).to.be.true;
+    const iTwinError = result as ITwinError;
+    expect(iTwinError.message).to.be.equal("Maximum number of briefcases per user per minute reached.");
+  });
+
+  it("should retain conflicting locks error details", () => {
+    const apiResponse = {
+      error: {
+        code: "ConflictWithAnotherUser",
+        message: "Lock(s) is owned by another Briefcase.",
+        conflictingLocks: [
+          { objectId: "0x1", lockLevel: "exclusive", briefcaseIds: [ 1 ] },
+          { objectId: "0x2", lockLevel: "exclusive", briefcaseIds: [ 1 ] }
+        ]
+      }
+    };
+    const apiError = AuthoringIModelsErrorParser.parse({ statusCode: 409, body: apiResponse }, new Error());
+
+    const result = ErrorAdapter.toITwinError(apiError, "updateLocks");
+
+    const isiTwinError = ITwinError.isError(result, IModelsErrorScope, IModelsErrorCode.LockOwnedByAnotherBriefcase);
+    expect(isiTwinError).to.be.true;
+    const iTwinError = result as any;
+    const firstLock = apiResponse.error.conflictingLocks[0];
+    const secondLock = apiResponse.error.conflictingLocks[1];
+    expect(iTwinError.conflictingLocks[0]).to.be.equal(firstLock);
+    expect(iTwinError.conflictingLocks[1]).to.be.equal(secondLock);
+    expect(iTwinError.message).to.be.equal(
+      "Lock(s) is owned by another Briefcase. Conflicting locks:\n" +
+      `1. Object id: ${firstLock.objectId}, lock level: ${firstLock.lockLevel}, briefcase ids: ${firstLock.briefcaseIds[0]}\n` +
+      `2. Object id: ${secondLock.objectId}, lock level: ${secondLock.lockLevel}, briefcase ids: ${secondLock.briefcaseIds[0]}\n`);
   });
 });

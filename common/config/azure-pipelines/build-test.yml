@@ -14,7 +14,7 @@ pr:
   drafts: false
 
 variables:
-  node18Version: '18.12.0'
+  nodeVersion: '18.12.0'
 
 jobs:
   - job: BuildAndTest
@@ -22,15 +22,25 @@ jobs:
       matrix:
         linux-node18:
           imageName: 'ubuntu-latest'
-          nodeVersion: $(node18Version)
-        mac-node18:
-          imageName: 'macos-latest'
-          nodeVersion: $(node18Version)
         windows-node18:
           imageName: 'windows-latest'
-          nodeVersion: $(node18Version)
     pool:
       vmImage: $(imageName)
+    variables:
+      - group: iModels Clients 3.0 - Integration Tests - DEV
+    workspace:
+      clean: all
+
+    steps:
+      - template: templates/build-test.yml
+        parameters:
+          runRushAudit: ${{ parameters.runRushAudit }}
+
+  - job: BuildAndTest_macArm64
+    pool:
+      name: iModelTechMacArm
+      demands:
+        - Agent.OS -equals Darwin
     variables:
       - group: iModels Clients 3.0 - Integration Tests - DEV
     workspace:
