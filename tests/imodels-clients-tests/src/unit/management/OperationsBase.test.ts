@@ -2,7 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/internal";
+import { AxiosRestClient } from "@itwin/imodels-client-management/lib/base/axios";
+import { IModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
 import { expect } from "chai";
 
 import { Authorization, ContentType } from "@itwin/imodels-client-management";
@@ -112,7 +113,8 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor
+          headers: headersPassedToConstructor,
+          parseErrorFunc: IModelsErrorParser.parse
         });
 
       // Act
@@ -132,7 +134,8 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor
+          headers: headersPassedToConstructor,
+          parseErrorFunc: IModelsErrorParser.parse
         });
 
       // Act
@@ -153,7 +156,8 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor
+          headers: headersPassedToConstructor,
+          parseErrorFunc: IModelsErrorParser.parse
         });
 
       // Act
@@ -175,7 +179,8 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor
+          headers: headersPassedToConstructor,
+          parseErrorFunc: IModelsErrorParser.parse
         });
 
       // Act
@@ -195,7 +200,8 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor
+          headers: headersPassedToConstructor,
+          parseErrorFunc: IModelsErrorParser.parse
         });
 
       // Act

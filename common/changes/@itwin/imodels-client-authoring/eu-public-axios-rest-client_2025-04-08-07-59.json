@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Moved error parsing to OperationsBase",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-authoring"
+}

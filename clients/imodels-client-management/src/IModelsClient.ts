@@ -2,7 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm, IModelsErrorParser } from "./base/internal";
+import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "./base/axios";
+import { IModelsErrorParser } from "./base/internal";
 import { ApiOptions, HeaderFactories, HttpRequestRetryPolicy, RecursiveRequired, RestClient } from "./base/types";
 import { Constants } from "./Constants";
 import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, OperationOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
@@ -48,6 +49,7 @@ export class IModelsClient {
     const filledIModelsClientOptions = IModelsClient.fillManagementClientConfiguration(options);
     this._operationsOptions = {
       ...filledIModelsClientOptions,
+      parseErrorFunc: IModelsErrorParser.parse,
       urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
     };
   }
@@ -120,7 +122,7 @@ export class IModelsClient {
 
     return {
       api: this.fillApiConfiguration(options?.api),
-      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse, retryPolicy),
+      restClient: options?.restClient ?? new AxiosRestClient(retryPolicy),
       headers: options?.headers ?? {},
       retryPolicy
     };

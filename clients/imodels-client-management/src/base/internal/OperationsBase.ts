@@ -3,12 +3,14 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { Constants } from "../../Constants";
-import { AuthorizationParam, BinaryContentType, ContentType, Dictionary, HeaderFactories, HeadersParam, HttpResponse, PreferReturn, RestClient, SupportedGetResponseTypes } from "../types";
+import { AuthorizationParam, BinaryContentType, ContentType, Dictionary, HeaderFactories, HeadersParam, HttpResponse, IModelsOriginalError, PreferReturn, RestClient, SupportedGetResponseTypes } from "../types";
 
 import { CollectionResponse } from "./ApiResponseInterfaces";
+import { IModelsErrorBaseImpl, ResponseInfo } from "./IModelsErrorParser";
 import { EntityCollectionPage } from "./UtilityTypes";
 
 type CommonRequestParams = AuthorizationParam & HeadersParam;
+export type ParseErrorFunc = (response: ResponseInfo, originalError: IModelsOriginalError) => Error;
 export type SendGetRequestParams = CommonRequestParams & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };
 export type SendPostRequestParams = CommonRequestParams & { url: string, body: object | undefined };
 export type SendPutRequestParams = CommonRequestParams & { url: string, contentType: BinaryContentType, body: Uint8Array };
@@ -18,6 +20,7 @@ export interface OperationsBaseOptions {
   restClient: RestClient;
   api: { version: string };
   headers: HeaderFactories;
+  parseErrorFunc: ParseErrorFunc;
 }
 
 export class OperationsBase<TOptions extends OperationsBaseOptions> {
@@ -33,55 +36,68 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     };
 
     if (params.responseType === ContentType.Png)
-      return this._options.restClient.sendGetRequest({
-        responseType: ContentType.Png,
-        ...urlAndHeaders
-      });
+      return this.executeRequest(async () =>
+        this._options.restClient.sendGetRequest({
+          responseType: ContentType.Png,
+          ...urlAndHeaders
+        })
+      );
 
-    return this._options.restClient.sendGetRequest<TBody>({
-      responseType: params.responseType ?? ContentType.Json,
-      ...urlAndHeaders
-    });
+    const responseType = params.responseType ?? ContentType.Json;
+    return this.executeRequest(async () =>
+      this._options.restClient.sendGetRequest<TBody>({
+        responseType,
+        ...urlAndHeaders
+      })
+    );
   }
 
   protected async sendPostRequest<TBody>(params: SendPostRequestParams): Promise<HttpResponse<TBody>> {
-    return this._options.restClient.sendPostRequest<TBody>({
-      url: params.url,
-      body: {
-        contentType: ContentType.Json,
-        content: params.body
-      },
-      headers: await this.formHeaders({ ...params, contentType: ContentType.Json })
-    });
+    return this.executeRequest(async () =>
+      this._options.restClient.sendPostRequest<TBody>({
+        url: params.url,
+        body: {
+          contentType: ContentType.Json,
+          content: params.body
+        },
+        headers: await this.formHeaders({ ...params, contentType: ContentType.Json })
+      })
+    );
   }
 
   protected async sendPutRequest<TBody>(params: SendPutRequestParams): Promise<HttpResponse<TBody>> {
-    return this._options.restClient.sendPutRequest<TBody>({
-      url: params.url,
-      body: {
-        contentType: params.contentType,
-        content: params.body
-      },
-      headers: await this.formHeaders({ ...params, contentType: params.contentType })
-    });
+    return this.executeRequest(async () =>
+      this._options.restClient.sendPutRequest<TBody>({
+        url: params.url,
+        body: {
+          contentType: params.contentType,
+          content: params.body
+        },
+        headers: await this.formHeaders({ ...params, contentType: params.contentType })
+      })
+    );
   }
 
   protected async sendPatchRequest<TBody>(params: SendPatchRequestParams): Promise<HttpResponse<TBody>> {
-    return this._options.restClient.sendPatchRequest<TBody>({
-      url: params.url,
-      body: {
-        contentType: ContentType.Json,
-        content: params.body
-      },
-      headers: await this.formHeaders({ ...params, contentType: ContentType.Json })
-    });
+    return this.executeRequest(async () =>
+      this._options.restClient.sendPatchRequest<TBody>({
+        url: params.url,
+        body: {
+          contentType: ContentType.Json,
+          content: params.body
+        },
+        headers: await this.formHeaders({ ...params, contentType: ContentType.Json })
+      })
+    );
   }
 
   protected async sendDeleteRequest<TBody>(params: SendDeleteRequestParams): Promise<HttpResponse<TBody>> {
-    return this._options.restClient.sendDeleteRequest<TBody>({
-      url: params.url,
-      headers: await this.formHeaders(params)
-    });
+    return this.executeRequest(async () =>
+      this._options.restClient.sendDeleteRequest<TBody>({
+        url: params.url,
+        headers: await this.formHeaders(params)
+      })
+    );
   }
 
   protected async getEntityCollectionPage<TEntity, TResponse extends CollectionResponse>(params: CommonRequestParams & {
@@ -89,13 +105,28 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     preferReturn?: PreferReturn;
     entityCollectionAccessor: (response: HttpResponse<TResponse>) => TEntity[];
   }): Promise<EntityCollectionPage<TEntity>> {
-    const response = await this.sendGetRequest<TResponse>(params);
+    const response = await this.executeRequest(async () =>
+      this.sendGetRequest<TResponse>(params)
+    );
     return {
       entities: params.entityCollectionAccessor(response),
       next: response.body._links.next
         ? async () => this.getEntityCollectionPage({ ...params, url: response.body._links.next!.href })
         : undefined
     };
+  }
+
+  private async executeRequest<TBody>(requestFunc: () => Promise<HttpResponse<TBody>>): Promise<HttpResponse<TBody>> {
+    try {
+      const response = await requestFunc();
+      return response;
+    } catch (error: any) {
+      if (error instanceof IModelsErrorBaseImpl)
+        throw error;
+
+      const parsedError: Error = this._options.parseErrorFunc({ statusCode: error.response?.status, body: error.response?.data }, error);
+      throw parsedError;
+    }
   }
 
   private resolveHeaderValue(headerOrHeaderFactory: (() => string | undefined) | string): string | undefined {

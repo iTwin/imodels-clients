@@ -2,9 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, AxiosRetryPolicy, IModelsApiError, IModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
+import { AxiosRestClient, AxiosRetryPolicy } from "@itwin/imodels-client-management/lib/base/axios";
 import * as utilityFunctions from "@itwin/imodels-client-management/lib/base/internal/UtilityFunctions";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { expect } from "chai";
 import sinon from "sinon";
@@ -50,7 +50,7 @@ describe("[Management] AxiosRestClient", () => {
       }
     };
     axiosMock.onPost(requestParams.url).reply(200, responseBody, {});
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, null);
+    const restClient = new AxiosRestClient(null);
 
     // Act
     const response = await restClient.sendPostRequest(requestParams);
@@ -74,7 +74,7 @@ describe("[Management] AxiosRestClient", () => {
       "retry-after": 60
     };
     axiosMock.onPost(requestParams.url).reply(200, {}, responseHeaders);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, null);
+    const restClient = new AxiosRestClient(null);
 
     // Act & Assert
     const response = await restClient.sendPostRequest(requestParams);
@@ -107,7 +107,7 @@ describe("[Management] AxiosRestClient", () => {
       "Content-Type": "application/json"
     };
     axiosMock.onPost(requestParams.url).reply(200, {}, responseHeaders);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, null);
+    const restClient = new AxiosRestClient(null);
 
     // Act
     const response = await restClient.sendPostRequest(requestParams);
@@ -129,7 +129,7 @@ describe("[Management] AxiosRestClient", () => {
     };
 
     axiosMock.onPost(requestParams.url).reply(500);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, null);
+    const restClient = new AxiosRestClient(null);
 
     // Act
     let thrownError;
@@ -140,7 +140,7 @@ describe("[Management] AxiosRestClient", () => {
     }
 
     // Assert
-    expect((thrownError as IModelsApiError).statusCode).to.be.equal(500);
+    expect((thrownError as AxiosError).status).to.be.equal(500);
     expect(axiosMock.history.post.length === 1);
   });
 
@@ -156,7 +156,7 @@ describe("[Management] AxiosRestClient", () => {
     };
 
     axiosMock.onPost(requestParams.url).reply(500);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, null);
+    const restClient = new AxiosRestClient(null);
 
     // Act
     let thrownError;
@@ -167,7 +167,7 @@ describe("[Management] AxiosRestClient", () => {
     }
 
     // Assert
-    expect((thrownError as IModelsApiError).statusCode).to.be.equal(500);
+    expect((thrownError as AxiosError).status).to.be.equal(500);
     expect(axiosMock.history.post.filter((x) => x.url === requestParams.url).length === 1);
   });
 
@@ -184,7 +184,7 @@ describe("[Management] AxiosRestClient", () => {
 
     axiosMock.onPost(requestParams.url).reply(500);
     (retryPolicyStub as any).maxRetries = undefined;
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, retryPolicyStub);
+    const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
     let thrownError;
@@ -195,7 +195,7 @@ describe("[Management] AxiosRestClient", () => {
     }
 
     // Assert
-    expect((thrownError as IModelsApiError).statusCode).to.be.equal(500);
+    expect((thrownError as AxiosError).status).to.be.equal(500);
     expect(axiosMock.history.post.filter((x) => x.url === requestParams.url).length === 11);
   });
 
@@ -212,7 +212,7 @@ describe("[Management] AxiosRestClient", () => {
 
     axiosMock.onPost(requestParams.url).reply(500),
     retryPolicyStub.shouldRetry.returns(false);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, retryPolicyStub);
+    const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
     let thrownError: unknown;
@@ -223,7 +223,7 @@ describe("[Management] AxiosRestClient", () => {
     }
 
     // Assert
-    expect((thrownError as IModelsApiError).statusCode).to.be.equal(500);
+    expect((thrownError as AxiosError).status).to.be.equal(500);
     expect(axiosMock.history.post.filter((x) => x.url === requestParams.url).length).to.be.equal(1);
     expect(retryPolicyStub.shouldRetry.calledOnceWith({ retriesInvoked: 0, error: sinon.match.any })).to.be.true;
     expect(retryPolicyStub.getSleepDurationInMs.callCount).to.be.equal(0);
@@ -249,7 +249,7 @@ describe("[Management] AxiosRestClient", () => {
       .replyOnce(200, responseData),
     retryPolicyStub.shouldRetry.returns(true);
     retryPolicyStub.getSleepDurationInMs.returns(1000);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, retryPolicyStub);
+    const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
     const response = await restClient.sendPostRequest(requestParams);
@@ -276,7 +276,7 @@ describe("[Management] AxiosRestClient", () => {
     axiosMock.onPost(requestParams.url).reply(503);
     retryPolicyStub.shouldRetry.returns(true);
     retryPolicyStub.getSleepDurationInMs.returns(0);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, retryPolicyStub);
+    const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
     let thrownError: unknown;
@@ -287,7 +287,7 @@ describe("[Management] AxiosRestClient", () => {
     }
 
     // Assert
-    expect((thrownError as IModelsApiError).statusCode).to.be.equal(503);
+    expect((thrownError as AxiosError).status).to.be.equal(503);
     expect(axiosMock.history.post.filter((x) => x.url === requestParams.url).length).to.be.equal(4);
 
     expect(retryPolicyStub.shouldRetry.callCount).to.be.equal(3);
