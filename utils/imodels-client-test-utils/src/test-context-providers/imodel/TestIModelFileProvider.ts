@@ -9,6 +9,8 @@ import { injectable } from "inversify";
 import { SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
 
 import { TestSetupError } from "../../CommonTestUtils.js";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
 export interface TestIModelBaselineFile {
   filePath: string;
@@ -34,7 +36,7 @@ interface ChangesetDescriptorFileItem extends TestChangesetFile {
 
 @injectable()
 export class TestIModelFileProvider {
-  private readonly _iModelDataRootPath = `${__dirname}/../../assets/test-imodel`;
+  private readonly _iModelDataRootPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "/../../assets/test-imodel");
   private _baselineFile: TestIModelBaselineFile | undefined;
   private _changesetFiles: TestChangesetFile[] | undefined;
 

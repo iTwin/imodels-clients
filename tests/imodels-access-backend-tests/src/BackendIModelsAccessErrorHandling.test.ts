@@ -29,7 +29,7 @@ describe("BackendIModelsAccess error handling", () => {
   let testIModelForRead: ReusableIModelMetadata;
   let testIModelForWrite: IModelMetadata;
 
-  const testDownloadPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "../lib/testDownloads");
+  const testDownloadPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "../lib/esm/testDownloads");
 
   before(async () => {
     const container = getTestDIContainer();
