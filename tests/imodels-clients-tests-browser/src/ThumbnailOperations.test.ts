@@ -8,6 +8,8 @@ import { assertThumbnail } from "@itwin/imodels-client-test-utils";
 import { ApiOptions, Authorization, AuthorizationCallback, ContentType, DownloadThumbnailParams, IModelScopedOperationParams, IModelsClient, Thumbnail, ThumbnailSize, UploadThumbnailParams } from "@itwin/imodels-client-management";
 
 import { FrontendTestEnvVariableKeys } from "./setup/FrontendTestEnvVariableKeys.js";
+import { expect } from "chai";
+import fs from "node:fs";
 
 describe(`[Management] ${ThumbnailOperations.name}`, () => {
   let iModelsClient: IModelsClient;
@@ -19,15 +21,15 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
   let testPngFilePath: string;
 
   before(async () => {
-    const iModelsClientApiOptions: ApiOptions = JSON.parse(Cypress.env(FrontendTestEnvVariableKeys.iModelsClientApiOptions));
+    const iModelsClientApiOptions: ApiOptions = JSON.parse(process.env[FrontendTestEnvVariableKeys.iModelsClientApiOptions]!);
     iModelsClient = new IModelsClient({ api: iModelsClientApiOptions });
 
-    const admin1AuthorizationInfo: Authorization = JSON.parse(Cypress.env(FrontendTestEnvVariableKeys.admin1AuthorizationInfo));
+    const admin1AuthorizationInfo: Authorization = JSON.parse(process.env[FrontendTestEnvVariableKeys.admin1AuthorizationInfo]!);
     authorization = async () => admin1AuthorizationInfo;
 
-    testIModelForReadId = Cypress.env(FrontendTestEnvVariableKeys.testIModelForReadId);
+    testIModelForReadId = process.env[FrontendTestEnvVariableKeys.testIModelForReadId]!;
 
-    const iTwinId: string = Cypress.env(FrontendTestEnvVariableKeys.testITwinId);
+    const iTwinId: string = process.env[FrontendTestEnvVariableKeys.testITwinId]!;
     const uniqueId = new Date().getTime();
     const testIModelForWrite = await iModelsClient.iModels.createEmpty({
       authorization,
@@ -38,7 +40,7 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
     });
     testIModelForWriteId = testIModelForWrite.id;
 
-    testPngFilePath = Cypress.env(FrontendTestEnvVariableKeys.testPngFilePath);
+    testPngFilePath = process.env[FrontendTestEnvVariableKeys.testPngFilePath]!;
   });
 
   after(async () => {
@@ -96,8 +98,11 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
   });
 
   async function readFile(filePath: string): Promise<Uint8Array> {
-    return new Promise((resolve) => {
-      cy.readFile(filePath, "binary").then((stringContent: string) => {
+    return new Promise((resolve, reject) => {
+      fs.readFile(filePath, { encoding: "binary" }, (err, stringContent) => {
+        if (err) {
+          reject(err);
+        }
         const binaryContent = Uint8Array.from(stringContent, (x) => x.charCodeAt(0));
         resolve(binaryContent);
       });

@@ -8,6 +8,9 @@ import { ApiOptions, Authorization, AuthorizationCallback, ChangesetExtendedData
 
 import { FrontendTestEnvVariableKeys } from "./setup/FrontendTestEnvVariableKeys.js";
 
+import { setupIntegrationTests } from "./setup/testSetup.js"
+import { expect } from "chai";
+
 describe(`[Management] ${ChangesetExtendedDataOperations.name}`, () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
@@ -15,13 +18,14 @@ describe(`[Management] ${ChangesetExtendedDataOperations.name}`, () => {
   let testIModelForReadId: string;
 
   before(async () => {
-    const iModelsClientApiOptions: ApiOptions = JSON.parse(Cypress.env(FrontendTestEnvVariableKeys.iModelsClientApiOptions));
+    await setupIntegrationTests();
+    const iModelsClientApiOptions: ApiOptions = JSON.parse(process.env[FrontendTestEnvVariableKeys.iModelsClientApiOptions]!);
     iModelsClient = new IModelsClient({ api: iModelsClientApiOptions });
 
-    const admin1AuthorizationInfo: Authorization = JSON.parse(Cypress.env(FrontendTestEnvVariableKeys.admin1AuthorizationInfo));
+    const admin1AuthorizationInfo: Authorization = JSON.parse(process.env[FrontendTestEnvVariableKeys.admin1AuthorizationInfo]!);
     authorization = async () => admin1AuthorizationInfo;
 
-    testIModelForReadId = Cypress.env(FrontendTestEnvVariableKeys.testIModelForReadId);
+    testIModelForReadId = process.env[FrontendTestEnvVariableKeys.testIModelForReadId]!;
   });
 
   it("should get changeset extended data by changeset index", async () => {

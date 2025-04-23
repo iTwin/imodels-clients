@@ -11,27 +11,26 @@ import { ReusableTestIModelProvider, TestAuthorizationProvider, TestITwinProvide
 
 import { FrontendTestEnvVariableKeys } from "./FrontendTestEnvVariableKeys.js";
 
-export async function setupIntegrationTests(_on: unknown, config: { env: any }): Promise<unknown> {
+export async function setupIntegrationTests(): Promise<void> {
   const container = new Container();
-  TestUtilBootstrapper.bind(container, path.join(import.meta.dirname, "..", ".env"));
+  TestUtilBootstrapper.bind(container, path.join(import.meta.dirname, "../../../", ".env"));
 
   const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
-  config.env[FrontendTestEnvVariableKeys.iModelsClientApiOptions] = JSON.stringify(iModelsClientOptions.api);
+  process.env[FrontendTestEnvVariableKeys.iModelsClientApiOptions] = JSON.stringify(iModelsClientOptions.api);
 
   const authorizationProvider = container.get(TestAuthorizationProvider);
   const authorizationCallback = authorizationProvider.getAdmin1Authorization();
   const authorizationInfo = await authorizationCallback();
-  config.env[FrontendTestEnvVariableKeys.admin1AuthorizationInfo] = JSON.stringify(authorizationInfo);
+  process.env[FrontendTestEnvVariableKeys.admin1AuthorizationInfo] = JSON.stringify(authorizationInfo);
 
   const testITwinProvider = container.get(TestITwinProvider);
   const iTwinId = await testITwinProvider.getOrCreate();
-  config.env[FrontendTestEnvVariableKeys.testITwinId] = iTwinId;
+  process.env[FrontendTestEnvVariableKeys.testITwinId] = iTwinId;
 
   const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
   const testIModelForRead = await reusableTestIModelProvider.getOrCreate();
-  config.env[FrontendTestEnvVariableKeys.testIModelForReadId] = testIModelForRead.id;
+  process.env[FrontendTestEnvVariableKeys.testIModelForReadId] = testIModelForRead.id;
 
-  config.env[FrontendTestEnvVariableKeys.testPngFilePath] = path.join(import.meta.dirname, "assets", "Sample.png");
+  process.env[FrontendTestEnvVariableKeys.testPngFilePath] = path.join(import.meta.dirname, "../", "assets", "Sample.png");
 
-  return config;
 }

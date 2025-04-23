@@ -26,14 +26,14 @@ describe(`[Management] ${IModelsClient.name}`, () => {
         expectedError: {
           code: IModelsErrorCode.Unrecognized,
           message: "Unknown error occurred.\n"
-            + "Original error message: Network Error,\n"
-            + "original error code: ERR_NETWORK,\n"
+            + "Original error message: getaddrinfo ENOTFOUND foo.bar,\n"
+            + "original error code: ENOTFOUND,\n"
             + "response status code: undefined,\n"
             + "response body: undefined",
           originalError: {
-            code: "ERR_NETWORK",
+            code: "ENOTFOUND",
             name: "Error",
-            message: "Network Error"
+            message: "getaddrinfo ENOTFOUND foo.bar"
           }
         }
       });
