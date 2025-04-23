@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { Authorization, AxiosRestClient, ContentType } from "@itwin/imodels-client-management";
+import { Authorization, AxiosRestClient, ContentType, IModelsErrorParser } from "@itwin/imodels-client-management";
 
 import { createStub } from "../Stubs.js";
 
@@ -111,7 +111,8 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor
+          headers: headersPassedToConstructor,
+          parseErrorFunc: IModelsErrorParser.parse
         });
 
       // Act
@@ -131,7 +132,8 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor
+          headers: headersPassedToConstructor,
+          parseErrorFunc: IModelsErrorParser.parse
         });
 
       // Act
@@ -152,7 +154,8 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor
+          headers: headersPassedToConstructor,
+          parseErrorFunc: IModelsErrorParser.parse
         });
 
       // Act
@@ -174,7 +177,8 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor
+          headers: headersPassedToConstructor,
+          parseErrorFunc: IModelsErrorParser.parse
         });
 
       // Act
@@ -194,7 +198,8 @@ describe("[Management] OperationsBase", () => {
         {
           restClient,
           api: {version: "version"},
-          headers: headersPassedToConstructor
+          headers: headersPassedToConstructor,
+          parseErrorFunc: IModelsErrorParser.parse
         });
 
       // Act

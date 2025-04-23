@@ -53,6 +53,7 @@ export class IModelsClient extends ManagementIModelsClient {
 
     this._operationsOptions = {
       ...filledIModelsClientOptions,
+      parseErrorFunc: IModelsErrorParser.parse,
       urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
     };
   }
@@ -113,7 +114,7 @@ export class IModelsClient extends ManagementIModelsClient {
 
     return {
       api: this.fillApiConfiguration(options?.api),
-      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse, retryPolicy),
+      restClient: options?.restClient ?? new AxiosRestClient(retryPolicy),
       localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
       cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory()),
       headers: options?.headers ?? {},

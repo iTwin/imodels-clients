@@ -48,6 +48,7 @@ export class IModelsClient {
     const filledIModelsClientOptions = IModelsClient.fillManagementClientConfiguration(options);
     this._operationsOptions = {
       ...filledIModelsClientOptions,
+      parseErrorFunc: IModelsErrorParser.parse,
       urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
     };
   }
@@ -120,7 +121,7 @@ export class IModelsClient {
 
     return {
       api: this.fillApiConfiguration(options?.api),
-      restClient: options?.restClient ?? new AxiosRestClient(IModelsErrorParser.parse, retryPolicy),
+      restClient: options?.restClient ?? new AxiosRestClient(retryPolicy),
       headers: options?.headers ?? {},
       retryPolicy
     };

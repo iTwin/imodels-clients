@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, AxiosRetryPolicy, IModelsApiError, IModelsErrorParser } from "@itwin/imodels-client-management";
+import { AxiosRestClient, AxiosRetryPolicy, IModelsApiError } from "@itwin/imodels-client-management";
 import axios from "axios";
 import { expect } from "chai";
 import sinon from "sinon";
@@ -49,7 +49,7 @@ describe("[Management] AxiosRestClient", async () => {
       status: 200
     });
 
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, null);
+    const restClient = new AxiosRestClient(null);
 
     // Act
     const response = await restClient.sendPostRequest(requestParams);
@@ -77,7 +77,7 @@ describe("[Management] AxiosRestClient", async () => {
       headers: responseHeaders,
       status: 200
     });
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, null);
+    const restClient = new AxiosRestClient(null);
 
     // Act & Assert
     const response = await restClient.sendPostRequest(requestParams);
@@ -114,7 +114,7 @@ describe("[Management] AxiosRestClient", async () => {
       headers: responseHeaders,
       status: 200
     });
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, null);
+    const restClient = new AxiosRestClient(null);
 
     // Act
     const response = await restClient.sendPostRequest(requestParams);
@@ -139,7 +139,7 @@ describe("[Management] AxiosRestClient", async () => {
       url: requestParams.url,
       statusCode: 500
     });
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, null);
+    const restClient = new AxiosRestClient(null);
 
     // Act
     let thrownError;
@@ -169,7 +169,7 @@ describe("[Management] AxiosRestClient", async () => {
       url: requestParams.url,
       statusCode: 500
     });
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, null);
+    const restClient = new AxiosRestClient(null);
 
     // Act
     let thrownError;
@@ -201,7 +201,7 @@ describe("[Management] AxiosRestClient", async () => {
     });
     (retryPolicyStub as any).maxRetries = undefined;
     retryPolicyStub.shouldRetry.returns(true);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, retryPolicyStub);
+    const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
     let thrownError;
@@ -232,7 +232,7 @@ describe("[Management] AxiosRestClient", async () => {
       statusCode: 500
     });
     retryPolicyStub.shouldRetry.returns(false);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, retryPolicyStub);
+    const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
     let thrownError: unknown;
@@ -271,7 +271,7 @@ describe("[Management] AxiosRestClient", async () => {
     });
     retryPolicyStub.shouldRetry.returns(true);
     retryPolicyStub.getSleepDurationInMs.returns(1000);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, retryPolicyStub);
+    const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
     const response = await restClient.sendPostRequest(requestParams);
@@ -301,7 +301,7 @@ describe("[Management] AxiosRestClient", async () => {
     });
     retryPolicyStub.shouldRetry.returns(true);
     retryPolicyStub.getSleepDurationInMs.returns(0);
-    const restClient = new AxiosRestClient(IModelsErrorParser.parse, retryPolicyStub);
+    const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
     let thrownError: unknown;
