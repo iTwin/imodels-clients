@@ -8,8 +8,7 @@ import { expect } from "chai";
 import sinon from "sinon";
 
 import {
-  AxiosRestClient, AxiosRetryPolicy, ContentType, HttpRequestWithJsonBodyParams,
-  IModelsApiError, IModelsErrorParser, UtilityFunctions
+  AxiosRestClient, AxiosRetryPolicy, ContentType, HttpRequestWithJsonBodyParams, UtilityFunctions
 } from "@itwin/imodels-client-management";
 
 import { createStub } from "../Stubs";

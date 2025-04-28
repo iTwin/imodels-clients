@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 export * from "./base/types";
 export * from "./base/internal";
+export * from "./base/axios";
 export * from "./operations";
 export * from "./Constants";
 export * from "./IModelsClient";
