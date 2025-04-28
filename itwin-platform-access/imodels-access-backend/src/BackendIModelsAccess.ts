@@ -13,22 +13,21 @@ import { AccessToken, Guid, GuidString, ITwinError, Logger, OpenMode, StopWatch 
 import {
   BriefcaseId, BriefcaseIdValue, ChangesetFileProps, ChangesetIndex, ChangesetIndexAndId, ChangesetProps, IModelVersion
 } from "@itwin/core-common";
-import { AccessTokenAdapter } from "@itwin/imodels-access-common/lib/AccessTokenAdapter";
-import { getLatestFullChangesetIfExists, getNamedVersionChangeset } from "@itwin/imodels-access-common/lib/ChangesetFunctions";
-import { Constants } from "@itwin/imodels-access-common/lib/Constants";
-import { ErrorAdapter } from "@itwin/imodels-access-common/lib/ErrorAdapter";
-import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
-import { downloadFile } from "@itwin/imodels-client-authoring/lib/operations";
+import {
+  AccessTokenAdapter, Constants, ErrorAdapter,
+  getLatestFullChangesetIfExists, getNamedVersionChangeset, handleAPIErrors
+} from "@itwin/imodels-access-common";
 
 import {
-  AcquireBriefcaseParams, AuthorizationCallback, AuthorizationParam, Briefcase, Changeset,
-  Checkpoint, CreateChangesetParams, CreateIModelFromBaselineParams,
-  DeleteIModelParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset,
-  EntityListIterator, GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetLockListParams,
-  GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsClient, IModelsErrorCode, IModelsErrorScope,
-  Lock, LockLevel, LockedObjects, MinimalChangeset, MinimalIModel,
-  ReleaseBriefcaseParams, SPECIAL_VALUES_ME, UpdateLockParams, isIModelsApiError, take, toArray
+  AcquireBriefcaseParams,
+  CreateChangesetParams, CreateIModelFromBaselineParams,
+  DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset,
+  GetLockListParams,
+  IModelsClient,
+  Lock, LockLevel, LockedObjects,
+  ReleaseBriefcaseParams, UpdateLockParams, downloadFile
 } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, AuthorizationParam, Briefcase, Changeset, Checkpoint, DeleteIModelParams, EntityListIterator, GetBriefcaseListParams, GetChangesetListParams, GetIModelListParams, GetSingleChangesetParams, GetSingleCheckpointParams, IModel, IModelScopedOperationParams, IModelsErrorCode, IModelsErrorScope, MinimalChangeset, MinimalIModel,SPECIAL_VALUES_ME, isIModelsApiError, take, toArray } from "@itwin/imodels-client-management";
 
 import { getV1CheckpointSize, queryCurrentOrPrecedingV1Checkpoint, queryCurrentOrPrecedingV2Checkpoint } from "./CheckpointHelperFunctions";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
@@ -279,6 +278,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       Logger.logInfo("BackendIModelsAccess", `Starting download of checkpoint with id ${stopwatch.description}`);
       await downloadFile({
         storage: this._iModelsClient.cloudStorage,
+        storageType: checkpoint._links.download.storageType,
         url: checkpoint._links.download.href,
         localPath: arg.localFile,
         totalDownloadCallback,

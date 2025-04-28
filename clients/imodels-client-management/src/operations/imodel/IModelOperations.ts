@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIteratorImpl, IModelResponse, IModelsErrorImpl, IModelsResponse, OperationsBase, waitForCondition } from "../../base/internal";
+import { EntityListIteratorImpl, IModelResponse, IModelsErrorImpl, IModelsResponse, OperationsBase, UtilityFunctions } from "../../base/internal";
 import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse, IModel, IModelCreationState, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn, User } from "../../base/types";
 import { Constants } from "../../Constants";
 import { IModelsClient } from "../../IModelsClient";
@@ -407,7 +407,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     timeOutInMs?: number;
     headers?: HeaderFactories;
   }): Promise<void> {
-    return waitForCondition({
+    return UtilityFunctions.waitForCondition({
       conditionToSatisfy: async () => this.isIModelInitialized({
         authorization: params.authorization,
         iModelId: params.iModelId,
@@ -431,7 +431,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     timeOutInMs?: number;
     headers?: HeaderFactories;
   }): Promise<void> {
-    return waitForCondition({
+    return UtilityFunctions.waitForCondition({
       conditionToSatisfy: async () => this.isIModelInitialized({
         authorization: params.authorization,
         iModelId: params.iModelId,
@@ -455,7 +455,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     timeOutInMs?: number;
     headers?: HeaderFactories;
   }): Promise<void> {
-    return waitForCondition({
+    return UtilityFunctions.waitForCondition({
       conditionToSatisfy: async () => this.isIModelInitialized({
         authorization: params.authorization,
         iModelId: params.iModelId,
@@ -479,7 +479,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     timeOutInMs?: number;
     headers?: HeaderFactories;
   }): Promise<void> {
-    return waitForCondition({
+    return UtilityFunctions.waitForCondition({
       conditionToSatisfy: async () => this.isIModelForkInitialized({
         authorization: params.authorization,
         iModelId: params.iModelId,

@@ -4,7 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { GetBriefcaseListParams, GetChangesetExtendedDataListParams, GetChangesetGroupListParams, GetChangesetListParams, GetLockListParams, GetNamedVersionListParams, IModel, Lock, NamedVersion, toArray } from "@itwin/imodels-client-authoring";
+import { GetLockListParams, Lock } from "@itwin/imodels-client-authoring";
+import {  GetBriefcaseListParams, GetChangesetExtendedDataListParams, GetChangesetGroupListParams,GetChangesetListParams, GetNamedVersionListParams, IModel,NamedVersion, toArray } from "@itwin/imodels-client-management";
 
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";

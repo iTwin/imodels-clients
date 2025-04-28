@@ -16,5 +16,15 @@
     "**/out": true,
     "**/lib": true,
     "common/temp": true
-  }
+  },
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.markdownlint": "explicit",
+    "editor.action.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
 }

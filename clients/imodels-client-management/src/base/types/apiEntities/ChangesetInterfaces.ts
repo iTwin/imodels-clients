@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Application, Link } from "../CommonInterfaces";
+import { Application, Link, StorageLink } from "../CommonInterfaces";
 
 import { Checkpoint } from "./CheckpointInterfaces";
 import { NamedVersion } from "./NamedVersionInterfaces";
@@ -93,13 +93,13 @@ export interface ChangesetLinks extends MinimalChangesetLinks {
    * */
   currentOrPrecedingCheckpoint: Link | null;
   /** Link from where to download the Changeset file. Link points to a remote storage. */
-  download: Link | null;
+  download: StorageLink | null;
   /**
    * Link where to upload the Changeset file. Link points to a remote storage. IMPORTANT: this link
    * is never present in any of the Changeset instances returned from methods in this client. This property
    * is only used internally.
    */
-  upload: Link | null | undefined;
+  upload: StorageLink | null | undefined;
   /**
    * Link to confirm the Changeset file upload and complete the creation process. Points to a specific
    * Changeset in iModels API. IMPORTANT: this link is never present in any of the Changeset instances returned

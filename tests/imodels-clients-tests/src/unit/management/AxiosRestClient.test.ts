@@ -2,14 +2,15 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, AxiosRetryPolicy } from "@itwin/imodels-client-management/lib/base/axios";
-import * as utilityFunctions from "@itwin/imodels-client-management/lib/base/internal/UtilityFunctions";
 import axios, { AxiosError } from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { expect } from "chai";
 import sinon from "sinon";
 
-import { ContentType, HttpRequestWithJsonBodyParams } from "@itwin/imodels-client-management";
+import {
+  AxiosRestClient, AxiosRetryPolicy, ContentType, HttpRequestWithJsonBodyParams,
+  IModelsApiError, IModelsErrorParser, UtilityFunctions
+} from "@itwin/imodels-client-management";
 
 import { createStub } from "../Stubs";
 
@@ -21,7 +22,7 @@ describe("[Management] AxiosRestClient", () => {
   before(() => {
     axiosMock = new MockAdapter(axios);
     retryPolicyStub = createStub(AxiosRetryPolicy);
-    sleepStub = sinon.stub(utilityFunctions, "sleep");
+    sleepStub = sinon.stub(UtilityFunctions, "sleep");
   });
 
   afterEach(() => {

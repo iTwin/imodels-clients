@@ -18,11 +18,13 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
-  "main": "lib/index.js",
+  "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
-  "types": "lib/index.d.ts",
+  "typings": "lib/cjs/index",
   "scripts": {
-    "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json 1>&2",
+    "build": "npm run -s build:cjs && npm run -s build:esm",
+    "build:cjs": "tsc 1>&2 --outDir lib/cjs",
+    "build:esm": "tsc 1>&2 --module esnext --outDir lib/esm",
     "clean": "rimraf lib",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
@@ -36,16 +38,16 @@
     "@itwin/imodels-client-management": "workspace:*"
   },
   "devDependencies": {
-    "@itwin/appui-abstract": "^4.0.0",
-    "@itwin/core-bentley": "^5.0.0-dev.0",
-    "@itwin/core-common": "^5.0.0-dev.0",
-    "@itwin/core-frontend": "^5.0.0-dev.0",
-    "@itwin/core-geometry": "^5.0.0-dev.0",
-    "@itwin/core-orbitgt": "^5.0.0-dev.0",
-    "@itwin/core-quantity": "^5.0.0-dev.0",
+    "@itwin/appui-abstract": "^5.0.0-dev.104",
+    "@itwin/core-bentley": "^5.0.0-dev.104",
+    "@itwin/core-common": "^5.0.0-dev.104",
+    "@itwin/core-frontend": "^5.0.0-dev.104",
+    "@itwin/core-geometry": "^5.0.0-dev.104",
+    "@itwin/core-orbitgt": "^5.0.0-dev.104",
+    "@itwin/core-quantity": "^5.0.0-dev.104",
     "@itwin/eslint-plugin": "~3.7.8",
     "@itwin/imodels-client-common-config": "workspace:*",
-    "@itwin/webgl-compatibility": "^4.0.0",
+    "@itwin/webgl-compatibility": "^5.0.0-dev.104",
     "@types/node": "14.14.31",
     "@typescript-eslint/eslint-plugin": "~6.14.0",
     "cspell": "~5.21.0",
@@ -59,8 +61,8 @@
     "typescript": "~5.3.3"
   },
   "peerDependencies": {
-    "@itwin/core-bentley": "^5.0.0-dev.0",
-    "@itwin/core-common": "^5.0.0-dev.0",
-    "@itwin/core-frontend": "^5.0.0-dev.0"
+    "@itwin/core-bentley": "^5.0.0-dev.104",
+    "@itwin/core-common": "^5.0.0-dev.104",
+    "@itwin/core-frontend": "^5.0.0-dev.104"
   }
 }

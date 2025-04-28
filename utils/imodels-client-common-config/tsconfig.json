@@ -1,18 +1,27 @@
 {
   "compilerOptions": {
-    "target": "es2021",
+    "target": "ES2022",
     "module": "commonjs",
+    "moduleResolution": "node",
     "sourceMap": true,
     "inlineSources": true,
     "lib": [
-      "es2021",
-      "esnext.asynciterable",
-      "DOM"
+      "ES2022", "DOM"
     ],
     "noUnusedLocals": true,
     "declaration": true,
+    "declarationMap": true,
     "strict": true,
-    "noImplicitOverride": true,
-    "declarationMap": true
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitOverride": true
   }
 }
+
+
+// "declaration": true,
+// "sourceMap": true,
+// "strict": true,
+// "esModuleInterop": true,
+// "moduleResolution": "node",
+// "skipLibCheck": true

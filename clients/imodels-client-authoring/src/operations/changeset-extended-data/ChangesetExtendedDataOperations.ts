@@ -2,10 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetExtendedDataResponse } from "@itwin/imodels-client-management/lib/base/internal";
-import { ChangesetExtendedDataOperations as ManagementChangesetExtendedDataOperations } from "@itwin/imodels-client-management/lib/operations";
-
-import { ChangesetExtendedData } from "@itwin/imodels-client-management";
+import { ChangesetExtendedData, ChangesetExtendedDataResponse,
+  ChangesetExtendedDataOperations as ManagementChangesetExtendedDataOperations } from "@itwin/imodels-client-management";
 
 import { OperationOptions } from "../OperationOptions";
 

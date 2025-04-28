@@ -32,7 +32,7 @@
   "dependencies": {
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",
-    "@itwin/object-storage-core": "^2.2.5",
+    "@itwin/object-storage-core": "^3.0.0-dev.0",
     "@puppeteer/browsers": "^2.10.0",
     "axios": "^1.8.2",
     "chai": "~4.3.10",

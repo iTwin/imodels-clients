@@ -2,7 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, ChangesetGroup, ChangesetGroupState, CreateChangesetGroupParams, IModelsClient, IModelsClientOptions, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
+import { CreateChangesetGroupParams, IModelsClient, IModelsClientOptions, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, ChangesetGroup, ChangesetGroupState } from "@itwin/imodels-client-management";
 import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertChangesetGroup } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";

@@ -18,4 +18,4 @@ export * from "./imodel/TestIModelFileProvider";
 export * from "./imodel/TestIModelInterfaces";
 export * from "./imodel/TestIModelRetriever";
 export * from "./imodel/TestIModelsClient";
-export * from "./imodel/TestModelsClientOptions";
+export * from "./imodel/TestIModelsClientOptions";

@@ -18,8 +18,19 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
+  "exports": {
+    ".": {
+      "import": "./lib/esm/index.js",
+      "require": "./lib/cjs/index.js"
+    }
+  },
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "typings": "lib/cjs/index",
   "scripts": {
-    "build": "tsc 1>&2",
+    "build": "npm run -s build:cjs && npm run -s build:esm",
+    "build:cjs": "tsc 1>&2 --outDir lib/cjs",
+    "build:esm": "tsc 1>&2 --module esnext --outDir lib/esm",
     "clean": "rimraf lib",
     "lint": "eslint ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
@@ -33,9 +44,9 @@
     "@itwin/imodels-client-authoring": "workspace:*"
   },
   "devDependencies": {
-    "@itwin/core-bentley": "^5.0.0-dev.0",
-    "@itwin/core-common": "^5.0.0-dev.0",
-    "@itwin/core-geometry": "^5.0.0-dev.0",
+    "@itwin/core-bentley": "^5.0.0-dev.104",
+    "@itwin/core-common": "^5.0.0-dev.104",
+    "@itwin/core-geometry": "^5.0.0-dev.104",
     "@itwin/eslint-plugin": "~3.7.8",
     "@itwin/imodels-client-common-config": "workspace:*",
     "@typescript-eslint/eslint-plugin": "~6.14.0",
@@ -50,7 +61,7 @@
     "typescript": "~5.3.3"
   },
   "peerDependencies": {
-    "@itwin/core-bentley": "^5.0.0-dev.0",
-    "@itwin/core-common": "^5.0.0-dev.0"
+    "@itwin/core-bentley": "^5.0.0-dev.104",
+    "@itwin/core-common": "^5.0.0-dev.104"
   }
 }

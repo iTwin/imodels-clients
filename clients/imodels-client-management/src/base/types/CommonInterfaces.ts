@@ -121,6 +121,12 @@ export interface Link {
   href: string;
 }
 
+/** Link to download or upload a file. */
+export interface StorageLink extends Link {
+  /** Storage type. */
+  storageType: string;
+}
+
 /**
  * Values for return preference used in `Prefer` header. The header value is formed by joining
  * `return=` and the enum value.

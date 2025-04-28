@@ -10,12 +10,12 @@ import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, Checkpoint
 import { Guid, ITwinError, Logger } from "@itwin/core-bentley";
 import { BriefcaseId, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, IModel as CoreIModel, LocalDirName } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
-import { IModelOperations } from "@itwin/imodels-client-authoring/lib/operations";
 import { expect, use } from "chai";
-import * as chaiAsPromised from "chai-as-promised";
-import * as sinon from "sinon";
+import chaiAsPromised from "chai-as-promised";
+import sinon from "sinon";
 
-import { AuthorizationCallback, ContainingChanges, IModel, IModelsClient, IModelsClientOptions, IModelsErrorCode, IModelsErrorScope, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { IModelOperations, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, ContainingChanges, IModel, IModelsErrorCode, IModelsErrorScope, isIModelsApiError } from "@itwin/imodels-client-management";
 import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";

@@ -4,7 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { AuthorizationCallback, ConflictingLock, ConflictingLocksError, GetLockListParams, IModelsClient, IModelsClientOptions, IModelsErrorCode, Lock, LockLevel, LockLevelFilter, LocksError, UpdateLockParams, toArray } from "@itwin/imodels-client-authoring";
+import { ConflictingLock, ConflictingLocksError, GetLockListParams, IModelsClient, IModelsClientOptions, Lock, LockLevel, LockLevelFilter, LocksError, UpdateLockParams } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, IModelsErrorCode, toArray } from "@itwin/imodels-client-management";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertCollection, assertError, assertLock } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";

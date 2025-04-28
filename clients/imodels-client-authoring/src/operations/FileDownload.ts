@@ -2,13 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import "reflect-metadata";
 import * as fs from "fs";
 
-import { IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
 import { ClientStorage } from "@itwin/object-storage-core";
 
-import { IModelsErrorCode } from "@itwin/imodels-client-management";
+import { IModelsErrorCode, IModelsErrorImpl } from "@itwin/imodels-client-management";
 
 import { GenericAbortSignal } from "../base/types";
 
@@ -21,6 +19,8 @@ export interface DownloadFileParams {
   storage: ClientStorage;
   /** URL of the file in the storage. */
   url: string;
+  /** Type of storage where file is stored (e.g., "azure" or "google") */
+  storageType: string;
   /** Absolute file path. */
   localPath: string;
   /** Function periodically called to report how many bytes of the file are downloaded. */

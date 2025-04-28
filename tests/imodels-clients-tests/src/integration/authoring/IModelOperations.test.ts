@@ -4,7 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { randomUUID } from "crypto";
 
-import { AuthorizationCallback, ContainerTypes, CreateIModelFromBaselineParams, IModel, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { CreateIModelFromBaselineParams, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback, ContainerTypes, IModel } from "@itwin/imodels-client-management";
 import { TestAuthorizationProvider, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertIModel } from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";

@@ -1,5 +1,12 @@
-import { OperationsBase, OperationsBaseOptions, SendDeleteRequestParams, SendGetRequestParams, SendPatchRequestParams, SendPostRequestParams, SendPutRequestParams } from "@itwin/imodels-client-management/lib/base/internal";
-import { ContentType, HttpResponse } from "@itwin/imodels-client-management/lib/base/types";
+/*---------------------------------------------------------------------------------------------
+ * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
+ * See LICENSE.md in the project root for license terms and full copyright notice.
+ *--------------------------------------------------------------------------------------------*/
+import {
+  ContentType, HttpResponse, OperationsBase, OperationsBaseOptions,
+  SendDeleteRequestParams, SendGetRequestParams, SendPatchRequestParams, SendPostRequestParams,
+  SendPutRequestParams
+} from "@itwin/imodels-client-management";
 
 export class TestOperationsWrapper extends OperationsBase<OperationsBaseOptions> {
   public constructor(options: OperationsBaseOptions) {

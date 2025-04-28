@@ -3,12 +3,11 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { ITwinError } from "@itwin/core-bentley";
-import { ErrorAdapter, OperationNameForErrorMapping } from "@itwin/imodels-access-common/lib/ErrorAdapter";
-import { IModelsErrorParser as AuthoringIModelsErrorParser } from "@itwin/imodels-client-authoring/lib/base/internal";
-import { IModelsErrorImpl, IModelsErrorParser } from "@itwin/imodels-client-management/lib/base/internal";
+import { ErrorAdapter, OperationNameForErrorMapping } from "@itwin/imodels-access-common";
 import { expect } from "chai";
 
-import { IModelsErrorCode, IModelsErrorScope } from "@itwin/imodels-client-management";
+import { IModelsErrorParser } from "@itwin/imodels-client-authoring";
+import { IModelsErrorCode, IModelsErrorImpl, IModelsErrorScope } from "@itwin/imodels-client-management";
 
 describe("ErrorAdapter", () => {
   [
@@ -235,7 +234,7 @@ describe("ErrorAdapter", () => {
         ]
       }
     };
-    const apiError = AuthoringIModelsErrorParser.parse({ statusCode: 409, body: apiResponse }, new Error());
+    const apiError = IModelsErrorParser.parse({ statusCode: 409, body: apiResponse }, new Error());
 
     const result = ErrorAdapter.toITwinError(apiError, "updateLocks");
 

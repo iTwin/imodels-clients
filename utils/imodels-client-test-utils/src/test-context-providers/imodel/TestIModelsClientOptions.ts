@@ -4,7 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { ApiOptions, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { ApiOptions } from "@itwin/imodels-client-management";
 
 import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
 

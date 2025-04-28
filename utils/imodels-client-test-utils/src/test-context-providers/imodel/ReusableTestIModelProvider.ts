@@ -2,10 +2,9 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { sleep } from "@itwin/imodels-client-management/lib/base/internal";
 import { injectable } from "inversify";
 
-import { DeleteIModelParams, IModel } from "@itwin/imodels-client-authoring";
+import { DeleteIModelParams, IModel, UtilityFunctions } from "@itwin/imodels-client-management";
 
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 
@@ -56,7 +55,7 @@ export class ReusableTestIModelProvider {
         return this._testIModelRetriever.queryRelatedData(iModel);
       }
 
-      await sleep(pollingIntervalInMs);
+      await UtilityFunctions.sleep(pollingIntervalInMs);
 
       iModel = await this._iModelsClient.iModels.getSingle({
         authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
