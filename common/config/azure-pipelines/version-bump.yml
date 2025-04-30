@@ -9,6 +9,7 @@ parameters:
       - major
       - minor
       - patch
+      - prerelease
       - none
   - name: interopPackagesBumpType
     displayName: Interop packages bump type
@@ -18,6 +19,8 @@ parameters:
       - major
       - minor
       - patch
+      - prerelease
+      - none
 
 trigger: none
 
