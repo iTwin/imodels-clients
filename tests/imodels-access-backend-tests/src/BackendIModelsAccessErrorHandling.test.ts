@@ -10,7 +10,8 @@ import { ChangesetFileProps, IModelVersion } from "@itwin/core-common";
 import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect } from "chai";
 
-import { IModelsClient, IModelsClientOptions, IModelsErrorCode, IModelsErrorScope } from "@itwin/imodels-client-authoring";
+import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { IModelsErrorCode, IModelsErrorScope } from "@itwin/imodels-client-management";
 import { IModelMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";

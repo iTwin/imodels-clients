@@ -2,7 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, BaselineFile, BaselineFileState, GetSingleBaselineFileParams, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, GetSingleBaselineFileParams, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import { AuthorizationCallback } from "@itwin/imodels-client-management";
 import { IModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertBaselineFile } from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "../common";

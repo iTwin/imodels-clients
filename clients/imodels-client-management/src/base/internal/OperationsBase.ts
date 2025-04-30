@@ -10,7 +10,13 @@ import { IModelsErrorBaseImpl, ResponseInfo } from "./IModelsErrorParser";
 import { EntityCollectionPage } from "./UtilityTypes";
 
 type CommonRequestParams = AuthorizationParam & HeadersParam;
+
+/**
+ * Function that is called if the HTTP request fails and which returns an error that will be thrown by one of the
+ * methods in {@link RestClient}.
+ */
 export type ParseErrorFunc = (response: ResponseInfo, originalError: IModelsOriginalError) => Error;
+
 export type SendGetRequestParams = CommonRequestParams & { url: string, preferReturn?: PreferReturn, responseType?: SupportedGetResponseTypes };
 export type SendPostRequestParams = CommonRequestParams & { url: string, body: object | undefined };
 export type SendPutRequestParams = CommonRequestParams & { url: string, contentType: BinaryContentType, body: Uint8Array };

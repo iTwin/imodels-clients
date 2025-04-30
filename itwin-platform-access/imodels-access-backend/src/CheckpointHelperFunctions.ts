@@ -8,17 +8,18 @@ import {
   V2CheckpointAccessProps
 } from "@itwin/core-backend";
 import { Logger } from "@itwin/core-bentley";
-import { Constants } from "@itwin/imodels-access-common/lib/Constants";
-import { handleAPIErrors } from "@itwin/imodels-access-common/lib/ErrorHandlingFunctions";
+import { Constants, handleAPIErrors } from "@itwin/imodels-access-common";
 import axios, { AxiosResponse } from "axios";
 
+import {
+  IModelsClient
+} from "@itwin/imodels-client-authoring";
 import {
   Checkpoint,
   GetSingleChangesetParams,
   GetSingleCheckpointParams,
-  IModelScopedOperationParams,
-  IModelsClient
-} from "@itwin/imodels-client-authoring";
+  IModelScopedOperationParams
+} from "@itwin/imodels-client-management";
 
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAdapter";

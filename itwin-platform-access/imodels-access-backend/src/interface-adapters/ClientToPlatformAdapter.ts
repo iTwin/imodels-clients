@@ -6,7 +6,8 @@ import { LockProps, LockState, V2CheckpointAccessProps } from "@itwin/core-backe
 import { ITwinError } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetProps, ChangesetType } from "@itwin/core-common";
 
-import { ContainerAccessInfo, ContainingChanges, DownloadedChangeset, IModelsErrorCode, IModelsErrorScope, Lock, LockLevel, MinimalChangeset, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { DownloadedChangeset, Lock, LockLevel } from "@itwin/imodels-client-authoring";
+import { ContainerAccessInfo, ContainingChanges, IModelsErrorCode, IModelsErrorScope, MinimalChangeset, isIModelsApiError } from "@itwin/imodels-client-management";
 
 export class ClientToPlatformAdapter {
   public static toChangesetProps(changeset: MinimalChangeset): ChangesetProps {

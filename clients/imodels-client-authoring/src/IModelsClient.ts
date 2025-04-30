@@ -2,14 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import "reflect-metadata";
-
-import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "@itwin/imodels-client-management/lib/base/axios";
-import { Constants } from "@itwin/imodels-client-management/lib/Constants";
 import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
 
 import {
+  AxiosRestClient, AxiosRetryPolicy, Constants, ExponentialBackoffAlgorithm,
   IModelsClient as ManagementIModelsClient,
   IModelsClientOptions as ManagementIModelsClientOptions,
   RecursiveRequired

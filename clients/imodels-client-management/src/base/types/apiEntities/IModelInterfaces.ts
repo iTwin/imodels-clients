@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Link } from "../CommonInterfaces";
+import { Link, StorageLink } from "../CommonInterfaces";
 
 import { User } from "./UserInterfaces";
 
@@ -72,7 +72,7 @@ export interface IModelLinks {
    * only used internally.
    * @private
    */
-  upload: Link | null | undefined;
+  upload: StorageLink | null | undefined;
   /**
    * Link to confirm the Baseline file upload and complete the iModel creation process. Points to a specific
    * iModel Baseline in iModels API. IMPORTANT: this link is never present in any of the IModel instances

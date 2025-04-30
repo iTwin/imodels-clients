@@ -4,10 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { AxiosResponseHeadersAdapter } from "../internal/AxiosResponseHeadersAdapter";
-import { sleep } from "../internal/UtilityFunctions";
+import { UtilityFunctions } from "../internal/";
 import { HttpRequestRetryPolicy } from "../types";
 import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, RestClient } from "../types/RestClient";
+
+import { AxiosResponseHeadersAdapter } from "./AxiosResponseHeadersAdapter";
 
 /** Default implementation for {@link RestClient} interface that uses `axios` library for sending the requests. */
 export class AxiosRestClient implements RestClient {
@@ -97,7 +98,7 @@ export class AxiosRestClient implements RestClient {
 
         const sleepDurationInMs = this._retryPolicy.getSleepDurationInMs({ retriesInvoked: retriesInvoked++ });
         if (sleepDurationInMs > 0) {
-          await sleep(sleepDurationInMs);
+          await UtilityFunctions.sleep(sleepDurationInMs);
         }
       }
     }

@@ -2,8 +2,6 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import "reflect-metadata";
-
 import { GenericAbortSignal as ObjectStorageAbortSignal } from "@itwin/object-storage-core";
 
 /** Common properties of all downloaded files. */

@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetExtendedDataOperations } from "@itwin/imodels-client-management/lib/esm/operations";
 import { assertChangesetExtendedDataBrowser, assertCollection } from "@itwin/imodels-client-test-utils/lib/assertions/BrowserFriendlyAssertions";
 
-import { ApiOptions, Authorization, AuthorizationCallback, ChangesetExtendedData, GetChangesetExtendedDataListParams, GetSingleChangesetExtendedDataParams, IModelsClient } from "@itwin/imodels-client-management";
+import { ApiOptions, Authorization, AuthorizationCallback, ChangesetExtendedData, ChangesetExtendedDataOperations,
+  GetChangesetExtendedDataListParams, GetSingleChangesetExtendedDataParams, IModelsClient } from "@itwin/imodels-client-management";
 
 import { FrontendTestEnvVariableKeys } from "./setup/FrontendTestEnvVariableKeys";
 

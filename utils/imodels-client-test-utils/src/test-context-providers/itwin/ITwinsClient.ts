@@ -5,7 +5,7 @@
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
 
-import { AuthorizationParam } from "@itwin/imodels-client-authoring";
+import { AuthorizationParam } from "@itwin/imodels-client-management";
 
 import { ITwinsClientConfig } from "./ITwinsClientConfig";
 

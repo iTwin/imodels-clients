@@ -2,10 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetGroupResponse } from "@itwin/imodels-client-management/lib/base/internal";
-import { ChangesetGroupOperations as ManagementChangesetGroupOperations } from "@itwin/imodels-client-management/lib/operations";
-
-import { ChangesetGroup } from "@itwin/imodels-client-management";
+import { ChangesetGroup, ChangesetGroupResponse, ChangesetGroupOperations as ManagementChangesetGroupOperations } from "@itwin/imodels-client-management";
 
 import { OperationOptions } from "../OperationOptions";
 

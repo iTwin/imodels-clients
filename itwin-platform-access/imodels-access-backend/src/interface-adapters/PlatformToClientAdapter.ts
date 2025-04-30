@@ -8,10 +8,13 @@ import { ITwinError } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetRange, ChangesetType, ChangesetIndexOrId as PlatformChangesetIdOrIndex } from "@itwin/core-common";
 
 import {
-  ChangesetPropertiesForCreate, ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, DownloadProgressParam, GetChangesetListUrlParams, IModelProperties,
-  IModelsErrorCode, IModelsErrorScope,
+  ChangesetPropertiesForCreate, DownloadProgressParam,
   LockLevel, LockedObjects
 } from "@itwin/imodels-client-authoring";
+import {
+  ChangesetIdOrIndex as ClientChangesetIdOrIndex, ContainingChanges, GetChangesetListUrlParams, IModelProperties,
+  IModelsErrorCode, IModelsErrorScope
+} from "@itwin/imodels-client-management";
 
 interface DownloadCancellationMonitorFuncParams { shouldCancel: boolean }
 export type DownloadCancellationMonitorFunc = (params: DownloadCancellationMonitorFuncParams) => void;

@@ -1,4 +1,5 @@
 # This CODEOWNERS file follows the format of Github's CODEOWNERS
-#   Documentation for reference, https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
 
-* @austeja-bentley @Animagne @amikoliunas @robertas-kerpys
+# Documentation for reference, <https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners>
+
+* @aerimagne @amikoliunas @robertas-kerpys

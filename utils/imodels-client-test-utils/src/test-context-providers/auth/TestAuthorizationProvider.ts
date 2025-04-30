@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { Authorization, AuthorizationCallback } from "@itwin/imodels-client-authoring";
+import { Authorization, AuthorizationCallback } from "@itwin/imodels-client-management";
 
 import { TestAuthorizationClient } from "./TestAuthorizationClient";
 import { TestAuthorizationProviderConfig } from "./TestAuthorizationProviderConfig";

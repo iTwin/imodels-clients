@@ -2,10 +2,10 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { sleep } from "@itwin/imodels-client-management/lib/base/internal";
 import { injectable } from "inversify";
 
-import { ChangesetGroupState, CheckpointState, ContainerTypes, GetSingleCheckpointParams, IModel, Lock, LockLevel, LockedObjects, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
+import {  Lock, LockLevel, LockedObjects, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
+import { ChangesetGroupState, CheckpointState, ContainerTypes, GetSingleCheckpointParams, IModel, UtilityFunctions } from "@itwin/imodels-client-management";
 
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
@@ -273,7 +273,7 @@ export class TestIModelCreator {
   }
 
   private async waitForNamedVersionCheckpointGenerated(iModelId: string, namedVersionId: string): Promise<void> {
-    await sleep(3000);
+    await UtilityFunctions.sleep(3000);
 
     const getSingleCheckpointParams: GetSingleCheckpointParams = {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
@@ -291,7 +291,7 @@ export class TestIModelCreator {
       if (checkpoint.state !== CheckpointState.Scheduled && checkpoint.state !== CheckpointState.Successful)
         throw new TestSetupError(`Checkpoint generation failed with state: ${checkpoint.state}.`);
 
-      await sleep(sleepPeriodInMs);
+      await UtilityFunctions.sleep(sleepPeriodInMs);
     }
 
     throw new TestSetupError("Timed out while waiting for checkpoint generation to complete.");

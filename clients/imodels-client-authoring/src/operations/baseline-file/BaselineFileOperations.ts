@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { OperationsBase } from "@itwin/imodels-client-management/lib/base/internal";
+import { OperationsBase } from "@itwin/imodels-client-management";
 
 import { BaselineFileResponse } from "../../base/internal";
 import { BaselineFile } from "../../base/types";

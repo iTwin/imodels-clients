@@ -2,10 +2,8 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsErrorImpl, waitForCondition } from "@itwin/imodels-client-management/lib/base/internal";
-import { IModelOperations as ManagementIModelOperations, assertLink } from "@itwin/imodels-client-management/lib/operations";
-
-import { AuthorizationParam, HeadersParam, IModel, IModelsErrorCode } from "@itwin/imodels-client-management";
+import { AuthorizationParam, HeadersParam, IModel,
+  IModelsErrorCode, IModelsErrorImpl, IModelOperations as ManagementIModelOperations, UtilityFunctions, assertLink } from "@itwin/imodels-client-management";
 
 import { BaselineFileState } from "../../base/types";
 import { IModelsClient } from "../../IModelsClient";
@@ -41,9 +39,10 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
     const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headers);
 
     assertLink(createdIModel._links.upload);
-    const uploadUrl = createdIModel._links.upload.href;
+    const uploadLink = createdIModel._links.upload;
     await this._options.cloudStorage.upload({
-      url: uploadUrl,
+      url: uploadLink.href,
+      storageType: uploadLink.storageType,
       data: params.iModelProperties.filePath
     });
 
@@ -100,7 +99,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Managem
       return state === BaselineFileState.Initialized;
     };
 
-    return waitForCondition({
+    return UtilityFunctions.waitForCondition({
       conditionToSatisfy: isBaselineInitialized,
       timeoutErrorFactory: () => new IModelsErrorImpl({
         code: IModelsErrorCode.BaselineFileInitializationTimedOut,

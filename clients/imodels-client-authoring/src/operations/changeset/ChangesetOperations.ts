@@ -4,10 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import * as path from "path";
 
-import { ChangesetResponse, IModelsErrorImpl } from "@itwin/imodels-client-management/lib/base/internal";
-import { ChangesetOperations as ManagementChangesetOperations, assertLink } from "@itwin/imodels-client-management/lib/operations";
-
-import { Changeset, ChangesetState, IModelScopedOperationParams, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
+import { Changeset, ChangesetResponse, ChangesetState,
+  IModelScopedOperationParams, IModelsErrorCode, IModelsErrorImpl, ChangesetOperations as ManagementChangesetOperations, assertLink,
+  isIModelsApiError } from "@itwin/imodels-client-management";
 
 import { DownloadProgressParam, DownloadedChangeset, GenericAbortSignal, TargetDirectoryParam } from "../../base/types";
 import { DownloadFileParams, downloadFile } from "../FileDownload";
@@ -53,7 +52,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     assertLink(uploadLink);
     await this._options.cloudStorage.upload({
       url: uploadLink.href,
-      data: params.changesetProperties.filePath
+      data: params.changesetProperties.filePath,
+      storageType: uploadLink.storageType
     });
 
     const completeLink = createChangesetResponse.body.changeset._links.complete;
@@ -180,7 +180,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     if (await this.isChangesetAlreadyDownloaded(targetFilePath, params.changeset.fileSize))
       return;
 
-    const downloadParams: Omit<DownloadFileParams, "url"> = {
+    const downloadParams: Omit<Omit<DownloadFileParams, "url">, "storageType"> = {
       storage: this._options.cloudStorage,
       localPath: targetFilePath,
       abortSignal: params.abortSignal
@@ -199,7 +199,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
       assertLink(downloadLink);
       await downloadFile({
         ...downloadParams,
-        url: downloadLink.href
+        url: downloadLink.href,
+        storageType: downloadLink.storageType
       });
     } catch (error) {
       this.throwIfAbortError(error, params.changeset);
@@ -217,7 +218,8 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
         assertLink(newDownloadLink);
         await downloadFile({
           ...downloadParams,
-          url: newDownloadLink.href
+          url: newDownloadLink.href,
+          storageType: newDownloadLink.storageType
         });
       } catch (errorAfterRetry) {
         this.throwIfAbortError(error, params.changeset);
@@ -285,6 +287,7 @@ export class ChangesetOperations<TOptions extends OperationOptions> extends Mana
     if (!isIModelsApiError(error) || error.code !== IModelsErrorCode.DownloadAborted)
       return;
 
+    error.originalError = new Error(error.message);
     error.message = `Changeset(s) download was aborted. Changeset id: ${changeset.id}}.`;
     throw error;
   }

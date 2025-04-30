@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Link } from "../CommonInterfaces";
+import { StorageLink } from "../CommonInterfaces";
 
 /** Possible Checkpoint states. */
 export enum CheckpointState {
@@ -31,7 +31,7 @@ export interface ContainerAccessInfo {
 /** Links that belong to Checkpoint entity. */
 export interface CheckpointLinks {
   /** Link to download the Checkpoint file. Points to file storage. */
-  download: Link | null;
+  download: StorageLink | null;
 }
 
 /** Full representation of a Checkpoint. */

@@ -85,5 +85,25 @@
         "<node_internals>/**"
       ]
     },
+    {
+      "name": "iModels Clients Browser Tests",
+      "cwd": "${workspaceFolder}/tests/imodels-clients-tests-browser",
+      "type": "pwa-node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "test:integration:debug"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/*/*/lib/**/*.js"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "DEBUG": "1"
+      },
+    },
   ]
 }

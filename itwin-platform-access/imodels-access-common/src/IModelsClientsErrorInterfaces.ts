@@ -4,7 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import { ITwinError } from "@itwin/core-bentley";
 
-import { ConflictingLock, IModelsErrorScope } from "@itwin/imodels-client-authoring";
+import { ConflictingLock } from "@itwin/imodels-client-authoring";
+import { IModelsErrorScope } from "@itwin/imodels-client-management";
 
 /** Most common error returned in the majority of error cases by imodels-clients. */
 export interface IModelsClientsError extends ITwinError {

@@ -6,7 +6,8 @@ import * as fs from "fs";
 
 import { expect } from "chai";
 
-import { BaselineFile, BaselineFileState, Changeset, ChangesetExtendedData, ChangesetGroup, ChangesetGroupPropertiesForCreate, ChangesetGroupPropertiesForUpdate, ChangesetGroupState, ChangesetPropertiesForCreate, ChangesetState, DownloadedChangeset, IModelsError, IModelsErrorCode, Lock, MinimalChangeset, SynchronizationInfo, SynchronizationInfoForCreate, isIModelsApiError } from "@itwin/imodels-client-authoring";
+import { BaselineFile, BaselineFileState, ChangesetGroupPropertiesForCreate, ChangesetGroupPropertiesForUpdate, ChangesetPropertiesForCreate, DownloadedChangeset, Lock, SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
+import { Changeset, ChangesetExtendedData, ChangesetGroup, ChangesetGroupState, ChangesetState, IModelsError, IModelsErrorCode, MinimalChangeset, SynchronizationInfo, isIModelsApiError } from "@itwin/imodels-client-management";
 
 import { TestChangesetFile, TestIModelBaselineFile } from "../test-context-providers";
 
