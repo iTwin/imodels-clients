@@ -6,11 +6,10 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { AbortController } from "@azure/abort-controller";
-import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ConfigDownloadInput, UrlDownloadInput } from "@itwin/object-storage-core";
 import { expect } from "chai";
 
-import { AcquireBriefcaseParams, CreateChangesetGroupParams, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, IModelsClient, IModelsClientOptions, ProgressCallback, TargetDirectoryParam } from "@itwin/imodels-client-authoring";
+import { AcquireBriefcaseParams, AuthoringUtilityFunctions, CreateChangesetGroupParams, CreateChangesetParams, DownloadChangesetListParams, DownloadSingleChangesetParams, DownloadedChangeset, IModelsClient, IModelsClientOptions, ProgressCallback, TargetDirectoryParam } from "@itwin/imodels-client-authoring";
 import { AuthorizationCallback, IModelScopedOperationParams, IModelsError, IModelsErrorCode, isIModelsApiError } from "@itwin/imodels-client-management";
 import { FileTransferLog, IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, TrackableClientStorage, assertChangeset, assertDownloadedChangeset, assertProgressReports, cleanupDirectory } from "@itwin/imodels-client-test-utils";
 
@@ -342,7 +341,7 @@ describe("[Authoring] ChangesetOperations", () => {
       it(`should should retry changeset download if it fails the first time when downloading changeset ${testCase.label}`, async () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
-        const azureClientStorage = new AzureClientStorage(new BlockBlobClientWrapperFactory());
+        const azureClientStorage = AuthoringUtilityFunctions.createDefaultClientStorage();
         let hasDownloadFailed = false;
         const downloadInterceptor = (input: UrlDownloadInput | ConfigDownloadInput) => {
           fileTransferLog.recordDownload((input as UrlDownloadInput).url);
@@ -383,7 +382,7 @@ describe("[Authoring] ChangesetOperations", () => {
       it(`should not download changeset again if it is already present when downloading changeset ${testCase.label}`, async () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
-        const azureClientStorage = new AzureClientStorage(new BlockBlobClientWrapperFactory());
+        const azureClientStorage = AuthoringUtilityFunctions.createDefaultClientStorage();
         const downloadInterceptor = async (input: UrlDownloadInput | ConfigDownloadInput) => {
           fileTransferLog.recordDownload((input as UrlDownloadInput).url);
         };

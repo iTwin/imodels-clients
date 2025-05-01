@@ -16,16 +16,30 @@ export enum CheckpointState {
   NotGenerated = "notGenerated"
 }
 
-/** Storage container which stores the Checkpoint in blocks. */
-export interface ContainerAccessInfo {
-  /** Storage account name. */
-  account: string;
+export interface AzureDirectoryAccessInfo {
   /** Shared access key to access the container. */
-  sas: string;
-  /** Storage container name. */
-  container: string;
-  /** Checkpoint file name. */
-  dbName: string;
+  sasToken: string;
+}
+
+export interface GoogleDirectoryAccessInfo {
+  /** Shared access key to access the container. */
+  authorization: string;
+}
+
+/** Storage container which stores the Checkpoint in blocks. */
+export interface DirectoryAccessInfo {
+  /** Base URL to the storage. */
+  baseUrl: string;
+  /** Storage account name. */
+  storage: string;
+  /** Base directory name. */
+  baseDirectory: string;
+  /** Type of storage for container */
+  storageType: string;
+  /** Access information for Azure storage. */
+  azure?: AzureDirectoryAccessInfo;
+  /** Access information for Google storage. */
+  google?: GoogleDirectoryAccessInfo;
 }
 
 /** Links that belong to Checkpoint entity. */
@@ -48,8 +62,10 @@ export interface Checkpoint {
   changesetIndex: number;
   /** Checkpoint state. See {@link CheckpointState}. */
   state: CheckpointState;
-  /** Information to access storage container which stores the Checkpoint in blocks. See {@link ContainerAccessInfo}. */
-  containerAccessInfo: ContainerAccessInfo | null;
+  /** Name of checkpoint when downloading it in blocks. */
+  dbName: string;
+  /** Information to access storage container which stores the Checkpoint in blocks. See {@link DirectoryAccessInfo}. */
+  directoryAccessInfo: DirectoryAccessInfo | null;
   /** Checkpoint links. See {@link CheckpointLinks}. */
   _links: CheckpointLinks;
 }

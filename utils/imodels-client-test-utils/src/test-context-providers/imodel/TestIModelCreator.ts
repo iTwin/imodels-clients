@@ -285,7 +285,7 @@ export class TestIModelCreator {
     for (let retries = timeOutInMs / sleepPeriodInMs; retries > 0; --retries) {
       const checkpoint = await this._iModelsClient.checkpoints.getSingle(getSingleCheckpointParams);
 
-      if (checkpoint.state === CheckpointState.Successful && checkpoint._links?.download !== undefined && checkpoint.containerAccessInfo !== null)
+      if (checkpoint.state === CheckpointState.Successful && checkpoint._links?.download !== undefined && checkpoint.directoryAccessInfo !== null)
         return;
 
       if (checkpoint.state !== CheckpointState.Scheduled && checkpoint.state !== CheckpointState.Successful)

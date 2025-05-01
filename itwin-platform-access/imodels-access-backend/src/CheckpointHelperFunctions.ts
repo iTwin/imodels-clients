@@ -33,16 +33,16 @@ export async function queryCurrentOrPrecedingV2Checkpoint(
 
   if (changesetIndex === 0) {
     const baselineCheckpoint = await getBaselineCheckpoint(iModelsClient, iModelScopedOperationParams);
-    if (!baselineCheckpoint?.containerAccessInfo)
+    if (!baselineCheckpoint?.directoryAccessInfo)
       return undefined;
-    return ClientToPlatformAdapter.toV2CheckpointAccessProps(baselineCheckpoint.containerAccessInfo);
+    return ClientToPlatformAdapter.toV2CheckpointAccessProps(baselineCheckpoint.directoryAccessInfo, baselineCheckpoint.dbName);
   }
 
-  const isQueriedCheckpointValid = (queriedCheckpoint: Checkpoint) => !!queriedCheckpoint.containerAccessInfo;
+  const isQueriedCheckpointValid = (queriedCheckpoint: Checkpoint) => !!queriedCheckpoint.directoryAccessInfo;
   const checkpoint = await findLatestCheckpointForChangeset(iModelsClient, iModelScopedOperationParams, changesetIndex, isQueriedCheckpointValid);
   if (checkpoint === undefined)
     return undefined;
-  return ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo!);
+  return ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.directoryAccessInfo!, checkpoint.dbName);
 }
 
 export async function queryCurrentOrPrecedingV1Checkpoint(

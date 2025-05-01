@@ -2,7 +2,6 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AzureClientStorage, BlockBlobClientWrapperFactory } from "@itwin/object-storage-azure";
 import { ClientStorage } from "@itwin/object-storage-core";
 
 import {
@@ -12,8 +11,7 @@ import {
   RecursiveRequired
 } from "@itwin/imodels-client-management";
 
-import { NodeLocalFileSystem } from "./base/internal";
-import { IModelsErrorParser } from "./base/internal/IModelsErrorParser";
+import { AuthoringUtilityFunctions, IModelsErrorParser, NodeLocalFileSystem } from "./base/internal";
 import { LocalFileSystem } from "./base/types";
 import { BaselineFileOperations, BriefcaseOperations, ChangesetExtendedDataOperations, ChangesetGroupOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
 
@@ -28,7 +26,7 @@ export interface IModelsClientOptions extends ManagementIModelsClientOptions {
   /**
    * Storage handler to use in operations which transfer files. Examples of such operations are Changeset download in
    * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. If `undefined` the default
-   * is used which is `AzureClientStorage` class from `@itwin/object-storage-azure`.
+   * is used which supports both Azure and Google storage.
    */
   cloudStorage?: ClientStorage;
 }
@@ -114,7 +112,7 @@ export class IModelsClient extends ManagementIModelsClient {
       api: this.fillApiConfiguration(options?.api),
       restClient: options?.restClient ?? new AxiosRestClient(retryPolicy),
       localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
-      cloudStorage: options?.cloudStorage ?? new AzureClientStorage(new BlockBlobClientWrapperFactory()),
+      cloudStorage: options?.cloudStorage ?? AuthoringUtilityFunctions.createDefaultClientStorage(),
       headers: options?.headers ?? {},
       retryPolicy
     };
