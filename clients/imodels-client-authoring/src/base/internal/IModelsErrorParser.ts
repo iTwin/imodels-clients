@@ -2,9 +2,20 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsApiError, IModelsErrorBaseImpl, IModelsErrorCode, IModelsOriginalError, IModelsErrorParser as ManagementIModelsErrorParser, ResponseInfo } from "@itwin/imodels-client-management";
+import {
+  IModelsApiError,
+  IModelsErrorBaseImpl,
+  IModelsErrorCode,
+  IModelsOriginalError,
+  IModelsErrorParser as ManagementIModelsErrorParser,
+  ResponseInfo,
+} from "@itwin/imodels-client-management";
 
-import { ConflictingLock, ConflictingLocksError, LocksError } from "../types/apiEntities/LockErrorInterfaces";
+import {
+  ConflictingLock,
+  ConflictingLocksError,
+  LocksError,
+} from "../types/apiEntities/LockErrorInterfaces";
 
 interface AuthoringIModelsApiErrorWrapper {
   error: AuthoringIModelsApiError;
@@ -29,7 +40,10 @@ class LocksErrorImpl extends IModelsErrorBaseImpl implements LocksError {
   }
 }
 
-class ConflictingLocksErrorImpl extends IModelsErrorBaseImpl implements ConflictingLocksError {
+class ConflictingLocksErrorImpl
+  extends IModelsErrorBaseImpl
+  implements ConflictingLocksError
+{
   public conflictingLocks?: ConflictingLock[];
 
   constructor(params: {
@@ -44,10 +58,15 @@ class ConflictingLocksErrorImpl extends IModelsErrorBaseImpl implements Conflict
 }
 
 export class IModelsErrorParser extends ManagementIModelsErrorParser {
-  public static override parse(response: ResponseInfo, originalError: IModelsOriginalError): Error {
+  public static override parse(
+    response: ResponseInfo,
+    originalError: IModelsOriginalError
+  ): Error {
     const errorFromApi: AuthoringIModelsApiErrorWrapper | undefined =
       response.body as AuthoringIModelsApiErrorWrapper;
-    const errorCode: IModelsErrorCode = IModelsErrorParser.parseCode(errorFromApi?.error?.code);
+    const errorCode: IModelsErrorCode = IModelsErrorParser.parseCode(
+      errorFromApi?.error?.code
+    );
 
     if (errorCode === IModelsErrorCode.NewerChangesExist) {
       const errorMessage = IModelsErrorParser.parseAndFormatLockErrorMessage(
@@ -58,20 +77,21 @@ export class IModelsErrorParser extends ManagementIModelsErrorParser {
         code: errorCode,
         message: errorMessage,
         originalError,
-        objectIds: errorFromApi?.error?.objectIds
+        objectIds: errorFromApi?.error?.objectIds,
       });
     }
 
     if (errorCode === IModelsErrorCode.ConflictWithAnotherUser) {
-      const errorMessage = IModelsErrorParser.parseAndFormatLockConflictErrorMessage(
-        errorFromApi?.error?.message,
-        errorFromApi?.error?.conflictingLocks
-      );
+      const errorMessage =
+        IModelsErrorParser.parseAndFormatLockConflictErrorMessage(
+          errorFromApi?.error?.message,
+          errorFromApi?.error?.conflictingLocks
+        );
       return new ConflictingLocksErrorImpl({
         code: errorCode,
         message: errorMessage,
         originalError,
-        conflictingLocks: errorFromApi?.error?.conflictingLocks
+        conflictingLocks: errorFromApi?.error?.conflictingLocks,
       });
     }
 
@@ -83,8 +103,7 @@ export class IModelsErrorParser extends ManagementIModelsErrorParser {
     objectIds: string[] | undefined
   ): string {
     let result = message ?? ManagementIModelsErrorParser._defaultErrorMessage;
-    if (!objectIds || objectIds.length === 0)
-      return result;
+    if (!objectIds || objectIds.length === 0) return result;
 
     result += ` Object ids: ${objectIds.join(" ,")}`;
     return result;
@@ -95,15 +114,15 @@ export class IModelsErrorParser extends ManagementIModelsErrorParser {
     conflictingLocks: ConflictingLock[] | undefined
   ) {
     let result = message ?? ManagementIModelsErrorParser._defaultErrorMessage;
-    if (!conflictingLocks || conflictingLocks.length === 0)
-      return result;
+    if (!conflictingLocks || conflictingLocks.length === 0) return result;
 
     result += " Conflicting locks:\n";
     for (let i = 0; i < conflictingLocks.length; i++) {
-      result += `${i + 1}. Object id: ${conflictingLocks[i].objectId
-      }, lock level: ${conflictingLocks[i].lockLevel
-      }, briefcase ids: ${conflictingLocks[i].briefcaseIds.join(", ")
-      }\n`;
+      result += `${i + 1}. Object id: ${
+        conflictingLocks[i].objectId
+      }, lock level: ${
+        conflictingLocks[i].lockLevel
+      }, briefcase ids: ${conflictingLocks[i].briefcaseIds.join(", ")}\n`;
     }
     return result;
   }

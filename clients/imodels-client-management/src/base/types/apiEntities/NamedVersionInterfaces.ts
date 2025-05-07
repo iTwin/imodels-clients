@@ -12,7 +12,7 @@ export enum NamedVersionState {
   /** Visible. Named Version should be present in displayed Named Version lists. */
   Visible = "visible",
   /** Hidden. Named Version is intended to be hidden in displayed Named Version lists. */
-  Hidden = "hidden"
+  Hidden = "hidden",
 }
 
 /** Minimal representation of a Named Version. */
@@ -73,4 +73,3 @@ export interface NamedVersion extends MinimalNamedVersion {
    */
   getChangeset(): Promise<Changeset | undefined>;
 }
-

@@ -5,6 +5,7 @@
 import { Constants } from "../../Constants";
 import { IModelsError } from "../types";
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace UtilityFunctions {
   export async function sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -16,12 +17,16 @@ export namespace UtilityFunctions {
     timeOutInMs?: number;
   }): Promise<void> {
     const sleepPeriodInMs = Constants.time.sleepPeriodInMs;
-    const timeOutInMs = params.timeOutInMs ?? Constants.time.iModelInitializationTimeOutInMs;
+    const timeOutInMs =
+      params.timeOutInMs ?? Constants.time.iModelInitializationTimeOutInMs;
 
-    for (let retries = Math.ceil(timeOutInMs / sleepPeriodInMs); retries > 0; --retries) {
+    for (
+      let retries = Math.ceil(timeOutInMs / sleepPeriodInMs);
+      retries > 0;
+      --retries
+    ) {
       const isTargetStateReached = await params.conditionToSatisfy();
-      if (isTargetStateReached)
-        return;
+      if (isTargetStateReached) return;
       await sleep(sleepPeriodInMs);
     }
 

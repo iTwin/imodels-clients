@@ -4,15 +4,34 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import {  Lock, LockLevel, LockedObjects, UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
-import { ChangesetGroupState, CheckpointState, ContainerTypes, GetSingleCheckpointParams, IModel, UtilityFunctions } from "@itwin/imodels-client-management";
+import {
+  Lock,
+  LockLevel,
+  LockedObjects,
+  UpdateChangesetGroupParams,
+} from "@itwin/imodels-client-authoring";
+import {
+  ChangesetGroupState,
+  CheckpointState,
+  ContainerTypes,
+  GetSingleCheckpointParams,
+  IModel,
+  UtilityFunctions,
+} from "@itwin/imodels-client-management";
 
 import { TestSetupError } from "../../CommonTestUtils";
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 import { TestITwinProvider } from "../itwin/TestITwinProvider";
 
 import { TestIModelFileProvider } from "./TestIModelFileProvider";
-import { BriefcaseMetadata, ChangesetExtendedDataMetadata, ChangesetGroupMetadata, IModelMetadata, NamedVersionMetadata, ReusableIModelMetadata } from "./TestIModelInterfaces";
+import {
+  BriefcaseMetadata,
+  ChangesetExtendedDataMetadata,
+  ChangesetGroupMetadata,
+  IModelMetadata,
+  NamedVersionMetadata,
+  ReusableIModelMetadata,
+} from "./TestIModelInterfaces";
 import { TestIModelsClient } from "./TestIModelsClient";
 
 @injectable()
@@ -21,21 +40,23 @@ export class TestIModelCreator {
 
   public static namedVersions = [
     { name: "Named version 5", changesetIndex: 5 },
-    { name: "Named version 10", changesetIndex: 10 }
+    { name: "Named version 10", changesetIndex: 10 },
   ];
 
   public static changesetExtendedData = [
     { changesetIndex: 1, data: { someKey: "someValue" } },
-    { changesetIndex: 2, data: { someKey: "someValue2" } }
+    { changesetIndex: 2, data: { someKey: "someValue2" } },
   ];
 
   public static changesetGroups = [
     { description: "Initial group", changesetIndexes: [1, 2, 3] },
-    { description: "Another one", changesetIndexes: [4, 5, 6] }
+    { description: "Another one", changesetIndexes: [4, 5, 6] },
   ];
 
-  private readonly _reusableIModelCreationInProgressDescription = "Reusable iModel creation in progress";
-  private readonly _reusableIModelCreationCompletedDescription = "Reusable iModel creation completed";
+  private readonly _reusableIModelCreationInProgressDescription =
+    "Reusable iModel creation in progress";
+  private readonly _reusableIModelCreationCompletedDescription =
+    "Reusable iModel creation completed";
   private readonly _briefcaseDeviceName = "Some device name";
 
   constructor(
@@ -43,9 +64,12 @@ export class TestIModelCreator {
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
     private readonly _testITwinProvider: TestITwinProvider,
     private readonly _testIModelFileProvider: TestIModelFileProvider
-  ) { }
+  ) {}
 
-  public async createEmpty(iModelName: string, iModelDescription: string = "Some description"): Promise<IModelMetadata> {
+  public async createEmpty(
+    iModelName: string,
+    iModelDescription: string = "Some description"
+  ): Promise<IModelMetadata> {
     const iTwinId = await this._testITwinProvider.getOrCreate();
     const iModel = await this._iModelsClient.iModels.createEmpty({
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
@@ -53,39 +77,59 @@ export class TestIModelCreator {
         iTwinId,
         name: iModelName,
         description: iModelDescription,
-        containersEnabled: ContainerTypes.None
-      }
+        containersEnabled: ContainerTypes.None,
+      },
     });
 
     return {
       id: iModel.id,
       name: iModel.name,
-      description: iModel.description!
+      description: iModel.description!,
     };
   }
 
-  public async createEmptyAndUploadChangesets(iModelName: string): Promise<IModelMetadata> {
+  public async createEmptyAndUploadChangesets(
+    iModelName: string
+  ): Promise<IModelMetadata> {
     const iModel = await this.createEmpty(iModelName);
-    const briefcases = await this.acquireBriefcases(iModel.id, TestIModelCreator.briefcaseCount);
+    const briefcases = await this.acquireBriefcases(
+      iModel.id,
+      TestIModelCreator.briefcaseCount
+    );
     await this.uploadChangesets(iModel.id, briefcases[0].id, []);
     return iModel;
   }
 
-  public async createReusable(iModelName: string): Promise<ReusableIModelMetadata> {
-    const iModel = await this.createEmpty(iModelName, this._reusableIModelCreationInProgressDescription);
-    const briefcases = await this.acquireBriefcases(iModel.id, TestIModelCreator.briefcaseCount);
+  public async createReusable(
+    iModelName: string
+  ): Promise<ReusableIModelMetadata> {
+    const iModel = await this.createEmpty(
+      iModelName,
+      this._reusableIModelCreationInProgressDescription
+    );
+    const briefcases = await this.acquireBriefcases(
+      iModel.id,
+      TestIModelCreator.briefcaseCount
+    );
     const changesetGroups = await this.createChangesetGroups(iModel.id);
     await this.uploadChangesets(iModel.id, briefcases[0].id, changesetGroups);
     await this.completeChangesetGroups(iModel.id, changesetGroups);
-    const changesetExtendedData = await this.createChangesetExtendedData(iModel.id);
-    const namedVersions = await this.createNamedVersionsOnReusableIModel(iModel.id);
-    const lock = await this.createLockOnReusableIModel(iModel.id, briefcases[0].id);
+    const changesetExtendedData = await this.createChangesetExtendedData(
+      iModel.id
+    );
+    const namedVersions = await this.createNamedVersionsOnReusableIModel(
+      iModel.id
+    );
+    const lock = await this.createLockOnReusableIModel(
+      iModel.id,
+      briefcases[0].id
+    );
     const initializedIModel = await this._iModelsClient.iModels.update({
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelId: iModel.id,
       iModelProperties: {
-        description: this._reusableIModelCreationCompletedDescription
-      }
+        description: this._reusableIModelCreationCompletedDescription,
+      },
     });
 
     return {
@@ -95,23 +139,28 @@ export class TestIModelCreator {
       namedVersions,
       lock,
       changesetGroups,
-      changesetExtendedData
+      changesetExtendedData,
     };
   }
 
   public isReusableIModelInitialized(iModel: IModel): boolean {
-    return iModel.description === this._reusableIModelCreationCompletedDescription;
+    return (
+      iModel.description === this._reusableIModelCreationCompletedDescription
+    );
   }
 
-  private async createNamedVersionsOnReusableIModel(iModelId: string): Promise<NamedVersionMetadata[]> {
+  private async createNamedVersionsOnReusableIModel(
+    iModelId: string
+  ): Promise<NamedVersionMetadata[]> {
     const namedVersions: NamedVersionMetadata[] = [];
     const checkpointGenerationPromises: Promise<void>[] = [];
     for (const namedVersionMetadata of TestIModelCreator.namedVersions) {
-      const namedVersion: NamedVersionMetadata = await this.createNamedVersionOnChangesetIndex(
-        iModelId,
-        namedVersionMetadata.name,
-        namedVersionMetadata.changesetIndex
-      );
+      const namedVersion: NamedVersionMetadata =
+        await this.createNamedVersionOnChangesetIndex(
+          iModelId,
+          namedVersionMetadata.name,
+          namedVersionMetadata.changesetIndex
+        );
       namedVersions.push(namedVersion);
       checkpointGenerationPromises.push(
         this.waitForNamedVersionCheckpointGenerated(iModelId, namedVersion.id)
@@ -122,33 +171,43 @@ export class TestIModelCreator {
     return namedVersions;
   }
 
-  private async createLockOnReusableIModel(iModelId: string, briefcaseId: number): Promise<Lock> {
+  private async createLockOnReusableIModel(
+    iModelId: string,
+    briefcaseId: number
+  ): Promise<Lock> {
     const testIModelLocks: LockedObjects[] = [
       {
         lockLevel: LockLevel.Exclusive,
-        objectIds: ["0x1", "0xa"]
+        objectIds: ["0x1", "0xa"],
       },
       {
         lockLevel: LockLevel.Shared,
-        objectIds: ["0x2", "0xb"]
-      }
+        objectIds: ["0x2", "0xb"],
+      },
     ];
 
     const acquiredLocks: Lock = await this._iModelsClient.locks.update({
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelId,
       briefcaseId,
-      lockedObjects: testIModelLocks
+      lockedObjects: testIModelLocks,
     });
 
     return acquiredLocks;
   }
 
-  private async uploadChangesets(iModelId: string, briefcaseId: number, changesetGroups: ChangesetGroupMetadata[]): Promise<void> {
+  private async uploadChangesets(
+    iModelId: string,
+    briefcaseId: number,
+    changesetGroups: ChangesetGroupMetadata[]
+  ): Promise<void> {
     for (let i = 0; i < this._testIModelFileProvider.changesets.length; i++) {
       const changeset = this._testIModelFileProvider.changesets[i];
-      const parentId = i === 0 ? undefined : this._testIModelFileProvider.changesets[i - 1].id;
-      const changesetGroupId = changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changeset.index))?.id;
+      const parentId =
+        i === 0 ? undefined : this._testIModelFileProvider.changesets[i - 1].id;
+      const changesetGroupId = changesetGroups.find((csGroup) =>
+        csGroup.changesetIndexes.includes(changeset.index)
+      )?.id;
 
       await this._iModelsClient.changesets.create({
         authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
@@ -161,71 +220,88 @@ export class TestIModelCreator {
           parentId,
           synchronizationInfo: changeset.synchronizationInfo,
           filePath: changeset.filePath,
-          groupId: changesetGroupId
-        }
+          groupId: changesetGroupId,
+        },
       });
     }
   }
 
-  private async createChangesetExtendedData(iModelId: string): Promise<ChangesetExtendedDataMetadata[]> {
+  private async createChangesetExtendedData(
+    iModelId: string
+  ): Promise<ChangesetExtendedDataMetadata[]> {
     const changesetExtendedDataList: ChangesetExtendedDataMetadata[] = [];
     for (const changesetExtendedDataMetadata of TestIModelCreator.changesetExtendedData) {
-      const changesetMetadata = this._testIModelFileProvider.changesets[changesetExtendedDataMetadata.changesetIndex - 1];
-      const changesetExtendedData = await this._iModelsClient.changesetExtendedData.create({
-        authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
-        iModelId,
-        changesetExtendedDataProperties: {
-          data: changesetExtendedDataMetadata.data
-        },
-        changesetIndex: changesetExtendedDataMetadata.changesetIndex
-      });
+      const changesetMetadata =
+        this._testIModelFileProvider.changesets[
+          changesetExtendedDataMetadata.changesetIndex - 1
+        ];
+      const changesetExtendedData =
+        await this._iModelsClient.changesetExtendedData.create({
+          authorization:
+            this._testAuthorizationProvider.getAdmin1Authorization(),
+          iModelId,
+          changesetExtendedDataProperties: {
+            data: changesetExtendedDataMetadata.data,
+          },
+          changesetIndex: changesetExtendedDataMetadata.changesetIndex,
+        });
 
       changesetExtendedDataList.push({
         changesetId: changesetMetadata.id,
         changesetIndex: changesetExtendedDataMetadata.changesetIndex,
-        data: changesetExtendedData.data
+        data: changesetExtendedData.data,
       });
     }
 
     return changesetExtendedDataList;
   }
 
-  private async createChangesetGroups(iModelId: string): Promise<ChangesetGroupMetadata[]> {
+  private async createChangesetGroups(
+    iModelId: string
+  ): Promise<ChangesetGroupMetadata[]> {
     const changesetGroups: ChangesetGroupMetadata[] = [];
 
     for (const changesetGroupMetadata of TestIModelCreator.changesetGroups) {
       const changesetGroup = await this._iModelsClient.changesetGroups.create({
         authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
         iModelId,
-        changesetGroupProperties: changesetGroupMetadata
+        changesetGroupProperties: changesetGroupMetadata,
       });
 
       changesetGroups.push({
         id: changesetGroup.id,
         description: changesetGroup.description,
-        changesetIndexes: changesetGroupMetadata.changesetIndexes
+        changesetIndexes: changesetGroupMetadata.changesetIndexes,
       });
     }
 
     return changesetGroups;
   }
 
-  private async completeChangesetGroups(iModelId: string, changesetGroups: ChangesetGroupMetadata[]): Promise<void> {
+  private async completeChangesetGroups(
+    iModelId: string,
+    changesetGroups: ChangesetGroupMetadata[]
+  ): Promise<void> {
     for (const changesetGroup of changesetGroups) {
       const updateChangesetGroupParams: UpdateChangesetGroupParams = {
         authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
         iModelId,
         changesetGroupId: changesetGroup.id,
         changesetGroupProperties: {
-          state: ChangesetGroupState.Completed
-        }
+          state: ChangesetGroupState.Completed,
+        },
       };
 
-      await this._iModelsClient.changesetGroups.update(updateChangesetGroupParams);
+      await this._iModelsClient.changesetGroups.update(
+        updateChangesetGroupParams
+      );
     }
   }
 
-  private async acquireBriefcases(iModelId: string, briefcaseCount: number): Promise<BriefcaseMetadata[]> {
+  private async acquireBriefcases(
+    iModelId: string,
+    briefcaseCount: number
+  ): Promise<BriefcaseMetadata[]> {
     const briefcases: BriefcaseMetadata[] = [];
     for (let i = 1; i <= briefcaseCount; i++) {
       const briefcase = await this.acquireBriefcase(iModelId);
@@ -239,61 +315,83 @@ export class TestIModelCreator {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelId,
       briefcaseProperties: {
-        deviceName: this._briefcaseDeviceName
-      }
+        deviceName: this._briefcaseDeviceName,
+      },
     });
 
     return {
       id: briefcase.briefcaseId,
       deviceName: briefcase.deviceName!,
-      ownerId: briefcase.ownerId
+      ownerId: briefcase.ownerId,
     };
   }
 
-  private async createNamedVersionOnChangesetIndex(iModelId: string, namedVersionName: string, changesetIndex: number): Promise<NamedVersionMetadata> {
+  private async createNamedVersionOnChangesetIndex(
+    iModelId: string,
+    namedVersionName: string,
+    changesetIndex: number
+  ): Promise<NamedVersionMetadata> {
     // We use this specific user that is able to generate checkpoints
     // for named version creation to mimic production environment.
-    const authorizationForFullyFeaturedUser = this._testAuthorizationProvider.getFullyFeaturedAdmin2Authorization();
+    const authorizationForFullyFeaturedUser =
+      this._testAuthorizationProvider.getFullyFeaturedAdmin2Authorization();
 
-    const changesetMetadata = this._testIModelFileProvider.changesets[changesetIndex - 1];
+    const changesetMetadata =
+      this._testIModelFileProvider.changesets[changesetIndex - 1];
     const namedVersion = await this._iModelsClient.namedVersions.create({
       authorization: authorizationForFullyFeaturedUser,
       iModelId,
       namedVersionProperties: {
         name: namedVersionName,
-        changesetId: changesetMetadata.id
-      }
+        changesetId: changesetMetadata.id,
+      },
     });
     return {
       id: namedVersion.id,
       name: namedVersion.name,
       changesetId: changesetMetadata.id,
-      changesetIndex: changesetMetadata.index
+      changesetIndex: changesetMetadata.index,
     };
   }
 
-  private async waitForNamedVersionCheckpointGenerated(iModelId: string, namedVersionId: string): Promise<void> {
+  private async waitForNamedVersionCheckpointGenerated(
+    iModelId: string,
+    namedVersionId: string
+  ): Promise<void> {
     await UtilityFunctions.sleep(3000);
 
     const getSingleCheckpointParams: GetSingleCheckpointParams = {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelId,
-      namedVersionId
+      namedVersionId,
     };
     const sleepPeriodInMs = 1000;
     const timeOutInMs = 5 * 60 * 1000;
     for (let retries = timeOutInMs / sleepPeriodInMs; retries > 0; --retries) {
-      const checkpoint = await this._iModelsClient.checkpoints.getSingle(getSingleCheckpointParams);
+      const checkpoint = await this._iModelsClient.checkpoints.getSingle(
+        getSingleCheckpointParams
+      );
 
-      if (checkpoint.state === CheckpointState.Successful && checkpoint._links?.download !== undefined && checkpoint.directoryAccessInfo !== null)
+      if (
+        checkpoint.state === CheckpointState.Successful &&
+        checkpoint._links?.download !== undefined &&
+        checkpoint.directoryAccessInfo !== null
+      )
         return;
 
-      if (checkpoint.state !== CheckpointState.Scheduled && checkpoint.state !== CheckpointState.Successful)
-        throw new TestSetupError(`Checkpoint generation failed with state: ${checkpoint.state}.`);
+      if (
+        checkpoint.state !== CheckpointState.Scheduled &&
+        checkpoint.state !== CheckpointState.Successful
+      )
+        throw new TestSetupError(
+          `Checkpoint generation failed with state: ${checkpoint.state}.`
+        );
 
       await UtilityFunctions.sleep(sleepPeriodInMs);
     }
 
-    throw new TestSetupError("Timed out while waiting for checkpoint generation to complete.");
+    throw new TestSetupError(
+      "Timed out while waiting for checkpoint generation to complete."
+    );
   }
 }

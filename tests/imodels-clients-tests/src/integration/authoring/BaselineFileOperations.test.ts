@@ -2,9 +2,22 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BaselineFile, BaselineFileState, GetSingleBaselineFileParams, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import {
+  BaselineFile,
+  BaselineFileState,
+  GetSingleBaselineFileParams,
+  IModelsClient,
+  IModelsClientOptions,
+} from "@itwin/imodels-client-authoring";
 import { AuthorizationCallback } from "@itwin/imodels-client-management";
-import { IModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertBaselineFile } from "@itwin/imodels-client-test-utils";
+import {
+  IModelMetadata,
+  ReusableTestIModelProvider,
+  TestAuthorizationProvider,
+  TestIModelFileProvider,
+  TestUtilTypes,
+  assertBaselineFile,
+} from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "../common";
 
@@ -18,7 +31,9 @@ describe("[Authoring] BaselineFileOperations", () => {
   before(async () => {
     const container = getTestDIContainer();
 
-    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    const iModelsClientOptions = container.get<IModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
@@ -26,7 +41,9 @@ describe("[Authoring] BaselineFileOperations", () => {
 
     testIModelFileProvider = container.get(TestIModelFileProvider);
 
-    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(
+      ReusableTestIModelProvider
+    );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
   });
 
@@ -34,19 +51,20 @@ describe("[Authoring] BaselineFileOperations", () => {
     // Arrange
     const getSingleBaselineFileParams: GetSingleBaselineFileParams = {
       authorization,
-      iModelId: testIModelForRead.id
+      iModelId: testIModelForRead.id,
     };
 
     // Act
-    const baselineFile: BaselineFile = await iModelsClient.baselineFiles.getSingle(getSingleBaselineFileParams);
+    const baselineFile: BaselineFile =
+      await iModelsClient.baselineFiles.getSingle(getSingleBaselineFileParams);
 
     // Assert
     await assertBaselineFile({
       actualBaselineFile: baselineFile,
       expectedBaselineFileProperties: {
-        state: BaselineFileState.Initialized
+        state: BaselineFileState.Initialized,
       },
-      expectedTestBaselineFile: testIModelFileProvider.iModel
+      expectedTestBaselineFile: testIModelFileProvider.iModel,
     });
   });
 });

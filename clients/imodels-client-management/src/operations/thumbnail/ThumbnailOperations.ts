@@ -3,12 +3,22 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { OperationsBase } from "../../base/internal";
-import { ContentType, HttpResponse, Thumbnail, ThumbnailSize } from "../../base/types";
+import {
+  ContentType,
+  HttpResponse,
+  Thumbnail,
+  ThumbnailSize,
+} from "../../base/types";
 import { OperationOptions } from "../OperationOptions";
 
-import { DownloadThumbnailParams, UploadThumbnailParams } from "./ThumbnailOperationParams";
+import {
+  DownloadThumbnailParams,
+  UploadThumbnailParams,
+} from "./ThumbnailOperationParams";
 
-export class ThumbnailOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
+export class ThumbnailOperations<
+  TOptions extends OperationOptions
+> extends OperationsBase<TOptions> {
   /**
    * Downloads a thumbnail for a specific iModel. The Thumbnail returned is either a default one or a custom
    * uploaded one. Wraps the
@@ -29,20 +39,23 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
     // to return to user the information which thumbnail is this.
     const urlParams = {
       ...params.urlParams,
-      size: params.urlParams?.size ?? ThumbnailSize.Small
+      size: params.urlParams?.size ?? ThumbnailSize.Small,
     };
-    const url = this._options.urlFormatter.getThumbnailUrl({ iModelId: params.iModelId, urlParams });
+    const url = this._options.urlFormatter.getThumbnailUrl({
+      iModelId: params.iModelId,
+      urlParams,
+    });
     const response: HttpResponse<Uint8Array> = await this.sendGetRequest({
       authorization: params.authorization,
       url,
       responseType: ContentType.Png,
-      headers: params.headers
+      headers: params.headers,
     });
 
     return {
       size: urlParams.size,
       imageType: ContentType.Png,
-      image: response.body
+      image: response.body,
     };
   }
 
@@ -54,13 +67,15 @@ export class ThumbnailOperations<TOptions extends OperationOptions> extends Oper
    * @returns {Promise<void>} a promise that resolves after operation completes.
    */
   public async upload(params: UploadThumbnailParams): Promise<void> {
-    const url = this._options.urlFormatter.getThumbnailUrl({ iModelId: params.iModelId });
+    const url = this._options.urlFormatter.getThumbnailUrl({
+      iModelId: params.iModelId,
+    });
     await this.sendPutRequest({
       authorization: params.authorization,
       url,
       contentType: params.thumbnailProperties.imageType,
       body: params.thumbnailProperties.image,
-      headers: params.headers
+      headers: params.headers,
     });
   }
 }

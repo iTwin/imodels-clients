@@ -63,34 +63,35 @@ export class IModelsClientsTestsConfig {
       authority: process.env.AUTH_AUTHORITY!,
       clientId: process.env.AUTH_CLIENT_ID!,
       clientSecret: process.env.AUTH_CLIENT_SECRET!,
-      redirectUrl: process.env.AUTH_REDIRECT_URL!
+      redirectUrl: process.env.AUTH_REDIRECT_URL!,
     };
 
     this.apis = {
       iModels: {
         baseUrl: process.env.APIS_IMODELS_BASE_URL!,
         version: process.env.APIS_IMODELS_VERSION!,
-        scopes: process.env.APIS_IMODELS_SCOPES!
+        scopes: process.env.APIS_IMODELS_SCOPES!,
       },
       iTwins: {
         baseUrl: process.env.APIS_ITWINS_BASE_URL!,
-        scopes: process.env.APIS_ITWINS_SCOPES!
-      }
+        scopes: process.env.APIS_ITWINS_SCOPES!,
+      },
     };
 
     this.testUsers = {
       admin1: {
         email: process.env.TEST_USERS_ADMIN1_EMAIL!,
-        password: process.env.TEST_USERS_ADMIN1_PASSWORD!
+        password: process.env.TEST_USERS_ADMIN1_PASSWORD!,
       },
       admin2FullyFeatured: {
         email: process.env.TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL!,
-        password: process.env.TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD!
-      }
+        password: process.env.TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD!,
+      },
     };
 
     this.behaviorOptions = {
-      recreateReusableIModel: Number(process.env.TEST_BEHAVIOR_OPTIONS_RECREATE_IMODEL) > 0
+      recreateReusableIModel:
+        Number(process.env.TEST_BEHAVIOR_OPTIONS_RECREATE_IMODEL) > 0,
     };
   }
 
@@ -116,7 +117,9 @@ export class IModelsClientsTestsConfig {
     this.validateConfigValue("TEST_USERS_ADMIN2_FULLY_FEATURED_EMAIL");
     this.validateConfigValue("TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD");
 
-    this.validateConfigOptionalNumericValue("TEST_BEHAVIOR_OPTIONS_RECREATE_IMODEL");
+    this.validateConfigOptionalNumericValue(
+      "TEST_BEHAVIOR_OPTIONS_RECREATE_IMODEL"
+    );
   }
 
   private validateConfigValue(key: string): void {
@@ -126,10 +129,11 @@ export class IModelsClientsTestsConfig {
 
   private validateConfigOptionalNumericValue(key: string): void {
     const value = process.env[key];
-    if (value === undefined)
-      return;
+    if (value === undefined) return;
 
     if (isNaN(Number(value)))
-      throw new TestSetupError(`Invalid configuration: ${key} value must be a number.`);
+      throw new TestSetupError(
+        `Invalid configuration: ${key} value must be a number.`
+      );
   }
 }

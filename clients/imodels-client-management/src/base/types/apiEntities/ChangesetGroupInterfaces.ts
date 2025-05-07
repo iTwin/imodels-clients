@@ -15,7 +15,7 @@ export enum ChangesetGroupState {
   /** Changeset Group was not completed within the specified timeout period so it was closed by the service. */
   TimedOut = "timedOut",
   /** Changeset group was forcibly closed before cloning to the target iModel. */
-  ForciblyClosed = "forciblyClosed"
+  ForciblyClosed = "forciblyClosed",
 }
 
 /** Links that belong to a Changeset Group entity returned from iModels API. */

@@ -10,7 +10,7 @@ describe("[Management] ExponentialBackoffAlgorithm", () => {
   it("should calculate sleep duration correctly", () => {
     const testedClass = new ExponentialBackoffAlgorithm({
       baseDelayInMs: 300,
-      factor: 3
+      factor: 3,
     });
 
     expect(testedClass.getSleepDurationInMs(0)).to.be.equal(300);

@@ -4,51 +4,59 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ITwinError } from "@itwin/core-bentley";
-
 import { ConflictingLock } from "@itwin/imodels-client-authoring";
-import { IModelsError, IModelsErrorCode, IModelsErrorScope, isIModelsApiError } from "@itwin/imodels-client-management";
+import {
+  IModelsError,
+  IModelsErrorCode,
+  IModelsErrorScope,
+  isIModelsApiError,
+} from "@itwin/imodels-client-management";
 
 import { ConflictingLocksError } from "./IModelsClientsErrorInterfaces";
 
-export type OperationNameForErrorMapping
-  = "acquireBriefcase"
+export type OperationNameForErrorMapping =
+  | "acquireBriefcase"
   | "downloadChangesets"
   | "updateLocks"
   | "createChangeset";
 
 export class ErrorAdapter {
-  public static toITwinError(error: unknown, operationName?: OperationNameForErrorMapping): unknown {
-    if (!isIModelsApiError(error))
-      return error;
+  public static toITwinError(
+    error: unknown,
+    operationName?: OperationNameForErrorMapping
+  ): unknown {
+    if (!isIModelsApiError(error)) return error;
 
-    if (error.code === IModelsErrorCode.Unrecognized)
-      return error;
+    if (error.code === IModelsErrorCode.Unrecognized) return error;
 
-    if (ErrorAdapter.isAPIAuthError(error.code))
-      return error;
-    if (ErrorAdapter.isIncorrectAPIUsageError(error.code))
-      return error;
+    if (ErrorAdapter.isAPIAuthError(error.code)) return error;
+    if (ErrorAdapter.isIncorrectAPIUsageError(error.code)) return error;
     if (ErrorAdapter.isAPIErrorWithoutCorrespondingStatus(error.code))
       return error;
 
     if (error.code === IModelsErrorCode.InvalidIModelsRequest)
       return ErrorAdapter.adaptInvalidRequestErrorIfPossible(error);
 
-    let errorCode = ErrorAdapter.tryMapGenericErrorCode(error.code, operationName);
-    if (!errorCode)
-      errorCode = ErrorAdapter.mapErrorCode(error.code);
+    let errorCode = ErrorAdapter.tryMapGenericErrorCode(
+      error.code,
+      operationName
+    );
+    if (!errorCode) errorCode = ErrorAdapter.mapErrorCode(error.code);
 
     if ("conflictingLocks" in error)
       return ITwinError.create<ConflictingLocksError>({
         iTwinErrorId: {
           key: errorCode,
-          scope: IModelsErrorScope
+          scope: IModelsErrorScope,
         },
         message: error.message,
-        conflictingLocks: error.conflictingLocks as ConflictingLock[]
+        conflictingLocks: error.conflictingLocks as ConflictingLock[],
       });
 
-    return ITwinError.create({ iTwinErrorId: { key: errorCode, scope: IModelsErrorScope }, message: error.message });
+    return ITwinError.create({
+      iTwinErrorId: { key: errorCode, scope: IModelsErrorScope },
+      message: error.message,
+    });
   }
 
   private static isAPIAuthError(apiErrorCode: IModelsErrorCode): boolean {
@@ -61,7 +69,9 @@ export class ErrorAdapter {
     }
   }
 
-  private static isIncorrectAPIUsageError(apiErrorCode: IModelsErrorCode): boolean {
+  private static isIncorrectAPIUsageError(
+    apiErrorCode: IModelsErrorCode
+  ): boolean {
     switch (apiErrorCode) {
       case IModelsErrorCode.TooManyRequests:
       case IModelsErrorCode.RequestTooLarge:
@@ -83,7 +93,9 @@ export class ErrorAdapter {
     }
   }
 
-  private static isAPIErrorWithoutCorrespondingStatus(apiErrorCode: IModelsErrorCode): boolean {
+  private static isAPIErrorWithoutCorrespondingStatus(
+    apiErrorCode: IModelsErrorCode
+  ): boolean {
     switch (apiErrorCode) {
       case IModelsErrorCode.NamedVersionNotFound:
       case IModelsErrorCode.UserNotFound:
@@ -95,22 +107,27 @@ export class ErrorAdapter {
       case IModelsErrorCode.ClonedIModelInitializationFailed:
       case IModelsErrorCode.ChangesetDownloadFailed:
         return true;
-      default: return false;
+      default:
+        return false;
     }
   }
 
-  private static adaptInvalidRequestErrorIfPossible(originalError: IModelsError): IModelsError | ITwinError {
-    if (!originalError.details)
-      return originalError;
+  private static adaptInvalidRequestErrorIfPossible(
+    originalError: IModelsError
+  ): IModelsError | ITwinError {
+    if (!originalError.details) return originalError;
 
     for (const errorDetail of originalError.details)
-      if (errorDetail.innerError?.code === IModelsErrorCode.MaximumNumberOfBriefcasesPerUser)
+      if (
+        errorDetail.innerError?.code ===
+        IModelsErrorCode.MaximumNumberOfBriefcasesPerUser
+      )
         return ITwinError.create<ITwinError>({
           iTwinErrorId: {
             key: IModelsErrorCode.MaximumNumberOfBriefcasesPerUser,
-            scope: IModelsErrorScope
+            scope: IModelsErrorScope,
           },
-          message: originalError.message
+          message: originalError.message,
         });
 
     return originalError;
@@ -120,13 +137,18 @@ export class ErrorAdapter {
     apiErrorCode: IModelsErrorCode,
     operationName?: OperationNameForErrorMapping
   ): IModelsErrorCode | undefined {
-    if (!operationName)
-      return;
+    if (!operationName) return;
 
-    if (apiErrorCode === IModelsErrorCode.RateLimitExceeded && operationName === "acquireBriefcase")
+    if (
+      apiErrorCode === IModelsErrorCode.RateLimitExceeded &&
+      operationName === "acquireBriefcase"
+    )
       return IModelsErrorCode.MaximumNumberOfBriefcasesPerUserPerMinute;
 
-    if (apiErrorCode === IModelsErrorCode.DownloadAborted && operationName === "downloadChangesets")
+    if (
+      apiErrorCode === IModelsErrorCode.DownloadAborted &&
+      operationName === "downloadChangesets"
+    )
       return IModelsErrorCode.DownloadCancelled;
 
     if (apiErrorCode === IModelsErrorCode.ConflictWithAnotherUser) {
@@ -139,7 +161,9 @@ export class ErrorAdapter {
     return undefined;
   }
 
-  private static mapErrorCode(apiErrorCode: IModelsErrorCode): IModelsErrorCode {
+  private static mapErrorCode(
+    apiErrorCode: IModelsErrorCode
+  ): IModelsErrorCode {
     switch (apiErrorCode) {
       case IModelsErrorCode.Unknown:
       case IModelsErrorCode.ITwinNotFound:

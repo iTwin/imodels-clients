@@ -8,25 +8,42 @@ export class TestEntity {
   constructor(
     public pageIndex: number | undefined,
     public entityIndex: number
-  ) { }
+  ) {}
 }
 
-export function getEntityPageQueryFunc(pageCount: number, entityCountPerPage: number): EntityPageQueryFunc<TestEntity> {
+export function getEntityPageQueryFunc(
+  pageCount: number,
+  entityCountPerPage: number
+): EntityPageQueryFunc<TestEntity> {
   return getEntityPageQueryFuncInternal(0, pageCount, entityCountPerPage);
 }
 
-function getEntityPageQueryFuncInternal(currentPageIndex: number, pageCount: number, entityCountPerPage: number): EntityPageQueryFunc<TestEntity> {
+function getEntityPageQueryFuncInternal(
+  currentPageIndex: number,
+  pageCount: number,
+  entityCountPerPage: number
+): EntityPageQueryFunc<TestEntity> {
   const currentPageEntities: TestEntity[] = [];
   for (let i = 0; i < entityCountPerPage; i++)
-    currentPageEntities.push(new TestEntity(currentPageIndex, currentPageIndex * entityCountPerPage + i));
+    currentPageEntities.push(
+      new TestEntity(
+        currentPageIndex,
+        currentPageIndex * entityCountPerPage + i
+      )
+    );
 
   const isCurrentPageLast = currentPageIndex === pageCount - 1;
   const nextPage = isCurrentPageLast
     ? undefined
-    : getEntityPageQueryFuncInternal(currentPageIndex + 1, pageCount, entityCountPerPage);
+    : getEntityPageQueryFuncInternal(
+        currentPageIndex + 1,
+        pageCount,
+        entityCountPerPage
+      );
 
-  return async () => ({
-    entities: currentPageEntities,
-    next: nextPage
-  });
+  return () =>
+    Promise.resolve({
+      entities: currentPageEntities,
+      next: nextPage,
+    });
 }

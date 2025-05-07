@@ -2,7 +2,22 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Briefcase, Changeset, ChangesetGroup, Checkpoint, CreateIModelOperationDetails, IModel, Link, MinimalBriefcase, MinimalChangeset, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, User } from "../types";
+import {
+  Briefcase,
+  Changeset,
+  ChangesetGroup,
+  Checkpoint,
+  CreateIModelOperationDetails,
+  IModel,
+  Link,
+  MinimalBriefcase,
+  MinimalChangeset,
+  MinimalIModel,
+  MinimalNamedVersion,
+  MinimalUser,
+  NamedVersion,
+  User,
+} from "../types";
 
 /**
  * Links that are included in all entity list page responses. They simplify pagination implementation because users
@@ -28,19 +43,24 @@ export interface CollectionResponse {
   _links: CollectionLinks;
 }
 
-export interface IModelsResponse<TIModel extends MinimalIModel> extends CollectionResponse {
+export interface IModelsResponse<TIModel extends MinimalIModel>
+  extends CollectionResponse {
   iModels: TIModel[];
 }
 
-export interface BriefcasesResponse<TBriefcase extends MinimalBriefcase> extends CollectionResponse {
+export interface BriefcasesResponse<TBriefcase extends MinimalBriefcase>
+  extends CollectionResponse {
   briefcases: TBriefcase[];
 }
 
-export interface NamedVersionsResponse<TNamedVersion extends MinimalNamedVersion> extends CollectionResponse {
+export interface NamedVersionsResponse<
+  TNamedVersion extends MinimalNamedVersion
+> extends CollectionResponse {
   namedVersions: TNamedVersion[];
 }
 
-export interface ChangesetsResponse<TChangeset extends MinimalChangeset> extends CollectionResponse {
+export interface ChangesetsResponse<TChangeset extends MinimalChangeset>
+  extends CollectionResponse {
   changesets: TChangeset[];
 }
 
@@ -52,7 +72,8 @@ export interface ChangesetGroupsResponse extends CollectionResponse {
   changesetGroups: ChangesetGroup[];
 }
 
-export interface UsersResponse<TUser extends MinimalUser> extends CollectionResponse {
+export interface UsersResponse<TUser extends MinimalUser>
+  extends CollectionResponse {
   users: TUser[];
 }
 

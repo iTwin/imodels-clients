@@ -2,7 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { Briefcase, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types";
+import {
+  Briefcase,
+  IModelScopedOperationParams,
+  OrderableCollectionRequestParams,
+} from "../../base/types";
 
 /** Special value to indicate the id of current user who is making the request. */
 export const SPECIAL_VALUES_ME = "me";
@@ -19,11 +23,15 @@ export type ValidOwnerIdValue = string;
  * entities are ordered in a collection.
  */
 export enum BriefcaseOrderByProperty {
-  AcquiredDateTime = "acquiredDateTime"
+  AcquiredDateTime = "acquiredDateTime",
 }
 
 /** Url parameters supported in Briefcase list query. */
-export interface GetBriefcaseListUrlParams extends OrderableCollectionRequestParams<Briefcase, BriefcaseOrderByProperty> {
+export interface GetBriefcaseListUrlParams
+  extends OrderableCollectionRequestParams<
+    Briefcase,
+    BriefcaseOrderByProperty
+  > {
   /** Filters Briefcases with specific owner. See {@link ValidOwnerIdValue}. */
   ownerId?: ValidOwnerIdValue;
 }

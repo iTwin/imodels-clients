@@ -6,17 +6,70 @@ import { assert } from "console";
 import * as fs from "fs";
 import * as path from "path";
 
-import { AcquireNewBriefcaseIdArg, BriefcaseDbArg, ChangesetRangeArg, CheckpointProps, CreateNewIModelProps, DownloadChangesetRangeArg, DownloadRequest, IModelHost, IModelIdArg, IModelJsFs, LockMap, LockProps, LockState, PhysicalModel, ProgressFunction, ProgressStatus, StandaloneDb, V2CheckpointAccessProps } from "@itwin/core-backend";
-import { Guid, ITwinError, Logger } from "@itwin/core-bentley";
-import { BriefcaseId, ChangesetFileProps, ChangesetIndexAndId, ChangesetType, IModel as CoreIModel, LocalDirName } from "@itwin/core-common";
-import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
 import { expect, use } from "chai";
 import chaiAsPromised from "chai-as-promised";
 import sinon from "sinon";
 
-import { IModelOperations, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, ContainingChanges, IModel, IModelsErrorCode, IModelsErrorScope, isIModelsApiError } from "@itwin/imodels-client-management";
-import { IModelMetadata, ProgressReport, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertAbortError, assertProgressReports, cleanupDirectory, createGuidValue } from "@itwin/imodels-client-test-utils";
+import {
+  AcquireNewBriefcaseIdArg,
+  BriefcaseDbArg,
+  ChangesetRangeArg,
+  CheckpointProps,
+  CreateNewIModelProps,
+  DownloadChangesetRangeArg,
+  DownloadRequest,
+  IModelHost,
+  IModelIdArg,
+  IModelJsFs,
+  LockMap,
+  LockProps,
+  LockState,
+  PhysicalModel,
+  ProgressFunction,
+  ProgressStatus,
+  StandaloneDb,
+  V2CheckpointAccessProps,
+} from "@itwin/core-backend";
+import { Guid, ITwinError, Logger } from "@itwin/core-bentley";
+import {
+  BriefcaseId,
+  ChangesetFileProps,
+  ChangesetIndexAndId,
+  ChangesetType,
+  IModel as CoreIModel,
+  LocalDirName,
+} from "@itwin/core-common";
+import { BackendIModelsAccess } from "@itwin/imodels-access-backend";
+import {
+  IModelOperations,
+  IModelsClient,
+  IModelsClientOptions,
+} from "@itwin/imodels-client-authoring";
+import {
+  AuthorizationCallback,
+  ContainingChanges,
+  IModel,
+  IModelsErrorCode,
+  IModelsErrorScope,
+  isIModelsApiError,
+} from "@itwin/imodels-client-management";
+import {
+  IModelMetadata,
+  ProgressReport,
+  ReusableIModelMetadata,
+  ReusableTestIModelProvider,
+  TestAuthorizationProvider,
+  TestIModelCreator,
+  TestIModelFileProvider,
+  TestIModelGroup,
+  TestIModelGroupFactory,
+  TestITwinProvider,
+  TestUtilTypes,
+  assertAbortError,
+  assertProgressReports,
+  cleanupDirectory,
+  createGuidValue,
+} from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "./TestDiContainerProvider";
 import { TestIModelHostAuthorizationClient } from "./TestIModelHostAuthorizationClient";
@@ -41,7 +94,9 @@ describe("BackendIModelsAccess", () => {
   before(async () => {
     const container = getTestDIContainer();
 
-    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    const iModelsClientOptions = container.get<IModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
     iModelsClient = new IModelsClient(iModelsClientOptions);
     backendIModelsAccess = new BackendIModelsAccess(iModelsClient);
 
@@ -49,7 +104,9 @@ describe("BackendIModelsAccess", () => {
     authorizationCallback = authorizationProvider.getAdmin1Authorization();
     const authorization = await authorizationCallback();
     accessToken = `${authorization.scheme} ${authorization.token}`;
-    IModelHost.authorizationClient = new TestIModelHostAuthorizationClient(accessToken);
+    IModelHost.authorizationClient = new TestIModelHostAuthorizationClient(
+      accessToken
+    );
 
     const testITwinProvider = container.get(TestITwinProvider);
     iTwinId = await testITwinProvider.getOrCreate();
@@ -60,14 +117,18 @@ describe("BackendIModelsAccess", () => {
     testIModelGroup = testIModelGroupFactory.create({
       testRunId,
       packageName: "IModelsAccessBackendTests",
-      testSuiteName: "BackendIModelsAccess"
+      testSuiteName: "BackendIModelsAccess",
     });
 
-    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(
+      ReusableTestIModelProvider
+    );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
 
     const testIModelCreator = container.get(TestIModelCreator);
-    testIModelForWrite = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
+    testIModelForWrite = await testIModelCreator.createEmpty(
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
+    );
 
     await IModelHost.startup();
   });
@@ -89,14 +150,17 @@ describe("BackendIModelsAccess", () => {
   describe("briefcases", () => {
     it("should get current user briefcase ids", async () => {
       // Arrange
-      const expectedBriefcaseIds = testIModelForRead.briefcases.map((briefcase) => briefcase.id);
+      const expectedBriefcaseIds = testIModelForRead.briefcases.map(
+        (briefcase) => briefcase.id
+      );
       const getMyBriefcaseIdsParams: IModelIdArg = {
         accessToken,
-        iModelId: testIModelForRead.id
+        iModelId: testIModelForRead.id,
       };
 
       // Act
-      const briefcaseIds: BriefcaseId[] = await backendIModelsAccess.getMyBriefcaseIds(getMyBriefcaseIdsParams);
+      const briefcaseIds: BriefcaseId[] =
+        await backendIModelsAccess.getMyBriefcaseIds(getMyBriefcaseIdsParams);
 
       // Assert
       expect(briefcaseIds.length).to.equal(expectedBriefcaseIds.length);
@@ -107,33 +171,55 @@ describe("BackendIModelsAccess", () => {
   describe("changesets", () => {
     it("should download changesets", async () => {
       // Arrange
-      const downloadChangesetsParams: ChangesetRangeArg & { targetDir: LocalDirName } = {
+      const downloadChangesetsParams: ChangesetRangeArg & {
+        targetDir: LocalDirName;
+      } = {
         accessToken,
         iModelId: testIModelForRead.id,
-        targetDir: testDownloadPath
+        targetDir: testDownloadPath,
       };
 
       // Act
-      const downloadedChangesets: ChangesetFileProps[] = await backendIModelsAccess.downloadChangesets(downloadChangesetsParams);
+      const downloadedChangesets: ChangesetFileProps[] =
+        await backendIModelsAccess.downloadChangesets(downloadChangesetsParams);
 
       // Assert
-      expect(downloadedChangesets.length).to.be.equal(testIModelFileProvider.changesets.length);
+      expect(downloadedChangesets.length).to.be.equal(
+        testIModelFileProvider.changesets.length
+      );
       for (let i = 0; i < downloadedChangesets.length; i++) {
         const downloadedChangeset = downloadedChangesets[i];
         const expectedChangesetFile = testIModelFileProvider.changesets[i];
 
         expect(fs.existsSync(downloadedChangeset.pathname)).to.equal(true);
         expect(downloadedChangeset.id).to.be.equal(expectedChangesetFile.id);
-        expect(downloadedChangeset.index).to.be.equal(expectedChangesetFile.index);
-        expect(downloadedChangeset.parentId).to.be.equal(expectedChangesetFile.parentId);
-        expect(downloadedChangeset.description).to.be.equal(expectedChangesetFile.description);
-        expect(downloadedChangeset.briefcaseId).to.be.equal(testIModelForRead.briefcases[0].id);
-        expect(downloadedChangeset.size).to.be.equal(fs.statSync(expectedChangesetFile.filePath).size);
+        expect(downloadedChangeset.index).to.be.equal(
+          expectedChangesetFile.index
+        );
+        expect(downloadedChangeset.parentId).to.be.equal(
+          expectedChangesetFile.parentId
+        );
+        expect(downloadedChangeset.description).to.be.equal(
+          expectedChangesetFile.description
+        );
+        expect(downloadedChangeset.briefcaseId).to.be.equal(
+          testIModelForRead.briefcases[0].id
+        );
+        expect(downloadedChangeset.size).to.be.equal(
+          fs.statSync(expectedChangesetFile.filePath).size
+        );
 
-        if (expectedChangesetFile.containingChanges === ContainingChanges.Schema as number)
-          expect(downloadedChangeset.changesType).to.be.equal(ChangesetType.Schema);
+        if (
+          expectedChangesetFile.containingChanges ===
+          (ContainingChanges.Schema as number)
+        )
+          expect(downloadedChangeset.changesType).to.be.equal(
+            ChangesetType.Schema
+          );
         else
-          expect(downloadedChangeset.changesType).to.be.equal(ChangesetType.Regular);
+          expect(downloadedChangeset.changesType).to.be.equal(
+            ChangesetType.Regular
+          );
       }
     });
 
@@ -142,15 +228,23 @@ describe("BackendIModelsAccess", () => {
       const downloadChangesetsParams: DownloadChangesetRangeArg = {
         accessToken,
         iModelId: testIModelForRead.id,
-        targetDir: testDownloadPath
+        targetDir: testDownloadPath,
       };
 
       let progressReports: ProgressReport[] = [];
-      const progressCallbackFor1stDownload = (downloaded: number, total: number) => {
+      const progressCallbackFor1stDownload = (
+        downloaded: number,
+        total: number
+      ) => {
         progressReports.push({ downloaded, total });
-        return downloaded < total / 4 ? ProgressStatus.Continue : ProgressStatus.Abort;
+        return downloaded < total / 4
+          ? ProgressStatus.Continue
+          : ProgressStatus.Abort;
       };
-      const progressCallbackFor2ndDownload = (downloaded: number, total: number) => {
+      const progressCallbackFor2ndDownload = (
+        downloaded: number,
+        total: number
+      ) => {
         progressReports.push({ downloaded, total });
         return ProgressStatus.Continue;
       };
@@ -160,7 +254,7 @@ describe("BackendIModelsAccess", () => {
       try {
         await backendIModelsAccess.downloadChangesets({
           ...downloadChangesetsParams,
-          progressCallback: progressCallbackFor1stDownload
+          progressCallback: progressCallbackFor1stDownload,
         });
       } catch (error: unknown) {
         thrownError = error;
@@ -168,7 +262,9 @@ describe("BackendIModelsAccess", () => {
 
       // Assert #1
       const expectedErrorCode = IModelsErrorCode.DownloadCancelled;
-      expect(ITwinError.isError(thrownError, IModelsErrorScope, expectedErrorCode)).to.be.true;
+      expect(
+        ITwinError.isError(thrownError, IModelsErrorScope, expectedErrorCode)
+      ).to.be.true;
 
       expect(fs.readdirSync(testDownloadPath).length).to.be.greaterThan(0);
       assertProgressReports(progressReports, false);
@@ -177,14 +273,25 @@ describe("BackendIModelsAccess", () => {
       // Act #2
       const changesets = await backendIModelsAccess.downloadChangesets({
         ...downloadChangesetsParams,
-        progressCallback: progressCallbackFor2ndDownload
+        progressCallback: progressCallbackFor2ndDownload,
       });
 
       // Assert #2
-      expect(changesets.length).to.equal(testIModelFileProvider.changesets.length);
+      expect(changesets.length).to.equal(
+        testIModelFileProvider.changesets.length
+      );
 
-      const downloadedFilesSizeSum = fs.readdirSync(testDownloadPath).reduce((sum, filename) => sum + fs.statSync(path.join(testDownloadPath, filename)).size, 0);
-      const expectedSizeSum = changesets.reduce((sum, changeset) => sum + (changeset.size ?? 0), 0);
+      const downloadedFilesSizeSum = fs
+        .readdirSync(testDownloadPath)
+        .reduce(
+          (sum, filename) =>
+            sum + fs.statSync(path.join(testDownloadPath, filename)).size,
+          0
+        );
+      const expectedSizeSum = changesets.reduce(
+        (sum, changeset) => sum + (changeset.size ?? 0),
+        0
+      );
       expect(downloadedFilesSizeSum).to.equal(expectedSizeSum);
 
       assertProgressReports(progressReports);
@@ -195,11 +302,15 @@ describe("BackendIModelsAccess", () => {
     it("should create new empty iModel", async () => {
       const createNewIModelProps: CreateNewIModelProps = {
         accessToken,
-        iModelName: testIModelGroup.getPrefixedUniqueIModelName("Test create empty iModel"),
-        iTwinId
+        iModelName: testIModelGroup.getPrefixedUniqueIModelName(
+          "Test create empty iModel"
+        ),
+        iTwinId,
       };
 
-      const newiModelId = await backendIModelsAccess.createNewIModel(createNewIModelProps);
+      const newiModelId = await backendIModelsAccess.createNewIModel(
+        createNewIModelProps
+      );
 
       expect(newiModelId).to.not.be.empty;
     });
@@ -210,12 +321,25 @@ describe("BackendIModelsAccess", () => {
       try {
         // Arrange - Create an iModel and insert some data into it, so that SQLite creates a wal file with that data. https://www.sqlite.org/wal.html for more info.
         const walPath = `${filePath}-wal`;
-        const loggerSpy = sinon.spy(Logger, "logWarning").withArgs("BackendIModelsAccess", "Wal file found while uploading file, performing checkpoint.", sinon.match.any);
+        const loggerSpy = sinon
+          .spy(Logger, "logWarning")
+          .withArgs(
+            "BackendIModelsAccess",
+            "Wal file found while uploading file, performing checkpoint.",
+            sinon.match.any
+          );
         // No need to actually talk to the hub, so stub the call to the hub.
-        sinon.stub(IModelOperations.prototype, "createFromBaseline").callsFake(async (_params) => {
-          return ({id: Guid.createValue()} as unknown) as IModel;
+        sinon
+          .stub(IModelOperations.prototype, "createFromBaseline")
+          .callsFake((_params) => {
+            return Promise.resolve({
+              id: Guid.createValue(),
+            } as unknown as IModel);
+          });
+        const testIModel = StandaloneDb.createEmpty(filePath, {
+          rootSubject: { name: "test1" },
+          allowEdit: JSON.stringify({ txns: true }),
         });
-        const testIModel = StandaloneDb.createEmpty(filePath, { rootSubject: { name: "test1"}, allowEdit: JSON.stringify({ txns: true })});
         PhysicalModel.insert(testIModel, CoreIModel.rootSubjectId, "TestModel");
         testIModel.saveChanges();
         expect(testIModel.isOpen).to.be.true;
@@ -224,7 +348,7 @@ describe("BackendIModelsAccess", () => {
         const arg: CreateNewIModelProps = {
           version0: filePath,
           iModelName: "testimodel",
-          iTwinId: Guid.createValue()
+          iTwinId: Guid.createValue(),
         };
         /**
          * NOTE: The below 'await expect' is possibly a test case worth doing but it takes 20 seconds to test due to the busy retry.
@@ -241,7 +365,11 @@ describe("BackendIModelsAccess", () => {
         expect(loggerSpy.callCount).to.be.equal(1);
 
         // Arrange
-        PhysicalModel.insert(testIModel, CoreIModel.rootSubjectId, "TestModel2");
+        PhysicalModel.insert(
+          testIModel,
+          CoreIModel.rootSubjectId,
+          "TestModel2"
+        );
         testIModel.saveChanges();
         expect(IModelJsFs.lstatSync(walPath)?.size).to.be.greaterThan(0);
 
@@ -264,7 +392,9 @@ describe("BackendIModelsAccess", () => {
       } finally {
         sinon.restore();
         // Need to reset the authorizationClient after otherwise future tests fail.
-        IModelHost.authorizationClient = new TestIModelHostAuthorizationClient(accessToken);
+        IModelHost.authorizationClient = new TestIModelHostAuthorizationClient(
+          accessToken
+        );
       }
     });
   });
@@ -272,9 +402,15 @@ describe("BackendIModelsAccess", () => {
   describe("checkpoints v1", () => {
     it("should download checkpoint for a specific changeset", async () => {
       // Arrange
-      const lastNamedVersion = testIModelForRead.namedVersions[testIModelForRead.namedVersions.length - 1];
+      const lastNamedVersion =
+        testIModelForRead.namedVersions[
+          testIModelForRead.namedVersions.length - 1
+        ];
 
-      const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_specific_changeset.bim");
+      const localCheckpointFilePath = path.join(
+        testDownloadPath,
+        "checkpoint_specific_changeset.bim"
+      );
       const downloadV1CheckpointParams = {
         localFile: localCheckpointFilePath,
         checkpoint: {
@@ -282,18 +418,23 @@ describe("BackendIModelsAccess", () => {
           iTwinId,
           iModelId: testIModelForRead.id,
           changeset: {
-            id: lastNamedVersion.changesetId
-          }
-        }
+            id: lastNamedVersion.changesetId,
+          },
+        },
       };
 
       // Act
       // eslint-disable-next-line deprecation/deprecation
-      const downloadedCheckpoint: ChangesetIndexAndId = await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
+      const downloadedCheckpoint: ChangesetIndexAndId =
+        await backendIModelsAccess.downloadV1Checkpoint(
+          downloadV1CheckpointParams
+        );
 
       // Assert
       expect(downloadedCheckpoint.id).to.be.equal(lastNamedVersion.changesetId);
-      expect(downloadedCheckpoint.index).to.be.equal(lastNamedVersion.changesetIndex);
+      expect(downloadedCheckpoint.index).to.be.equal(
+        lastNamedVersion.changesetIndex
+      );
       expect(fs.existsSync(localCheckpointFilePath)).to.be.equal(true);
       expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
     });
@@ -301,26 +442,42 @@ describe("BackendIModelsAccess", () => {
     it("should query preceding checkpoint v2", async () => {
       // Arrange
       const firstNamedVersion = testIModelForRead.namedVersions[0];
-      assert(testIModelFileProvider.changesets.length >= firstNamedVersion.changesetIndex + 1, "Not enough changesets");
-      const nextChangeset = testIModelFileProvider.changesets[firstNamedVersion.changesetIndex];
-      assert(firstNamedVersion.changesetId !== nextChangeset.id, "Unexpected changeset ids");
+      assert(
+        testIModelFileProvider.changesets.length >=
+          firstNamedVersion.changesetIndex + 1,
+        "Not enough changesets"
+      );
+      const nextChangeset =
+        testIModelFileProvider.changesets[firstNamedVersion.changesetIndex];
+      assert(
+        firstNamedVersion.changesetId !== nextChangeset.id,
+        "Unexpected changeset ids"
+      );
       const queryV2CheckpointParams: CheckpointProps = {
         accessToken,
         iTwinId,
         iModelId: testIModelForRead.id,
         changeset: {
-          id: nextChangeset.id
-        }
+          id: nextChangeset.id,
+        },
       };
 
       // Act
-      const v2checkpointForExactChangeset: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams);
+      const v2checkpointForExactChangeset: V2CheckpointAccessProps | undefined =
+        await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams);
       // Assert
       expect(v2checkpointForExactChangeset).to.be.undefined;
 
       // Act
-      const v2checkpointForChangesetAllowPrecedingParams = { ...queryV2CheckpointParams, allowPreceding: true };
-      const v2checkpointForChangesetAllowPreceding: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(v2checkpointForChangesetAllowPrecedingParams);
+      const v2checkpointForChangesetAllowPrecedingParams = {
+        ...queryV2CheckpointParams,
+        allowPreceding: true,
+      };
+      const v2checkpointForChangesetAllowPreceding:
+        | V2CheckpointAccessProps
+        | undefined = await backendIModelsAccess.queryV2Checkpoint(
+        v2checkpointForChangesetAllowPrecedingParams
+      );
       // Assert
       expect(v2checkpointForChangesetAllowPreceding).to.not.be.undefined;
     });
@@ -336,21 +493,26 @@ describe("BackendIModelsAccess", () => {
       const iModelId = "e71f4085-75a6-479c-bab8-dce19b9352f6";
       await assertHardcodedIModelExists(
         iModelId,
-        "iModel for queryV2Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test.");
+        "iModel for queryV2Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test."
+      );
 
-      const mostRecentChangeset = testIModelFileProvider.changesets[testIModelFileProvider.changesets.length - 1];
+      const mostRecentChangeset =
+        testIModelFileProvider.changesets[
+          testIModelFileProvider.changesets.length - 1
+        ];
       const queryV2CheckpointParams: CheckpointProps = {
         accessToken,
         iTwinId,
         iModelId,
         changeset: {
-          id: mostRecentChangeset.id
+          id: mostRecentChangeset.id,
         },
-        allowPreceding: true
+        allowPreceding: true,
       };
 
       // Act
-      const queryCheckpoint: V2CheckpointAccessProps | undefined = await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams);
+      const queryCheckpoint: V2CheckpointAccessProps | undefined =
+        await backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams);
 
       // Assert
       expect(queryCheckpoint).to.not.be.undefined;
@@ -360,11 +522,22 @@ describe("BackendIModelsAccess", () => {
     it("should download preceding checkpoint if one for current changeset does not exist", async () => {
       // Arrange
       const firstNamedVersion = testIModelForRead.namedVersions[0];
-      assert(testIModelFileProvider.changesets.length >= firstNamedVersion.changesetIndex + 1, "Not enough changesets");
-      const nextChangeset = testIModelFileProvider.changesets[firstNamedVersion.changesetIndex];
-      assert(firstNamedVersion.changesetId !== nextChangeset.id, "Unexpected changeset ids");
+      assert(
+        testIModelFileProvider.changesets.length >=
+          firstNamedVersion.changesetIndex + 1,
+        "Not enough changesets"
+      );
+      const nextChangeset =
+        testIModelFileProvider.changesets[firstNamedVersion.changesetIndex];
+      assert(
+        firstNamedVersion.changesetId !== nextChangeset.id,
+        "Unexpected changeset ids"
+      );
 
-      const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_preceding_changeset.bim");
+      const localCheckpointFilePath = path.join(
+        testDownloadPath,
+        "checkpoint_preceding_changeset.bim"
+      );
       const downloadV1CheckpointParams = {
         localFile: localCheckpointFilePath,
         checkpoint: {
@@ -372,18 +545,25 @@ describe("BackendIModelsAccess", () => {
           iTwinId,
           iModelId: testIModelForRead.id,
           changeset: {
-            id: nextChangeset.id
-          }
-        }
+            id: nextChangeset.id,
+          },
+        },
       };
 
       // Act
       // eslint-disable-next-line deprecation/deprecation
-      const downloadedCheckpoint: ChangesetIndexAndId = await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
+      const downloadedCheckpoint: ChangesetIndexAndId =
+        await backendIModelsAccess.downloadV1Checkpoint(
+          downloadV1CheckpointParams
+        );
 
       // Assert
-      expect(downloadedCheckpoint.id).to.be.equal(firstNamedVersion.changesetId);
-      expect(downloadedCheckpoint.index).to.be.equal(firstNamedVersion.changesetIndex);
+      expect(downloadedCheckpoint.id).to.be.equal(
+        firstNamedVersion.changesetId
+      );
+      expect(downloadedCheckpoint.index).to.be.equal(
+        firstNamedVersion.changesetIndex
+      );
       expect(fs.existsSync(localCheckpointFilePath)).to.be.equal(true);
       expect(fs.statSync(localCheckpointFilePath).size).to.be.greaterThan(0);
     });
@@ -399,24 +579,34 @@ describe("BackendIModelsAccess", () => {
       const iModelId = "c53e6b49-020f-4bf6-804b-d320463c5e00";
       await assertHardcodedIModelExists(
         iModelId,
-        "iModel for downloadV1Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test.");
+        "iModel for downloadV1Checkpoint test was not found. Please recreate the test iModel as described within the test, or disable the test."
+      );
 
-      const secondToLastChangeset = testIModelFileProvider.changesets[testIModelFileProvider.changesets.length - 2];
-      const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_skip_v2_checkpoint.bim");
+      const secondToLastChangeset =
+        testIModelFileProvider.changesets[
+          testIModelFileProvider.changesets.length - 2
+        ];
+      const localCheckpointFilePath = path.join(
+        testDownloadPath,
+        "checkpoint_skip_v2_checkpoint.bim"
+      );
       const downloadV1CheckpointParams: DownloadRequest = {
         localFile: localCheckpointFilePath,
         checkpoint: {
           iTwinId,
           iModelId,
           changeset: {
-            id: secondToLastChangeset.id
-          }
-        }
+            id: secondToLastChangeset.id,
+          },
+        },
       };
 
       // Act
       // eslint-disable-next-line deprecation/deprecation
-      const changesetIndexAndId: ChangesetIndexAndId = await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
+      const changesetIndexAndId: ChangesetIndexAndId =
+        await backendIModelsAccess.downloadV1Checkpoint(
+          downloadV1CheckpointParams
+        );
 
       // Assert
       expect(changesetIndexAndId.index).to.be.equal(0);
@@ -426,12 +616,18 @@ describe("BackendIModelsAccess", () => {
     it("should report progress when downloading checkpoint", async () => {
       // Arrange
       const progressLogs: ProgressReport[] = [];
-      const progressCallback: ProgressFunction = (downloaded: number, total: number) => {
+      const progressCallback: ProgressFunction = (
+        downloaded: number,
+        total: number
+      ) => {
         progressLogs.push({ downloaded, total });
         return ProgressStatus.Continue;
       };
 
-      const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_progress_test.bim");
+      const localCheckpointFilePath = path.join(
+        testDownloadPath,
+        "checkpoint_progress_test.bim"
+      );
       const downloadV1CheckpointParams = {
         localFile: localCheckpointFilePath,
         checkpoint: {
@@ -439,15 +635,17 @@ describe("BackendIModelsAccess", () => {
           iTwinId,
           iModelId: testIModelForRead.id,
           changeset: {
-            id: testIModelForRead.namedVersions[0].changesetId
-          }
+            id: testIModelForRead.namedVersions[0].changesetId,
+          },
         },
-        onProgress: progressCallback
+        onProgress: progressCallback,
       };
 
       // Act
       // eslint-disable-next-line deprecation/deprecation
-      await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
+      await backendIModelsAccess.downloadV1Checkpoint(
+        downloadV1CheckpointParams
+      );
 
       // Assert
       expect(fs.existsSync(localCheckpointFilePath)).to.be.equal(true);
@@ -455,18 +653,28 @@ describe("BackendIModelsAccess", () => {
 
       assertProgressReports(progressLogs);
       const lastReportedLog = progressLogs[progressLogs.length - 1];
-      expect(lastReportedLog.total).to.be.equal(fs.statSync(localCheckpointFilePath).size);
+      expect(lastReportedLog.total).to.be.equal(
+        fs.statSync(localCheckpointFilePath).size
+      );
     });
 
     it("should cancel checkpoint download", async () => {
       // Arrange
       const progressLogs: ProgressReport[] = [];
-      const progressCallback: ProgressFunction = (downloaded: number, total: number) => {
+      const progressCallback: ProgressFunction = (
+        downloaded: number,
+        total: number
+      ) => {
         progressLogs.push({ downloaded, total });
-        return downloaded > total / 2 ? ProgressStatus.Abort : ProgressStatus.Continue;
+        return downloaded > total / 2
+          ? ProgressStatus.Abort
+          : ProgressStatus.Continue;
       };
 
-      const localCheckpointFilePath = path.join(testDownloadPath, "checkpoint_cancel_test.bim");
+      const localCheckpointFilePath = path.join(
+        testDownloadPath,
+        "checkpoint_cancel_test.bim"
+      );
       const downloadV1CheckpointParams = {
         localFile: localCheckpointFilePath,
         checkpoint: {
@@ -474,17 +682,19 @@ describe("BackendIModelsAccess", () => {
           iTwinId,
           iModelId: testIModelForRead.id,
           changeset: {
-            id: testIModelForRead.namedVersions[0].changesetId
-          }
+            id: testIModelForRead.namedVersions[0].changesetId,
+          },
         },
-        onProgress: progressCallback
+        onProgress: progressCallback,
       };
 
       // Act
       let thrownError: unknown;
       try {
         // eslint-disable-next-line deprecation/deprecation
-        await backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams);
+        await backendIModelsAccess.downloadV1Checkpoint(
+          downloadV1CheckpointParams
+        );
       } catch (error: unknown) {
         thrownError = error;
       }
@@ -493,19 +703,27 @@ describe("BackendIModelsAccess", () => {
       assertAbortError(thrownError);
       assertProgressReports(progressLogs, false);
       const lastReportedLog = progressLogs[progressLogs.length - 1];
-      expect(lastReportedLog.total).to.be.greaterThan(fs.statSync(localCheckpointFilePath).size);
+      expect(lastReportedLog.total).to.be.greaterThan(
+        fs.statSync(localCheckpointFilePath).size
+      );
     });
 
-    async function assertHardcodedIModelExists(iModelId: string, errorMessage: string): Promise<void> {
+    async function assertHardcodedIModelExists(
+      iModelId: string,
+      errorMessage: string
+    ): Promise<void> {
       try {
         // Make sure iModel exists since we're hardcoding this ID.
         const iModel = await iModelsClient.iModels.getSingle({
           iModelId,
-          authorization: authorizationCallback
+          authorization: authorizationCallback,
         });
         expect(iModel).to.not.be.undefined;
       } catch (error) {
-        if (isIModelsApiError(error) && error.code === IModelsErrorCode.IModelNotFound) {
+        if (
+          isIModelsApiError(error) &&
+          error.code === IModelsErrorCode.IModelNotFound
+        ) {
           throw new Error(errorMessage);
         }
         throw error;
@@ -521,7 +739,7 @@ describe("BackendIModelsAccess", () => {
         await backendIModelsAccess.releaseBriefcase({
           accessToken,
           iModelId: testIModelForWrite.id,
-          briefcaseId
+          briefcaseId,
         });
       }
       testIModelForWriteBriefcaseIds = [];
@@ -531,16 +749,18 @@ describe("BackendIModelsAccess", () => {
       // Arrange
       const acquireNewBriefcaseIdParams: AcquireNewBriefcaseIdArg = {
         accessToken,
-        iModelId: testIModelForWrite.id
+        iModelId: testIModelForWrite.id,
       };
-      const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId(acquireNewBriefcaseIdParams);
+      const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId(
+        acquireNewBriefcaseIdParams
+      );
       testIModelForWriteBriefcaseIds.push(briefcaseId);
 
       const briefcaseDbParams: BriefcaseDbArg = {
         accessToken,
         iModelId: testIModelForWrite.id,
         briefcaseId,
-        changeset: { id: "", index: 0 }
+        changeset: { id: "", index: 0 },
       };
       // eslint-disable-next-line deprecation/deprecation
       const locksToAcquire: LockMap = new Map<string, LockState>([
@@ -549,16 +769,19 @@ describe("BackendIModelsAccess", () => {
         // eslint-disable-next-line deprecation/deprecation
         ["0x2", LockState.Exclusive],
         // eslint-disable-next-line deprecation/deprecation
-        ["0x3", LockState.Shared]
+        ["0x3", LockState.Shared],
       ]);
 
       // Act
-      await backendIModelsAccess.acquireLocks(briefcaseDbParams, locksToAcquire);
+      await backendIModelsAccess.acquireLocks(
+        briefcaseDbParams,
+        locksToAcquire
+      );
 
       // Assert
       await assertLocks({
         lockQueryParams: briefcaseDbParams,
-        expectedLocks: locksToAcquire
+        expectedLocks: locksToAcquire,
       });
     });
 
@@ -566,16 +789,18 @@ describe("BackendIModelsAccess", () => {
       // Arrange
       const acquireNewBriefcaseIdParams: AcquireNewBriefcaseIdArg = {
         accessToken,
-        iModelId: testIModelForWrite.id
+        iModelId: testIModelForWrite.id,
       };
-      const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId(acquireNewBriefcaseIdParams);
+      const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId(
+        acquireNewBriefcaseIdParams
+      );
       testIModelForWriteBriefcaseIds.push(briefcaseId);
 
       const briefcaseDbParams: BriefcaseDbArg = {
         accessToken,
         iModelId: testIModelForWrite.id,
         briefcaseId,
-        changeset: { id: "", index: 0 }
+        changeset: { id: "", index: 0 },
       };
 
       // eslint-disable-next-line deprecation/deprecation
@@ -587,25 +812,41 @@ describe("BackendIModelsAccess", () => {
         locksToAcquire.set(`0x${objectId.toString(16)}`, LockState.Exclusive);
       }
 
-      await backendIModelsAccess.acquireLocks(briefcaseDbParams, locksToAcquire);
+      await backendIModelsAccess.acquireLocks(
+        briefcaseDbParams,
+        locksToAcquire
+      );
       await assertLocks({
         lockQueryParams: briefcaseDbParams,
-        expectedLocks: locksToAcquire
+        expectedLocks: locksToAcquire,
       });
 
       // Act
       await backendIModelsAccess.releaseAllLocks(briefcaseDbParams);
 
       // Assert
-      const actualLocks: LockProps[] = await backendIModelsAccess.queryAllLocks(briefcaseDbParams);
+      const actualLocks: LockProps[] = await backendIModelsAccess.queryAllLocks(
+        briefcaseDbParams
+      );
       expect(actualLocks.length).to.be.equal(0);
     });
 
-    async function assertLocks(params: { lockQueryParams: BriefcaseDbArg, expectedLocks: LockMap }): Promise<void> {
-      const actualLocks: LockProps[] = await backendIModelsAccess.queryAllLocks(params.lockQueryParams);
+    async function assertLocks(params: {
+      lockQueryParams: BriefcaseDbArg;
+      expectedLocks: LockMap;
+    }): Promise<void> {
+      const actualLocks: LockProps[] = await backendIModelsAccess.queryAllLocks(
+        params.lockQueryParams
+      );
       expect(actualLocks.length).to.equal(params.expectedLocks.size);
-      for (const [expectedObjectId, expectedLockState] of params.expectedLocks) {
-        const actualLock = actualLocks.find((lock) => lock.id === expectedObjectId && lock.state === expectedLockState);
+      for (const [
+        expectedObjectId,
+        expectedLockState,
+      ] of params.expectedLocks) {
+        const actualLock = actualLocks.find(
+          (lock) =>
+            lock.id === expectedObjectId && lock.state === expectedLockState
+        );
         expect(actualLock).to.not.be.undefined;
       }
     }

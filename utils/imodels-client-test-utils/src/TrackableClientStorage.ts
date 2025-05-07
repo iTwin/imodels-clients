@@ -4,7 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 import { Readable } from "stream";
 
-import { ClientStorage, ConfigDownloadInput, ConfigUploadInput, TransferData, UploadInMultiplePartsInput, UrlDownloadInput, UrlUploadInput } from "@itwin/object-storage-core";
+import {
+  ClientStorage,
+  ConfigDownloadInput,
+  ConfigUploadInput,
+  TransferData,
+  UploadInMultiplePartsInput,
+  UrlDownloadInput,
+  UrlUploadInput,
+} from "@itwin/object-storage-core";
 
 export class FileTransferLog {
   public downloads: { [key: string]: number } = {};
@@ -22,24 +30,30 @@ export class TrackableClientStorage implements ClientStorage {
     private _underlyingStorage: ClientStorage,
     private _interceptors?: {
       download?: (input: UrlDownloadInput | ConfigDownloadInput) => void;
-    }) {
-  }
-  public download(input: (UrlDownloadInput | ConfigDownloadInput) & {
-    transferType: "buffer";
-  }): Promise<Buffer>;
-  public download(input: (UrlDownloadInput | ConfigDownloadInput) & {
-    transferType: "stream";
-  }): Promise<Readable>;
-  public download(input: (UrlDownloadInput | ConfigDownloadInput) & {
-    transferType: "local";
-    localPath: string;
-  }): Promise<string>;
+    }
+  ) {}
+  public download(
+    input: (UrlDownloadInput | ConfigDownloadInput) & {
+      transferType: "buffer";
+    }
+  ): Promise<Buffer>;
+  public download(
+    input: (UrlDownloadInput | ConfigDownloadInput) & {
+      transferType: "stream";
+    }
+  ): Promise<Readable>;
+  public download(
+    input: (UrlDownloadInput | ConfigDownloadInput) & {
+      transferType: "local";
+      localPath: string;
+    }
+  ): Promise<string>;
   public async download(
     input: UrlDownloadInput | ConfigDownloadInput
   ): Promise<TransferData> {
-    if (this._interceptors?.download)
-      this._interceptors.download(input);
+    if (this._interceptors?.download) this._interceptors.download(input);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
     return this._underlyingStorage.download(input as any);
   }
 
@@ -47,7 +61,6 @@ export class TrackableClientStorage implements ClientStorage {
     input: UrlUploadInput | ConfigUploadInput
   ): Promise<void> {
     return this._underlyingStorage.upload(input);
-
   }
 
   public async uploadInMultipleParts(

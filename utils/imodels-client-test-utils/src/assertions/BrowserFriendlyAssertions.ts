@@ -4,9 +4,40 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { Application, Briefcase, ChangesetExtendedData, Checkpoint, CheckpointState, ContentType, EntityListIterator, IModel, IModelPermission, IModelProperties, IModelState, IModelsError, IModelsErrorDetail, Link, MinimalBriefcase, MinimalIModel, MinimalNamedVersion, MinimalUser, NamedVersion, NamedVersionPropertiesForCreate, NamedVersionState, Thumbnail, ThumbnailSize, User, UserPermissions, UserStatistics } from "@itwin/imodels-client-management";
+import {
+  Application,
+  Briefcase,
+  ChangesetExtendedData,
+  Checkpoint,
+  CheckpointState,
+  ContentType,
+  EntityListIterator,
+  IModel,
+  IModelPermission,
+  IModelProperties,
+  IModelState,
+  IModelsError,
+  IModelsErrorDetail,
+  Link,
+  MinimalBriefcase,
+  MinimalIModel,
+  MinimalNamedVersion,
+  MinimalUser,
+  NamedVersion,
+  NamedVersionPropertiesForCreate,
+  NamedVersionState,
+  Thumbnail,
+  ThumbnailSize,
+  User,
+  UserPermissions,
+  UserStatistics,
+} from "@itwin/imodels-client-management";
 
-import { assertBriefcaseCallbacks, assertIModelCallbacks, assertNamedVersionCallbacks } from "./RelatedEntityCallbackAssertions";
+import {
+  assertBriefcaseCallbacks,
+  assertIModelCallbacks,
+  assertNamedVersionCallbacks,
+} from "./RelatedEntityCallbackAssertions";
 
 export async function assertCollection<T>(params: {
   asyncIterable: EntityListIterator<T>;
@@ -33,19 +64,29 @@ export async function assertIModel(params: {
   expectedIModelProperties: IModelProperties;
 }): Promise<void> {
   assertMinimalIModel({
-    actualIModel: params.actualIModel
+    actualIModel: params.actualIModel,
   });
 
-  expect(params.actualIModel.name).to.equal(params.expectedIModelProperties.name);
-  assertOptionalProperty(params.expectedIModelProperties.description, params.actualIModel.description);
-  assertOptionalProperty(params.expectedIModelProperties.extent, params.actualIModel.extent);
-  expect(params.actualIModel.containersEnabled).to.equal(params.expectedIModelProperties.containersEnabled);
+  expect(params.actualIModel.name).to.equal(
+    params.expectedIModelProperties.name
+  );
+  assertOptionalProperty(
+    params.expectedIModelProperties.description,
+    params.actualIModel.description
+  );
+  assertOptionalProperty(
+    params.expectedIModelProperties.extent,
+    params.actualIModel.extent
+  );
+  expect(params.actualIModel.containersEnabled).to.equal(
+    params.expectedIModelProperties.containersEnabled
+  );
   expect(params.actualIModel.createdDateTime).to.not.be.empty;
   expect(params.actualIModel.state).to.equal(IModelState.Initialized);
   expect(params.actualIModel.dataCenterLocation).to.not.be.empty;
 
   await assertIModelCallbacks({
-    iModel: params.actualIModel
+    iModel: params.actualIModel,
   });
 }
 
@@ -66,26 +107,31 @@ export async function assertBriefcase(params: {
   };
 }): Promise<void> {
   assertMinimalBriefcase({
-    actualBriefcase: params.actualBriefcase
+    actualBriefcase: params.actualBriefcase,
   });
 
   if (params.expectedBriefcaseProperties.ownerId)
-    expect(params.actualBriefcase.ownerId).to.be.equal(params.expectedBriefcaseProperties.ownerId);
-  else
-    expect(params.actualBriefcase.ownerId).to.not.be.empty;
+    expect(params.actualBriefcase.ownerId).to.be.equal(
+      params.expectedBriefcaseProperties.ownerId
+    );
+  else expect(params.actualBriefcase.ownerId).to.not.be.empty;
 
   expect(params.actualBriefcase.acquiredDateTime).to.not.be.empty;
 
   expect(params.actualBriefcase.fileSize).to.be.greaterThan(0);
-  assertOptionalProperty(params.expectedBriefcaseProperties?.deviceName, params.actualBriefcase.deviceName);
+  assertOptionalProperty(
+    params.expectedBriefcaseProperties?.deviceName,
+    params.actualBriefcase.deviceName
+  );
 
   if (params.expectedBriefcaseProperties.briefcaseId)
-    expect(params.actualBriefcase.briefcaseId).to.equal(params.expectedBriefcaseProperties.briefcaseId);
-  else
-    expect(params.actualBriefcase.briefcaseId).to.be.greaterThan(0);
+    expect(params.actualBriefcase.briefcaseId).to.equal(
+      params.expectedBriefcaseProperties.briefcaseId
+    );
+  else expect(params.actualBriefcase.briefcaseId).to.be.greaterThan(0);
 
   assertApplication({
-    actualApplication: params.actualBriefcase.application
+    actualApplication: params.actualBriefcase.application,
   });
 
   expect(params.actualBriefcase._links).to.exist;
@@ -95,13 +141,16 @@ export async function assertBriefcase(params: {
   expect(params.actualBriefcase._links.checkpoint!.href).to.not.be.empty;
 
   await assertBriefcaseCallbacks({
-    briefcase: params.actualBriefcase
+    briefcase: params.actualBriefcase,
   });
 }
 
 export function assertMinimalNamedVersion(params: {
   actualNamedVersion: MinimalNamedVersion;
-  expectedNamedVersionProperties: Pick<NamedVersionPropertiesForCreate, "changesetId"> & {
+  expectedNamedVersionProperties: Pick<
+    NamedVersionPropertiesForCreate,
+    "changesetId"
+  > & {
     changesetIndex: number;
   };
 }): void {
@@ -109,8 +158,13 @@ export function assertMinimalNamedVersion(params: {
   expect(params.actualNamedVersion.id).to.not.be.empty;
   expect(params.actualNamedVersion.displayName).to.not.be.empty;
 
-  assertOptionalProperty(params.expectedNamedVersionProperties.changesetId, params.actualNamedVersion.changesetId);
-  expect(params.actualNamedVersion.changesetIndex).to.equal(params.expectedNamedVersionProperties.changesetIndex);
+  assertOptionalProperty(
+    params.expectedNamedVersionProperties.changesetId,
+    params.actualNamedVersion.changesetId
+  );
+  expect(params.actualNamedVersion.changesetIndex).to.equal(
+    params.expectedNamedVersionProperties.changesetIndex
+  );
 }
 
 export async function assertNamedVersion(params: {
@@ -124,15 +178,20 @@ export async function assertNamedVersion(params: {
 }): Promise<void> {
   assertMinimalNamedVersion({
     actualNamedVersion: params.actualNamedVersion,
-    expectedNamedVersionProperties: params.expectedNamedVersionProperties
+    expectedNamedVersionProperties: params.expectedNamedVersionProperties,
   });
 
-  expect(params.actualNamedVersion.name).to.equal(params.expectedNamedVersionProperties.name);
-  assertOptionalProperty(params.expectedNamedVersionProperties.description, params.actualNamedVersion.description);
+  expect(params.actualNamedVersion.name).to.equal(
+    params.expectedNamedVersionProperties.name
+  );
+  assertOptionalProperty(
+    params.expectedNamedVersionProperties.description,
+    params.actualNamedVersion.description
+  );
   expect(params.actualNamedVersion.state).to.equal(NamedVersionState.Visible);
 
   assertApplication({
-    actualApplication: params.actualNamedVersion.application
+    actualApplication: params.actualNamedVersion.application,
   });
 
   expect(params.actualNamedVersion._links).to.exist;
@@ -140,12 +199,12 @@ export async function assertNamedVersion(params: {
   expect(params.actualNamedVersion._links.creator?.href).to.not.be.empty;
   assertOptionalLink({
     actualLink: params.actualNamedVersion._links.changeset,
-    shouldLinkExist: params.expectedLinks.changeset
+    shouldLinkExist: params.expectedLinks.changeset,
   });
 
   await assertNamedVersionCallbacks({
     namedVersion: params.actualNamedVersion,
-    shouldChangesetExist: params.expectedLinks.changeset
+    shouldChangesetExist: params.expectedLinks.changeset,
   });
 }
 
@@ -158,20 +217,29 @@ export function assertCheckpoint(params: {
   };
 }): void {
   if (params.expectedCheckpointProperties.changesetId)
-    expect(params.actualCheckpoint.changesetId).to.equal(params.expectedCheckpointProperties.changesetId);
+    expect(params.actualCheckpoint.changesetId).to.equal(
+      params.expectedCheckpointProperties.changesetId
+    );
 
   if (params.expectedCheckpointProperties.changesetIndex != null)
-    expect(params.actualCheckpoint.changesetIndex).to.equal(params.expectedCheckpointProperties.changesetIndex);
+    expect(params.actualCheckpoint.changesetIndex).to.equal(
+      params.expectedCheckpointProperties.changesetIndex
+    );
   else
     expect(params.actualCheckpoint.changesetIndex).to.be.greaterThanOrEqual(0);
 
-  expect(params.actualCheckpoint.state).to.equal(params.expectedCheckpointProperties.state);
+  expect(params.actualCheckpoint.state).to.equal(
+    params.expectedCheckpointProperties.state
+  );
 
   expect(params.actualCheckpoint.directoryAccessInfo).to.not.be.null;
   expect(params.actualCheckpoint.directoryAccessInfo!.baseUrl).to.not.be.empty;
-  expect(params.actualCheckpoint.directoryAccessInfo!.baseDirectory).to.not.be.empty;
-  expect(params.actualCheckpoint.directoryAccessInfo?.azure?.sasToken ??
-    params.actualCheckpoint.directoryAccessInfo?.google?.authorization).to.not.be.empty;
+  expect(params.actualCheckpoint.directoryAccessInfo!.baseDirectory).to.not.be
+    .empty;
+  expect(
+    params.actualCheckpoint.directoryAccessInfo?.azure?.sasToken ??
+      params.actualCheckpoint.directoryAccessInfo?.google?.authorization
+  ).to.not.be.empty;
   expect(params.actualCheckpoint.dbName).to.not.be.empty;
 
   expect(params.actualCheckpoint._links).to.exist;
@@ -189,13 +257,13 @@ export function assertThumbnail(params: {
   expect(params.actualThumbnail.image).to.exist;
   expect(params.actualThumbnail.image).to.not.be.empty;
 
-  expect(params.actualThumbnail.size).to.be.equal(params.expectedThumbnailProperties.size);
+  expect(params.actualThumbnail.size).to.be.equal(
+    params.expectedThumbnailProperties.size
+  );
   expect(params.actualThumbnail.imageType).to.be.equal(ContentType.Png);
 }
 
-export function assertMinimalUser(params: {
-  actualUser: MinimalUser;
-}): void {
+export function assertMinimalUser(params: { actualUser: MinimalUser }): void {
   expect(params.actualUser).to.exist;
   expect(params.actualUser.id).to.not.be.empty;
   expect(params.actualUser.displayName).to.not.be.empty;
@@ -205,11 +273,9 @@ export function assertMinimalUser(params: {
   expect(params.actualUser._links.self?.href).to.not.be.empty;
 }
 
-export function assertUser(params: {
-  actualUser: User;
-}): void {
+export function assertUser(params: { actualUser: User }): void {
   assertMinimalUser({
-    actualUser: params.actualUser
+    actualUser: params.actualUser,
   });
 
   expect(params.actualUser.givenName).to.not.be.empty;
@@ -217,8 +283,12 @@ export function assertUser(params: {
   expect(params.actualUser.email).to.not.be.empty;
 
   expect(params.actualUser.statistics).to.exist;
-  expect(params.actualUser.statistics.pushedChangesetsCount).to.be.greaterThanOrEqual(0);
-  expect(params.actualUser.statistics.createdVersionsCount).to.be.greaterThanOrEqual(0);
+  expect(
+    params.actualUser.statistics.pushedChangesetsCount
+  ).to.be.greaterThanOrEqual(0);
+  expect(
+    params.actualUser.statistics.createdVersionsCount
+  ).to.be.greaterThanOrEqual(0);
   expect(params.actualUser.statistics.briefcasesCount).to.greaterThanOrEqual(0);
 }
 
@@ -227,10 +297,19 @@ export function assertUserStatistics(params: {
   expectedUserStatistics: UserStatistics;
 }): void {
   expect(params.actualUser.statistics).to.exist;
-  expect(params.actualUser.statistics.pushedChangesetsCount).to.equal(params.expectedUserStatistics.pushedChangesetsCount);
-  expect(params.actualUser.statistics.createdVersionsCount).to.equal(params.expectedUserStatistics.createdVersionsCount);
-  assertOptionalProperty(params.expectedUserStatistics.lastChangesetPushDate, params.actualUser.statistics.lastChangesetPushDate);
-  expect(params.actualUser.statistics.briefcasesCount).to.equal(params.expectedUserStatistics.briefcasesCount);
+  expect(params.actualUser.statistics.pushedChangesetsCount).to.equal(
+    params.expectedUserStatistics.pushedChangesetsCount
+  );
+  expect(params.actualUser.statistics.createdVersionsCount).to.equal(
+    params.expectedUserStatistics.createdVersionsCount
+  );
+  assertOptionalProperty(
+    params.expectedUserStatistics.lastChangesetPushDate,
+    params.actualUser.statistics.lastChangesetPushDate
+  );
+  expect(params.actualUser.statistics.briefcasesCount).to.equal(
+    params.expectedUserStatistics.briefcasesCount
+  );
 }
 
 export function assertUserPermissions(params: {
@@ -239,10 +318,14 @@ export function assertUserPermissions(params: {
 }): void {
   expect(params.actualPermissions).to.exist;
   expect(params.actualPermissions.permissions).to.exist;
-  expect(params.actualPermissions.permissions.length).to.be.equal(params.expectedPermissions.length);
+  expect(params.actualPermissions.permissions.length).to.be.equal(
+    params.expectedPermissions.length
+  );
 
   for (const actualIModelPermission of params.actualPermissions.permissions) {
-    const isCurrentPermissionExpected = params.expectedPermissions.includes(actualIModelPermission);
+    const isCurrentPermissionExpected = params.expectedPermissions.includes(
+      actualIModelPermission
+    );
     expect(isCurrentPermissionExpected).to.equal(true);
   }
 }
@@ -256,11 +339,18 @@ export function assertChangesetExtendedDataBrowser(params: {
 }): void {
   expect(params.actualChangesetExtendedData).to.exist;
   expect(params.actualChangesetExtendedData.changesetId).to.not.be.empty;
-  expect(params.actualChangesetExtendedData.changesetIndex).to.equal(params.expectedChangesetExtendedData.changesetIndex);
-  expect(params.actualChangesetExtendedData.data).to.deep.equal(params.expectedChangesetExtendedData.data);
+  expect(params.actualChangesetExtendedData.changesetIndex).to.equal(
+    params.expectedChangesetExtendedData.changesetIndex
+  );
+  expect(params.actualChangesetExtendedData.data).to.deep.equal(
+    params.expectedChangesetExtendedData.data
+  );
 }
 
-export function assertError(params: { objectThrown: unknown, expectedError: Partial<IModelsError> }): void {
+export function assertError(params: {
+  objectThrown: unknown;
+  expectedError: Partial<IModelsError>;
+}): void {
   expect(params.objectThrown).is.not.undefined;
   expect(params.objectThrown instanceof Error);
 
@@ -272,7 +362,9 @@ export function assertError(params: { objectThrown: unknown, expectedError: Part
 
   if (params.expectedError.details) {
     expect(iModelsError.details).to.exist;
-    expect(iModelsError.details!.length).to.equal(params.expectedError.details.length);
+    expect(iModelsError.details!.length).to.equal(
+      params.expectedError.details.length
+    );
 
     for (const expectedDetail of params.expectedError.details) {
       const detailVerificationFunc = (detail: IModelsErrorDetail) =>
@@ -287,16 +379,21 @@ export function assertError(params: { objectThrown: unknown, expectedError: Part
 
   if (params.expectedError.originalError) {
     expect(iModelsError.originalError).to.exist;
-    expect(iModelsError.originalError!.code).to.equal(params.expectedError.originalError.code);
-    expect(iModelsError.originalError!.message).to.equal(params.expectedError.originalError.message);
+    expect(iModelsError.originalError!.code).to.equal(
+      params.expectedError.originalError.code
+    );
+    expect(iModelsError.originalError!.message).to.equal(
+      params.expectedError.originalError.message
+    );
   }
 }
 
-export function assertOptionalProperty<TPropertyType>(expectedValue: TPropertyType, actualValue: TPropertyType): void {
-  if (expectedValue)
-    expect(actualValue).to.deep.equal(expectedValue);
-  else
-    expect(actualValue).to.equal(null);
+export function assertOptionalProperty<TPropertyType>(
+  expectedValue: TPropertyType,
+  actualValue: TPropertyType
+): void {
+  if (expectedValue) expect(actualValue).to.deep.equal(expectedValue);
+  else expect(actualValue).to.equal(null);
 }
 
 export function assertOptionalLink(params: {
@@ -318,4 +415,3 @@ export function assertApplication(params: {
   expect(params.actualApplication!.id).to.not.be.empty;
   expect(params.actualApplication!.name).to.not.be.empty;
 }
-

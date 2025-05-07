@@ -2,7 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { TestAuthorizationProvider, TestIModelsClient, TestITwinProvider } from "../test-context-providers";
+import {
+  TestAuthorizationProvider,
+  TestIModelsClient,
+  TestITwinProvider,
+} from "../test-context-providers";
 
 export interface TestRunContext {
   testRunId: string;
@@ -43,20 +47,23 @@ export class TestIModelGroup {
     const iModels = this._iModelsClient.iModels.getMinimalList({
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       urlParams: {
-        iTwinId
-      }
+        iTwinId,
+      },
     });
     for await (const iModel of iModels)
       if (this.doesIModelBelongToGroup(iModel.displayName))
         await this._iModelsClient.iModels.delete({
-          authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
-          iModelId: iModel.id
+          authorization:
+            this._testAuthorizationProvider.getAdmin1Authorization(),
+          iModelId: iModel.id,
         });
   }
 
   private doesIModelBelongToGroup(iModelName: string): boolean {
-    return iModelName.startsWith(this._iModelNamePrefix) ||
+    return (
+      iModelName.startsWith(this._iModelNamePrefix) ||
       iModelName === this.getFirstIModelNameForOrderingTests() ||
-      iModelName === this.getLastIModelNameForOrderingTests();
+      iModelName === this.getLastIModelNameForOrderingTests()
+    );
   }
 }

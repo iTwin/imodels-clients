@@ -5,7 +5,7 @@
 
 /** Changeset Extended Data. */
 export interface ChangesetExtendedData {
-    /** Changeset id. */
+  /** Changeset id. */
   changesetId: string;
   /** Changeset index. */
   changesetIndex: number;

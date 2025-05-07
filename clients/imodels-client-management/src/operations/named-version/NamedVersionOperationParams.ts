@@ -2,7 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AtLeastOneProperty, IModelScopedOperationParams, NamedVersion, NamedVersionState, OrderableCollectionRequestParams } from "../../base/types";
+import {
+  AtLeastOneProperty,
+  IModelScopedOperationParams,
+  NamedVersion,
+  NamedVersionState,
+  OrderableCollectionRequestParams,
+} from "../../base/types";
 
 /**
  * Named Versions entity properties that are supported in $orderBy url parameter which specifies by what property
@@ -10,11 +16,15 @@ import { AtLeastOneProperty, IModelScopedOperationParams, NamedVersion, NamedVer
  */
 export enum NamedVersionOrderByProperty {
   ChangesetIndex = "changesetIndex",
-  CreatedDateTime = "createdDateTime"
+  CreatedDateTime = "createdDateTime",
 }
 
 /** Url parameters supported in Named Version list query. */
-export interface GetNamedVersionListUrlParams extends OrderableCollectionRequestParams<NamedVersion, NamedVersionOrderByProperty> {
+export interface GetNamedVersionListUrlParams
+  extends OrderableCollectionRequestParams<
+    NamedVersion,
+    NamedVersionOrderByProperty
+  > {
   /** Filters Named Versions whose name or description property contains the specified search value. */
   $search?: string;
   /** Filters Named Versions with a specific name. */
@@ -30,7 +40,8 @@ export interface GetNamedVersionListParams extends IModelScopedOperationParams {
 }
 
 /** Parameters for get single Named Version operation. */
-export interface GetSingleNamedVersionParams extends IModelScopedOperationParams {
+export interface GetSingleNamedVersionParams
+  extends IModelScopedOperationParams {
   /** Named Version id. */
   namedVersionId: string;
 }
@@ -78,7 +89,8 @@ export interface EditableNamedVersionProperties {
  * Properties that can be specified when updating a Named Version. At least one of the editable properties should
  * be specified.
  */
-export type NamedVersionPropertiesForUpdate = AtLeastOneProperty<EditableNamedVersionProperties>;
+export type NamedVersionPropertiesForUpdate =
+  AtLeastOneProperty<EditableNamedVersionProperties>;
 
 /** Parameters for update Named Version operation. */
 export interface UpdateNamedVersionParams extends IModelScopedOperationParams {

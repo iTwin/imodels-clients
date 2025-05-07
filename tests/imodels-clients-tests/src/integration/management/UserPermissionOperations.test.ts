@@ -2,8 +2,21 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, GetUserPermissionsParams, IModelPermission, IModelsClient, IModelsClientOptions, UserPermissions } from "@itwin/imodels-client-management";
-import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertUserPermissions } from "@itwin/imodels-client-test-utils";
+import {
+  AuthorizationCallback,
+  GetUserPermissionsParams,
+  IModelPermission,
+  IModelsClient,
+  IModelsClientOptions,
+  UserPermissions,
+} from "@itwin/imodels-client-management";
+import {
+  ReusableIModelMetadata,
+  ReusableTestIModelProvider,
+  TestAuthorizationProvider,
+  TestUtilTypes,
+  assertUserPermissions,
+} from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "../common";
 
@@ -16,13 +29,17 @@ describe("[Management] UserPermissionOperations", () => {
   before(async () => {
     const container = getTestDIContainer();
 
-    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    const iModelsClientOptions = container.get<IModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
-    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(
+      ReusableTestIModelProvider
+    );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
   });
 
@@ -30,11 +47,12 @@ describe("[Management] UserPermissionOperations", () => {
     // Arrange
     const getUserPermissionsParams: GetUserPermissionsParams = {
       authorization,
-      iModelId: testIModelForRead.id
+      iModelId: testIModelForRead.id,
     };
 
     // Act
-    const permissions: UserPermissions = await iModelsClient.userPermissions.get(getUserPermissionsParams);
+    const permissions: UserPermissions =
+      await iModelsClient.userPermissions.get(getUserPermissionsParams);
 
     // Assert
     assertUserPermissions({
@@ -43,8 +61,8 @@ describe("[Management] UserPermissionOperations", () => {
         IModelPermission.WebView,
         IModelPermission.Read,
         IModelPermission.Write,
-        IModelPermission.Manage
-      ]
+        IModelPermission.Manage,
+      ],
     });
   });
 });

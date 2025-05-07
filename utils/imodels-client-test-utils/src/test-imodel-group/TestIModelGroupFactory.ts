@@ -4,7 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { TestAuthorizationProvider, TestIModelsClient, TestITwinProvider } from "../test-context-providers";
+import {
+  TestAuthorizationProvider,
+  TestIModelsClient,
+  TestITwinProvider,
+} from "../test-context-providers";
 
 import { TestIModelGroup } from "./TestIModelGroup";
 
@@ -14,13 +18,18 @@ export class TestIModelGroupFactory {
     private readonly _iModelsClient: TestIModelsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
     private readonly _testITwinProvider: TestITwinProvider
-  ) { }
+  ) {}
 
   public create(testRunContext: {
     testRunId: string;
     packageName: string;
     testSuiteName?: string;
   }): TestIModelGroup {
-    return new TestIModelGroup(this._iModelsClient, this._testAuthorizationProvider, this._testITwinProvider, testRunContext);
+    return new TestIModelGroup(
+      this._iModelsClient,
+      this._testAuthorizationProvider,
+      this._testITwinProvider,
+      testRunContext
+    );
   }
 }

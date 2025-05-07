@@ -4,9 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import * as fs from "fs";
 
-import { ClientStorage } from "@itwin/object-storage-core";
+import {
+  IModelsErrorCode,
+  IModelsErrorImpl,
+} from "@itwin/imodels-client-management";
 
-import { IModelsErrorCode, IModelsErrorImpl } from "@itwin/imodels-client-management";
+import { ClientStorage } from "@itwin/object-storage-core";
 
 import { GenericAbortSignal } from "../base/types";
 
@@ -38,15 +41,20 @@ export async function downloadFile(params: DownloadFileParams): Promise<void> {
   try {
     const downloadStream = await params.storage.download({
       ...params,
-      transferType: "stream"
+      transferType: "stream",
     });
     downloadStream.pipe(targetFileStream);
 
-    if (params.totalDownloadCallback || params.latestDownloadedChunkSizeCallback){
+    if (
+      params.totalDownloadCallback ||
+      params.latestDownloadedChunkSizeCallback
+    ) {
       let bytesDownloaded = 0;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       downloadStream.on("data", (chunk: any) => {
         bytesDownloaded += chunk?.length;
         params.totalDownloadCallback?.(bytesDownloaded);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         params.latestDownloadedChunkSizeCallback?.(chunk?.length);
       });
     }
@@ -62,14 +70,13 @@ export async function downloadFile(params: DownloadFileParams): Promise<void> {
 }
 
 function adaptAbortError(error: unknown): unknown {
-  if (!(error instanceof Error) || error.name !== "AbortError")
-    return error;
+  if (!(error instanceof Error) || error.name !== "AbortError") return error;
 
   return new IModelsErrorImpl({
     code: IModelsErrorCode.DownloadAborted,
     message: `Download was aborted. Message: ${error.message}}.`,
     originalError: error,
     statusCode: undefined,
-    details: undefined
+    details: undefined,
   });
 }

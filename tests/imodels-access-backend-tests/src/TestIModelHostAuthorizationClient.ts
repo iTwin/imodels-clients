@@ -6,10 +6,9 @@
 import { AuthorizationClient } from "@itwin/core-common";
 
 export class TestIModelHostAuthorizationClient implements AuthorizationClient {
-  constructor(private _accessToken: string) {
-  }
+  constructor(private _accessToken: string) {}
 
-  public async getAccessToken(): Promise<string> {
-    return this._accessToken;
+  public getAccessToken(): Promise<string> {
+    return Promise.resolve(this._accessToken);
   }
 }

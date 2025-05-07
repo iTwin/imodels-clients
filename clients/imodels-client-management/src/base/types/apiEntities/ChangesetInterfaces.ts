@@ -13,7 +13,7 @@ export enum ChangesetState {
   /** Changeset instance is created but file is not uploaded. The Changeset creation is not complete. */
   WaitingForFile = "waitingForFile",
   /** The Changeset file is uploaded and creation is complete. */
-  FileUploaded = "fileUploaded"
+  FileUploaded = "fileUploaded",
 }
 
 /** Flags that describe Changeset contents. */
@@ -25,7 +25,7 @@ export enum ContainingChanges {
   SheetsAndDrawings = 1 << 3,
   ViewsAndModels = 1 << 4,
   GlobalProperties = 1 << 5,
-  SchemaSync = 1 << 6
+  SchemaSync = 1 << 6,
 }
 
 /** Synchronization information. */

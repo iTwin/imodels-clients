@@ -4,5 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 
 export class Constants {
-  public static readonly ChangeSet0 = { id: "", changesType: 0, description: "initialChangeset", parentId: "", briefcaseId: 0, pushDate: "", userCreated: "", index: 0, size: 0 };
+  public static readonly ChangeSet0 = {
+    id: "",
+    changesType: 0,
+    description: "initialChangeset",
+    parentId: "",
+    briefcaseId: 0,
+    pushDate: "",
+    userCreated: "",
+    index: 0,
+    size: 0,
+  };
 }

@@ -62,7 +62,9 @@ export interface HeadersParam {
  * Common parameters for iModel scoped operations. All operations exposed in this client are iModel scoped
  * except for {@link https://developer.bentley.com/apis/imodels-v2/operations/get-itwin-imodels/ Get iTwin iModels}.
  */
-export interface IModelScopedOperationParams extends AuthorizationParam, HeadersParam {
+export interface IModelScopedOperationParams
+  extends AuthorizationParam,
+    HeadersParam {
   /** iModel id. */
   iModelId: string;
 }
@@ -87,7 +89,10 @@ export interface CollectionRequestParams {
 }
 
 /** Common url parameters that are supported for orderable entity list requests. */
-export interface OrderableCollectionRequestParams<TEntity, TProperties extends keyof TEntity> extends CollectionRequestParams {
+export interface OrderableCollectionRequestParams<
+  TEntity,
+  TProperties extends keyof TEntity
+> extends CollectionRequestParams {
   /** Specifies in what order should entities be returned. See {@link OrderBy}. */
   $orderBy?: OrderBy<TEntity, TProperties> | OrderBy<TEntity, TProperties>[];
 }
@@ -97,7 +102,7 @@ export enum OrderByOperator {
   /** Ascending. Entities will be returned in ascending order. */
   Ascending = "asc",
   /** Descending. Entities will be returned in descending order. */
-  Descending = "desc"
+  Descending = "desc",
 }
 
 /**
@@ -135,7 +140,7 @@ export enum PreferReturn {
   /** Instructs the server to return minimal entity representation. */
   Minimal = "minimal",
   /** Instructs the server to return full entity representation. */
-  Representation = "representation"
+  Representation = "representation",
 }
 
 /** Application information. */

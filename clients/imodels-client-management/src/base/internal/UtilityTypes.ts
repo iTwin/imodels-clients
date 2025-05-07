@@ -12,4 +12,6 @@ export interface EntityCollectionPage<TEntity> {
 }
 
 /** Function to query an entity page. */
-export type EntityPageQueryFunc<TEntity> = () => Promise<EntityCollectionPage<TEntity>>;
+export type EntityPageQueryFunc<TEntity> = () => Promise<
+  EntityCollectionPage<TEntity>
+>;

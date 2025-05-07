@@ -2,7 +2,11 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { BinaryContentType, IModelScopedOperationParams, ThumbnailSize } from "../../base/types";
+import {
+  BinaryContentType,
+  IModelScopedOperationParams,
+  ThumbnailSize,
+} from "../../base/types";
 
 /** Url parameters supported in Thumbnail download operation. */
 export interface DownloadThumbnailUrlParams {

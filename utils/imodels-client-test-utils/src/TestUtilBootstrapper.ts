@@ -7,7 +7,22 @@ import { Container } from "inversify";
 import { IModelsClientOptions } from "@itwin/imodels-client-authoring";
 
 import { IModelsClientsTestsConfig } from "./IModelsClientsTestsConfig";
-import { ITwinsClient, ITwinsClientConfig, ReusableTestIModelProvider, ReusableTestIModelProviderConfig, TestAuthorizationClient, TestAuthorizationClientConfig, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelRetriever, TestIModelsClient, TestIModelsClientOptions, TestITwinProvider, TestITwinProviderConfig } from "./test-context-providers";
+import {
+  ITwinsClient,
+  ITwinsClientConfig,
+  ReusableTestIModelProvider,
+  ReusableTestIModelProviderConfig,
+  TestAuthorizationClient,
+  TestAuthorizationClientConfig,
+  TestAuthorizationProvider,
+  TestIModelCreator,
+  TestIModelFileProvider,
+  TestIModelRetriever,
+  TestIModelsClient,
+  TestIModelsClientOptions,
+  TestITwinProvider,
+  TestITwinProviderConfig,
+} from "./test-context-providers";
 import { TestAuthorizationProviderConfig } from "./test-context-providers/auth/TestAuthorizationProviderConfig";
 import { TestIModelGroupFactory } from "./test-imodel-group/TestIModelGroupFactory";
 import { TestUtilTypes } from "./TestUtilTypes";
@@ -33,9 +48,15 @@ export class TestUtilBootstrapper {
     container.bind(TestITwinProviderConfig).toSelf().inSingletonScope();
     container.bind(TestITwinProvider).toSelf().inSingletonScope();
 
-    container.bind<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions).to(TestIModelsClientOptions).inSingletonScope();
+    container
+      .bind<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions)
+      .to(TestIModelsClientOptions)
+      .inSingletonScope();
     container.bind(TestIModelsClient).toSelf().inSingletonScope();
-    container.bind(ReusableTestIModelProviderConfig).toSelf().inSingletonScope();
+    container
+      .bind(ReusableTestIModelProviderConfig)
+      .toSelf()
+      .inSingletonScope();
     container.bind(ReusableTestIModelProvider).toSelf().inSingletonScope();
     container.bind(TestIModelCreator).toSelf().inSingletonScope();
     container.bind(TestIModelFileProvider).toSelf().inSingletonScope();

@@ -2,18 +2,37 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import {
+  AxiosRestClient,
+  AxiosRetryPolicy,
+  Constants,
+  ExponentialBackoffAlgorithm,
+  IModelsOriginalError,
+  IModelsClient as ManagementIModelsClient,
+  IModelsClientOptions as ManagementIModelsClientOptions,
+  RecursiveRequired,
+  ResponseInfo,
+} from "@itwin/imodels-client-management";
+
 import { ClientStorage } from "@itwin/object-storage-core";
 
 import {
-  AxiosRestClient, AxiosRetryPolicy, Constants, ExponentialBackoffAlgorithm,
-  IModelsClient as ManagementIModelsClient,
-  IModelsClientOptions as ManagementIModelsClientOptions,
-  RecursiveRequired
-} from "@itwin/imodels-client-management";
-
-import { AuthoringUtilityFunctions, IModelsErrorParser, NodeLocalFileSystem } from "./base/internal";
+  createDefaultClientStorage,
+  IModelsErrorParser,
+  NodeLocalFileSystem,
+} from "./base/internal";
 import { LocalFileSystem } from "./base/types";
-import { BaselineFileOperations, BriefcaseOperations, ChangesetExtendedDataOperations, ChangesetGroupOperations, ChangesetOperations, IModelOperations, IModelsApiUrlFormatter, LockOperations, OperationOptions } from "./operations";
+import {
+  BaselineFileOperations,
+  BriefcaseOperations,
+  ChangesetExtendedDataOperations,
+  ChangesetGroupOperations,
+  ChangesetOperations,
+  IModelOperations,
+  IModelsApiUrlFormatter,
+  LockOperations,
+  OperationOptions,
+} from "./operations";
 
 /** User-configurable iModels client options. */
 export interface IModelsClientOptions extends ManagementIModelsClientOptions {
@@ -44,13 +63,19 @@ export class IModelsClient extends ManagementIModelsClient {
    * are `undefined` the client uses defaults. See {@link iModelsClientOptions}.
    */
   constructor(options?: IModelsClientOptions) {
-    const filledIModelsClientOptions = IModelsClient.fillAuthoringClientConfiguration(options);
+    const filledIModelsClientOptions =
+      IModelsClient.fillAuthoringClientConfiguration(options);
     super(filledIModelsClientOptions);
 
     this._operationsOptions = {
       ...filledIModelsClientOptions,
-      parseErrorFunc: IModelsErrorParser.parse,
-      urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
+      parseErrorFunc: (
+        response: ResponseInfo,
+        originalError: IModelsOriginalError
+      ) => IModelsErrorParser.parse(response, originalError),
+      urlFormatter: new IModelsApiUrlFormatter(
+        filledIModelsClientOptions.api.baseUrl
+      ),
     };
   }
 
@@ -100,21 +125,23 @@ export class IModelsClient extends ManagementIModelsClient {
   private static fillAuthoringClientConfiguration(
     options: IModelsClientOptions | undefined
   ): RecursiveRequired<IModelsClientOptions> {
-    const retryPolicy = options?.retryPolicy ?? new AxiosRetryPolicy({
-      maxRetries: Constants.retryPolicy.maxRetries,
-      backoffAlgorithm: new ExponentialBackoffAlgorithm({
-        baseDelayInMs: Constants.retryPolicy.baseDelayInMs,
-        factor: Constants.retryPolicy.delayFactor
-      })
-    });
+    const retryPolicy =
+      options?.retryPolicy ??
+      new AxiosRetryPolicy({
+        maxRetries: Constants.retryPolicy.maxRetries,
+        backoffAlgorithm: new ExponentialBackoffAlgorithm({
+          baseDelayInMs: Constants.retryPolicy.baseDelayInMs,
+          factor: Constants.retryPolicy.delayFactor,
+        }),
+      });
 
     return {
       api: this.fillApiConfiguration(options?.api),
       restClient: options?.restClient ?? new AxiosRestClient(retryPolicy),
       localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
-      cloudStorage: options?.cloudStorage ?? AuthoringUtilityFunctions.createDefaultClientStorage(),
+      cloudStorage: options?.cloudStorage ?? createDefaultClientStorage(),
       headers: options?.headers ?? {},
-      retryPolicy
+      retryPolicy,
     };
   }
 }

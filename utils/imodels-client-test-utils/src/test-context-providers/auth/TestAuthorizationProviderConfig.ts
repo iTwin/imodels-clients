@@ -4,7 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { IModelsClientsTestsConfig, TestUsersConfigValues } from "../../IModelsClientsTestsConfig";
+import {
+  IModelsClientsTestsConfig,
+  TestUsersConfigValues,
+} from "../../IModelsClientsTestsConfig";
 
 interface ApiScopes {
   iModels: string;
@@ -16,13 +19,11 @@ export class TestAuthorizationProviderConfig {
   public testUsers: TestUsersConfigValues;
   public apiScopes: ApiScopes;
 
-  constructor(
-    config: IModelsClientsTestsConfig
-  ) {
+  constructor(config: IModelsClientsTestsConfig) {
     this.testUsers = config.testUsers;
     this.apiScopes = {
       iModels: config.apis.iModels.scopes,
-      iTwins: config.apis.iTwins.scopes
+      iTwins: config.apis.iTwins.scopes,
     };
   }
 }

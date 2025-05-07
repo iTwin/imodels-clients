@@ -2,7 +2,18 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AtLeastOneProperty, AuthorizationParam, ContainerTypes, Extent, GeographicCoordinateSystem, HeadersParam, IModel, IModelCreationMode, IModelScopedOperationParams, OrderableCollectionRequestParams } from "../../base/types";
+import {
+  AtLeastOneProperty,
+  AuthorizationParam,
+  ContainerTypes,
+  Extent,
+  GeographicCoordinateSystem,
+  HeadersParam,
+  IModel,
+  IModelCreationMode,
+  IModelScopedOperationParams,
+  OrderableCollectionRequestParams,
+} from "../../base/types";
 import { ChangesetIdOrIndex } from "../OperationParamExports";
 
 /**
@@ -15,7 +26,8 @@ export enum IModelOrderByProperty {
 }
 
 /** Url parameters supported in iModel list query. */
-export interface GetIModelListUrlParams extends OrderableCollectionRequestParams<IModel, IModelOrderByProperty> {
+export interface GetIModelListUrlParams
+  extends OrderableCollectionRequestParams<IModel, IModelOrderByProperty> {
   /** Filters iModels whose name or description property contains the specified search value. */
   $search?: string;
   /** Filters iModels for a specific iTwin. */
@@ -62,7 +74,9 @@ export interface IModelProperties {
 }
 
 /** Parameters for create iModel operation. */
-export interface CreateEmptyIModelParams extends AuthorizationParam, HeadersParam  {
+export interface CreateEmptyIModelParams
+  extends AuthorizationParam,
+    HeadersParam {
   /** Properties of the new iModel. See {@link IModelProperties}. */
   iModelProperties: IModelProperties;
   /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */
@@ -82,13 +96,16 @@ export interface IModelTemplate {
 }
 
 /** Properties that should be specified when creating a new iModel from template. */
-export interface IModelPropertiesForCreateFromTemplate extends IModelProperties {
+export interface IModelPropertiesForCreateFromTemplate
+  extends IModelProperties {
   /** iModel template. See {@link IModelTemplate}. */
   template: IModelTemplate;
 }
 
 /** Parameters for create iModel from template operation. */
-export interface CreateIModelFromTemplateParams extends AuthorizationParam, HeadersParam {
+export interface CreateIModelFromTemplateParams
+  extends AuthorizationParam,
+    HeadersParam {
   /** Properties of the new iModel. See {@link IModelPropertiesForCreateFromTemplate}. */
   iModelProperties: IModelPropertiesForCreateFromTemplate;
   /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */
@@ -113,10 +130,13 @@ interface IModelPropertiesForCloneBase {
  * - If neither `changesetId` nor `changesetIndex` is provided, all existing source iModel Changesets are copied to the target iModel.
  * - If `changesetId: ""` or `changesetIndex: 0` is provided, no Changesets are copied to the target iModel, only the source iModel's Baseline.
  */
-export type IModelPropertiesForClone = IModelPropertiesForCloneBase & Partial<ChangesetIdOrIndex>;
+export type IModelPropertiesForClone = IModelPropertiesForCloneBase &
+  Partial<ChangesetIdOrIndex>;
 
 /** Parameters for clone iModel operation. */
-export interface CloneIModelParams extends IModelScopedOperationParams, HeadersParam {
+export interface CloneIModelParams
+  extends IModelScopedOperationParams,
+    HeadersParam {
   /** Properties of the new iModel. See {@link IModelPropertiesForClone}. */
   iModelProperties: IModelPropertiesForClone;
   /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */
@@ -129,17 +149,20 @@ export interface CloneIModelParams extends IModelScopedOperationParams, HeadersP
  * - If neither `changesetId` nor `changesetIndex` is provided, all existing source iModel Changesets are copied to the iModel fork.
  * - If `changesetId: ""` or `changesetIndex: 0` is provided, no Changesets are copied to the iModel fork, only the source iModel's Baseline.
  */
-export type IModelPropertiesForFork = IModelPropertiesForCloneBase & Partial<ChangesetIdOrIndex> & {
-  /**
-   * Option to control how Changesets are copied from the source iModel to the iModel fork. If set to `true`, Changesets will be copied
-   * individually and the history will be preserved. If set to `false`, Changesets will be squashed and applied to the Baseline
-   * resulting in an iModel fork without Changeset history. The default value is `false`.
-   */
-  preserveHistory?: boolean;
-};
+export type IModelPropertiesForFork = IModelPropertiesForCloneBase &
+  Partial<ChangesetIdOrIndex> & {
+    /**
+     * Option to control how Changesets are copied from the source iModel to the iModel fork. If set to `true`, Changesets will be copied
+     * individually and the history will be preserved. If set to `false`, Changesets will be squashed and applied to the Baseline
+     * resulting in an iModel fork without Changeset history. The default value is `false`.
+     */
+    preserveHistory?: boolean;
+  };
 
 /** Parameters for fork iModel operation. */
-export interface ForkIModelParams extends IModelScopedOperationParams, HeadersParam {
+export interface ForkIModelParams
+  extends IModelScopedOperationParams,
+    HeadersParam {
   /** Properties of the new iModel. See {@link IModelPropertiesForFork}. */
   iModelProperties: IModelPropertiesForFork;
   /** Time period to wait until the iModel fork is initialized. Default value is 300,000 ms (5 minutes). */
@@ -162,7 +185,8 @@ export interface EditableIModelProperties {
  * Properties that can be specified when updating an iModel. At least one of the editable properties should
  * be specified.
  */
-export type IModelPropertiesForUpdate = AtLeastOneProperty<EditableIModelProperties>;
+export type IModelPropertiesForUpdate =
+  AtLeastOneProperty<EditableIModelProperties>;
 
 /** Parameters for update iModel operation. */
 export interface UpdateIModelParams extends IModelScopedOperationParams {

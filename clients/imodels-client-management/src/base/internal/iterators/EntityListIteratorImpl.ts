@@ -7,7 +7,9 @@ import { EntityPageQueryFunc } from "../UtilityTypes";
 
 import { EntityPageListIterator } from "./EntityPageListIterator";
 
-export class EntityListIteratorImpl<TEntity> implements EntityListIterator<TEntity> {
+export class EntityListIteratorImpl<TEntity>
+  implements EntityListIterator<TEntity>
+{
   private _entityPages: EntityPageListIterator<TEntity>;
   private _entities: AsyncIterableIterator<TEntity>;
 

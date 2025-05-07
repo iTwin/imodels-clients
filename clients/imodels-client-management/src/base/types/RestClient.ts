@@ -10,7 +10,7 @@ import { Dictionary } from "./UtilityTypes";
 export enum ContentType {
   Json = "application/json",
   Png = "image/png",
-  Jpeg = "image/jpeg"
+  Jpeg = "image/jpeg",
 }
 
 /** Helper type to group all supported binary content types. */
@@ -93,40 +93,52 @@ export interface RestClient {
    * @param {HttpGetRequestParams} params parameters for this operation. See {@link HttpGetRequestParams}.
    * @throws an error if the request fails.
    */
-  sendGetRequest<TBody>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<HttpResponse<TBody>>;
+  sendGetRequest<TBody>(
+    params: HttpGetRequestParams & { responseType: ContentType.Json }
+  ): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends GET HTTP request to get binary response.
    * @param {HttpGetRequestParams} params parameters for this operation. See {@link HttpGetRequestParams}.
    * @throws an error if the request fails.
    */
-  sendGetRequest(params: HttpGetRequestParams & { responseType: ContentType.Png }): Promise<HttpResponse<Uint8Array>>;
+  sendGetRequest(
+    params: HttpGetRequestParams & { responseType: ContentType.Png }
+  ): Promise<HttpResponse<Uint8Array>>;
 
   /**
    * Sends POST HTTP request.
    * @param {HttpRequestWithBodyParams} params parameters for this operation. See {@link HttpRequestWithBodyParams}.
    * @throws an error if the request fails.
    */
-  sendPostRequest<TBody>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TBody>>;
+  sendPostRequest<TBody>(
+    params: HttpRequestWithJsonBodyParams
+  ): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends PUT HTTP request.
    * @param {HttpPutRequestParams} params parameters for this operation. See {@link HttpRequestWithBodyParams}.
    * @throws an error if the request fails.
    */
-  sendPutRequest<TBody>(params: HttpRequestWithBinaryBodyParams): Promise<HttpResponse<TBody>>;
+  sendPutRequest<TBody>(
+    params: HttpRequestWithBinaryBodyParams
+  ): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends PATCH HTTP request.
    * @param {HttpRequestWithBodyParams} params parameters for this operation. See {@link HttpRequestWithBodyParams}.
    * @throws an error if the request fails.
    */
-  sendPatchRequest<TBody>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TBody>>;
+  sendPatchRequest<TBody>(
+    params: HttpRequestWithJsonBodyParams
+  ): Promise<HttpResponse<TBody>>;
 
   /**
    * Sends DELETE HTTP request.
    * @param {HttpRequestParams} params parameters for this operation. See {@link HttpRequestParams}.
    * @throws an error if the request fails.
    */
-  sendDeleteRequest<TBody>(params: HttpRequestParams): Promise<HttpResponse<TBody>>;
+  sendDeleteRequest<TBody>(
+    params: HttpRequestParams
+  ): Promise<HttpResponse<TBody>>;
 }

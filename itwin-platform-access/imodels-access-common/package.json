@@ -32,16 +32,17 @@
     "build:cjs": "tsc 1>&2 --outDir lib/cjs",
     "build:esm": "tsc 1>&2 --module esnext --outDir lib/esm",
     "clean": "rimraf lib",
-    "lint": "eslint ./src/**/*.ts 1>&2",
-    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
+    "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
   },
+  "prettier": "./node_modules/@itwin/imodels-client-common-config/prettier.json",
   "eslintConfig": {
-    "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
+    "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.js"
   },
   "dependencies": {
-    "@itwin/imodels-client-management": "workspace:*",
-    "@itwin/imodels-client-authoring": "workspace:*"
+    "@itwin/imodels-client-authoring": "workspace:*",
+    "@itwin/imodels-client-management": "workspace:*"
   },
   "devDependencies": {
     "@itwin/core-bentley": "^5.0.0-dev.104",

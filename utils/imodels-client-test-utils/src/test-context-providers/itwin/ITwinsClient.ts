@@ -26,21 +26,22 @@ export class ITwinsClient {
   private readonly _defaultClass = "Endeavor";
   private readonly _defaultSubClass = "Project";
 
-  constructor(
-    private _config: ITwinsClientConfig
-  ) { }
+  constructor(private _config: ITwinsClientConfig) {}
 
-  public async getOrCreateITwin(params: AuthorizationParam & { iTwinName: string }): Promise<string> {
+  public async getOrCreateITwin(
+    params: AuthorizationParam & { iTwinName: string }
+  ): Promise<string> {
     const authorizationInfo = await params.authorization();
     const requestConfig = {
       headers: {
         Accept: "application/vnd.bentley.itwin-platform.v1+json",
-        Authorization: `${authorizationInfo.scheme} ${authorizationInfo.token}`
-      }
+        Authorization: `${authorizationInfo.scheme} ${authorizationInfo.token}`,
+      },
     };
 
     const getITwinsWithNameUrl = `${this._config.baseUrl}?subClass=${this._defaultSubClass}&displayName=${params.iTwinName}`;
-    const getITwinsWithNameResponse: AxiosResponse<ITwinsResponse> = await axios.get(getITwinsWithNameUrl, requestConfig);
+    const getITwinsWithNameResponse: AxiosResponse<ITwinsResponse> =
+      await axios.get(getITwinsWithNameUrl, requestConfig);
     if (getITwinsWithNameResponse.data.iTwins.length > 0)
       return getITwinsWithNameResponse.data.iTwins[0].id;
 
@@ -48,9 +49,13 @@ export class ITwinsClient {
     const createITwinBody = {
       class: this._defaultClass,
       subClass: this._defaultSubClass,
-      displayName: params.iTwinName
+      displayName: params.iTwinName,
     };
-    const createITwinResponse: AxiosResponse<ITwinResponse> = await axios.post(createITwinUrl, createITwinBody, requestConfig);
+    const createITwinResponse: AxiosResponse<ITwinResponse> = await axios.post(
+      createITwinUrl,
+      createITwinBody,
+      requestConfig
+    );
     return createITwinResponse.data.iTwin.id;
   }
 }

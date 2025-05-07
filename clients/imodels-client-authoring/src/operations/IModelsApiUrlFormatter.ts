@@ -11,7 +11,12 @@ export class IModelsApiUrlFormatter extends ManamegentIModelsApiUrlFormatter {
     return `${this.baseUrl}/${params.iModelId}/baselinefile`;
   }
 
-  public getLockListUrl(params: { iModelId: string, urlParams?: GetLockListUrlParams }): string {
-    return `${this.baseUrl}/${params.iModelId}/locks${this.formQueryString({ ...params.urlParams })}`;
+  public getLockListUrl(params: {
+    iModelId: string;
+    urlParams?: GetLockListUrlParams;
+  }): string {
+    return `${this.baseUrl}/${params.iModelId}/locks${this.formQueryString({
+      ...params.urlParams,
+    })}`;
   }
 }

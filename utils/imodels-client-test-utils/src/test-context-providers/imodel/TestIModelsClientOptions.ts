@@ -13,9 +13,7 @@ import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
 export class TestIModelsClientOptions implements IModelsClientOptions {
   public api: ApiOptions;
 
-  constructor(
-    config: IModelsClientsTestsConfig
-  ) {
+  constructor(config: IModelsClientsTestsConfig) {
     this.api = { baseUrl: config.apis.iModels.baseUrl };
   }
 }

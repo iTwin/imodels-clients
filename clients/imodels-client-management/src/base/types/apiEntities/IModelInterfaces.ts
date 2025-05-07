@@ -14,7 +14,7 @@ export enum IModelState {
    */
   NotInitialized = "notInitialized",
   /** Initialized iModel. It means that iModel initialization has completed and iModel is ready to use. */
-  Initialized = "initialized"
+  Initialized = "initialized",
 }
 
 /** A point on the Earth's surface denoted by coordinates. Used to specify {@link Extent}. */

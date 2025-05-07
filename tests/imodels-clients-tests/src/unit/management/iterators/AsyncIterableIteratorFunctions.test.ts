@@ -7,8 +7,7 @@ import { expect } from "chai";
 import { take, toArray } from "@itwin/imodels-client-management";
 
 class TestEntity {
-  constructor(public index: number) {
-  }
+  constructor(public index: number) {}
 }
 
 describe("AsyncIterableIterator utility functions", () => {
@@ -39,8 +38,10 @@ describe("AsyncIterableIterator utility functions", () => {
     expect(entities[0].index).to.equal(0);
   });
 
-  async function* getTestIterator(count: number): AsyncIterableIterator<TestEntity> {
-    for (let i = 0; i < count; i++)
-      yield new TestEntity(i);
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async function* getTestIterator(
+    count: number
+  ): AsyncIterableIterator<TestEntity> {
+    for (let i = 0; i < count; i++) yield new TestEntity(i);
   }
 });

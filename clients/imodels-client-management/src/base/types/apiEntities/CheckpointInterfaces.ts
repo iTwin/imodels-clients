@@ -13,7 +13,7 @@ export enum CheckpointState {
   /** Checkpoint generation failed. */
   Failed = "failed",
   /** Checkpoint is not generated and the background job is not scheduled. */
-  NotGenerated = "notGenerated"
+  NotGenerated = "notGenerated",
 }
 
 export interface AzureDirectoryAccessInfo {

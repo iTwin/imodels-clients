@@ -26,7 +26,7 @@ export enum IModelPermission {
    * Allows to delete an iModel. This Permission is only available on the iTwin level. Use
    * {@link https://developer.bentley.com/apis/access-control/operations/get-itwin-permissions/ Access Control API}
    * to check if user can delete iModels on a given iTwin. */
-  Delete = "imodels-delete"
+  Delete = "imodels-delete",
 }
 
 /** User Permissions. */

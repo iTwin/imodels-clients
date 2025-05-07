@@ -5,7 +5,11 @@
 import { isAxiosError } from "axios";
 
 import { Constants } from "../../Constants";
-import { GetSleepDurationInMsParams, HttpRequestRetryPolicy, ShouldRetryParams } from "../types";
+import {
+  GetSleepDurationInMsParams,
+  HttpRequestRetryPolicy,
+  ShouldRetryParams,
+} from "../types";
 
 import { BackoffAlgorithm } from "./ExponentialBackoffAlgorithm";
 
@@ -25,7 +29,10 @@ export class AxiosRetryPolicy implements HttpRequestRetryPolicy {
 
   public shouldRetry(params: ShouldRetryParams): boolean {
     if (isAxiosError(params.error) && params.error.response?.status != null) {
-      return params.error.response.status >= Constants.httpStatusCodes.internalServerError;
+      return (
+        params.error.response.status >=
+        Constants.httpStatusCodes.internalServerError
+      );
     }
 
     return true;

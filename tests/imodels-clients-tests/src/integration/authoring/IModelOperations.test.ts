@@ -4,9 +4,25 @@
  *--------------------------------------------------------------------------------------------*/
 import { randomUUID } from "crypto";
 
-import { CreateIModelFromBaselineParams, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, ContainerTypes, IModel } from "@itwin/imodels-client-management";
-import { TestAuthorizationProvider, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes, assertIModel } from "@itwin/imodels-client-test-utils";
+import {
+  CreateIModelFromBaselineParams,
+  IModelsClient,
+  IModelsClientOptions,
+} from "@itwin/imodels-client-authoring";
+import {
+  AuthorizationCallback,
+  ContainerTypes,
+  IModel,
+} from "@itwin/imodels-client-management";
+import {
+  TestAuthorizationProvider,
+  TestIModelFileProvider,
+  TestIModelGroup,
+  TestIModelGroupFactory,
+  TestITwinProvider,
+  TestUtilTypes,
+  assertIModel,
+} from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
@@ -21,7 +37,9 @@ describe("[Authoring] IModelOperations", () => {
   before(async () => {
     const container = getTestDIContainer();
 
-    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    const iModelsClientOptions = container.get<IModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
@@ -33,7 +51,11 @@ describe("[Authoring] IModelOperations", () => {
     testIModelFileProvider = container.get(TestIModelFileProvider);
 
     const testIModelGroupFactory = container.get(TestIModelGroupFactory);
-    testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "AuthoringIModelOperations" });
+    testIModelGroup = testIModelGroupFactory.create({
+      testRunId: getTestRunId(),
+      packageName: Constants.PackagePrefix,
+      testSuiteName: "AuthoringIModelOperations",
+    });
   });
 
   after(async () => {
@@ -46,22 +68,26 @@ describe("[Authoring] IModelOperations", () => {
       authorization,
       iModelProperties: {
         iTwinId,
-        name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel from baseline"),
+        name: testIModelGroup.getPrefixedUniqueIModelName(
+          "Sample iModel from baseline"
+        ),
         filePath: testIModelFileProvider.iModel.filePath,
-        containersEnabled: ContainerTypes.None
+        containersEnabled: ContainerTypes.None,
       },
       headers: {
-        "X-Correlation-Id": randomUUID()
-      }
+        "X-Correlation-Id": randomUUID(),
+      },
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.createFromBaseline(createIModelParams);
+    const iModel: IModel = await iModelsClient.iModels.createFromBaseline(
+      createIModelParams
+    );
 
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: createIModelParams.iModelProperties
+      expectedIModelProperties: createIModelParams.iModelProperties,
     });
   });
 
@@ -71,25 +97,29 @@ describe("[Authoring] IModelOperations", () => {
       authorization,
       iModelProperties: {
         iTwinId,
-        name: testIModelGroup.getPrefixedUniqueIModelName("Sample iModel from baseline with horizontal CRS"),
+        name: testIModelGroup.getPrefixedUniqueIModelName(
+          "Sample iModel from baseline with horizontal CRS"
+        ),
         filePath: testIModelFileProvider.iModel.filePath,
         containersEnabled: ContainerTypes.None,
         geographicCoordinateSystem: {
-          horizontalCRSId: "EPSG:3857"
-        }
+          horizontalCRSId: "EPSG:3857",
+        },
       },
       headers: {
-        "X-Correlation-Id": randomUUID()
-      }
+        "X-Correlation-Id": randomUUID(),
+      },
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.createFromBaseline(createIModelParams);
+    const iModel: IModel = await iModelsClient.iModels.createFromBaseline(
+      createIModelParams
+    );
 
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: createIModelParams.iModelProperties
+      expectedIModelProperties: createIModelParams.iModelProperties,
     });
   });
 });
