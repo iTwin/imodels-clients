@@ -2,9 +2,26 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, CheckpointState, GetSingleCheckpointParams, IModelScopedOperationParams, IModelsErrorCode } from "@itwin/imodels-client-management";
-import { NamedVersionMetadata, ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestUtilTypes, assertCheckpoint, assertError } from "@itwin/imodels-client-test-utils";
+import {
+  IModelsClient,
+  IModelsClientOptions,
+} from "@itwin/imodels-client-authoring";
+import {
+  AuthorizationCallback,
+  CheckpointState,
+  GetSingleCheckpointParams,
+  IModelScopedOperationParams,
+  IModelsErrorCode,
+} from "@itwin/imodels-client-management";
+import {
+  NamedVersionMetadata,
+  ReusableIModelMetadata,
+  ReusableTestIModelProvider,
+  TestAuthorizationProvider,
+  TestUtilTypes,
+  assertCheckpoint,
+  assertError,
+} from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "../common";
 
@@ -18,13 +35,17 @@ describe("[Authoring] CheckpointOperations", () => {
   before(async () => {
     const container = getTestDIContainer();
 
-    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    const iModelsClientOptions = container.get<IModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
-    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(
+      ReusableTestIModelProvider
+    );
     testIModel = await reusableTestIModelProvider.getOrCreate();
     testIModelNamedVersion = testIModel.namedVersions[0];
   });
@@ -34,11 +55,13 @@ describe("[Authoring] CheckpointOperations", () => {
     const getSingleCheckpointParams: GetSingleCheckpointParams = {
       authorization,
       iModelId: testIModel.id,
-      changesetId: testIModelNamedVersion.changesetId
+      changesetId: testIModelNamedVersion.changesetId,
     };
 
     // Act
-    const checkpoint = await iModelsClient.checkpoints.getSingle(getSingleCheckpointParams);
+    const checkpoint = await iModelsClient.checkpoints.getSingle(
+      getSingleCheckpointParams
+    );
 
     // Assert
     assertCheckpoint({
@@ -46,8 +69,8 @@ describe("[Authoring] CheckpointOperations", () => {
       expectedCheckpointProperties: {
         changesetId: testIModelNamedVersion.changesetId,
         changesetIndex: testIModelNamedVersion.changesetIndex,
-        state: CheckpointState.Successful
-      }
+        state: CheckpointState.Successful,
+      },
     });
   });
 
@@ -56,11 +79,13 @@ describe("[Authoring] CheckpointOperations", () => {
     const getSingleCheckpointParams: GetSingleCheckpointParams = {
       authorization,
       iModelId: testIModel.id,
-      changesetIndex: testIModelNamedVersion.changesetIndex
+      changesetIndex: testIModelNamedVersion.changesetIndex,
     };
 
     // Act
-    const checkpoint = await iModelsClient.checkpoints.getSingle(getSingleCheckpointParams);
+    const checkpoint = await iModelsClient.checkpoints.getSingle(
+      getSingleCheckpointParams
+    );
 
     // Assert
     assertCheckpoint({
@@ -68,8 +93,8 @@ describe("[Authoring] CheckpointOperations", () => {
       expectedCheckpointProperties: {
         changesetId: testIModelNamedVersion.changesetId,
         changesetIndex: testIModelNamedVersion.changesetIndex,
-        state: CheckpointState.Successful
-      }
+        state: CheckpointState.Successful,
+      },
     });
   });
 
@@ -78,11 +103,13 @@ describe("[Authoring] CheckpointOperations", () => {
     const getSingleCheckpointParams: GetSingleCheckpointParams = {
       authorization,
       iModelId: testIModel.id,
-      namedVersionId: testIModelNamedVersion.id
+      namedVersionId: testIModelNamedVersion.id,
     };
 
     // Act
-    const checkpoint = await iModelsClient.checkpoints.getSingle(getSingleCheckpointParams);
+    const checkpoint = await iModelsClient.checkpoints.getSingle(
+      getSingleCheckpointParams
+    );
 
     // Assert
     assertCheckpoint({
@@ -90,21 +117,24 @@ describe("[Authoring] CheckpointOperations", () => {
       expectedCheckpointProperties: {
         changesetId: testIModelNamedVersion.changesetId,
         changesetIndex: testIModelNamedVersion.changesetIndex,
-        state: CheckpointState.Successful
-      }
+        state: CheckpointState.Successful,
+      },
     });
   });
 
   it("should get latest", async () => {
     // Arrange
-    const expectedNamedVersion = testIModel.namedVersions[testIModel.namedVersions.length - 1];
+    const expectedNamedVersion =
+      testIModel.namedVersions[testIModel.namedVersions.length - 1];
     const getSingleCheckpointParams: GetSingleCheckpointParams = {
       authorization,
-      iModelId: testIModel.id
+      iModelId: testIModel.id,
     };
 
     // Act
-    const checkpoint = await iModelsClient.checkpoints.getSingle(getSingleCheckpointParams);
+    const checkpoint = await iModelsClient.checkpoints.getSingle(
+      getSingleCheckpointParams
+    );
 
     // Assert
     assertCheckpoint({
@@ -112,46 +142,47 @@ describe("[Authoring] CheckpointOperations", () => {
       expectedCheckpointProperties: {
         changesetId: expectedNamedVersion.changesetId,
         changesetIndex: expectedNamedVersion.changesetIndex,
-        state: CheckpointState.Successful
-      }
+        state: CheckpointState.Successful,
+      },
     });
   });
 
   [
     {
       label: "by changeset id",
-      functionUnderTest: async (params: IModelScopedOperationParams) => iModelsClient.checkpoints.getSingle(
-        {
+      functionUnderTest: async (params: IModelScopedOperationParams) =>
+        iModelsClient.checkpoints.getSingle({
           ...params,
-          changesetId: testIModelNamedVersion.changesetId
-        })
+          changesetId: testIModelNamedVersion.changesetId,
+        }),
     },
     {
       label: "by changeset index",
-      functionUnderTest: async (params: IModelScopedOperationParams) => iModelsClient.checkpoints.getSingle(
-        {
+      functionUnderTest: async (params: IModelScopedOperationParams) =>
+        iModelsClient.checkpoints.getSingle({
           ...params,
-          changesetIndex: testIModelNamedVersion.changesetIndex
-        })
+          changesetIndex: testIModelNamedVersion.changesetIndex,
+        }),
     },
     {
       label: "by named version id",
-      functionUnderTest: async (params: IModelScopedOperationParams) => iModelsClient.checkpoints.getSingle(
-        {
+      functionUnderTest: async (params: IModelScopedOperationParams) =>
+        iModelsClient.checkpoints.getSingle({
           ...params,
-          namedVersionId: testIModelNamedVersion.id
-        })
+          namedVersionId: testIModelNamedVersion.id,
+        }),
     },
     {
       label: "(latest)",
-      functionUnderTest: async (params: IModelScopedOperationParams) => iModelsClient.checkpoints.getSingle(params)
-    }
+      functionUnderTest: async (params: IModelScopedOperationParams) =>
+        iModelsClient.checkpoints.getSingle(params),
+    },
   ].forEach((testCase) => {
     it(`should not find checkpoint ${testCase.label} if iModel does not exist`, async () => {
       // Arrange
       const iModelScopedOperationParams: IModelScopedOperationParams = {
         authorization,
-        iModelId: "invalidIModelId"
+        iModelId: "invalidIModelId",
       };
 
       // Act
@@ -167,8 +198,8 @@ describe("[Authoring] CheckpointOperations", () => {
         objectThrown,
         expectedError: {
           code: IModelsErrorCode.IModelNotFound,
-          message: "Requested iModel is not available."
-        }
+          message: "Requested iModel is not available.",
+        },
       });
     });
   });
@@ -176,26 +207,26 @@ describe("[Authoring] CheckpointOperations", () => {
   [
     {
       label: "by changeset id",
-      functionUnderTest: async (params: IModelScopedOperationParams) => iModelsClient.checkpoints.getSingle(
-        {
+      functionUnderTest: async (params: IModelScopedOperationParams) =>
+        iModelsClient.checkpoints.getSingle({
           ...params,
-          changesetId: "invalidId"
-        })
+          changesetId: "invalidId",
+        }),
     },
     {
       label: "by changeset index",
-      functionUnderTest: async (params: IModelScopedOperationParams) => iModelsClient.checkpoints.getSingle(
-        {
+      functionUnderTest: async (params: IModelScopedOperationParams) =>
+        iModelsClient.checkpoints.getSingle({
           ...params,
-          changesetIndex: 1000
-        })
-    }
+          changesetIndex: 1000,
+        }),
+    },
   ].forEach((testCase) => {
     it(`should not find checkpoint ${testCase.label} if changeset does not exist`, async () => {
       // Arrange
       const iModelScopedOperationParams: IModelScopedOperationParams = {
         authorization,
-        iModelId: testIModel.id
+        iModelId: testIModel.id,
       };
 
       // Act
@@ -211,8 +242,8 @@ describe("[Authoring] CheckpointOperations", () => {
         objectThrown,
         expectedError: {
           code: IModelsErrorCode.ChangesetNotFound,
-          message: "Requested Changeset is not available."
-        }
+          message: "Requested Changeset is not available.",
+        },
       });
     });
   });
@@ -222,7 +253,7 @@ describe("[Authoring] CheckpointOperations", () => {
     const getSingleCheckpointParams: GetSingleCheckpointParams = {
       authorization,
       iModelId: testIModel.id,
-      namedVersionId: "invalidId"
+      namedVersionId: "invalidId",
     };
 
     // Act
@@ -238,8 +269,8 @@ describe("[Authoring] CheckpointOperations", () => {
       objectThrown,
       expectedError: {
         code: IModelsErrorCode.NamedVersionNotFound,
-        message: "Requested Named Version is not available."
-      }
+        message: "Requested Named Version is not available.",
+      },
     });
   });
 });

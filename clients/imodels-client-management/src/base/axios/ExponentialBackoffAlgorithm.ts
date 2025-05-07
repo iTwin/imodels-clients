@@ -17,10 +17,7 @@ export class ExponentialBackoffAlgorithm implements BackoffAlgorithm {
   private readonly _baseDelayInMs: number;
   private readonly _factor: number;
 
-  public constructor(params: {
-    baseDelayInMs: number;
-    factor: number;
-  }) {
+  public constructor(params: { baseDelayInMs: number; factor: number }) {
     this._baseDelayInMs = params.baseDelayInMs;
     this._factor = params.factor;
   }

@@ -10,7 +10,9 @@ import { OperationOptions } from "../OperationOptions";
 
 import { GetSingleBaselineFileParams } from "./BaselineFileOperationParams";
 
-export class BaselineFileOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
+export class BaselineFileOperations<
+  TOptions extends OperationOptions
+> extends OperationsBase<TOptions> {
   /**
    * Gets a single Baseline file by iModel id. This method returns a Baseline file in its full representation. Wraps the
    * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-baseline-file-details/
@@ -18,11 +20,15 @@ export class BaselineFileOperations<TOptions extends OperationOptions> extends O
    * @param {GetSingleBaselineFileParams} params parameters for this operation. See {@link GetSingleBaselineFileParams}.
    * @returns {Promise<BaselineFile>} a Baseline file for the specified iModel. See {@link BaselineFile}.
    */
-  public async getSingle(params: GetSingleBaselineFileParams): Promise<BaselineFile> {
+  public async getSingle(
+    params: GetSingleBaselineFileParams
+  ): Promise<BaselineFile> {
     const response = await this.sendGetRequest<BaselineFileResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getBaselineUrl({ iModelId: params.iModelId }),
-      headers: params.headers
+      url: this._options.urlFormatter.getBaselineUrl({
+        iModelId: params.iModelId,
+      }),
+      headers: params.headers,
     });
     return response.body.baselineFile;
   }

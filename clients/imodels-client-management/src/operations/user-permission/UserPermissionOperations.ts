@@ -8,7 +8,9 @@ import { OperationOptions } from "../OperationOptions";
 
 import { GetUserPermissionsParams } from "./UserPermissionOperationParams";
 
-export class UserPermissionOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
+export class UserPermissionOperations<
+  TOptions extends OperationOptions
+> extends OperationsBase<TOptions> {
   /**
    * Retrieves Permissions the current user has for the specified iModel. The current user is determined based on
    * passed authorization information. Wraps the
@@ -22,8 +24,10 @@ export class UserPermissionOperations<TOptions extends OperationOptions> extends
   public async get(params: GetUserPermissionsParams): Promise<UserPermissions> {
     const response = await this.sendGetRequest<UserPermissions>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getUserPermissionsUrl({ iModelId: params.iModelId }),
-      headers: params.headers
+      url: this._options.urlFormatter.getUserPermissionsUrl({
+        iModelId: params.iModelId,
+      }),
+      headers: params.headers,
     });
     return response.body;
   }

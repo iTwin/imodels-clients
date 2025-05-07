@@ -21,10 +21,13 @@ describe("[Authoring] IModelsApiUrlFormatter", () => {
       const getBaselineUrlParams = { iModelId: "IMODEL_ID" };
 
       // Act
-      const baselineUrl = iModelsApiUrlFormatter.getBaselineUrl(getBaselineUrlParams);
+      const baselineUrl =
+        iModelsApiUrlFormatter.getBaselineUrl(getBaselineUrlParams);
 
       // Assert
-      expect(baselineUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/baselinefile");
+      expect(baselineUrl).to.be.equal(
+        "https://api.bentley.com/imodels/IMODEL_ID/baselinefile"
+      );
     });
   });
 
@@ -34,10 +37,13 @@ describe("[Authoring] IModelsApiUrlFormatter", () => {
       const getLockListUrlParams = { iModelId: "IMODEL_ID" };
 
       // Act
-      const lockListUrl = iModelsApiUrlFormatter.getLockListUrl(getLockListUrlParams);
+      const lockListUrl =
+        iModelsApiUrlFormatter.getLockListUrl(getLockListUrlParams);
 
       // Assert
-      expect(lockListUrl).to.be.equal("https://api.bentley.com/imodels/IMODEL_ID/locks");
+      expect(lockListUrl).to.be.equal(
+        "https://api.bentley.com/imodels/IMODEL_ID/locks"
+      );
     });
   });
 });

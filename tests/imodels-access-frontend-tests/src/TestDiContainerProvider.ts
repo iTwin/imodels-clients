@@ -10,11 +10,10 @@ import { TestUtilBootstrapper } from "@itwin/imodels-client-test-utils";
 
 let container: Container;
 export function getTestDIContainer(): Container {
-  if (container)
-    return container;
+  if (container) return container;
 
   container = new Container();
-  TestUtilBootstrapper.bind(container,path.join(__dirname, "..", ".env"));
+  TestUtilBootstrapper.bind(container, path.join(__dirname, "..", ".env"));
 
   return container;
 }

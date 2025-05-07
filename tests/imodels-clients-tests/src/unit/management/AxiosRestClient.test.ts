@@ -8,7 +8,11 @@ import { expect } from "chai";
 import sinon from "sinon";
 
 import {
-  AxiosRestClient, AxiosRetryPolicy, ContentType, HttpRequestWithJsonBodyParams, UtilityFunctions
+  AxiosRestClient,
+  AxiosRetryPolicy,
+  ContentType,
+  HttpRequestWithJsonBodyParams,
+  UtilityFunctions,
 } from "@itwin/imodels-client-management";
 
 import { createStub } from "../Stubs";
@@ -29,6 +33,7 @@ describe("[Management] AxiosRestClient", () => {
     sleepStub.resetHistory();
     retryPolicyStub.getSleepDurationInMs.reset();
     retryPolicyStub.shouldRetry.reset();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (retryPolicyStub as any).maxRetries = 3;
   });
 
@@ -39,15 +44,15 @@ describe("[Management] AxiosRestClient", () => {
       headers: {},
       body: {
         content: {},
-        contentType: ContentType.Json
-      }
+        contentType: ContentType.Json,
+      },
     };
     const responseBody = {
       iModelId: "IMODEL_ID",
       changesetId: 4,
       _links: {
-        self: "https://imodelhub.bentley.com/something"
-      }
+        self: "https://imodelhub.bentley.com/something",
+      },
     };
     axiosMock.onPost(requestParams.url).reply(200, responseBody, {});
     const restClient = new AxiosRestClient(null);
@@ -66,12 +71,12 @@ describe("[Management] AxiosRestClient", () => {
       headers: {},
       body: {
         content: {},
-        contentType: ContentType.Json
-      }
+        contentType: ContentType.Json,
+      },
     };
     const responseHeaders = {
-      "location": "https://some-url.com",
-      "retry-after": 60
+      location: "https://some-url.com",
+      "retry-after": 60,
     };
     axiosMock.onPost(requestParams.url).reply(200, {}, responseHeaders);
     const restClient = new AxiosRestClient(null);
@@ -93,18 +98,18 @@ describe("[Management] AxiosRestClient", () => {
       headers: {},
       body: {
         content: {},
-        contentType: ContentType.Json
-      }
+        contentType: ContentType.Json,
+      },
     };
     const responseHeaders = {
-      "location": "https://some-url.com",
+      location: "https://some-url.com",
       "retry-after": 60,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     };
     const expectedHeaders = {
-      "location": "https://some-url.com",
+      location: "https://some-url.com",
       "retry-after": "60",
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     };
     axiosMock.onPost(requestParams.url).reply(200, {}, responseHeaders);
     const restClient = new AxiosRestClient(null);
@@ -124,8 +129,8 @@ describe("[Management] AxiosRestClient", () => {
       headers: {},
       body: {
         content: {},
-        contentType: ContentType.Json
-      }
+        contentType: ContentType.Json,
+      },
     };
 
     axiosMock.onPost(requestParams.url).reply(500);
@@ -151,8 +156,8 @@ describe("[Management] AxiosRestClient", () => {
       headers: {},
       body: {
         content: {},
-        contentType: ContentType.Json
-      }
+        contentType: ContentType.Json,
+      },
     };
 
     axiosMock.onPost(requestParams.url).reply(500);
@@ -168,7 +173,10 @@ describe("[Management] AxiosRestClient", () => {
 
     // Assert
     expect((thrownError as AxiosError).status).to.be.equal(500);
-    expect(axiosMock.history.post.filter((x) => x.url === requestParams.url).length === 1);
+    expect(
+      axiosMock.history.post.filter((x) => x.url === requestParams.url)
+        .length === 1
+    );
   });
 
   it("should hard cap retries at 10", async () => {
@@ -178,11 +186,12 @@ describe("[Management] AxiosRestClient", () => {
       headers: {},
       body: {
         content: {},
-        contentType: ContentType.Json
-      }
+        contentType: ContentType.Json,
+      },
     };
 
     axiosMock.onPost(requestParams.url).reply(500);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (retryPolicyStub as any).maxRetries = undefined;
     const restClient = new AxiosRestClient(retryPolicyStub);
 
@@ -196,7 +205,10 @@ describe("[Management] AxiosRestClient", () => {
 
     // Assert
     expect((thrownError as AxiosError).status).to.be.equal(500);
-    expect(axiosMock.history.post.filter((x) => x.url === requestParams.url).length === 11);
+    expect(
+      axiosMock.history.post.filter((x) => x.url === requestParams.url)
+        .length === 11
+    );
   });
 
   it("should not retry request on error according to retry policy", async () => {
@@ -206,12 +218,12 @@ describe("[Management] AxiosRestClient", () => {
       headers: {},
       body: {
         content: {},
-        contentType: ContentType.Json
-      }
+        contentType: ContentType.Json,
+      },
     };
 
     axiosMock.onPost(requestParams.url).reply(500),
-    retryPolicyStub.shouldRetry.returns(false);
+      retryPolicyStub.shouldRetry.returns(false);
     const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
@@ -224,8 +236,15 @@ describe("[Management] AxiosRestClient", () => {
 
     // Assert
     expect((thrownError as AxiosError).status).to.be.equal(500);
-    expect(axiosMock.history.post.filter((x) => x.url === requestParams.url).length).to.be.equal(1);
-    expect(retryPolicyStub.shouldRetry.calledOnceWith({ retriesInvoked: 0, error: sinon.match.any })).to.be.true;
+    expect(
+      axiosMock.history.post.filter((x) => x.url === requestParams.url).length
+    ).to.be.equal(1);
+    expect(
+      retryPolicyStub.shouldRetry.calledOnceWith({
+        retriesInvoked: 0,
+        error: sinon.match.any,
+      })
+    ).to.be.true;
     expect(retryPolicyStub.getSleepDurationInMs.callCount).to.be.equal(0);
     expect(sleepStub.callCount).to.be.equal(0);
   });
@@ -238,8 +257,8 @@ describe("[Management] AxiosRestClient", () => {
       headers: {},
       body: {
         content: {},
-        contentType: ContentType.Json
-      }
+        contentType: ContentType.Json,
+      },
     };
 
     axiosMock
@@ -247,7 +266,7 @@ describe("[Management] AxiosRestClient", () => {
       .replyOnce(500)
       .onPost(requestParams.url)
       .replyOnce(200, responseData),
-    retryPolicyStub.shouldRetry.returns(true);
+      retryPolicyStub.shouldRetry.returns(true);
     retryPolicyStub.getSleepDurationInMs.returns(1000);
     const restClient = new AxiosRestClient(retryPolicyStub);
 
@@ -256,9 +275,18 @@ describe("[Management] AxiosRestClient", () => {
 
     // Assert
     expect(response.body).to.deep.equal(responseData);
-    expect(axiosMock.history.post.filter((x) => x.url === requestParams.url).length).to.be.equal(2);
-    expect(retryPolicyStub.shouldRetry.calledOnceWith({ retriesInvoked: 0, error: sinon.match.any })).to.be.true;
-    expect(retryPolicyStub.getSleepDurationInMs.calledOnceWith({ retriesInvoked: 0 })).to.be.true;
+    expect(
+      axiosMock.history.post.filter((x) => x.url === requestParams.url).length
+    ).to.be.equal(2);
+    expect(
+      retryPolicyStub.shouldRetry.calledOnceWith({
+        retriesInvoked: 0,
+        error: sinon.match.any,
+      })
+    ).to.be.true;
+    expect(
+      retryPolicyStub.getSleepDurationInMs.calledOnceWith({ retriesInvoked: 0 })
+    ).to.be.true;
     expect(sleepStub.calledOnceWith(1000)).to.be.true;
   });
 
@@ -269,8 +297,8 @@ describe("[Management] AxiosRestClient", () => {
       headers: {},
       body: {
         content: {},
-        contentType: ContentType.Json
-      }
+        contentType: ContentType.Json,
+      },
     };
 
     axiosMock.onPost(requestParams.url).reply(503);
@@ -288,17 +316,40 @@ describe("[Management] AxiosRestClient", () => {
 
     // Assert
     expect((thrownError as AxiosError).status).to.be.equal(503);
-    expect(axiosMock.history.post.filter((x) => x.url === requestParams.url).length).to.be.equal(4);
+    expect(
+      axiosMock.history.post.filter((x) => x.url === requestParams.url).length
+    ).to.be.equal(4);
 
     expect(retryPolicyStub.shouldRetry.callCount).to.be.equal(3);
-    expect(retryPolicyStub.shouldRetry.calledWithMatch({ retriesInvoked: 0, error: sinon.match.object })).to.be.true;
-    expect(retryPolicyStub.shouldRetry.calledWithMatch({ retriesInvoked: 1, error: sinon.match.object })).to.be.true;
-    expect(retryPolicyStub.shouldRetry.calledWithMatch({ retriesInvoked: 2, error: sinon.match.object })).to.be.true;
+    expect(
+      retryPolicyStub.shouldRetry.calledWithMatch({
+        retriesInvoked: 0,
+        error: sinon.match.object,
+      })
+    ).to.be.true;
+    expect(
+      retryPolicyStub.shouldRetry.calledWithMatch({
+        retriesInvoked: 1,
+        error: sinon.match.object,
+      })
+    ).to.be.true;
+    expect(
+      retryPolicyStub.shouldRetry.calledWithMatch({
+        retriesInvoked: 2,
+        error: sinon.match.object,
+      })
+    ).to.be.true;
 
     expect(retryPolicyStub.getSleepDurationInMs.callCount).to.be.equal(3);
-    expect(retryPolicyStub.getSleepDurationInMs.args[0][0]).to.deep.equal({ retriesInvoked: 0 });
-    expect(retryPolicyStub.getSleepDurationInMs.args[1][0]).to.deep.equal({ retriesInvoked: 1 });
-    expect(retryPolicyStub.getSleepDurationInMs.args[2][0]).to.deep.equal({ retriesInvoked: 2 });
+    expect(retryPolicyStub.getSleepDurationInMs.args[0][0]).to.deep.equal({
+      retriesInvoked: 0,
+    });
+    expect(retryPolicyStub.getSleepDurationInMs.args[1][0]).to.deep.equal({
+      retriesInvoked: 1,
+    });
+    expect(retryPolicyStub.getSleepDurationInMs.args[2][0]).to.deep.equal({
+      retriesInvoked: 2,
+    });
 
     expect(sleepStub.callCount).to.be.equal(0);
   });

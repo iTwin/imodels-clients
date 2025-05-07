@@ -2,11 +2,20 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+import {
+  ApiOptions,
+  Authorization,
+  AuthorizationCallback,
+  ContentType,
+  DownloadThumbnailParams,
+  IModelScopedOperationParams,
+  IModelsClient,
+  Thumbnail,
+  ThumbnailOperations,
+  ThumbnailSize,
+  UploadThumbnailParams,
+} from "@itwin/imodels-client-management";
 import { assertThumbnail } from "@itwin/imodels-client-test-utils/lib/assertions/BrowserFriendlyAssertions";
-
-import { ApiOptions, Authorization, AuthorizationCallback, ContentType, DownloadThumbnailParams,
-  IModelScopedOperationParams, IModelsClient, Thumbnail, ThumbnailOperations, ThumbnailSize,
-  UploadThumbnailParams } from "@itwin/imodels-client-management";
 
 import { FrontendTestEnvVariableKeys } from "./setup/FrontendTestEnvVariableKeys";
 
@@ -20,22 +29,32 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
   let testPngFilePath: string;
 
   before(async () => {
-    const iModelsClientApiOptions: ApiOptions = JSON.parse(Cypress.env(FrontendTestEnvVariableKeys.iModelsClientApiOptions));
+    const iModelsClientApiOptions: ApiOptions = JSON.parse(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      Cypress.env(FrontendTestEnvVariableKeys.iModelsClientApiOptions)
+    );
     iModelsClient = new IModelsClient({ api: iModelsClientApiOptions });
 
-    const admin1AuthorizationInfo: Authorization = JSON.parse(Cypress.env(FrontendTestEnvVariableKeys.admin1AuthorizationInfo));
-    authorization = async () => admin1AuthorizationInfo;
+    const admin1AuthorizationInfo: Authorization = JSON.parse(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      Cypress.env(FrontendTestEnvVariableKeys.admin1AuthorizationInfo)
+    );
+    authorization = () => Promise.resolve(admin1AuthorizationInfo);
 
-    testIModelForReadId = Cypress.env(FrontendTestEnvVariableKeys.testIModelForReadId);
+    testIModelForReadId = Cypress.env(
+      FrontendTestEnvVariableKeys.testIModelForReadId
+    );
 
-    const iTwinId: string = Cypress.env(FrontendTestEnvVariableKeys.testITwinId);
+    const iTwinId: string = Cypress.env(
+      FrontendTestEnvVariableKeys.testITwinId
+    );
     const uniqueId = new Date().getTime();
     const testIModelForWrite = await iModelsClient.iModels.createEmpty({
       authorization,
       iModelProperties: {
         iTwinId,
-        name: `Thumbnail browser tests [${uniqueId}]`
-      }
+        name: `Thumbnail browser tests [${uniqueId}]`,
+      },
     });
     testIModelForWriteId = testIModelForWrite.id;
 
@@ -43,12 +62,11 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
   });
 
   after(async () => {
-    if (!testIModelForWriteId)
-      return;
+    if (!testIModelForWriteId) return;
 
     await iModelsClient.iModels.delete({
       authorization,
-      iModelId: testIModelForWriteId
+      iModelId: testIModelForWriteId,
     });
   });
 
@@ -56,18 +74,20 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
     // Arrange
     const downloadThumbnailParams: DownloadThumbnailParams = {
       authorization,
-      iModelId: testIModelForReadId
+      iModelId: testIModelForReadId,
     };
 
     // Act
-    const thumbnail: Thumbnail = await iModelsClient.thumbnails.download(downloadThumbnailParams);
+    const thumbnail: Thumbnail = await iModelsClient.thumbnails.download(
+      downloadThumbnailParams
+    );
 
     // Assert
     assertThumbnail({
       actualThumbnail: thumbnail,
       expectedThumbnailProperties: {
-        size: ThumbnailSize.Small
-      }
+        size: ThumbnailSize.Small,
+      },
     });
   });
 
@@ -75,31 +95,39 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
     // Arrange
     const iModelScopedOperationParams: IModelScopedOperationParams = {
       authorization,
-      iModelId: testIModelForWriteId
+      iModelId: testIModelForWriteId,
     };
-    const initialThumbnail: Thumbnail = await iModelsClient.thumbnails.download(iModelScopedOperationParams);
+    const initialThumbnail: Thumbnail = await iModelsClient.thumbnails.download(
+      iModelScopedOperationParams
+    );
 
     const testPngFileBytes = await readFile(testPngFilePath);
     const uploadThumbnailParams: UploadThumbnailParams = {
       ...iModelScopedOperationParams,
       thumbnailProperties: {
         imageType: ContentType.Png,
-        image: testPngFileBytes
-      }
+        image: testPngFileBytes,
+      },
     };
 
     // Act
     await iModelsClient.thumbnails.upload(uploadThumbnailParams);
 
     // Assert
-    const newThumbnail: Thumbnail = await iModelsClient.thumbnails.download(iModelScopedOperationParams);
-    expect(newThumbnail.image.length).to.not.be.equal(initialThumbnail.image.length);
+    const newThumbnail: Thumbnail = await iModelsClient.thumbnails.download(
+      iModelScopedOperationParams
+    );
+    expect(newThumbnail.image.length).to.not.be.equal(
+      initialThumbnail.image.length
+    );
   });
 
   async function readFile(filePath: string): Promise<Uint8Array> {
     return new Promise((resolve) => {
       cy.readFile(filePath, "binary").then((stringContent: string) => {
-        const binaryContent = Uint8Array.from(stringContent, (x) => x.charCodeAt(0));
+        const binaryContent = Uint8Array.from(stringContent, (x) =>
+          x.charCodeAt(0)
+        );
         resolve(binaryContent);
       });
     });

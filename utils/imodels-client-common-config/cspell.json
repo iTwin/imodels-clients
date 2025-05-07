@@ -10,19 +10,22 @@
     "tsconfig.json"
   ],
   "words": [
-    "imodel",
-    "itwin",
     "apim",
-    "itwinjs",
-    "changesets",
-    "namedversions",
-    "datetime",
-    "inversify",
-    "bootstrapper",
-    "ITWINS",
-    "Guids",
     "backoff",
-    "epsg"
+    "bootstrapper",
+    "changesetgroups",
+    "changesets",
+    "datetime",
+    "epsg",
+    "extendeddata",
+    "Guids",
+    "imodel",
+    "inversify",
+    "itwin",
+    "itwinjs",
+    "ITWINS",
+    "namedversions",
+    "txns"
   ],
   "ignoreRegExpList": [
     "/imodel.*/i"

@@ -8,7 +8,8 @@
  * without having to manage individual pages - a request for a new page is sent after the consumer has already
  * iterated over all of the previous entities.
  */
-export interface EntityListIterator<TEntity> extends AsyncIterableIterator<TEntity> {
+export interface EntityListIterator<TEntity>
+  extends AsyncIterableIterator<TEntity> {
   /**
    * Exposes internal entity pages. This method allows to operate on entity pages instead of a flattened list. Since
    * all entities in the API response are returned as a single page a new request to the API is sent on every iteration

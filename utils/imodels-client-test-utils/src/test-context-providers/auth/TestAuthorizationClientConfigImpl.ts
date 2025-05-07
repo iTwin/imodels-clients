@@ -9,9 +9,7 @@ export class TestAuthorizationClientConfig {
   public clientSecret: string;
   public redirectUrl: string;
 
-  constructor(
-    config: IModelsClientsTestsConfig
-  ) {
+  constructor(config: IModelsClientsTestsConfig) {
     this.authority = config.auth.authority;
     this.clientId = config.auth.clientId;
     this.clientSecret = config.auth.clientSecret;

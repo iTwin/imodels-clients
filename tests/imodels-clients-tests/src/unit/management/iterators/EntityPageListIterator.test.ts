@@ -11,12 +11,13 @@ import { TestEntity, getEntityPageQueryFunc } from "./TestEntityPageFunctions";
 describe("EntityPageListIterator", () => {
   it("should return entities in pages", async () => {
     // Arrange
-    const testIterator = new EntityPageListIterator(getEntityPageQueryFunc(2, 2));
+    const testIterator = new EntityPageListIterator(
+      getEntityPageQueryFunc(2, 2)
+    );
     const entityPages: TestEntity[][] = [];
 
     // Act
-    for await (const entityPage of testIterator)
-      entityPages.push(entityPage);
+    for await (const entityPage of testIterator) entityPages.push(entityPage);
 
     // Assert
     expect(entityPages.length).to.be.equal(2);
@@ -30,4 +31,3 @@ describe("EntityPageListIterator", () => {
       expect(entities[i].entityIndex).to.be.equal(i);
   });
 });
-

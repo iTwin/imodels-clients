@@ -6,7 +6,11 @@ import { AxiosError, AxiosHeaders } from "axios";
 import { expect } from "chai";
 import sinon from "sinon";
 
-import { AxiosRetryPolicy, ExponentialBackoffAlgorithm, GetSleepDurationInMsParams } from "@itwin/imodels-client-management";
+import {
+  AxiosRetryPolicy,
+  ExponentialBackoffAlgorithm,
+  GetSleepDurationInMsParams,
+} from "@itwin/imodels-client-management";
 
 import { createStub } from "../Stubs";
 
@@ -21,18 +25,24 @@ describe("[Management] AxiosRetryPolicy", () => {
     // Arrange
     const testedClass = new AxiosRetryPolicy({
       backoffAlgorithm: backoffAlgorithmStub,
-      maxRetries: 3
+      maxRetries: 3,
     });
     const params: GetSleepDurationInMsParams = { retriesInvoked: 2 };
     const expectedSleepDuration = 1000;
-    backoffAlgorithmStub.getSleepDurationInMs.withArgs(params.retriesInvoked).returns(expectedSleepDuration);
+    backoffAlgorithmStub.getSleepDurationInMs
+      .withArgs(params.retriesInvoked)
+      .returns(expectedSleepDuration);
 
     // Act
     const actualSleepDuration = testedClass.getSleepDurationInMs(params);
 
     // Assert
     expect(actualSleepDuration).to.be.equal(expectedSleepDuration);
-    expect(backoffAlgorithmStub.getSleepDurationInMs.calledOnceWith(params.retriesInvoked)).to.be.true;
+    expect(
+      backoffAlgorithmStub.getSleepDurationInMs.calledOnceWith(
+        params.retriesInvoked
+      )
+    ).to.be.true;
   });
 
   const createAxiosError = (status: number) => {
@@ -40,14 +50,14 @@ describe("[Management] AxiosRetryPolicy", () => {
     const headers = new AxiosHeaders();
     const config = {
       url: "bar",
-      headers
+      headers,
     };
     return new AxiosError("Message", "Code", config, request, {
       status,
       data: {},
       statusText: "",
       config,
-      headers
+      headers,
     });
   };
 
@@ -55,43 +65,45 @@ describe("[Management] AxiosRetryPolicy", () => {
     {
       label: "axios 404 error",
       error: createAxiosError(404),
-      expectedShouldRetry: false
+      expectedShouldRetry: false,
     },
     {
       label: "axios 408 error",
       error: createAxiosError(408),
-      expectedShouldRetry: false
+      expectedShouldRetry: false,
     },
     {
       label: "axios 429 error",
       error: createAxiosError(429),
-      expectedShouldRetry: false
+      expectedShouldRetry: false,
     },
     {
       label: "axios 500 error",
       error: createAxiosError(500),
-      expectedShouldRetry: true
+      expectedShouldRetry: true,
     },
     {
       label: "axios 503 error",
       error: createAxiosError(503),
-      expectedShouldRetry: true
+      expectedShouldRetry: true,
     },
     {
       label: "non-axios error",
       error: new Error("Not an axios error"),
-      expectedShouldRetry: true
-    }
+      expectedShouldRetry: true,
+    },
   ].forEach((testCase) => {
     it(`should return ${testCase.expectedShouldRetry} when HTTP request fails with ${testCase.label}`, () => {
       // Arrange
       const testedClass = new AxiosRetryPolicy({
         backoffAlgorithm: backoffAlgorithmStub,
-        maxRetries: 3
+        maxRetries: 3,
       });
 
       // Act & Assert
-      expect(testedClass.shouldRetry({ retriesInvoked: 0, error: testCase.error })).to.be.equal(testCase.expectedShouldRetry);
+      expect(
+        testedClass.shouldRetry({ retriesInvoked: 0, error: testCase.error })
+      ).to.be.equal(testCase.expectedShouldRetry);
     });
   });
 });

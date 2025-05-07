@@ -2,16 +2,29 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetExtendedDataApiResponse, ChangesetExtendedDataListResponse, ChangesetExtendedDataResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { ChangesetExtendedData, EntityListIterator, HttpResponse } from "../../base/types";
+import {
+  ChangesetExtendedDataApiResponse,
+  ChangesetExtendedDataListResponse,
+  ChangesetExtendedDataResponse,
+  EntityListIteratorImpl,
+  OperationsBase,
+} from "../../base/internal";
+import {
+  ChangesetExtendedData,
+  EntityListIterator,
+  HttpResponse,
+} from "../../base/types";
 import { OperationOptions } from "../OperationOptions";
 
-import { GetChangesetExtendedDataListParams, GetSingleChangesetExtendedDataParams } from "./ChangesetExtendedDataOperationParams";
+import {
+  GetChangesetExtendedDataListParams,
+  GetSingleChangesetExtendedDataParams,
+} from "./ChangesetExtendedDataOperationParams";
 
-export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
-  constructor(
-    options: TOptions
-  ) {
+export class ChangesetExtendedDataOperations<
+  TOptions extends OperationOptions
+> extends OperationsBase<TOptions> {
+  constructor(options: TOptions) {
     super(options);
   }
 
@@ -22,18 +35,32 @@ export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> 
    * @param {GetChangesetExtendedDataListParams} params parameters for this operation. See {@link GetChangesetExtendedDataListParams}.
    * @returns {EntityListIterator<ChangesetExtendedData>} iterator for Changeset Extended Data list. See {@link EntityListIterator}.
    */
-  public getList(params: GetChangesetExtendedDataListParams): EntityListIterator<ChangesetExtendedData> {
-    const entityCollectionAccessor = (response: HttpResponse<ChangesetExtendedDataListResponse>) => {
+  public getList(
+    params: GetChangesetExtendedDataListParams
+  ): EntityListIterator<ChangesetExtendedData> {
+    const entityCollectionAccessor = (
+      response: HttpResponse<ChangesetExtendedDataListResponse>
+    ) => {
       const apiResponse = response.body.extendedData;
-      const mappedChangesetExtendedData = apiResponse.map((extendedData) => this.convertToChangesetExtendedData(extendedData));
+      const mappedChangesetExtendedData = apiResponse.map((extendedData) =>
+        this.convertToChangesetExtendedData(extendedData)
+      );
       return mappedChangesetExtendedData;
     };
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<ChangesetExtendedData, ChangesetExtendedDataListResponse>({
-      authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetExtendedDataListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
-      entityCollectionAccessor,
-      headers: params.headers
-    }));
+    return new EntityListIteratorImpl(async () =>
+      this.getEntityCollectionPage<
+        ChangesetExtendedData,
+        ChangesetExtendedDataListResponse
+      >({
+        authorization: params.authorization,
+        url: this._options.urlFormatter.getChangesetExtendedDataListUrl({
+          iModelId: params.iModelId,
+          urlParams: params.urlParams,
+        }),
+        entityCollectionAccessor,
+        headers: params.headers,
+      })
+    );
   }
 
   /**
@@ -43,22 +70,31 @@ export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> 
    * @param {GetSingleChangesetExtendedDataParams} params parameters for this operation. See {@link GetSingleChangesetExtendedDataParams}.
    * @returns {Promise<ChangesetExtendedData>} a Changeset Extended Data with the specified changeset id or index. See {@link ChangesetExtendedData}.
    */
-  public async getSingle(params: GetSingleChangesetExtendedDataParams): Promise<ChangesetExtendedData> {
+  public async getSingle(
+    params: GetSingleChangesetExtendedDataParams
+  ): Promise<ChangesetExtendedData> {
     const { authorization, iModelId, headers, ...changesetIdOrIndex } = params;
     const response = await this.sendGetRequest<ChangesetExtendedDataResponse>({
       authorization,
-      url: this._options.urlFormatter.getSingleChangesetExtendedDataUrl({ iModelId, ...changesetIdOrIndex }),
-      headers
+      url: this._options.urlFormatter.getSingleChangesetExtendedDataUrl({
+        iModelId,
+        ...changesetIdOrIndex,
+      }),
+      headers,
     });
 
     return this.convertToChangesetExtendedData(response.body.extendedData);
   }
 
-  protected convertToChangesetExtendedData(changesetExtendedDataApiResponse: ChangesetExtendedDataApiResponse): ChangesetExtendedData {
+  protected convertToChangesetExtendedData(
+    changesetExtendedDataApiResponse: ChangesetExtendedDataApiResponse
+  ): ChangesetExtendedData {
     return {
       changesetId: changesetExtendedDataApiResponse.changesetId,
       changesetIndex: changesetExtendedDataApiResponse.changesetIndex,
-      data: this.convertBase64StringToObject(changesetExtendedDataApiResponse.data)
+      data: this.convertBase64StringToObject(
+        changesetExtendedDataApiResponse.data
+      ),
     };
   }
 
@@ -66,9 +102,11 @@ export class ChangesetExtendedDataOperations<TOptions extends OperationOptions> 
     if (typeof window !== "undefined") {
       const binString = atob(input);
       const bytes = Uint8Array.from(binString, (m) => m.charCodeAt(0));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return JSON.parse(new TextDecoder().decode(bytes));
     } else {
       const decodedString = Buffer.from(input, "base64").toString("utf8");
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return JSON.parse(decodedString);
     }
   }

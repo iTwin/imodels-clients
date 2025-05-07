@@ -2,9 +2,26 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { CreateChangesetExtendedDataParams, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, ChangesetExtendedData, GetSingleChangesetExtendedDataParams } from "@itwin/imodels-client-management";
-import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertChangesetExtendedData } from "@itwin/imodels-client-test-utils";
+import {
+  CreateChangesetExtendedDataParams,
+  IModelsClient,
+  IModelsClientOptions,
+} from "@itwin/imodels-client-authoring";
+import {
+  AuthorizationCallback,
+  ChangesetExtendedData,
+  GetSingleChangesetExtendedDataParams,
+} from "@itwin/imodels-client-management";
+import {
+  IModelMetadata,
+  TestAuthorizationProvider,
+  TestIModelCreator,
+  TestIModelFileProvider,
+  TestIModelGroup,
+  TestIModelGroupFactory,
+  TestUtilTypes,
+  assertChangesetExtendedData,
+} from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
@@ -19,7 +36,9 @@ describe("[Authoring] ChangesetExtendedDataOperations", () => {
   before(async () => {
     const container = getTestDIContainer();
 
-    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    const iModelsClientOptions = container.get<IModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
@@ -28,10 +47,16 @@ describe("[Authoring] ChangesetExtendedDataOperations", () => {
     testIModelFileProvider = container.get(TestIModelFileProvider);
 
     const testIModelGroupFactory = container.get(TestIModelGroupFactory);
-    testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "AuthoringChangesetExtendedDataOperations" });
+    testIModelGroup = testIModelGroupFactory.create({
+      testRunId: getTestRunId(),
+      packageName: Constants.PackagePrefix,
+      testSuiteName: "AuthoringChangesetExtendedDataOperations",
+    });
 
     const testIModelCreator = container.get(TestIModelCreator);
-    testIModel = await testIModelCreator.createEmptyAndUploadChangesets(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
+    testIModel = await testIModelCreator.createEmptyAndUploadChangesets(
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
+    );
   });
 
   after(async () => {
@@ -44,41 +69,49 @@ describe("[Authoring] ChangesetExtendedDataOperations", () => {
     const expectedChangesetExtendedData = {
       changesetId: testIModelFileProvider.changesets[0].id,
       changesetIndex: 1,
-      data: expectedDataObject
+      data: expectedDataObject,
     };
 
-    const createChangesetExtendedDataParams: CreateChangesetExtendedDataParams = {
-      authorization,
-      iModelId: testIModel.id,
-      changesetIndex: expectedChangesetExtendedData.changesetIndex,
-      changesetExtendedDataProperties: {
-        data: expectedDataObject
-      }
-    };
+    const createChangesetExtendedDataParams: CreateChangesetExtendedDataParams =
+      {
+        authorization,
+        iModelId: testIModel.id,
+        changesetIndex: expectedChangesetExtendedData.changesetIndex,
+        changesetExtendedDataProperties: {
+          data: expectedDataObject,
+        },
+      };
 
     // Act
-    const changesetExtendedData: ChangesetExtendedData = await iModelsClient.changesetExtendedData.create(createChangesetExtendedDataParams);
+    const changesetExtendedData: ChangesetExtendedData =
+      await iModelsClient.changesetExtendedData.create(
+        createChangesetExtendedDataParams
+      );
 
     // Assert
     assertChangesetExtendedData({
       actualChangesetExtendedData: changesetExtendedData,
-      expectedChangesetExtendedData
+      expectedChangesetExtendedData,
     });
 
     // Arrange
-    const getSingleChangesetExtendedDataParams: GetSingleChangesetExtendedDataParams = {
-      authorization,
-      iModelId: testIModel.id,
-      changesetIndex: expectedChangesetExtendedData.changesetIndex
-    };
+    const getSingleChangesetExtendedDataParams: GetSingleChangesetExtendedDataParams =
+      {
+        authorization,
+        iModelId: testIModel.id,
+        changesetIndex: expectedChangesetExtendedData.changesetIndex,
+      };
 
     // Act
-    const singleChangesetExtendedData: ChangesetExtendedData = await iModelsClient.changesetExtendedData.getSingle(getSingleChangesetExtendedDataParams);
+    const singleChangesetExtendedData: ChangesetExtendedData =
+      await iModelsClient.changesetExtendedData.getSingle(
+        getSingleChangesetExtendedDataParams
+      );
 
     // Assert
     assertChangesetExtendedData({
       actualChangesetExtendedData: singleChangesetExtendedData,
-      expectedChangesetExtendedData
+      expectedChangesetExtendedData,
     });
   });
 });

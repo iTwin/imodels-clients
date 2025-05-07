@@ -2,20 +2,32 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { ChangesetGroupResponse, ChangesetGroupsResponse, EntityListIteratorImpl, OperationsBase } from "../../base/internal";
-import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse } from "../../base/types";
+import {
+  ChangesetGroupResponse,
+  ChangesetGroupsResponse,
+  EntityListIteratorImpl,
+  OperationsBase,
+} from "../../base/internal";
+import {
+  AuthorizationCallback,
+  EntityListIterator,
+  HeaderFactories,
+  HttpResponse,
+} from "../../base/types";
 import { ChangesetGroup } from "../../base/types/apiEntities/ChangesetGroupInterfaces";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { getUser } from "../SharedFunctions";
 
-import { GetChangesetGroupListParams, GetSingleChangesetGroupParams } from "./ChangesetGroupOperationParams";
+import {
+  GetChangesetGroupListParams,
+  GetSingleChangesetGroupParams,
+} from "./ChangesetGroupOperationParams";
 
-export class ChangesetGroupOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
-  constructor(
-    options: TOptions,
-    private _iModelsClient: IModelsClient
-  ) {
+export class ChangesetGroupOperations<
+  TOptions extends OperationOptions
+> extends OperationsBase<TOptions> {
+  constructor(options: TOptions, private _iModelsClient: IModelsClient) {
     super(options);
   }
 
@@ -27,20 +39,34 @@ export class ChangesetGroupOperations<TOptions extends OperationOptions> extends
    * @returns {EntityListIterator<ChangesetGroup>} iterator for Changeset Group list, which internally queries entities in pages.
    * See {@link EntityListIterator}, {@link ChangesetGroup}.
    */
-  public getList(params: GetChangesetGroupListParams): EntityListIterator<ChangesetGroup> {
-    const entityCollectionAccessor = (response: HttpResponse<ChangesetGroupsResponse>) => {
+  public getList(
+    params: GetChangesetGroupListParams
+  ): EntityListIterator<ChangesetGroup> {
+    const entityCollectionAccessor = (
+      response: HttpResponse<ChangesetGroupsResponse>
+    ) => {
       const changesetGroups = response.body.changesetGroups;
       const mappedChangesetGroups = changesetGroups.map((changesetGroup) =>
-        this.appendRelatedEntityCallbacks(params.authorization, changesetGroup, params.headers));
+        this.appendRelatedEntityCallbacks(
+          params.authorization,
+          changesetGroup,
+          params.headers
+        )
+      );
       return mappedChangesetGroups;
     };
 
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<ChangesetGroup, ChangesetGroupsResponse>({
-      authorization: params.authorization,
-      url: this._options.urlFormatter.getChangesetGroupListUrl({ iModelId: params.iModelId, urlParams: params.urlParams }),
-      entityCollectionAccessor,
-      headers: params.headers
-    }));
+    return new EntityListIteratorImpl(async () =>
+      this.getEntityCollectionPage<ChangesetGroup, ChangesetGroupsResponse>({
+        authorization: params.authorization,
+        url: this._options.urlFormatter.getChangesetGroupListUrl({
+          iModelId: params.iModelId,
+          urlParams: params.urlParams,
+        }),
+        entityCollectionAccessor,
+        headers: params.headers,
+      })
+    );
   }
 
   /**
@@ -50,11 +76,16 @@ export class ChangesetGroupOperations<TOptions extends OperationOptions> extends
    * @param {GetSingleChangesetGroupParams} params parameters for this operation. See {@link GetSingleChangesetGroupParams}.
    * @returns {Promise<ChangesetGroup>} a Changeset Group with the specified id. See {@link ChangesetGroup}.
    */
-  public async getSingle(params: GetSingleChangesetGroupParams): Promise<ChangesetGroup> {
+  public async getSingle(
+    params: GetSingleChangesetGroupParams
+  ): Promise<ChangesetGroup> {
     const response = await this.sendGetRequest<ChangesetGroupResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleChangesetGroupUrl({ iModelId: params.iModelId, changesetGroupId: params.changesetGroupId }),
-      headers: params.headers
+      url: this._options.urlFormatter.getSingleChangesetGroupUrl({
+        iModelId: params.iModelId,
+        changesetGroupId: params.changesetGroupId,
+      }),
+      headers: params.headers,
     });
 
     const result: ChangesetGroup = this.appendRelatedEntityCallbacks(
@@ -66,18 +97,23 @@ export class ChangesetGroupOperations<TOptions extends OperationOptions> extends
     return result;
   }
 
-  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, changesetGroup: ChangesetGroup, headers?: HeaderFactories): ChangesetGroup {
-    const getCreator = async () => getUser(
-      authorization,
-      this._iModelsClient.users,
-      this._options.urlFormatter,
-      changesetGroup._links.creator?.href,
-      headers
-    );
+  protected appendRelatedEntityCallbacks(
+    authorization: AuthorizationCallback,
+    changesetGroup: ChangesetGroup,
+    headers?: HeaderFactories
+  ): ChangesetGroup {
+    const getCreator = async () =>
+      getUser(
+        authorization,
+        this._iModelsClient.users,
+        this._options.urlFormatter,
+        changesetGroup._links.creator?.href,
+        headers
+      );
 
     const result: ChangesetGroup = {
       ...changesetGroup,
-      getCreator
+      getCreator,
     };
 
     return result;

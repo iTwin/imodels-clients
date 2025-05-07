@@ -23,13 +23,14 @@
     "build": "tsc 1>&2",
     "clean": "rimraf lib",
     "cover": "nyc npm test",
-    "lint": "eslint ./src/**/*.ts 1>&2",
-    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
+    "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config ./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
     "test:integration": "mocha lib/**/*.test.js --color --timeout 180000 --exit"
   },
+  "prettier": "./node_modules/@itwin/imodels-client-common-config/prettier.json",
   "eslintConfig": {
-    "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
+    "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.js"
   },
   "dependencies": {
     "@itwin/appui-abstract": "^5.0.0-dev.104",

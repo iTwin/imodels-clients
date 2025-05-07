@@ -2,7 +2,12 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AuthorizationCallback, HeaderFactories, Link, User } from "../base/types";
+import {
+  AuthorizationCallback,
+  HeaderFactories,
+  Link,
+  User,
+} from "../base/types";
 
 import { IModelsApiUrlFormatter } from "./IModelsApiUrlFormatter";
 import { OperationOptions } from "./OperationOptions";
@@ -15,25 +20,31 @@ export async function getUser(
   userLink: string | undefined,
   headers?: HeaderFactories
 ): Promise<User | undefined> {
-  if (!userLink)
-    return undefined;
+  if (!userLink) return undefined;
 
   const { iModelId, userId } = urlFormatter.parseUserUrl(userLink);
   return userOperations.getSingle({
     authorization,
     iModelId,
     userId,
-    headers
+    headers,
   });
 }
 
-export function assertStringHeaderValue(headerName: string, headerValue: unknown): asserts headerValue is string {
-  const isString = typeof headerValue === "string" || headerValue instanceof String;
+export function assertStringHeaderValue(
+  headerName: string,
+  headerValue: unknown
+): asserts headerValue is string {
+  const isString =
+    typeof headerValue === "string" || headerValue instanceof String;
   if (!isString)
-    throw new Error(`Assertion failed: header's ${headerName} value is not a string.`);
+    throw new Error(
+      `Assertion failed: header's ${headerName} value is not a string.`
+    );
 }
 
-export function assertLink(link: Link | null | undefined): asserts link is Link {
-  if (!link || !link.href)
-    throw new Error("Assertion failed: link is falsy.");
+export function assertLink(
+  link: Link | null | undefined
+): asserts link is Link {
+  if (!link || !link.href) throw new Error("Assertion failed: link is falsy.");
 }

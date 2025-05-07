@@ -10,7 +10,7 @@ export enum LockLevel {
   /** Multiple Briefcases can acquire a shared lock on the same object. */
   Shared = "shared",
   /** Only one Briefcase can acquire an exclusive lock on a given object at a time. */
-  Exclusive = "exclusive"
+  Exclusive = "exclusive",
 }
 
 /** A group of locked objects that have the same lock level. */

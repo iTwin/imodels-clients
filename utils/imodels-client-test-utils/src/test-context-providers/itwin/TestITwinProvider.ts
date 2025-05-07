@@ -17,17 +17,18 @@ export class TestITwinProvider {
     private readonly _testITwinProviderConfig: TestITwinProviderConfig,
     private readonly _iTwinsClient: ITwinsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider
-  ) { }
+  ) {}
 
   public async getOrCreate(): Promise<string> {
-    return this._iTwinId ?? await this.initialize();
+    return this._iTwinId ?? (await this.initialize());
   }
 
   private async initialize(): Promise<string> {
-    const authorization = this._testAuthorizationProvider.getAdmin1AuthorizationForITwins();
+    const authorization =
+      this._testAuthorizationProvider.getAdmin1AuthorizationForITwins();
     this._iTwinId = await this._iTwinsClient.getOrCreateITwin({
       authorization,
-      iTwinName: this._testITwinProviderConfig.testITwinName
+      iTwinName: this._testITwinProviderConfig.testITwinName,
     });
     return this._iTwinId;
   }

@@ -4,19 +4,22 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { EntityListIterator, EntityListIteratorImpl } from "@itwin/imodels-client-management";
+import {
+  EntityListIterator,
+  EntityListIteratorImpl,
+} from "@itwin/imodels-client-management";
 
 import { TestEntity, getEntityPageQueryFunc } from "./TestEntityPageFunctions";
 
 describe("EntityListIteratorImpl", () => {
   it("should return entities", async () => {
     // Arrange
-    const testIterator: EntityListIterator<TestEntity> = new EntityListIteratorImpl(getEntityPageQueryFunc(2, 2));
+    const testIterator: EntityListIterator<TestEntity> =
+      new EntityListIteratorImpl(getEntityPageQueryFunc(2, 2));
     const entities: TestEntity[] = [];
 
     // Act
-    for await (const entity of testIterator)
-      entities.push(entity);
+    for await (const entity of testIterator) entities.push(entity);
 
     // Assert
     expect(entities.length).to.be.equal(4);
@@ -26,7 +29,8 @@ describe("EntityListIteratorImpl", () => {
 
   it("should allow to get raw entity pages", async () => {
     // Arrange
-    const testIterator: EntityListIterator<TestEntity> = new EntityListIteratorImpl(getEntityPageQueryFunc(2, 2));
+    const testIterator: EntityListIterator<TestEntity> =
+      new EntityListIteratorImpl(getEntityPageQueryFunc(2, 2));
     const entityPages: TestEntity[][] = [];
 
     // Act

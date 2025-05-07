@@ -2,20 +2,52 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { EntityListIteratorImpl, IModelResponse, IModelsErrorImpl, IModelsResponse, OperationsBase, UtilityFunctions } from "../../base/internal";
-import { AuthorizationCallback, EntityListIterator, HeaderFactories, HttpResponse, IModel, IModelCreationState, IModelState, IModelsErrorCode, MinimalIModel, PreferReturn, User } from "../../base/types";
+import {
+  EntityListIteratorImpl,
+  IModelResponse,
+  IModelsErrorImpl,
+  IModelsResponse,
+  OperationsBase,
+  UtilityFunctions,
+} from "../../base/internal";
+import {
+  AuthorizationCallback,
+  EntityListIterator,
+  HeaderFactories,
+  HttpResponse,
+  IModel,
+  IModelCreationState,
+  IModelState,
+  IModelsErrorCode,
+  MinimalIModel,
+  PreferReturn,
+  User,
+} from "../../base/types";
 import { Constants } from "../../Constants";
 import { IModelsClient } from "../../IModelsClient";
 import { OperationOptions } from "../OperationOptions";
 import { assertStringHeaderValue } from "../SharedFunctions";
 
-import { CloneIModelParams, CreateEmptyIModelParams, CreateIModelFromTemplateParams, DeleteIModelParams, ForkIModelParams, GetIModelListParams, GetSingleIModelParams, IModelProperties, IModelPropertiesForClone, IModelPropertiesForCreateFromTemplate, IModelPropertiesForFork, IModelPropertiesForUpdate, UpdateIModelParams } from "./IModelOperationParams";
+import {
+  CloneIModelParams,
+  CreateEmptyIModelParams,
+  CreateIModelFromTemplateParams,
+  DeleteIModelParams,
+  ForkIModelParams,
+  GetIModelListParams,
+  GetSingleIModelParams,
+  IModelProperties,
+  IModelPropertiesForClone,
+  IModelPropertiesForCreateFromTemplate,
+  IModelPropertiesForFork,
+  IModelPropertiesForUpdate,
+  UpdateIModelParams,
+} from "./IModelOperationParams";
 
-export class IModelOperations<TOptions extends OperationOptions> extends OperationsBase<TOptions> {
-  constructor(
-    options: TOptions,
-    private _iModelsClient: IModelsClient
-  ) {
+export class IModelOperations<
+  TOptions extends OperationOptions
+> extends OperationsBase<TOptions> {
+  constructor(options: TOptions, private _iModelsClient: IModelsClient) {
     super(options);
   }
   /**
@@ -25,14 +57,23 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * @param {GetIModelListParams} params parameters for this operation. See {@link GetIModelListParams}.
    * @returns {EntityListIterator<MinimalIModel>} iterator for iModel list. See {@link EntityListIterator}, {@link MinimalIModel}.
    */
-  public getMinimalList(params: GetIModelListParams): EntityListIterator<MinimalIModel> {
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<MinimalIModel, IModelsResponse<MinimalIModel>>({
-      authorization: params.authorization,
-      url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
-      preferReturn: PreferReturn.Minimal,
-      entityCollectionAccessor: (response) => response.body.iModels,
-      headers: params.headers
-    }));
+  public getMinimalList(
+    params: GetIModelListParams
+  ): EntityListIterator<MinimalIModel> {
+    return new EntityListIteratorImpl(async () =>
+      this.getEntityCollectionPage<
+        MinimalIModel,
+        IModelsResponse<MinimalIModel>
+      >({
+        authorization: params.authorization,
+        url: this._options.urlFormatter.getIModelListUrl({
+          urlParams: params.urlParams,
+        }),
+        preferReturn: PreferReturn.Minimal,
+        entityCollectionAccessor: (response) => response.body.iModels,
+        headers: params.headers,
+      })
+    );
   }
 
   /**
@@ -42,20 +83,34 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * @param {GetIModelListParams} params parameters for this operation. See {@link GetIModelListParams}.
    * @returns {EntityListIterator<IModel>} iterator for iModel list. See {@link EntityListIterator}, {@link IModel}.
    */
-  public getRepresentationList(params: GetIModelListParams): EntityListIterator<IModel> {
-    const entityCollectionAccessor = (response: HttpResponse<IModelsResponse<IModel>>) => {
+  public getRepresentationList(
+    params: GetIModelListParams
+  ): EntityListIterator<IModel> {
+    const entityCollectionAccessor = (
+      response: HttpResponse<IModelsResponse<IModel>>
+    ) => {
       const iModels = response.body.iModels;
-      const mappedIModels = iModels.map((iModel) => this.appendRelatedEntityCallbacks(params.authorization, iModel, params.headers));
+      const mappedIModels = iModels.map((iModel) =>
+        this.appendRelatedEntityCallbacks(
+          params.authorization,
+          iModel,
+          params.headers
+        )
+      );
       return mappedIModels;
     };
 
-    return new EntityListIteratorImpl(async () => this.getEntityCollectionPage<IModel, IModelsResponse<IModel>>({
-      authorization: params.authorization,
-      url: this._options.urlFormatter.getIModelListUrl({ urlParams: params.urlParams }),
-      preferReturn: PreferReturn.Representation,
-      entityCollectionAccessor,
-      headers: params.headers
-    }));
+    return new EntityListIteratorImpl(async () =>
+      this.getEntityCollectionPage<IModel, IModelsResponse<IModel>>({
+        authorization: params.authorization,
+        url: this._options.urlFormatter.getIModelListUrl({
+          urlParams: params.urlParams,
+        }),
+        preferReturn: PreferReturn.Representation,
+        entityCollectionAccessor,
+        headers: params.headers,
+      })
+    );
   }
 
   /**
@@ -67,10 +122,16 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
   public async getSingle(params: GetSingleIModelParams): Promise<IModel> {
     const response = await this.sendGetRequest<IModelResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId }),
-      headers: params.headers
+      url: this._options.urlFormatter.getSingleIModelUrl({
+        iModelId: params.iModelId,
+      }),
+      headers: params.headers,
     });
-    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, response.body.iModel, params.headers);
+    const result: IModel = this.appendRelatedEntityCallbacks(
+      params.authorization,
+      response.body.iModel,
+      params.headers
+    );
     return result;
   }
 
@@ -81,34 +142,48 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * @returns {Promise<iModel>} newly created iModel. See {@link IModel}.
    */
   public async createEmpty(params: CreateEmptyIModelParams): Promise<IModel> {
-    const createIModelBody = this.getCreateEmptyIModelRequestBody(params.iModelProperties);
-    if (createIModelBody.geographicCoordinateSystem && createIModelBody.creationMode !== "empty") {
+    const createIModelBody = this.getCreateEmptyIModelRequestBody(
+      params.iModelProperties
+    );
+    if (
+      createIModelBody.geographicCoordinateSystem &&
+      createIModelBody.creationMode !== "empty"
+    ) {
       throw new IModelsErrorImpl({
         code: IModelsErrorCode.InvalidIModelGCSCreationMode,
-        message: "For empty iModels, GeographicCoordinateSystem can only be set when creationMode is 'empty'.",
+        message:
+          "For empty iModels, GeographicCoordinateSystem can only be set when creationMode is 'empty'.",
         originalError: undefined,
         statusCode: undefined,
-        details: undefined
+        details: undefined,
       });
     }
 
-    let createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headers);
+    let createdIModel = await this.sendIModelPostRequest(
+      params.authorization,
+      createIModelBody,
+      params.headers
+    );
 
     if (createdIModel.state === IModelState.NotInitialized) {
       await this.waitForEmptyIModelInitialization({
         authorization: params.authorization,
         headers: params.headers,
         iModelId: createdIModel.id,
-        timeOutInMs: params.timeOutInMs
+        timeOutInMs: params.timeOutInMs,
       });
 
       createdIModel = await this.getSingle({
         authorization: params.authorization,
-        iModelId: createdIModel.id
+        iModelId: createdIModel.id,
       });
     }
 
-    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, createdIModel, params.headers);
+    const result: IModel = this.appendRelatedEntityCallbacks(
+      params.authorization,
+      createdIModel,
+      params.headers
+    );
     return result;
   }
 
@@ -123,21 +198,29 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * @throws an error that implements `iModelsError` interface with code {@link IModelsErrorCode.IModelFromTemplateInitializationFailed} if
    * iModel initialization failed or did not complete in time. See {@link IModelsErrorCode}.
    */
-  public async createFromTemplate(params: CreateIModelFromTemplateParams): Promise<IModel> {
-    const createIModelBody = this.getCreateIModelFromTemplateRequestBody(params.iModelProperties);
-    const createdIModel = await this.sendIModelPostRequest(params.authorization, createIModelBody, params.headers);
+  public async createFromTemplate(
+    params: CreateIModelFromTemplateParams
+  ): Promise<IModel> {
+    const createIModelBody = this.getCreateIModelFromTemplateRequestBody(
+      params.iModelProperties
+    );
+    const createdIModel = await this.sendIModelPostRequest(
+      params.authorization,
+      createIModelBody,
+      params.headers
+    );
 
     await this.waitForTemplatedIModelInitialization({
       authorization: params.authorization,
       iModelId: createdIModel.id,
       headers: params.headers,
-      timeOutInMs: params.timeOutInMs
+      timeOutInMs: params.timeOutInMs,
     });
 
     return this.getSingle({
       authorization: params.authorization,
       iModelId: createdIModel.id,
-      headers: params.headers
+      headers: params.headers,
     });
   }
 
@@ -153,28 +236,35 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * See {@link IModelsErrorCode}.
    */
   public async clone(params: CloneIModelParams): Promise<IModel> {
-    const cloneIModelBody = this.getCloneIModelRequestBody(params.iModelProperties);
+    const cloneIModelBody = this.getCloneIModelRequestBody(
+      params.iModelProperties
+    );
     const cloneIModelResponse = await this.sendPostRequest<void>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getCloneIModelUrl({ iModelId: params.iModelId }),
+      url: this._options.urlFormatter.getCloneIModelUrl({
+        iModelId: params.iModelId,
+      }),
       body: cloneIModelBody,
-      headers: params.headers
+      headers: params.headers,
     });
 
-    const locationHeaderValue = cloneIModelResponse.headers.get(Constants.headers.location);
+    const locationHeaderValue = cloneIModelResponse.headers.get(
+      Constants.headers.location
+    );
     assertStringHeaderValue(Constants.headers.location, locationHeaderValue);
-    const { iModelId: clonedIModelId } = this._options.urlFormatter.parseIModelUrl(locationHeaderValue);
+    const { iModelId: clonedIModelId } =
+      this._options.urlFormatter.parseIModelUrl(locationHeaderValue);
 
     await this.waitForClonedIModelInitialization({
       authorization: params.authorization,
       iModelId: clonedIModelId,
       headers: params.headers,
-      timeOutInMs: params.timeOutInMs
+      timeOutInMs: params.timeOutInMs,
     });
 
     return this.getSingle({
       authorization: params.authorization,
-      iModelId: clonedIModelId
+      iModelId: clonedIModelId,
     });
   }
 
@@ -192,28 +282,35 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * See {@link IModelsErrorCode}.
    */
   public async fork(params: ForkIModelParams): Promise<IModel> {
-    const forkIModelBody = this.getForkIModelRequestBody(params.iModelProperties);
+    const forkIModelBody = this.getForkIModelRequestBody(
+      params.iModelProperties
+    );
     const forkIModelResponse = await this.sendPostRequest<void>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getForkIModelUrl({ iModelId: params.iModelId }),
+      url: this._options.urlFormatter.getForkIModelUrl({
+        iModelId: params.iModelId,
+      }),
       body: forkIModelBody,
-      headers: params.headers
+      headers: params.headers,
     });
 
-    const locationHeaderValue = forkIModelResponse.headers.get(Constants.headers.location);
+    const locationHeaderValue = forkIModelResponse.headers.get(
+      Constants.headers.location
+    );
     assertStringHeaderValue(Constants.headers.location, locationHeaderValue);
-    const { iModelId: forkIModelId } = this._options.urlFormatter.parseIModelUrl(locationHeaderValue);
+    const { iModelId: forkIModelId } =
+      this._options.urlFormatter.parseIModelUrl(locationHeaderValue);
 
     await this.waitForIModelForkInitialization({
       authorization: params.authorization,
       iModelId: forkIModelId,
       headers: params.headers,
-      timeOutInMs: params.timeOutInMs
+      timeOutInMs: params.timeOutInMs,
     });
 
     return this.getSingle({
       authorization: params.authorization,
-      iModelId: forkIModelId
+      iModelId: forkIModelId,
     });
   }
 
@@ -224,14 +321,22 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
    * @returns {Promise<IModel>} updated iModel. See {@link IModel}.
    */
   public async update(params: UpdateIModelParams): Promise<IModel> {
-    const updateIModelBody = this.getUpdateIModelRequestBody(params.iModelProperties);
+    const updateIModelBody = this.getUpdateIModelRequestBody(
+      params.iModelProperties
+    );
     const updateIModelResponse = await this.sendPatchRequest<IModelResponse>({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId }),
+      url: this._options.urlFormatter.getSingleIModelUrl({
+        iModelId: params.iModelId,
+      }),
       body: updateIModelBody,
-      headers: params.headers
+      headers: params.headers,
     });
-    const result: IModel = this.appendRelatedEntityCallbacks(params.authorization, updateIModelResponse.body.iModel, params.headers);
+    const result: IModel = this.appendRelatedEntityCallbacks(
+      params.authorization,
+      updateIModelResponse.body.iModel,
+      params.headers
+    );
     return result;
   }
 
@@ -244,23 +349,32 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
   public async delete(params: DeleteIModelParams): Promise<void> {
     await this.sendDeleteRequest({
       authorization: params.authorization,
-      url: this._options.urlFormatter.getSingleIModelUrl({ iModelId: params.iModelId }),
-      headers: params.headers
+      url: this._options.urlFormatter.getSingleIModelUrl({
+        iModelId: params.iModelId,
+      }),
+      headers: params.headers,
     });
   }
 
-  protected appendRelatedEntityCallbacks(authorization: AuthorizationCallback, iModel: IModel, headers?: HeaderFactories): IModel {
-    const getCreator = async () => this.getCreator(authorization, iModel._links.creator?.href, headers);
+  protected appendRelatedEntityCallbacks(
+    authorization: AuthorizationCallback,
+    iModel: IModel,
+    headers?: HeaderFactories
+  ): IModel {
+    const getCreator = async () =>
+      this.getCreator(authorization, iModel._links.creator?.href, headers);
 
     const result: IModel = {
       ...iModel,
-      getCreator
+      getCreator,
     };
 
     return result;
   }
 
-  protected getCreateEmptyIModelRequestBody(iModelProperties: IModelProperties): IModelProperties {
+  protected getCreateEmptyIModelRequestBody(
+    iModelProperties: IModelProperties
+  ): IModelProperties {
     const result: IModelProperties = {
       iTwinId: iModelProperties.iTwinId,
       name: iModelProperties.name,
@@ -268,58 +382,73 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       extent: iModelProperties.extent,
       containersEnabled: iModelProperties.containersEnabled,
       creationMode: iModelProperties.creationMode,
-      geographicCoordinateSystem: iModelProperties.geographicCoordinateSystem
+      geographicCoordinateSystem: iModelProperties.geographicCoordinateSystem,
     };
 
     return result;
   }
 
-  protected async sendIModelPostRequest(authorization: AuthorizationCallback, createIModelBody: object, headers?: HeaderFactories): Promise<IModel> {
+  protected async sendIModelPostRequest(
+    authorization: AuthorizationCallback,
+    createIModelBody: object,
+    headers?: HeaderFactories
+  ): Promise<IModel> {
     const createIModelResponse = await this.sendPostRequest<IModelResponse>({
       authorization,
       url: this._options.urlFormatter.getCreateIModelUrl(),
       body: createIModelBody,
-      headers
+      headers,
     });
     return createIModelResponse.body.iModel;
   }
 
-  private async getCreator(authorization: AuthorizationCallback, creatorLink: string | undefined, headers?: HeaderFactories): Promise<User | undefined> {
-    if (!creatorLink)
-      return undefined;
+  private async getCreator(
+    authorization: AuthorizationCallback,
+    creatorLink: string | undefined,
+    headers?: HeaderFactories
+  ): Promise<User | undefined> {
+    if (!creatorLink) return undefined;
 
-    const { iModelId, userId } = this._options.urlFormatter.parseUserUrl(creatorLink);
+    const { iModelId, userId } =
+      this._options.urlFormatter.parseUserUrl(creatorLink);
     return this._iModelsClient.users.getSingle({
       authorization,
       iModelId,
       userId,
-      headers
+      headers,
     });
   }
 
-  private getCreateIModelFromTemplateRequestBody(iModelProperties: IModelPropertiesForCreateFromTemplate): object {
-    const emptyIModelParams = this.getCreateEmptyIModelRequestBody(iModelProperties);
+  private getCreateIModelFromTemplateRequestBody(
+    iModelProperties: IModelPropertiesForCreateFromTemplate
+  ): object {
+    const emptyIModelParams =
+      this.getCreateEmptyIModelRequestBody(iModelProperties);
     return {
       ...emptyIModelParams,
       template: {
         iModelId: iModelProperties.template.iModelId,
-        changesetId: iModelProperties.template.changesetId
-      }
+        changesetId: iModelProperties.template.changesetId,
+      },
     };
   }
 
-  private getCloneIModelRequestBody(iModelProperties: IModelPropertiesForClone): object {
+  private getCloneIModelRequestBody(
+    iModelProperties: IModelPropertiesForClone
+  ): object {
     return {
       iTwinId: iModelProperties.iTwinId,
       name: iModelProperties.name,
       description: iModelProperties.description,
       changesetId: iModelProperties.changesetId,
       changesetIndex: iModelProperties.changesetIndex,
-      containersEnabled: iModelProperties.containersEnabled
+      containersEnabled: iModelProperties.containersEnabled,
     };
   }
 
-  private getForkIModelRequestBody(iModelProperties: IModelPropertiesForFork): object {
+  private getForkIModelRequestBody(
+    iModelProperties: IModelPropertiesForFork
+  ): object {
     return {
       iTwinId: iModelProperties.iTwinId,
       name: iModelProperties.name,
@@ -327,15 +456,17 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
       changesetId: iModelProperties.changesetId,
       changesetIndex: iModelProperties.changesetIndex,
       preserveHistory: iModelProperties.preserveHistory,
-      containersEnabled: iModelProperties.containersEnabled
+      containersEnabled: iModelProperties.containersEnabled,
     };
   }
 
-  private getUpdateIModelRequestBody(iModelProperties: IModelPropertiesForUpdate): object {
+  private getUpdateIModelRequestBody(
+    iModelProperties: IModelPropertiesForUpdate
+  ): object {
     return {
       name: iModelProperties.name,
       description: iModelProperties.description,
-      extent: iModelProperties.extent
+      extent: iModelProperties.extent,
     };
   }
 
@@ -345,13 +476,15 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     errorCodeOnFailure: IModelsErrorCode;
     headers?: HeaderFactories;
   }): Promise<boolean> {
-    const { state } = await this._iModelsClient.operations.getCreateIModelDetails({
-      authorization: params.authorization,
-      iModelId: params.iModelId,
-      headers: params.headers
-    });
+    const { state } =
+      await this._iModelsClient.operations.getCreateIModelDetails({
+        authorization: params.authorization,
+        iModelId: params.iModelId,
+        headers: params.headers,
+      });
 
-    if (state !== IModelCreationState.Scheduled &&
+    if (
+      state !== IModelCreationState.Scheduled &&
       state !== IModelCreationState.WaitingForFile &&
       state !== IModelCreationState.Successful
     )
@@ -360,7 +493,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
         message: `iModel initialization failed with state '${state}'`,
         originalError: undefined,
         statusCode: undefined,
-        details: undefined
+        details: undefined,
       });
 
     return state === IModelCreationState.Successful;
@@ -371,22 +504,25 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     iModelId: string;
     headers?: HeaderFactories;
   }): Promise<boolean> {
-    const { state } = await this._iModelsClient.operations.getCreateIModelDetails({
-      authorization: params.authorization,
-      iModelId: params.iModelId,
-      headers: params.headers
-    });
+    const { state } =
+      await this._iModelsClient.operations.getCreateIModelDetails({
+        authorization: params.authorization,
+        iModelId: params.iModelId,
+        headers: params.headers,
+      });
 
     if (state === IModelCreationState.MainIModelIsMissingFederationGuids)
       throw new IModelsErrorImpl({
         code: IModelsErrorCode.MainIModelIsMissingFederationGuids,
-        message: "iModel fork initialization failed because some elements in the main iModel do not have FederationGuid property set.",
+        message:
+          "iModel fork initialization failed because some elements in the main iModel do not have FederationGuid property set.",
         originalError: undefined,
         statusCode: undefined,
-        details: undefined
+        details: undefined,
       });
 
-    if (state !== IModelCreationState.Scheduled &&
+    if (
+      state !== IModelCreationState.Scheduled &&
       state !== IModelCreationState.WaitingForFile &&
       state !== IModelCreationState.Successful
     )
@@ -395,7 +531,7 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
         message: `iModel fork initialization failed with state '${state}'`,
         originalError: undefined,
         statusCode: undefined,
-        details: undefined
+        details: undefined,
       });
 
     return state === IModelCreationState.Successful;
@@ -408,20 +544,22 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     headers?: HeaderFactories;
   }): Promise<void> {
     return UtilityFunctions.waitForCondition({
-      conditionToSatisfy: async () => this.isIModelInitialized({
-        authorization: params.authorization,
-        iModelId: params.iModelId,
-        errorCodeOnFailure: IModelsErrorCode.EmptyIModelInitializationFailed,
-        headers: params.headers
-      }),
-      timeoutErrorFactory: () => new IModelsErrorImpl({
-        code: IModelsErrorCode.EmptyIModelInitializationFailed,
-        message: "Timed out waiting for empty iModel initialization.",
-        originalError: undefined,
-        statusCode: undefined,
-        details: undefined
-      }),
-      timeOutInMs: params.timeOutInMs
+      conditionToSatisfy: async () =>
+        this.isIModelInitialized({
+          authorization: params.authorization,
+          iModelId: params.iModelId,
+          errorCodeOnFailure: IModelsErrorCode.EmptyIModelInitializationFailed,
+          headers: params.headers,
+        }),
+      timeoutErrorFactory: () =>
+        new IModelsErrorImpl({
+          code: IModelsErrorCode.EmptyIModelInitializationFailed,
+          message: "Timed out waiting for empty iModel initialization.",
+          originalError: undefined,
+          statusCode: undefined,
+          details: undefined,
+        }),
+      timeOutInMs: params.timeOutInMs,
     });
   }
 
@@ -432,20 +570,23 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     headers?: HeaderFactories;
   }): Promise<void> {
     return UtilityFunctions.waitForCondition({
-      conditionToSatisfy: async () => this.isIModelInitialized({
-        authorization: params.authorization,
-        iModelId: params.iModelId,
-        errorCodeOnFailure: IModelsErrorCode.IModelFromTemplateInitializationFailed,
-        headers: params.headers
-      }),
-      timeoutErrorFactory: () => new IModelsErrorImpl({
-        code: IModelsErrorCode.IModelFromTemplateInitializationTimedOut,
-        message: "Timed out waiting for Baseline File initialization.",
-        originalError: undefined,
-        statusCode: undefined,
-        details: undefined
-      }),
-      timeOutInMs: params.timeOutInMs
+      conditionToSatisfy: async () =>
+        this.isIModelInitialized({
+          authorization: params.authorization,
+          iModelId: params.iModelId,
+          errorCodeOnFailure:
+            IModelsErrorCode.IModelFromTemplateInitializationFailed,
+          headers: params.headers,
+        }),
+      timeoutErrorFactory: () =>
+        new IModelsErrorImpl({
+          code: IModelsErrorCode.IModelFromTemplateInitializationTimedOut,
+          message: "Timed out waiting for Baseline File initialization.",
+          originalError: undefined,
+          statusCode: undefined,
+          details: undefined,
+        }),
+      timeOutInMs: params.timeOutInMs,
     });
   }
 
@@ -456,20 +597,22 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     headers?: HeaderFactories;
   }): Promise<void> {
     return UtilityFunctions.waitForCondition({
-      conditionToSatisfy: async () => this.isIModelInitialized({
-        authorization: params.authorization,
-        iModelId: params.iModelId,
-        errorCodeOnFailure: IModelsErrorCode.ClonedIModelInitializationFailed,
-        headers: params.headers
-      }),
-      timeoutErrorFactory: () => new IModelsErrorImpl({
-        code: IModelsErrorCode.ClonedIModelInitializationTimedOut,
-        message: "Timed out waiting for Cloned iModel initialization.",
-        originalError: undefined,
-        statusCode: undefined,
-        details: undefined
-      }),
-      timeOutInMs: params.timeOutInMs
+      conditionToSatisfy: async () =>
+        this.isIModelInitialized({
+          authorization: params.authorization,
+          iModelId: params.iModelId,
+          errorCodeOnFailure: IModelsErrorCode.ClonedIModelInitializationFailed,
+          headers: params.headers,
+        }),
+      timeoutErrorFactory: () =>
+        new IModelsErrorImpl({
+          code: IModelsErrorCode.ClonedIModelInitializationTimedOut,
+          message: "Timed out waiting for Cloned iModel initialization.",
+          originalError: undefined,
+          statusCode: undefined,
+          details: undefined,
+        }),
+      timeOutInMs: params.timeOutInMs,
     });
   }
 
@@ -480,19 +623,21 @@ export class IModelOperations<TOptions extends OperationOptions> extends Operati
     headers?: HeaderFactories;
   }): Promise<void> {
     return UtilityFunctions.waitForCondition({
-      conditionToSatisfy: async () => this.isIModelForkInitialized({
-        authorization: params.authorization,
-        iModelId: params.iModelId,
-        headers: params.headers
-      }),
-      timeoutErrorFactory: () => new IModelsErrorImpl({
-        code: IModelsErrorCode.IModelForkInitializationTimedOut,
-        message: "Timed out waiting for iModel fork initialization.",
-        originalError: undefined,
-        statusCode: undefined,
-        details: undefined
-      }),
-      timeOutInMs: params.timeOutInMs
+      conditionToSatisfy: async () =>
+        this.isIModelForkInitialized({
+          authorization: params.authorization,
+          iModelId: params.iModelId,
+          headers: params.headers,
+        }),
+      timeoutErrorFactory: () =>
+        new IModelsErrorImpl({
+          code: IModelsErrorCode.IModelForkInitializationTimedOut,
+          message: "Timed out waiting for iModel fork initialization.",
+          originalError: undefined,
+          statusCode: undefined,
+          details: undefined,
+        }),
+      timeOutInMs: params.timeOutInMs,
     });
   }
 }

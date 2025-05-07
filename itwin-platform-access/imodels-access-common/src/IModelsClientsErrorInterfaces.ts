@@ -3,7 +3,6 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { ITwinError } from "@itwin/core-bentley";
-
 import { ConflictingLock } from "@itwin/imodels-client-authoring";
 import { IModelsErrorScope } from "@itwin/imodels-client-management";
 
@@ -24,10 +23,18 @@ export interface ConflictingLocksError extends IModelsClientsError {
   conflictingLocks: ConflictingLock[];
 }
 
-export function isIModelsClientsError(error: unknown, key?: string): error is IModelsClientsError {
+export function isIModelsClientsError(
+  error: unknown,
+  key?: string
+): error is IModelsClientsError {
   return ITwinError.isError(error, IModelsErrorScope, key);
 }
 
-export function isConflictingLocksError(error: unknown): error is ConflictingLocksError {
-  return ITwinError.isError<ConflictingLocksError>(error, IModelsErrorScope) && "conflictingLocks" in error;
+export function isConflictingLocksError(
+  error: unknown
+): error is ConflictingLocksError {
+  return (
+    ITwinError.isError<ConflictingLocksError>(error, IModelsErrorScope) &&
+    "conflictingLocks" in error
+  );
 }

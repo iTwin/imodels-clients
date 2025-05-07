@@ -16,12 +16,19 @@ export class LimitedParallelQueue {
 
   public async waitAll(): Promise<void> {
     const currentlyExecutingPromises = new Array<Promise<void>>();
-    while (this._queue.length !== 0 || currentlyExecutingPromises.length !== 0) {
-      while (this._queue.length !== 0 && currentlyExecutingPromises.length < this._maxParallelPromises) {
+    while (
+      this._queue.length !== 0 ||
+      currentlyExecutingPromises.length !== 0
+    ) {
+      while (
+        this._queue.length !== 0 &&
+        currentlyExecutingPromises.length < this._maxParallelPromises
+      ) {
         // We create a promise that removes itself from the `currentlyExecutingPromises` queue after it resolves.
         const itemToExecute = this._queue.shift()!;
         const executingItem = itemToExecute().then(() => {
-          const indexOfItemInQueue = currentlyExecutingPromises.indexOf(executingItem);
+          const indexOfItemInQueue =
+            currentlyExecutingPromises.indexOf(executingItem);
           currentlyExecutingPromises.splice(indexOfItemInQueue, 1);
         });
         currentlyExecutingPromises.push(executingItem);

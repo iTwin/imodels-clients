@@ -4,7 +4,17 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { Briefcase, Changeset, ChangesetGroup, Checkpoint, CheckpointState, IModel, MinimalChangeset, NamedVersion, User } from "@itwin/imodels-client-management";
+import {
+  Briefcase,
+  Changeset,
+  ChangesetGroup,
+  Checkpoint,
+  CheckpointState,
+  IModel,
+  MinimalChangeset,
+  NamedVersion,
+  User,
+} from "@itwin/imodels-client-management";
 
 import { assertCheckpoint, assertUser } from "./BrowserFriendlyAssertions";
 
@@ -15,7 +25,7 @@ export async function assertIModelCallbacks(params: {
 
   const creator: User | undefined = await params.iModel.getCreator();
   assertUser({
-    actualUser: creator!
+    actualUser: creator!,
   });
 }
 
@@ -26,7 +36,7 @@ export async function assertBriefcaseCallbacks(params: {
 
   const owner: User | undefined = await params.briefcase.getOwner();
   assertUser({
-    actualUser: owner!
+    actualUser: owner!,
   });
 
   expect(params.briefcase.getCheckpoint).to.exist;
@@ -35,8 +45,8 @@ export async function assertBriefcaseCallbacks(params: {
   assertCheckpoint({
     actualCheckpoint: checkpoint,
     expectedCheckpointProperties: {
-      state: CheckpointState.Successful
-    }
+      state: CheckpointState.Successful,
+    },
   });
 }
 
@@ -47,7 +57,7 @@ export async function assertMinimalChangesetCallbacks(params: {
 
   const creator: User | undefined = await params.changeset.getCreator();
   assertUser({
-    actualUser: creator!
+    actualUser: creator!,
   });
 }
 
@@ -57,22 +67,20 @@ export async function assertChangesetCallbacks(params: {
   shouldCheckpointExist: boolean;
 }): Promise<void> {
   await assertMinimalChangesetCallbacks({
-    changeset: params.changeset
+    changeset: params.changeset,
   });
 
   expect(params.changeset.getNamedVersion).to.exist;
-  const namedVersion: NamedVersion | undefined = await params.changeset.getNamedVersion();
-  if (params.shouldNamedVersionExist)
-    expect(namedVersion).to.exist;
-  else
-    expect(namedVersion).to.be.undefined;
+  const namedVersion: NamedVersion | undefined =
+    await params.changeset.getNamedVersion();
+  if (params.shouldNamedVersionExist) expect(namedVersion).to.exist;
+  else expect(namedVersion).to.be.undefined;
 
   expect(params.changeset.getCurrentOrPrecedingCheckpoint).to.exist;
-  const checkpoint: Checkpoint | undefined = await params.changeset.getCurrentOrPrecedingCheckpoint();
-  if (params.shouldCheckpointExist)
-    expect(checkpoint).to.exist;
-  else
-    expect(checkpoint).to.be.undefined;
+  const checkpoint: Checkpoint | undefined =
+    await params.changeset.getCurrentOrPrecedingCheckpoint();
+  if (params.shouldCheckpointExist) expect(checkpoint).to.exist;
+  else expect(checkpoint).to.be.undefined;
 }
 
 export async function assertChangesetGroupCallbacks(params: {
@@ -82,7 +90,7 @@ export async function assertChangesetGroupCallbacks(params: {
 
   const creator: User | undefined = await params.changesetGroup.getCreator();
   assertUser({
-    actualUser: creator!
+    actualUser: creator!,
   });
 }
 
@@ -92,12 +100,11 @@ export async function assertNamedVersionCallbacks(params: {
 }): Promise<void> {
   const creator: User | undefined = await params.namedVersion.getCreator();
   assertUser({
-    actualUser: creator!
+    actualUser: creator!,
   });
 
-  const changeset: Changeset | undefined = await params.namedVersion.getChangeset();
-  if (params.shouldChangesetExist)
-    expect(changeset).to.exist;
-  else
-    expect(changeset).to.be.undefined;
+  const changeset: Changeset | undefined =
+    await params.namedVersion.getChangeset();
+  if (params.shouldChangesetExist) expect(changeset).to.exist;
+  else expect(changeset).to.be.undefined;
 }

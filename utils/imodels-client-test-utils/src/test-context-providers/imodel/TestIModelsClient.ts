@@ -4,7 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 import { decorate, inject, injectable } from "inversify";
 
-import { IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
+import {
+  IModelsClient,
+  IModelsClientOptions,
+} from "@itwin/imodels-client-authoring";
 
 import { TestUtilTypes } from "../../TestUtilTypes";
 

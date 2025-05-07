@@ -33,7 +33,12 @@ interface LatestCheckpointParam {
  * be specified to reference a single Checkpoint by its parent entity: `changesetId`, `changesetIndex`, `namedVersionId`.
  * To reference iModel's latest Checkpoint, do not specify any of the parent entity identifiers.
  */
-export type CheckpointParentEntityId = ChangesetIdParam | ChangesetIndexParam | NamedVersionIdParam | LatestCheckpointParam;
+export type CheckpointParentEntityId =
+  | ChangesetIdParam
+  | ChangesetIndexParam
+  | NamedVersionIdParam
+  | LatestCheckpointParam;
 
 /** Parameters for get single Checkpoint operation. */
-export type GetSingleCheckpointParams = IModelScopedOperationParams & CheckpointParentEntityId;
+export type GetSingleCheckpointParams = IModelScopedOperationParams &
+  CheckpointParentEntityId;

@@ -9,7 +9,7 @@ export enum ThumbnailSize {
   /** A small Thumbnail is a 400x250 PNG image. */
   Small = "small",
   /** A large Thumbnail is a 800x500 PNG image. */
-  Large = "large"
+  Large = "large",
 }
 
 /** Full representation of a iModel Thumbnail. */

@@ -2,9 +2,24 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AcquireBriefcaseParams, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-authoring";
-import { AuthorizationCallback, Briefcase } from "@itwin/imodels-client-management";
-import { IModelMetadata, TestAuthorizationProvider, TestIModelCreator, TestIModelGroup, TestIModelGroupFactory, TestUtilTypes, assertBriefcase } from "@itwin/imodels-client-test-utils";
+import {
+  AcquireBriefcaseParams,
+  IModelsClient,
+  IModelsClientOptions,
+} from "@itwin/imodels-client-authoring";
+import {
+  AuthorizationCallback,
+  Briefcase,
+} from "@itwin/imodels-client-management";
+import {
+  IModelMetadata,
+  TestAuthorizationProvider,
+  TestIModelCreator,
+  TestIModelGroup,
+  TestIModelGroupFactory,
+  TestUtilTypes,
+  assertBriefcase,
+} from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
@@ -18,17 +33,25 @@ describe("[Authoring] BriefcaseOperations", () => {
   before(async () => {
     const container = getTestDIContainer();
 
-    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    const iModelsClientOptions = container.get<IModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
     const testIModelGroupFactory = container.get(TestIModelGroupFactory);
-    testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "AuthoringBriefcaseOperations" });
+    testIModelGroup = testIModelGroupFactory.create({
+      testRunId: getTestRunId(),
+      packageName: Constants.PackagePrefix,
+      testSuiteName: "AuthoringBriefcaseOperations",
+    });
 
     const testIModelCreator = container.get(TestIModelCreator);
-    testIModel = await testIModelCreator.createEmpty(testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"));
+    testIModel = await testIModelCreator.createEmpty(
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
+    );
   });
 
   after(async () => {
@@ -41,17 +64,19 @@ describe("[Authoring] BriefcaseOperations", () => {
       authorization,
       iModelId: testIModel.id,
       briefcaseProperties: {
-        deviceName: "some device name"
-      }
+        deviceName: "some device name",
+      },
     };
 
     // Act
-    const briefcase: Briefcase = await iModelsClient.briefcases.acquire(acquireBriefcaseParams);
+    const briefcase: Briefcase = await iModelsClient.briefcases.acquire(
+      acquireBriefcaseParams
+    );
 
     // Assert
     await assertBriefcase({
       actualBriefcase: briefcase,
-      expectedBriefcaseProperties: acquireBriefcaseParams.briefcaseProperties!
+      expectedBriefcaseProperties: acquireBriefcaseParams.briefcaseProperties!,
     });
   });
 });

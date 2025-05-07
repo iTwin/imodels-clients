@@ -4,7 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { Authorization, AxiosRestClient, ContentType, IModelsErrorParser } from "@itwin/imodels-client-management";
+import {
+  Authorization,
+  AxiosRestClient,
+  ContentType,
+  IModelsErrorParser,
+} from "@itwin/imodels-client-management";
 
 import { createStub } from "../Stubs";
 
@@ -12,113 +17,127 @@ import { TestOperationsWrapper } from "./TestOperationsWrapper";
 
 describe("[Management] OperationsBase", () => {
   let restClient: sinon.SinonStubbedInstance<AxiosRestClient>;
-  let requiredArgs: {url: string, authorization: () => Promise<Authorization>};
+  let requiredArgs: {
+    url: string;
+    authorization: () => Promise<Authorization>;
+  };
 
   const operationsTestCases: {
     caseName: string;
-    headersPassedToConstructor: Record<string, string | (() => string | undefined)>;
-    headersPassedToOperation: Record<string, string | (() => string | undefined)>;
+    headersPassedToConstructor: Record<
+      string,
+      string | (() => string | undefined)
+    >;
+    headersPassedToOperation: Record<
+      string,
+      string | (() => string | undefined)
+    >;
     expectedHeaders: Record<string, string>;
   }[] = [
     {
       caseName: "Adds constructor headers",
       headersPassedToConstructor: {
-        "header-specified-in-constructor": "constructor"
+        "header-specified-in-constructor": "constructor",
       },
       headersPassedToOperation: {},
       expectedHeaders: {
-        "header-specified-in-constructor": "constructor"
-      }
+        "header-specified-in-constructor": "constructor",
+      },
     },
     {
       caseName: "Adds operation headers",
       headersPassedToConstructor: {},
       headersPassedToOperation: {
-        "header-specified-in-operation": "operation"
+        "header-specified-in-operation": "operation",
       },
       expectedHeaders: {
-        "header-specified-in-operation": "operation"
-      }
+        "header-specified-in-operation": "operation",
+      },
     },
     {
       caseName: "Adds constructor and operation headers",
       headersPassedToConstructor: {
-        "header-specified-in-constructor": "constructor"
+        "header-specified-in-constructor": "constructor",
       },
       headersPassedToOperation: {
-        "header-specified-in-operation": "operation"
+        "header-specified-in-operation": "operation",
       },
       expectedHeaders: {
         "header-specified-in-constructor": "constructor",
-        "header-specified-in-operation": "operation"
-      }
+        "header-specified-in-operation": "operation",
+      },
     },
     {
       caseName: "Replaces constructor headers",
       headersPassedToConstructor: {
-        "header-specified-in-constructor": "constructor"
+        "header-specified-in-constructor": "constructor",
       },
       headersPassedToOperation: {
-        "header-specified-in-constructor": "operation"
+        "header-specified-in-constructor": "operation",
       },
       expectedHeaders: {
-        "header-specified-in-constructor": "operation"
-      }
+        "header-specified-in-constructor": "operation",
+      },
     },
     {
       caseName: "Removes constructor headers",
       headersPassedToConstructor: {
-        "header-specified-in-constructor": "constructor"
+        "header-specified-in-constructor": "constructor",
       },
       headersPassedToOperation: {
-        "header-specified-in-constructor": () => undefined
+        "header-specified-in-constructor": () => undefined,
       },
-      expectedHeaders: {}
+      expectedHeaders: {},
     },
     {
       caseName: "Works with function headers",
       headersPassedToConstructor: {
-        "header-specified-in-constructor": () => "constructor"
+        "header-specified-in-constructor": () => "constructor",
       },
       headersPassedToOperation: {
-        "header-specified-in-operation": () => "operation"
+        "header-specified-in-operation": () => "operation",
       },
       expectedHeaders: {
         "header-specified-in-constructor": "constructor",
-        "header-specified-in-operation": "operation"
-      }
-    }
+        "header-specified-in-operation": "operation",
+      },
+    },
   ];
 
-  before( async () => {
+  before(() => {
     restClient = createStub(AxiosRestClient);
     const authorizationCallback = async () => {
       const authorization: Authorization = {
         scheme: "scheme",
-        token: "token"
+        token: "token",
       };
       return Promise.resolve(authorization);
     };
-    requiredArgs = {url: "url", authorization: authorizationCallback};
+    requiredArgs = { url: "url", authorization: authorizationCallback };
   });
 
-  for( const testCase of operationsTestCases) {
-    const { caseName, headersPassedToConstructor, headersPassedToOperation, expectedHeaders } = testCase;
+  for (const testCase of operationsTestCases) {
+    const {
+      caseName,
+      headersPassedToConstructor,
+      headersPassedToOperation,
+      expectedHeaders,
+    } = testCase;
 
     it(`${caseName} works with Get Request`, async () => {
       // Arrange
-      const iModelsOperationsWrapper = new TestOperationsWrapper(
-        {
-          restClient,
-          api: {version: "version"},
-          headers: headersPassedToConstructor,
-          parseErrorFunc: IModelsErrorParser.parse
-        });
+      const iModelsOperationsWrapper = new TestOperationsWrapper({
+        restClient,
+        api: { version: "version" },
+        headers: headersPassedToConstructor,
+        parseErrorFunc: (response, originalError) =>
+          IModelsErrorParser.parse(response, originalError),
+      });
 
       // Act
       await iModelsOperationsWrapper.sendGetRequest({
         ...requiredArgs,
-        headers: headersPassedToOperation
+        headers: headersPassedToOperation,
       });
 
       // Assert
@@ -128,19 +147,19 @@ describe("[Management] OperationsBase", () => {
 
     it(`${caseName} works with Post Request`, async () => {
       // Arrange
-      const iModelsOperationsWrapper = new TestOperationsWrapper(
-        {
-          restClient,
-          api: {version: "version"},
-          headers: headersPassedToConstructor,
-          parseErrorFunc: IModelsErrorParser.parse
-        });
+      const iModelsOperationsWrapper = new TestOperationsWrapper({
+        restClient,
+        api: { version: "version" },
+        headers: headersPassedToConstructor,
+        parseErrorFunc: (response, originalError) =>
+          IModelsErrorParser.parse(response, originalError),
+      });
 
       // Act
       await iModelsOperationsWrapper.sendPostRequest({
         ...requiredArgs,
         headers: headersPassedToOperation,
-        body: {}
+        body: {},
       });
 
       // Assert
@@ -150,20 +169,20 @@ describe("[Management] OperationsBase", () => {
 
     it(`${caseName} works with Put Request`, async () => {
       // Arrange
-      const iModelsOperationsWrapper = new TestOperationsWrapper(
-        {
-          restClient,
-          api: {version: "version"},
-          headers: headersPassedToConstructor,
-          parseErrorFunc: IModelsErrorParser.parse
-        });
+      const iModelsOperationsWrapper = new TestOperationsWrapper({
+        restClient,
+        api: { version: "version" },
+        headers: headersPassedToConstructor,
+        parseErrorFunc: (response, originalError) =>
+          IModelsErrorParser.parse(response, originalError),
+      });
 
       // Act
       await iModelsOperationsWrapper.sendPutRequest({
         ...requiredArgs,
         headers: headersPassedToOperation,
         body: new Uint8Array(),
-        contentType: ContentType.Png
+        contentType: ContentType.Png,
       });
 
       // Assert
@@ -173,18 +192,18 @@ describe("[Management] OperationsBase", () => {
 
     it(`${caseName} works with Delete Request`, async () => {
       // Arrange
-      const iModelsOperationsWrapper = new TestOperationsWrapper(
-        {
-          restClient,
-          api: {version: "version"},
-          headers: headersPassedToConstructor,
-          parseErrorFunc: IModelsErrorParser.parse
-        });
+      const iModelsOperationsWrapper = new TestOperationsWrapper({
+        restClient,
+        api: { version: "version" },
+        headers: headersPassedToConstructor,
+        parseErrorFunc: (response, originalError) =>
+          IModelsErrorParser.parse(response, originalError),
+      });
 
       // Act
       await iModelsOperationsWrapper.sendDeleteRequest({
         ...requiredArgs,
-        headers: headersPassedToOperation
+        headers: headersPassedToOperation,
       });
 
       // Assert
@@ -194,19 +213,19 @@ describe("[Management] OperationsBase", () => {
 
     it(`${caseName} works with Patch Request`, async () => {
       // Arrange
-      const iModelsOperationsWrapper = new TestOperationsWrapper(
-        {
-          restClient,
-          api: {version: "version"},
-          headers: headersPassedToConstructor,
-          parseErrorFunc: IModelsErrorParser.parse
-        });
+      const iModelsOperationsWrapper = new TestOperationsWrapper({
+        restClient,
+        api: { version: "version" },
+        headers: headersPassedToConstructor,
+        parseErrorFunc: (response, originalError) =>
+          IModelsErrorParser.parse(response, originalError),
+      });
 
       // Act
       await iModelsOperationsWrapper.sendPatchRequest({
         ...requiredArgs,
         headers: headersPassedToOperation,
-        body: {}
+        body: {},
       });
 
       // Assert

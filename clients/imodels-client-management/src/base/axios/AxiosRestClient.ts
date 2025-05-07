@@ -6,7 +6,15 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
 import { UtilityFunctions } from "../internal/";
 import { HttpRequestRetryPolicy } from "../types";
-import { ContentType, HttpGetRequestParams, HttpRequestParams, HttpRequestWithBinaryBodyParams, HttpRequestWithJsonBodyParams, HttpResponse, RestClient } from "../types/RestClient";
+import {
+  ContentType,
+  HttpGetRequestParams,
+  HttpRequestParams,
+  HttpRequestWithBinaryBodyParams,
+  HttpRequestWithJsonBodyParams,
+  HttpResponse,
+  RestClient,
+} from "../types/RestClient";
 
 import { AxiosResponseHeadersAdapter } from "./AxiosResponseHeadersAdapter";
 
@@ -20,16 +28,24 @@ export class AxiosRestClient implements RestClient {
     this._retryPolicy = retryPolicy;
   }
 
-  public sendGetRequest<TBody>(params: HttpGetRequestParams & { responseType: ContentType.Json }): Promise<HttpResponse<TBody>>;
-  public sendGetRequest(params: HttpGetRequestParams & { responseType: ContentType.Png }): Promise<HttpResponse<Uint8Array>>;
-  public async sendGetRequest<TBody>(params: HttpGetRequestParams): Promise<HttpResponse<TBody | Uint8Array>> {
+  public sendGetRequest<TBody>(
+    params: HttpGetRequestParams & { responseType: ContentType.Json }
+  ): Promise<HttpResponse<TBody>>;
+  public sendGetRequest(
+    params: HttpGetRequestParams & { responseType: ContentType.Png }
+  ): Promise<HttpResponse<Uint8Array>>;
+  public async sendGetRequest<TBody>(
+    params: HttpGetRequestParams
+  ): Promise<HttpResponse<TBody | Uint8Array>> {
     const requestConfig: AxiosRequestConfig = {
-      headers: params.headers
+      headers: params.headers,
     };
 
     if (params.responseType === ContentType.Png) {
       requestConfig.responseType = "arraybuffer";
-      const response = await this.executeRequest(async () => axios.get(params.url, requestConfig));
+      const response = await this.executeRequest(async () =>
+        axios.get(params.url, requestConfig)
+      );
 
       const data: Buffer | ArrayBuffer = response.body;
       if (data instanceof ArrayBuffer)
@@ -38,50 +54,72 @@ export class AxiosRestClient implements RestClient {
       return response;
     }
 
-    return this.executeRequest(async () => axios.get(params.url, requestConfig));
+    return this.executeRequest(async () =>
+      axios.get(params.url, requestConfig)
+    );
   }
 
-  public async sendPostRequest<TBody>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TBody>> {
+  public async sendPostRequest<TBody>(
+    params: HttpRequestWithJsonBodyParams
+  ): Promise<HttpResponse<TBody>> {
     const requestConfig: AxiosRequestConfig = {
-      headers: params.headers
+      headers: params.headers,
     };
 
-    return this.executeRequest(async () => axios.post(params.url, params.body.content ?? {}, requestConfig));
+    return this.executeRequest(async () =>
+      axios.post(params.url, params.body.content ?? {}, requestConfig)
+    );
   }
 
-  public async sendPutRequest<TBody>(params: HttpRequestWithBinaryBodyParams): Promise<HttpResponse<TBody>> {
+  public async sendPutRequest<TBody>(
+    params: HttpRequestWithBinaryBodyParams
+  ): Promise<HttpResponse<TBody>> {
     const requestConfig: AxiosRequestConfig = {
-      headers: params.headers
+      headers: params.headers,
     };
 
-    return this.executeRequest(async () => axios.put(params.url, params.body.content, requestConfig));
+    return this.executeRequest(async () =>
+      axios.put(params.url, params.body.content, requestConfig)
+    );
   }
 
-  public async sendPatchRequest<TBody>(params: HttpRequestWithJsonBodyParams): Promise<HttpResponse<TBody>> {
+  public async sendPatchRequest<TBody>(
+    params: HttpRequestWithJsonBodyParams
+  ): Promise<HttpResponse<TBody>> {
     const requestConfig: AxiosRequestConfig = {
-      headers: params.headers
+      headers: params.headers,
     };
 
-    return this.executeRequest(async () => axios.patch(params.url, params.body.content ?? {}, requestConfig));
+    return this.executeRequest(async () =>
+      axios.patch(params.url, params.body.content ?? {}, requestConfig)
+    );
   }
 
-  public async sendDeleteRequest<TBody>(params: HttpRequestParams): Promise<HttpResponse<TBody>> {
+  public async sendDeleteRequest<TBody>(
+    params: HttpRequestParams
+  ): Promise<HttpResponse<TBody>> {
     const requestConfig: AxiosRequestConfig = {
-      headers: params.headers
+      headers: params.headers,
     };
 
-    return this.executeRequest(async () => axios.delete(params.url, requestConfig));
+    return this.executeRequest(async () =>
+      axios.delete(params.url, requestConfig)
+    );
   }
 
-  private async executeRequest<TBody>(requestFunc: () => Promise<AxiosResponse<TBody>>): Promise<HttpResponse<TBody>> {
+  private async executeRequest<TBody>(
+    requestFunc: () => Promise<AxiosResponse<TBody>>
+  ): Promise<HttpResponse<TBody>> {
     const response = await this.executeWithRetry(requestFunc);
     return {
       body: response.data,
-      headers: new AxiosResponseHeadersAdapter(response)
+      headers: new AxiosResponseHeadersAdapter(response),
     };
   }
 
-  private async executeWithRetry<TBody>(requestFunc: () => Promise<AxiosResponse<TBody>>): Promise<AxiosResponse<TBody>> {
+  private async executeWithRetry<TBody>(
+    requestFunc: () => Promise<AxiosResponse<TBody>>
+  ): Promise<AxiosResponse<TBody>> {
     let retriesInvoked = 0;
     for (;;) {
       try {
@@ -96,7 +134,9 @@ export class AxiosRestClient implements RestClient {
           throw error;
         }
 
-        const sleepDurationInMs = this._retryPolicy.getSleepDurationInMs({ retriesInvoked: retriesInvoked++ });
+        const sleepDurationInMs = this._retryPolicy.getSleepDurationInMs({
+          retriesInvoked: retriesInvoked++,
+        });
         if (sleepDurationInMs > 0) {
           await UtilityFunctions.sleep(sleepDurationInMs);
         }
@@ -104,4 +144,3 @@ export class AxiosRestClient implements RestClient {
     }
   }
 }
-

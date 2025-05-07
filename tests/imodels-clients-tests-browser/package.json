@@ -26,15 +26,23 @@
     "build:tests-setup": "tsc --p cjs.tsconfig.json 1>&2",
     "clean": "rimraf lib",
     "cover": "",
-    "lint": "eslint ./src/**/*.ts 1>&2",
-    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
+    "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config ./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
     "test:integration": "cypress run",
     "test:integration:debug": "cypress open",
     "test:unit": ""
   },
+  "prettier": "./node_modules/@itwin/imodels-client-common-config/prettier.json",
   "eslintConfig": {
-    "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.json"
+    "parserOptions": {
+      "project": [
+        "tsconfig.json",
+        "cjs.tsconfig.json"
+      ],
+      "sourceType": "module"
+    },
+    "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.js"
   },
   "dependencies": {
     "@cypress/request": "3.0.1",

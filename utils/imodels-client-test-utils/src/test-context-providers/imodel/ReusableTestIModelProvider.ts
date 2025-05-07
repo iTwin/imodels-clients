@@ -4,7 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { DeleteIModelParams, IModel, UtilityFunctions } from "@itwin/imodels-client-management";
+import {
+  DeleteIModelParams,
+  IModel,
+  UtilityFunctions,
+} from "@itwin/imodels-client-management";
 
 import { TestAuthorizationProvider } from "../auth/TestAuthorizationProvider";
 
@@ -24,52 +28,67 @@ export class ReusableTestIModelProvider {
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
     private readonly _testIModelRetriever: TestIModelRetriever,
     private readonly _testIModelCreator: TestIModelCreator
-  ) { }
+  ) {}
 
   public async getOrCreate(): Promise<ReusableIModelMetadata> {
-    if (!this._reusableIModel)
-      this._reusableIModel = await this.get();
+    if (!this._reusableIModel) this._reusableIModel = await this.get();
 
     return this._reusableIModel;
   }
 
   private async get(): Promise<ReusableIModelMetadata> {
-    const existingReusableIModel = await this._testIModelRetriever.findIModelByName(this._config.testIModelName);
+    const existingReusableIModel =
+      await this._testIModelRetriever.findIModelByName(
+        this._config.testIModelName
+      );
     if (!existingReusableIModel)
-      return this._testIModelCreator.createReusable(this._config.testIModelName);
+      return this._testIModelCreator.createReusable(
+        this._config.testIModelName
+      );
 
     if (this._config.behaviorOptions.recreateReusableIModel) {
       await this.deleteIModel(existingReusableIModel.id);
-      return this._testIModelCreator.createReusable(this._config.testIModelName);
+      return this._testIModelCreator.createReusable(
+        this._config.testIModelName
+      );
     }
 
     return this.waitForInitializedIModel(existingReusableIModel);
   }
 
-  private async waitForInitializedIModel(iModel: IModel): Promise<ReusableIModelMetadata> {
+  private async waitForInitializedIModel(
+    iModel: IModel
+  ): Promise<ReusableIModelMetadata> {
     const timeoutInMs = 3 * 60 * 1000; // 3 minutes
     const pollingIntervalInMs = 5 * 1000; // 5 seconds
 
-    for (let attempt = 0; attempt < Math.ceil(timeoutInMs / pollingIntervalInMs); attempt++) {
+    for (
+      let attempt = 0;
+      attempt < Math.ceil(timeoutInMs / pollingIntervalInMs);
+      attempt++
+    ) {
       if (this._testIModelCreator.isReusableIModelInitialized(iModel)) {
         return this._testIModelRetriever.queryRelatedData(iModel);
       }
 
       await UtilityFunctions.sleep(pollingIntervalInMs);
 
+      // eslint-disable-next-line no-param-reassign
       iModel = await this._iModelsClient.iModels.getSingle({
         authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
-        iModelId: iModel.id
+        iModelId: iModel.id,
       });
     }
 
-    throw Error("Timed out while waiting for reusable iModel to be initialized.");
+    throw Error(
+      "Timed out while waiting for reusable iModel to be initialized."
+    );
   }
 
   private async deleteIModel(iModelId: string): Promise<void> {
     const deleteIModelParams: DeleteIModelParams = {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
-      iModelId
+      iModelId,
     };
     return this._iModelsClient.iModels.delete(deleteIModelParams);
   }

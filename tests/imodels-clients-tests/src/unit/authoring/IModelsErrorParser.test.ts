@@ -7,5 +7,7 @@ import { IModelsErrorParser as AuthoringIModelsErrorParser } from "@itwin/imodel
 import { testIModelsErrorParser } from "../CommonErrorParsingTests";
 
 describe("[Authoring] IModelsErrorParser", () => {
-  testIModelsErrorParser(AuthoringIModelsErrorParser.parse);
+  testIModelsErrorParser((response, originalError) =>
+    AuthoringIModelsErrorParser.parse(response, originalError)
+  );
 });

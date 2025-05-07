@@ -10,9 +10,7 @@ import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
 export class ITwinsClientConfig {
   public baseUrl: string;
 
-  constructor(
-    config: IModelsClientsTestsConfig
-  ) {
+  constructor(config: IModelsClientsTestsConfig) {
     this.baseUrl = config.apis.iTwins.baseUrl;
   }
 }

@@ -5,8 +5,24 @@
 
 import { expect } from "chai";
 
-import { AuthorizationCallback, ClonedFrom, GetCreateIModelOperationDetailsParams, IModelCreationState, IModelsClient, IModelsClientOptions } from "@itwin/imodels-client-management";
-import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestIModelGroup, TestIModelGroupFactory, TestITwinProvider, TestUtilTypes } from "@itwin/imodels-client-test-utils";
+import {
+  AuthorizationCallback,
+  ClonedFrom,
+  GetCreateIModelOperationDetailsParams,
+  IModelCreationState,
+  IModelsClient,
+  IModelsClientOptions,
+} from "@itwin/imodels-client-management";
+import {
+  ReusableIModelMetadata,
+  ReusableTestIModelProvider,
+  TestAuthorizationProvider,
+  TestIModelFileProvider,
+  TestIModelGroup,
+  TestIModelGroupFactory,
+  TestITwinProvider,
+  TestUtilTypes,
+} from "@itwin/imodels-client-test-utils";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
@@ -22,7 +38,9 @@ describe("[Management] OperationOperations", () => {
   before(async () => {
     const container = getTestDIContainer();
 
-    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    const iModelsClientOptions = container.get<IModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
@@ -34,9 +52,15 @@ describe("[Management] OperationOperations", () => {
     testIModelFileProvider = container.get(TestIModelFileProvider);
 
     const testIModelGroupFactory = container.get(TestIModelGroupFactory);
-    testIModelGroup = testIModelGroupFactory.create({ testRunId: getTestRunId(), packageName: Constants.PackagePrefix, testSuiteName: "ManagementOperationOperations" });
+    testIModelGroup = testIModelGroupFactory.create({
+      testRunId: getTestRunId(),
+      packageName: Constants.PackagePrefix,
+      testSuiteName: "ManagementOperationOperations",
+    });
 
-    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(
+      ReusableTestIModelProvider
+    );
     testIModel = await reusableTestIModelProvider.getOrCreate();
   });
 
@@ -44,11 +68,12 @@ describe("[Management] OperationOperations", () => {
     // Arrange
     const operationParams: GetCreateIModelOperationDetailsParams = {
       authorization,
-      iModelId: testIModel.id
+      iModelId: testIModel.id,
     };
 
     // Act
-    const operationDetails = await iModelsClient.operations.getCreateIModelDetails(operationParams);
+    const operationDetails =
+      await iModelsClient.operations.getCreateIModelDetails(operationParams);
 
     // Assert
     expect(operationDetails.clonedFrom).to.be.null;
@@ -59,24 +84,27 @@ describe("[Management] OperationOperations", () => {
     // Arrange
     const expectedClonedFrom: ClonedFrom = {
       iModelId: testIModel.id,
-      changesetId: testIModelFileProvider.changesets[0].id
+      changesetId: testIModelFileProvider.changesets[0].id,
     };
     const newIModel = await iModelsClient.iModels.clone({
       authorization,
       iModelId: expectedClonedFrom.iModelId,
       iModelProperties: {
         iTwinId,
-        name: testIModelGroup.getPrefixedUniqueIModelName("cloned iModel for get create iModel operation details"),
-        changesetId: expectedClonedFrom.changesetId
-      }
+        name: testIModelGroup.getPrefixedUniqueIModelName(
+          "cloned iModel for get create iModel operation details"
+        ),
+        changesetId: expectedClonedFrom.changesetId,
+      },
     });
     const operationParams: GetCreateIModelOperationDetailsParams = {
       authorization,
-      iModelId: newIModel.id
+      iModelId: newIModel.id,
     };
 
     // Act
-    const operationDetails = await iModelsClient.operations.getCreateIModelDetails(operationParams);
+    const operationDetails =
+      await iModelsClient.operations.getCreateIModelDetails(operationParams);
 
     // Assert
     expect(operationDetails.clonedFrom).to.deep.equal(expectedClonedFrom);

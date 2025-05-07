@@ -4,8 +4,29 @@
  *--------------------------------------------------------------------------------------------*/
 import { expect } from "chai";
 
-import { AuthorizationCallback, Changeset, ChangesetOrderByProperty, EntityListIterator, GetChangesetListParams, GetSingleChangesetParams, IModelsClient, IModelsClientOptions, MinimalChangeset, OrderByOperator, toArray } from "@itwin/imodels-client-management";
-import { ReusableIModelMetadata, ReusableTestIModelProvider, TestAuthorizationProvider, TestIModelFileProvider, TestUtilTypes, assertChangeset, assertCollection, assertMinimalChangeset } from "@itwin/imodels-client-test-utils";
+import {
+  AuthorizationCallback,
+  Changeset,
+  ChangesetOrderByProperty,
+  EntityListIterator,
+  GetChangesetListParams,
+  GetSingleChangesetParams,
+  IModelsClient,
+  IModelsClientOptions,
+  MinimalChangeset,
+  OrderByOperator,
+  toArray,
+} from "@itwin/imodels-client-management";
+import {
+  ReusableIModelMetadata,
+  ReusableTestIModelProvider,
+  TestAuthorizationProvider,
+  TestIModelFileProvider,
+  TestUtilTypes,
+  assertChangeset,
+  assertCollection,
+  assertMinimalChangeset,
+} from "@itwin/imodels-client-test-utils";
 
 import { getTestDIContainer } from "../common";
 
@@ -18,7 +39,9 @@ describe("[Management] ChangesetOperations", () => {
   before(async () => {
     const container = getTestDIContainer();
 
-    const iModelsClientOptions = container.get<IModelsClientOptions>(TestUtilTypes.IModelsClientOptions);
+    const iModelsClientOptions = container.get<IModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
     const authorizationProvider = container.get(TestAuthorizationProvider);
@@ -26,19 +49,23 @@ describe("[Management] ChangesetOperations", () => {
 
     testIModelFileProvider = container.get(TestIModelFileProvider);
 
-    const reusableTestIModelProvider = container.get(ReusableTestIModelProvider);
+    const reusableTestIModelProvider = container.get(
+      ReusableTestIModelProvider
+    );
     testIModel = await reusableTestIModelProvider.getOrCreate();
   });
 
   [
     {
       label: "minimal",
-      functionUnderTest: (params: GetChangesetListParams) => iModelsClient.changesets.getMinimalList(params)
+      functionUnderTest: (params: GetChangesetListParams) =>
+        iModelsClient.changesets.getMinimalList(params),
     },
     {
       label: "representation",
-      functionUnderTest: (params: GetChangesetListParams) => iModelsClient.changesets.getRepresentationList(params)
-    }
+      functionUnderTest: (params: GetChangesetListParams) =>
+        iModelsClient.changesets.getRepresentationList(params),
+    },
   ].forEach((testCase) => {
     it(`should return all items when querying ${testCase.label} collection`, async () => {
       // Arrange
@@ -46,8 +73,8 @@ describe("[Management] ChangesetOperations", () => {
         authorization,
         iModelId: testIModel.id,
         urlParams: {
-          $top: 5
-        }
+          $top: 5,
+        },
       };
 
       // Act
@@ -56,7 +83,8 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: changesets,
-        isEntityCountCorrect: (count) => count === testIModelFileProvider.changesets.length
+        isEntityCountCorrect: (count) =>
+          count === testIModelFileProvider.changesets.length,
       });
     });
 
@@ -67,16 +95,18 @@ describe("[Management] ChangesetOperations", () => {
         iModelId: testIModel.id,
         urlParams: {
           $orderBy: {
-            property: ChangesetOrderByProperty.Index
-          }
-        }
+            property: ChangesetOrderByProperty.Index,
+          },
+        },
       };
 
       // Act
       const changesets = testCase.functionUnderTest(getChangesetListParams);
 
       // Assert
-      const changesetIndexes = (await toArray(changesets)).map((changeset) => changeset.index);
+      const changesetIndexes = (await toArray(changesets)).map(
+        (changeset) => changeset.index
+      );
       for (let i = 0; i < changesetIndexes.length - 1; i++)
         expect(changesetIndexes[i]).to.be.lessThan(changesetIndexes[i + 1]);
     });
@@ -89,16 +119,18 @@ describe("[Management] ChangesetOperations", () => {
         urlParams: {
           $orderBy: {
             property: ChangesetOrderByProperty.Index,
-            operator: OrderByOperator.Descending
-          }
-        }
+            operator: OrderByOperator.Descending,
+          },
+        },
       };
 
       // Act
       const changesets = testCase.functionUnderTest(getChangesetListParams);
 
       // Assert
-      const changesetIndexes = (await toArray(changesets)).map((changeset) => changeset.index);
+      const changesetIndexes = (await toArray(changesets)).map(
+        (changeset) => changeset.index
+      );
       for (let i = 0; i < changesetIndexes.length - 1; i++)
         expect(changesetIndexes[i]).to.be.greaterThan(changesetIndexes[i + 1]);
     });
@@ -110,8 +142,8 @@ describe("[Management] ChangesetOperations", () => {
         iModelId: testIModel.id,
         urlParams: {
           afterIndex: 5,
-          lastIndex: 10
-        }
+          lastIndex: 10,
+        },
       };
 
       // Act
@@ -120,7 +152,10 @@ describe("[Management] ChangesetOperations", () => {
       // Assert
       await assertCollection({
         asyncIterable: changesets,
-        isEntityCountCorrect: (count) => count === (getChangesetListParams.urlParams!.lastIndex! - getChangesetListParams.urlParams!.afterIndex!)
+        isEntityCountCorrect: (count) =>
+          count ===
+          getChangesetListParams.urlParams!.lastIndex! -
+            getChangesetListParams.urlParams!.afterIndex!,
       });
     });
 
@@ -134,16 +169,18 @@ describe("[Management] ChangesetOperations", () => {
           lastIndex: 10,
           $orderBy: {
             property: ChangesetOrderByProperty.Index,
-            operator: OrderByOperator.Descending
-          }
-        }
+            operator: OrderByOperator.Descending,
+          },
+        },
       };
 
       // Act
       const changesets = testCase.functionUnderTest(getChangesetListParams);
 
       // Assert
-      const changesetIndexes = (await toArray(changesets)).map((changeset) => changeset.index);
+      const changesetIndexes = (await toArray(changesets)).map(
+        (changeset) => changeset.index
+      );
       expect(changesetIndexes).to.deep.equal([10, 9, 8, 7, 6]);
     });
   });
@@ -158,9 +195,9 @@ describe("[Management] ChangesetOperations", () => {
         lastIndex: 1,
         $orderBy: {
           property: ChangesetOrderByProperty.Index,
-          operator: OrderByOperator.Descending
-        }
-      }
+          operator: OrderByOperator.Descending,
+        },
+      },
     };
 
     // Act
@@ -171,8 +208,11 @@ describe("[Management] ChangesetOperations", () => {
     const minimalChangesetList = await toArray(minimalChangesets);
     expect(minimalChangesetList.length).to.be.equal(1);
     const minimalChangeset = minimalChangesetList[0];
-    const testChangesetFile = testIModelFileProvider.changesets[minimalChangeset.index - 1];
-    const groupId = testIModel.changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(minimalChangeset.index))?.id;
+    const testChangesetFile =
+      testIModelFileProvider.changesets[minimalChangeset.index - 1];
+    const groupId = testIModel.changesetGroups.find((csGroup) =>
+      csGroup.changesetIndexes.includes(minimalChangeset.index)
+    )?.id;
     await assertMinimalChangeset({
       actualChangeset: minimalChangeset,
       expectedChangesetProperties: {
@@ -181,9 +221,9 @@ describe("[Management] ChangesetOperations", () => {
         parentId: testChangesetFile.parentId,
         description: testChangesetFile.description,
         containingChanges: testChangesetFile.containingChanges,
-        groupId
+        groupId,
       },
-      expectedTestChangesetFile: testChangesetFile
+      expectedTestChangesetFile: testChangesetFile,
     });
   });
 
@@ -195,8 +235,8 @@ describe("[Management] ChangesetOperations", () => {
       iModelId: testIModel.id,
       urlParams: {
         afterIndex: firstNamedVersion.changesetIndex - 1,
-        lastIndex: firstNamedVersion.changesetIndex
-      }
+        lastIndex: firstNamedVersion.changesetIndex,
+      },
     };
 
     // Act
@@ -207,8 +247,11 @@ describe("[Management] ChangesetOperations", () => {
     const changesetList: Changeset[] = await toArray(changesets);
     expect(changesetList.length).to.be.equal(1);
     const changeset = changesetList[0];
-    const testChangesetFile = testIModelFileProvider.changesets[changeset.index - 1];
-    const groupId = testIModel.changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changeset.index))?.id;
+    const testChangesetFile =
+      testIModelFileProvider.changesets[changeset.index - 1];
+    const groupId = testIModel.changesetGroups.find((csGroup) =>
+      csGroup.changesetIndexes.includes(changeset.index)
+    )?.id;
     await assertChangeset({
       actualChangeset: changeset,
       expectedChangesetProperties: {
@@ -218,14 +261,14 @@ describe("[Management] ChangesetOperations", () => {
         description: testChangesetFile.description,
         containingChanges: testChangesetFile.containingChanges,
         synchronizationInfo: testChangesetFile.synchronizationInfo,
-        groupId
+        groupId,
       },
       expectedTestChangesetFile: testChangesetFile,
       expectedLinks: {
         namedVersion: true,
-        checkpoint: true
+        checkpoint: true,
       },
-      isGetResponse: true
+      isGetResponse: true,
     });
   });
 
@@ -233,16 +276,21 @@ describe("[Management] ChangesetOperations", () => {
     // Arrange
     const firstNamedVersion = testIModel.namedVersions[0];
     const changesetWithNamedVersionIndex = firstNamedVersion.changesetIndex;
-    const testChangesetFile = testIModelFileProvider.changesets[changesetWithNamedVersionIndex - 1];
-    const groupId = testIModel.changesetGroups.find((csGroup) => csGroup.changesetIndexes.includes(changesetWithNamedVersionIndex))?.id;
+    const testChangesetFile =
+      testIModelFileProvider.changesets[changesetWithNamedVersionIndex - 1];
+    const groupId = testIModel.changesetGroups.find((csGroup) =>
+      csGroup.changesetIndexes.includes(changesetWithNamedVersionIndex)
+    )?.id;
     const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
       iModelId: testIModel.id,
-      changesetId: testChangesetFile.id
+      changesetId: testChangesetFile.id,
     };
 
     // Act
-    const changeset: Changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
+    const changeset: Changeset = await iModelsClient.changesets.getSingle(
+      getSingleChangesetParams
+    );
 
     // Assert
     await assertChangeset({
@@ -254,14 +302,14 @@ describe("[Management] ChangesetOperations", () => {
         description: testChangesetFile.description,
         containingChanges: testChangesetFile.containingChanges,
         synchronizationInfo: testChangesetFile.synchronizationInfo,
-        groupId
+        groupId,
       },
       expectedTestChangesetFile: testChangesetFile,
       expectedLinks: {
         namedVersion: true,
-        checkpoint: true
+        checkpoint: true,
       },
-      isGetResponse: true
+      isGetResponse: true,
     });
   });
 
@@ -269,16 +317,21 @@ describe("[Management] ChangesetOperations", () => {
     // Arrange
     const firstChangesetGroup = testIModel.changesetGroups[0];
     const changesetWithGroupIndex = firstChangesetGroup.changesetIndexes[0];
-    const testChangesetFile = testIModelFileProvider.changesets[changesetWithGroupIndex - 1];
-    const changesetHasNamedVersion = !!testIModel.namedVersions.find((version) => version.changesetIndex === changesetWithGroupIndex);
+    const testChangesetFile =
+      testIModelFileProvider.changesets[changesetWithGroupIndex - 1];
+    const changesetHasNamedVersion = !!testIModel.namedVersions.find(
+      (version) => version.changesetIndex === changesetWithGroupIndex
+    );
     const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
       iModelId: testIModel.id,
-      changesetId: testChangesetFile.id
+      changesetId: testChangesetFile.id,
     };
 
     // Act
-    const changeset: Changeset = await iModelsClient.changesets.getSingle(getSingleChangesetParams);
+    const changeset: Changeset = await iModelsClient.changesets.getSingle(
+      getSingleChangesetParams
+    );
 
     // Assert
     await assertChangeset({
@@ -290,14 +343,14 @@ describe("[Management] ChangesetOperations", () => {
         description: testChangesetFile.description,
         containingChanges: testChangesetFile.containingChanges,
         synchronizationInfo: testChangesetFile.synchronizationInfo,
-        groupId: firstChangesetGroup.id
+        groupId: firstChangesetGroup.id,
       },
       expectedTestChangesetFile: testChangesetFile,
       expectedLinks: {
         namedVersion: changesetHasNamedVersion,
-        checkpoint: true
+        checkpoint: true,
       },
-      isGetResponse: true
+      isGetResponse: true,
     });
   });
 });

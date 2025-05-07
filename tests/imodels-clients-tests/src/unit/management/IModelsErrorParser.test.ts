@@ -7,5 +7,7 @@ import { IModelsErrorParser as ManagementIModelsErrorParser } from "@itwin/imode
 import { testIModelsErrorParser } from "../CommonErrorParsingTests";
 
 describe("[Management] IModelsErrorParser", () => {
-  testIModelsErrorParser(ManagementIModelsErrorParser.parse);
+  testIModelsErrorParser((response, originalError) =>
+    ManagementIModelsErrorParser.parse(response, originalError)
+  );
 });

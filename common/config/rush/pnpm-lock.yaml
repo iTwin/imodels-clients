@@ -790,6 +790,9 @@ importers:
       '@itwin/eslint-plugin':
         specifier: ~3.7.8
         version: 3.7.17(eslint@8.55.0)(typescript@5.8.3)
+      '@rushstack/eslint-patch':
+        specifier: ^1.2.0
+        version: 1.11.0
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.8.3))(eslint@8.55.0)(typescript@5.8.3)
@@ -799,12 +802,30 @@ importers:
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
+      eslint-config-prettier:
+        specifier: ^8.8.0
+        version: 8.10.0(eslint@8.55.0)
+      eslint-import-resolver-node:
+        specifier: ^0.3.7
+        version: 0.3.9
+      eslint-plugin-deprecation:
+        specifier: ~1.5.0
+        version: 1.5.0(eslint@8.55.0)(typescript@5.8.3)
       eslint-plugin-import:
         specifier: ~2.29.0
         version: 2.29.1(eslint@8.55.0)
       eslint-plugin-mocha:
         specifier: ~10.2.0
         version: 10.2.0(eslint@8.55.0)
+      eslint-plugin-prefer-arrow:
+        specifier: ~1.2.3
+        version: 1.2.3(eslint@8.55.0)
+      eslint-plugin-prettier:
+        specifier: ^4.2.1
+        version: 4.2.1(eslint-config-prettier@8.10.0(eslint@8.55.0))(eslint@8.55.0)(prettier@2.8.8)
+      prettier:
+        specifier: ^2.8.8
+        version: 2.8.8
       sort-package-json:
         specifier: ~1.53.1
         version: 1.53.1
@@ -845,9 +866,6 @@ importers:
         specifier: ~0.1.13
         version: 0.1.14
     devDependencies:
-      '@itwin/eslint-plugin':
-        specifier: ~3.7.8
-        version: 3.7.17(eslint@8.55.0)(typescript@5.8.3)
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../imodels-client-common-config
@@ -857,9 +875,6 @@ importers:
       '@types/node':
         specifier: ^20.14.8
         version: 20.17.30
-      '@typescript-eslint/eslint-plugin':
-        specifier: ~6.14.0
-        version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.8.3))(eslint@8.55.0)(typescript@5.8.3)
       cpx2:
         specifier: 4.2.0
         version: 4.2.0
@@ -869,18 +884,6 @@ importers:
       eslint:
         specifier: ~8.55.0
         version: 8.55.0
-      eslint-plugin-deprecation:
-        specifier: ~1.5.0
-        version: 1.5.0(eslint@8.55.0)(typescript@5.8.3)
-      eslint-plugin-import:
-        specifier: ~2.29.0
-        version: 2.29.1(eslint@8.55.0)
-      eslint-plugin-mocha:
-        specifier: ~10.2.0
-        version: 10.2.0(eslint@8.55.0)
-      eslint-plugin-prefer-arrow:
-        specifier: ~1.2.3
-        version: 1.2.3(eslint@8.55.0)
       rimraf:
         specifier: ~3.0.2
         version: 3.0.2
@@ -1471,6 +1474,9 @@ packages:
     resolution: {integrity: sha512-HdHF4rny4JCvIcm7V1dpvpctIGqM3/Me255CB44vW7hDG1zYMmcBMjpNqZEDxdCfXGLkx5kP0+Jz5DUS+ukqtA==}
     engines: {node: '>=18'}
     hasBin: true
+
+  '@rushstack/eslint-patch@1.11.0':
+    resolution: {integrity: sha512-zxnHvoMQVqewTJr/W4pKjF0bMGiKJv1WX7bSrkl46Hg0QjESbzBROWK0Wg4RphzSOS5Jiy7eFimmM3UgMrMZbQ==}
 
   '@sinonjs/commons@1.8.6':
     resolution: {integrity: sha512-Ky+XkAkqPZSm3NLBeUng77EBQl3cmeJhITaGHdYH8kjVB+aun3S4XBRti2zt17mtt0mIUDiNxYeoJm6drVvBJQ==}
@@ -2436,6 +2442,12 @@ packages:
     engines: {node: '>=6.0'}
     hasBin: true
 
+  eslint-config-prettier@8.10.0:
+    resolution: {integrity: sha512-SM8AMJdeQqRYT9O9zguiruQZaN7+z+E4eAP9oiLNGKMtomwaB1E9dcgUD6ZAn/eQAb52USbvezbiljfZUhbJcg==}
+    hasBin: true
+    peerDependencies:
+      eslint: '>=7.0.0'
+
   eslint-import-resolver-node@0.3.4:
     resolution: {integrity: sha512-ogtf+5AB/O+nM6DIeBUNr2fuT7ot9Qg/1harBfBtaP13ekEWFQEEMP94BCB7zaNW3gyY+8SHYF00rnqYwXKWOA==}
 
@@ -2496,6 +2508,17 @@ packages:
     resolution: {integrity: sha512-J9I5PKCOJretVuiZRGvPQxCbllxGAV/viI20JO3LYblAodofBxyMnZAJ+WGeClHgANnSJberTNoFWWjrWKBuXQ==}
     peerDependencies:
       eslint: '>=2.0.0'
+
+  eslint-plugin-prettier@4.2.1:
+    resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      eslint: '>=7.28.0'
+      eslint-config-prettier: '*'
+      prettier: '>=2.0.0'
+    peerDependenciesMeta:
+      eslint-config-prettier:
+        optional: true
 
   eslint-plugin-react-hooks@4.6.2:
     resolution: {integrity: sha512-QzliNJq4GinDBcD8gPB5v0wh6g8q3SUi6EFF0x8N/BL9PoVs0atuGc47ozMRyOWAKdwaZ5OnbOEa3WR+dSGKuQ==}
@@ -2599,6 +2622,9 @@ packages:
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
+
+  fast-diff@1.3.0:
+    resolution: {integrity: sha512-VxPP4NqbUjj6MaAOafWeUn2cXWLcCtljklUtZf0Ind4XQ+QPtmA0b18zZy0jIQx+ExRVCR/ZQpBmik5lXshNsw==}
 
   fast-equals@3.0.3:
     resolution: {integrity: sha512-NCe8qxnZFARSHGztGMZOO/PC1qa5MIFB5Hp66WdzbCRAz8U8US3bx1UTgLS49efBQPcUtO9gf5oVEY8o7y/7Kg==}
@@ -3691,6 +3717,15 @@ packages:
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
+
+  prettier-linter-helpers@1.0.0:
+    resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
+    engines: {node: '>=6.0.0'}
+
+  prettier@2.8.8:
+    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
 
   pretty-bytes@5.6.0:
     resolution: {integrity: sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==}
@@ -5207,6 +5242,8 @@ snapshots:
       - bare-buffer
       - supports-color
 
+  '@rushstack/eslint-patch@1.11.0': {}
+
   '@sinonjs/commons@1.8.6':
     dependencies:
       type-detect: 4.0.8
@@ -6388,6 +6425,10 @@ snapshots:
     optionalDependencies:
       source-map: 0.6.1
 
+  eslint-config-prettier@8.10.0(eslint@8.55.0):
+    dependencies:
+      eslint: 8.55.0
+
   eslint-import-resolver-node@0.3.4:
     dependencies:
       debug: 2.6.9
@@ -6497,6 +6538,14 @@ snapshots:
   eslint-plugin-prefer-arrow@1.2.3(eslint@8.55.0):
     dependencies:
       eslint: 8.55.0
+
+  eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.10.0(eslint@8.55.0))(eslint@8.55.0)(prettier@2.8.8):
+    dependencies:
+      eslint: 8.55.0
+      prettier: 2.8.8
+      prettier-linter-helpers: 1.0.0
+    optionalDependencies:
+      eslint-config-prettier: 8.10.0(eslint@8.55.0)
 
   eslint-plugin-react-hooks@4.6.2(eslint@8.55.0):
     dependencies:
@@ -6645,6 +6694,8 @@ snapshots:
   extsprintf@1.3.0: {}
 
   fast-deep-equal@3.1.3: {}
+
+  fast-diff@1.3.0: {}
 
   fast-equals@3.0.3: {}
 
@@ -7850,6 +7901,12 @@ snapshots:
   possible-typed-array-names@1.1.0: {}
 
   prelude-ls@1.2.1: {}
+
+  prettier-linter-helpers@1.0.0:
+    dependencies:
+      fast-diff: 1.3.0
+
+  prettier@2.8.8: {}
 
   pretty-bytes@5.6.0: {}
 

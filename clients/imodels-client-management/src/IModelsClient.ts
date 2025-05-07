@@ -2,11 +2,31 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import { AxiosRestClient, AxiosRetryPolicy, ExponentialBackoffAlgorithm } from "./base/axios";
-import { IModelsErrorParser } from "./base/internal";
-import { ApiOptions, HeaderFactories, HttpRequestRetryPolicy, RecursiveRequired, RestClient } from "./base/types";
+import {
+  AxiosRestClient,
+  AxiosRetryPolicy,
+  ExponentialBackoffAlgorithm,
+} from "./base/axios";
+import { IModelsErrorParser, ResponseInfo } from "./base/internal";
+import {
+  ApiOptions,
+  HeaderFactories,
+  HttpRequestRetryPolicy,
+  IModelsOriginalError,
+  RecursiveRequired,
+  RestClient,
+} from "./base/types";
 import { Constants } from "./Constants";
-import { BriefcaseOperations, ChangesetOperations, IModelOperations, NamedVersionOperations, OperationOperations, ThumbnailOperations, UserOperations, UserPermissionOperations } from "./operations";
+import {
+  BriefcaseOperations,
+  ChangesetOperations,
+  IModelOperations,
+  NamedVersionOperations,
+  OperationOperations,
+  ThumbnailOperations,
+  UserOperations,
+  UserPermissionOperations,
+} from "./operations";
 import { ChangesetExtendedDataOperations } from "./operations/changeset-extended-data/ChangesetExtendedDataOperations";
 import { ChangesetGroupOperations } from "./operations/changeset-group/ChangesetGroupOperations";
 import { CheckpointOperations } from "./operations/checkpoint/CheckpointOperations";
@@ -46,11 +66,17 @@ export class IModelsClient {
    * are `undefined` the client uses defaults. See {@link iModelsClientOptions}.
    */
   constructor(options?: IModelsClientOptions) {
-    const filledIModelsClientOptions = IModelsClient.fillManagementClientConfiguration(options);
+    const filledIModelsClientOptions =
+      IModelsClient.fillManagementClientConfiguration(options);
     this._operationsOptions = {
       ...filledIModelsClientOptions,
-      parseErrorFunc: IModelsErrorParser.parse,
-      urlFormatter: new IModelsApiUrlFormatter(filledIModelsClientOptions.api.baseUrl)
+      parseErrorFunc: (
+        response: ResponseInfo,
+        originalError: IModelsOriginalError
+      ) => IModelsErrorParser.parse(response, originalError),
+      urlFormatter: new IModelsApiUrlFormatter(
+        filledIModelsClientOptions.api.baseUrl
+      ),
     };
   }
 
@@ -112,19 +138,21 @@ export class IModelsClient {
   private static fillManagementClientConfiguration(
     options: IModelsClientOptions | undefined
   ): RecursiveRequired<IModelsClientOptions> {
-    const retryPolicy = options?.retryPolicy ?? new AxiosRetryPolicy({
-      maxRetries: Constants.retryPolicy.maxRetries,
-      backoffAlgorithm: new ExponentialBackoffAlgorithm({
-        baseDelayInMs: Constants.retryPolicy.baseDelayInMs,
-        factor: Constants.retryPolicy.delayFactor
-      })
-    });
+    const retryPolicy =
+      options?.retryPolicy ??
+      new AxiosRetryPolicy({
+        maxRetries: Constants.retryPolicy.maxRetries,
+        backoffAlgorithm: new ExponentialBackoffAlgorithm({
+          baseDelayInMs: Constants.retryPolicy.baseDelayInMs,
+          factor: Constants.retryPolicy.delayFactor,
+        }),
+      });
 
     return {
       api: this.fillApiConfiguration(options?.api),
       restClient: options?.restClient ?? new AxiosRestClient(retryPolicy),
       headers: options?.headers ?? {},
-      retryPolicy
+      retryPolicy,
     };
   }
 
@@ -133,7 +161,7 @@ export class IModelsClient {
   ): RecursiveRequired<ApiOptions> {
     return {
       baseUrl: apiOptions?.baseUrl ?? Constants.api.baseUrl,
-      version: apiOptions?.version ?? Constants.api.version
+      version: apiOptions?.version ?? Constants.api.version,
     };
   }
 }
