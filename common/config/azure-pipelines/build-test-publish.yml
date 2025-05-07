@@ -8,7 +8,7 @@ parameters:
 trigger: none
 
 variables:
-  nodeVersion: '18.12.0'
+  nodeVersion: '20.9.0'
 
 jobs:
   - job: BuildAndTest
