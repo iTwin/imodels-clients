@@ -3,5 +3,6 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 export * from "./ApiResponseInterfaces";
+export * from "./AuthoringUtilityFunctions";
 export * from "./IModelsErrorParser";
 export * from "./NodeLocalFileSystem";

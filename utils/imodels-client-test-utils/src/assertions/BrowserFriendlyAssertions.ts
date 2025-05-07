@@ -167,11 +167,12 @@ export function assertCheckpoint(params: {
 
   expect(params.actualCheckpoint.state).to.equal(params.expectedCheckpointProperties.state);
 
-  expect(params.actualCheckpoint.containerAccessInfo).to.not.be.null;
-  expect(params.actualCheckpoint.containerAccessInfo!.account).to.not.be.empty;
-  expect(params.actualCheckpoint.containerAccessInfo!.sas).to.not.be.empty;
-  expect(params.actualCheckpoint.containerAccessInfo!.container).to.not.be.empty;
-  expect(params.actualCheckpoint.containerAccessInfo!.dbName).to.not.be.empty;
+  expect(params.actualCheckpoint.directoryAccessInfo).to.not.be.null;
+  expect(params.actualCheckpoint.directoryAccessInfo!.baseUrl).to.not.be.empty;
+  expect(params.actualCheckpoint.directoryAccessInfo!.baseDirectory).to.not.be.empty;
+  expect(params.actualCheckpoint.directoryAccessInfo?.azure?.sasToken ??
+    params.actualCheckpoint.directoryAccessInfo?.google?.authorization).to.not.be.empty;
+  expect(params.actualCheckpoint.dbName).to.not.be.empty;
 
   expect(params.actualCheckpoint._links).to.exist;
   expect(params.actualCheckpoint._links.download).to.exist;

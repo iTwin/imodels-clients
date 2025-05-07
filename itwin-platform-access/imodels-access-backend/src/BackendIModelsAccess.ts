@@ -318,7 +318,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     }
 
     // Means the v2 checkpoint does not exist.
-    if (checkpoint.containerAccessInfo === null) {
+    if (checkpoint.directoryAccessInfo === null) {
       return arg?.allowPreceding
         ? queryCurrentOrPrecedingV2Checkpoint(
           this._iModelsClient,
@@ -328,7 +328,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
         : undefined;
     }
 
-    const result = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.containerAccessInfo);
+    const result = ClientToPlatformAdapter.toV2CheckpointAccessProps(checkpoint.directoryAccessInfo, checkpoint.dbName);
     return result;
   }
 

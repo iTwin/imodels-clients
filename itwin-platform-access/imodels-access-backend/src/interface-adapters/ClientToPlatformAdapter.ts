@@ -7,7 +7,7 @@ import { ITwinError } from "@itwin/core-bentley";
 import { ChangesetFileProps, ChangesetProps, ChangesetType } from "@itwin/core-common";
 
 import { DownloadedChangeset, Lock, LockLevel } from "@itwin/imodels-client-authoring";
-import { ContainerAccessInfo, ContainingChanges, IModelsErrorCode, IModelsErrorScope, MinimalChangeset, isIModelsApiError } from "@itwin/imodels-client-management";
+import { ContainingChanges, DirectoryAccessInfo, IModelsErrorCode, IModelsErrorScope, MinimalChangeset, isIModelsApiError } from "@itwin/imodels-client-management";
 
 export class ClientToPlatformAdapter {
   public static toChangesetProps(changeset: MinimalChangeset): ChangesetProps {
@@ -40,8 +40,8 @@ export class ClientToPlatformAdapter {
     return result;
   }
 
-  public static toV2CheckpointAccessProps(containerAccessInfo: ContainerAccessInfo): V2CheckpointAccessProps {
-    if (!containerAccessInfo.container || !containerAccessInfo.sas || !containerAccessInfo.account || !containerAccessInfo.dbName)
+  public static toV2CheckpointAccessProps(directoryAccessInfo: DirectoryAccessInfo, dbName: string): V2CheckpointAccessProps {
+    if (!directoryAccessInfo.baseDirectory || !directoryAccessInfo.baseUrl || !dbName)
       ITwinError.throwError({
         iTwinErrorId: {
           key: IModelsErrorCode.CheckpointNotFound,
@@ -49,13 +49,21 @@ export class ClientToPlatformAdapter {
         },
         message: "Invalid V2 checkpoint"
       });
+    if (directoryAccessInfo.storageType !== "azure" && directoryAccessInfo.storageType !== "google")
+      ITwinError.throwError({
+        iTwinErrorId: {
+          key: IModelsErrorCode.StorageTypeNotSupported,
+          scope: IModelsErrorScope
+        },
+        message: "Invalid V2 checkpoint storage type"
+      });
 
     return {
-      containerId: containerAccessInfo.container,
-      sasToken: containerAccessInfo.sas,
-      accountName: containerAccessInfo.account,
-      dbName: containerAccessInfo.dbName,
-      storageType: "azure?sas=1"
+      containerId: directoryAccessInfo.baseDirectory,
+      sasToken: directoryAccessInfo.storageType === "azure" ? directoryAccessInfo.azure!.sasToken : directoryAccessInfo.google!.authorization,
+      accountName: directoryAccessInfo.storage,
+      dbName,
+      storageType: directoryAccessInfo.storageType === "azure" ? "azure?sas=1" : directoryAccessInfo.storageType
     };
   }
 

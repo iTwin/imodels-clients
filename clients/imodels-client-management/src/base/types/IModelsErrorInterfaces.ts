@@ -60,12 +60,13 @@ export enum IModelsErrorCode {
   RateLimitExceeded = "RateLimitExceeded",
   RequestTooLarge = "RequestTooLarge",
   ResourceQuotaExceeded = "ResourceQuotaExceeded",
+  StorageTypeNotSupported = "StorageTypeNotSupported",
   TooManyRequests = "TooManyRequests",
   Unauthorized = "Unauthorized",
   Unknown = "Unknown",
   Unrecognized = "Unrecognized",
   UserNotFound = "UserNotFound",
-  VersionExists = "NamedVersionExists"
+  VersionExists = "NamedVersionExists",
 }
 
 /** Error detail information. */

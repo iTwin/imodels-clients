@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Support google storage",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-authoring"
+}

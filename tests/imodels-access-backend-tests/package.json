@@ -68,6 +68,6 @@
     "rimraf": "~3.0.2",
     "sinon": "^15.1.0",
     "sort-package-json": "~1.53.1",
-    "typescript": "~5.3.3"
+    "typescript": "~5.8.3"
   }
 }
