@@ -94,13 +94,16 @@ export class ClientToPlatformAdapter {
         },
         message: "Invalid V2 checkpoint storage type",
       });
-    if (directoryAccessInfo.storageType !== "azure" && directoryAccessInfo.storageType !== "google")
+    if (
+      directoryAccessInfo.storageType !== "azure" &&
+      directoryAccessInfo.storageType !== "google"
+    )
       ITwinError.throwError({
         iTwinErrorId: {
           key: IModelsErrorCode.StorageTypeNotSupported,
-          scope: IModelsErrorScope
+          scope: IModelsErrorScope,
         },
-        message: "Invalid V2 checkpoint storage type"
+        message: "Invalid V2 checkpoint storage type",
       });
 
     return {

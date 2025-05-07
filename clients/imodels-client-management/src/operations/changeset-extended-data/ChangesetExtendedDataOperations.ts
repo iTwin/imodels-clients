@@ -102,9 +102,11 @@ export class ChangesetExtendedDataOperations<
     if (typeof window !== "undefined") {
       const binString = atob(input);
       const bytes = Uint8Array.from(binString, (m) => m.charCodeAt(0));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return JSON.parse(new TextDecoder().decode(bytes));
     } else {
       const decodedString = Buffer.from(input, "base64").toString("utf8");
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return JSON.parse(decodedString);
     }
   }

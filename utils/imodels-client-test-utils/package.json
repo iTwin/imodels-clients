@@ -22,7 +22,7 @@
     "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
     "clean": "rimraf lib",
     "cover": "nyc npm test",
-    "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config./src/**/*.ts 1>&2",
+    "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
   },

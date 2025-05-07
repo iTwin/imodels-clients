@@ -33,7 +33,7 @@
     "build:cjs": "tsc 1>&2 --outDir lib/cjs",
     "build:esm": "tsc 1>&2 --module esnext --outDir lib/esm",
     "clean": "rimraf lib",
-    "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config./src/**/*.ts 1>&2",
+    "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
   },
