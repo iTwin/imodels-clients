@@ -27,4 +27,5 @@
     "editor.action.fixAll": "explicit",
     "source.fixAll.eslint": "explicit"
   },
+  "cSpell.import": ["${workspaceFolder}/utils/imodels-client-common-config/cspell.json"]
 }
