@@ -341,7 +341,7 @@ describe("[Authoring] ChangesetOperations", () => {
       it(`should should retry changeset download if it fails the first time when downloading changeset ${testCase.label}`, async () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
-        const azureClientStorage = AuthoringUtilityFunctions.createDefaultClientStorage();
+        const clientStorage = AuthoringUtilityFunctions.createDefaultClientStorage();
         let hasDownloadFailed = false;
         const downloadInterceptor = (input: UrlDownloadInput | ConfigDownloadInput) => {
           fileTransferLog.recordDownload((input as UrlDownloadInput).url);
@@ -352,7 +352,7 @@ describe("[Authoring] ChangesetOperations", () => {
           }
         };
 
-        const trackedStorage = new TrackableClientStorage(azureClientStorage, { download: downloadInterceptor });
+        const trackedStorage = new TrackableClientStorage(clientStorage, { download: downloadInterceptor });
         const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, cloudStorage: trackedStorage });
 
         const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", `download ${testCase.label} retry test`);
@@ -382,12 +382,12 @@ describe("[Authoring] ChangesetOperations", () => {
       it(`should not download changeset again if it is already present when downloading changeset ${testCase.label}`, async () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
-        const azureClientStorage = AuthoringUtilityFunctions.createDefaultClientStorage();
+        const clientStorage = AuthoringUtilityFunctions.createDefaultClientStorage();
         const downloadInterceptor = async (input: UrlDownloadInput | ConfigDownloadInput) => {
           fileTransferLog.recordDownload((input as UrlDownloadInput).url);
         };
 
-        const trackedStorage = new TrackableClientStorage(azureClientStorage, { download: downloadInterceptor });
+        const trackedStorage = new TrackableClientStorage(clientStorage, { download: downloadInterceptor });
         const iModelsClientWithTrackedFileTransfer = new IModelsClient({ ...iModelsClientOptions, cloudStorage: trackedStorage });
 
         const downloadPath = path.join(Constants.TestDownloadDirectoryPath, "[Authoring] ChangesetOperations", `download ${testCase.label} reuse test`);
