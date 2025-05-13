@@ -12,6 +12,7 @@ import {
   IModel,
   IModelCreationMode,
   IModelScopedOperationParams,
+  IModelState,
   OrderableCollectionRequestParams,
 } from "../../base/types";
 import { ChangesetIdOrIndex } from "../OperationParamExports";
@@ -34,6 +35,8 @@ export interface GetIModelListUrlParams
   iTwinId: string;
   /** Filters iModels with a specific name. */
   name?: string;
+  /** Filters iModels with a specific state. Valid values for this parameter are 'initialized' or 'notInitialized'. */
+  state?: IModelState;
 }
 
 /** Parameters for get iModel list operation. */
