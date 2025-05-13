@@ -35,7 +35,7 @@ export interface GetIModelListUrlParams
   iTwinId: string;
   /** Filters iModels with a specific name. */
   name?: string;
-  /** Filters iModels with a specific state. Valid values for this parameter are 'initialized' or 'notInitialized'. */
+  /** Filters iModels with a specific state. */
   state?: IModelState;
 }
 
