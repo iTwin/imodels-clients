@@ -33,12 +33,12 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.js"
   },
   "dependencies": {
-    "@itwin/core-backend": "^5.0.0-dev.104",
-    "@itwin/core-bentley": "^5.0.0-dev.104",
-    "@itwin/core-common": "^5.0.0-dev.104",
-    "@itwin/core-geometry": "^5.0.0-dev.104",
-    "@itwin/core-quantity": "^5.0.0-dev.104",
-    "@itwin/ecschema-metadata": "^5.0.0-dev.104",
+    "@itwin/core-backend": "^5.0.0-dev.112",
+    "@itwin/core-bentley": "^5.0.0-dev.112",
+    "@itwin/core-common": "^5.0.0-dev.112",
+    "@itwin/core-geometry": "^5.0.0-dev.112",
+    "@itwin/core-quantity": "^5.0.0-dev.112",
+    "@itwin/ecschema-metadata": "^5.0.0-dev.112",
     "@itwin/imodels-access-backend": "workspace:*",
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",

@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { ITwinError } from "@itwin/core-bentley";
-import { ChangesetIndexAndId, IModelVersion } from "@itwin/core-common";
+import type { ChangesetIndexAndId, IModelVersion } from "@itwin/core-common";
 import {
   FrontendHubAccess,
   IModelApp,
