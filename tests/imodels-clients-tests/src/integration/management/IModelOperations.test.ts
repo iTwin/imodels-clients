@@ -19,6 +19,7 @@ import {
   GetSingleIModelParams,
   IModel,
   IModelOrderByProperty,
+  IModelState,
   IModelsClient,
   IModelsClientOptions,
   IModelsErrorCode,
@@ -360,6 +361,54 @@ describe("[Management] IModelOperations", () => {
     expect(iModelArray.length).to.equal(1);
     const iModel = iModelArray[0];
     expect(iModel.id).to.equal(testIModelForUpdate.id);
+  });
+
+  it("should return iModels that match the provided state (notInitialized)", async () => {
+    // Arrange
+    const getIModelListParams: GetIModelListParams = {
+      authorization,
+      urlParams: {
+        iTwinId,
+        state: IModelState.NotInitialized,
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID(),
+      },
+    };
+
+    // Act
+    const iModels =
+      iModelsClient.iModels.getRepresentationList(getIModelListParams);
+
+    // Assert
+    const iModelArray = await toArray(iModels);
+    iModelArray.forEach((iModel) => {
+      expect(iModel.state).to.be.equal(IModelState.NotInitialized);
+    });
+  });
+
+  it("should return iModels that match the provided state (initialized)", async () => {
+    // Arrange
+    const getIModelListParams: GetIModelListParams = {
+      authorization,
+      urlParams: {
+        iTwinId,
+        state: IModelState.Initialized,
+      },
+      headers: {
+        "X-Correlation-Id": randomUUID(),
+      },
+    };
+
+    // Act
+    const iModels =
+      iModelsClient.iModels.getRepresentationList(getIModelListParams);
+
+    // Assert
+    const iModelArray = await toArray(iModels);
+    iModelArray.forEach((iModel) => {
+      expect(iModel.state).to.be.equal(IModelState.Initialized);
+    });
   });
 
   it("should get minimal iModel", async () => {
