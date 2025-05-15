@@ -19,6 +19,7 @@ import {
   toArray,
 } from "@itwin/imodels-client-management";
 import {
+  IModelsClientsTestsConfig,
   ReusableIModelMetadata,
   ReusableTestIModelProvider,
   TestAuthorizationProvider,
@@ -37,6 +38,8 @@ describe("[Management] UserOperations", () => {
 
   let testIModelForRead: ReusableIModelMetadata;
 
+  let testConfig: IModelsClientsTestsConfig;
+
   before(async () => {
     const container = getTestDIContainer();
 
@@ -52,6 +55,8 @@ describe("[Management] UserOperations", () => {
       ReusableTestIModelProvider
     );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
+
+    testConfig = container.get(IModelsClientsTestsConfig);
   });
 
   [
@@ -111,29 +116,35 @@ describe("[Management] UserOperations", () => {
 
   it("should get user by id", async () => {
     // Arrange
-    const userId = await getValidUserId();
-    const getSingleUserParams: GetSingleUserParams = {
+    const users = await getMinimalUsersList();
+    const admin1User = users.find(
+      (user) => user.displayName === testConfig.testUsers.admin1.email
+    );
+    expect(admin1User).to.not.be.undefined;
+    const getAdmin1UserParams: GetSingleUserParams = {
       authorization,
       iModelId: testIModelForRead.id,
-      userId,
+      userId: admin1User!.id,
     };
 
     // Act
-    const user: User = await iModelsClient.users.getSingle(getSingleUserParams);
+    const queriedAdmin1User: User = await iModelsClient.users.getSingle(
+      getAdmin1UserParams
+    );
 
     // Assert
     assertUser({
-      actualUser: user,
+      actualUser: queriedAdmin1User,
     });
 
     // Assert user statistics
     assertUserStatistics({
-      actualUser: user,
+      actualUser: queriedAdmin1User,
       expectedUserStatistics: {
-        briefcasesCount: 0,
-        createdVersionsCount: 2,
-        lastChangesetPushDate: null,
-        pushedChangesetsCount: 0,
+        briefcasesCount: 3,
+        createdVersionsCount: 0,
+        pushedChangesetsCount: 10,
+        applications: [{ ownsLocks: true, ownsExclusiveRootElementLock: true }],
       },
     });
   });
@@ -266,13 +277,13 @@ describe("[Management] UserOperations", () => {
         .true;
   });
 
-  async function getValidUserId(): Promise<string> {
+  async function getMinimalUsersList(): Promise<MinimalUser[]> {
     const users: EntityListIterator<MinimalUser> =
       iModelsClient.users.getMinimalList({
         authorization,
         iModelId: testIModelForRead.id,
       });
     const userList: MinimalUser[] = await toArray(users);
-    return userList[0].id;
+    return userList;
   }
 });
