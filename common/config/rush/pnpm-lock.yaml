@@ -35,7 +35,7 @@ importers:
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
       '@types/node':
-        specifier: ^20.14.8
+        specifier: ^22.15.14
         version: 20.17.30
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
@@ -65,7 +65,7 @@ importers:
         specifier: ~1.53.1
         version: 1.53.1
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   ../../clients/imodels-client-management:
@@ -81,7 +81,7 @@ importers:
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
       '@types/node':
-        specifier: ^20.14.8
+        specifier: ^22.15.14
         version: 20.17.30
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
@@ -111,7 +111,7 @@ importers:
         specifier: ~1.53.1
         version: 1.53.1
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   ../../itwin-platform-access/imodels-access-backend:
@@ -184,7 +184,7 @@ importers:
         specifier: ~1.53.1
         version: 1.53.1
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   ../../itwin-platform-access/imodels-access-common:
@@ -239,7 +239,7 @@ importers:
         specifier: ~1.53.1
         version: 1.53.1
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   ../../itwin-platform-access/imodels-access-frontend:
@@ -312,7 +312,7 @@ importers:
         specifier: ~1.53.1
         version: 1.53.1
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   ../../tests/imodels-access-backend-tests:
@@ -421,7 +421,7 @@ importers:
         specifier: ~1.53.1
         version: 1.53.1
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   ../../tests/imodels-access-common-tests:
@@ -494,7 +494,7 @@ importers:
         specifier: ~1.53.1
         version: 1.53.1
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   ../../tests/imodels-access-frontend-tests:
@@ -594,7 +594,7 @@ importers:
         specifier: ~1.53.1
         version: 1.53.1
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   ../../tests/imodels-clients-tests:
@@ -655,7 +655,7 @@ importers:
         specifier: ~9.0.0
         version: 9.0.0
       '@types/node':
-        specifier: ^20.14.8
+        specifier: ^22.15.14
         version: 20.17.30
       '@types/sinon':
         specifier: ^10.0.15
@@ -709,7 +709,7 @@ importers:
         specifier: ~2.0.2
         version: 2.0.2
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   ../../tests/imodels-clients-tests-browser:
@@ -749,7 +749,7 @@ importers:
         specifier: ~4.2.21
         version: 4.2.22
       '@types/node':
-        specifier: ^20.14.8
+        specifier: ^22.15.14
         version: 20.17.30
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
@@ -782,7 +782,7 @@ importers:
         specifier: ~1.53.1
         version: 1.53.1
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   ../../utils/imodels-client-common-config:
@@ -830,7 +830,7 @@ importers:
         specifier: ~1.53.1
         version: 1.53.1
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
   ../../utils/imodels-client-test-utils:
@@ -873,7 +873,7 @@ importers:
         specifier: ~4.2.21
         version: 4.2.22
       '@types/node':
-        specifier: ^20.14.8
+        specifier: ^22.15.14
         version: 20.17.30
       cpx2:
         specifier: 4.2.0
@@ -891,7 +891,7 @@ importers:
         specifier: ~1.53.1
         version: 1.53.1
       typescript:
-        specifier: ~5.8.3
+        specifier: ^5.8.3
         version: 5.8.3
 
 packages:
