@@ -30,6 +30,20 @@ export interface UserStatistics {
   createdVersionsCount: number;
   /** Number of Briefcases owned by the user. */
   briefcasesCount: number;
+  /** User Statistics grouped by application. */
+  applications: UserApplicationStatistics[];
+}
+
+/** User Statistics grouped by application. */
+export interface UserApplicationStatistics {
+  /** Application id. */
+  id: string | null;
+  /** Application name. */
+  name: string | null;
+  /** Indicates if this user owns any locks with a briefcase acquired by this application. */
+  ownsLocks: boolean;
+  /** Indicates if this user owns an exclusive repository model lock with a briefcase acquired by this application. */
+  ownsExclusiveRootElementLock: boolean;
 }
 
 /** Full representation of a User. */
