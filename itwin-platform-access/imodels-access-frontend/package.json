@@ -34,10 +34,6 @@
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.js"
   },
-  "dependencies": {
-    "@itwin/imodels-access-common": "workspace:*",
-    "@itwin/imodels-client-management": "workspace:*"
-  },
   "devDependencies": {
     "@itwin/appui-abstract": "^5.0.0-dev.112",
     "@itwin/core-bentley": "^5.0.0-dev.112",
@@ -49,7 +45,9 @@
     "@itwin/ecschema-metadata": "^5.0.0-dev.112",
     "@itwin/ecschema-rpcinterface-common": "^5.0.0-dev.112",
     "@itwin/eslint-plugin": "~3.7.8",
+    "@itwin/imodels-access-common": "workspace:*",
     "@itwin/imodels-client-common-config": "workspace:*",
+    "@itwin/imodels-client-management": "workspace:*",
     "@itwin/webgl-compatibility": "^5.0.0-dev.112",
     "@types/node": "^22.15.14",
     "@typescript-eslint/eslint-plugin": "~6.14.0",
@@ -65,6 +63,8 @@
   },
   "peerDependencies": {
     "@itwin/core-bentley": "^5.0.0-dev.112",
-    "@itwin/core-frontend": "^5.0.0-dev.112"
+    "@itwin/core-frontend": "^5.0.0-dev.112",
+    "@itwin/imodels-access-common": "workspace:^*",
+    "@itwin/imodels-client-management": "workspace:^*"
   }
 }
