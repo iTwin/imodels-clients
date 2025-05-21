@@ -16,11 +16,7 @@ import {
 
 import { ClientStorage } from "@itwin/object-storage-core";
 
-import {
-  createDefaultClientStorage,
-  IModelsErrorParser,
-  NodeLocalFileSystem,
-} from "./base/internal";
+import { IModelsErrorParser, NodeLocalFileSystem } from "./base/internal";
 import { LocalFileSystem } from "./base/types";
 import {
   BaselineFileOperations,
@@ -44,10 +40,10 @@ export interface IModelsClientOptions extends ManagementIModelsClientOptions {
   localFileSystem?: LocalFileSystem;
   /**
    * Storage handler to use in operations which transfer files. Examples of such operations are Changeset download in
-   * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. If `undefined` the default
-   * is used which supports both Azure and Google storage.
+   * {@link ChangesetOperations}, iModel creation from Baseline in {@link iModelOperations}. You can use
+   * {@link createDefaultClientStorage} which supports both Azure and Google storage.
    */
-  cloudStorage?: ClientStorage;
+  cloudStorage: ClientStorage;
 }
 
 /**
@@ -62,7 +58,7 @@ export class IModelsClient extends ManagementIModelsClient {
    * @param {iModelsClientOptions} options client options. If `options` are `undefined` or if some of the properties
    * are `undefined` the client uses defaults. See {@link iModelsClientOptions}.
    */
-  constructor(options?: IModelsClientOptions) {
+  constructor(options: IModelsClientOptions) {
     const filledIModelsClientOptions =
       IModelsClient.fillAuthoringClientConfiguration(options);
     super(filledIModelsClientOptions);
@@ -123,7 +119,7 @@ export class IModelsClient extends ManagementIModelsClient {
   }
 
   private static fillAuthoringClientConfiguration(
-    options: IModelsClientOptions | undefined
+    options: IModelsClientOptions
   ): RecursiveRequired<IModelsClientOptions> {
     const retryPolicy =
       options?.retryPolicy ??
@@ -137,10 +133,10 @@ export class IModelsClient extends ManagementIModelsClient {
 
     return {
       api: this.fillApiConfiguration(options?.api),
-      restClient: options?.restClient ?? new AxiosRestClient(retryPolicy),
-      localFileSystem: options?.localFileSystem ?? new NodeLocalFileSystem(),
-      cloudStorage: options?.cloudStorage ?? createDefaultClientStorage(),
-      headers: options?.headers ?? {},
+      restClient: options.restClient ?? new AxiosRestClient(retryPolicy),
+      localFileSystem: options.localFileSystem ?? new NodeLocalFileSystem(),
+      headers: options.headers ?? {},
+      cloudStorage: options.cloudStorage,
       retryPolicy,
     };
   }
