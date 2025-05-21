@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ITwinError } from "@itwin/core-bentley";
-import { ConflictingLock } from "@itwin/imodels-client-authoring";
+import { type ConflictingLock } from "@itwin/imodels-client-authoring";
 import {
   IModelsError,
   IModelsErrorCode,

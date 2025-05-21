@@ -116,18 +116,6 @@ importers:
 
   ../../itwin-platform-access/imodels-access-backend:
     dependencies:
-      '@azure/abort-controller':
-        specifier: ^1.1.0
-        version: 1.1.0
-      '@itwin/imodels-access-common':
-        specifier: workspace:*
-        version: link:../imodels-access-common
-      '@itwin/imodels-client-authoring':
-        specifier: workspace:*
-        version: link:../../clients/imodels-client-authoring
-      '@itwin/imodels-client-management':
-        specifier: workspace:*
-        version: link:../../clients/imodels-client-management
       axios:
         specifier: ^1.8.2
         version: 1.8.4
@@ -150,9 +138,18 @@ importers:
       '@itwin/eslint-plugin':
         specifier: ~3.7.8
         version: 3.7.17(eslint@8.55.0)(typescript@5.8.3)
+      '@itwin/imodels-access-common':
+        specifier: workspace:*
+        version: link:../imodels-access-common
+      '@itwin/imodels-client-authoring':
+        specifier: workspace:*
+        version: link:../../clients/imodels-client-authoring
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
+      '@itwin/imodels-client-management':
+        specifier: workspace:*
+        version: link:../../clients/imodels-client-management
       '@types/node':
         specifier: 14.14.31
         version: 14.14.31
@@ -1554,6 +1551,9 @@ packages:
 
   '@types/node@14.14.31':
     resolution: {integrity: sha512-vFHy/ezP5qI0rFgJ7aQnjDXwAMrG0KqqIH7tQG5PPv3BWBayOPIQNBjVc/P6hhdZfMx51REc6tfDNXHUio893g==}
+
+  '@types/node@20.17.49':
+    resolution: {integrity: sha512-lu4U+g0EbSW2aPGksNyqcesB2D3eDD0mv8ig9youJsEs/DuMOdeqcEbFOBDCCurXNpa10NkKSSRfOQLBFCiD8w==}
 
   '@types/node@22.15.18':
     resolution: {integrity: sha512-v1DKRfUdyW+jJhZNEI1PYy29S2YRxMV5AOO/x/SjKmW0acCIOqmbj6Haf9eHAhsPmrhlHSxEhv/1WszcLWV4cg==}
@@ -4308,6 +4308,9 @@ packages:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
     engines: {node: '>= 0.4'}
 
+  undici-types@6.19.8:
+    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
@@ -5331,6 +5334,11 @@ snapshots:
 
   '@types/node@14.14.31': {}
 
+  '@types/node@20.17.49':
+    dependencies:
+      undici-types: 6.19.8
+    optional: true
+
   '@types/node@22.15.18':
     dependencies:
       undici-types: 6.21.0
@@ -5373,7 +5381,7 @@ snapshots:
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 22.15.18
+      '@types/node': 20.17.49
     optional: true
 
   '@typescript-eslint/eslint-plugin@4.31.2(@typescript-eslint/parser@4.31.2(eslint@8.55.0)(typescript@5.8.3))(eslint@8.55.0)(typescript@5.8.3)':
@@ -8613,6 +8621,9 @@ snapshots:
       has-bigints: 1.1.0
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
+
+  undici-types@6.19.8:
+    optional: true
 
   undici-types@6.21.0: {}
 
