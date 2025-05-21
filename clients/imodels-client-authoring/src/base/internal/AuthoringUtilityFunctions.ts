@@ -3,27 +3,44 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 
-import { GoogleClientStorage } from "@itwin/object-storage-google/lib/client";
-import { ClientStorageWrapperFactory } from "@itwin/object-storage-google/lib/client/wrappers";
-
-import {
-  AzureClientStorage,
-  BlockBlobClientWrapperFactory,
-} from "@itwin/object-storage-azure";
 import {
   ClientStorage,
   StrategyClientStorage,
 } from "@itwin/object-storage-core";
 
-export function createDefaultClientStorage(): ClientStorage {
-  return new StrategyClientStorage([
-    {
+export async function createDefaultClientStorage(): Promise<ClientStorage> {
+  const clients = [];
+
+  try {
+    const { AzureClientStorage, BlockBlobClientWrapperFactory } = await import(
+      "@itwin/object-storage-azure"
+    );
+    clients.push({
       instanceName: "azure",
       instance: new AzureClientStorage(new BlockBlobClientWrapperFactory()),
-    },
-    {
+    });
+  } catch {
+    throw new Error(
+      "Azure client storage is not available. Please install @itwin/object-storage-azure package."
+    );
+  }
+
+  try {
+    const { GoogleClientStorage } = await import(
+      "@itwin/object-storage-google/lib/client"
+    );
+    const { ClientStorageWrapperFactory } = await import(
+      "@itwin/object-storage-google/lib/client/wrappers"
+    );
+    clients.push({
       instanceName: "google",
       instance: new GoogleClientStorage(new ClientStorageWrapperFactory()),
-    },
-  ]);
+    });
+  } catch {
+    throw new Error(
+      "Google client storage is not available. Please install @itwin/object-storage-google package."
+    );
+  }
+
+  return new StrategyClientStorage(clients);
 }

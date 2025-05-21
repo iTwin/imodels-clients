@@ -4,13 +4,19 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import {
-  createDefaultClientStorage,
-  IModelsClientOptions,
-} from "@itwin/imodels-client-authoring";
+import { IModelsClientOptions } from "@itwin/imodels-client-authoring";
 import { ApiOptions } from "@itwin/imodels-client-management";
+import { GoogleClientStorage } from "@itwin/object-storage-google/lib/client";
+import { ClientStorageWrapperFactory } from "@itwin/object-storage-google/lib/client/wrappers";
 
-import { ClientStorage } from "@itwin/object-storage-core";
+import {
+  AzureClientStorage,
+  BlockBlobClientWrapperFactory,
+} from "@itwin/object-storage-azure";
+import {
+  ClientStorage,
+  StrategyClientStorage,
+} from "@itwin/object-storage-core";
 
 import { IModelsClientsTestsConfig } from "../../IModelsClientsTestsConfig";
 
@@ -21,6 +27,15 @@ export class TestIModelsClientOptions implements IModelsClientOptions {
 
   constructor(config: IModelsClientsTestsConfig) {
     this.api = { baseUrl: config.apis.iModels.baseUrl };
-    this.cloudStorage = createDefaultClientStorage();
+    this.cloudStorage = new StrategyClientStorage([
+      {
+        instanceName: "azure",
+        instance: new AzureClientStorage(new BlockBlobClientWrapperFactory()),
+      },
+      {
+        instanceName: "google",
+        instance: new GoogleClientStorage(new ClientStorageWrapperFactory()),
+      },
+    ]);
   }
 }
