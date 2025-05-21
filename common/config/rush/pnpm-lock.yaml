@@ -18,15 +18,9 @@ importers:
       '@itwin/imodels-client-management':
         specifier: workspace:*
         version: link:../imodels-client-management
-      '@itwin/object-storage-azure':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@itwin/object-storage-core':
         specifier: ^3.0.0-dev.0
         version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
-      '@itwin/object-storage-google':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0
     devDependencies:
       '@itwin/eslint-plugin':
         specifier: ~3.7.8
@@ -34,6 +28,12 @@ importers:
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
+      '@itwin/object-storage-azure':
+        specifier: ^3.0.0-dev.0
+        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+      '@itwin/object-storage-google':
+        specifier: ^3.0.0-dev.0
+        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@types/node':
         specifier: ^22.15.14
         version: 22.15.18
@@ -188,13 +188,6 @@ importers:
         version: 5.8.3
 
   ../../itwin-platform-access/imodels-access-common:
-    dependencies:
-      '@itwin/imodels-client-authoring':
-        specifier: workspace:*
-        version: link:../../clients/imodels-client-authoring
-      '@itwin/imodels-client-management':
-        specifier: workspace:*
-        version: link:../../clients/imodels-client-management
     devDependencies:
       '@itwin/core-bentley':
         specifier: ^5.0.0-dev.112
@@ -202,9 +195,15 @@ importers:
       '@itwin/eslint-plugin':
         specifier: ~3.7.8
         version: 3.7.17(eslint@8.55.0)(typescript@5.8.3)
+      '@itwin/imodels-client-authoring':
+        specifier: workspace:*
+        version: link:../../clients/imodels-client-authoring
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
+      '@itwin/imodels-client-management':
+        specifier: workspace:*
+        version: link:../../clients/imodels-client-management
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.8.3))(eslint@8.55.0)(typescript@5.8.3)
@@ -237,13 +236,6 @@ importers:
         version: 5.8.3
 
   ../../itwin-platform-access/imodels-access-frontend:
-    dependencies:
-      '@itwin/imodels-access-common':
-        specifier: workspace:*
-        version: link:../imodels-access-common
-      '@itwin/imodels-client-management':
-        specifier: workspace:*
-        version: link:../../clients/imodels-client-management
     devDependencies:
       '@itwin/appui-abstract':
         specifier: ^5.0.0-dev.112
@@ -275,9 +267,15 @@ importers:
       '@itwin/eslint-plugin':
         specifier: ~3.7.8
         version: 3.7.17(eslint@8.55.0)(typescript@5.8.3)
+      '@itwin/imodels-access-common':
+        specifier: workspace:*
+        version: link:../imodels-access-common
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
+      '@itwin/imodels-client-management':
+        specifier: workspace:*
+        version: link:../../clients/imodels-client-management
       '@itwin/webgl-compatibility':
         specifier: ^5.0.0-dev.112
         version: 5.0.0-dev.112
@@ -617,6 +615,9 @@ importers:
       '@itwin/object-storage-core':
         specifier: ^3.0.0-dev.0
         version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+      '@itwin/object-storage-google':
+        specifier: ^3.0.0-dev.0
+        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       axios:
         specifier: ^1.8.2
         version: 1.8.4
@@ -841,7 +842,13 @@ importers:
       '@itwin/imodels-client-management':
         specifier: workspace:*
         version: link:../../clients/imodels-client-management
+      '@itwin/object-storage-azure':
+        specifier: ^3.0.0-dev.0
+        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@itwin/object-storage-core':
+        specifier: ^3.0.0-dev.0
+        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+      '@itwin/object-storage-google':
         specifier: ^3.0.0-dev.0
         version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@puppeteer/browsers':
@@ -1551,9 +1558,6 @@ packages:
 
   '@types/node@14.14.31':
     resolution: {integrity: sha512-vFHy/ezP5qI0rFgJ7aQnjDXwAMrG0KqqIH7tQG5PPv3BWBayOPIQNBjVc/P6hhdZfMx51REc6tfDNXHUio893g==}
-
-  '@types/node@20.17.49':
-    resolution: {integrity: sha512-lu4U+g0EbSW2aPGksNyqcesB2D3eDD0mv8ig9youJsEs/DuMOdeqcEbFOBDCCurXNpa10NkKSSRfOQLBFCiD8w==}
 
   '@types/node@22.15.18':
     resolution: {integrity: sha512-v1DKRfUdyW+jJhZNEI1PYy29S2YRxMV5AOO/x/SjKmW0acCIOqmbj6Haf9eHAhsPmrhlHSxEhv/1WszcLWV4cg==}
@@ -4308,9 +4312,6 @@ packages:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
     engines: {node: '>= 0.4'}
 
-  undici-types@6.19.8:
-    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
-
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
@@ -5141,7 +5142,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itwin/object-storage-google@3.0.0-dev.0':
+  '@itwin/object-storage-google@3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)':
     dependencies:
       '@google-cloud/storage': 7.16.0
       '@google-cloud/storage-control': 0.2.1
@@ -5149,6 +5150,9 @@ snapshots:
       '@itwin/object-storage-core': 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       axios: 1.8.4
       google-auth-library: 9.15.1
+    optionalDependencies:
+      inversify: 6.0.3
+      reflect-metadata: 0.1.14
     transitivePeerDependencies:
       - debug
       - encoding
@@ -5334,11 +5338,6 @@ snapshots:
 
   '@types/node@14.14.31': {}
 
-  '@types/node@20.17.49':
-    dependencies:
-      undici-types: 6.19.8
-    optional: true
-
   '@types/node@22.15.18':
     dependencies:
       undici-types: 6.21.0
@@ -5381,7 +5380,7 @@ snapshots:
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 20.17.49
+      '@types/node': 22.15.18
     optional: true
 
   '@typescript-eslint/eslint-plugin@4.31.2(@typescript-eslint/parser@4.31.2(eslint@8.55.0)(typescript@5.8.3))(eslint@8.55.0)(typescript@5.8.3)':
@@ -8621,9 +8620,6 @@ snapshots:
       has-bigints: 1.1.0
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
-
-  undici-types@6.19.8:
-    optional: true
 
   undici-types@6.21.0: {}
 

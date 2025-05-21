@@ -29,6 +29,7 @@
     "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
+    "test": "npm run test:unit && npm run test:integration",
     "test:integration": "mocha lib/integration/**/*.test.js --color --timeout 180000 --exit",
     "test:unit": "mocha lib/unit/**/*.test.js --color --timeout 180000 --exit"
   },
@@ -43,6 +44,7 @@
     "@itwin/imodels-client-test-utils": "workspace:*",
     "@itwin/object-storage-azure": "^3.0.0-dev.0",
     "@itwin/object-storage-core": "^3.0.0-dev.0",
+    "@itwin/object-storage-google": "^3.0.0-dev.0",
     "axios": "^1.8.2",
     "chai": "~4.3.10",
     "chai-as-promised": "~7.1.1",

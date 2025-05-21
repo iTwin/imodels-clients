@@ -29,9 +29,9 @@
     "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
+    "test": "npm run test:integration",
     "test:integration": "cypress run",
-    "test:integration:debug": "cypress open",
-    "test:unit": ""
+    "test:integration:debug": "cypress open"
   },
   "prettier": "./node_modules/@itwin/imodels-client-common-config/prettier.json",
   "eslintConfig": {

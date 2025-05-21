@@ -34,6 +34,7 @@ To include custom headers in your requests, you have the option to provide addit
 
 ```typescript
 iModelsClient = new IModelsClient({
+  cloudStorage: createDefaultClientStorage(),
   headers: {
     "X-Correlation-Id": () => "xCorrelationIdValue",
     "some-custom-header": "someCustomValue",
@@ -59,7 +60,7 @@ import {
 
 /** Function that creates a new iModel from Baseline file and prints its id to the console. */
 async function createIModelFromBaselineFile(): Promise<void> {
-  const iModelsClient: IModelsClient = new IModelsClient();
+  const iModelsClient: IModelsClient = new IModelsClient({ cloudStorage: createDefaultClientStorage() });
   const iModel: IModel = await iModelsClient.iModels.createFromBaseline({
     authorization: () => getAuthorization(),
     iModelProperties: {

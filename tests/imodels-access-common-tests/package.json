@@ -26,6 +26,7 @@
     "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
+    "test": "npm run test:unit",
     "test:unit": "mocha lib/**/*.test.js --color --timeout 180000 --exit"
   },
   "prettier": "./node_modules/@itwin/imodels-client-common-config/prettier.json",

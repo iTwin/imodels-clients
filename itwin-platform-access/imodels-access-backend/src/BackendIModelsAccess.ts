@@ -110,11 +110,7 @@ import {
 } from "./interface-adapters/PlatformToClientAdapter";
 
 export class BackendIModelsAccess implements BackendHubAccess {
-  protected readonly _iModelsClient: IModelsClient;
-
-  constructor(iModelsClient?: IModelsClient) {
-    this._iModelsClient = iModelsClient ?? new IModelsClient();
-  }
+  constructor(private readonly _iModelsClient: IModelsClient) {}
 
   public async downloadChangesets(
     arg: DownloadChangesetRangeArg
