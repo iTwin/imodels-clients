@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-management",
+      "comment": "Add PUT Named Version Checkpoint endpoint",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-management"
+}
