@@ -43,7 +43,7 @@ export type SendPostRequestParams = CommonRequestParams & {
 };
 export type SendPutRequestParams = CommonRequestParams & {
   url: string;
-  contentType: BinaryContentType;
+  contentType?: BinaryContentType;
   body: Uint8Array;
 };
 export type SendPatchRequestParams = SendPostRequestParams;
@@ -110,13 +110,15 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   protected async sendPutRequest<TBody>(
     params: SendPutRequestParams
   ): Promise<HttpResponse<TBody>> {
+    const body = params.contentType ? {
+      contentType: params.contentType,
+      content: params.body,
+    } : undefined;
+    
     return this.executeRequest(async () =>
       this._options.restClient.sendPutRequest<TBody>({
         url: params.url,
-        body: {
-          contentType: params.contentType,
-          content: params.body,
-        },
+        body: body,
         headers: await this.formHeaders({
           ...params,
           contentType: params.contentType,

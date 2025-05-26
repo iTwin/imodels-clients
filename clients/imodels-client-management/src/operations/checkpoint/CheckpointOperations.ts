@@ -3,7 +3,7 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import { CheckpointResponse, OperationsBase } from "../../base/internal";
-import { Checkpoint, ContentType } from "../../base/types";
+import { Checkpoint } from "../../base/types";
 import { GetSingleNamedVersionParams } from "../named-version/NamedVersionOperationParams";
 import { OperationOptions } from "../OperationOptions";
 
@@ -55,8 +55,7 @@ export class CheckpointOperations<
             namedVersionId: params.namedVersionId,
           }),   
           headers: params.headers,
-          body: new Uint8Array(),
-          contentType: ContentType.Png
+          body: new Uint8Array()
         });
     return response.body.checkpoint;
   }

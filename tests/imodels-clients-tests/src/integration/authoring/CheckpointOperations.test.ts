@@ -299,7 +299,7 @@ describe("[Authoring] CheckpointOperations", () => {
 
   it("should reschedule named version checkpoint if it is not succeeded", async () => {
     // Arrange
-    const changeset = await getChangesetForNewNamedVersion({
+    const changeset = await getChangesetWithoutNamedVersion({
       authorization,
       iModelId: testIModelForWrite.id,
     });
@@ -414,7 +414,7 @@ describe("[Authoring] CheckpointOperations", () => {
     });
   });
 
-  async function getChangesetForNewNamedVersion(
+  async function getChangesetWithoutNamedVersion(
     params: IModelScopedOperationParams
   ): Promise<Changeset> {
     for await (const changeset of iModelsClient.changesets.getRepresentationList(
