@@ -10,7 +10,6 @@ import { expect } from "chai";
 
 import {
   AcquireBriefcaseParams,
-  createDefaultClientStorage,
   CreateChangesetGroupParams,
   CreateChangesetParams,
   DownloadChangesetListParams,
@@ -46,15 +45,36 @@ import {
   assertProgressReports,
   cleanupDirectory,
 } from "@itwin/imodels-client-test-utils";
+import { GoogleClientStorage } from "@itwin/object-storage-google/lib/client";
+import { ClientStorageWrapperFactory } from "@itwin/object-storage-google/lib/client/wrappers";
 
 import {
+  AzureClientStorage,
+  BlockBlobClientWrapperFactory,
+} from "@itwin/object-storage-azure";
+import {
+  ClientStorage,
   ConfigDownloadInput,
+  StrategyClientStorage,
   UrlDownloadInput,
 } from "@itwin/object-storage-core";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 type CommonDownloadParams = IModelScopedOperationParams & TargetDirectoryParam;
+
+function createDefaultClientStorage(): ClientStorage {
+  return new StrategyClientStorage([
+    {
+      instanceName: "azure",
+      instance: new AzureClientStorage(new BlockBlobClientWrapperFactory()),
+    },
+    {
+      instanceName: "google",
+      instance: new GoogleClientStorage(new ClientStorageWrapperFactory()),
+    },
+  ]);
+}
 
 describe("[Authoring] ChangesetOperations", () => {
   let iModelsClient: IModelsClient;
@@ -446,7 +466,7 @@ describe("[Authoring] ChangesetOperations", () => {
       it(`should should retry changeset download if it fails the first time when downloading changeset ${testCase.label}`, async () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
-        const clientStorage = await createDefaultClientStorage();
+        const clientStorage = createDefaultClientStorage();
         let hasDownloadFailed = false;
         const downloadInterceptor = (
           input: UrlDownloadInput | ConfigDownloadInput
@@ -503,7 +523,7 @@ describe("[Authoring] ChangesetOperations", () => {
       it(`should not download changeset again if it is already present when downloading changeset ${testCase.label}`, async () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
-        const clientStorage = await createDefaultClientStorage();
+        const clientStorage = createDefaultClientStorage();
         const downloadInterceptor = (
           input: UrlDownloadInput | ConfigDownloadInput
         ) => {

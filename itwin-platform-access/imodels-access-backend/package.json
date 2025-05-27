@@ -45,9 +45,12 @@
     "@itwin/ecschema-metadata": "^5.0.0-dev.112",
     "@itwin/eslint-plugin": "~3.7.8",
     "@itwin/imodels-access-common": "workspace:*",
-    "@itwin/imodels-client-common-config": "workspace:*",
     "@itwin/imodels-client-authoring": "workspace:*",
+    "@itwin/imodels-client-common-config": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",
+    "@itwin/object-storage-azure": "^3.0.0-dev.0",
+    "@itwin/object-storage-core": "^3.0.0-dev.0",
+    "@itwin/object-storage-google": "^3.0.0-dev.0",
     "@types/node": "14.14.31",
     "@types/ws": "^7.0.0",
     "@typescript-eslint/eslint-plugin": "~6.14.0",
@@ -67,6 +70,9 @@
     "@itwin/core-common": "^5.0.0-dev.112",
     "@itwin/imodels-access-common": "workspace:*",
     "@itwin/imodels-client-authoring": "workspace:*",
-    "@itwin/imodels-client-management": "workspace:*"
+    "@itwin/imodels-client-management": "workspace:*",
+    "@itwin/object-storage-azure": "^3.0.0-dev.0",
+    "@itwin/object-storage-core": "^3.0.0-dev.0",
+    "@itwin/object-storage-google": "^3.0.0-dev.0"
   }
 }

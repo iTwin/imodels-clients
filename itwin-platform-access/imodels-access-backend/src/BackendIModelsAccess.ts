@@ -103,6 +103,7 @@ import {
   queryCurrentOrPrecedingV1Checkpoint,
   queryCurrentOrPrecedingV2Checkpoint,
 } from "./CheckpointHelperFunctions";
+import { createDefaultClientStorage } from "./DefaultClientStorage";
 import { ClientToPlatformAdapter } from "./interface-adapters/ClientToPlatformAdapter";
 import {
   DownloadCancellationMonitorFunc,
@@ -110,7 +111,13 @@ import {
 } from "./interface-adapters/PlatformToClientAdapter";
 
 export class BackendIModelsAccess implements BackendHubAccess {
-  constructor(private readonly _iModelsClient: IModelsClient) {}
+  private readonly _iModelsClient: IModelsClient;
+
+  constructor(iModelsClient?: IModelsClient) {
+    this._iModelsClient =
+      iModelsClient ??
+      new IModelsClient({ cloudStorage: createDefaultClientStorage() });
+  }
 
   public async downloadChangesets(
     arg: DownloadChangesetRangeArg
