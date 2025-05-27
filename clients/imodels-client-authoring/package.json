@@ -55,17 +55,5 @@
     "rimraf": "~3.0.2",
     "sort-package-json": "~1.53.1",
     "typescript": "^5.8.3"
-  },
-  "peerDependencies": {
-    "@itwin/object-storage-azure": "^3.0.0-dev.0",
-    "@itwin/object-storage-google": "^3.0.0-dev.0"
-  },
-  "peerDependenciesMeta": {
-    "@itwin/object-storage-azure": {
-      "optional": true
-    },
-    "@itwin/object-storage-google": {
-      "optional": true
-    }
   }
 }
