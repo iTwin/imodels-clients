@@ -466,7 +466,7 @@ describe("[Authoring] ChangesetOperations", () => {
       it(`should should retry changeset download if it fails the first time when downloading changeset ${testCase.label}`, async () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
-        const clientStorage = await createDefaultClientStorage();
+        const clientStorage = createDefaultClientStorage();
         let hasDownloadFailed = false;
         const downloadInterceptor = (
           input: UrlDownloadInput | ConfigDownloadInput
@@ -523,7 +523,7 @@ describe("[Authoring] ChangesetOperations", () => {
       it(`should not download changeset again if it is already present when downloading changeset ${testCase.label}`, async () => {
         // Arrange
         const fileTransferLog = new FileTransferLog();
-        const clientStorage = await createDefaultClientStorage();
+        const clientStorage = createDefaultClientStorage();
         const downloadInterceptor = (
           input: UrlDownloadInput | ConfigDownloadInput
         ) => {
