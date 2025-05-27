@@ -79,7 +79,7 @@ export class AxiosRestClient implements RestClient {
     };
 
     return this.executeRequest(async () =>
-      axios.put(params.url, params.body.content, requestConfig)
+      axios.put(params.url, params.body?.content, requestConfig)
     );
   }
 
