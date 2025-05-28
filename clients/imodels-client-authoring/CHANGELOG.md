@@ -1,6 +1,26 @@
 # Change Log - @itwin/imodels-client-authoring
 
-This log was last generated on Wed, 26 Mar 2025 11:41:32 GMT and should not be manually modified.
+This log was last generated on Wed, 28 May 2025 07:15:31 GMT and should not be manually modified.
+
+## 6.0.0
+Wed, 28 May 2025 07:15:31 GMT
+
+### Minor changes
+
+- Bump up tar-fs package version
+- Moved error parsing to OperationsBase
+
+### Updates
+
+- Client packages updated to 6.0.0-dev.0
+- Actually make peer dependencies on object storage implementations optional.
+- Support google storage
+- Drop support for Node.js versions older than 20.9.0.
+- Remove dependencies on object storage implementations
+- Export ESM modules
+- Remove reexports from @itwin/imodels-client-management
+- Update object-storage to 3.0.0
+- Remove default for cloudStorage option
 
 ## 5.10.0
 Wed, 26 Mar 2025 11:41:32 GMT

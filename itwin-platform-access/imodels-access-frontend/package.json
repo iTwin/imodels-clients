@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-frontend",
-  "version": "6.0.0-dev.4",
+  "version": "6.0.0",
   "description": "Interoperability package between iModels API and iTwin.js library for frontend.",
   "keywords": [
     "Bentley",
@@ -64,7 +64,7 @@
   "peerDependencies": {
     "@itwin/core-bentley": "^5.0.0-dev.112",
     "@itwin/core-frontend": "^5.0.0-dev.112",
-    "@itwin/imodels-access-common": "workspace:^6.0.0-dev.4",
-    "@itwin/imodels-client-management": "workspace:^6.0.0-dev.4"
+    "@itwin/imodels-access-common": "workspace:^6.0.0",
+    "@itwin/imodels-client-management": "workspace:^6.0.0"
   }
 }

@@ -1,6 +1,19 @@
 # Change Log - @itwin/imodels-access-frontend
 
-This log was last generated on Wed, 26 Mar 2025 11:41:33 GMT and should not be manually modified.
+This log was last generated on Wed, 28 May 2025 07:15:35 GMT and should not be manually modified.
+
+## 6.0.0
+Wed, 28 May 2025 07:15:35 GMT
+
+### Breaking changes
+
+- Adopt iTwinError instead of iModelError
+
+### Updates
+
+- Interop packages updated to 6.0.0-dev.0
+- Drop support for Node.js versions older than 20.9.0.
+- Export ESM modules
 
 ## 5.3.0
 Wed, 26 Mar 2025 11:41:33 GMT
