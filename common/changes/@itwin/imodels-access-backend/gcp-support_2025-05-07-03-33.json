@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-access-backend",
+      "comment": "Support google storage",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-backend"
+}

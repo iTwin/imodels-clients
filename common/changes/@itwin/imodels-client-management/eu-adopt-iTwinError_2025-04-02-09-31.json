@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-management",
+      "comment": "Add iModelsError codes",
+      "type": "major"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-management"
+}

@@ -2,50 +2,6 @@
   "name": "@itwin/imodels-client-authoring",
   "entries": [
     {
-      "version": "6.0.0",
-      "tag": "@itwin/imodels-client-authoring_v6.0.0",
-      "date": "Wed, 28 May 2025 07:15:31 GMT",
-      "comments": {
-        "minor": [
-          {
-            "comment": "Bump up tar-fs package version"
-          },
-          {
-            "comment": "Moved error parsing to OperationsBase"
-          }
-        ],
-        "none": [
-          {
-            "comment": "Client packages updated to 6.0.0-dev.0"
-          },
-          {
-            "comment": "Actually make peer dependencies on object storage implementations optional."
-          },
-          {
-            "comment": "Support google storage"
-          },
-          {
-            "comment": "Drop support for Node.js versions older than 20.9.0."
-          },
-          {
-            "comment": "Remove dependencies on object storage implementations"
-          },
-          {
-            "comment": "Export ESM modules"
-          },
-          {
-            "comment": "Remove reexports from @itwin/imodels-client-management"
-          },
-          {
-            "comment": "Update object-storage to 3.0.0"
-          },
-          {
-            "comment": "Remove default for cloudStorage option"
-          }
-        ]
-      }
-    },
-    {
       "version": "5.10.0",
       "tag": "@itwin/imodels-client-authoring_v5.10.0",
       "date": "Wed, 26 Mar 2025 11:41:32 GMT",

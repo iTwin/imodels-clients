@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Bump up tar-fs package version",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-authoring"
+}

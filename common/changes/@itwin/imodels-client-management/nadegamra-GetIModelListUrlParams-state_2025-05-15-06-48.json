@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-management",
+      "comment": "Added state parameter support for methods, that wrap https://developer.bentley.com/apis/imodels-v2/operations/get-itwin-imodels/ operation from iModels API",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-management"
+}

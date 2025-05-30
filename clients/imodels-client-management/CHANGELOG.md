@@ -1,23 +1,6 @@
 # Change Log - @itwin/imodels-client-management
 
-This log was last generated on Wed, 28 May 2025 07:15:31 GMT and should not be manually modified.
-
-## 6.0.0
-Wed, 28 May 2025 07:15:31 GMT
-
-### Breaking changes
-
-- Add iModelsError codes
-- Made AxiosRestClient part of the public API
-
-### Updates
-
-- Add PUT Named Version Checkpoint endpoint
-- Client packages updated to 6.0.0-dev.0
-- Drop support for Node.js versions older than 20.9.0.
-- Add applications property to User response model
-- Added state parameter support for methods, that wrap https://developer.bentley.com/apis/imodels-v2/operations/get-itwin-imodels/ operation from iModels API
-- Export ESM modules
+This log was last generated on Wed, 26 Mar 2025 11:41:32 GMT and should not be manually modified.
 
 ## 5.10.0
 Wed, 26 Mar 2025 11:41:32 GMT
