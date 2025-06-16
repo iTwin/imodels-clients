@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: false
   excludeLinksFromLockfile: false
 
+overrides:
+  tar-fs: ^3.0.9
+
 pnpmfileChecksum: avk5jcsa6uxo2n5cahoirjiuw4
 
 importers:
@@ -36,7 +39,7 @@ importers:
         version: link:../../utils/imodels-client-common-config
       '@types/node':
         specifier: ^22.15.14
-        version: 20.17.30
+        version: 22.15.32
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.8.3))(eslint@8.55.0)(typescript@5.8.3)
@@ -82,7 +85,7 @@ importers:
         version: link:../../utils/imodels-client-common-config
       '@types/node':
         specifier: ^22.15.14
-        version: 20.17.30
+        version: 22.15.32
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.8.3))(eslint@8.55.0)(typescript@5.8.3)
@@ -285,8 +288,8 @@ importers:
         specifier: ^5.0.0-dev.112
         version: 5.0.0-dev.112
       '@types/node':
-        specifier: ^20.14.8
-        version: 20.17.30
+        specifier: ^22.15.14
+        version: 22.15.32
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.8.3))(eslint@8.55.0)(typescript@5.8.3)
@@ -539,8 +542,8 @@ importers:
         specifier: ~10.0.0
         version: 10.0.0
       formidable:
-        specifier: 3.2.4
-        version: 3.2.4
+        specifier: 3.5.4
+        version: 3.5.4
       inversify:
         specifier: ~6.0.2
         version: 6.0.3
@@ -659,7 +662,7 @@ importers:
         version: 9.0.0
       '@types/node':
         specifier: ^22.15.14
-        version: 20.17.30
+        version: 22.15.32
       '@types/sinon':
         specifier: ^10.0.15
         version: 10.0.20
@@ -753,7 +756,7 @@ importers:
         version: 4.2.22
       '@types/node':
         specifier: ^22.15.14
-        version: 20.17.30
+        version: 22.15.32
       '@typescript-eslint/eslint-plugin':
         specifier: ~6.14.0
         version: 6.14.0(@typescript-eslint/parser@6.14.0(eslint@8.55.0)(typescript@5.8.3))(eslint@8.55.0)(typescript@5.8.3)
@@ -877,7 +880,7 @@ importers:
         version: 4.2.22
       '@types/node':
         specifier: ^22.15.14
-        version: 20.17.30
+        version: 22.15.32
       cpx2:
         specifier: 4.2.0
         version: 4.2.0
@@ -1432,6 +1435,10 @@ packages:
   '@loaders.gl/worker-utils@3.4.15':
     resolution: {integrity: sha512-zUUepOYRYmcYIcr/c4Mchox9h5fBFNkD81rsGnLlZyq19QvyHzN+93SVxrLc078gw93t2RKrVcOOZY13zT3t1w==}
 
+  '@noble/hashes@1.8.0':
+    resolution: {integrity: sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A==}
+    engines: {node: ^14.21.3 || >=16}
+
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -1443,6 +1450,9 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@paralleldrive/cuid2@2.2.2':
+    resolution: {integrity: sha512-ZOBkgDwEdoYVlSeRbYYXs0S9MejQofiVYoTbKzy/6GQa39/q5tQU2IX46+shYnUkpEl3wc+J6wRlar7r2EK2xA==}
 
   '@probe.gl/env@3.6.0':
     resolution: {integrity: sha512-4tTZYUg/8BICC3Yyb9rOeoKeijKbZHRXBEKObrfPmX4sQmYB15ZOUpoVBhAyJkOYVAM8EkPci6Uw5dLCwx2BEQ==}
@@ -1557,6 +1567,9 @@ packages:
 
   '@types/node@20.17.30':
     resolution: {integrity: sha512-7zf4YyHA+jvBNfVrk2Gtvs6x7E8V+YDW05bNfG2XkWDJfYRXrTiP/DsB2zSYTaHX0bGIujTBQdMVAhb+j7mwpg==}
+
+  '@types/node@22.15.32':
+    resolution: {integrity: sha512-3jigKqgSjsH6gYZv2nEsqdXfZqIFGAV36XYYjf9KGZ3PSG+IhLecqPnI310RvjutyMwifE2hhhNEklOUrvx/wA==}
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
@@ -2326,8 +2339,8 @@ packages:
   devtools-protocol@0.0.1425554:
     resolution: {integrity: sha512-uRfxR6Nlzdzt0ihVIkV+sLztKgs7rgquY/Mhcv1YNCWDh5IZgl5mnn2aeEnW5stYTE0wwiF4RYVz8eMEpV1SEw==}
 
-  dezalgo@1.0.3:
-    resolution: {integrity: sha512-K7i4zNfT2kgQz3GylDw40ot9GAE47sFZ9EXHFSPP6zONLgH6kWXE0KWJchkbQJLBkRazq4APwZ4OwiFFlT95OQ==}
+  dezalgo@1.0.4:
+    resolution: {integrity: sha512-rXSP0bf+5n0Qonsb+SVVfNfIsimO4HEtmnIpPHY8Q1UCzKlQrDMfdobr8nJOOsRgWCyMRqeSBQzmWUMq7zvVig==}
 
   diff@4.0.2:
     resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
@@ -2742,8 +2755,9 @@ packages:
     resolution: {integrity: sha512-tzN8e4TX8+kkxGPK8D5u0FNmjPUjw3lwC9lSLxxoB/+GtsJG91CO8bSWy73APlgAZzZbXEYZJuxjkHH2w+Ezhw==}
     engines: {node: '>= 6'}
 
-  formidable@3.2.4:
-    resolution: {integrity: sha512-8/5nJsq+o2o1+Dryx1k5gLTDaw0dNE9kL4P3srKArO6zhoerGm42/R8zq+L5EkV7kckNTvJpJke0kI8JseL3RQ==}
+  formidable@3.5.4:
+    resolution: {integrity: sha512-YikH+7CUTOtP44ZTnUhR7Ic2UASBPOqmaRkRKxRbywPTe5VxF7RRCck4af9wutiZ/QKM5nME9Bie2fFaPz5Gug==}
+    engines: {node: '>=14.0.0'}
 
   fromentries@1.3.2:
     resolution: {integrity: sha512-cHEpEQHUg0f8XdtZCc2ZAhrHzKzT0MrFUTcvx+hfxYu7rGMDc5SKoXFh+n4YigxsHXRzc6OrCshdR1bWH6HHyg==}
@@ -2974,10 +2988,6 @@ packages:
   he@1.2.0:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
-
-  hexoid@1.0.0:
-    resolution: {integrity: sha512-QFLV0taWQOZtvIRIAdBChesmogZrtuXvVWsFHZTk2SU+anspqZ2vMnoLg7IE1+Uk16N19APic1BuF8bC8c2m5g==}
-    engines: {node: '>=8'}
 
   html-entities@2.6.0:
     resolution: {integrity: sha512-kig+rMn/QOVRvr7c86gQ8lWXq+Hkv6CbAH1hLu+RG338StTpE8Z0b44SDVaqVu7HGKf27frdmUYEs9hTUX/cLQ==}
@@ -4167,8 +4177,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  tar-fs@3.0.8:
-    resolution: {integrity: sha512-ZoROL70jptorGAlgAYiLoBLItEKw/fUxg9BSYK/dF/GAGYFJOJJJMvjPAKDJraCXFwadD456FCuvLWgfhMsPwg==}
+  tar-fs@3.0.10:
+    resolution: {integrity: sha512-C1SwlQGNLe/jPNqapK8epDsXME7CAJR5RL3GcE6KWx1d9OUByzoHVcbu1VPI8tevg9H8Alae0AApHHFGzrD5zA==}
 
   tar-stream@3.1.7:
     resolution: {integrity: sha512-qJj60CXt7IU1Ffyc3NJMjh6EkuCFej46zUqJ4J7pqYlThyd9bO0XBTmcOIhSzZJVWfsLks0+nle/j538YAW9RQ==}
@@ -4310,6 +4320,9 @@ packages:
 
   undici-types@6.19.8:
     resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
   unicode-trie@2.0.0:
     resolution: {integrity: sha512-x7bc76x0bm4prf1VLg79uhAzKw8DVboClSN5VxJuQ+LKDOVEW9CdH+VY7SP+vX7xCYQqzzgQpFqz15zeLvAtZQ==}
@@ -5203,6 +5216,8 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.27.0
 
+  '@noble/hashes@1.8.0': {}
+
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -5214,6 +5229,10 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
+
+  '@paralleldrive/cuid2@2.2.2':
+    dependencies:
+      '@noble/hashes': 1.8.0
 
   '@probe.gl/env@3.6.0':
     dependencies:
@@ -5258,7 +5277,7 @@ snapshots:
       progress: 2.0.3
       proxy-agent: 6.5.0
       semver: 7.7.1
-      tar-fs: 3.0.8
+      tar-fs: 3.0.10
       yargs: 17.7.2
     transitivePeerDependencies:
       - bare-buffer
@@ -5317,7 +5336,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.17.30
+      '@types/node': 22.15.32
 
   '@types/json-schema@7.0.15': {}
 
@@ -5334,13 +5353,18 @@ snapshots:
   '@types/node@20.17.30':
     dependencies:
       undici-types: 6.19.8
+    optional: true
+
+  '@types/node@22.15.32':
+    dependencies:
+      undici-types: 6.21.0
 
   '@types/parse-json@4.0.2': {}
 
   '@types/request@2.48.12':
     dependencies:
       '@types/caseless': 0.12.5
-      '@types/node': 20.17.30
+      '@types/node': 22.15.32
       '@types/tough-cookie': 4.0.5
       form-data: 2.5.3
 
@@ -5369,7 +5393,7 @@ snapshots:
 
   '@types/ws@7.4.7':
     dependencies:
-      '@types/node': 20.17.30
+      '@types/node': 22.15.32
 
   '@types/yauzl@2.10.3':
     dependencies:
@@ -6257,7 +6281,7 @@ snapshots:
 
   devtools-protocol@0.0.1425554: {}
 
-  dezalgo@1.0.3:
+  dezalgo@1.0.4:
     dependencies:
       asap: 2.0.6
       wrappy: 1.0.2
@@ -6826,10 +6850,10 @@ snapshots:
       combined-stream: 1.0.8
       mime-types: 2.1.35
 
-  formidable@3.2.4:
+  formidable@3.5.4:
     dependencies:
-      dezalgo: 1.0.3
-      hexoid: 1.0.0
+      '@paralleldrive/cuid2': 2.2.2
+      dezalgo: 1.0.4
       once: 1.4.0
 
   fromentries@1.3.2: {}
@@ -7118,8 +7142,6 @@ snapshots:
       function-bind: 1.1.2
 
   he@1.2.0: {}
-
-  hexoid@1.0.0: {}
 
   html-entities@2.6.0: {}
 
@@ -7962,7 +7984,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 20.17.30
+      '@types/node': 22.15.32
       long: 5.3.2
 
   proxy-agent@6.5.0:
@@ -8451,7 +8473,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  tar-fs@3.0.8:
+  tar-fs@3.0.10:
     dependencies:
       pump: 3.0.2
       tar-stream: 3.1.7
@@ -8614,7 +8636,10 @@ snapshots:
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
 
-  undici-types@6.19.8: {}
+  undici-types@6.19.8:
+    optional: true
+
+  undici-types@6.21.0: {}
 
   unicode-trie@2.0.0:
     dependencies:
