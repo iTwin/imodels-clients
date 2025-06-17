@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-access-common",
+      "comment": "Update to iTwin.js Core 5.0",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-access-common"
+}

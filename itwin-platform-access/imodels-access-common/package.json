@@ -35,7 +35,7 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.js"
   },
   "devDependencies": {
-    "@itwin/core-bentley": "^5.0.0-dev.112",
+    "@itwin/core-bentley": "^5.0.0",
     "@itwin/eslint-plugin": "~3.7.8",
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-common-config": "workspace:*",
@@ -52,7 +52,7 @@
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
-    "@itwin/core-bentley": "^5.0.0-dev.112",
+    "@itwin/core-bentley": "^5.0.0",
     "@itwin/imodels-client-management": "workspace:*"
   }
 }

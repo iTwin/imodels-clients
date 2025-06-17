@@ -38,11 +38,11 @@
     "axios": "^1.8.2"
   },
   "devDependencies": {
-    "@itwin/core-backend": "^5.0.0-dev.112",
-    "@itwin/core-bentley": "^5.0.0-dev.112",
-    "@itwin/core-common": "^5.0.0-dev.112",
-    "@itwin/core-geometry": "^5.0.0-dev.112",
-    "@itwin/ecschema-metadata": "^5.0.0-dev.112",
+    "@itwin/core-backend": "^5.0.0",
+    "@itwin/core-bentley": "^5.0.0",
+    "@itwin/core-common": "^5.0.0",
+    "@itwin/core-geometry": "^5.0.0",
+    "@itwin/ecschema-metadata": "^5.0.0",
     "@itwin/eslint-plugin": "~3.7.8",
     "@itwin/imodels-access-common": "workspace:*",
     "@itwin/imodels-client-authoring": "workspace:*",
@@ -65,9 +65,9 @@
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
-    "@itwin/core-backend": "^5.0.0-dev.112",
-    "@itwin/core-bentley": "^5.0.0-dev.112",
-    "@itwin/core-common": "^5.0.0-dev.112",
+    "@itwin/core-backend": "^5.0.0",
+    "@itwin/core-bentley": "^5.0.0",
+    "@itwin/core-common": "^5.0.0",
     "@itwin/imodels-access-common": "workspace:*",
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",
