@@ -2,5 +2,6 @@
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/pnpm-config.schema.json",
   "useWorkspaces": true,
   "globalOverrides": {
+    "tar-fs": "^3.0.9" // imodels-client-test-utils > puppeteer@24.6.1 > tar-fs@3.0.8 -> CVE: https://github.com/advisories/GHSA-8cj5-5rvv-wf4v 
   } 
 }
