@@ -28,6 +28,15 @@
       "allowWarningsInSuccessfulBuild": true
     },
     {
+      "name": "test",
+      "commandKind": "bulk",
+      "summary": "Run tests on each package",
+      "description": "Iterates through each package in the monorepo and runs the 'test' script",
+      "enableParallelism": false,
+      "ignoreMissingScript": true,
+      "allowWarningsInSuccessfulBuild": false
+    },
+    {
       "name": "spell-check",
       "commandKind": "bulk",
       "summary": "Run spell check on each package",

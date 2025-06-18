@@ -80,7 +80,7 @@ export interface HttpRequestWithJsonBodyParams extends HttpRequestParams {
 /** Common parameters for HTTP request operations that contain a binary body. */
 export interface HttpRequestWithBinaryBodyParams extends HttpRequestParams {
   /** Request body. */
-  body: BinaryBody;
+  body?: BinaryBody;
 }
 
 /**

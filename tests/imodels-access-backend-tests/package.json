@@ -26,6 +26,7 @@
     "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config ./src/**/*.ts 1>&2",
     "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
+    "test": "npm run test:integration",
     "test:integration": "mocha lib/**/*.test.js --color --timeout 180000 --exit"
   },
   "prettier": "./node_modules/@itwin/imodels-client-common-config/prettier.json",
@@ -33,12 +34,12 @@
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.js"
   },
   "dependencies": {
-    "@itwin/core-backend": "^5.0.0-dev.112",
-    "@itwin/core-bentley": "^5.0.0-dev.112",
-    "@itwin/core-common": "^5.0.0-dev.112",
-    "@itwin/core-geometry": "^5.0.0-dev.112",
-    "@itwin/core-quantity": "^5.0.0-dev.112",
-    "@itwin/ecschema-metadata": "^5.0.0-dev.112",
+    "@itwin/core-backend": "^5.0.0",
+    "@itwin/core-bentley": "^5.0.0",
+    "@itwin/core-common": "^5.0.0",
+    "@itwin/core-geometry": "^5.0.0",
+    "@itwin/core-quantity": "^5.0.0",
+    "@itwin/ecschema-metadata": "^5.0.0",
     "@itwin/imodels-access-backend": "workspace:*",
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",

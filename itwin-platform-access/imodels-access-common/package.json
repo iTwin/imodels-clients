@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-common",
-  "version": "6.0.0-dev.1",
+  "version": "6.0.0",
   "description": "Common code package for @itwin/imodels-access-frontend and @itwin/imodels-access-backend.",
   "keywords": [
     "Bentley",
@@ -18,12 +18,6 @@
     "name": "Bentley Systems, Inc.",
     "url": "http://www.bentley.com"
   },
-  "exports": {
-    ".": {
-      "import": "./lib/esm/index.js",
-      "require": "./lib/cjs/index.js"
-    }
-  },
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "typings": "lib/cjs/index",
@@ -40,14 +34,12 @@
   "eslintConfig": {
     "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.js"
   },
-  "dependencies": {
-    "@itwin/imodels-client-authoring": "workspace:*",
-    "@itwin/imodels-client-management": "workspace:*"
-  },
   "devDependencies": {
-    "@itwin/core-bentley": "^5.0.0-dev.112",
+    "@itwin/core-bentley": "^5.0.0",
     "@itwin/eslint-plugin": "~3.7.8",
+    "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-common-config": "workspace:*",
+    "@itwin/imodels-client-management": "workspace:*",
     "@typescript-eslint/eslint-plugin": "~6.14.0",
     "cspell": "~5.21.0",
     "eslint": "~8.55.0",
@@ -60,6 +52,7 @@
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
-    "@itwin/core-bentley": "^5.0.0-dev.112"
+    "@itwin/core-bentley": "^5.0.0",
+    "@itwin/imodels-client-management": "workspace:*"
   }
 }

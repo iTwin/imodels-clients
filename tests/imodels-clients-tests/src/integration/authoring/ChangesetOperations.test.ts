@@ -10,7 +10,6 @@ import { expect } from "chai";
 
 import {
   AcquireBriefcaseParams,
-  createDefaultClientStorage,
   CreateChangesetGroupParams,
   CreateChangesetParams,
   DownloadChangesetListParams,
@@ -46,15 +45,36 @@ import {
   assertProgressReports,
   cleanupDirectory,
 } from "@itwin/imodels-client-test-utils";
+import { GoogleClientStorage } from "@itwin/object-storage-google/lib/client";
+import { ClientStorageWrapperFactory } from "@itwin/object-storage-google/lib/client/wrappers";
 
 import {
+  AzureClientStorage,
+  BlockBlobClientWrapperFactory,
+} from "@itwin/object-storage-azure";
+import {
+  ClientStorage,
   ConfigDownloadInput,
+  StrategyClientStorage,
   UrlDownloadInput,
 } from "@itwin/object-storage-core";
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 type CommonDownloadParams = IModelScopedOperationParams & TargetDirectoryParam;
+
+function createDefaultClientStorage(): ClientStorage {
+  return new StrategyClientStorage([
+    {
+      instanceName: "azure",
+      instance: new AzureClientStorage(new BlockBlobClientWrapperFactory()),
+    },
+    {
+      instanceName: "google",
+      instance: new GoogleClientStorage(new ClientStorageWrapperFactory()),
+    },
+  ]);
+}
 
 describe("[Authoring] ChangesetOperations", () => {
   let iModelsClient: IModelsClient;

@@ -2,7 +2,7 @@
   "changes": [
     {
       "packageName": "@itwin/imodels-access-backend",
-      "comment": "Export ESM modules",
+      "comment": "Update to iTwin.js Core 5.0",
       "type": "none"
     }
   ],

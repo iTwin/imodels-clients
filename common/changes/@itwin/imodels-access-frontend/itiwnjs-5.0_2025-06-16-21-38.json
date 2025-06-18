@@ -2,7 +2,7 @@
   "changes": [
     {
       "packageName": "@itwin/imodels-access-frontend",
-      "comment": "Interop packages updated to 6.0.0-dev.0",
+      "comment": "Update to iTwin.js Core 5.0",
       "type": "none"
     }
   ],

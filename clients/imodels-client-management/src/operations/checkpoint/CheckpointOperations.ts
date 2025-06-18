@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { CheckpointResponse, OperationsBase } from "../../base/internal";
 import { Checkpoint } from "../../base/types";
+import { GetSingleNamedVersionParams } from "../named-version/NamedVersionOperationParams";
 import { OperationOptions } from "../OperationOptions";
 
 import { GetSingleCheckpointParams } from "./CheckpointOperationParams";
@@ -33,6 +34,29 @@ export class CheckpointOperations<
       }),
       headers,
     });
+    return response.body.checkpoint;
+  }
+
+  /**
+   * Reschedules failed Named Version Checkpoint. This method
+   * returns a Checkpoint in its full representation. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/update-named-version-checkpoint/
+   * Update Named Version Checkpoint} operation from iModels API.
+   * @param {GetSingleNamedVersionParams} params parameters for this operation. See {@link GetSingleNamedVersionParams}.
+   * @returns {Promise<Checkpoint>} a Checkpoint for the specified parent entity. See {@link Checkpoint}.
+   */
+  public async updateNamedVersionCheckpoint(
+    params: GetSingleNamedVersionParams
+  ): Promise<Checkpoint> {
+    const response = await this.sendPutRequest<CheckpointResponse>({
+          authorization: params.authorization,
+          url: this._options.urlFormatter.getCheckpointUrl({
+            iModelId: params.iModelId,
+            namedVersionId: params.namedVersionId,
+          }),   
+          headers: params.headers,
+          body: new Uint8Array()
+        });
     return response.body.checkpoint;
   }
 }

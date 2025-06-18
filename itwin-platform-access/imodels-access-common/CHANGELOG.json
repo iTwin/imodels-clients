@@ -2,6 +2,29 @@
   "name": "@itwin/imodels-access-common",
   "entries": [
     {
+      "version": "6.0.0",
+      "tag": "@itwin/imodels-access-common_v6.0.0",
+      "date": "Wed, 28 May 2025 07:15:35 GMT",
+      "comments": {
+        "major": [
+          {
+            "comment": "Adopt iTwinError instead of iModelError"
+          }
+        ],
+        "none": [
+          {
+            "comment": "Interop packages updated to 6.0.0-dev.0"
+          },
+          {
+            "comment": "Drop support for Node.js versions older than 20.9.0."
+          },
+          {
+            "comment": "Export ESM modules"
+          }
+        ]
+      }
+    },
+    {
       "version": "5.3.0",
       "tag": "@itwin/imodels-access-common_v5.3.0",
       "date": "Wed, 26 Mar 2025 11:41:33 GMT",

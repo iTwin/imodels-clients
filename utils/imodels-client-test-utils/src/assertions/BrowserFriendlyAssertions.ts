@@ -30,7 +30,6 @@ import {
   ThumbnailSize,
   User,
   UserPermissions,
-  UserStatistics,
 } from "@itwin/imodels-client-management";
 
 import {
@@ -294,22 +293,47 @@ export function assertUser(params: { actualUser: User }): void {
 
 export function assertUserStatistics(params: {
   actualUser: User;
-  expectedUserStatistics: UserStatistics;
+  expectedUserStatistics: {
+    pushedChangesetsCount: number;
+    createdVersionsCount: number;
+    briefcasesCount: number;
+    applications: {
+      ownsLocks: boolean;
+      ownsExclusiveRootElementLock: boolean;
+    }[];
+  };
 }): void {
   expect(params.actualUser.statistics).to.exist;
   expect(params.actualUser.statistics.pushedChangesetsCount).to.equal(
     params.expectedUserStatistics.pushedChangesetsCount
   );
+  expect(params.actualUser.statistics.lastChangesetPushDate == null).to.equal(
+    params.actualUser.statistics.pushedChangesetsCount == 0
+  );
   expect(params.actualUser.statistics.createdVersionsCount).to.equal(
     params.expectedUserStatistics.createdVersionsCount
-  );
-  assertOptionalProperty(
-    params.expectedUserStatistics.lastChangesetPushDate,
-    params.actualUser.statistics.lastChangesetPushDate
   );
   expect(params.actualUser.statistics.briefcasesCount).to.equal(
     params.expectedUserStatistics.briefcasesCount
   );
+  expect(params.actualUser.statistics.applications.length).to.equal(
+    params.expectedUserStatistics.applications.length
+  );
+  expect(params.actualUser.statistics.applications.length).to.equal(
+    params.expectedUserStatistics.applications.length
+  );
+
+  for (let i = 0; i < params.actualUser.statistics.applications.length; i++) {
+    const application = params.actualUser.statistics.applications[i];
+    expect(application.id).to.not.be.empty;
+    expect(application.name).to.not.be.empty;
+    expect(application.ownsLocks).to.equal(
+      params.expectedUserStatistics.applications[i].ownsLocks
+    );
+    expect(application.ownsExclusiveRootElementLock).to.equal(
+      params.expectedUserStatistics.applications[i].ownsExclusiveRootElementLock
+    );
+  }
 }
 
 export function assertUserPermissions(params: {

@@ -20,9 +20,9 @@ jobs:
   - job: BuildAndTest
     strategy:
       matrix:
-        linux-node18:
+        linux:
           imageName: 'ubuntu-latest'
-        windows-node18:
+        windows:
           imageName: 'windows-latest'
     pool:
       vmImage: $(imageName)
