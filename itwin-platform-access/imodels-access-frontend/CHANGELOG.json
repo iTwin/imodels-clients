@@ -9,17 +9,14 @@
         "major": [
           {
             "comment": "Adopt iTwinError instead of iModelError"
-          }
-        ],
-        "none": [
-          {
-            "comment": "Interop packages updated to 6.0.0-dev.0"
-          },
-          {
-            "comment": "Drop support for Node.js versions older than 20.9.0."
           },
           {
             "comment": "Export ESM modules"
+          }
+        ],
+        "minor": [
+          {
+            "comment": "Drop support for Node.js versions older than 20.9.0."
           }
         ]
       }

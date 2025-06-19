@@ -9,23 +9,17 @@
         "major": [
           {
             "comment": "Adopt iTwinError instead of iModelError"
+          },
+          {
+            "comment": "Export ESM modules"
           }
         ],
-        "none": [
-          {
-            "comment": "Interop packages updated to 6.0.0-dev.0"
-          },
+        "minor": [
           {
             "comment": "Support google storage"
           },
           {
             "comment": "Drop support for Node.js versions older than 20.9.0."
-          },
-          {
-            "comment": "Export ESM modules"
-          },
-          {
-            "comment": "Remove default for iModelsClient option"
           }
         ]
       }

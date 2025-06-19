@@ -8,30 +8,27 @@
       "comments": {
         "major": [
           {
-            "comment": "Add iModelsError codes"
-          },
-          {
-            "comment": "Made AxiosRestClient part of the public API"
+            "comment": "Export ESM modules"
           }
         ],
-        "none": [
+        "minor": [
           {
-            "comment": "Add PUT Named Version Checkpoint endpoint"
-          },
-          {
-            "comment": "Client packages updated to 6.0.0-dev.0"
-          },
-          {
-            "comment": "Drop support for Node.js versions older than 20.9.0."
+            "comment": "Add iModelsError codes"
           },
           {
             "comment": "Add applications property to User response model"
           },
           {
-            "comment": "Added state parameter support for methods, that wrap https://developer.bentley.com/apis/imodels-v2/operations/get-itwin-imodels/ operation from iModels API"
+            "comment": "Add state property for get iTwin iModels"
           },
           {
-            "comment": "Export ESM modules"
+            "comment": "Add PUT Named Version Checkpoint endpoint"
+          },
+          {
+            "comment": "Make AxiosRestClient part of the public API"
+          },
+          {
+            "comment": "Drop support for Node.js versions older than 20.9.0."
           }
         ]
       }
