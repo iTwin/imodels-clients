@@ -66,6 +66,7 @@ import {
   DownloadedChangeset,
   GetLockListParams,
   IModelsClient,
+  IModelsClientOptions,
   Lock,
   LockLevel,
   LockedObjects,
@@ -110,13 +111,24 @@ import {
   PlatformToClientAdapter,
 } from "./interface-adapters/PlatformToClientAdapter";
 
+export type BackendIModelsAccessOptions = Pick<
+  Partial<IModelsClientOptions>,
+  "cloudStorage"
+> &
+  Omit<IModelsClientOptions, "cloudStorage">;
+
 export class BackendIModelsAccess implements BackendHubAccess {
   private readonly _iModelsClient: IModelsClient;
 
-  constructor(iModelsClient?: IModelsClient) {
+  constructor(iModelsClient?: IModelsClient | BackendIModelsAccessOptions) {
     this._iModelsClient =
-      iModelsClient ??
-      new IModelsClient({ cloudStorage: createDefaultClientStorage() });
+      iModelsClient instanceof IModelsClient
+        ? iModelsClient
+        : new IModelsClient({
+            ...iModelsClient,
+            cloudStorage:
+              iModelsClient?.cloudStorage ?? createDefaultClientStorage(),
+          });
   }
 
   public async downloadChangesets(

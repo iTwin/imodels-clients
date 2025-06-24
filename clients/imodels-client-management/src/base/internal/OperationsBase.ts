@@ -110,11 +110,13 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   protected async sendPutRequest<TBody>(
     params: SendPutRequestParams
   ): Promise<HttpResponse<TBody>> {
-    const body = params.contentType ? {
-      contentType: params.contentType,
-      content: params.body,
-    } : undefined;
-    
+    const body = params.contentType
+      ? {
+          contentType: params.contentType,
+          content: params.body,
+        }
+      : undefined;
+
     return this.executeRequest(async () =>
       this._options.restClient.sendPutRequest<TBody>({
         url: params.url,

@@ -18,6 +18,9 @@
           },
           {
             "comment": "Remove reexports from @itwin/imodels-client-management"
+          },
+          {
+            "comment": "Change @itwin/imodels-client-management to be a peer dependency"
           }
         ],
         "minor": [

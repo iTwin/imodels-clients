@@ -12,6 +12,7 @@ Wed, 28 May 2025 07:15:31 GMT
 - Export ESM modules
 - Remove dependencies on object storage implementations
 - Remove reexports from @itwin/imodels-client-management
+- Change @itwin/imodels-client-management to be a peer dependency
 
 ### Minor changes
 
