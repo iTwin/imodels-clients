@@ -25,12 +25,6 @@ importers:
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
-      '@itwin/object-storage-azure':
-        specifier: ^3.0.0
-        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
-      '@itwin/object-storage-google':
-        specifier: ^3.0.0
-        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@types/node':
         specifier: ^22.15.14
         version: 22.15.32
