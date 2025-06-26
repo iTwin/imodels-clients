@@ -24,6 +24,7 @@ import {
   GetSingleChangesetParams,
   IModelScopedOperationParams,
   IModelsClient,
+  IModelsClientOptions,
   IModelsErrorCode,
   IModelsErrorScope,
   MinimalNamedVersion,
@@ -32,6 +33,8 @@ import {
   take,
 } from "@itwin/imodels-client-management";
 
+export type FrontendIModelsAccessOptions = IModelsClientOptions;
+
 export class FrontendIModelsAccess implements FrontendHubAccess {
   private readonly _emptyChangeset: ChangesetIndexAndId = {
     index: Constants.ChangeSet0.index,
@@ -39,8 +42,11 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
   };
   protected readonly _iModelsClient: IModelsClient;
 
-  constructor(iModelsClient?: IModelsClient) {
-    this._iModelsClient = iModelsClient ?? new IModelsClient();
+  constructor(iModelsClient?: IModelsClient | FrontendIModelsAccessOptions) {
+    this._iModelsClient =
+      iModelsClient instanceof IModelsClient
+        ? iModelsClient
+        : new IModelsClient(iModelsClient);
   }
 
   private async getChangesetFromId(

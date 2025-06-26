@@ -37,13 +37,11 @@
   },
   "dependencies": {
     "@itwin/imodels-client-management": "workspace:*",
-    "@itwin/object-storage-core": "^3.0.0-dev.0"
+    "@itwin/object-storage-core": "^3.0.0"
   },
   "devDependencies": {
     "@itwin/eslint-plugin": "~3.7.8",
     "@itwin/imodels-client-common-config": "workspace:*",
-    "@itwin/object-storage-azure": "^3.0.0-dev.0",
-    "@itwin/object-storage-google": "^3.0.0-dev.0",
     "@types/node": "^22.15.14",
     "@typescript-eslint/eslint-plugin": "~6.14.0",
     "cspell": "~5.21.0",

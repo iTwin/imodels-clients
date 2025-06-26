@@ -3,8 +3,8 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 
-import { GoogleClientStorage } from "@itwin/object-storage-google/lib/client";
-import { ClientStorageWrapperFactory } from "@itwin/object-storage-google/lib/client/wrappers";
+import { GoogleClientStorage } from "@itwin/object-storage-google/lib/client/index.js";
+import { ClientStorageWrapperFactory } from "@itwin/object-storage-google/lib/client/wrappers/index.js";
 
 import {
   AzureClientStorage,

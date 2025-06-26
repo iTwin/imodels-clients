@@ -49,14 +49,14 @@ export class CheckpointOperations<
     params: GetSingleNamedVersionParams
   ): Promise<Checkpoint> {
     const response = await this.sendPutRequest<CheckpointResponse>({
-          authorization: params.authorization,
-          url: this._options.urlFormatter.getCheckpointUrl({
-            iModelId: params.iModelId,
-            namedVersionId: params.namedVersionId,
-          }),   
-          headers: params.headers,
-          body: new Uint8Array()
-        });
+      authorization: params.authorization,
+      url: this._options.urlFormatter.getCheckpointUrl({
+        iModelId: params.iModelId,
+        namedVersionId: params.namedVersionId,
+      }),
+      headers: params.headers,
+      body: new Uint8Array(),
+    });
     return response.body.checkpoint;
   }
 }

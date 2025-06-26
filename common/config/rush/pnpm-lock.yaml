@@ -16,8 +16,8 @@ importers:
         specifier: workspace:*
         version: link:../imodels-client-management
       '@itwin/object-storage-core':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+        specifier: ^3.0.0
+        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
     devDependencies:
       '@itwin/eslint-plugin':
         specifier: ~3.7.8
@@ -25,12 +25,6 @@ importers:
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
-      '@itwin/object-storage-azure':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
-      '@itwin/object-storage-google':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@types/node':
         specifier: ^22.15.14
         version: 22.15.32
@@ -113,6 +107,24 @@ importers:
 
   ../../itwin-platform-access/imodels-access-backend:
     dependencies:
+      '@itwin/imodels-access-common':
+        specifier: workspace:*
+        version: link:../imodels-access-common
+      '@itwin/imodels-client-authoring':
+        specifier: workspace:*
+        version: link:../../clients/imodels-client-authoring
+      '@itwin/imodels-client-management':
+        specifier: workspace:*
+        version: link:../../clients/imodels-client-management
+      '@itwin/object-storage-azure':
+        specifier: ^3.0.0
+        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+      '@itwin/object-storage-core':
+        specifier: ^3.0.0
+        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+      '@itwin/object-storage-google':
+        specifier: ^3.0.0
+        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       axios:
         specifier: ^1.8.2
         version: 1.10.0
@@ -135,27 +147,9 @@ importers:
       '@itwin/eslint-plugin':
         specifier: ~3.7.8
         version: 3.7.17(eslint@8.55.0)(typescript@5.8.3)
-      '@itwin/imodels-access-common':
-        specifier: workspace:*
-        version: link:../imodels-access-common
-      '@itwin/imodels-client-authoring':
-        specifier: workspace:*
-        version: link:../../clients/imodels-client-authoring
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
-      '@itwin/imodels-client-management':
-        specifier: workspace:*
-        version: link:../../clients/imodels-client-management
-      '@itwin/object-storage-azure':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
-      '@itwin/object-storage-core':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
-      '@itwin/object-storage-google':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@types/node':
         specifier: 14.14.31
         version: 14.14.31
@@ -242,6 +236,13 @@ importers:
         version: 5.8.3
 
   ../../itwin-platform-access/imodels-access-frontend:
+    dependencies:
+      '@itwin/imodels-access-common':
+        specifier: workspace:*
+        version: link:../imodels-access-common
+      '@itwin/imodels-client-management':
+        specifier: workspace:*
+        version: link:../../clients/imodels-client-management
     devDependencies:
       '@itwin/appui-abstract':
         specifier: ^5.0.0
@@ -273,15 +274,9 @@ importers:
       '@itwin/eslint-plugin':
         specifier: ~3.7.8
         version: 3.7.17(eslint@8.55.0)(typescript@5.8.3)
-      '@itwin/imodels-access-common':
-        specifier: workspace:*
-        version: link:../imodels-access-common
       '@itwin/imodels-client-common-config':
         specifier: workspace:*
         version: link:../../utils/imodels-client-common-config
-      '@itwin/imodels-client-management':
-        specifier: workspace:*
-        version: link:../../clients/imodels-client-management
       '@itwin/webgl-compatibility':
         specifier: ^5.0.0
         version: 5.0.0
@@ -616,14 +611,14 @@ importers:
         specifier: workspace:*
         version: link:../../utils/imodels-client-test-utils
       '@itwin/object-storage-azure':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+        specifier: ^3.0.0
+        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@itwin/object-storage-core':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+        specifier: ^3.0.0
+        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@itwin/object-storage-google':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+        specifier: ^3.0.0
+        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       axios:
         specifier: ^1.8.2
         version: 1.10.0
@@ -849,14 +844,14 @@ importers:
         specifier: workspace:*
         version: link:../../clients/imodels-client-management
       '@itwin/object-storage-azure':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+        specifier: ^3.0.0
+        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@itwin/object-storage-core':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+        specifier: ^3.0.0
+        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@itwin/object-storage-google':
-        specifier: ^3.0.0-dev.0
-        version: 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+        specifier: ^3.0.0
+        version: 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       '@puppeteer/browsers':
         specifier: ^2.10.0
         version: 2.10.5
@@ -1266,8 +1261,8 @@ packages:
       reflect-metadata:
         optional: true
 
-  '@itwin/cloud-agnostic-core@3.0.0-dev.0':
-    resolution: {integrity: sha512-PLIPkKn5Hcw2frLnQAaN4EJMnlrf1c7Hp1cab1zvyMplfTnPUM38Upm8I82hy1wmi8vq8GFVPZoFv/28vfhEeA==}
+  '@itwin/cloud-agnostic-core@3.0.0':
+    resolution: {integrity: sha512-PZPCiccvKzIBBygvYNlGNTDeWApfYXdowQyc/KHLZ2zQ0y5Nf8p9JlKeUGuZKj6S9zGHqTx1SzY2W3AyqCUWqQ==}
     peerDependencies:
       inversify: ^6.2.2
       reflect-metadata: ^0.2.2
@@ -1359,8 +1354,8 @@ packages:
       reflect-metadata:
         optional: true
 
-  '@itwin/object-storage-azure@3.0.0-dev.0':
-    resolution: {integrity: sha512-dhVVGzFSZLtxIoKYMLgQPVf5jMXbjckVxhLRQ0QN+l1BobxKvcOewERigOsoHHhCjbGQdWxbqd/rJmHpktSfcA==}
+  '@itwin/object-storage-azure@3.0.0':
+    resolution: {integrity: sha512-twfJuiYG45mbg2QgcipFrTaddIXG3Oy4gil2/BET3vTdu3ns7PnsJ9OvaRokHPEYDXPT8rxCzqr1ZLmCSi4SVg==}
     peerDependencies:
       inversify: ^6.2.2
       reflect-metadata: ^0.2.2
@@ -1381,8 +1376,8 @@ packages:
       reflect-metadata:
         optional: true
 
-  '@itwin/object-storage-core@3.0.0-dev.0':
-    resolution: {integrity: sha512-NHtUHwmI0wMrUA5u1u5SpRTR6Be+bY+JlKJy4ypPeXyze3zX6oFpabvhf2il/kaqnr8RWCrpnQBbJPu0gISMEQ==}
+  '@itwin/object-storage-core@3.0.0':
+    resolution: {integrity: sha512-FkJyJSOx3yeoeRUtequwkX9vEjNrWwlHKgijF7Fsy7L1ekGN8vzyzagpl+EnzXRKh6WRDYK9JE/piH90Dt6ZXw==}
     peerDependencies:
       inversify: ^6.2.2
       reflect-metadata: ^0.2.2
@@ -1392,8 +1387,8 @@ packages:
       reflect-metadata:
         optional: true
 
-  '@itwin/object-storage-google@3.0.0-dev.0':
-    resolution: {integrity: sha512-lUqFMSTPV8yrFt8yU1KVW8sxoaVLZdJdYH3yEMx2AvHF1/RYvdmaYKpgQ4CBS1mja9eytbRXPSZHa8pRf8HITg==}
+  '@itwin/object-storage-google@3.0.0':
+    resolution: {integrity: sha512-mBfv7636UoVWVfhKTtMf5CfTP3AijH2HScyUTBXTMzirD6lu7mprN5XW3BcbOjiibDOqFoO/+LUxJZeAiv70OA==}
     peerDependencies:
       inversify: ^6.2.2
       reflect-metadata: ^0.2.2
@@ -5003,7 +4998,7 @@ snapshots:
       inversify: 6.0.3
       reflect-metadata: 0.1.14
 
-  '@itwin/cloud-agnostic-core@3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)':
+  '@itwin/cloud-agnostic-core@3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)':
     optionalDependencies:
       inversify: 6.0.3
       reflect-metadata: 0.1.14
@@ -5132,12 +5127,12 @@ snapshots:
       - debug
       - supports-color
 
-  '@itwin/object-storage-azure@3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)':
+  '@itwin/object-storage-azure@3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)':
     dependencies:
       '@azure/core-paging': 1.6.2
       '@azure/storage-blob': 12.27.0
-      '@itwin/cloud-agnostic-core': 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
-      '@itwin/object-storage-core': 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+      '@itwin/cloud-agnostic-core': 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+      '@itwin/object-storage-core': 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
     optionalDependencies:
       inversify: 6.0.3
       reflect-metadata: 0.1.14
@@ -5155,9 +5150,9 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itwin/object-storage-core@3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)':
+  '@itwin/object-storage-core@3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)':
     dependencies:
-      '@itwin/cloud-agnostic-core': 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+      '@itwin/cloud-agnostic-core': 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       axios: 1.10.0
     optionalDependencies:
       inversify: 6.0.3
@@ -5165,12 +5160,12 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@itwin/object-storage-google@3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)':
+  '@itwin/object-storage-google@3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)':
     dependencies:
       '@google-cloud/storage': 7.16.0
       '@google-cloud/storage-control': 0.2.1
-      '@itwin/cloud-agnostic-core': 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
-      '@itwin/object-storage-core': 3.0.0-dev.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+      '@itwin/cloud-agnostic-core': 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
+      '@itwin/object-storage-core': 3.0.0(inversify@6.0.3)(reflect-metadata@0.1.14)
       axios: 1.10.0
       google-auth-library: 9.15.1
     optionalDependencies:

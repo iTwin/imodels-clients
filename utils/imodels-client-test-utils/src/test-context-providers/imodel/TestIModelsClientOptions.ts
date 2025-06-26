@@ -6,8 +6,8 @@ import { injectable } from "inversify";
 
 import { IModelsClientOptions } from "@itwin/imodels-client-authoring";
 import { ApiOptions } from "@itwin/imodels-client-management";
-import { GoogleClientStorage } from "@itwin/object-storage-google/lib/client";
-import { ClientStorageWrapperFactory } from "@itwin/object-storage-google/lib/client/wrappers";
+import { GoogleClientStorage } from "@itwin/object-storage-google/lib/client/index.js";
+import { ClientStorageWrapperFactory } from "@itwin/object-storage-google/lib/client/wrappers/index.js";
 
 import {
   AzureClientStorage,
