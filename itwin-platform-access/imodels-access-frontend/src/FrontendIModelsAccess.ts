@@ -49,6 +49,10 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
         : new IModelsClient(iModelsClient);
   }
 
+  public get iModelsClient(): IModelsClient {
+    return this._iModelsClient;
+  }
+
   private async getChangesetFromId(
     arg: IModelIdArg & { changeSetId: string }
   ): Promise<ChangesetIndexAndId> {
