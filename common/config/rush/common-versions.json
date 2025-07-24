@@ -5,7 +5,6 @@
     ]
   },
   "preferredVersions": {
-    "@cypress/request": "3.0.1",
     "json5": "2.2.2"
   }
 }
