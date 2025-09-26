@@ -10,7 +10,7 @@ import {
   SynchronizationInfo,
 } from "@itwin/imodels-client-management";
 
-import { DownloadProgressParam, TargetDirectoryParam } from "../../base/types";
+import { DownloadProgressParam, RetryParams, TargetDirectoryParam } from "../../base/types";
 
 export type SynchronizationInfoForCreate = Omit<
   SynchronizationInfo,
@@ -58,9 +58,11 @@ export interface CreateChangesetParams extends IModelScopedOperationParams {
 /** Parameters for single Changeset download operation. */
 export type DownloadSingleChangesetParams = GetSingleChangesetParams &
   TargetDirectoryParam &
-  DownloadProgressParam;
+  DownloadProgressParam &
+  RetryParams;
 
 /** Parameters for Changeset list download operation. */
 export type DownloadChangesetListParams = GetChangesetListParams &
   TargetDirectoryParam &
-  DownloadProgressParam;
+  DownloadProgressParam &
+  RetryParams;

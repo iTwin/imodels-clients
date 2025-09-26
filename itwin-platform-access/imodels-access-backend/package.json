@@ -38,9 +38,9 @@
     "@itwin/imodels-access-common": "workspace:*",
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",
-    "@itwin/object-storage-azure": "^3.0.0",
-    "@itwin/object-storage-core": "^3.0.0",
-    "@itwin/object-storage-google": "^3.0.0",
+    "@itwin/object-storage-azure": "^3.0.4",
+    "@itwin/object-storage-core": "^3.0.4",
+    "@itwin/object-storage-google": "^3.0.4",
     "axios": "^1.8.2"
   },
   "devDependencies": {

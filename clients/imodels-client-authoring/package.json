@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@itwin/imodels-client-management": "workspace:*",
-    "@itwin/object-storage-core": "^3.0.0"
+    "@itwin/object-storage-core": "^3.0.4"
   },
   "devDependencies": {
     "@itwin/eslint-plugin": "~3.7.8",

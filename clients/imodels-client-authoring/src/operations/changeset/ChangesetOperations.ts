@@ -20,6 +20,7 @@ import {
   DownloadProgressParam,
   DownloadedChangeset,
   GenericAbortSignal,
+  RetryParams,
   TargetDirectoryParam,
 } from "../../base/types";
 import { DownloadFileParams, downloadFile } from "../FileDownload";
@@ -40,7 +41,7 @@ type DownloadCallback = (bytesDownloaded: number) => void;
 type DownloadFailedCallback = (bytesDownloadedBeforeFailure: number) => void;
 
 interface DownloadChangesetFileWithRetryParams
-  extends IModelScopedOperationParams {
+  extends IModelScopedOperationParams, RetryParams {
   changeset: DownloadedChangeset;
   abortSignal?: GenericAbortSignal;
   downloadCallback?: DownloadCallback;
@@ -122,7 +123,7 @@ export class ChangesetOperations<
     );
 
     const changeset: Changeset = await this.querySingleInternal(params);
-    return this.downloadSingleChangeset({ ...params, changeset });
+    return this.downloadChangeset({ ...params, changeset });
   }
 
   /**
@@ -170,13 +171,14 @@ export class ChangesetOperations<
       const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
       for (const changeset of changesetsWithFilePath)
         queue.push(async () =>
-          this.downloadChangesetFileWithRetry({
+          this.downloadChangesetWithRetries({
             authorization: params.authorization,
             iModelId: params.iModelId,
             changeset,
             abortSignal: params.abortSignal,
             downloadCallback,
             firstDownloadFailedCallback: downloadFailedCallback,
+            maxRetries: params.maxRetries,
             headers: params.headers,
           })
         );
@@ -211,9 +213,9 @@ export class ChangesetOperations<
     };
   }
 
-  private async downloadSingleChangeset(
+  private async downloadChangeset(
     params: IModelScopedOperationParams &
-      TargetDirectoryParam & { changeset: Changeset } & DownloadProgressParam
+      TargetDirectoryParam & { changeset: Changeset } & DownloadProgressParam & RetryParams
   ): Promise<DownloadedChangeset> {
     const changesetWithPath: DownloadedChangeset = {
       ...params.changeset,
@@ -228,19 +230,20 @@ export class ChangesetOperations<
           params.progressCallback?.(bytes, changesetWithPath.fileSize)
       : undefined;
 
-    await this.downloadChangesetFileWithRetry({
+    await this.downloadChangesetWithRetries({
       authorization: params.authorization,
       iModelId: params.iModelId,
       changeset: changesetWithPath,
       abortSignal: params.abortSignal,
       downloadCallback,
+      maxRetries: params.maxRetries,
       headers: params.headers,
     });
 
     return changesetWithPath;
   }
 
-  private async downloadChangesetFileWithRetry(
+  private async downloadChangesetWithRetries(
     params: DownloadChangesetFileWithRetryParams
   ): Promise<void> {
     const targetFilePath = params.changeset.filePath;
@@ -261,60 +264,64 @@ export class ChangesetOperations<
       abortSignal: params.abortSignal,
     };
 
-    let bytesDownloaded = 0;
-    if (params.downloadCallback) {
-      downloadParams.latestDownloadedChunkSizeCallback = (downloaded) => {
-        bytesDownloaded += downloaded;
-        params.downloadCallback?.(downloaded);
-      };
-    }
-
-    try {
-      const downloadLink = params.changeset._links.download;
-      assertLink(downloadLink);
-      await downloadFile({
-        ...downloadParams,
-        url: downloadLink.href,
-        storageType: downloadLink.storageType,
-      });
-    } catch (error) {
-      this.throwIfAbortError(error, params.changeset);
-      params.firstDownloadFailedCallback?.(bytesDownloaded);
-
-      const changeset = await this.querySingleInternal({
-        authorization: params.authorization,
-        iModelId: params.iModelId,
-        changesetId: params.changeset.id,
-        headers: params.headers,
-      });
+    let firstError: Error | undefined;
+    for (let i = 0; i < (params.maxRetries ?? 4); i++) {
+      let bytesDownloaded = 0;
+      if (params.downloadCallback) {
+        downloadParams.latestDownloadedChunkSizeCallback = (downloaded) => {
+          bytesDownloaded += downloaded;
+          params.downloadCallback?.(downloaded);
+        };
+      }
 
       try {
-        const newDownloadLink = changeset._links.download;
-        assertLink(newDownloadLink);
+        const downloadLink = await this.getDownloadLink(params, i > 0);
+        assertLink(downloadLink);
         await downloadFile({
           ...downloadParams,
-          url: newDownloadLink.href,
-          storageType: newDownloadLink.storageType,
+          url: downloadLink.href,
+          storageType: downloadLink.storageType,
         });
-      } catch (errorAfterRetry) {
-        this.throwIfAbortError(error, params.changeset);
-
-        let originalError: Error | undefined;
-        if (errorAfterRetry instanceof Error) originalError = errorAfterRetry;
-
-        throw new IModelsErrorImpl({
-          code: IModelsErrorCode.ChangesetDownloadFailed,
-          message: `Failed to download changeset. Changeset id: ${
-            params.changeset.id
-          }, changeset index: ${
-            params.changeset.index
-          }, error: ${JSON.stringify(errorAfterRetry)}.`,
-          originalError,
-          statusCode: undefined,
-          details: undefined,
-        });
+        return;
+      } catch (error) {
+        this.throwIfAbortError(
+          error,
+          params.changeset,
+          downloadParams.abortSignal
+        );
+        if (i === 0) {
+          params.firstDownloadFailedCallback?.(bytesDownloaded);
+        }
+        if (error instanceof Error && firstError == null) firstError = error;
       }
     }
+
+    if (firstError != null)
+      throw new IModelsErrorImpl({
+        code: IModelsErrorCode.ChangesetDownloadFailed,
+        message: `Failed to download changeset. Changeset id: ${
+          params.changeset.id
+        }, changeset index: ${params.changeset.index}, error: ${JSON.stringify(
+          firstError
+        )}.`,
+        originalError: firstError,
+        statusCode: undefined,
+        details: undefined,
+      });
+  }
+
+  private async getDownloadLink(
+    params: DownloadChangesetFileWithRetryParams,
+    refreshLink: boolean
+  ) {
+    if (!refreshLink) return params.changeset._links.download;
+    const changeset = await this.querySingleInternal({
+      authorization: params.authorization,
+      iModelId: params.iModelId,
+      changesetId: params.changeset.id,
+      headers: params.headers,
+    });
+    return changeset._links.download;
   }
 
   private async isChangesetAlreadyDownloaded(
@@ -374,10 +381,15 @@ export class ChangesetOperations<
     return [progressCallback, downloadFailedCallback];
   }
 
-  private throwIfAbortError(error: unknown, changeset: Changeset) {
+  private throwIfAbortError(
+    error: unknown,
+    changeset: Changeset,
+    abortSignal?: GenericAbortSignal
+  ) {
     if (
       !isIModelsApiError(error) ||
-      error.code !== IModelsErrorCode.DownloadAborted
+      error.code !== IModelsErrorCode.DownloadAborted ||
+      abortSignal?.aborted !== true
     )
       return;
 
