@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Fix AbortSignal and retries for changeset downloads",
+      "type": "none"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-authoring"
+}
