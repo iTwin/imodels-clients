@@ -37,7 +37,7 @@
     "@itwin/object-storage-core": "^3.0.4",
     "@itwin/object-storage-google": "^3.0.4",
     "@puppeteer/browsers": "^2.10.0",
-    "axios": "^1.8.2",
+    "axios": "^1.12.2",
     "chai": "~4.3.10",
     "dotenv": "~10.0.0",
     "inversify": "~6.0.2",

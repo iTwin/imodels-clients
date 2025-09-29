@@ -45,7 +45,7 @@
     "@itwin/object-storage-azure": "^3.0.4",
     "@itwin/object-storage-core": "^3.0.4",
     "@itwin/object-storage-google": "^3.0.4",
-    "axios": "^1.8.2",
+    "axios": "^1.12.2",
     "chai": "~4.3.10",
     "chai-as-promised": "~7.1.1",
     "dotenv": "~10.0.0",
