@@ -9,19 +9,11 @@
       "ES2022", "DOM"
     ],
     "noUnusedLocals": true,
+    "noImplicitOverride": true,
+    "allowSyntheticDefaultImports": true,
     "declaration": true,
     "declarationMap": true,
     "strict": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "noImplicitOverride": true
+    "esModuleInterop": true
   }
 }
-
-
-// "declaration": true,
-// "sourceMap": true,
-// "strict": true,
-// "esModuleInterop": true,
-// "moduleResolution": "node",
-// "skipLibCheck": true
