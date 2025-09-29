@@ -1,6 +1,11 @@
 # Change Log - @itwin/imodels-access-backend
 
-This log was last generated on Thu, 26 Jun 2025 10:42:20 GMT and should not be manually modified.
+This log was last generated on Mon, 29 Sep 2025 09:21:53 GMT and should not be manually modified.
+
+## 6.0.2
+Mon, 29 Sep 2025 09:21:53 GMT
+
+_Version update only_
 
 ## 6.0.1
 Thu, 26 Jun 2025 10:42:20 GMT
