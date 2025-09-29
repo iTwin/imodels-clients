@@ -10,7 +10,11 @@ import {
   SynchronizationInfo,
 } from "@itwin/imodels-client-management";
 
-import { DownloadProgressParam, RetryParams, TargetDirectoryParam } from "../../base/types";
+import {
+  DownloadProgressParam,
+  RetryParams,
+  TargetDirectoryParam,
+} from "../../base/types";
 
 export type SynchronizationInfoForCreate = Omit<
   SynchronizationInfo,

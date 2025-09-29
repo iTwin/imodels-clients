@@ -41,11 +41,12 @@ type DownloadCallback = (bytesDownloaded: number) => void;
 type DownloadFailedCallback = (bytesDownloadedBeforeFailure: number) => void;
 
 interface DownloadChangesetFileWithRetryParams
-  extends IModelScopedOperationParams, RetryParams {
+  extends IModelScopedOperationParams,
+    RetryParams {
   changeset: DownloadedChangeset;
   abortSignal?: GenericAbortSignal;
   downloadCallback?: DownloadCallback;
-  firstDownloadFailedCallback?: DownloadFailedCallback;
+  downloadFailedCallback?: DownloadFailedCallback;
 }
 
 export class ChangesetOperations<
@@ -177,7 +178,7 @@ export class ChangesetOperations<
             changeset,
             abortSignal: params.abortSignal,
             downloadCallback,
-            firstDownloadFailedCallback: downloadFailedCallback,
+            downloadFailedCallback: downloadFailedCallback,
             maxRetries: params.maxRetries,
             headers: params.headers,
           })
@@ -215,7 +216,8 @@ export class ChangesetOperations<
 
   private async downloadChangeset(
     params: IModelScopedOperationParams &
-      TargetDirectoryParam & { changeset: Changeset } & DownloadProgressParam & RetryParams
+      TargetDirectoryParam & { changeset: Changeset } & DownloadProgressParam &
+      RetryParams
   ): Promise<DownloadedChangeset> {
     const changesetWithPath: DownloadedChangeset = {
       ...params.changeset,
@@ -289,25 +291,21 @@ export class ChangesetOperations<
           params.changeset,
           downloadParams.abortSignal
         );
-        if (i === 0) {
-          params.firstDownloadFailedCallback?.(bytesDownloaded);
-        }
+        params.downloadFailedCallback?.(bytesDownloaded);
         if (error instanceof Error && firstError == null) firstError = error;
       }
     }
-
-    if (firstError != null)
-      throw new IModelsErrorImpl({
-        code: IModelsErrorCode.ChangesetDownloadFailed,
-        message: `Failed to download changeset. Changeset id: ${
-          params.changeset.id
-        }, changeset index: ${params.changeset.index}, error: ${JSON.stringify(
-          firstError
-        )}.`,
-        originalError: firstError,
-        statusCode: undefined,
-        details: undefined,
-      });
+    throw new IModelsErrorImpl({
+      code: IModelsErrorCode.ChangesetDownloadFailed,
+      message: `Failed to download changeset. Changeset id: ${
+        params.changeset.id
+      }, changeset index: ${params.changeset.index}, error: ${JSON.stringify(
+        firstError
+      )}.`,
+      originalError: firstError,
+      statusCode: undefined,
+      details: undefined,
+    });
   }
 
   private async getDownloadLink(
