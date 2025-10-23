@@ -16,7 +16,8 @@ export type RecursiveRequired<T> = Required<T> & {
 export type OptionalExceptFor<T, TRequired extends keyof T> = Partial<T> &
   Pick<T, TRequired>;
 /** Wrapper type that requires at least one property of `T` to be set. */
-export type AtLeastOneProperty<T extends Record<string, unknown>> =
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AtLeastOneProperty<T extends Record<string, any>> =
   | {
       [K in keyof T]: { [P in K]: T[P] } & {
         [P in Exclude<keyof T, K>]?: never;
