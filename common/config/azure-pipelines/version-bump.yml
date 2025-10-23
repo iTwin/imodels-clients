@@ -25,7 +25,7 @@ parameters:
 trigger: none
 
 variables:
-  node20Version: '20.9.0'
+  nodeVersion: '22.11.0'
 
 jobs:
   - deployment: iModelsApiClientsVersionBump
@@ -43,9 +43,9 @@ jobs:
               clean: true
 
             - task: NodeTool@0
-              displayName: Install Node@$(node20Version)
+              displayName: Install Node@$(nodeVersion)
               inputs:
-                versionSpec: $(node20Version)
+                versionSpec: $(nodeVersion)
             
             - bash: |
                 git config --local user.email 38288322+imodeljs-admin@users.noreply.github.com
