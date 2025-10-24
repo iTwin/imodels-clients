@@ -2,6 +2,18 @@
   "name": "@itwin/imodels-client-authoring",
   "entries": [
     {
+      "version": "6.0.2",
+      "tag": "@itwin/imodels-client-authoring_v6.0.2",
+      "date": "Mon, 29 Sep 2025 09:21:51 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fix AbortSignal and retries for changeset downloads"
+          }
+        ]
+      }
+    },
+    {
       "version": "6.0.1",
       "tag": "@itwin/imodels-client-authoring_v6.0.1",
       "date": "Thu, 26 Jun 2025 10:42:19 GMT",

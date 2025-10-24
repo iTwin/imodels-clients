@@ -16,6 +16,12 @@ export interface TargetDirectoryParam {
   targetDirectoryPath: string;
 }
 
+/** Parameters for retrying failed operations. */
+export interface RetryParams {
+  /** Maximum number of retries to attempt for each operation. Default is `4`. */
+  maxRetries?: number;
+}
+
 /** Signal interface for signalling abort. */
 export type GenericAbortSignal = ObjectStorageAbortSignal;
 

@@ -1,6 +1,13 @@
 # Change Log - @itwin/imodels-client-authoring
 
-This log was last generated on Thu, 26 Jun 2025 10:42:19 GMT and should not be manually modified.
+This log was last generated on Mon, 29 Sep 2025 09:21:51 GMT and should not be manually modified.
+
+## 6.0.2
+Mon, 29 Sep 2025 09:21:51 GMT
+
+### Updates
+
+- Fix AbortSignal and retries for changeset downloads
 
 ## 6.0.1
 Thu, 26 Jun 2025 10:42:19 GMT

@@ -722,6 +722,7 @@ describe("[Authoring] ChangesetOperations", () => {
       }
 
       // Assert
+      expect(abortSignal.aborted).to.be.true;
       expect(isIModelsApiError(thrownError)).to.be.true;
       expect((thrownError as IModelsError).code).to.be.equal(
         IModelsErrorCode.DownloadAborted
