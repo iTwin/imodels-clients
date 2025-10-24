@@ -118,7 +118,7 @@ export type BackendIModelsAccessOptions = Pick<
   Omit<IModelsClientOptions, "cloudStorage">;
 
 export class BackendIModelsAccess implements BackendHubAccess {
-  private readonly _iModelsClient: IModelsClient;
+  protected readonly _iModelsClient: IModelsClient;
 
   constructor(iModelsClient?: IModelsClient | BackendIModelsAccessOptions) {
     this._iModelsClient =
@@ -129,6 +129,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
             cloudStorage:
               iModelsClient?.cloudStorage ?? createDefaultClientStorage(),
           });
+  }
+
+  public get iModelsClient(): IModelsClient {
+    return this._iModelsClient;
   }
 
   public async downloadChangesets(
