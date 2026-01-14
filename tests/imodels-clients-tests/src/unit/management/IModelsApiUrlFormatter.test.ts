@@ -688,4 +688,129 @@ describe("[Management] IModelsApiUrlFormatter", () => {
       );
     });
   });
+
+  describe("Favorite iModel urls", () => {
+    it("should format favorite iModel list url", () => {
+      // Arrange
+      const getFavoriteIModelListUrlParams = {
+        urlParams: { iTwinId: "ITWIN_ID" },
+      };
+
+      // Act
+      const favoriteIModelListUrl =
+        iModelsApiUrlFormatter.getFavoriteIModelListUrl(
+          getFavoriteIModelListUrlParams
+        );
+
+      // Assert
+      expect(favoriteIModelListUrl).to.be.equal(
+        "https://api.bentley.com/imodels/favorites?iTwinId=ITWIN_ID"
+      );
+    });
+
+    it("should format favorite iModel list url with $top", () => {
+      // Arrange
+      const getFavoriteIModelListUrlParams = {
+        urlParams: { iTwinId: "ITWIN_ID", $top: 50 },
+      };
+
+      // Act
+      const favoriteIModelListUrl =
+        iModelsApiUrlFormatter.getFavoriteIModelListUrl(
+          getFavoriteIModelListUrlParams
+        );
+
+      // Assert
+      expect(favoriteIModelListUrl).to.be.equal(
+        "https://api.bentley.com/imodels/favorites?iTwinId=ITWIN_ID&$top=50"
+      );
+    });
+
+    it("should format favorite iModel list url with $continuationToken", () => {
+      // Arrange
+      const getFavoriteIModelListUrlParams = {
+        urlParams: {
+          iTwinId: "ITWIN_ID",
+          $continuationToken: "TOKEN_123",
+        },
+      };
+
+      // Act
+      const favoriteIModelListUrl =
+        iModelsApiUrlFormatter.getFavoriteIModelListUrl(
+          getFavoriteIModelListUrlParams
+        );
+
+      // Assert
+      expect(favoriteIModelListUrl).to.be.equal(
+        "https://api.bentley.com/imodels/favorites?iTwinId=ITWIN_ID&$continuationToken=TOKEN_123"
+      );
+    });
+
+    it("should format favorite iModel url", () => {
+      // Arrange
+      const getFavoriteIModelUrlParams = { iModelId: "IMODEL_ID" };
+
+      // Act
+      const favoriteIModelUrl = iModelsApiUrlFormatter.getFavoriteIModelUrl(
+        getFavoriteIModelUrlParams
+      );
+
+      // Assert
+      expect(favoriteIModelUrl).to.be.equal(
+        "https://api.bentley.com/imodels/favorites/IMODEL_ID"
+      );
+    });
+  });
+
+  describe("Recent iModel urls", () => {
+    it("should format recent iModel list url", () => {
+      // Arrange
+      const getRecentIModelListUrlParams = {
+        urlParams: { iTwinId: "ITWIN_ID" },
+      };
+
+      // Act
+      const recentIModelListUrl = iModelsApiUrlFormatter.getRecentIModelListUrl(
+        getRecentIModelListUrlParams
+      );
+
+      // Assert
+      expect(recentIModelListUrl).to.be.equal(
+        "https://api.bentley.com/imodels/recents?iTwinId=ITWIN_ID"
+      );
+    });
+
+    it("should format recent iModel list url with $top", () => {
+      // Arrange
+      const getRecentIModelListUrlParams = {
+        urlParams: { iTwinId: "ITWIN_ID", $top: 25 },
+      };
+
+      // Act
+      const recentIModelListUrl = iModelsApiUrlFormatter.getRecentIModelListUrl(
+        getRecentIModelListUrlParams
+      );
+
+      // Assert
+      expect(recentIModelListUrl).to.be.equal(
+        "https://api.bentley.com/imodels/recents?iTwinId=ITWIN_ID&$top=25"
+      );
+    });
+
+    it("should format recent iModel url", () => {
+      // Arrange
+      const getRecentIModelUrlParams = { iModelId: "IMODEL_ID" };
+
+      // Act
+      const recentIModelUrl = iModelsApiUrlFormatter.getRecentIModelUrl(
+        getRecentIModelUrlParams
+      );
+
+      // Assert
+      expect(recentIModelUrl).to.be.equal(
+        "https://api.bentley.com/imodels/recents/IMODEL_ID"
+      );
+    });
+  });
 });

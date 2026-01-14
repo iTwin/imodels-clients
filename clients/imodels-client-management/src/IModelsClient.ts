@@ -20,9 +20,11 @@ import { Constants } from "./Constants";
 import {
   BriefcaseOperations,
   ChangesetOperations,
+  FavoriteIModelOperations,
   IModelOperations,
   NamedVersionOperations,
   OperationOperations,
+  RecentIModelOperations,
   ThumbnailOperations,
   UserOperations,
   UserPermissionOperations,
@@ -133,6 +135,16 @@ export class IModelsClient {
   /** Operation operations. See {@link OperationOperations}. */
   public get operations(): OperationOperations<OperationOptions> {
     return new OperationOperations(this._operationsOptions);
+  }
+
+  /** Favorite iModel operations. See {@link FavoriteIModelOperations}. */
+  public get favoriteIModels(): FavoriteIModelOperations<OperationOptions> {
+    return new FavoriteIModelOperations(this._operationsOptions);
+  }
+
+  /** Recent iModel operations. See {@link RecentIModelOperations}. */
+  public get recentIModels(): RecentIModelOperations<OperationOptions> {
+    return new RecentIModelOperations(this._operationsOptions);
   }
 
   private static fillManagementClientConfiguration(

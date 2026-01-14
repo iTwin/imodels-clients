@@ -12,9 +12,11 @@ import {
 import { GetChangesetExtendedDataListUrlParams } from "./changeset-extended-data/ChangesetExtendedDataOperationParams";
 import { GetChangesetGroupListUrlParams } from "./changeset-group/ChangesetGroupOperationParams";
 import { CheckpointParentEntityId } from "./checkpoint/CheckpointOperationParams";
+import { GetFavoriteIModelListUrlParams } from "./favorite-imodel/FavoriteIModelOperationParams";
 import { GetIModelListUrlParams } from "./imodel/IModelOperationParams";
 import { GetNamedVersionListUrlParams } from "./named-version/NamedVersionOperationParams";
 import { DownloadThumbnailUrlParams } from "./OperationParamExports";
+import { GetRecentIModelListUrlParams } from "./recent-imodel/RecentIModelOperationParams";
 
 type SingleOrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type MultipleOrderByForAnyEntity = SingleOrderByForAnyEntity[];
@@ -210,6 +212,30 @@ export class IModelsApiUrlFormatter {
 
   public getUserPermissionsUrl(params: { iModelId: string }): string {
     return `${this.baseUrl}/${params.iModelId}/permissions`;
+  }
+
+  public getFavoriteIModelListUrl(params: {
+    urlParams: GetFavoriteIModelListUrlParams;
+  }): string {
+    return `${this.baseUrl}/favorites${this.formQueryString({
+      ...params.urlParams,
+    })}`;
+  }
+
+  public getFavoriteIModelUrl(params: { iModelId: string }): string {
+    return `${this.baseUrl}/favorites/${params.iModelId}`;
+  }
+
+  public getRecentIModelListUrl(params: {
+    urlParams: GetRecentIModelListUrlParams;
+  }): string {
+    return `${this.baseUrl}/recents${this.formQueryString({
+      ...params.urlParams,
+    })}`;
+  }
+
+  public getRecentIModelUrl(params: { iModelId: string }): string {
+    return `${this.baseUrl}/recents/${params.iModelId}`;
   }
 
   public getCreateIModelOperationDetailsUrl(params: {
