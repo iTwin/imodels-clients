@@ -25,6 +25,7 @@
     "itwinjs",
     "ITWINS",
     "namedversions",
+    "recents",
     "txns"
   ],
   "ignoreRegExpList": [

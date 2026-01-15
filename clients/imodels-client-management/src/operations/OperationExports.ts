@@ -13,3 +13,5 @@ export * from "./thumbnail/ThumbnailOperations";
 export * from "./user/UserOperations";
 export * from "./user-permission/UserPermissionOperations";
 export * from "./operation/OperationOperations";
+export * from "./favorite-imodel/FavoriteIModelOperations";
+export * from "./recent-imodel/RecentIModelOperations";
