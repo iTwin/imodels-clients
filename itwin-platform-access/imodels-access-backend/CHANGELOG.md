@@ -1,6 +1,13 @@
 # Change Log - @itwin/imodels-access-backend
 
-This log was last generated on Mon, 29 Sep 2025 09:21:53 GMT and should not be manually modified.
+This log was last generated on Thu, 15 Jan 2026 01:26:07 GMT and should not be manually modified.
+
+## 6.1.0
+Thu, 15 Jan 2026 01:26:07 GMT
+
+### Updates
+
+- Expose iModelsClient property
 
 ## 6.0.2
 Mon, 29 Sep 2025 09:21:53 GMT

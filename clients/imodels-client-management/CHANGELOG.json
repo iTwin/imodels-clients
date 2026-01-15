@@ -2,6 +2,21 @@
   "name": "@itwin/imodels-client-management",
   "entries": [
     {
+      "version": "6.1.0",
+      "tag": "@itwin/imodels-client-management_v6.1.0",
+      "date": "Thu, 15 Jan 2026 01:26:06 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "fix: update AtLeastOneProperty utility type to provide stronger type inference"
+          },
+          {
+            "comment": "Add recent and favorite iModels operations"
+          }
+        ]
+      }
+    },
+    {
       "version": "6.0.2",
       "tag": "@itwin/imodels-client-management_v6.0.2",
       "date": "Mon, 29 Sep 2025 09:21:51 GMT",

@@ -1,6 +1,14 @@
 # Change Log - @itwin/imodels-client-management
 
-This log was last generated on Mon, 29 Sep 2025 09:21:51 GMT and should not be manually modified.
+This log was last generated on Thu, 15 Jan 2026 01:26:06 GMT and should not be manually modified.
+
+## 6.1.0
+Thu, 15 Jan 2026 01:26:06 GMT
+
+### Updates
+
+- fix: update AtLeastOneProperty utility type to provide stronger type inference
+- Add recent and favorite iModels operations
 
 ## 6.0.2
 Mon, 29 Sep 2025 09:21:51 GMT

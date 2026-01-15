@@ -2,6 +2,12 @@
   "name": "@itwin/imodels-client-authoring",
   "entries": [
     {
+      "version": "6.1.0",
+      "tag": "@itwin/imodels-client-authoring_v6.1.0",
+      "date": "Thu, 15 Jan 2026 01:26:06 GMT",
+      "comments": {}
+    },
+    {
       "version": "6.0.2",
       "tag": "@itwin/imodels-client-authoring_v6.0.2",
       "date": "Mon, 29 Sep 2025 09:21:51 GMT",
