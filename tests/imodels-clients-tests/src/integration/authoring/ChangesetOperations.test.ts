@@ -169,6 +169,7 @@ describe("[Authoring] ChangesetOperations", () => {
       expectedLinks: {
         namedVersion: false,
         checkpoint: false,
+        elements: false,
       },
       isGetResponse: false,
     });
@@ -229,6 +230,7 @@ describe("[Authoring] ChangesetOperations", () => {
       expectedLinks: {
         namedVersion: false,
         checkpoint: false,
+        elements: false,
       },
       isGetResponse: false,
     });
@@ -285,6 +287,7 @@ describe("[Authoring] ChangesetOperations", () => {
           expectedLinks: {
             namedVersion: changesetHasNamedVersion,
             checkpoint: true,
+            elements: true,
           },
           expectedTestChangesetFile: testChangesetFile,
         });
@@ -349,6 +352,7 @@ describe("[Authoring] ChangesetOperations", () => {
           expectedLinks: {
             namedVersion: changesetHasNamedVersion,
             checkpoint: true,
+            elements: true,
           },
           expectedTestChangesetFile: testChangesetFile,
         });
@@ -423,6 +427,7 @@ describe("[Authoring] ChangesetOperations", () => {
           expectedLinks: {
             namedVersion: changesetHasNamedVersion,
             checkpoint: true,
+            elements: true,
           },
           expectedTestChangesetFile: testChangesetFile,
         });
