@@ -96,9 +96,9 @@ export interface ChangesetLinks extends MinimalChangesetLinks {
   download: StorageLink | null;
   /** Link from where to download the changed elements file. Link points to a remote storage.
    *
-   * Note: This property may be `undefined` as this property is experimental.
+   * Note: This property is experimental.
    */
-  changedElements: StorageLink | null | undefined;
+  changedElements: StorageLink | null;
   /**
    * Link where to upload the Changeset file. Link points to a remote storage. IMPORTANT: this link
    * is never present in any of the Changeset instances returned from methods in this client. This property
