@@ -12,6 +12,7 @@ import {
 
 import {
   DownloadProgressParam,
+  GenericAbortSignal,
   RetryParams,
   TargetDirectoryParam,
 } from "../../base/types";
@@ -58,6 +59,11 @@ export interface CreateChangesetParams extends IModelScopedOperationParams {
   /** Properties of the new Changeset. */
   changesetProperties: ChangesetPropertiesForCreate;
 }
+
+export type DownloadChangedElementsFileParams = GetSingleChangesetParams &
+  TargetDirectoryParam & {
+    abortSignal?: GenericAbortSignal;
+  };
 
 /** Parameters for single Changeset download operation. */
 export type DownloadSingleChangesetParams = GetSingleChangesetParams &
