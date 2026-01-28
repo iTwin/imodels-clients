@@ -52,6 +52,7 @@ describe("[Management] IModelOperations", () => {
   let iModelsClient: IModelsClient;
   let authorization: AuthorizationCallback;
   let iTwinId: string;
+  const testsIModelTimeOutInMs = 8 * 60000;
 
   let testIModelFileProvider: TestIModelFileProvider;
   let testIModelGroup: TestIModelGroup;
@@ -563,6 +564,7 @@ describe("[Management] IModelOperations", () => {
           ContainerTypes.CodeStore |
           ContainerTypes.ViewStore,
       },
+      timeOutInMs: testsIModelTimeOutInMs,
       headers: {
         "X-Correlation-Id": randomUUID(),
       },
@@ -600,6 +602,7 @@ describe("[Management] IModelOperations", () => {
           ContainerTypes.CodeStore |
           ContainerTypes.ViewStore,
       },
+      timeOutInMs: testsIModelTimeOutInMs,
       headers: {
         "X-Correlation-Id": randomUUID(),
       },
@@ -635,6 +638,7 @@ describe("[Management] IModelOperations", () => {
           ContainerTypes.CodeStore |
           ContainerTypes.ViewStore,
       },
+      timeOutInMs: testsIModelTimeOutInMs,
       headers: {
         "X-Correlation-Id": randomUUID(),
       },
@@ -671,6 +675,7 @@ describe("[Management] IModelOperations", () => {
           ContainerTypes.CodeStore |
           ContainerTypes.ViewStore,
       },
+      timeOutInMs: testsIModelTimeOutInMs,
     };
 
     // Act
@@ -714,6 +719,7 @@ describe("[Management] IModelOperations", () => {
           ContainerTypes.CodeStore |
           ContainerTypes.ViewStore,
       },
+      timeOutInMs: testsIModelTimeOutInMs,
     };
 
     // Act
