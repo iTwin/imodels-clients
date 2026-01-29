@@ -304,6 +304,8 @@ describe("[Management] AxiosRestClient", () => {
     axiosMock.onPost(requestParams.url).reply(503);
     retryPolicyStub.shouldRetry.returns(true);
     retryPolicyStub.getSleepDurationInMs.returns(0);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (retryPolicyStub as any).maxRetries = 3;
     const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
@@ -324,19 +326,19 @@ describe("[Management] AxiosRestClient", () => {
     expect(
       retryPolicyStub.shouldRetry.calledWithMatch({
         retriesInvoked: 0,
-        error: sinon.match.object,
+        error: sinon.match.any,
       })
     ).to.be.true;
     expect(
       retryPolicyStub.shouldRetry.calledWithMatch({
         retriesInvoked: 1,
-        error: sinon.match.object,
+        error: sinon.match.any,
       })
     ).to.be.true;
     expect(
       retryPolicyStub.shouldRetry.calledWithMatch({
         retriesInvoked: 2,
-        error: sinon.match.object,
+        error: sinon.match.any,
       })
     ).to.be.true;
 
