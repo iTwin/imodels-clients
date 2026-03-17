@@ -20,3 +20,4 @@ export * from "./recent-imodel";
 export * from "./thumbnail";
 export * from "./user";
 export * from "./user-permission";
+export * from "./lock";

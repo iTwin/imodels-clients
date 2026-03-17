@@ -26,7 +26,6 @@ import {
   ChangesetOperations,
   IModelOperations,
   IModelsApiUrlFormatter,
-  LockOperations,
   OperationOptions,
 } from "./operations";
 
@@ -111,11 +110,6 @@ export class IModelsClient extends ManagementIModelsClient {
   /** Changeset Group operations. See {@link ChangesetGroupOperations}. */
   public override get changesetGroups(): ChangesetGroupOperations<OperationOptions> {
     return new ChangesetGroupOperations(this._operationsOptions, this);
-  }
-
-  /** Lock operations. See {@link LockOperations}. */
-  public get locks(): LockOperations<OperationOptions> {
-    return new LockOperations(this._operationsOptions);
   }
 
   private static fillAuthoringClientConfiguration(

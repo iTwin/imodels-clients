@@ -13,6 +13,8 @@ export * from "./apiEntities/ThumbnailInterfaces";
 export * from "./apiEntities/UserInterfaces";
 export * from "./apiEntities/UserPermissionInterfaces";
 export * from "./apiEntities/OperationInterfaces";
+export * from "./apiEntities/LockInterfaces";
+export * from "./apiEntities/LockErrorInterfaces";
 
 export * from "./iterators/EntityListIterator";
 export * from "./iterators/IteratorUtilFunctions";

@@ -15,3 +15,4 @@ export * from "./user-permission/UserPermissionOperations";
 export * from "./operation/OperationOperations";
 export * from "./favorite-imodel/FavoriteIModelOperations";
 export * from "./recent-imodel/RecentIModelOperations";
+export * from "./lock/LockOperations";
