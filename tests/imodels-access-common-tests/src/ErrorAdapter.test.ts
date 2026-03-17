@@ -9,10 +9,10 @@ import {
   ErrorAdapter,
   OperationNameForErrorMapping,
 } from "@itwin/imodels-access-common";
-import { IModelsErrorParser } from "@itwin/imodels-client-authoring";
 import {
   IModelsErrorCode,
   IModelsErrorImpl,
+  IModelsErrorParser,
   IModelsErrorScope,
 } from "@itwin/imodels-client-management";
 

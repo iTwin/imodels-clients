@@ -7,6 +7,8 @@ import { expect } from "chai";
 import {
   IModelOrderByProperty,
   IModelsApiUrlFormatter,
+  LockLevel,
+  LockLevelFilter,
   OrderByOperator,
 } from "@itwin/imodels-client-management";
 
@@ -810,6 +812,42 @@ describe("[Management] IModelsApiUrlFormatter", () => {
       // Assert
       expect(recentIModelUrl).to.be.equal(
         "https://api.bentley.com/imodels/recents/IMODEL_ID"
+      );
+    });
+  });
+
+  describe("Lock urls", () => {
+    it("should format lock list url", () => {
+      // Arrange
+      const getLockListUrlParams = { iModelId: "IMODEL_ID" };
+
+      // Act
+      const lockListUrl =
+        iModelsApiUrlFormatter.getLockListUrl(getLockListUrlParams);
+
+      // Assert
+      expect(lockListUrl).to.be.equal(
+        "https://api.bentley.com/imodels/IMODEL_ID/locks"
+      );
+    });
+
+    it("should format lock list url with query params", () => {
+      // Arrange
+      const getLockListUrlParams = {
+        iModelId: "IMODEL_ID",
+        urlParams: {
+          briefcaseId: 3,
+          lockLevel: LockLevel.Shared as LockLevelFilter,
+        },
+      };
+
+      // Act
+      const lockListUrl =
+        iModelsApiUrlFormatter.getLockListUrl(getLockListUrlParams);
+
+      // Assert
+      expect(lockListUrl).to.be.equal(
+        "https://api.bentley.com/imodels/IMODEL_ID/locks?briefcaseId=3&lockLevel=shared"
       );
     });
   });

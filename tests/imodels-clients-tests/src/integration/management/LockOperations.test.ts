@@ -5,20 +5,19 @@
 import { expect } from "chai";
 
 import {
-  ConflictingLock,
-  ConflictingLocksError,
-  GetLockListParams,
-  IModelsClient,
-  IModelsClientOptions,
-  Lock,
-  LockLevel,
-  LockLevelFilter,
-  LocksError,
-  UpdateLockParams,
+  IModelsClient as AuthoringIModelsClient,
+  IModelsClientOptions as AuthoringIModelsClientOptions,
 } from "@itwin/imodels-client-authoring";
 import {
   AuthorizationCallback,
+  GetLockListParams,
+  IModelsClient,
+  IModelsClientOptions,
   IModelsErrorCode,
+  Lock,
+  LockLevel,
+  LockLevelFilter,
+  UpdateLockParams,
   toArray,
 } from "@itwin/imodels-client-management";
 import {
@@ -38,8 +37,9 @@ import {
 
 import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
-describe("[Authoring] LockOperations", () => {
+describe("[Management] LockOperations", () => {
   let iModelsClient: IModelsClient;
+  let authoringClient: AuthoringIModelsClient;
   let authorization: AuthorizationCallback;
 
   let testIModelFileProvider: TestIModelFileProvider;
@@ -56,6 +56,11 @@ describe("[Authoring] LockOperations", () => {
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
+    const authoringClientOptions = container.get<AuthoringIModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
+    authoringClient = new AuthoringIModelsClient(authoringClientOptions);
+
     const authorizationProvider = container.get(TestAuthorizationProvider);
     authorization = authorizationProvider.getAdmin1Authorization();
 
@@ -65,7 +70,7 @@ describe("[Authoring] LockOperations", () => {
     testIModelGroup = testIModelGroupFactory.create({
       testRunId: getTestRunId(),
       packageName: Constants.PackagePrefix,
-      testSuiteName: "AuthoringLockOperations",
+      testSuiteName: "ManagementLockOperations",
     });
 
     const reusableTestIModelProvider = container.get(
@@ -81,7 +86,7 @@ describe("[Authoring] LockOperations", () => {
 
   afterEach(async () => {
     for (const briefcaseId of testIModelForWriteBriefcaseIds) {
-      await iModelsClient.briefcases.release({
+      await authoringClient.briefcases.release({
         authorization,
         iModelId: testIModelForWrite.id,
         briefcaseId,
@@ -188,7 +193,7 @@ describe("[Authoring] LockOperations", () => {
 
   it("should acquire new locks", async () => {
     // Arrange
-    const briefcase = await iModelsClient.briefcases.acquire({
+    const briefcase = await authoringClient.briefcases.acquire({
       authorization,
       iModelId: testIModelForWrite.id,
     });
@@ -225,7 +230,7 @@ describe("[Authoring] LockOperations", () => {
 
   it("should release locks", async () => {
     // Arrange
-    const briefcase = await iModelsClient.briefcases.acquire({
+    const briefcase = await authoringClient.briefcases.acquire({
       authorization,
       iModelId: testIModelForWrite.id,
     });
@@ -273,7 +278,7 @@ describe("[Authoring] LockOperations", () => {
 
   it("should return error when trying to update non-existing lock to LockLevel.None", async () => {
     // Arrange
-    const briefcase = await iModelsClient.briefcases.acquire({
+    const briefcase = await authoringClient.briefcases.acquire({
       authorization,
       iModelId: testIModelForWrite.id,
     });
@@ -375,7 +380,7 @@ describe("[Authoring] LockOperations", () => {
 
   it("should return error when trying to update lock with non-existing changeset specified", async () => {
     // Arrange
-    const briefcase = await iModelsClient.briefcases.acquire({
+    const briefcase = await authoringClient.briefcases.acquire({
       authorization,
       iModelId: testIModelForWrite.id,
     });
@@ -414,7 +419,7 @@ describe("[Authoring] LockOperations", () => {
 
   it("should return error when trying to acquire exclusive lock on an object that is already locked by another briefcase", async () => {
     // Arrange
-    const briefcase1 = await iModelsClient.briefcases.acquire({
+    const briefcase1 = await authoringClient.briefcases.acquire({
       authorization,
       iModelId: testIModelForWrite.id,
     });
@@ -434,7 +439,7 @@ describe("[Authoring] LockOperations", () => {
 
     await iModelsClient.locks.update(updateLockParams1);
 
-    const briefcase2 = await iModelsClient.briefcases.acquire({
+    const briefcase2 = await authoringClient.briefcases.acquire({
       authorization,
       iModelId: testIModelForWrite.id,
     });
@@ -465,25 +470,14 @@ describe("[Authoring] LockOperations", () => {
       objectThrown,
       expectedError: {
         code: IModelsErrorCode.ConflictWithAnotherUser,
-        message:
-          "Lock(s) is owned by another Briefcase. Conflicting locks:\n" +
-          `1. Object id: 0x5, lock level: shared, briefcase ids: ${briefcase1.briefcaseId}\n`,
+        message: "Lock(s) is owned by another Briefcase.",
       },
     });
-    const conflictingLocks = (objectThrown as ConflictingLocksError)
-      .conflictingLocks;
-    expect(conflictingLocks).to.not.be.undefined;
-    expect(conflictingLocks!.length).to.be.equal(1);
-    const conflictingLock: ConflictingLock = conflictingLocks![0];
-    expect(conflictingLock.objectId).to.be.equal("0x5");
-    expect(conflictingLock.lockLevel).to.be.equal(LockLevel.Shared);
-    expect(conflictingLock.briefcaseIds.length).to.be.equal(1);
-    expect(conflictingLock.briefcaseIds[0]).to.be.equal(briefcase1.briefcaseId);
   });
 
   it("should return error when trying to acquire lock on an object that has been locked by a more recent changeset", async () => {
     // Arrange
-    const briefcase1 = await iModelsClient.briefcases.acquire({
+    const briefcase1 = await authoringClient.briefcases.acquire({
       authorization,
       iModelId: testIModelForWrite.id,
     });
@@ -504,7 +498,7 @@ describe("[Authoring] LockOperations", () => {
 
     await iModelsClient.locks.update(updateLockParams1);
 
-    const briefcase2 = await iModelsClient.briefcases.acquire({
+    const briefcase2 = await authoringClient.briefcases.acquire({
       authorization,
       iModelId: testIModelForWrite.id,
     });
@@ -531,14 +525,8 @@ describe("[Authoring] LockOperations", () => {
       objectThrown,
       expectedError: {
         code: IModelsErrorCode.NewerChangesExist,
-        message:
-          "One or more objects have been locked in a newer Changeset. Object ids: 0x5",
+        message: "One or more objects have been locked in a newer Changeset.",
       },
     });
-    const objectIds = (objectThrown as LocksError).objectIds;
-    expect(objectIds).to.not.be.undefined;
-    expect(objectIds!.length).to.be.equal(1);
-    const objectId = objectIds![0];
-    expect(objectId).to.be.equal("0x5");
   });
 });

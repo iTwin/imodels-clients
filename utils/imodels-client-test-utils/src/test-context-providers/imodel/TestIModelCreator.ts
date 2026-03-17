@@ -4,18 +4,16 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import {
-  Lock,
-  LockLevel,
-  LockedObjects,
-  UpdateChangesetGroupParams,
-} from "@itwin/imodels-client-authoring";
+import { UpdateChangesetGroupParams } from "@itwin/imodels-client-authoring";
 import {
   ChangesetGroupState,
   CheckpointState,
   ContainerTypes,
   GetSingleCheckpointParams,
   IModel,
+  Lock,
+  LockLevel,
+  LockedObjects,
   UtilityFunctions,
 } from "@itwin/imodels-client-management";
 

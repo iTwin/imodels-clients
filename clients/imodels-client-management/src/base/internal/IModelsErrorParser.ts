@@ -3,10 +3,13 @@
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
 import {
+  ConflictingLock,
+  ConflictingLocksError,
   IModelsError,
   IModelsErrorCode,
   IModelsErrorDetail,
   IModelsOriginalError,
+  LocksError,
 } from "../types";
 
 interface UnwrappedError {
@@ -22,6 +25,8 @@ export interface IModelsApiError {
   statusCode?: number;
   message?: string;
   details?: IModelsApiErrorDetail[];
+  objectIds?: string[];
+  conflictingLocks?: ConflictingLock[];
 }
 
 interface IModelsApiErrorDetail {
@@ -66,6 +71,37 @@ export class IModelsErrorImpl
   }
 }
 
+class LocksErrorImpl extends IModelsErrorBaseImpl implements LocksError {
+  public objectIds?: string[];
+
+  constructor(params: {
+    code: IModelsErrorCode;
+    message: string;
+    originalError: IModelsOriginalError | undefined;
+    objectIds?: string[];
+  }) {
+    super(params);
+    this.objectIds = params.objectIds;
+  }
+}
+
+class ConflictingLocksErrorImpl
+  extends IModelsErrorBaseImpl
+  implements ConflictingLocksError
+{
+  public conflictingLocks?: ConflictingLock[];
+
+  constructor(params: {
+    code: IModelsErrorCode;
+    message: string;
+    originalError: IModelsOriginalError | undefined;
+    conflictingLocks?: ConflictingLock[];
+  }) {
+    super(params);
+    this.conflictingLocks = params.conflictingLocks;
+  }
+}
+
 export interface ResponseInfo {
   statusCode?: number;
   body?: unknown;
@@ -103,6 +139,33 @@ export class IModelsErrorParser {
         response,
         originalError
       );
+
+    if (errorCode === IModelsErrorCode.NewerChangesExist) {
+      const errorMessage = IModelsErrorParser.parseAndFormatLockErrorMessage(
+        errorFromApi?.error?.message,
+        errorFromApi?.error?.objectIds
+      );
+      return new LocksErrorImpl({
+        code: errorCode,
+        message: errorMessage,
+        originalError,
+        objectIds: errorFromApi?.error?.objectIds,
+      });
+    }
+
+    if (errorCode === IModelsErrorCode.ConflictWithAnotherUser) {
+      const errorMessage =
+        IModelsErrorParser.parseAndFormatLockConflictErrorMessage(
+          errorFromApi?.error?.message,
+          errorFromApi?.error?.conflictingLocks
+        );
+      return new ConflictingLocksErrorImpl({
+        code: errorCode,
+        message: errorMessage,
+        originalError,
+        conflictingLocks: errorFromApi?.error?.conflictingLocks,
+      });
+    }
 
     const errorDetails: IModelsErrorDetail[] | undefined =
       IModelsErrorParser.parseDetails(errorFromApi.error?.details);
@@ -161,6 +224,35 @@ export class IModelsErrorParser {
       result += "\n";
     }
 
+    return result;
+  }
+
+  private static parseAndFormatLockErrorMessage(
+    message: string | undefined,
+    objectIds: string[] | undefined
+  ): string {
+    let result = message ?? IModelsErrorParser._defaultErrorMessage;
+    if (!objectIds || objectIds.length === 0) return result;
+
+    result += ` Object ids: ${objectIds.join(" ,")}`;
+    return result;
+  }
+
+  private static parseAndFormatLockConflictErrorMessage(
+    message: string | undefined,
+    conflictingLocks: ConflictingLock[] | undefined
+  ): string {
+    let result = message ?? IModelsErrorParser._defaultErrorMessage;
+    if (!conflictingLocks || conflictingLocks.length === 0) return result;
+
+    result += " Conflicting locks:\n";
+    for (let i = 0; i < conflictingLocks.length; i++) {
+      result += `${i + 1}. Object id: ${
+        conflictingLocks[i].objectId
+      }, lock level: ${
+        conflictingLocks[i].lockLevel
+      }, briefcase ids: ${conflictingLocks[i].briefcaseIds.join(", ")}\n`;
+    }
     return result;
   }
 

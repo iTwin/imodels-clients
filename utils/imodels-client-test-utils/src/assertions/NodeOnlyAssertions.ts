@@ -13,7 +13,6 @@ import {
   ChangesetGroupPropertiesForUpdate,
   ChangesetPropertiesForCreate,
   DownloadedChangeset,
-  Lock,
   SynchronizationInfoForCreate,
 } from "@itwin/imodels-client-authoring";
 import {
@@ -24,6 +23,7 @@ import {
   ChangesetState,
   IModelsError,
   IModelsErrorCode,
+  Lock,
   MinimalChangeset,
   SynchronizationInfo,
   isIModelsApiError,

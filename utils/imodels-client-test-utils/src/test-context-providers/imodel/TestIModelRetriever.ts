@@ -4,14 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 import { injectable } from "inversify";
 
-import { GetLockListParams, Lock } from "@itwin/imodels-client-authoring";
 import {
   GetBriefcaseListParams,
   GetChangesetExtendedDataListParams,
   GetChangesetGroupListParams,
   GetChangesetListParams,
+  GetLockListParams,
   GetNamedVersionListParams,
   IModel,
+  Lock,
   NamedVersion,
   toArray,
 } from "@itwin/imodels-client-management";

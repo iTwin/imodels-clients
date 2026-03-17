@@ -7,6 +7,7 @@ import {
   AxiosRetryPolicy,
   Constants,
   ExponentialBackoffAlgorithm,
+  IModelsErrorParser,
   IModelsOriginalError,
   IModelsClient as ManagementIModelsClient,
   IModelsClientOptions as ManagementIModelsClientOptions,
@@ -16,7 +17,7 @@ import {
 
 import { ClientStorage } from "@itwin/object-storage-core";
 
-import { IModelsErrorParser, NodeLocalFileSystem } from "./base/internal";
+import { NodeLocalFileSystem } from "./base/internal";
 import { LocalFileSystem } from "./base/types";
 import {
   BaselineFileOperations,
