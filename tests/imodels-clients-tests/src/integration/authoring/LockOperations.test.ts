@@ -503,8 +503,16 @@ describe("[Authoring] LockOperations", () => {
     };
     await iModelsClient.locks.update(updateLockParams1);
 
-    updateLockParams1.lockedObjects[0].lockLevel = LockLevel.None;
-    await iModelsClient.locks.update(updateLockParams1);
+    const releaseLockParams: UpdateLockParams = {
+      ...updateLockParams1,
+      lockedObjects: [
+        {
+          lockLevel: LockLevel.None,
+          objectIds: ["0x5"],
+        },
+      ],
+    };
+    await iModelsClient.locks.update(releaseLockParams);
 
     const briefcase2 = await iModelsClient.briefcases.acquire({
       authorization,
@@ -517,12 +525,7 @@ describe("[Authoring] LockOperations", () => {
       iModelId: testIModelForWrite.id,
       changesetId: testIModelFileProvider.changesets[4].id,
       briefcaseId: briefcase2.briefcaseId,
-      lockedObjects: [
-        {
-          lockLevel: LockLevel.Exclusive,
-          objectIds: ["0x5"],
-        },
-      ],
+      lockedObjects: updateLockParams1.lockedObjects,
     };
 
     // Act

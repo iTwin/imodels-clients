@@ -3,5 +3,5 @@
   "useWorkspaces": true,
   "globalOverrides": {
     "serialize-javascript": "^7.0.3" // mocha > serialize-javascript@6.0.0 -> CVE: https://github.com/advisories/GHSA-5c6j-r48x-rmvq
-  } 
+  }
 }
