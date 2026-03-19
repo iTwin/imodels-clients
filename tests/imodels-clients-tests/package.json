@@ -45,12 +45,12 @@
     "@itwin/object-storage-azure": "^3.0.4",
     "@itwin/object-storage-core": "^3.0.4",
     "@itwin/object-storage-google": "^3.0.4",
-    "axios": "^1.12.2",
+    "axios": "^1.13.5",
     "chai": "~4.3.10",
     "chai-as-promised": "~7.1.1",
     "dotenv": "~10.0.0",
     "inversify": "~6.0.2",
-    "mocha": "~9.2.2",
+    "mocha": "~10.8.2",
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
@@ -58,7 +58,7 @@
     "@itwin/imodels-client-common-config": "workspace:*",
     "@types/chai": "~4.2.21",
     "@types/chai-as-promised": "~7.1.5",
-    "@types/mocha": "~9.0.0",
+    "@types/mocha": "~10.0.10",
     "@types/node": "^22.15.14",
     "@types/sinon": "^10.0.15",
     "@types/sinon-chai": "^3.2.9",

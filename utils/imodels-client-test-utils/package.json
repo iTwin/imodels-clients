@@ -37,11 +37,11 @@
     "@itwin/object-storage-core": "^3.0.4",
     "@itwin/object-storage-google": "^3.0.4",
     "@puppeteer/browsers": "^2.10.0",
-    "axios": "^1.12.2",
+    "axios": "^1.13.5",
     "chai": "~4.3.10",
     "dotenv": "~10.0.0",
     "inversify": "~6.0.2",
-    "puppeteer": "~24.6.1",
+    "puppeteer": "~24.39.1",
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {

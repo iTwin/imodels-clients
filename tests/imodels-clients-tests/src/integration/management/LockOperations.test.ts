@@ -489,7 +489,7 @@ describe("[Management] LockOperations", () => {
     expect(conflictingLock.briefcaseIds[0]).to.be.equal(briefcase1.briefcaseId);
   });
 
-  it("should return error when trying to acquire lock on an object that has been locked by a more recent changeset", async () => {
+  it("should return error when trying to acquire lock on an object that has been released with a more recent changeset", async () => {
     // Arrange
     const briefcase1 = await authoringClient.briefcases.acquire({
       authorization,
@@ -504,13 +504,23 @@ describe("[Management] LockOperations", () => {
       briefcaseId: briefcase1.briefcaseId,
       lockedObjects: [
         {
-          lockLevel: LockLevel.Shared,
+          lockLevel: LockLevel.Exclusive,
           objectIds: ["0x5"],
         },
       ],
     };
-
     await iModelsClient.locks.update(updateLockParams1);
+
+    const releaseLockParams: UpdateLockParams = {
+      ...updateLockParams1,
+      lockedObjects: [
+        {
+          lockLevel: LockLevel.None,
+          objectIds: ["0x5"],
+        },
+      ],
+    };
+    await iModelsClient.locks.update(releaseLockParams);
 
     const briefcase2 = await authoringClient.briefcases.acquire({
       authorization,
