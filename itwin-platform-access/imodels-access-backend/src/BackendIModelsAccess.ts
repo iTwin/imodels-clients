@@ -69,7 +69,7 @@ import {
   IModelsClientOptions,
   Lock,
   ReleaseLocksChunkParams,
-  ReleaseLocksChunkResponse,
+  ReleaseLocksChunkResult,
   ReleaseBriefcaseParams,
   UpdateLockParams,
   downloadFile,
@@ -571,14 +571,12 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     let isLastChunk = false;
     do {
-      const response: ReleaseLocksChunkResponse = await handleAPIErrors(
+      const result: ReleaseLocksChunkResult = await handleAPIErrors(
         async () =>
-          this._iModelsClient.locks.releaseLocksChunk(
-            releaseLocksChunkParams
-          ) as Promise<ReleaseLocksChunkResponse>,
+          this._iModelsClient.locks.releaseLocksChunk(releaseLocksChunkParams),
         "releaseLocksChunk"
       );
-      isLastChunk = response.isLastChunk;
+      isLastChunk = result.isLastChunk;
     } while (!isLastChunk);
   }
 

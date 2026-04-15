@@ -13,7 +13,7 @@ import {
   LocksResponse,
   ReleaseLocksChunkResponse,
 } from "../../base/internal";
-import { Lock } from "../../base/types";
+import { Lock, ReleaseLocksChunkResult } from "../../base/types";
 import { OperationOptions } from "../OperationOptions";
 
 import {
@@ -72,11 +72,11 @@ export class LockOperations<
    * Wraps the {@link https://developer.bentley.com/apis/imodels-v2/operations/release-imodel-locks-chunk/
    * Release iModel Locks Chunk} operation from iModels API.
    * @param {ReleaseLocksChunkParams} params parameters for this operation. See {@link ReleaseLocksChunkParams}.
-   * @returns {Promise<ReleaseLocksChunkResponse>} response indicating if this was the last chunk. See {@link ReleaseLocksChunkResponse}.
+   * @returns {Promise<ReleaseLocksChunkResult>} result indicating if this was the last chunk. See {@link ReleaseLocksChunkResult}.
    */
   public async releaseLocksChunk(
     params: ReleaseLocksChunkParams
-  ): Promise<ReleaseLocksChunkResponse> {
+  ): Promise<ReleaseLocksChunkResult> {
     const releaseLocksChunkBody = this.getReleaseLocksChunkBody(params);
     const releaseLocksChunkResponse =
       await this.sendPostRequest<ReleaseLocksChunkResponse>({
