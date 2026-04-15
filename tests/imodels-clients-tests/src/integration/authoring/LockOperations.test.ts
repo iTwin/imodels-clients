@@ -271,6 +271,54 @@ describe("[Authoring] LockOperations", () => {
     });
   });
 
+  it("should release locks chunk", async () => {
+    // Arrange
+    const briefcase = await iModelsClient.briefcases.acquire({
+      authorization,
+      iModelId: testIModelForWrite.id,
+    });
+    testIModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
+
+    const updateLockParams: UpdateLockParams = {
+      authorization,
+      iModelId: testIModelForWrite.id,
+      briefcaseId: briefcase.briefcaseId,
+      lockedObjects: [
+        {
+          lockLevel: LockLevel.Exclusive,
+          objectIds: ["0xdd", "0xee", "0xff"],
+        },
+      ],
+    };
+
+    await iModelsClient.locks.update(updateLockParams);
+
+    const releaseLocksChunkParams = {
+      authorization,
+      iModelId: testIModelForWrite.id,
+      briefcaseId: briefcase.briefcaseId,
+      changesetId: testIModelFileProvider.changesets[0].id,
+    };
+
+    // Act
+    const releaseLocksChunkResponse =
+      await iModelsClient.locks.releaseLocksChunk(releaseLocksChunkParams);
+
+    // Assert
+    expect(releaseLocksChunkResponse.isLastChunk).to.be.true;
+
+    const getLockListParams: GetLockListParams = {
+      authorization,
+      iModelId: testIModelForWrite.id,
+      urlParams: {
+        briefcaseId: briefcase.briefcaseId,
+      },
+    };
+    const locks = iModelsClient.locks.getList(getLockListParams);
+    const lockArray = await toArray(locks);
+    expect(lockArray.length).to.be.equal(0);
+  });
+
   it("should return error when trying to update non-existing lock to LockLevel.None", async () => {
     // Arrange
     const briefcase = await iModelsClient.briefcases.acquire({

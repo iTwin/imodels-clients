@@ -14,6 +14,10 @@ export interface LockResponse {
   lock: Lock;
 }
 
+export interface ReleaseLocksChunkResponse {
+  isLastChunk: boolean;
+}
+
 export interface BaselineFileResponse {
   baselineFile: BaselineFile;
 }
