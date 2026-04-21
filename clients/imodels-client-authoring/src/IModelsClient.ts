@@ -114,7 +114,7 @@ export class IModelsClient extends ManagementIModelsClient {
   }
 
   /** Lock operations. See {@link LockOperations}. */
-  public get locks(): LockOperations<OperationOptions> {
+  public override get locks(): LockOperations<OperationOptions> {
     return new LockOperations(this._operationsOptions);
   }
 

@@ -47,3 +47,9 @@ export interface GetSingleBriefcaseParams extends IModelScopedOperationParams {
   /** Briefcase id. */
   briefcaseId: number;
 }
+
+/** Parameters for release Briefcase operation. */
+export interface ReleaseBriefcaseParams extends IModelScopedOperationParams {
+  /** Id of the Briefcase to release. */
+  briefcaseId: number;
+}

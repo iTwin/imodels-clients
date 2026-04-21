@@ -12,6 +12,7 @@ export * from "./apiEntities/CheckpointInterfaces";
 export * from "./apiEntities/ThumbnailInterfaces";
 export * from "./apiEntities/UserInterfaces";
 export * from "./apiEntities/UserPermissionInterfaces";
+export * from "./apiEntities/LockInterfaces";
 export * from "./apiEntities/OperationInterfaces";
 
 export * from "./iterators/EntityListIterator";

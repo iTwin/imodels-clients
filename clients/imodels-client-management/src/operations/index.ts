@@ -14,6 +14,7 @@ export * from "./changeset-group";
 export * from "./checkpoint";
 export * from "./favorite-imodel";
 export * from "./imodel";
+export * from "./lock";
 export * from "./named-version";
 export * from "./operation";
 export * from "./recent-imodel";

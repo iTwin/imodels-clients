@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@itwin/imodels-client-authoring",
+      "comment": "Move LockOperations.getList and BriefcaseOperations.release to @itwin/imodels-client-management; both are re-exported from authoring for backward compatibility",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@itwin/imodels-client-authoring"
+}
