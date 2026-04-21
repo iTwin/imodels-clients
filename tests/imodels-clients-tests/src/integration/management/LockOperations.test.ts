@@ -69,10 +69,9 @@ describe("[Management] LockOperations", () => {
       testSuiteName: "ManagementLockOperations",
     });
 
-    const authoringClientOptions =
-      container.get<AuthoringIModelsClientOptions>(
-        TestUtilTypes.IModelsClientOptions
-      );
+    const authoringClientOptions = container.get<AuthoringIModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
     authoringClient = new AuthoringIModelsClient(authoringClientOptions);
 
     const testIModelCreator = container.get(TestIModelCreator);
@@ -216,8 +215,9 @@ describe("[Management] LockOperations", () => {
     };
 
     // Act
-    const result =
-      await iModelsClient.locks.releaseLocksChunk(releaseLocksChunkParams);
+    const result = await iModelsClient.locks.releaseLocksChunk(
+      releaseLocksChunkParams
+    );
 
     // Assert
     expect(result.isLastChunk).to.be.true;
@@ -233,5 +233,4 @@ describe("[Management] LockOperations", () => {
     const lockArray = await toArray(locks);
     expect(lockArray.length).to.equal(0);
   });
-
 });
