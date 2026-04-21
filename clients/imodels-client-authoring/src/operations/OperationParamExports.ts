@@ -18,5 +18,3 @@ export type { GetLockListUrlParams } from "@itwin/imodels-client-management";
 export type { LockLevelFilter } from "@itwin/imodels-client-management";
 /** @deprecated Import {@link ReleaseBriefcaseParams} directly from `@itwin/imodels-client-management` instead. */
 export type { ReleaseBriefcaseParams } from "@itwin/imodels-client-management";
-/** @deprecated Import {@link ReleaseLocksChunkParams} directly from `@itwin/imodels-client-management` instead. */
-export type { ReleaseLocksChunkParams } from "@itwin/imodels-client-management";

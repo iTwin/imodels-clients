@@ -9,5 +9,3 @@ export type { Lock } from "@itwin/imodels-client-management";
 export { LockLevel } from "@itwin/imodels-client-management";
 /** @deprecated Import {@link LockedObjects} directly from `@itwin/imodels-client-management` instead. */
 export type { LockedObjects } from "@itwin/imodels-client-management";
-/** @deprecated Import {@link ReleaseLocksChunkResult} directly from `@itwin/imodels-client-management` instead. */
-export type { ReleaseLocksChunkResult } from "@itwin/imodels-client-management";
