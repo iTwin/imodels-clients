@@ -19,4 +19,8 @@ export class IModelsApiUrlFormatter extends ManamegentIModelsApiUrlFormatter {
       ...params.urlParams,
     })}`;
   }
+
+  public getReleaseLocksChunkUrl(params: { iModelId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}/locks/release-chunk`;
+  }
 }

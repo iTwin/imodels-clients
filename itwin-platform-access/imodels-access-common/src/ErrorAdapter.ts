@@ -18,7 +18,8 @@ export type OperationNameForErrorMapping =
   | "acquireBriefcase"
   | "downloadChangesets"
   | "updateLocks"
-  | "createChangeset";
+  | "createChangeset"
+  | "releaseLocksChunk";
 
 export class ErrorAdapter {
   public static toITwinError(

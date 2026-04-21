@@ -28,3 +28,9 @@ export interface Lock {
   /** Ids of the locked objects grouped by their lock level. See {@link LockedObjects}. */
   lockedObjects: LockedObjects[];
 }
+
+/** Result of a release Locks chunk operation. */
+export interface ReleaseLocksChunkResult {
+  /** Indicates whether this was the last chunk of Locks to release. */
+  isLastChunk: boolean;
+}
