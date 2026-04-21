@@ -121,3 +121,7 @@ export interface LocksResponse extends CollectionResponse {
 export interface LockResponse {
   lock: Lock;
 }
+
+export interface ReleaseLocksChunkResponse {
+  isLastChunk: boolean;
+}

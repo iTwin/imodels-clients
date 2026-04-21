@@ -68,8 +68,8 @@ import {
   IModelsClient,
   IModelsClientOptions,
   Lock,
-  LockLevel,
-  LockedObjects,
+  ReleaseLocksChunkParams,
+  ReleaseLocksChunkResult,
   ReleaseBriefcaseParams,
   UpdateLockParams,
   downloadFile,
@@ -95,7 +95,6 @@ import {
   MinimalIModel,
   SPECIAL_VALUES_ME,
   isIModelsApiError,
-  take,
   toArray,
 } from "@itwin/imodels-client-management";
 
@@ -564,14 +563,23 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   public async releaseAllLocks(arg: BriefcaseDbArg): Promise<void> {
-    let shouldQueryMoreLocks = true;
+    const releaseLocksChunkParams: ReleaseLocksChunkParams = {
+      ...this.getIModelScopedOperationParams(arg),
+      briefcaseId: arg.briefcaseId,
+      changesetId: arg.changeset.id,
+    };
 
+    let isLastChunk = false;
     do {
-      const locksPage: Lock[] = await this.getFirstLocksPage(arg);
-      shouldQueryMoreLocks = this.shouldQueryMoreLocks(locksPage);
-
-      await this.releaseLocksPage(arg, locksPage);
-    } while (shouldQueryMoreLocks);
+      const result: ReleaseLocksChunkResult = await handleAPIErrors(
+        async () =>
+          await this._iModelsClient.locks.releaseLocksChunk(
+            releaseLocksChunkParams
+          ),
+        "releaseLocksChunk"
+      );
+      isLastChunk = result.isLastChunk;
+    } while (!isLastChunk);
   }
 
   public async queryIModelByName(
@@ -650,12 +658,6 @@ export class BackendIModelsAccess implements BackendHubAccess {
       Promise.resolve(AccessTokenAdapter.toAuthorization(accessToken));
   }
 
-  private setLockLevelToNone(lockedObjectsForBriefcase: LockedObjects[]): void {
-    for (const lockedObjects of lockedObjectsForBriefcase) {
-      lockedObjects.lockLevel = LockLevel.None;
-    }
-  }
-
   private copyAndPrepareBaselineFile(arg: CreateNewIModelProps): string {
     const tempBaselineFilePath = join(
       KnownLocations.tmpdir,
@@ -716,58 +718,5 @@ export class BackendIModelsAccess implements BackendHubAccess {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((db as any).closeIModel) (db as any).closeIModel();
     else db.closeFile();
-  }
-
-  private async getFirstLocksPage(arg: BriefcaseDbArg): Promise<Lock[]> {
-    const getLockListParams: GetLockListParams = {
-      ...this.getIModelScopedOperationParams(arg),
-      urlParams: {
-        briefcaseId: arg.briefcaseId,
-      },
-    };
-
-    const lockPagesIterator = this._iModelsClient.locks
-      .getList(getLockListParams)
-      .byPage();
-    const lockPages = await handleAPIErrors(async () =>
-      take(lockPagesIterator, 1)
-    );
-
-    return lockPages[0];
-  }
-
-  private shouldQueryMoreLocks(currentResult: Lock[]): boolean {
-    // `$top` parameter in "Get iModel Locks" operation limits `objectIds` within Lock entity, not `Lock` entities themselves.
-    // https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-locks/#paging
-    // So instead of checking for `currentResult.length === pageSize` we should check if `currentResult[idx].objectIds === pageSize`
-    // which would require to iterate over all `currentResult` entities.
-
-    // To simplify logic we check for a non-empty result. This means that we will terminate iteration over Locks only
-    // after we receive an empty response.
-
-    return currentResult.length !== 0;
-  }
-
-  private async releaseLocksPage(
-    arg: BriefcaseDbArg,
-    locksPage: Lock[]
-  ): Promise<void> {
-    if (locksPage.length === 0) return;
-
-    for (const lock of locksPage) {
-      this.setLockLevelToNone(lock.lockedObjects);
-
-      const updateLockParams: UpdateLockParams = {
-        ...this.getIModelScopedOperationParams(arg),
-        briefcaseId: lock.briefcaseId,
-        changesetId: arg.changeset.id,
-        lockedObjects: lock.lockedObjects,
-      };
-
-      await handleAPIErrors(
-        async () => this._iModelsClient.locks.update(updateLockParams),
-        "updateLocks"
-      );
-    }
   }
 }

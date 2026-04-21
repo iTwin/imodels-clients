@@ -248,6 +248,10 @@ export class IModelsApiUrlFormatter {
     })}`;
   }
 
+  public getReleaseLocksChunkUrl(params: { iModelId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}/locks/release-chunk`;
+  }
+
   public getCreateIModelOperationDetailsUrl(params: {
     iModelId: string;
   }): string {
