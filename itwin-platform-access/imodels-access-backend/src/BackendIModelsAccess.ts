@@ -68,8 +68,6 @@ import {
   IModelsClient,
   IModelsClientOptions,
   Lock,
-  ReleaseLocksChunkParams,
-  ReleaseLocksChunkResult,
   ReleaseBriefcaseParams,
   UpdateLockParams,
   downloadFile,
@@ -93,6 +91,8 @@ import {
   IModelsErrorScope,
   MinimalChangeset,
   MinimalIModel,
+  ReleaseLocksChunkParams,
+  ReleaseLocksChunkResult,
   SPECIAL_VALUES_ME,
   isIModelsApiError,
   toArray,
@@ -573,7 +573,9 @@ export class BackendIModelsAccess implements BackendHubAccess {
     do {
       const result: ReleaseLocksChunkResult = await handleAPIErrors(
         async () =>
-          this._iModelsClient.locks.releaseLocksChunk(releaseLocksChunkParams),
+          await this._iModelsClient.locks.releaseLocksChunk(
+            releaseLocksChunkParams
+          ),
         "releaseLocksChunk"
       );
       isLastChunk = result.isLastChunk;

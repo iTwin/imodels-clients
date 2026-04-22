@@ -10,6 +10,7 @@ import {
   CreateIModelOperationDetails,
   IModel,
   Link,
+  Lock,
   MinimalBriefcase,
   MinimalChangeset,
   MinimalIModel,
@@ -111,4 +112,16 @@ export interface NamedVersionResponse {
 
 export interface CreateIModelOperationDetailsResponse {
   createOperation: CreateIModelOperationDetails;
+}
+
+export interface LocksResponse extends CollectionResponse {
+  locks: Lock[];
+}
+
+export interface LockResponse {
+  lock: Lock;
+}
+
+export interface ReleaseLocksChunkResponse {
+  isLastChunk: boolean;
 }
