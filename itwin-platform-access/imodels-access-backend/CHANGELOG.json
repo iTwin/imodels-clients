@@ -2,6 +2,18 @@
   "name": "@itwin/imodels-access-backend",
   "entries": [
     {
+      "version": "6.1.1",
+      "tag": "@itwin/imodels-access-backend_v6.1.1",
+      "date": "Thu, 23 Apr 2026 08:41:44 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Use new release Locks in chunks api to release all Locks"
+          }
+        ]
+      }
+    },
+    {
       "version": "6.1.0",
       "tag": "@itwin/imodels-access-backend_v6.1.0",
       "date": "Thu, 15 Jan 2026 01:26:07 GMT",

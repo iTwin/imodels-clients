@@ -2,6 +2,21 @@
   "name": "@itwin/imodels-client-management",
   "entries": [
     {
+      "version": "6.2.0",
+      "tag": "@itwin/imodels-client-management_v6.2.0",
+      "date": "Thu, 23 Apr 2026 08:41:43 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Add LockOperations.getList and BriefcaseOperations.release, moved from @itwin/imodels-client-authoring"
+          },
+          {
+            "comment": "Implement new release Locks in chunks operation"
+          }
+        ]
+      }
+    },
+    {
       "version": "6.1.0",
       "tag": "@itwin/imodels-client-management_v6.1.0",
       "date": "Thu, 15 Jan 2026 01:26:06 GMT",

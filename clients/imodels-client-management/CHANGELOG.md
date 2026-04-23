@@ -1,6 +1,14 @@
 # Change Log - @itwin/imodels-client-management
 
-This log was last generated on Thu, 15 Jan 2026 01:26:06 GMT and should not be manually modified.
+This log was last generated on Thu, 23 Apr 2026 08:41:43 GMT and should not be manually modified.
+
+## 6.2.0
+Thu, 23 Apr 2026 08:41:43 GMT
+
+### Minor changes
+
+- Add LockOperations.getList and BriefcaseOperations.release, moved from @itwin/imodels-client-authoring
+- Implement new release Locks in chunks operation
 
 ## 6.1.0
 Thu, 15 Jan 2026 01:26:06 GMT
