@@ -3,7 +3,7 @@
     {
       "packageName": "@itwin/imodels-access-backend",
       "comment": "Use new release Locks in chunks api to release all Locks",
-      "type": "none"
+      "type": "patch"
     }
   ],
   "packageName": "@itwin/imodels-access-backend"

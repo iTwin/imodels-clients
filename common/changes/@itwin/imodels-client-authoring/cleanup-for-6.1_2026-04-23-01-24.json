@@ -2,7 +2,7 @@
   "changes": [
     {
       "packageName": "@itwin/imodels-client-authoring",
-      "comment": "Implement new release Locks in chunks operation",
+      "comment": "",
       "type": "none"
     }
   ],
