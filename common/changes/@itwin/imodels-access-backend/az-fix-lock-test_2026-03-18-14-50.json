@@ -2,7 +2,7 @@
   "changes": [
     {
       "packageName": "@itwin/imodels-access-backend",
-      "comment": "Updated dependencies to address security vulnerabilities.",
+      "comment": "",
       "type": "none"
     }
   ],

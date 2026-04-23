@@ -2,8 +2,8 @@
   "changes": [
     {
       "packageName": "@itwin/imodels-client-management",
-      "comment": "",
-      "type": "none"
+      "comment": "Implement new release Locks in chunks operation",
+      "type": "minor"
     }
   ],
   "packageName": "@itwin/imodels-client-management"

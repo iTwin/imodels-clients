@@ -3,7 +3,7 @@
     {
       "packageName": "@itwin/imodels-access-common",
       "comment": "Add error mapping for a new release Locks in chunks api",
-      "type": "none"
+      "type": "patch"
     }
   ],
   "packageName": "@itwin/imodels-access-common"
