@@ -32,7 +32,7 @@ describe("FrontendIModelsAccess error handling", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     const iModelsClient = new IModelsClient(iModelsClientOptions);
     frontendIModelsAccess = new FrontendIModelsAccess(iModelsClient);
@@ -44,7 +44,7 @@ describe("FrontendIModelsAccess error handling", () => {
     accessToken = `${authorization.scheme} ${authorization.token}`;
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
   });
@@ -58,7 +58,7 @@ describe("FrontendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         frontendIModelsAccess.getLatestChangeset(getLatestChangesetParams),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -74,9 +74,9 @@ describe("FrontendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         frontendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         ),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -92,9 +92,9 @@ describe("FrontendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         frontendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         ),
-      IModelsErrorCode.NamedVersionNotFound
+      IModelsErrorCode.NamedVersionNotFound,
     );
   });
 
@@ -110,9 +110,9 @@ describe("FrontendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         frontendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         ),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -128,9 +128,9 @@ describe("FrontendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         frontendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         ),
-      IModelsErrorCode.ChangesetNotFound
+      IModelsErrorCode.ChangesetNotFound,
     );
   });
 
@@ -146,9 +146,9 @@ describe("FrontendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         frontendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         ),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -164,9 +164,9 @@ describe("FrontendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         frontendIModelsAccess.getChangesetFromNamedVersion(
-          getChangesetFromNamedVersionParams
+          getChangesetFromNamedVersionParams,
         ),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -182,15 +182,15 @@ describe("FrontendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         frontendIModelsAccess.getChangesetFromNamedVersion(
-          getChangesetFromNamedVersionParams
+          getChangesetFromNamedVersionParams,
         ),
-      IModelsErrorCode.NamedVersionNotFound
+      IModelsErrorCode.NamedVersionNotFound,
     );
   });
 
   async function executeFuncAndAssertError(
     func: () => Promise<void> | Promise<unknown>,
-    expectedErrorCode: string
+    expectedErrorCode: string,
   ): Promise<void> {
     let thrownError: unknown;
     try {
@@ -200,7 +200,7 @@ describe("FrontendIModelsAccess error handling", () => {
     }
 
     expect(
-      ITwinError.isError(thrownError, IModelsErrorScope, expectedErrorCode)
+      ITwinError.isError(thrownError, IModelsErrorScope, expectedErrorCode),
     ).to.be.true;
     expect(thrownError).to.not.be.undefined;
     expect((thrownError as ITwinError).message).to.not.be.empty;

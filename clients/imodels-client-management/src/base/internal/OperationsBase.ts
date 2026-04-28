@@ -29,7 +29,7 @@ type CommonRequestParams = AuthorizationParam & HeadersParam;
  */
 export type ParseErrorFunc = (
   response: ResponseInfo,
-  originalError: IModelsOriginalError
+  originalError: IModelsOriginalError,
 ) => Error;
 
 export type SendGetRequestParams = CommonRequestParams & {
@@ -59,13 +59,13 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   constructor(protected _options: TOptions) {}
 
   protected async sendGetRequest<TBody>(
-    params: SendGetRequestParams & { responseType?: ContentType.Json }
+    params: SendGetRequestParams & { responseType?: ContentType.Json },
   ): Promise<HttpResponse<TBody>>;
   protected async sendGetRequest(
-    params: SendGetRequestParams & { responseType: ContentType.Png }
+    params: SendGetRequestParams & { responseType: ContentType.Png },
   ): Promise<HttpResponse<Uint8Array>>;
   protected async sendGetRequest<TBody>(
-    params: SendGetRequestParams
+    params: SendGetRequestParams,
   ): Promise<HttpResponse<TBody | Uint8Array>> {
     const urlAndHeaders = {
       url: params.url,
@@ -77,7 +77,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
         this._options.restClient.sendGetRequest({
           responseType: ContentType.Png,
           ...urlAndHeaders,
-        })
+        }),
       );
 
     const responseType = params.responseType ?? ContentType.Json;
@@ -85,12 +85,12 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
       this._options.restClient.sendGetRequest<TBody>({
         responseType,
         ...urlAndHeaders,
-      })
+      }),
     );
   }
 
   protected async sendPostRequest<TBody>(
-    params: SendPostRequestParams
+    params: SendPostRequestParams,
   ): Promise<HttpResponse<TBody>> {
     return this.executeRequest(async () =>
       this._options.restClient.sendPostRequest<TBody>({
@@ -103,12 +103,12 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
           ...params,
           contentType: ContentType.Json,
         }),
-      })
+      }),
     );
   }
 
   protected async sendPutRequest<TBody>(
-    params: SendPutRequestParams
+    params: SendPutRequestParams,
   ): Promise<HttpResponse<TBody>> {
     const body = params.contentType
       ? {
@@ -125,12 +125,12 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
           ...params,
           contentType: params.contentType,
         }),
-      })
+      }),
     );
   }
 
   protected async sendPatchRequest<TBody>(
-    params: SendPatchRequestParams
+    params: SendPatchRequestParams,
   ): Promise<HttpResponse<TBody>> {
     return this.executeRequest(async () =>
       this._options.restClient.sendPatchRequest<TBody>({
@@ -143,35 +143,35 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
           ...params,
           contentType: ContentType.Json,
         }),
-      })
+      }),
     );
   }
 
   protected async sendDeleteRequest<TBody>(
-    params: SendDeleteRequestParams
+    params: SendDeleteRequestParams,
   ): Promise<HttpResponse<TBody>> {
     return this.executeRequest(async () =>
       this._options.restClient.sendDeleteRequest<TBody>({
         url: params.url,
         headers: await this.formHeaders(params),
-      })
+      }),
     );
   }
 
   protected async getEntityCollectionPage<
     TEntity,
-    TResponse extends CollectionResponse
+    TResponse extends CollectionResponse,
   >(
     params: CommonRequestParams & {
       url: string;
       preferReturn?: PreferReturn;
       entityCollectionAccessor: (
-        response: HttpResponse<TResponse>
+        response: HttpResponse<TResponse>,
       ) => TEntity[];
-    }
+    },
   ): Promise<EntityCollectionPage<TEntity>> {
     const response = await this.executeRequest(async () =>
-      this.sendGetRequest<TResponse>(params)
+      this.sendGetRequest<TResponse>(params),
     );
     return {
       entities: params.entityCollectionAccessor(response),
@@ -186,7 +186,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   }
 
   private async executeRequest<TBody>(
-    requestFunc: () => Promise<HttpResponse<TBody>>
+    requestFunc: () => Promise<HttpResponse<TBody>>,
   ): Promise<HttpResponse<TBody>> {
     try {
       const response = await requestFunc();
@@ -198,14 +198,14 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
       const parsedError: Error = this._options.parseErrorFunc(
         { statusCode: error.response?.status, body: error.response?.data },
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        error
+        error,
       );
       throw parsedError;
     }
   }
 
   private resolveHeaderValue(
-    headerOrHeaderFactory: (() => string | undefined) | string
+    headerOrHeaderFactory: (() => string | undefined) | string,
   ): string | undefined {
     if (typeof headerOrHeaderFactory === "function")
       return headerOrHeaderFactory();
@@ -214,14 +214,14 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
 
   private addOrUpdateHeaders(
     existingHeaders: Dictionary<string>,
-    additionalHeaders?: HeaderFactories
+    additionalHeaders?: HeaderFactories,
   ) {
     if (!additionalHeaders) return;
 
     for (const headerName in additionalHeaders) {
       if (Object.prototype.hasOwnProperty.call(additionalHeaders, headerName)) {
         const headerValue: string | undefined = this.resolveHeaderValue(
-          additionalHeaders[headerName]
+          additionalHeaders[headerName],
         );
         if (typeof headerValue === "string")
           existingHeaders[headerName] = headerValue;
@@ -234,16 +234,14 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
     params: CommonRequestParams & {
       preferReturn?: PreferReturn;
       contentType?: ContentType;
-    }
+    },
   ): Promise<Dictionary<string>> {
     const headers: Dictionary<string> = {};
     const authorizationInfo = await params.authorization();
-    headers[
-      Constants.headers.authorization
-    ] = `${authorizationInfo.scheme} ${authorizationInfo.token}`;
-    headers[
-      Constants.headers.accept
-    ] = `application/vnd.bentley.${this._options.api.version}+json`;
+    headers[Constants.headers.authorization] =
+      `${authorizationInfo.scheme} ${authorizationInfo.token}`;
+    headers[Constants.headers.accept] =
+      `application/vnd.bentley.${this._options.api.version}+json`;
 
     if (params.preferReturn)
       headers[Constants.headers.prefer] = `return=${params.preferReturn}`;

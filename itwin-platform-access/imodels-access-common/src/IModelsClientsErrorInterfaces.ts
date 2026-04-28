@@ -25,13 +25,13 @@ export interface ConflictingLocksError extends IModelsClientsError {
 
 export function isIModelsClientsError(
   error: unknown,
-  key?: string
+  key?: string,
 ): error is IModelsClientsError {
   return ITwinError.isError(error, IModelsErrorScope, key);
 }
 
 export function isConflictingLocksError(
-  error: unknown
+  error: unknown,
 ): error is ConflictingLocksError {
   return (
     ITwinError.isError<ConflictingLocksError>(error, IModelsErrorScope) &&

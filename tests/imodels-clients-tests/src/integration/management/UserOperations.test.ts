@@ -44,7 +44,7 @@ describe("[Management] UserOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -52,7 +52,7 @@ describe("[Management] UserOperations", () => {
     authorization = authorizationProvider.getAdmin1Authorization();
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
 
@@ -118,7 +118,7 @@ describe("[Management] UserOperations", () => {
     // Arrange
     const users = await getMinimalUsersList();
     const admin1User = users.find(
-      (user) => user.displayName === testConfig.testUsers.admin1.email
+      (user) => user.displayName === testConfig.testUsers.admin1.email,
     );
     expect(admin1User).to.not.be.undefined;
     const getAdmin1UserParams: GetSingleUserParams = {
@@ -128,9 +128,8 @@ describe("[Management] UserOperations", () => {
     };
 
     // Act
-    const queriedAdmin1User: User = await iModelsClient.users.getSingle(
-      getAdmin1UserParams
-    );
+    const queriedAdmin1User: User =
+      await iModelsClient.users.getSingle(getAdmin1UserParams);
 
     // Assert
     assertUser({
@@ -269,7 +268,7 @@ describe("[Management] UserOperations", () => {
 
     // Assert
     const userProperties = (await toArray(users)).map(
-      (user) => `${user.givenName} ${user.surname}`
+      (user) => `${user.givenName} ${user.surname}`,
     );
     expect(userProperties.length).to.be.greaterThanOrEqual(2);
     for (let i = 0; i < userProperties.length - 1; i++)

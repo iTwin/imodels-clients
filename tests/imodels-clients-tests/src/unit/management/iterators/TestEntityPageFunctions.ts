@@ -7,13 +7,13 @@ import { EntityPageQueryFunc } from "@itwin/imodels-client-management";
 export class TestEntity {
   constructor(
     public pageIndex: number | undefined,
-    public entityIndex: number
+    public entityIndex: number,
   ) {}
 }
 
 export function getEntityPageQueryFunc(
   pageCount: number,
-  entityCountPerPage: number
+  entityCountPerPage: number,
 ): EntityPageQueryFunc<TestEntity> {
   return getEntityPageQueryFuncInternal(0, pageCount, entityCountPerPage);
 }
@@ -21,15 +21,15 @@ export function getEntityPageQueryFunc(
 function getEntityPageQueryFuncInternal(
   currentPageIndex: number,
   pageCount: number,
-  entityCountPerPage: number
+  entityCountPerPage: number,
 ): EntityPageQueryFunc<TestEntity> {
   const currentPageEntities: TestEntity[] = [];
   for (let i = 0; i < entityCountPerPage; i++)
     currentPageEntities.push(
       new TestEntity(
         currentPageIndex,
-        currentPageIndex * entityCountPerPage + i
-      )
+        currentPageIndex * entityCountPerPage + i,
+      ),
     );
 
   const isCurrentPageLast = currentPageIndex === pageCount - 1;
@@ -38,7 +38,7 @@ function getEntityPageQueryFuncInternal(
     : getEntityPageQueryFuncInternal(
         currentPageIndex + 1,
         pageCount,
-        entityCountPerPage
+        entityCountPerPage,
       );
 
   return () =>

@@ -44,24 +44,27 @@ export interface CollectionResponse {
   _links: CollectionLinks;
 }
 
-export interface IModelsResponse<TIModel extends MinimalIModel>
-  extends CollectionResponse {
+export interface IModelsResponse<
+  TIModel extends MinimalIModel,
+> extends CollectionResponse {
   iModels: TIModel[];
 }
 
-export interface BriefcasesResponse<TBriefcase extends MinimalBriefcase>
-  extends CollectionResponse {
+export interface BriefcasesResponse<
+  TBriefcase extends MinimalBriefcase,
+> extends CollectionResponse {
   briefcases: TBriefcase[];
 }
 
 export interface NamedVersionsResponse<
-  TNamedVersion extends MinimalNamedVersion
+  TNamedVersion extends MinimalNamedVersion,
 > extends CollectionResponse {
   namedVersions: TNamedVersion[];
 }
 
-export interface ChangesetsResponse<TChangeset extends MinimalChangeset>
-  extends CollectionResponse {
+export interface ChangesetsResponse<
+  TChangeset extends MinimalChangeset,
+> extends CollectionResponse {
   changesets: TChangeset[];
 }
 
@@ -73,8 +76,9 @@ export interface ChangesetGroupsResponse extends CollectionResponse {
   changesetGroups: ChangesetGroup[];
 }
 
-export interface UsersResponse<TUser extends MinimalUser>
-  extends CollectionResponse {
+export interface UsersResponse<
+  TUser extends MinimalUser,
+> extends CollectionResponse {
   users: TUser[];
 }
 

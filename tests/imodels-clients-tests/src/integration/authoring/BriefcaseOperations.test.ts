@@ -34,7 +34,7 @@ describe("[Authoring] BriefcaseOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -50,7 +50,7 @@ describe("[Authoring] BriefcaseOperations", () => {
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModel = await testIModelCreator.createEmpty(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"),
     );
   });
 
@@ -70,7 +70,7 @@ describe("[Authoring] BriefcaseOperations", () => {
 
     // Act
     const briefcase: Briefcase = await iModelsClient.briefcases.acquire(
-      acquireBriefcaseParams
+      acquireBriefcaseParams,
     );
 
     // Assert

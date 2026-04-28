@@ -29,7 +29,7 @@ export class ITwinsClient {
   constructor(private _config: ITwinsClientConfig) {}
 
   public async getOrCreateITwin(
-    params: AuthorizationParam & { iTwinName: string }
+    params: AuthorizationParam & { iTwinName: string },
   ): Promise<string> {
     const authorizationInfo = await params.authorization();
     const requestConfig = {
@@ -54,7 +54,7 @@ export class ITwinsClient {
     const createITwinResponse: AxiosResponse<ITwinResponse> = await axios.post(
       createITwinUrl,
       createITwinBody,
-      requestConfig
+      requestConfig,
     );
     return createITwinResponse.data.iTwin.id;
   }

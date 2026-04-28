@@ -63,12 +63,12 @@ export class TestIModelCreator {
     private readonly _iModelsClient: TestIModelsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
     private readonly _testITwinProvider: TestITwinProvider,
-    private readonly _testIModelFileProvider: TestIModelFileProvider
+    private readonly _testIModelFileProvider: TestIModelFileProvider,
   ) {}
 
   public async createEmpty(
     iModelName: string,
-    iModelDescription: string = "Some description"
+    iModelDescription: string = "Some description",
   ): Promise<IModelMetadata> {
     const iTwinId = await this._testITwinProvider.getOrCreate();
     const iModel = await this._iModelsClient.iModels.createEmpty({
@@ -89,40 +89,40 @@ export class TestIModelCreator {
   }
 
   public async createEmptyAndUploadChangesets(
-    iModelName: string
+    iModelName: string,
   ): Promise<IModelMetadata> {
     const iModel = await this.createEmpty(iModelName);
     const briefcases = await this.acquireBriefcases(
       iModel.id,
-      TestIModelCreator.briefcaseCount
+      TestIModelCreator.briefcaseCount,
     );
     await this.uploadChangesets(iModel.id, briefcases[0].id, []);
     return iModel;
   }
 
   public async createReusable(
-    iModelName: string
+    iModelName: string,
   ): Promise<ReusableIModelMetadata> {
     const iModel = await this.createEmpty(
       iModelName,
-      this._reusableIModelCreationInProgressDescription
+      this._reusableIModelCreationInProgressDescription,
     );
     const briefcases = await this.acquireBriefcases(
       iModel.id,
-      TestIModelCreator.briefcaseCount
+      TestIModelCreator.briefcaseCount,
     );
     const changesetGroups = await this.createChangesetGroups(iModel.id);
     await this.uploadChangesets(iModel.id, briefcases[0].id, changesetGroups);
     await this.completeChangesetGroups(iModel.id, changesetGroups);
     const changesetExtendedData = await this.createChangesetExtendedData(
-      iModel.id
+      iModel.id,
     );
     const namedVersions = await this.createNamedVersionsOnReusableIModel(
-      iModel.id
+      iModel.id,
     );
     const lock = await this.createLockOnReusableIModel(
       iModel.id,
-      briefcases[0].id
+      briefcases[0].id,
     );
     const initializedIModel = await this._iModelsClient.iModels.update({
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
@@ -150,7 +150,7 @@ export class TestIModelCreator {
   }
 
   private async createNamedVersionsOnReusableIModel(
-    iModelId: string
+    iModelId: string,
   ): Promise<NamedVersionMetadata[]> {
     const namedVersions: NamedVersionMetadata[] = [];
     const checkpointGenerationPromises: Promise<void>[] = [];
@@ -159,11 +159,11 @@ export class TestIModelCreator {
         await this.createNamedVersionOnChangesetIndex(
           iModelId,
           namedVersionMetadata.name,
-          namedVersionMetadata.changesetIndex
+          namedVersionMetadata.changesetIndex,
         );
       namedVersions.push(namedVersion);
       checkpointGenerationPromises.push(
-        this.waitForNamedVersionCheckpointGenerated(iModelId, namedVersion.id)
+        this.waitForNamedVersionCheckpointGenerated(iModelId, namedVersion.id),
       );
     }
 
@@ -173,7 +173,7 @@ export class TestIModelCreator {
 
   private async createLockOnReusableIModel(
     iModelId: string,
-    briefcaseId: number
+    briefcaseId: number,
   ): Promise<Lock> {
     const testIModelLocks: LockedObjects[] = [
       {
@@ -199,14 +199,14 @@ export class TestIModelCreator {
   private async uploadChangesets(
     iModelId: string,
     briefcaseId: number,
-    changesetGroups: ChangesetGroupMetadata[]
+    changesetGroups: ChangesetGroupMetadata[],
   ): Promise<void> {
     for (let i = 0; i < this._testIModelFileProvider.changesets.length; i++) {
       const changeset = this._testIModelFileProvider.changesets[i];
       const parentId =
         i === 0 ? undefined : this._testIModelFileProvider.changesets[i - 1].id;
       const changesetGroupId = changesetGroups.find((csGroup) =>
-        csGroup.changesetIndexes.includes(changeset.index)
+        csGroup.changesetIndexes.includes(changeset.index),
       )?.id;
 
       await this._iModelsClient.changesets.create({
@@ -227,7 +227,7 @@ export class TestIModelCreator {
   }
 
   private async createChangesetExtendedData(
-    iModelId: string
+    iModelId: string,
   ): Promise<ChangesetExtendedDataMetadata[]> {
     const changesetExtendedDataList: ChangesetExtendedDataMetadata[] = [];
     for (const changesetExtendedDataMetadata of TestIModelCreator.changesetExtendedData) {
@@ -257,7 +257,7 @@ export class TestIModelCreator {
   }
 
   private async createChangesetGroups(
-    iModelId: string
+    iModelId: string,
   ): Promise<ChangesetGroupMetadata[]> {
     const changesetGroups: ChangesetGroupMetadata[] = [];
 
@@ -280,7 +280,7 @@ export class TestIModelCreator {
 
   private async completeChangesetGroups(
     iModelId: string,
-    changesetGroups: ChangesetGroupMetadata[]
+    changesetGroups: ChangesetGroupMetadata[],
   ): Promise<void> {
     for (const changesetGroup of changesetGroups) {
       const updateChangesetGroupParams: UpdateChangesetGroupParams = {
@@ -293,14 +293,14 @@ export class TestIModelCreator {
       };
 
       await this._iModelsClient.changesetGroups.update(
-        updateChangesetGroupParams
+        updateChangesetGroupParams,
       );
     }
   }
 
   private async acquireBriefcases(
     iModelId: string,
-    briefcaseCount: number
+    briefcaseCount: number,
   ): Promise<BriefcaseMetadata[]> {
     const briefcases: BriefcaseMetadata[] = [];
     for (let i = 1; i <= briefcaseCount; i++) {
@@ -329,7 +329,7 @@ export class TestIModelCreator {
   private async createNamedVersionOnChangesetIndex(
     iModelId: string,
     namedVersionName: string,
-    changesetIndex: number
+    changesetIndex: number,
   ): Promise<NamedVersionMetadata> {
     // We use this specific user that is able to generate checkpoints
     // for named version creation to mimic production environment.
@@ -356,7 +356,7 @@ export class TestIModelCreator {
 
   private async waitForNamedVersionCheckpointGenerated(
     iModelId: string,
-    namedVersionId: string
+    namedVersionId: string,
   ): Promise<void> {
     await UtilityFunctions.sleep(3000);
 
@@ -369,7 +369,7 @@ export class TestIModelCreator {
     const timeOutInMs = 5 * 60 * 1000;
     for (let retries = timeOutInMs / sleepPeriodInMs; retries > 0; --retries) {
       const checkpoint = await this._iModelsClient.checkpoints.getSingle(
-        getSingleCheckpointParams
+        getSingleCheckpointParams,
       );
 
       if (
@@ -384,14 +384,14 @@ export class TestIModelCreator {
         checkpoint.state !== CheckpointState.Successful
       )
         throw new TestSetupError(
-          `Checkpoint generation failed with state: ${checkpoint.state}.`
+          `Checkpoint generation failed with state: ${checkpoint.state}.`,
         );
 
       await UtilityFunctions.sleep(sleepPeriodInMs);
     }
 
     throw new TestSetupError(
-      "Timed out while waiting for checkpoint generation to complete."
+      "Timed out while waiting for checkpoint generation to complete.",
     );
   }
 }

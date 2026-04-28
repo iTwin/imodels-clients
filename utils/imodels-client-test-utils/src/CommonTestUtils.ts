@@ -37,7 +37,7 @@ export async function cleanupDirectory(directory: string): Promise<void> {
       } else {
         await testLocalFileSystem.deleteFile(fullPath);
       }
-    }
+    },
   );
   await Promise.all(fileDeletePromises);
 }

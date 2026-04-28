@@ -29,9 +29,12 @@ import {
 } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
-  constructor(options: TOptions, private _iModelsClient: IModelsClient) {
+  constructor(
+    options: TOptions,
+    private _iModelsClient: IModelsClient,
+  ) {
     super(options);
   }
 
@@ -45,7 +48,7 @@ export class BriefcaseOperations<
    * {@link MinimalBriefcase}.
    */
   public getMinimalList(
-    params: GetBriefcaseListParams
+    params: GetBriefcaseListParams,
   ): EntityListIterator<MinimalBriefcase> {
     return new EntityListIteratorImpl(async () =>
       this.getEntityCollectionPage<
@@ -60,7 +63,7 @@ export class BriefcaseOperations<
         preferReturn: PreferReturn.Minimal,
         entityCollectionAccessor: (response) => response.body.briefcases,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -73,18 +76,18 @@ export class BriefcaseOperations<
    * @returns {EntityListIterator<Briefcase>} iterator for Briefcase list. See {@link EntityListIterator}, {@link Briefcase}.
    */
   public getRepresentationList(
-    params: GetBriefcaseListParams
+    params: GetBriefcaseListParams,
   ): EntityListIterator<Briefcase> {
     const entityCollectionAccessor = (
-      response: HttpResponse<BriefcasesResponse<Briefcase>>
+      response: HttpResponse<BriefcasesResponse<Briefcase>>,
     ) => {
       const briefcases = response.body.briefcases;
       const mappedBriefcases = briefcases.map((briefcase) =>
         this.appendRelatedEntityCallbacks(
           params.authorization,
           briefcase,
-          params.headers
-        )
+          params.headers,
+        ),
       );
       return mappedBriefcases;
     };
@@ -99,7 +102,7 @@ export class BriefcaseOperations<
         preferReturn: PreferReturn.Representation,
         entityCollectionAccessor,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -122,7 +125,7 @@ export class BriefcaseOperations<
     const result: Briefcase = this.appendRelatedEntityCallbacks(
       params.authorization,
       response.body.briefcase,
-      params.headers
+      params.headers,
     );
     return result;
   }
@@ -148,7 +151,7 @@ export class BriefcaseOperations<
   protected appendRelatedEntityCallbacks(
     authorization: AuthorizationCallback,
     briefcase: Briefcase,
-    headers?: HeaderFactories
+    headers?: HeaderFactories,
   ): Briefcase {
     const getOwner = async () =>
       getUser(
@@ -156,7 +159,7 @@ export class BriefcaseOperations<
         this._iModelsClient.users,
         this._options.urlFormatter,
         briefcase._links.owner?.href,
-        headers
+        headers,
       );
 
     const checkpointLink = briefcase._links.checkpoint;

@@ -29,7 +29,7 @@ export class LimitedParallelQueue {
         const executingItem = itemToExecute().then(() => {
           const indexOfItemInQueue =
             currentlyExecutingPromises.indexOf(executingItem);
-          currentlyExecutingPromises.splice(indexOfItemInQueue, 1);
+          void currentlyExecutingPromises.splice(indexOfItemInQueue, 1);
         });
         currentlyExecutingPromises.push(executingItem);
       }

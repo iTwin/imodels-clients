@@ -16,7 +16,7 @@ import {
 } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends ManagementBriefcaseOperations<TOptions> {
   /**
    * Acquires a new Briefcase with specified properties. Wraps the
@@ -27,7 +27,7 @@ export class BriefcaseOperations<
    */
   public async acquire(params: AcquireBriefcaseParams): Promise<Briefcase> {
     const acquireBriefcaseBody = this.getAcquireBriefcaseRequestBody(
-      params.briefcaseProperties
+      params.briefcaseProperties,
     );
     const acquireBriefcaseResponse =
       await this.sendPostRequest<BriefcaseResponse>({
@@ -41,13 +41,13 @@ export class BriefcaseOperations<
     const result = this.appendRelatedEntityCallbacks(
       params.authorization,
       acquireBriefcaseResponse.body.briefcase,
-      params.headers
+      params.headers,
     );
     return result;
   }
 
   private getAcquireBriefcaseRequestBody(
-    briefcaseProperties: BriefcaseProperties | undefined
+    briefcaseProperties: BriefcaseProperties | undefined,
   ): object | undefined {
     if (!briefcaseProperties) return undefined;
 

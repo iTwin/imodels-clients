@@ -135,7 +135,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   public async downloadChangesets(
-    arg: DownloadChangesetRangeArg
+    arg: DownloadChangesetRangeArg,
   ): Promise<ChangesetFileProps[]> {
     const downloadParams: DownloadChangesetListParams = {
       ...this.getIModelScopedOperationParams(arg),
@@ -158,12 +158,12 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
       const downloadedChangesets: DownloadedChangeset[] = await handleAPIErrors(
         async () => this._iModelsClient.changesets.downloadList(downloadParams),
-        "downloadChangesets"
+        "downloadChangesets",
       );
 
       const result: ChangesetFileProps[] = downloadedChangesets.map(
         (value: DownloadedChangeset) =>
-          ClientToPlatformAdapter.toChangesetFileProps(value)
+          ClientToPlatformAdapter.toChangesetFileProps(value),
       );
       return result;
     } finally {
@@ -172,7 +172,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   public async downloadChangeset(
-    arg: DownloadChangesetArg
+    arg: DownloadChangesetArg,
   ): Promise<ChangesetFileProps> {
     const downloadSingleChangesetParams: DownloadSingleChangesetParams = {
       ...this.getIModelScopedOperationParams(arg),
@@ -198,21 +198,21 @@ export class BackendIModelsAccess implements BackendHubAccess {
           const stopwatch = new StopWatch(`[${arg.changeset.id}]`, true);
           Logger.logInfo(
             "BackendIModelsAccess",
-            `Starting download of changeset with id ${stopwatch.description}`
+            `Starting download of changeset with id ${stopwatch.description}`,
           );
 
           const innerResult =
             await this._iModelsClient.changesets.downloadSingle(
-              downloadSingleChangesetParams
+              downloadSingleChangesetParams,
             );
 
           Logger.logInfo(
             "BackendIModelsAccess",
-            `Downloaded changeset with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`
+            `Downloaded changeset with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`,
           );
           return innerResult;
         },
-        "downloadChangesets"
+        "downloadChangesets",
       );
 
       const result: ChangesetFileProps =
@@ -230,7 +230,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
 
     const changeset: Changeset = await handleAPIErrors(async () =>
-      this._iModelsClient.changesets.getSingle(getSingleChangesetParams)
+      this._iModelsClient.changesets.getSingle(getSingleChangesetParams),
     );
 
     const result: ChangesetProps =
@@ -239,7 +239,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   public async queryChangesets(
-    arg: ChangesetRangeArg
+    arg: ChangesetRangeArg,
   ): Promise<ChangesetProps[]> {
     const iModelOperationParams: GetChangesetListParams =
       this.getIModelScopedOperationParams(arg);
@@ -248,26 +248,26 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const changesetsIterator: EntityListIterator<Changeset> =
       this._iModelsClient.changesets.getRepresentationList(
-        iModelOperationParams
+        iModelOperationParams,
       );
     const changesets: Changeset[] = await handleAPIErrors(async () =>
-      toArray(changesetsIterator)
+      toArray(changesetsIterator),
     );
 
     const result: ChangesetProps[] = changesets.map((value: Changeset) =>
-      ClientToPlatformAdapter.toChangesetProps(value)
+      ClientToPlatformAdapter.toChangesetProps(value),
     );
     return result;
   }
 
   public async pushChangeset(
-    arg: IModelIdArg & { changesetProps: ChangesetFileProps }
+    arg: IModelIdArg & { changesetProps: ChangesetFileProps },
   ): Promise<ChangesetIndex> {
     let changesetDescription = arg.changesetProps.description;
     if (changesetDescription.length >= 255) {
       Logger.logWarning(
         "BackendIModelsAccess",
-        `pushChangeset - Truncating description to 255 characters. ${changesetDescription}`
+        `pushChangeset - Truncating description to 255 characters. ${changesetDescription}`,
       );
       changesetDescription = changesetDescription.slice(0, 254);
     }
@@ -277,12 +277,12 @@ export class BackendIModelsAccess implements BackendHubAccess {
       changesetProperties:
         PlatformToClientAdapter.toChangesetPropertiesForCreate(
           arg.changesetProps,
-          changesetDescription
+          changesetDescription,
         ),
     };
     const createdChangeset: Changeset = await handleAPIErrors(
       async () => this._iModelsClient.changesets.create(createChangesetParams),
-      "createChangeset"
+      "createChangeset",
     );
 
     return createdChangeset.index;
@@ -291,7 +291,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   public async getLatestChangeset(arg: IModelIdArg): Promise<ChangesetProps> {
     const latestChangeset = await getLatestFullChangesetIfExists(
       this._iModelsClient,
-      this.getIModelScopedOperationParams(arg)
+      this.getIModelScopedOperationParams(arg),
     );
 
     if (!latestChangeset) return Constants.ChangeSet0;
@@ -302,7 +302,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   public async getChangesetFromVersion(
-    arg: IModelIdArg & { version: IModelVersion }
+    arg: IModelIdArg & { version: IModelVersion },
   ): Promise<ChangesetProps> {
     const version = arg.version;
     if (version.isFirst) return Constants.ChangeSet0;
@@ -325,14 +325,14 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   public async getChangesetFromNamedVersion(
-    arg: IModelIdArg & { versionName: string }
+    arg: IModelIdArg & { versionName: string },
   ): Promise<ChangesetProps> {
     const iModelOperationParams: IModelScopedOperationParams =
       this.getIModelScopedOperationParams(arg);
     const namedVersionChangeset = await getNamedVersionChangeset(
       this._iModelsClient,
       iModelOperationParams,
-      arg.versionName
+      arg.versionName,
     );
 
     const getSingleChangesetParams: GetSingleChangesetParams = {
@@ -341,7 +341,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
 
     const changeset: MinimalChangeset = await handleAPIErrors(async () =>
-      this._iModelsClient.changesets.getSingle(getSingleChangesetParams)
+      this._iModelsClient.changesets.getSingle(getSingleChangesetParams),
     );
 
     const result: ChangesetProps =
@@ -350,7 +350,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   public async acquireNewBriefcaseId(
-    arg: AcquireNewBriefcaseIdArg
+    arg: AcquireNewBriefcaseIdArg,
   ): Promise<BriefcaseId> {
     const acquireBriefcaseParams: AcquireBriefcaseParams =
       this.getIModelScopedOperationParams(arg);
@@ -358,7 +358,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     const briefcase: Briefcase = await handleAPIErrors(
       async () =>
         this._iModelsClient.briefcases.acquire(acquireBriefcaseParams),
-      "acquireBriefcase"
+      "acquireBriefcase",
     );
 
     if (!briefcase)
@@ -380,7 +380,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
 
     await handleAPIErrors(async () =>
-      this._iModelsClient.briefcases.release(releaseBriefcaseParams)
+      this._iModelsClient.briefcases.release(releaseBriefcaseParams),
     );
   }
 
@@ -394,21 +394,20 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const briefcasesIterator: EntityListIterator<Briefcase> =
       this._iModelsClient.briefcases.getRepresentationList(
-        getBriefcaseListParams
+        getBriefcaseListParams,
       );
     const briefcases: Briefcase[] = await handleAPIErrors(async () =>
-      toArray(briefcasesIterator)
+      toArray(briefcasesIterator),
     );
 
     const briefcaseIds: BriefcaseId[] = briefcases.map(
-      (briefcase) => briefcase.briefcaseId
+      (briefcase) => briefcase.briefcaseId,
     );
     return briefcaseIds;
   }
 
-  // eslint-disable-next-line deprecation/deprecation
   public async downloadV1Checkpoint(
-    arg: DownloadRequest
+    arg: DownloadRequest,
   ): Promise<ChangesetIndexAndId> {
     const iModelScopedOperationParams: IModelScopedOperationParams = {
       ...this.getAuthorizationParam(arg.checkpoint),
@@ -418,7 +417,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       await queryCurrentOrPrecedingV1Checkpoint(
         this._iModelsClient,
         iModelScopedOperationParams,
-        arg
+        arg,
       );
     if (!checkpoint || !checkpoint._links?.download)
       ITwinError.throwError({
@@ -430,7 +429,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       });
 
     const v1CheckpointSize = await getV1CheckpointSize(
-      checkpoint._links.download.href
+      checkpoint._links.download.href,
     );
 
     let downloadCancellationMonitorFunc:
@@ -445,14 +444,14 @@ export class BackendIModelsAccess implements BackendHubAccess {
         ? (downloaded: number) =>
             downloadProgressParams.progressCallback?.(
               downloaded,
-              v1CheckpointSize
+              v1CheckpointSize,
             )
         : undefined;
 
       const stopwatch = new StopWatch(`[${checkpoint.changesetId}]`, true);
       Logger.logInfo(
         "BackendIModelsAccess",
-        `Starting download of checkpoint with id ${stopwatch.description}`
+        `Starting download of checkpoint with id ${stopwatch.description}`,
       );
       await downloadFile({
         storage: this._iModelsClient.cloudStorage,
@@ -464,7 +463,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       });
       Logger.logInfo(
         "BackendIModelsAccess",
-        `Downloaded checkpoint with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`
+        `Downloaded checkpoint with id ${stopwatch.description} (${stopwatch.elapsedSeconds} seconds)`,
       );
 
       return { index: checkpoint.changesetIndex, id: checkpoint.changesetId };
@@ -474,7 +473,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   public async queryV2Checkpoint(
-    arg: CheckpointProps
+    arg: CheckpointProps,
   ): Promise<V2CheckpointAccessProps | undefined> {
     const iModelScopedOperationParams =
       this.getIModelScopedOperationParams(arg);
@@ -486,7 +485,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     let checkpoint: Checkpoint;
     try {
       checkpoint = await this._iModelsClient.checkpoints.getSingle(
-        getSingleCheckpointParams
+        getSingleCheckpointParams,
       );
     } catch (error) {
       // Means that neither v1 nor v2 checkpoint exists
@@ -498,7 +497,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
           ? queryCurrentOrPrecedingV2Checkpoint(
               this._iModelsClient,
               iModelScopedOperationParams,
-              arg
+              arg,
             )
           : undefined;
       }
@@ -512,21 +511,21 @@ export class BackendIModelsAccess implements BackendHubAccess {
         ? queryCurrentOrPrecedingV2Checkpoint(
             this._iModelsClient,
             iModelScopedOperationParams,
-            arg
+            arg,
           )
         : undefined;
     }
 
     const result = ClientToPlatformAdapter.toV2CheckpointAccessProps(
       checkpoint.directoryAccessInfo,
-      checkpoint.dbName
+      checkpoint.dbName,
     );
     return result;
   }
 
   public async acquireLocks(
     arg: BriefcaseDbArg,
-    locks: LockMap
+    locks: LockMap,
   ): Promise<void> {
     const updateLockParams: UpdateLockParams = {
       ...this.getIModelScopedOperationParams(arg),
@@ -537,7 +536,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     await handleAPIErrors(
       async () => this._iModelsClient.locks.update(updateLockParams),
-      "updateLocks"
+      "updateLocks",
     );
   }
 
@@ -552,12 +551,12 @@ export class BackendIModelsAccess implements BackendHubAccess {
     const locksIterator: EntityListIterator<Lock> =
       this._iModelsClient.locks.getList(getLockListParams);
     const locks: Lock[] = await handleAPIErrors(async () =>
-      toArray(locksIterator)
+      toArray(locksIterator),
     );
 
     if (locks.length === 0) return [];
     const result: LockProps[] = locks.flatMap((lock: Lock) =>
-      ClientToPlatformAdapter.toLockProps(lock)
+      ClientToPlatformAdapter.toLockProps(lock),
     );
     return result;
   }
@@ -574,16 +573,16 @@ export class BackendIModelsAccess implements BackendHubAccess {
       const result: ReleaseLocksChunkResult = await handleAPIErrors(
         async () =>
           await this._iModelsClient.locks.releaseLocksChunk(
-            releaseLocksChunkParams
+            releaseLocksChunkParams,
           ),
-        "releaseLocksChunk"
+        "releaseLocksChunk",
       );
       isLastChunk = result.isLastChunk;
     } while (!isLastChunk);
   }
 
   public async queryIModelByName(
-    arg: IModelNameArg
+    arg: IModelNameArg,
   ): Promise<GuidString | undefined> {
     const getIModelListParams: GetIModelListParams = {
       ...this.getAuthorizationParam(arg),
@@ -613,8 +612,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const iModel: IModel = await handleAPIErrors(async () =>
       this._iModelsClient.iModels.createFromBaseline(
-        createIModelFromBaselineParams
-      )
+        createIModelFromBaselineParams,
+      ),
     );
 
     IModelJsFs.removeSync(baselineFilePath);
@@ -626,12 +625,12 @@ export class BackendIModelsAccess implements BackendHubAccess {
       this.getIModelScopedOperationParams(arg);
 
     return handleAPIErrors(async () =>
-      this._iModelsClient.iModels.delete(deleteIModelParams)
+      this._iModelsClient.iModels.delete(deleteIModelParams),
     );
   }
 
   private getIModelScopedOperationParams(
-    arg: IModelIdArg
+    arg: IModelIdArg,
   ): IModelScopedOperationParams {
     return {
       ...this.getAuthorizationParam(arg),
@@ -643,7 +642,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     const authorizationCallback: AuthorizationCallback = tokenArg.accessToken
       ? this.getAuthorizationCallbackFromToken(tokenArg.accessToken)
       : AccessTokenAdapter.toAuthorizationCallback(() =>
-          IModelHost.getAccessToken()
+          IModelHost.getAccessToken(),
         );
 
     return {
@@ -652,7 +651,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   }
 
   private getAuthorizationCallbackFromToken(
-    accessToken: AccessToken
+    accessToken: AccessToken,
   ): AuthorizationCallback {
     return () =>
       Promise.resolve(AccessTokenAdapter.toAuthorization(accessToken));
@@ -661,7 +660,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
   private copyAndPrepareBaselineFile(arg: CreateNewIModelProps): string {
     const tempBaselineFilePath = join(
       KnownLocations.tmpdir,
-      `temp-baseline-${Guid.createValue()}.bim`
+      `temp-baseline-${Guid.createValue()}.bim`,
     );
     IModelJsFs.removeSync(tempBaselineFilePath);
 
@@ -678,13 +677,13 @@ export class BackendIModelsAccess implements BackendHubAccess {
       const foundWalFile = IModelJsFs.existsSync(`${baselineFilePath}-wal`);
       const db = IModelDb.openDgnDb(
         { path: baselineFilePath },
-        OpenMode.ReadWrite
+        OpenMode.ReadWrite,
       );
       if (foundWalFile) {
         Logger.logWarning(
           "BackendIModelsAccess",
           "Wal file found while uploading file, performing checkpoint.",
-          { baselineFilePath }
+          { baselineFilePath },
         );
         db.performCheckpoint();
       }
@@ -694,7 +693,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
 
     const nativeDb = IModelDb.openDgnDb(
       { path: tempBaselineFilePath },
-      OpenMode.ReadWrite
+      OpenMode.ReadWrite,
     );
     try {
       nativeDb.setITwinId(arg.iTwinId);
@@ -704,7 +703,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       nativeDb.resetBriefcaseId(BriefcaseIdValue.Unassigned);
       nativeDb.saveLocalValue(
         BriefcaseLocalValue.NoLocking,
-        arg.noLocks ? "true" : undefined
+        arg.noLocks ? "true" : undefined,
       );
       nativeDb.saveChanges();
     } finally {

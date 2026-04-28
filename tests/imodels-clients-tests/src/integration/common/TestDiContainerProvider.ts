@@ -15,7 +15,7 @@ export function getTestDIContainer(): Container {
   container = new Container();
   TestUtilBootstrapper.bind(
     container,
-    path.join(__dirname, "..", "..", "..", ".env")
+    path.join(__dirname, "..", "..", "..", ".env"),
   );
 
   return container;

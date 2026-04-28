@@ -54,7 +54,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
   }
 
   private async getChangesetFromId(
-    arg: IModelIdArg & { changeSetId: string }
+    arg: IModelIdArg & { changeSetId: string },
   ): Promise<ChangesetIndexAndId> {
     const getSingleChangesetParams: GetSingleChangesetParams = {
       ...this.getIModelScopedOperationParams(arg),
@@ -62,7 +62,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
     };
 
     const changeset: Changeset = await handleAPIErrors(async () =>
-      this._iModelsClient.changesets.getSingle(getSingleChangesetParams)
+      this._iModelsClient.changesets.getSingle(getSingleChangesetParams),
     );
 
     if (!changeset)
@@ -78,11 +78,11 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
   }
 
   public async getLatestChangeset(
-    arg: IModelIdArg
+    arg: IModelIdArg,
   ): Promise<ChangesetIndexAndId> {
     const latestChangeset = await getLatestMinimalChangesetIfExists(
       this._iModelsClient,
-      this.getIModelScopedOperationParams(arg)
+      this.getIModelScopedOperationParams(arg),
     );
 
     if (!latestChangeset) return this._emptyChangeset;
@@ -91,7 +91,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
   }
 
   public async getChangesetFromVersion(
-    arg: IModelIdArg & { version: IModelVersion }
+    arg: IModelIdArg & { version: IModelVersion },
   ): Promise<ChangesetIndexAndId> {
     const version = arg.version;
     if (version.isFirst) return this._emptyChangeset;
@@ -114,25 +114,25 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
   }
 
   public async getChangesetFromNamedVersion(
-    arg: IModelIdArg & { versionName?: string }
+    arg: IModelIdArg & { versionName?: string },
   ): Promise<ChangesetIndexAndId> {
     if (!arg.versionName) return this.getChangesetFromLatestNamedVersion(arg);
 
     return getNamedVersionChangeset(
       this._iModelsClient,
       this.getIModelScopedOperationParams(arg),
-      arg.versionName
+      arg.versionName,
     );
   }
 
   private getIModelScopedOperationParams(
-    arg: IModelIdArg
+    arg: IModelIdArg,
   ): IModelScopedOperationParams {
     const authorizationCallback: AuthorizationCallback = arg.accessToken
       ? () =>
           Promise.resolve(AccessTokenAdapter.toAuthorization(arg.accessToken))
       : AccessTokenAdapter.toAuthorizationCallback(() =>
-          IModelApp.getAccessToken()
+          IModelApp.getAccessToken(),
         );
 
     return {
@@ -142,7 +142,7 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
   }
 
   private async getChangesetFromLatestNamedVersion(
-    arg: IModelIdArg
+    arg: IModelIdArg,
   ): Promise<ChangesetIndexAndId> {
     const getNamedVersionListParams: GetNamedVersionListParams = {
       ...this.getIModelScopedOperationParams(arg),
@@ -156,10 +156,10 @@ export class FrontendIModelsAccess implements FrontendHubAccess {
     };
     const namedVersionsIterator: EntityListIterator<MinimalNamedVersion> =
       this._iModelsClient.namedVersions.getMinimalList(
-        getNamedVersionListParams
+        getNamedVersionListParams,
       );
     const namedVersions = await handleAPIErrors(async () =>
-      take(namedVersionsIterator, 1)
+      take(namedVersionsIterator, 1),
     );
 
     if (

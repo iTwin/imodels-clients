@@ -36,7 +36,7 @@ describe("[Authoring] ChangesetGroupOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -52,7 +52,7 @@ describe("[Authoring] ChangesetGroupOperations", () => {
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModel = await testIModelCreator.createEmpty(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"),
     );
   });
 
@@ -106,7 +106,7 @@ describe("[Authoring] ChangesetGroupOperations", () => {
 
     // Act
     const updatedChangesetGroup = await iModelsClient.changesetGroups.update(
-      updateChangesetGroupParams
+      updateChangesetGroupParams,
     );
 
     // Assert

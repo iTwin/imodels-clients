@@ -37,23 +37,23 @@ export class IModelsApiUrlFormatter {
   private readonly _numericRegex = new RegExp("^\\d+$");
   private readonly _changesetUrlRegex = new RegExp(
     `/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIdOrIndex}>[^/]*)`,
-    this._regexIgnoreCaseOption
+    this._regexIgnoreCaseOption,
   );
   private readonly _checkpointUrlRegex = new RegExp(
     `/iModels/(?<${this._groupNames.iModelId}>.*)/changesets/(?<${this._groupNames.changesetIdOrIndex}>.*)/checkpoint`,
-    this._regexIgnoreCaseOption
+    this._regexIgnoreCaseOption,
   );
   private readonly _namedVersionUrlRegex = new RegExp(
     `/iModels/(?<${this._groupNames.iModelId}>.*)/namedversions/(?<${this._groupNames.namedVersionId}>[^/]*)`,
-    this._regexIgnoreCaseOption
+    this._regexIgnoreCaseOption,
   );
   private readonly _userUrlRegex = new RegExp(
     `/iModels/(?<${this._groupNames.iModelId}>.*)/users/(?<${this._groupNames.userId}>[^/]*)`,
-    this._regexIgnoreCaseOption
+    this._regexIgnoreCaseOption,
   );
   private readonly _iModelUrlRegex = new RegExp(
     `/iModels/(?<${this._groupNames.iModelId}>[^/]*)`,
-    this._regexIgnoreCaseOption
+    this._regexIgnoreCaseOption,
   );
 
   constructor(protected readonly baseUrl: string) {}
@@ -81,7 +81,7 @@ export class IModelsApiUrlFormatter {
   }
 
   public getSingleBriefcaseUrl(
-    params: { iModelId: string } & { briefcaseId: number }
+    params: { iModelId: string } & { briefcaseId: number },
   ): string {
     return `${this.baseUrl}/${params.iModelId}/briefcases/${params.briefcaseId}`;
   }
@@ -91,12 +91,12 @@ export class IModelsApiUrlFormatter {
     urlParams?: GetBriefcaseListUrlParams;
   }): string {
     return `${this.baseUrl}/${params.iModelId}/briefcases${this.formQueryString(
-      { ...params.urlParams }
+      { ...params.urlParams },
     )}`;
   }
 
   public getSingleChangesetUrl(
-    params: { iModelId: string } & ChangesetIdOrIndex
+    params: { iModelId: string } & ChangesetIdOrIndex,
   ): string {
     return `${this.baseUrl}/${params.iModelId}/changesets/${
       params.changesetId ?? params.changesetIndex
@@ -108,12 +108,12 @@ export class IModelsApiUrlFormatter {
     urlParams?: GetChangesetListUrlParams;
   }): string {
     return `${this.baseUrl}/${params.iModelId}/changesets${this.formQueryString(
-      { ...params.urlParams }
+      { ...params.urlParams },
     )}`;
   }
 
   public getSingleChangesetExtendedDataUrl(
-    params: { iModelId: string } & ChangesetIdOrIndex
+    params: { iModelId: string } & ChangesetIdOrIndex,
   ): string {
     return `${this.baseUrl}/${params.iModelId}/changesets/${
       params.changesetId ?? params.changesetIndex
@@ -130,7 +130,7 @@ export class IModelsApiUrlFormatter {
   }
 
   public getSingleChangesetGroupUrl(
-    params: { iModelId: string } & { changesetGroupId: string }
+    params: { iModelId: string } & { changesetGroupId: string },
   ): string {
     return `${this.baseUrl}/${params.iModelId}/changesetgroups/${params.changesetGroupId}`;
   }
@@ -145,20 +145,20 @@ export class IModelsApiUrlFormatter {
   }
 
   public parseChangesetUrl(
-    url: string
+    url: string,
   ): { iModelId: string } & ChangesetIdOrIndex {
     const matchedGroups: Dictionary<string> =
       this._changesetUrlRegex.exec(url)!.groups!;
     return {
       iModelId: matchedGroups[this._groupNames.iModelId],
       ...this.parseChangesetIdOrIndex(
-        matchedGroups[this._groupNames.changesetIdOrIndex]
+        matchedGroups[this._groupNames.changesetIdOrIndex],
       ),
     };
   }
 
   public getSingleNamedVersionUrl(
-    params: { iModelId: string } & { namedVersionId: string }
+    params: { iModelId: string } & { namedVersionId: string },
   ): string {
     return `${this.baseUrl}/${params.iModelId}/namedversions/${params.namedVersionId}`;
   }
@@ -173,7 +173,7 @@ export class IModelsApiUrlFormatter {
   }
 
   public getCheckpointUrl(
-    params: { iModelId: string } & CheckpointParentEntityId
+    params: { iModelId: string } & CheckpointParentEntityId,
   ): string {
     let parentEntityUrlPath: string;
     if (params.namedVersionId)
@@ -206,7 +206,7 @@ export class IModelsApiUrlFormatter {
   }
 
   public getSingleUserUrl(
-    params: { iModelId: string } & { userId: string }
+    params: { iModelId: string } & { userId: string },
   ): string {
     return `${this.baseUrl}/${params.iModelId}/users/${params.userId}`;
   }
@@ -259,14 +259,14 @@ export class IModelsApiUrlFormatter {
   }
 
   public parseCheckpointUrl(
-    url: string
+    url: string,
   ): { iModelId: string } & ChangesetIdOrIndex {
     const matchedGroups: Dictionary<string> =
       this._checkpointUrlRegex.exec(url)!.groups!;
     return {
       iModelId: matchedGroups[this._groupNames.iModelId],
       ...this.parseChangesetIdOrIndex(
-        matchedGroups[this._groupNames.changesetIdOrIndex]
+        matchedGroups[this._groupNames.changesetIdOrIndex],
       ),
     };
   }
@@ -301,7 +301,7 @@ export class IModelsApiUrlFormatter {
   }
 
   protected formQueryString(
-    urlParameters: Dictionary<UrlParameterValue> | undefined
+    urlParameters: Dictionary<UrlParameterValue> | undefined,
   ): string {
     let queryString = "";
     for (const urlParameterKey in urlParameters) {
@@ -314,7 +314,7 @@ export class IModelsApiUrlFormatter {
       queryString = this.appendToQueryString(
         queryString,
         urlParameterKey,
-        urlParameterValue
+        urlParameterValue,
       );
     }
 
@@ -327,7 +327,7 @@ export class IModelsApiUrlFormatter {
    * symbols it is a numeric index, otherwise, it is a string id.
    */
   private parseChangesetIdOrIndex(
-    changesetIdOrIndex: string
+    changesetIdOrIndex: string,
   ): ChangesetIdOrIndex {
     const containsOnlyDigits = this._numericRegex.test(changesetIdOrIndex);
     if (containsOnlyDigits && changesetIdOrIndex.length < 40)
@@ -353,11 +353,11 @@ export class IModelsApiUrlFormatter {
   private appendToQueryString(
     existingQueryString: string,
     parameterKey: string,
-    parameterValue: UrlParameterValue
+    parameterValue: UrlParameterValue,
   ): string {
     const separator = existingQueryString.length === 0 ? "?" : "&";
     return `${existingQueryString}${separator}${parameterKey}=${this.stringify(
-      parameterValue
+      parameterValue,
     )}`;
   }
 
@@ -372,13 +372,13 @@ export class IModelsApiUrlFormatter {
   }
 
   private isSingleOrderBy(
-    parameterValue: UrlParameterValue
+    parameterValue: UrlParameterValue,
   ): parameterValue is SingleOrderByForAnyEntity {
     return (parameterValue as SingleOrderByForAnyEntity).property !== undefined;
   }
 
   private isMultipleOrderBy(
-    parameterValue: UrlParameterValue
+    parameterValue: UrlParameterValue,
   ): parameterValue is MultipleOrderByForAnyEntity {
     return (
       (parameterValue as MultipleOrderByForAnyEntity)?.[0]?.property !==
@@ -387,7 +387,7 @@ export class IModelsApiUrlFormatter {
   }
 
   private stringifyOrderByParameterValue(
-    orderByCriteria: MultipleOrderByForAnyEntity
+    orderByCriteria: MultipleOrderByForAnyEntity,
   ): string {
     let result = "";
     for (let i = 0; i < orderByCriteria.length; i++) {

@@ -78,37 +78,37 @@ export class IModelsErrorParser {
 
   public static parse(
     response: ResponseInfo,
-    originalError: IModelsOriginalError
+    originalError: IModelsOriginalError,
   ): Error {
     if (!response.body)
       return IModelsErrorParser.createUnrecognizedError(
         response,
-        originalError
+        originalError,
       );
 
     if (response.statusCode === 401)
       return IModelsErrorParser.createUnauthorizedError(
         response,
-        originalError
+        originalError,
       );
 
     const errorFromApi: IModelsApiErrorWrapper | undefined =
       response.body as IModelsApiErrorWrapper;
     const errorCode: IModelsErrorCode = IModelsErrorParser.parseCode(
-      errorFromApi?.error?.code
+      errorFromApi?.error?.code,
     );
 
     if (errorCode === IModelsErrorCode.Unrecognized)
       return IModelsErrorParser.createUnrecognizedError(
         response,
-        originalError
+        originalError,
       );
 
     const errorDetails: IModelsErrorDetail[] | undefined =
       IModelsErrorParser.parseDetails(errorFromApi.error?.details);
     const errorMessage: string = IModelsErrorParser.parseAndFormatMessage(
       errorFromApi?.error?.message,
-      errorDetails
+      errorDetails,
     );
 
     return new IModelsErrorImpl({
@@ -137,7 +137,7 @@ export class IModelsErrorParser {
   }
 
   private static parseDetails(
-    details: IModelsApiErrorDetail[] | undefined
+    details: IModelsApiErrorDetail[] | undefined,
   ): IModelsErrorDetail[] | undefined {
     if (!details) return undefined;
 
@@ -148,7 +148,7 @@ export class IModelsErrorParser {
 
   private static parseAndFormatMessage(
     message: string | undefined,
-    errorDetails: IModelsErrorDetail[] | undefined
+    errorDetails: IModelsErrorDetail[] | undefined,
   ): string {
     let result = message ?? IModelsErrorParser._defaultErrorMessage;
     if (!errorDetails || errorDetails.length === 0) return result;
@@ -166,7 +166,7 @@ export class IModelsErrorParser {
 
   private static createUnrecognizedError(
     response: ResponseInfo,
-    originalError: IModelsOriginalError
+    originalError: IModelsOriginalError,
   ): Error {
     return new IModelsErrorImpl({
       code: IModelsErrorCode.Unrecognized,
@@ -184,7 +184,7 @@ export class IModelsErrorParser {
 
   private static createUnauthorizedError(
     response: ResponseInfo,
-    originalError: IModelsOriginalError
+    originalError: IModelsOriginalError,
   ): Error {
     const errorMessage =
       (response.body as IModelsApiErrorWrapper)?.error?.message ??

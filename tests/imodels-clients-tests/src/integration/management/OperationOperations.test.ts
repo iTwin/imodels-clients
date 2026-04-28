@@ -39,7 +39,7 @@ describe("[Management] OperationOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -59,7 +59,7 @@ describe("[Management] OperationOperations", () => {
     });
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModel = await reusableTestIModelProvider.getOrCreate();
   });
@@ -92,7 +92,7 @@ describe("[Management] OperationOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName(
-          "cloned iModel for get create iModel operation details"
+          "cloned iModel for get create iModel operation details",
         ),
         changesetId: expectedClonedFrom.changesetId,
       },

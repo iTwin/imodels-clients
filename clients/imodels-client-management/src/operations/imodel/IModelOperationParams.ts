@@ -27,8 +27,10 @@ export enum IModelOrderByProperty {
 }
 
 /** Url parameters supported in iModel list query. */
-export interface GetIModelListUrlParams
-  extends OrderableCollectionRequestParams<IModel, IModelOrderByProperty> {
+export interface GetIModelListUrlParams extends OrderableCollectionRequestParams<
+  IModel,
+  IModelOrderByProperty
+> {
   /** Filters iModels whose name or description property contains the specified search value. */
   $search?: string;
   /** Filters iModels for a specific iTwin. */
@@ -78,8 +80,7 @@ export interface IModelProperties {
 
 /** Parameters for create iModel operation. */
 export interface CreateEmptyIModelParams
-  extends AuthorizationParam,
-    HeadersParam {
+  extends AuthorizationParam, HeadersParam {
   /** Properties of the new iModel. See {@link IModelProperties}. */
   iModelProperties: IModelProperties;
   /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */
@@ -99,16 +100,14 @@ export interface IModelTemplate {
 }
 
 /** Properties that should be specified when creating a new iModel from template. */
-export interface IModelPropertiesForCreateFromTemplate
-  extends IModelProperties {
+export interface IModelPropertiesForCreateFromTemplate extends IModelProperties {
   /** iModel template. See {@link IModelTemplate}. */
   template: IModelTemplate;
 }
 
 /** Parameters for create iModel from template operation. */
 export interface CreateIModelFromTemplateParams
-  extends AuthorizationParam,
-    HeadersParam {
+  extends AuthorizationParam, HeadersParam {
   /** Properties of the new iModel. See {@link IModelPropertiesForCreateFromTemplate}. */
   iModelProperties: IModelPropertiesForCreateFromTemplate;
   /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */
@@ -138,8 +137,7 @@ export type IModelPropertiesForClone = IModelPropertiesForCloneBase &
 
 /** Parameters for clone iModel operation. */
 export interface CloneIModelParams
-  extends IModelScopedOperationParams,
-    HeadersParam {
+  extends IModelScopedOperationParams, HeadersParam {
   /** Properties of the new iModel. See {@link IModelPropertiesForClone}. */
   iModelProperties: IModelPropertiesForClone;
   /** Time period to wait until the iModel is initialized. Default value is 300,000 ms (5 minutes). */
@@ -164,8 +162,7 @@ export type IModelPropertiesForFork = IModelPropertiesForCloneBase &
 
 /** Parameters for fork iModel operation. */
 export interface ForkIModelParams
-  extends IModelScopedOperationParams,
-    HeadersParam {
+  extends IModelScopedOperationParams, HeadersParam {
   /** Properties of the new iModel. See {@link IModelPropertiesForFork}. */
   iModelProperties: IModelPropertiesForFork;
   /** Time period to wait until the iModel fork is initialized. Default value is 300,000 ms (5 minutes). */

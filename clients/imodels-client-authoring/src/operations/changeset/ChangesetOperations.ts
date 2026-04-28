@@ -41,8 +41,7 @@ type DownloadCallback = (bytesDownloaded: number) => void;
 type DownloadFailedCallback = (bytesDownloadedBeforeFailure: number) => void;
 
 interface DownloadChangesetFileWithRetryParams
-  extends IModelScopedOperationParams,
-    RetryParams {
+  extends IModelScopedOperationParams, RetryParams {
   changeset: DownloadedChangeset;
   abortSignal?: GenericAbortSignal;
   downloadCallback?: DownloadCallback;
@@ -50,7 +49,7 @@ interface DownloadChangesetFileWithRetryParams
 }
 
 export class ChangesetOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends ManagementChangesetOperations<TOptions> {
   /**
    * Creates a Changeset. Wraps the
@@ -63,11 +62,11 @@ export class ChangesetOperations<
    */
   public async create(params: CreateChangesetParams): Promise<Changeset> {
     const changesetFileSize = await this._options.localFileSystem.getFileSize(
-      params.changesetProperties.filePath
+      params.changesetProperties.filePath,
     );
     const createChangesetBody = this.getCreateChangesetRequestBody(
       params.changesetProperties,
-      changesetFileSize
+      changesetFileSize,
     );
     const createChangesetResponse =
       await this.sendPostRequest<ChangesetResponse>({
@@ -90,7 +89,7 @@ export class ChangesetOperations<
     const completeLink = createChangesetResponse.body.changeset._links.complete;
     assertLink(completeLink);
     const confirmUploadBody = this.getConfirmUploadRequestBody(
-      params.changesetProperties
+      params.changesetProperties,
     );
     const confirmUploadResponse =
       await this.sendPatchRequest<ChangesetResponse>({
@@ -103,7 +102,7 @@ export class ChangesetOperations<
     const result = this.appendRelatedEntityCallbacks(
       params.authorization,
       confirmUploadResponse.body.changeset,
-      params.headers
+      params.headers,
     );
     return result;
   }
@@ -117,10 +116,10 @@ export class ChangesetOperations<
    * @returns downloaded Changeset. See {@link DownloadedChangeset}.
    */
   public async downloadSingle(
-    params: DownloadSingleChangesetParams
+    params: DownloadSingleChangesetParams,
   ): Promise<DownloadedChangeset> {
     await this._options.localFileSystem.createDirectory(
-      params.targetDirectoryPath
+      params.targetDirectoryPath,
     );
 
     const changeset: Changeset = await this.querySingleInternal(params);
@@ -138,10 +137,10 @@ export class ChangesetOperations<
    * @returns downloaded Changeset metadata along with the downloaded file path. See {@link DownloadedChangeset}.
    */
   public async downloadList(
-    params: DownloadChangesetListParams
+    params: DownloadChangesetListParams,
   ): Promise<DownloadedChangeset[]> {
     await this._options.localFileSystem.createDirectory(
-      params.targetDirectoryPath
+      params.targetDirectoryPath,
     );
 
     const [downloadCallback, downloadFailedCallback] =
@@ -149,16 +148,16 @@ export class ChangesetOperations<
 
     let result: DownloadedChangeset[] = [];
     for await (const changesetPage of this.getRepresentationList(
-      params
+      params,
     ).byPage()) {
       const changesetsWithFilePath: DownloadedChangeset[] = changesetPage.map(
         (changeset: Changeset) => ({
           ...changeset,
           filePath: path.join(
             params.targetDirectoryPath,
-            this.createFileName(changeset.id)
+            this.createFileName(changeset.id),
           ),
-        })
+        }),
       );
       result = result.concat(changesetsWithFilePath);
 
@@ -166,7 +165,7 @@ export class ChangesetOperations<
       // changesets first because their SAS tokens have a shorter lifespan.
       changesetsWithFilePath.sort(
         (changeset1: DownloadedChangeset, changeset2: DownloadedChangeset) =>
-          changeset1.fileSize - changeset2.fileSize
+          changeset1.fileSize - changeset2.fileSize,
       );
 
       const queue = new LimitedParallelQueue({ maxParallelPromises: 10 });
@@ -181,7 +180,7 @@ export class ChangesetOperations<
             downloadFailedCallback: downloadFailedCallback,
             maxRetries: params.maxRetries,
             headers: params.headers,
-          })
+          }),
         );
       await queue.waitAll();
     }
@@ -191,7 +190,7 @@ export class ChangesetOperations<
 
   private getCreateChangesetRequestBody(
     changesetProperties: ChangesetPropertiesForCreate,
-    changesetFileSize: number
+    changesetFileSize: number,
   ): object {
     return {
       id: changesetProperties.id,
@@ -206,7 +205,7 @@ export class ChangesetOperations<
   }
 
   private getConfirmUploadRequestBody(
-    changesetProperties: ChangesetPropertiesForCreate
+    changesetProperties: ChangesetPropertiesForCreate,
   ): object {
     return {
       state: ChangesetState.FileUploaded,
@@ -217,13 +216,13 @@ export class ChangesetOperations<
   private async downloadChangeset(
     params: IModelScopedOperationParams &
       TargetDirectoryParam & { changeset: Changeset } & DownloadProgressParam &
-      RetryParams
+      RetryParams,
   ): Promise<DownloadedChangeset> {
     const changesetWithPath: DownloadedChangeset = {
       ...params.changeset,
       filePath: path.join(
         params.targetDirectoryPath,
-        this.createFileName(params.changeset.id)
+        this.createFileName(params.changeset.id),
       ),
     };
 
@@ -246,13 +245,13 @@ export class ChangesetOperations<
   }
 
   private async downloadChangesetWithRetries(
-    params: DownloadChangesetFileWithRetryParams
+    params: DownloadChangesetFileWithRetryParams,
   ): Promise<void> {
     const targetFilePath = params.changeset.filePath;
     if (
       await this.isChangesetAlreadyDownloaded(
         targetFilePath,
-        params.changeset.fileSize
+        params.changeset.fileSize,
       )
     )
       return;
@@ -289,7 +288,7 @@ export class ChangesetOperations<
         this.throwIfAbortError(
           error,
           params.changeset,
-          downloadParams.abortSignal
+          downloadParams.abortSignal,
         );
         params.downloadFailedCallback?.(bytesDownloaded);
         if (error instanceof Error && firstError == null) firstError = error;
@@ -300,7 +299,7 @@ export class ChangesetOperations<
       message: `Failed to download changeset. Changeset id: ${
         params.changeset.id
       }, changeset index: ${params.changeset.index}, error: ${JSON.stringify(
-        firstError
+        firstError,
       )}.`,
       originalError: firstError,
       statusCode: undefined,
@@ -310,7 +309,7 @@ export class ChangesetOperations<
 
   private async getDownloadLink(
     params: DownloadChangesetFileWithRetryParams,
-    refreshLink: boolean
+    refreshLink: boolean,
   ) {
     if (!refreshLink) return params.changeset._links.download;
     const changeset = await this.querySingleInternal({
@@ -324,16 +323,14 @@ export class ChangesetOperations<
 
   private async isChangesetAlreadyDownloaded(
     targetFilePath: string,
-    expectedFileSize: number
+    expectedFileSize: number,
   ): Promise<boolean> {
-    const fileExists = await this._options.localFileSystem.fileExists(
-      targetFilePath
-    );
+    const fileExists =
+      await this._options.localFileSystem.fileExists(targetFilePath);
     if (!fileExists) return false;
 
-    const existingFileSize = await this._options.localFileSystem.getFileSize(
-      targetFilePath
-    );
+    const existingFileSize =
+      await this._options.localFileSystem.getFileSize(targetFilePath);
     if (existingFileSize === expectedFileSize) return true;
 
     await this._options.localFileSystem.deleteFile(targetFilePath);
@@ -345,7 +342,7 @@ export class ChangesetOperations<
   }
 
   private async provideDownloadCallbacks(
-    params: DownloadChangesetListParams
+    params: DownloadChangesetListParams,
   ): Promise<[DownloadCallback, DownloadFailedCallback] | undefined> {
     if (!params.progressCallback) return;
 
@@ -358,7 +355,7 @@ export class ChangesetOperations<
 
         const filePath = path.join(
           params.targetDirectoryPath,
-          this.createFileName(changeset.id)
+          this.createFileName(changeset.id),
         );
         if (
           await this.isChangesetAlreadyDownloaded(filePath, changeset.fileSize)
@@ -373,7 +370,7 @@ export class ChangesetOperations<
     };
     // We increase total size to prevent cases where downloaded size is larger than total size at the end of the download.
     const downloadFailedCallback: DownloadCallback = (
-      downloadedBeforeFailure
+      downloadedBeforeFailure,
     ) => (totalSize += downloadedBeforeFailure);
 
     return [progressCallback, downloadFailedCallback];
@@ -382,7 +379,7 @@ export class ChangesetOperations<
   private throwIfAbortError(
     error: unknown,
     changeset: Changeset,
-    abortSignal?: GenericAbortSignal
+    abortSignal?: GenericAbortSignal,
   ) {
     if (
       !isIModelsApiError(error) ||

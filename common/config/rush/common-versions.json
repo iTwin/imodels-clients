@@ -1,10 +1,6 @@
 {
-  "allowedAlternativeVersions": {
-    "@types/node": [
-      "14.14.31"
-    ]
-  },
+  "allowedAlternativeVersions": {},
   "preferredVersions": {
-    "json5": "2.2.2"
+    "json5": "2.2.3"
   }
 }

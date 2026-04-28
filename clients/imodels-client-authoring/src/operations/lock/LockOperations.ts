@@ -13,7 +13,7 @@ import { OperationOptions } from "../OperationOptions";
 import { UpdateLockParams } from "./LockOperationParams";
 
 export class LockOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends ManagementLockOperations<TOptions> {
   /**
    * Updates Lock for a specific Briefcase. This operation is used to acquire new locks and change the lock level for

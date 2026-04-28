@@ -11,7 +11,7 @@ import { OperationOptions } from "../OperationOptions";
 import { GetSingleBaselineFileParams } from "./BaselineFileOperationParams";
 
 export class BaselineFileOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Gets a single Baseline file by iModel id. This method returns a Baseline file in its full representation. Wraps the
@@ -21,7 +21,7 @@ export class BaselineFileOperations<
    * @returns {Promise<BaselineFile>} a Baseline file for the specified iModel. See {@link BaselineFile}.
    */
   public async getSingle(
-    params: GetSingleBaselineFileParams
+    params: GetSingleBaselineFileParams,
   ): Promise<BaselineFile> {
     const response = await this.sendGetRequest<BaselineFileResponse>({
       authorization: params.authorization,

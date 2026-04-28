@@ -25,9 +25,12 @@ import {
 } from "./ChangesetGroupOperationParams";
 
 export class ChangesetGroupOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
-  constructor(options: TOptions, private _iModelsClient: IModelsClient) {
+  constructor(
+    options: TOptions,
+    private _iModelsClient: IModelsClient,
+  ) {
     super(options);
   }
 
@@ -40,18 +43,18 @@ export class ChangesetGroupOperations<
    * See {@link EntityListIterator}, {@link ChangesetGroup}.
    */
   public getList(
-    params: GetChangesetGroupListParams
+    params: GetChangesetGroupListParams,
   ): EntityListIterator<ChangesetGroup> {
     const entityCollectionAccessor = (
-      response: HttpResponse<ChangesetGroupsResponse>
+      response: HttpResponse<ChangesetGroupsResponse>,
     ) => {
       const changesetGroups = response.body.changesetGroups;
       const mappedChangesetGroups = changesetGroups.map((changesetGroup) =>
         this.appendRelatedEntityCallbacks(
           params.authorization,
           changesetGroup,
-          params.headers
-        )
+          params.headers,
+        ),
       );
       return mappedChangesetGroups;
     };
@@ -65,7 +68,7 @@ export class ChangesetGroupOperations<
         }),
         entityCollectionAccessor,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -77,7 +80,7 @@ export class ChangesetGroupOperations<
    * @returns {Promise<ChangesetGroup>} a Changeset Group with the specified id. See {@link ChangesetGroup}.
    */
   public async getSingle(
-    params: GetSingleChangesetGroupParams
+    params: GetSingleChangesetGroupParams,
   ): Promise<ChangesetGroup> {
     const response = await this.sendGetRequest<ChangesetGroupResponse>({
       authorization: params.authorization,
@@ -91,7 +94,7 @@ export class ChangesetGroupOperations<
     const result: ChangesetGroup = this.appendRelatedEntityCallbacks(
       params.authorization,
       response.body.changesetGroup,
-      params.headers
+      params.headers,
     );
 
     return result;
@@ -100,7 +103,7 @@ export class ChangesetGroupOperations<
   protected appendRelatedEntityCallbacks(
     authorization: AuthorizationCallback,
     changesetGroup: ChangesetGroup,
-    headers?: HeaderFactories
+    headers?: HeaderFactories,
   ): ChangesetGroup {
     const getCreator = async () =>
       getUser(
@@ -108,7 +111,7 @@ export class ChangesetGroupOperations<
         this._iModelsClient.users,
         this._options.urlFormatter,
         changesetGroup._links.creator?.href,
-        headers
+        headers,
       );
 
     const result: ChangesetGroup = {

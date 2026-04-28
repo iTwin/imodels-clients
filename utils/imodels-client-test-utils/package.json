@@ -22,26 +22,23 @@
     "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
     "clean": "rimraf lib",
     "cover": "nyc npm test",
-    "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config ./src/**/*.ts 1>&2",
-    "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
+    "lint": "eslint ./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
   },
   "prettier": "./node_modules/@itwin/imodels-client-common-config/prettier.json",
-  "eslintConfig": {
-    "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.js"
-  },
   "dependencies": {
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",
-    "@itwin/object-storage-azure": "^3.0.4",
-    "@itwin/object-storage-core": "^3.0.4",
-    "@itwin/object-storage-google": "^3.0.4",
+    "@itwin/object-storage-azure": "^3.0.5",
+    "@itwin/object-storage-core": "^3.0.5",
+    "@itwin/object-storage-google": "^3.0.5",
     "@puppeteer/browsers": "^2.10.0",
     "axios": "^1.13.5",
     "chai": "~4.3.10",
     "dotenv": "~10.0.0",
     "inversify": "~6.0.2",
-    "puppeteer": "~24.39.1",
+    "puppeteer": "~24.42.0",
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
@@ -50,7 +47,7 @@
     "@types/node": "^22.15.14",
     "cpx2": "4.2.0",
     "cspell": "~5.21.0",
-    "eslint": "~8.55.0",
+    "eslint": "~9.39.4",
     "rimraf": "~3.0.2",
     "sort-package-json": "~1.53.1",
     "typescript": "^5.8.3"

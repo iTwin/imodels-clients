@@ -31,7 +31,7 @@ describe("FrontendIModelsAccess", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     const iModelsClient = new IModelsClient(iModelsClientOptions);
     frontendIModelsAccess = new FrontendIModelsAccess(iModelsClient);
@@ -45,7 +45,7 @@ describe("FrontendIModelsAccess", () => {
     testIModelFileProvider = container.get(TestIModelFileProvider);
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
   });
@@ -61,7 +61,7 @@ describe("FrontendIModelsAccess", () => {
       // Act
       const latestChangeset: ChangesetIndexAndId =
         await frontendIModelsAccess.getLatestChangeset(
-          getLatestChangesetParams
+          getLatestChangesetParams,
         );
 
       // Assert
@@ -88,7 +88,7 @@ describe("FrontendIModelsAccess", () => {
       // Act
       const changesetFromVersion: ChangesetIndexAndId =
         await frontendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         );
 
       // Assert
@@ -110,7 +110,7 @@ describe("FrontendIModelsAccess", () => {
       // Act
       const changesetFromVersion: ChangesetIndexAndId =
         await frontendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         );
 
       // Assert
@@ -132,15 +132,15 @@ describe("FrontendIModelsAccess", () => {
       // Act
       const changesetFromVersion: ChangesetIndexAndId =
         await frontendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         );
 
       // Assert
       expect(changesetFromVersion.id).to.be.equal(
-        testIModelNamedVersion.changesetId
+        testIModelNamedVersion.changesetId,
       );
       expect(changesetFromVersion.index).to.be.equal(
-        testIModelNamedVersion.changesetIndex
+        testIModelNamedVersion.changesetIndex,
       );
     });
 
@@ -157,7 +157,7 @@ describe("FrontendIModelsAccess", () => {
       // Act
       const changesetFromVersion: ChangesetIndexAndId =
         await frontendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         );
 
       // Assert
@@ -167,7 +167,7 @@ describe("FrontendIModelsAccess", () => {
         ];
       expect(changesetFromVersion.id).to.be.equal(latestTestChangesetFile.id);
       expect(changesetFromVersion.index).to.be.equal(
-        latestTestChangesetFile.index
+        latestTestChangesetFile.index,
       );
     });
   });
@@ -187,7 +187,7 @@ describe("FrontendIModelsAccess", () => {
       // Act
       const changesetFromNamedVersion: ChangesetIndexAndId =
         await frontendIModelsAccess.getChangesetFromNamedVersion(
-          getChangesetFromNamedVersionParams
+          getChangesetFromNamedVersionParams,
         );
 
       // Assert
@@ -196,10 +196,10 @@ describe("FrontendIModelsAccess", () => {
           testIModelNamedVersion.changesetIndex - 1
         ];
       expect(changesetFromNamedVersion.id).to.be.equal(
-        expectedChangesetFile.id
+        expectedChangesetFile.id,
       );
       expect(changesetFromNamedVersion.index).to.be.equal(
-        expectedChangesetFile.index
+        expectedChangesetFile.index,
       );
     });
 
@@ -215,7 +215,7 @@ describe("FrontendIModelsAccess", () => {
       // Act
       const changesetFromNamedVersion: ChangesetIndexAndId =
         await frontendIModelsAccess.getChangesetFromNamedVersion(
-          getChangesetFromNamedVersionParams
+          getChangesetFromNamedVersionParams,
         );
 
       // Assert
@@ -228,10 +228,10 @@ describe("FrontendIModelsAccess", () => {
           latestTestIModelNamedVersion.changesetIndex - 1
         ];
       expect(changesetFromNamedVersion.id).to.be.equal(
-        expectedChangesetFile.id
+        expectedChangesetFile.id,
       );
       expect(changesetFromNamedVersion.index).to.be.equal(
-        expectedChangesetFile.index
+        expectedChangesetFile.index,
       );
     });
   });

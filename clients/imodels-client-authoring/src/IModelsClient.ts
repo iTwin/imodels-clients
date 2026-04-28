@@ -67,10 +67,10 @@ export class IModelsClient extends ManagementIModelsClient {
       ...filledIModelsClientOptions,
       parseErrorFunc: (
         response: ResponseInfo,
-        originalError: IModelsOriginalError
+        originalError: IModelsOriginalError,
       ) => IModelsErrorParser.parse(response, originalError),
       urlFormatter: new IModelsApiUrlFormatter(
-        filledIModelsClientOptions.api.baseUrl
+        filledIModelsClientOptions.api.baseUrl,
       ),
     };
   }
@@ -119,7 +119,7 @@ export class IModelsClient extends ManagementIModelsClient {
   }
 
   private static fillAuthoringClientConfiguration(
-    options: IModelsClientOptions
+    options: IModelsClientOptions,
   ): RecursiveRequired<IModelsClientOptions> {
     const retryPolicy =
       options?.retryPolicy ??

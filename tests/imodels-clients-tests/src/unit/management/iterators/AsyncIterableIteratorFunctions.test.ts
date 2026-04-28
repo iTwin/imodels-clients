@@ -40,7 +40,7 @@ describe("AsyncIterableIterator utility functions", () => {
 
   // eslint-disable-next-line @typescript-eslint/require-await
   async function* getTestIterator(
-    count: number
+    count: number,
   ): AsyncIterableIterator<TestEntity> {
     for (let i = 0; i < count; i++) yield new TestEntity(i);
   }

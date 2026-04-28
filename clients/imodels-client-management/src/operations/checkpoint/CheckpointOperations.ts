@@ -10,7 +10,7 @@ import { OperationOptions } from "../OperationOptions";
 import { GetSingleCheckpointParams } from "./CheckpointOperationParams";
 
 export class CheckpointOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Gets a single Checkpoint generated either on a specific Changeset or for a specific Named Version. This method
@@ -23,7 +23,7 @@ export class CheckpointOperations<
    * @returns {Promise<Checkpoint>} a Checkpoint for the specified parent entity. See {@link Checkpoint}.
    */
   public async getSingle(
-    params: GetSingleCheckpointParams
+    params: GetSingleCheckpointParams,
   ): Promise<Checkpoint> {
     const { authorization, iModelId, headers, ...parentEntityId } = params;
     const response = await this.sendGetRequest<CheckpointResponse>({
@@ -46,7 +46,7 @@ export class CheckpointOperations<
    * @returns {Promise<Checkpoint>} a Checkpoint for the specified parent entity. See {@link Checkpoint}.
    */
   public async updateNamedVersionCheckpoint(
-    params: GetSingleNamedVersionParams
+    params: GetSingleNamedVersionParams,
   ): Promise<Checkpoint> {
     const response = await this.sendPutRequest<CheckpointResponse>({
       authorization: params.authorization,

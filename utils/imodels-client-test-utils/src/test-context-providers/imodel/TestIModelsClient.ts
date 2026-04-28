@@ -17,7 +17,7 @@ decorate(injectable(), IModelsClient);
 export class TestIModelsClient extends IModelsClient {
   constructor(
     @inject(TestUtilTypes.IModelsClientOptions)
-    options: IModelsClientOptions
+    options: IModelsClientOptions,
   ) {
     super(options);
   }

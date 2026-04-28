@@ -28,18 +28,18 @@ describe(`[Management] ${ChangesetExtendedDataOperations.name}`, () => {
   before(() => {
     const iModelsClientApiOptions: ApiOptions = JSON.parse(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      Cypress.env(FrontendTestEnvVariableKeys.iModelsClientApiOptions)
+      Cypress.env(FrontendTestEnvVariableKeys.iModelsClientApiOptions),
     );
     iModelsClient = new IModelsClient({ api: iModelsClientApiOptions });
 
     const admin1AuthorizationInfo: Authorization = JSON.parse(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      Cypress.env(FrontendTestEnvVariableKeys.admin1AuthorizationInfo)
+      Cypress.env(FrontendTestEnvVariableKeys.admin1AuthorizationInfo),
     );
     authorization = () => Promise.resolve(admin1AuthorizationInfo);
 
     testIModelForReadId = Cypress.env(
-      FrontendTestEnvVariableKeys.testIModelForReadId
+      FrontendTestEnvVariableKeys.testIModelForReadId,
     );
   });
 
@@ -60,7 +60,7 @@ describe(`[Management] ${ChangesetExtendedDataOperations.name}`, () => {
     // Act
     const changesetExtendedData: ChangesetExtendedData =
       await iModelsClient.changesetExtendedData.getSingle(
-        getSingleChangesetExtendedDataParams
+        getSingleChangesetExtendedDataParams,
       );
 
     // Assert
@@ -79,7 +79,7 @@ describe(`[Management] ${ChangesetExtendedDataOperations.name}`, () => {
       };
     // Act
     const changesetExtendedData = iModelsClient.changesetExtendedData.getList(
-      getChangesetExtendedDataListParams
+      getChangesetExtendedDataListParams,
     );
     expect(changesetExtendedData).to.not.be.undefined;
 

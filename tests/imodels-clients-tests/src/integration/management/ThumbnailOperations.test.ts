@@ -49,7 +49,7 @@ describe("[Management] ThumbnailOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -64,13 +64,13 @@ describe("[Management] ThumbnailOperations", () => {
     });
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModelForWrite = await testIModelCreator.createEmpty(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"),
     );
   });
 
@@ -87,7 +87,7 @@ describe("[Management] ThumbnailOperations", () => {
 
     // Act
     const thumbnail: Thumbnail = await iModelsClient.thumbnails.download(
-      downloadThumbnailParams
+      downloadThumbnailParams,
     );
 
     // Assert
@@ -114,7 +114,7 @@ describe("[Management] ThumbnailOperations", () => {
 
     // Act
     const thumbnail: Thumbnail = await iModelsClient.thumbnails.download(
-      downloadThumbnailParams
+      downloadThumbnailParams,
     );
 
     // Assert
@@ -151,7 +151,7 @@ describe("[Management] ThumbnailOperations", () => {
         await iModelsClient.thumbnails.download(iModelScopedOperationParams);
 
       const fileContents: Buffer = await fs.promises.readFile(
-        testCase.fileToUploadPath
+        testCase.fileToUploadPath,
       );
       const uploadThumbnailParams: UploadThumbnailParams = {
         ...iModelScopedOperationParams,
@@ -166,10 +166,10 @@ describe("[Management] ThumbnailOperations", () => {
 
       // Assert
       const newThumbnail: Thumbnail = await iModelsClient.thumbnails.download(
-        iModelScopedOperationParams
+        iModelScopedOperationParams,
       );
       expect(newThumbnail.image.length).to.not.be.equal(
-        initialThumbnail.image.length
+        initialThumbnail.image.length,
       );
     });
   });
@@ -177,17 +177,17 @@ describe("[Management] ThumbnailOperations", () => {
   async function saveThumbnailToFile(thumbnail: Thumbnail): Promise<void> {
     const downloadDirectory = path.join(
       Constants.TestDownloadDirectoryPath,
-      "[Management] ThumbnailOperations"
+      "[Management] ThumbnailOperations",
     );
     await fs.promises.mkdir(downloadDirectory, { recursive: true });
     const targetFilePath = path.join(
       downloadDirectory,
-      `test download - ${createGuidValue()}.png`
+      `test download - ${createGuidValue()}.png`,
     );
     await fs.promises.writeFile(
       targetFilePath,
       Buffer.from(thumbnail.image.buffer),
-      "binary"
+      "binary",
     );
   }
 });

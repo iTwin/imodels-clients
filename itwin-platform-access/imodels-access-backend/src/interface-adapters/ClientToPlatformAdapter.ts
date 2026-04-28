@@ -34,7 +34,7 @@ export class ClientToPlatformAdapter {
       index: changeset.index,
       parentId: changeset.parentId,
       changesType: ClientToPlatformAdapter.toChangesetType(
-        changeset.containingChanges
+        changeset.containingChanges,
       ),
       description: changeset.description,
       briefcaseId: changeset.briefcaseId,
@@ -45,7 +45,7 @@ export class ClientToPlatformAdapter {
   }
 
   public static toChangesetFileProps(
-    changeset: DownloadedChangeset
+    changeset: DownloadedChangeset,
   ): ChangesetFileProps {
     return {
       ...ClientToPlatformAdapter.toChangesetProps(changeset),
@@ -60,7 +60,7 @@ export class ClientToPlatformAdapter {
         result.push({
           id: objectId,
           state: ClientToPlatformAdapter.toLockState(
-            lockedObjectsForBriefcase.lockLevel
+            lockedObjectsForBriefcase.lockLevel,
           ),
         });
 
@@ -69,7 +69,7 @@ export class ClientToPlatformAdapter {
 
   public static toV2CheckpointAccessProps(
     directoryAccessInfo: DirectoryAccessInfo,
-    dbName: string
+    dbName: string,
   ): V2CheckpointAccessProps {
     if (
       !directoryAccessInfo.baseDirectory ||
@@ -137,17 +137,13 @@ export class ClientToPlatformAdapter {
     });
   }
 
-  // eslint-disable-next-line deprecation/deprecation
   private static toLockState(lockLevel: LockLevel): LockState {
     switch (lockLevel) {
       case LockLevel.None:
-        // eslint-disable-next-line deprecation/deprecation
         return LockState.None;
       case LockLevel.Shared:
-        // eslint-disable-next-line deprecation/deprecation
         return LockState.Shared;
       case LockLevel.Exclusive:
-        // eslint-disable-next-line deprecation/deprecation
         return LockState.Exclusive;
       default:
         ITwinError.throwError({
@@ -161,7 +157,7 @@ export class ClientToPlatformAdapter {
   }
 
   private static toChangesetType(
-    containingChanges: ContainingChanges
+    containingChanges: ContainingChanges,
   ): ChangesetType {
     switch (containingChanges) {
       case ContainingChanges.Schema:

@@ -8,6 +8,6 @@ import { testIModelsErrorParser } from "../CommonErrorParsingTests";
 
 describe("[Management] IModelsErrorParser", () => {
   testIModelsErrorParser((response, originalError) =>
-    ManagementIModelsErrorParser.parse(response, originalError)
+    ManagementIModelsErrorParser.parse(response, originalError),
   );
 });

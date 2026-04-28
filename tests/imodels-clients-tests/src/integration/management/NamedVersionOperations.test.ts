@@ -55,7 +55,7 @@ describe("[Management] NamedVersionOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -73,7 +73,7 @@ describe("[Management] NamedVersionOperations", () => {
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModel = await testIModelCreator.createEmptyAndUploadChangesets(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"),
     );
 
     for (let i = 0; i < namedVersionCountCreatedInSetup; i++) {
@@ -91,7 +91,7 @@ describe("[Management] NamedVersionOperations", () => {
             changesetId:
               testIModelFileProvider.changesets[changesetIndex - 1].id,
           },
-        })
+        }),
       );
     }
 
@@ -134,7 +134,7 @@ describe("[Management] NamedVersionOperations", () => {
 
       // Act
       const namedVersions = testCase.functionUnderTest(
-        getNamedVersionListParams
+        getNamedVersionListParams,
       );
 
       // Assert
@@ -164,11 +164,11 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Assert
     const namedVersionChangesetIndexes = (await toArray(namedVersions)).map(
-      (namedVersion) => namedVersion.changesetIndex
+      (namedVersion) => namedVersion.changesetIndex,
     );
     for (let i = 0; i < namedVersionChangesetIndexes.length - 1; i++)
       expect(namedVersionChangesetIndexes[i]).to.be.lessThan(
-        namedVersionChangesetIndexes[i + 1]
+        namedVersionChangesetIndexes[i + 1],
       );
   });
 
@@ -191,11 +191,11 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Assert
     const namedVersionChangesetIndexes = (await toArray(namedVersions)).map(
-      (namedVersion) => namedVersion.changesetIndex
+      (namedVersion) => namedVersion.changesetIndex,
     );
     for (let i = 0; i < namedVersionChangesetIndexes.length - 1; i++)
       expect(namedVersionChangesetIndexes[i]).to.be.greaterThan(
-        namedVersionChangesetIndexes[i + 1]
+        namedVersionChangesetIndexes[i + 1],
       );
   });
 
@@ -214,15 +214,15 @@ describe("[Management] NamedVersionOperations", () => {
     // Act
     const namedVersions = await toArray(
       iModelsClient.namedVersions.getRepresentationList(
-        getNamedVersionListParams
-      )
+        getNamedVersionListParams,
+      ),
     );
 
     // Assert
     expect(namedVersions.length).to.equal(namedVersionsCreatedInSetup.length);
     for (let i = 0; i < namedVersions.length - 1; i++)
       expect(new Date(namedVersions[i].createdDateTime)).to.be.lessThan(
-        new Date(namedVersions[i + 1].createdDateTime)
+        new Date(namedVersions[i + 1].createdDateTime),
       );
   });
 
@@ -242,15 +242,15 @@ describe("[Management] NamedVersionOperations", () => {
     // Act
     const namedVersions = await toArray(
       iModelsClient.namedVersions.getRepresentationList(
-        getNamedVersionListParams
-      )
+        getNamedVersionListParams,
+      ),
     );
 
     // Assert
     expect(namedVersions.length).to.equal(namedVersionsCreatedInSetup.length);
     for (let i = 0; i < namedVersions.length - 1; i++)
       expect(new Date(namedVersions[i].createdDateTime)).to.be.greaterThan(
-        new Date(namedVersions[i + 1].createdDateTime)
+        new Date(namedVersions[i + 1].createdDateTime),
       );
   });
 
@@ -267,7 +267,7 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Act
     const namedVersions = iModelsClient.namedVersions.getRepresentationList(
-      getNamedVersionListParams
+      getNamedVersionListParams,
     );
 
     // Assert
@@ -290,7 +290,7 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Act
     const namedVersions = iModelsClient.namedVersions.getRepresentationList(
-      getNamedVersionListParams
+      getNamedVersionListParams,
     );
 
     // Assert
@@ -311,7 +311,7 @@ describe("[Management] NamedVersionOperations", () => {
 
       // Act
       const namedVersions = iModelsClient.namedVersions.getRepresentationList(
-        getNamedVersionListParams
+        getNamedVersionListParams,
       );
 
       // Assert
@@ -326,7 +326,7 @@ describe("[Management] NamedVersionOperations", () => {
   it("should return versions that match the search filter when querying representation collection", async () => {
     // Arrange
     const expectedNamedVersions = namedVersionsCreatedInSetup.filter(
-      (version) => version.changesetIndex === 1
+      (version) => version.changesetIndex === 1,
     );
     expect(expectedNamedVersions.length).to.equal(1);
 
@@ -340,7 +340,7 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Act
     const namedVersions = iModelsClient.namedVersions.getRepresentationList(
-      getNamedVersionListParams
+      getNamedVersionListParams,
     );
 
     // Assert
@@ -361,7 +361,7 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Act
     const namedVersions = iModelsClient.namedVersions.getRepresentationList(
-      getNamedVersionListParams
+      getNamedVersionListParams,
     );
 
     // Assert
@@ -385,7 +385,7 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Act
     const minimalNamedVersions = iModelsClient.namedVersions.getMinimalList(
-      getNamedVersionListParams
+      getNamedVersionListParams,
     );
 
     // Assert
@@ -419,7 +419,7 @@ describe("[Management] NamedVersionOperations", () => {
     // Act
     const namedVersions: EntityListIterator<NamedVersion> =
       iModelsClient.namedVersions.getRepresentationList(
-        getNamedVersionListParams
+        getNamedVersionListParams,
       );
 
     // Assert
@@ -482,7 +482,7 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Act
     const namedVersion = await iModelsClient.namedVersions.create(
-      createNamedVersionParams
+      createNamedVersionParams,
     );
 
     // Assert
@@ -516,7 +516,7 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Act
     const namedVersion = await iModelsClient.namedVersions.create(
-      createNamedVersionParams
+      createNamedVersionParams,
     );
 
     // Assert
@@ -548,13 +548,13 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Act
     const updatedNamedVersion = await iModelsClient.namedVersions.update(
-      updateNamedVersionParams
+      updateNamedVersionParams,
     );
 
     // Assert
     expect(updatedNamedVersion.name).to.equal(newNamedVersionName);
     expect(updatedNamedVersion.description).to.equal(
-      namedVersionToUpdate.description
+      namedVersionToUpdate.description,
     );
     expect(updatedNamedVersion.state).to.equal(namedVersionToUpdate.state);
   });
@@ -575,13 +575,13 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Act
     const updatedNamedVersion = await iModelsClient.namedVersions.update(
-      updateNamedVersionParams
+      updateNamedVersionParams,
     );
 
     // Assert
     expect(updatedNamedVersion.name).to.equal(namedVersionToUpdate.name);
     expect(updatedNamedVersion.description).to.equal(
-      newNamedVersionDescription
+      newNamedVersionDescription,
     );
     expect(updatedNamedVersion.state).to.equal(namedVersionToUpdate.state);
   });
@@ -604,29 +604,29 @@ describe("[Management] NamedVersionOperations", () => {
 
     // Act
     const updatedNamedVersion = await iModelsClient.namedVersions.update(
-      updateNamedVersionParams
+      updateNamedVersionParams,
     );
 
     // Assert
     expect(updatedNamedVersion.name).to.equal(namedVersionToUpdate.name);
     expect(updatedNamedVersion.description).to.equal(
-      namedVersionToUpdate.description
+      namedVersionToUpdate.description,
     );
     expect(updatedNamedVersion.state).to.equal(newNamedVersionState);
   });
 
   async function getChangesetIndexForNewNamedVersion(
-    params: IModelScopedOperationParams
+    params: IModelScopedOperationParams,
   ): Promise<number> {
     for await (const changeset of iModelsClient.changesets.getRepresentationList(
-      params
+      params,
     )) {
       const namedVersion = await changeset.getNamedVersion();
       if (!namedVersion) return changeset.index;
     }
 
     throw new TestSetupError(
-      "Test iModel does not have any changesets without named versions."
+      "Test iModel does not have any changesets without named versions.",
     );
   }
 });

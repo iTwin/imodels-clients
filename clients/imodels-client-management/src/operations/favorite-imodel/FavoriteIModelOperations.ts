@@ -22,7 +22,7 @@ import {
 } from "./FavoriteIModelOperationParams";
 
 export class FavoriteIModelOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Gets favorite iModels for a specific iTwin. This method returns iModels in their minimal representation. The returned iterator
@@ -32,7 +32,7 @@ export class FavoriteIModelOperations<
    * @returns {EntityListIterator<MinimalIModel>} iterator for favorite iModel list. See {@link EntityListIterator}, {@link MinimalIModel}.
    */
   public getMinimalList(
-    params: GetFavoriteIModelListParams
+    params: GetFavoriteIModelListParams,
   ): EntityListIterator<MinimalIModel> {
     return new EntityListIteratorImpl(async () =>
       this.getEntityCollectionPage<
@@ -46,7 +46,7 @@ export class FavoriteIModelOperations<
         preferReturn: PreferReturn.Minimal,
         entityCollectionAccessor: (response) => response.body.iModels,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -58,7 +58,7 @@ export class FavoriteIModelOperations<
    * @returns {EntityListIterator<IModel>} iterator for favorite iModel list. See {@link EntityListIterator}, {@link IModel}.
    */
   public getRepresentationList(
-    params: GetFavoriteIModelListParams
+    params: GetFavoriteIModelListParams,
   ): EntityListIterator<IModel> {
     return new EntityListIteratorImpl(async () =>
       this.getEntityCollectionPage<IModel, IModelsResponse<IModel>>({
@@ -69,7 +69,7 @@ export class FavoriteIModelOperations<
         preferReturn: PreferReturn.Representation,
         entityCollectionAccessor: (response) => response.body.iModels,
         headers: params.headers,
-      })
+      }),
     );
   }
 

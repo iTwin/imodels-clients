@@ -17,24 +17,21 @@ export interface GetRecentIModelListUrlParams {
 
 /** Parameters for get recent iModel list operation. */
 export interface GetRecentIModelListParams
-  extends AuthorizationParam,
-    HeadersParam {
+  extends AuthorizationParam, HeadersParam {
   /** Parameters that will be appended to the entity list request url that will narrow down the results. */
   urlParams: GetRecentIModelListUrlParams;
 }
 
 /** Parameters for add iModel to recents operation. */
 export interface AddIModelToRecentsParams
-  extends AuthorizationParam,
-    HeadersParam {
+  extends AuthorizationParam, HeadersParam {
   /** iModel id. iModel id must not be an empty or whitespace string. */
   iModelId: string;
 }
 
 /** Parameters for remove iModel from recents operation. */
 export interface RemoveIModelFromRecentsParams
-  extends AuthorizationParam,
-    HeadersParam {
+  extends AuthorizationParam, HeadersParam {
   /** iModel id. iModel id must not be an empty or whitespace string. */
   iModelId: string;
 }

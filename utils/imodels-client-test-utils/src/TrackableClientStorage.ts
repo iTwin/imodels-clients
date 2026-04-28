@@ -30,26 +30,26 @@ export class TrackableClientStorage implements ClientStorage {
     private _underlyingStorage: ClientStorage,
     private _interceptors?: {
       download?: (input: UrlDownloadInput | ConfigDownloadInput) => void;
-    }
+    },
   ) {}
   public download(
     input: (UrlDownloadInput | ConfigDownloadInput) & {
       transferType: "buffer";
-    }
+    },
   ): Promise<Buffer>;
   public download(
     input: (UrlDownloadInput | ConfigDownloadInput) & {
       transferType: "stream";
-    }
+    },
   ): Promise<Readable>;
   public download(
     input: (UrlDownloadInput | ConfigDownloadInput) & {
       transferType: "local";
       localPath: string;
-    }
+    },
   ): Promise<string>;
   public async download(
-    input: UrlDownloadInput | ConfigDownloadInput
+    input: UrlDownloadInput | ConfigDownloadInput,
   ): Promise<TransferData> {
     if (this._interceptors?.download) this._interceptors.download(input);
 
@@ -58,13 +58,13 @@ export class TrackableClientStorage implements ClientStorage {
   }
 
   public async upload(
-    input: UrlUploadInput | ConfigUploadInput
+    input: UrlUploadInput | ConfigUploadInput,
   ): Promise<void> {
     return this._underlyingStorage.upload(input);
   }
 
   public async uploadInMultipleParts(
-    input: UploadInMultiplePartsInput
+    input: UploadInMultiplePartsInput,
   ): Promise<void> {
     return this._underlyingStorage.uploadInMultipleParts(input);
   }

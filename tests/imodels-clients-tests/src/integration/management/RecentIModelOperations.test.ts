@@ -46,7 +46,7 @@ describe("[Management] RecentIModelOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -65,13 +65,13 @@ describe("[Management] RecentIModelOperations", () => {
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModelForRecents1 = await testIModelCreator.createEmpty(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for recents 1")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for recents 1"),
     );
     testIModelForRecents2 = await testIModelCreator.createEmpty(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for recents 2")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for recents 2"),
     );
     testIModelForRecents3 = await testIModelCreator.createEmpty(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for recents 3")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for recents 3"),
     );
   });
 
@@ -119,7 +119,7 @@ describe("[Management] RecentIModelOperations", () => {
       iModelsClient.recentIModels.getMinimalList(getRecentListParams);
     const recentsList = await toArray(recents);
     const addedRecent = recentsList.find(
-      (iModel) => iModel.id === testIModelForRecents1.id
+      (iModel) => iModel.id === testIModelForRecents1.id,
     );
     expect(addedRecent).to.not.be.undefined;
   });
@@ -150,7 +150,7 @@ describe("[Management] RecentIModelOperations", () => {
       iModelsClient.recentIModels.getMinimalList(getRecentListParams);
     const recentsList = await toArray(recents);
     const removedRecent = recentsList.find(
-      (iModel) => iModel.id === testIModelForRecents1.id
+      (iModel) => iModel.id === testIModelForRecents1.id,
     );
     expect(removedRecent).to.be.undefined;
   });
@@ -184,13 +184,13 @@ describe("[Management] RecentIModelOperations", () => {
     });
 
     const recentsList = await toArray(
-      iModelsClient.recentIModels.getMinimalList(getRecentListParams)
+      iModelsClient.recentIModels.getMinimalList(getRecentListParams),
     );
     const recent1 = recentsList.find(
-      (iModel) => iModel.id === testIModelForRecents1.id
+      (iModel) => iModel.id === testIModelForRecents1.id,
     );
     const recent2 = recentsList.find(
-      (iModel) => iModel.id === testIModelForRecents2.id
+      (iModel) => iModel.id === testIModelForRecents2.id,
     );
     expect(recent1).to.not.be.undefined;
     expect(recent2).to.not.be.undefined;
@@ -229,10 +229,10 @@ describe("[Management] RecentIModelOperations", () => {
     });
 
     const recent1 = recentsList.find(
-      (iModel) => iModel.id === testIModelForRecents1.id
+      (iModel) => iModel.id === testIModelForRecents1.id,
     );
     const recent2 = recentsList.find(
-      (iModel) => iModel.id === testIModelForRecents2.id
+      (iModel) => iModel.id === testIModelForRecents2.id,
     );
     expect(recent1).to.not.be.undefined;
     expect(recent2).to.not.be.undefined;
@@ -311,13 +311,13 @@ describe("[Management] RecentIModelOperations", () => {
 
     // Assert
     const index1 = recentsList.findIndex(
-      (iModel) => iModel.id === testIModelForRecents1.id
+      (iModel) => iModel.id === testIModelForRecents1.id,
     );
     const index2 = recentsList.findIndex(
-      (iModel) => iModel.id === testIModelForRecents2.id
+      (iModel) => iModel.id === testIModelForRecents2.id,
     );
     const index3 = recentsList.findIndex(
-      (iModel) => iModel.id === testIModelForRecents3.id
+      (iModel) => iModel.id === testIModelForRecents3.id,
     );
 
     expect(index1).to.be.greaterThanOrEqual(0);

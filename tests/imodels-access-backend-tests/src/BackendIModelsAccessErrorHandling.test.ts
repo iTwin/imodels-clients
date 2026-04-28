@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import path = require("path");
+import * as path from "path";
 
 import { expect } from "chai";
 
@@ -71,7 +71,7 @@ describe("BackendIModelsAccess error handling", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     const iModelsClient = new IModelsClient(iModelsClientOptions);
     backendIModelsAccess = new BackendIModelsAccess(iModelsClient);
@@ -82,7 +82,7 @@ describe("BackendIModelsAccess error handling", () => {
     const authorization = await authorizationCallback();
     accessToken = `${authorization.scheme} ${authorization.token}`;
     IModelHost.authorizationClient = new TestIModelHostAuthorizationClient(
-      accessToken
+      accessToken,
     );
     await IModelHost.startup();
 
@@ -99,13 +99,13 @@ describe("BackendIModelsAccess error handling", () => {
     });
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModelForWrite = await testIModelCreator.createEmpty(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"),
     );
   });
 
@@ -128,7 +128,7 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.downloadChangeset(downloadChangesetParams),
-      IModelsErrorCode.ChangesetNotFound
+      IModelsErrorCode.ChangesetNotFound,
     );
   });
 
@@ -141,7 +141,7 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.queryChangeset(queryChangesetParams),
-      IModelsErrorCode.ChangesetNotFound
+      IModelsErrorCode.ChangesetNotFound,
     );
   });
 
@@ -153,7 +153,7 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.queryChangesets(queryChangesetsParams),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -180,7 +180,7 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.pushChangeset(pushChangesetParams),
-      IModelsErrorCode.BriefcaseNotFound
+      IModelsErrorCode.BriefcaseNotFound,
     );
   });
 
@@ -193,7 +193,7 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.getLatestChangeset(getLatestChangesetParams),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -209,9 +209,9 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         ),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -227,9 +227,9 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         ),
-      IModelsErrorCode.NamedVersionNotFound
+      IModelsErrorCode.NamedVersionNotFound,
     );
   });
 
@@ -245,9 +245,9 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         ),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -263,9 +263,9 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         ),
-      IModelsErrorCode.ChangesetNotFound
+      IModelsErrorCode.ChangesetNotFound,
     );
   });
 
@@ -281,9 +281,9 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.getChangesetFromVersion(
-          getChangesetFromVersionParams
+          getChangesetFromVersionParams,
         ),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -299,9 +299,9 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.getChangesetFromNamedVersion(
-          getChangesetFromNamedVersionParams
+          getChangesetFromNamedVersionParams,
         ),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -317,9 +317,9 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.getChangesetFromNamedVersion(
-          getChangesetFromNamedVersionParams
+          getChangesetFromNamedVersionParams,
         ),
-      IModelsErrorCode.NamedVersionNotFound
+      IModelsErrorCode.NamedVersionNotFound,
     );
   });
 
@@ -332,7 +332,7 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.acquireNewBriefcaseId(acquireNewBriefcaseIdParams),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -347,7 +347,7 @@ describe("BackendIModelsAccess error handling", () => {
       const acquire6BriefcasesFunc = async () => {
         for (let i = 0; i < 6; i++) {
           const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId(
-            acquireNewBriefcaseIdParams
+            acquireNewBriefcaseIdParams,
           );
           briefcaseIds.push(briefcaseId);
         }
@@ -355,7 +355,7 @@ describe("BackendIModelsAccess error handling", () => {
 
       await executeFuncAndAssertError(
         acquire6BriefcasesFunc,
-        IModelsErrorCode.MaximumNumberOfBriefcasesPerUserPerMinute
+        IModelsErrorCode.MaximumNumberOfBriefcasesPerUserPerMinute,
       );
     } finally {
       for (const briefcaseId of briefcaseIds) {
@@ -378,7 +378,7 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.releaseBriefcase(releaseBriefcaseParams),
-      IModelsErrorCode.BriefcaseNotFound
+      IModelsErrorCode.BriefcaseNotFound,
     );
   });
 
@@ -394,10 +394,9 @@ describe("BackendIModelsAccess error handling", () => {
     };
 
     await executeFuncAndAssertError(
-      // eslint-disable-next-line deprecation/deprecation
       async () =>
         backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams),
-      IModelsErrorCode.ChangesetNotFound
+      IModelsErrorCode.ChangesetNotFound,
     );
   });
 
@@ -413,10 +412,9 @@ describe("BackendIModelsAccess error handling", () => {
     };
 
     await executeFuncAndAssertError(
-      // eslint-disable-next-line deprecation/deprecation
       async () =>
         backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -431,7 +429,7 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.queryV2Checkpoint(queryV2CheckpointParams),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -442,20 +440,19 @@ describe("BackendIModelsAccess error handling", () => {
       briefcaseId: 555,
       changeset: { id: "", index: 0 },
     };
-    // eslint-disable-next-line deprecation/deprecation
+
     const locksToAcquire: LockMap = new Map<string, LockState>([
-      // eslint-disable-next-line deprecation/deprecation
       ["0x1", LockState.Exclusive],
-      // eslint-disable-next-line deprecation/deprecation
+
       ["0x2", LockState.Exclusive],
-      // eslint-disable-next-line deprecation/deprecation
+
       ["0x3", LockState.Shared],
     ]);
 
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.acquireLocks(briefcaseDbParams, locksToAcquire),
-      IModelsErrorCode.BriefcaseNotFound
+      IModelsErrorCode.BriefcaseNotFound,
     );
   });
 
@@ -468,7 +465,7 @@ describe("BackendIModelsAccess error handling", () => {
     };
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.queryAllLocks(queryAllLocksParams),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -482,7 +479,7 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.releaseAllLocks(briefcaseDbParams),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
@@ -496,7 +493,7 @@ describe("BackendIModelsAccess error handling", () => {
     await executeFuncAndAssertError(
       async () =>
         backendIModelsAccess.queryIModelByName(queryIModelByNameParams),
-      IModelsErrorCode.ITwinNotFound
+      IModelsErrorCode.ITwinNotFound,
     );
   });
 
@@ -509,7 +506,7 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.createNewIModel(createNewIModelParams),
-      IModelsErrorCode.IModelExists
+      IModelsErrorCode.IModelExists,
     );
   });
 
@@ -521,13 +518,13 @@ describe("BackendIModelsAccess error handling", () => {
     };
     await executeFuncAndAssertError(
       async () => backendIModelsAccess.deleteIModel(deleteIModelParams),
-      IModelsErrorCode.IModelNotFound
+      IModelsErrorCode.IModelNotFound,
     );
   });
 
   async function executeFuncAndAssertError(
     func: () => Promise<void> | Promise<unknown>,
-    expectedErrorCode: string
+    expectedErrorCode: string,
   ): Promise<void> {
     let thrownError: unknown;
     try {
@@ -538,7 +535,7 @@ describe("BackendIModelsAccess error handling", () => {
 
     expect(thrownError).to.not.be.undefined;
     expect(
-      ITwinError.isError(thrownError, IModelsErrorScope, expectedErrorCode)
+      ITwinError.isError(thrownError, IModelsErrorScope, expectedErrorCode),
     ).to.be.true;
     expect((thrownError as ITwinError).message).to.not.be.empty;
   }

@@ -63,7 +63,7 @@ describe("[Management] IModelOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -83,15 +83,15 @@ describe("[Management] IModelOperations", () => {
     });
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModelForUpdate = await testIModelCreator.createEmpty(
       testIModelGroup.getPrefixedUniqueIModelName(
-        "Test iModel for update and for search"
-      )
+        "Test iModel for update and for search",
+      ),
     );
   });
 
@@ -147,7 +147,7 @@ describe("[Management] IModelOperations", () => {
 
     // Act
     const iModel: IModel = await iModelsClient.iModels.getSingle(
-      getSingleiModelParams
+      getSingleiModelParams,
     );
 
     // Assert
@@ -214,10 +214,12 @@ describe("[Management] IModelOperations", () => {
 
     // Act
     const ascendingIModelArray = await toArray(
-      iModelsClient.iModels.getRepresentationList(getAscendingIModelListParams)
+      iModelsClient.iModels.getRepresentationList(getAscendingIModelListParams),
     );
     const descendingIModelArray = await toArray(
-      iModelsClient.iModels.getRepresentationList(getDescendingIModelListParams)
+      iModelsClient.iModels.getRepresentationList(
+        getDescendingIModelListParams,
+      ),
     );
 
     // Assert
@@ -227,7 +229,7 @@ describe("[Management] IModelOperations", () => {
       lastIModelIndex: lastIModelIndexInAscArray,
     } = assertAscendingiModelArray(ascendingIModelArray);
     expect(lastIModelIndexInAscArray).to.be.greaterThan(
-      firstIModelIndexInAscArray
+      firstIModelIndexInAscArray,
     );
 
     expect(descendingIModelArray.length).to.be.greaterThanOrEqual(2);
@@ -236,7 +238,7 @@ describe("[Management] IModelOperations", () => {
       lastIModelIndex: lastIModelIndexInDescArray,
     } = assertAscendingiModelArray(descendingIModelArray);
     expect(firstIModelIndexInDescArray).to.be.greaterThan(
-      lastIModelIndexInDescArray
+      lastIModelIndexInDescArray,
     );
   });
 
@@ -245,11 +247,11 @@ describe("[Management] IModelOperations", () => {
     lastIModelIndex: number;
   } {
     const firstIModelIndex = iModelArray.findIndex((iModel) =>
-      iModel.name.startsWith(testIModelGroup.firstNamePrefix)
+      iModel.name.startsWith(testIModelGroup.firstNamePrefix),
     );
     expect(firstIModelIndex).to.not.be.equal(-1);
     const lastIModelIndex = iModelArray.findIndex((iModel) =>
-      iModel.name.startsWith(testIModelGroup.lastNamePrefix)
+      iModel.name.startsWith(testIModelGroup.lastNamePrefix),
     );
     expect(lastIModelIndex).to.not.be.equal(-1);
     return { firstIModelIndex, lastIModelIndex };
@@ -286,7 +288,7 @@ describe("[Management] IModelOperations", () => {
 
     // Act
     const ascendingIModelArray = await toArray(
-      iModelsClient.iModels.getRepresentationList(getAscendingIModelListParams)
+      iModelsClient.iModels.getRepresentationList(getAscendingIModelListParams),
     );
 
     // Assert
@@ -295,12 +297,14 @@ describe("[Management] IModelOperations", () => {
     const lastAscendingArrayItem =
       ascendingIModelArray[ascendingIModelArray.length - 1];
     expect(new Date(firstAscendingArrayItem.createdDateTime)).to.be.lessThan(
-      new Date(lastAscendingArrayItem.createdDateTime)
+      new Date(lastAscendingArrayItem.createdDateTime),
     );
 
     // Act
     const descendingIModelArray = await toArray(
-      iModelsClient.iModels.getRepresentationList(getDescendingIModelListParams)
+      iModelsClient.iModels.getRepresentationList(
+        getDescendingIModelListParams,
+      ),
     );
 
     // Assert
@@ -309,7 +313,7 @@ describe("[Management] IModelOperations", () => {
     const lastDescendingArrayItem =
       descendingIModelArray[descendingIModelArray.length - 1];
     expect(
-      new Date(firstDescendingArrayItem.createdDateTime)
+      new Date(firstDescendingArrayItem.createdDateTime),
     ).to.be.greaterThan(new Date(lastDescendingArrayItem.createdDateTime));
   });
 
@@ -345,7 +349,7 @@ describe("[Management] IModelOperations", () => {
       urlParams: {
         iTwinId,
         $search: testIModelGroup.getPrefixedUniqueIModelName(
-          "test iModel for update and for Sear"
+          "test iModel for update and for Sear",
         ),
       },
       headers: {
@@ -502,9 +506,8 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.createEmpty(
-      createIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.createEmpty(createIModelParams);
 
     // Assert
     await assertIModel({
@@ -519,7 +522,7 @@ describe("[Management] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName(
-          "Empty Test IModel with GCS"
+          "Empty Test IModel with GCS",
         ),
         description: "Sample iModel description",
         extent: {
@@ -537,9 +540,8 @@ describe("[Management] IModelOperations", () => {
       },
     };
 
-    const iModel: IModel = await iModelsClient.iModels.createEmpty(
-      createIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.createEmpty(createIModelParams);
 
     await assertIModel({
       actualIModel: iModel,
@@ -554,7 +556,7 @@ describe("[Management] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName(
-          "iModel from template (without changeset)"
+          "iModel from template (without changeset)",
         ),
         template: {
           iModelId: testIModelForRead.id,
@@ -572,7 +574,7 @@ describe("[Management] IModelOperations", () => {
 
     // Act
     const iModel: IModel = await iModelsClient.iModels.createFromTemplate(
-      createIModelFromTemplateParams
+      createIModelFromTemplateParams,
     );
 
     // Assert
@@ -589,7 +591,7 @@ describe("[Management] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName(
-          "iModel from template (without changeset) (with GCS)"
+          "iModel from template (without changeset) (with GCS)",
         ),
         template: {
           iModelId: testIModelForRead.id,
@@ -610,7 +612,7 @@ describe("[Management] IModelOperations", () => {
 
     // Act
     const iModel: IModel = await iModelsClient.iModels.createFromTemplate(
-      createIModelFromTemplateParams
+      createIModelFromTemplateParams,
     );
 
     // Assert
@@ -627,7 +629,7 @@ describe("[Management] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName(
-          "iModel from template (with changeset)"
+          "iModel from template (with changeset)",
         ),
         template: {
           iModelId: testIModelForRead.id,
@@ -646,7 +648,7 @@ describe("[Management] IModelOperations", () => {
 
     // Act
     const iModel: IModel = await iModelsClient.iModels.createFromTemplate(
-      createIModelFromTemplateParams
+      createIModelFromTemplateParams,
     );
 
     // Assert
@@ -696,7 +698,7 @@ describe("[Management] IModelOperations", () => {
       iModelsClient.changesets.getMinimalList({
         authorization,
         iModelId: newIModel.id,
-      })
+      }),
     );
     expect(changesets.length).to.equal(changesetIndex);
   });
@@ -740,10 +742,10 @@ describe("[Management] IModelOperations", () => {
       iModelsClient.changesets.getMinimalList({
         authorization,
         iModelId: iModelFork.id,
-      })
+      }),
     );
     expect(changesets.length).to.equal(
-      testIModelFileProvider.changesets.length
+      testIModelFileProvider.changesets.length,
     );
   });
 
@@ -759,7 +761,7 @@ describe("[Management] IModelOperations", () => {
     });
 
     const newIModelName = testIModelGroup.getPrefixedUniqueIModelName(
-      "Test iModel for update and for search updated"
+      "Test iModel for update and for search updated",
     );
     const updateIModelParams: UpdateIModelParams = {
       authorization,
@@ -773,9 +775,8 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.update(
-      updateIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.update(updateIModelParams);
 
     // Assert
     await assertIModel({
@@ -814,9 +815,8 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.update(
-      updateIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.update(updateIModelParams);
 
     // Assert
     await assertIModel({
@@ -864,9 +864,8 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.update(
-      updateIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.update(updateIModelParams);
 
     // Assert
     await assertIModel({
@@ -889,7 +888,7 @@ describe("[Management] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName(
-          "Sample iModel (unauthorized)"
+          "Sample iModel (unauthorized)",
         ),
       },
       headers: {
@@ -923,7 +922,7 @@ describe("[Management] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName(
-          "Sample iModel (invalid)"
+          "Sample iModel (invalid)",
         ),
         description: "x".repeat(256),
       },

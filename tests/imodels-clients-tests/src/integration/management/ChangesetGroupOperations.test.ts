@@ -34,7 +34,7 @@ describe("[Management] ChangesetGroupOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -42,7 +42,7 @@ describe("[Management] ChangesetGroupOperations", () => {
     authorization = authorizationProvider.getAdmin1Authorization();
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModel = await reusableTestIModelProvider.getOrCreate();
   });
@@ -56,7 +56,7 @@ describe("[Management] ChangesetGroupOperations", () => {
 
     // Act
     const changesetGroups = iModelsClient.changesetGroups.getList(
-      getChangesetGroupListParams
+      getChangesetGroupListParams,
     );
 
     // Assert
@@ -79,7 +79,7 @@ describe("[Management] ChangesetGroupOperations", () => {
 
     // Act
     const changesetGroups = iModelsClient.changesetGroups.getList(
-      getChangesetGroupListParams
+      getChangesetGroupListParams,
     );
 
     // Assert
@@ -87,7 +87,7 @@ describe("[Management] ChangesetGroupOperations", () => {
     expect(changesetGroupList.length).to.be.equal(1);
     const actualChangesetGroup = changesetGroupList[0];
     const expectedChangesetGroup = testIModel.changesetGroups.find(
-      (x) => x.id === actualChangesetGroup.id
+      (x) => x.id === actualChangesetGroup.id,
     );
     expect(expectedChangesetGroup).to.exist;
     await assertChangesetGroup({
@@ -110,7 +110,7 @@ describe("[Management] ChangesetGroupOperations", () => {
 
     // Act
     const changesetGroup = await iModelsClient.changesetGroups.getSingle(
-      getSingleChangesetGroupParams
+      getSingleChangesetGroupParams,
     );
 
     // Assert
@@ -132,7 +132,7 @@ describe("[Management] ChangesetGroupOperations", () => {
     let objectThrown: unknown;
     try {
       await iModelsClient.changesetGroups.getSingle(
-        getSingleChangesetGroupParams
+        getSingleChangesetGroupParams,
       );
     } catch (e) {
       objectThrown = e;

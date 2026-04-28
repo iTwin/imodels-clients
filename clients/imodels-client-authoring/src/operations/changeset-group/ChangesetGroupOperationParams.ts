@@ -15,8 +15,7 @@ export interface ChangesetGroupPropertiesForCreate {
 }
 
 /** Parameters for create Changeset Group operation. */
-export interface CreateChangesetGroupParams
-  extends IModelScopedOperationParams {
+export interface CreateChangesetGroupParams extends IModelScopedOperationParams {
   /** Properties of the new Changeset Group. */
   changesetGroupProperties: ChangesetGroupPropertiesForCreate;
 }
@@ -35,8 +34,7 @@ export type ChangesetGroupPropertiesForUpdate =
   AtLeastOneProperty<EditableChangesetGroupProperties>;
 
 /** Parameters for Changeset Group operation. */
-export interface UpdateChangesetGroupParams
-  extends IModelScopedOperationParams {
+export interface UpdateChangesetGroupParams extends IModelScopedOperationParams {
   /** Changeset Group id. */
   changesetGroupId: string;
   /** New values for some of the Changeset Group properties. */

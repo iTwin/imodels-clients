@@ -20,13 +20,13 @@ export class TestOperationsWrapper extends OperationsBase<OperationsBaseOptions>
   }
 
   public override async sendGetRequest<TBody>(
-    params: SendGetRequestParams & { responseType?: ContentType.Json }
+    params: SendGetRequestParams & { responseType?: ContentType.Json },
   ): Promise<HttpResponse<TBody>>;
   public override async sendGetRequest(
-    params: SendGetRequestParams & { responseType: ContentType.Png }
+    params: SendGetRequestParams & { responseType: ContentType.Png },
   ): Promise<HttpResponse<Uint8Array>>;
   public override async sendGetRequest<TBody>(
-    params: SendGetRequestParams
+    params: SendGetRequestParams,
   ): Promise<HttpResponse<TBody | Uint8Array>> {
     if (params.responseType === ContentType.Png)
       return super.sendGetRequest({
@@ -40,25 +40,25 @@ export class TestOperationsWrapper extends OperationsBase<OperationsBaseOptions>
   }
 
   public override async sendPostRequest<TBody>(
-    params: SendPostRequestParams
+    params: SendPostRequestParams,
   ): Promise<HttpResponse<TBody>> {
     return super.sendPostRequest(params);
   }
 
   public override async sendDeleteRequest<TBody>(
-    params: SendDeleteRequestParams
+    params: SendDeleteRequestParams,
   ): Promise<HttpResponse<TBody>> {
     return super.sendDeleteRequest(params);
   }
 
   public override async sendPutRequest<TBody>(
-    params: SendPutRequestParams
+    params: SendPutRequestParams,
   ): Promise<HttpResponse<TBody>> {
     return super.sendPutRequest(params);
   }
 
   public override async sendPatchRequest<TBody>(
-    params: SendPatchRequestParams
+    params: SendPatchRequestParams,
   ): Promise<HttpResponse<TBody>> {
     return super.sendPatchRequest(params);
   }

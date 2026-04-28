@@ -17,11 +17,10 @@ export enum ChangesetOrderByProperty {
 }
 
 /** Url parameters supported in Changeset list query. */
-export interface GetChangesetListUrlParams
-  extends OrderableCollectionRequestParams<
-    Changeset,
-    ChangesetOrderByProperty
-  > {
+export interface GetChangesetListUrlParams extends OrderableCollectionRequestParams<
+  Changeset,
+  ChangesetOrderByProperty
+> {
   /**
    * Filters Changesets which have an index greater than specified in `afterIndex` property. For example,
    * `afterIndex: 5` will return all Changesets that have an index equal or greater than 6. This option can be

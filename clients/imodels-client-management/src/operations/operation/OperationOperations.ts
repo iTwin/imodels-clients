@@ -12,7 +12,7 @@ import { OperationOptions } from "../OperationOptions";
 import { GetCreateIModelOperationDetailsParams } from "./OperationParams";
 
 export class OperationOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   constructor(options: TOptions) {
     super(options);
@@ -26,7 +26,7 @@ export class OperationOperations<
    * @returns {Promise<CreateIModelOperationDetails>} iModel creation details. See {@link CreateIModelOperationDetails}.
    */
   public async getCreateIModelDetails(
-    params: GetCreateIModelOperationDetailsParams
+    params: GetCreateIModelOperationDetailsParams,
   ): Promise<CreateIModelOperationDetails> {
     const response =
       await this.sendGetRequest<CreateIModelOperationDetailsResponse>({

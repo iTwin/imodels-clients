@@ -22,7 +22,7 @@ import {
 } from "./ChangesetExtendedDataOperationParams";
 
 export class ChangesetExtendedDataOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   constructor(options: TOptions) {
     super(options);
@@ -36,14 +36,14 @@ export class ChangesetExtendedDataOperations<
    * @returns {EntityListIterator<ChangesetExtendedData>} iterator for Changeset Extended Data list. See {@link EntityListIterator}.
    */
   public getList(
-    params: GetChangesetExtendedDataListParams
+    params: GetChangesetExtendedDataListParams,
   ): EntityListIterator<ChangesetExtendedData> {
     const entityCollectionAccessor = (
-      response: HttpResponse<ChangesetExtendedDataListResponse>
+      response: HttpResponse<ChangesetExtendedDataListResponse>,
     ) => {
       const apiResponse = response.body.extendedData;
       const mappedChangesetExtendedData = apiResponse.map((extendedData) =>
-        this.convertToChangesetExtendedData(extendedData)
+        this.convertToChangesetExtendedData(extendedData),
       );
       return mappedChangesetExtendedData;
     };
@@ -59,7 +59,7 @@ export class ChangesetExtendedDataOperations<
         }),
         entityCollectionAccessor,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -71,7 +71,7 @@ export class ChangesetExtendedDataOperations<
    * @returns {Promise<ChangesetExtendedData>} a Changeset Extended Data with the specified changeset id or index. See {@link ChangesetExtendedData}.
    */
   public async getSingle(
-    params: GetSingleChangesetExtendedDataParams
+    params: GetSingleChangesetExtendedDataParams,
   ): Promise<ChangesetExtendedData> {
     const { authorization, iModelId, headers, ...changesetIdOrIndex } = params;
     const response = await this.sendGetRequest<ChangesetExtendedDataResponse>({
@@ -87,13 +87,13 @@ export class ChangesetExtendedDataOperations<
   }
 
   protected convertToChangesetExtendedData(
-    changesetExtendedDataApiResponse: ChangesetExtendedDataApiResponse
+    changesetExtendedDataApiResponse: ChangesetExtendedDataApiResponse,
   ): ChangesetExtendedData {
     return {
       changesetId: changesetExtendedDataApiResponse.changesetId,
       changesetIndex: changesetExtendedDataApiResponse.changesetIndex,
       data: this.convertBase64StringToObject(
-        changesetExtendedDataApiResponse.data
+        changesetExtendedDataApiResponse.data,
       ),
     };
   }
