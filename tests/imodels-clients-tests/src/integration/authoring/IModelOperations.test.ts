@@ -38,7 +38,7 @@ describe("[Authoring] IModelOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -69,7 +69,7 @@ describe("[Authoring] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName(
-          "Sample iModel from baseline"
+          "Sample iModel from baseline",
         ),
         filePath: testIModelFileProvider.iModel.filePath,
         containersEnabled: ContainerTypes.None,
@@ -80,9 +80,8 @@ describe("[Authoring] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.createFromBaseline(
-      createIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.createFromBaseline(createIModelParams);
 
     // Assert
     await assertIModel({
@@ -98,7 +97,7 @@ describe("[Authoring] IModelOperations", () => {
       iModelProperties: {
         iTwinId,
         name: testIModelGroup.getPrefixedUniqueIModelName(
-          "Sample iModel from baseline with horizontal CRS"
+          "Sample iModel from baseline with horizontal CRS",
         ),
         filePath: testIModelFileProvider.iModel.filePath,
         containersEnabled: ContainerTypes.None,
@@ -112,9 +111,8 @@ describe("[Authoring] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.createFromBaseline(
-      createIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.createFromBaseline(createIModelParams);
 
     // Assert
     await assertIModel({

@@ -30,16 +30,15 @@ export class AccessTokenAdapter {
 
   /** @deprecated in 5.2. Use {@link toAuthorizationCallback} with a callback parameter instead. */
   public static toAuthorizationCallback(
-    accessToken: AccessToken
-  ): AuthorizationCallback;
-
-  // eslint-disable-next-line @typescript-eslint/unified-signatures
-  public static toAuthorizationCallback(
-    getAccessToken: () => Promise<AccessToken>
+    accessToken: AccessToken,
   ): AuthorizationCallback;
 
   public static toAuthorizationCallback(
-    accessToken: AccessToken | (() => Promise<AccessToken>)
+    getAccessToken: () => Promise<AccessToken>,
+  ): AuthorizationCallback;
+
+  public static toAuthorizationCallback(
+    accessToken: AccessToken | (() => Promise<AccessToken>),
   ): AuthorizationCallback {
     if (typeof accessToken === "function") {
       return async () => {

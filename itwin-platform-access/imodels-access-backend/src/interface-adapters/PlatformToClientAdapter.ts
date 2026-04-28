@@ -35,19 +35,19 @@ interface DownloadCancellationMonitorFuncParams {
   shouldCancel: boolean;
 }
 export type DownloadCancellationMonitorFunc = (
-  params: DownloadCancellationMonitorFuncParams
+  params: DownloadCancellationMonitorFuncParams,
 ) => void;
 
 export class PlatformToClientAdapter {
   public static toChangesetPropertiesForCreate(
     changesetFileProps: ChangesetFileProps,
-    changesetDescription: string
+    changesetDescription: string,
   ): ChangesetPropertiesForCreate {
     return {
       id: changesetFileProps.id,
       parentId: changesetFileProps.parentId,
       containingChanges: PlatformToClientAdapter.toContainingChanges(
-        changesetFileProps.changesType
+        changesetFileProps.changesType,
       ),
       description: changesetDescription,
       briefcaseId: changesetFileProps.briefcaseId,
@@ -56,7 +56,7 @@ export class PlatformToClientAdapter {
   }
 
   public static toIModelProperties(
-    createNewIModelProps: CreateNewIModelProps
+    createNewIModelProps: CreateNewIModelProps,
   ): IModelProperties {
     return {
       iTwinId: createNewIModelProps.iTwinId,
@@ -74,15 +74,21 @@ export class PlatformToClientAdapter {
   }
 
   public static toContainingChanges(
-    changesType: ChangesetType
+    changesType: ChangesetType,
   ): ContainingChanges {
-    switch (changesType as number) {
-      case ChangesetType.Regular as number:
+    // SchemaSync is a ContainingChanges flag not present in ChangesetType, compare numerically
+    const changesTypeValue = Number(changesType);
+    const schemaWithSyncValue =
+      Number(ContainingChanges.Schema) | Number(ContainingChanges.SchemaSync);
+
+    if (changesTypeValue === schemaWithSyncValue)
+      return ContainingChanges.Schema | ContainingChanges.SchemaSync;
+
+    switch (changesType) {
+      case ChangesetType.Regular:
         return ContainingChanges.Regular;
-      case ChangesetType.Schema as number:
+      case ChangesetType.Schema:
         return ContainingChanges.Schema;
-      case ContainingChanges.Schema | ContainingChanges.SchemaSync:
-        return ContainingChanges.Schema | ContainingChanges.SchemaSync;
       default:
         ITwinError.throwError({
           iTwinErrorId: {
@@ -95,7 +101,7 @@ export class PlatformToClientAdapter {
   }
 
   public static toChangesetIdOrIndex(
-    changeset: PlatformChangesetIdOrIndex
+    changeset: PlatformChangesetIdOrIndex,
   ): ClientChangesetIdOrIndex {
     // The API only supports index in the url for changeset0.
     if (changeset.id === "" || changeset.index === 0)
@@ -113,7 +119,7 @@ export class PlatformToClientAdapter {
   }
 
   public static toChangesetRangeUrlParams(
-    changesetRange?: ChangesetRange
+    changesetRange?: ChangesetRange,
   ): Partial<GetChangesetListUrlParams> | undefined {
     if (!changesetRange) return undefined;
 
@@ -162,16 +168,14 @@ export class PlatformToClientAdapter {
     };
   }
 
-  // eslint-disable-next-line deprecation/deprecation
   private static toLockLevel(lockState: LockState): LockLevel {
     switch (lockState) {
-      // eslint-disable-next-line deprecation/deprecation
       case LockState.None:
         return LockLevel.None;
-      // eslint-disable-next-line deprecation/deprecation
+
       case LockState.Shared:
         return LockLevel.Shared;
-      // eslint-disable-next-line deprecation/deprecation
+
       case LockState.Exclusive:
         return LockLevel.Exclusive;
       default:
@@ -186,7 +190,7 @@ export class PlatformToClientAdapter {
   }
 
   private static groupLocksByLockLevel(
-    locks: LockMap
+    locks: LockMap,
   ): Map<LockLevel, string[]> {
     const result: Map<LockLevel, string[]> = new Map();
     for (const [objectId, lockState] of locks) {
@@ -201,7 +205,7 @@ export class PlatformToClientAdapter {
   }
 
   private static convertGroupedLocksToLockedObjects(
-    groupedLocks: Map<LockLevel, string[]>
+    groupedLocks: Map<LockLevel, string[]>,
   ): LockedObjects[] {
     const result: LockedObjects[] = [];
     for (const lockLevel of groupedLocks.keys())

@@ -45,7 +45,7 @@ describe("[Management] FavoriteIModelOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -64,13 +64,19 @@ describe("[Management] FavoriteIModelOperations", () => {
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModelForFavorites1 = await testIModelCreator.createEmpty(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for favorites 1")
+      testIModelGroup.getPrefixedUniqueIModelName(
+        "Test iModel for favorites 1",
+      ),
     );
     testIModelForFavorites2 = await testIModelCreator.createEmpty(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for favorites 2")
+      testIModelGroup.getPrefixedUniqueIModelName(
+        "Test iModel for favorites 2",
+      ),
     );
     testIModelForFavorites3 = await testIModelCreator.createEmpty(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for favorites 3")
+      testIModelGroup.getPrefixedUniqueIModelName(
+        "Test iModel for favorites 3",
+      ),
     );
   });
 
@@ -118,7 +124,7 @@ describe("[Management] FavoriteIModelOperations", () => {
       iModelsClient.favoriteIModels.getMinimalList(getFavoriteListParams);
     const favoritesList = await toArray(favorites);
     const addedFavorite = favoritesList.find(
-      (iModel) => iModel.id === testIModelForFavorites1.id
+      (iModel) => iModel.id === testIModelForFavorites1.id,
     );
     expect(addedFavorite).to.not.be.undefined;
   });
@@ -149,7 +155,7 @@ describe("[Management] FavoriteIModelOperations", () => {
       iModelsClient.favoriteIModels.getMinimalList(getFavoriteListParams);
     const favoritesList = await toArray(favorites);
     const removedFavorite = favoritesList.find(
-      (iModel) => iModel.id === testIModelForFavorites1.id
+      (iModel) => iModel.id === testIModelForFavorites1.id,
     );
     expect(removedFavorite).to.be.undefined;
   });
@@ -183,13 +189,13 @@ describe("[Management] FavoriteIModelOperations", () => {
     });
 
     const favoritesList = await toArray(
-      iModelsClient.favoriteIModels.getMinimalList(getFavoriteListParams)
+      iModelsClient.favoriteIModels.getMinimalList(getFavoriteListParams),
     );
     const favorite1 = favoritesList.find(
-      (iModel) => iModel.id === testIModelForFavorites1.id
+      (iModel) => iModel.id === testIModelForFavorites1.id,
     );
     const favorite2 = favoritesList.find(
-      (iModel) => iModel.id === testIModelForFavorites2.id
+      (iModel) => iModel.id === testIModelForFavorites2.id,
     );
     expect(favorite1).to.not.be.undefined;
     expect(favorite2).to.not.be.undefined;
@@ -218,23 +224,23 @@ describe("[Management] FavoriteIModelOperations", () => {
     // Act
     const favorites: EntityListIterator<IModel> =
       iModelsClient.favoriteIModels.getRepresentationList(
-        getFavoriteListParams
+        getFavoriteListParams,
       );
 
     // Assert
     const favoritesList = await toArray(favorites);
     await assertCollection({
       asyncIterable: iModelsClient.favoriteIModels.getRepresentationList(
-        getFavoriteListParams
+        getFavoriteListParams,
       ),
       isEntityCountCorrect: (count) => count >= 2,
     });
 
     const favorite1 = favoritesList.find(
-      (iModel) => iModel.id === testIModelForFavorites1.id
+      (iModel) => iModel.id === testIModelForFavorites1.id,
     );
     const favorite2 = favoritesList.find(
-      (iModel) => iModel.id === testIModelForFavorites2.id
+      (iModel) => iModel.id === testIModelForFavorites2.id,
     );
     expect(favorite1).to.not.be.undefined;
     expect(favorite2).to.not.be.undefined;

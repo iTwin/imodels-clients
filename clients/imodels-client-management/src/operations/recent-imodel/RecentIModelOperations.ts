@@ -22,7 +22,7 @@ import {
 } from "./RecentIModelOperationParams";
 
 export class RecentIModelOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Gets recently used iModels for a specific iTwin. A user can only have 25 recently used iModels.
@@ -34,7 +34,7 @@ export class RecentIModelOperations<
    * @returns {EntityListIterator<MinimalIModel>} iterator for recent iModel list. See {@link EntityListIterator}, {@link MinimalIModel}.
    */
   public getMinimalList(
-    params: GetRecentIModelListParams
+    params: GetRecentIModelListParams,
   ): EntityListIterator<MinimalIModel> {
     return new EntityListIteratorImpl(async () =>
       this.getEntityCollectionPage<
@@ -48,7 +48,7 @@ export class RecentIModelOperations<
         preferReturn: PreferReturn.Minimal,
         entityCollectionAccessor: (response) => response.body.iModels,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -62,7 +62,7 @@ export class RecentIModelOperations<
    * @returns {EntityListIterator<IModel>} iterator for recent iModel list. See {@link EntityListIterator}, {@link IModel}.
    */
   public getRepresentationList(
-    params: GetRecentIModelListParams
+    params: GetRecentIModelListParams,
   ): EntityListIterator<IModel> {
     return new EntityListIteratorImpl(async () =>
       this.getEntityCollectionPage<IModel, IModelsResponse<IModel>>({
@@ -73,7 +73,7 @@ export class RecentIModelOperations<
         preferReturn: PreferReturn.Representation,
         entityCollectionAccessor: (response) => response.body.iModels,
         headers: params.headers,
-      })
+      }),
     );
   }
 

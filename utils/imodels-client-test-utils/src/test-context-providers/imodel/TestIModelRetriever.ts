@@ -37,11 +37,11 @@ export class TestIModelRetriever {
     private readonly _iModelsClient: TestIModelsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
     private readonly _testITwinProvider: TestITwinProvider,
-    private readonly _testIModelFileProvider: TestIModelFileProvider
+    private readonly _testIModelFileProvider: TestIModelFileProvider,
   ) {}
 
   public async findIModelByName(
-    iModelName: string
+    iModelName: string,
   ): Promise<IModel | undefined> {
     const iTwinId = await this._testITwinProvider.getOrCreate();
     const iModelIterator = this._iModelsClient.iModels.getRepresentationList({
@@ -56,13 +56,13 @@ export class TestIModelRetriever {
   }
 
   public async queryRelatedData(
-    iModel: IModel
+    iModel: IModel,
   ): Promise<ReusableIModelMetadata> {
     const briefcases = await this.queryAndValidateBriefcases(iModel.id);
     const namedVersions = await this.queryAndValidateNamedVersions(iModel.id);
     const lock = await this.queryAndValidateLock(iModel.id);
     const changesetGroups = await this.queryAndValidateChangesetGroups(
-      iModel.id
+      iModel.id,
     );
     const changesetExtendedData =
       await this.queryAndValidateChangesetExtendedData(iModel.id);
@@ -81,7 +81,7 @@ export class TestIModelRetriever {
   }
 
   private async queryAndValidateBriefcases(
-    iModelId: string
+    iModelId: string,
   ): Promise<BriefcaseMetadata[]> {
     const getBriefcaseListParams: GetBriefcaseListParams = {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
@@ -89,12 +89,12 @@ export class TestIModelRetriever {
     };
     const briefcases = await toArray(
       this._iModelsClient.briefcases.getRepresentationList(
-        getBriefcaseListParams
-      )
+        getBriefcaseListParams,
+      ),
     );
     if (briefcases.length !== TestIModelCreator.briefcaseCount)
       throw new TestSetupError(
-        `${briefcases.length} is an unexpected briefcase count for reusable test iModel.`
+        `${briefcases.length} is an unexpected briefcase count for reusable test iModel.`,
       );
 
     return briefcases.map((briefcase) => ({
@@ -105,7 +105,7 @@ export class TestIModelRetriever {
   }
 
   private async queryAndValidateNamedVersions(
-    iModelId: string
+    iModelId: string,
   ): Promise<NamedVersionMetadata[]> {
     const getNamedVersionListParams: GetNamedVersionListParams = {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
@@ -113,12 +113,12 @@ export class TestIModelRetriever {
     };
     const namedVersions: NamedVersion[] = await toArray(
       this._iModelsClient.namedVersions.getRepresentationList(
-        getNamedVersionListParams
-      )
+        getNamedVersionListParams,
+      ),
     );
     if (namedVersions.length !== TestIModelCreator.namedVersions.length)
       throw new TestSetupError(
-        `${namedVersions.length} is an unexpected named version count for reusable test iModel.`
+        `${namedVersions.length} is an unexpected named version count for reusable test iModel.`,
       );
 
     const mappedNamedVersions = namedVersions
@@ -127,29 +127,29 @@ export class TestIModelRetriever {
         name: namedVersion.name,
         changesetId: namedVersion.changesetId!,
         changesetIndex: this._testIModelFileProvider.changesets.find(
-          (cs) => cs.id === namedVersion.changesetId
+          (cs) => cs.id === namedVersion.changesetId,
         )!.index,
       }))
       .sort((nv1, nv2) => nv1.changesetIndex - nv2.changesetIndex);
 
     if (
       !mappedNamedVersions.every(
-        (nv, i) => nv.name === TestIModelCreator.namedVersions[i].name
+        (nv, i) => nv.name === TestIModelCreator.namedVersions[i].name,
       )
     )
       throw new TestSetupError(
-        "Reusable test iModel contains unexpected named versions - names do not match"
+        "Reusable test iModel contains unexpected named versions - names do not match",
       );
 
     if (
       !mappedNamedVersions.every(
         (nv, i) =>
           nv.changesetIndex ===
-          TestIModelCreator.namedVersions[i].changesetIndex
+          TestIModelCreator.namedVersions[i].changesetIndex,
       )
     )
       throw new TestSetupError(
-        "Reusable test iModel contains unexpected named versions - Changeset indexes do not match."
+        "Reusable test iModel contains unexpected named versions - Changeset indexes do not match.",
       );
 
     return mappedNamedVersions;
@@ -161,18 +161,18 @@ export class TestIModelRetriever {
       iModelId,
     };
     const locks: Lock[] = await toArray(
-      this._iModelsClient.locks.getList(getLockListParams)
+      this._iModelsClient.locks.getList(getLockListParams),
     );
     if (locks.length !== 1)
       throw new TestSetupError(
-        `${locks.length} is an unexpected lock count for reusable test iModel.`
+        `${locks.length} is an unexpected lock count for reusable test iModel.`,
       );
 
     return locks[0];
   }
 
   private async queryAndValidateChangesetExtendedData(
-    iModelId: string
+    iModelId: string,
   ): Promise<ChangesetExtendedDataMetadata[]> {
     const getChangesetExtendedDataListParams: GetChangesetExtendedDataListParams =
       {
@@ -181,15 +181,15 @@ export class TestIModelRetriever {
       };
     const changesetExtendedDataList = await toArray(
       this._iModelsClient.changesetExtendedData.getList(
-        getChangesetExtendedDataListParams
-      )
+        getChangesetExtendedDataListParams,
+      ),
     );
     if (
       changesetExtendedDataList.length !==
       TestIModelCreator.changesetExtendedData.length
     )
       throw new TestSetupError(
-        `${changesetExtendedDataList.length} is an unexpected changeset extended data count for reusable test iModel.`
+        `${changesetExtendedDataList.length} is an unexpected changeset extended data count for reusable test iModel.`,
       );
 
     return changesetExtendedDataList.map((csExtendedData) => ({
@@ -200,27 +200,27 @@ export class TestIModelRetriever {
   }
 
   private async queryAndValidateChangesetGroups(
-    iModelId: string
+    iModelId: string,
   ): Promise<ChangesetGroupMetadata[]> {
     const getChangesetGroupListParams: GetChangesetGroupListParams = {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelId,
     };
     const changesetGroups = await toArray(
-      this._iModelsClient.changesetGroups.getList(getChangesetGroupListParams)
+      this._iModelsClient.changesetGroups.getList(getChangesetGroupListParams),
     );
     if (changesetGroups.length !== TestIModelCreator.changesetGroups.length)
       throw new TestSetupError(
-        `${changesetGroups.length} is an unexpected changeset group count for reusable test iModel.`
+        `${changesetGroups.length} is an unexpected changeset group count for reusable test iModel.`,
       );
 
     return changesetGroups.map((csGroup) => {
       const changesetIndexes = TestIModelCreator.changesetGroups.find(
-        (x) => x.description === csGroup.description
+        (x) => x.description === csGroup.description,
       )?.changesetIndexes;
       if (!changesetIndexes)
         throw new TestSetupError(
-          "Could not find expected changeset group by description."
+          "Could not find expected changeset group by description.",
         );
       return {
         id: csGroup.id,
@@ -232,28 +232,28 @@ export class TestIModelRetriever {
 
   private async queryAndValidateChangesets(
     iModelId: string,
-    changesetGroups: ChangesetGroupMetadata[]
+    changesetGroups: ChangesetGroupMetadata[],
   ): Promise<void> {
     const getChangesetListParams: GetChangesetListParams = {
       authorization: this._testAuthorizationProvider.getAdmin1Authorization(),
       iModelId,
     };
     const changesets = await toArray(
-      this._iModelsClient.changesets.getMinimalList(getChangesetListParams)
+      this._iModelsClient.changesets.getMinimalList(getChangesetListParams),
     );
     if (changesets.length !== this._testIModelFileProvider.changesets.length)
       throw new TestSetupError(
-        `${changesets.length} is an unexpected changeset count for reusable test iModel.`
+        `${changesets.length} is an unexpected changeset count for reusable test iModel.`,
       );
 
     for (const changeset of changesets) {
       const expectedGroupId =
         changesetGroups.find((csGroup) =>
-          csGroup.changesetIndexes.includes(changeset.index)
+          csGroup.changesetIndexes.includes(changeset.index),
         )?.id ?? null;
       if (changeset.groupId !== expectedGroupId)
         throw new TestSetupError(
-          `Changeset with index ${changeset.index} group id is incorrect.`
+          `Changeset with index ${changeset.index} group id is incorrect.`,
         );
     }
   }

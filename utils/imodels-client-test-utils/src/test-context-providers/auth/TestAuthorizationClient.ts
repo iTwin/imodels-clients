@@ -53,7 +53,7 @@ export class TestAuthorizationClient {
   constructor(private readonly _authConfig: TestAuthorizationClientConfig) {}
 
   public async getAccessToken(
-    testUserCredentials: TestUserCredentials
+    testUserCredentials: TestUserCredentials,
   ): Promise<string> {
     let executablePath;
     try {
@@ -61,11 +61,11 @@ export class TestAuthorizationClient {
         browser: Browser.CHROME,
         channel: ChromeReleaseChannel.STABLE,
       });
-    } catch (e) {
+    } catch (_e) {
       const buildId = await resolveBuildId(
         Browser.CHROMIUM,
         detectBrowserPlatform() as BrowserPlatform,
-        BrowserTag.LATEST
+        BrowserTag.LATEST,
       );
       const installedBrowser = await install({
         browser: Browser.CHROMIUM,
@@ -86,9 +86,8 @@ export class TestAuthorizationClient {
       // cspell:disable-next-line
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     };
-    const browser: puppeteer.Browser = await puppeteer.launch(
-      browserLaunchOptions
-    );
+    const browser: puppeteer.Browser =
+      await puppeteer.launch(browserLaunchOptions);
     const browserPage: puppeteer.Page = await browser.newPage();
 
     const authorizationCodePromise =
@@ -100,7 +99,7 @@ export class TestAuthorizationClient {
     await this.fillCredentials(browserPage, testUserCredentials);
     await this.consentIfNeeded(browserPage);
     const accessToken = await this.exchangeAuthorizationCodeForAccessToken(
-      await authorizationCodePromise
+      await authorizationCodePromise,
     );
 
     await browser.close();
@@ -108,7 +107,7 @@ export class TestAuthorizationClient {
   }
 
   private getAuthorizationUrl(
-    testUserCredentials: TestUserCredentials
+    testUserCredentials: TestUserCredentials,
   ): string {
     return (
       `${this._authConfig.authority}/connect/authorize?` +
@@ -121,29 +120,29 @@ export class TestAuthorizationClient {
 
   private async fillCredentials(
     browserPage: puppeteer.Page,
-    testUserCredentials: TestUserCredentials
+    testUserCredentials: TestUserCredentials,
   ): Promise<void> {
     const emailField = await this.captureElement(
       browserPage,
-      this._pageElementIds.fields.email
+      this._pageElementIds.fields.email,
     );
     await emailField.type(testUserCredentials.email);
 
     const nextButton = await this.captureElement(
       browserPage,
-      this._pageElementIds.buttons.next
+      this._pageElementIds.buttons.next,
     );
     await nextButton.click();
 
     const passwordField = await this.captureElement(
       browserPage,
-      this._pageElementIds.fields.password
+      this._pageElementIds.fields.password,
     );
     await passwordField.type(testUserCredentials.password);
 
     const signInButton = await this.captureElement(
       browserPage,
-      this._pageElementIds.buttons.signIn
+      this._pageElementIds.buttons.signIn,
     );
     await Promise.all([
       signInButton.click(),
@@ -158,7 +157,7 @@ export class TestAuthorizationClient {
 
     const consentButton = await this.captureElement(
       browserPage,
-      this._pageElementIds.buttons.consent
+      this._pageElementIds.buttons.consent,
     );
     await Promise.all([
       consentButton.click(),
@@ -167,7 +166,7 @@ export class TestAuthorizationClient {
   }
 
   private async exchangeAuthorizationCodeForAccessToken(
-    authorizationCode: string
+    authorizationCode: string,
   ): Promise<string> {
     const requestUrl = `${this._authConfig.authority}/connect/token`;
     const requestBody = new URLSearchParams({
@@ -177,8 +176,8 @@ export class TestAuthorizationClient {
     });
     const encodedClientCredentials = Buffer.from(
       `${encodeURIComponent(this._authConfig.clientId)}:${encodeURIComponent(
-        this._authConfig.clientSecret
-      )}`
+        this._authConfig.clientSecret,
+      )}`,
     ).toString("base64");
     const requestConfig = {
       headers: {
@@ -190,13 +189,13 @@ export class TestAuthorizationClient {
     const response: AxiosResponse<AccessTokenResponse> = await axios.post(
       requestUrl,
       requestBody,
-      requestConfig
+      requestConfig,
     );
     return response.data.access_token;
   }
 
   private async interceptRedirectAndGetAuthorizationCode(
-    browserPage: puppeteer.Page
+    browserPage: puppeteer.Page,
   ): Promise<string> {
     await browserPage.setRequestInterception(true);
     return new Promise<string>((resolve) => {
@@ -225,7 +224,7 @@ export class TestAuthorizationClient {
     const urlQuery: ParsedUrlQuery = parse(redirectUrl, true).query;
     if (!urlQuery.code)
       throw new TestSetupError(
-        "Sign in failed: could not parse code from url."
+        "Sign in failed: could not parse code from url.",
       );
 
     return urlQuery.code.toString();
@@ -233,12 +232,12 @@ export class TestAuthorizationClient {
 
   private async captureElement(
     browserPage: puppeteer.Page,
-    selector: string
+    selector: string,
   ): Promise<puppeteer.ElementHandle<Element>> {
     const element = await browserPage.waitForSelector(selector);
     if (!element)
       throw new TestSetupError(
-        `Sign in failed: could not find element with selector '${selector}'.`
+        `Sign in failed: could not find element with selector '${selector}'.`,
       );
 
     return element;

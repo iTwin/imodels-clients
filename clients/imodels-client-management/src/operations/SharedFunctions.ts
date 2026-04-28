@@ -18,7 +18,7 @@ export async function getUser(
   userOperations: UserOperations<OperationOptions>,
   urlFormatter: IModelsApiUrlFormatter,
   userLink: string | undefined,
-  headers?: HeaderFactories
+  headers?: HeaderFactories,
 ): Promise<User | undefined> {
   if (!userLink) return undefined;
 
@@ -33,18 +33,18 @@ export async function getUser(
 
 export function assertStringHeaderValue(
   headerName: string,
-  headerValue: unknown
+  headerValue: unknown,
 ): asserts headerValue is string {
   const isString =
     typeof headerValue === "string" || headerValue instanceof String;
   if (!isString)
     throw new Error(
-      `Assertion failed: header's ${headerName} value is not a string.`
+      `Assertion failed: header's ${headerName} value is not a string.`,
     );
 }
 
 export function assertLink(
-  link: Link | null | undefined
+  link: Link | null | undefined,
 ): asserts link is Link {
   if (!link || !link.href) throw new Error("Assertion failed: link is falsy.");
 }

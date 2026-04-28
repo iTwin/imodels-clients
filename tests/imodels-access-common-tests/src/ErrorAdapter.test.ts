@@ -114,7 +114,7 @@ describe("ErrorAdapter", () => {
       const isiTwinError = ITwinError.isError(
         result,
         IModelsErrorScope,
-        originalErrorCode
+        originalErrorCode,
       );
       expect(isiTwinError).to.be.true;
       const iTwinError = result as ITwinError;
@@ -162,19 +162,19 @@ describe("ErrorAdapter", () => {
 
         const result = ErrorAdapter.toITwinError(
           originalError,
-          testCase.operationName
+          testCase.operationName,
         );
 
         const isiTwinError = ITwinError.isError(
           result,
           IModelsErrorScope,
-          testCase.expectedErrorCode
+          testCase.expectedErrorCode,
         );
         expect(isiTwinError).to.be.true;
         const iTwinError = result as ITwinError;
         expect(iTwinError.message).to.be.equal(originalErrorMessage);
       });
-    }
+    },
   );
 
   [
@@ -215,19 +215,19 @@ describe("ErrorAdapter", () => {
 
         const result = ErrorAdapter.toITwinError(
           originalError,
-          testCase.operationName
+          testCase.operationName,
         );
 
         const isiTwinError = ITwinError.isError(
           result,
           IModelsErrorScope,
-          IModelsErrorCode.Unknown
+          IModelsErrorCode.Unknown,
         );
         expect(isiTwinError).to.be.true;
         const iTwinError = result as ITwinError;
         expect(iTwinError.message).to.be.equal(originalErrorMessage);
       });
-    }
+    },
   );
 
   it("should correctly parse MaximumNumberOfBriefcasesPerUser error", () => {
@@ -257,7 +257,7 @@ describe("ErrorAdapter", () => {
     };
     const apiError = IModelsErrorParser.parse(
       { statusCode: 422, body: apiResponse },
-      new Error()
+      new Error(),
     );
 
     const result = ErrorAdapter.toITwinError(apiError);
@@ -265,7 +265,7 @@ describe("ErrorAdapter", () => {
     const isiTwinError = ITwinError.isError(
       result,
       IModelsErrorScope,
-      IModelsErrorCode.MaximumNumberOfBriefcasesPerUser
+      IModelsErrorCode.MaximumNumberOfBriefcasesPerUser,
     );
     expect(isiTwinError).to.be.true;
     const iTwinError = result as ITwinError;
@@ -273,7 +273,7 @@ describe("ErrorAdapter", () => {
       "Cannot acquire Briefcase. Details:\n" +
         "1. Unrecognized: bar\n" +
         "2. Unrecognized: bar\n" +
-        "3. ResourceQuotaExceeded: Maximum number of Briefcases per user limit reached.\n"
+        "3. ResourceQuotaExceeded: Maximum number of Briefcases per user limit reached.\n",
     );
   });
 
@@ -286,7 +286,7 @@ describe("ErrorAdapter", () => {
     };
     const apiError = IModelsErrorParser.parse(
       { statusCode: 429, body: apiResponse },
-      new Error()
+      new Error(),
     );
 
     const result = ErrorAdapter.toITwinError(apiError, "acquireBriefcase");
@@ -294,12 +294,12 @@ describe("ErrorAdapter", () => {
     const isiTwinError = ITwinError.isError(
       result,
       IModelsErrorScope,
-      IModelsErrorCode.MaximumNumberOfBriefcasesPerUserPerMinute
+      IModelsErrorCode.MaximumNumberOfBriefcasesPerUserPerMinute,
     );
     expect(isiTwinError).to.be.true;
     const iTwinError = result as ITwinError;
     expect(iTwinError.message).to.be.equal(
-      "Maximum number of briefcases per user per minute reached."
+      "Maximum number of briefcases per user per minute reached.",
     );
   });
 
@@ -316,7 +316,7 @@ describe("ErrorAdapter", () => {
     };
     const apiError = IModelsErrorParser.parse(
       { statusCode: 409, body: apiResponse },
-      new Error()
+      new Error(),
     );
 
     const result = ErrorAdapter.toITwinError(apiError, "updateLocks");
@@ -324,7 +324,7 @@ describe("ErrorAdapter", () => {
     const isiTwinError = ITwinError.isError(
       result,
       IModelsErrorScope,
-      IModelsErrorCode.LockOwnedByAnotherBriefcase
+      IModelsErrorCode.LockOwnedByAnotherBriefcase,
     );
     expect(isiTwinError).to.be.true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -336,7 +336,7 @@ describe("ErrorAdapter", () => {
     expect(iTwinError.message).to.be.equal(
       "Lock(s) is owned by another Briefcase. Conflicting locks:\n" +
         `1. Object id: ${firstLock.objectId}, lock level: ${firstLock.lockLevel}, briefcase ids: ${firstLock.briefcaseIds[0]}\n` +
-        `2. Object id: ${secondLock.objectId}, lock level: ${secondLock.lockLevel}, briefcase ids: ${secondLock.briefcaseIds[0]}\n`
+        `2. Object id: ${secondLock.objectId}, lock level: ${secondLock.lockLevel}, briefcase ids: ${secondLock.briefcaseIds[0]}\n`,
     );
   });
 });

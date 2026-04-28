@@ -75,10 +75,10 @@ export class IModelsClient {
       ...filledIModelsClientOptions,
       parseErrorFunc: (
         response: ResponseInfo,
-        originalError: IModelsOriginalError
+        originalError: IModelsOriginalError,
       ) => IModelsErrorParser.parse(response, originalError),
       urlFormatter: new IModelsApiUrlFormatter(
-        filledIModelsClientOptions.api.baseUrl
+        filledIModelsClientOptions.api.baseUrl,
       ),
     };
   }
@@ -154,7 +154,7 @@ export class IModelsClient {
   }
 
   private static fillManagementClientConfiguration(
-    options: IModelsClientOptions | undefined
+    options: IModelsClientOptions | undefined,
   ): RecursiveRequired<IModelsClientOptions> {
     const retryPolicy =
       options?.retryPolicy ??
@@ -175,7 +175,7 @@ export class IModelsClient {
   }
 
   protected static fillApiConfiguration(
-    apiOptions: ApiOptions | undefined
+    apiOptions: ApiOptions | undefined,
   ): RecursiveRequired<ApiOptions> {
     return {
       baseUrl: apiOptions?.baseUrl ?? Constants.api.baseUrl,

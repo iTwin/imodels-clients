@@ -18,7 +18,7 @@ import {
 } from "./ChangesetGroupOperationParams";
 
 export class ChangesetGroupOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends ManagementChangesetGroupOperations<TOptions> {
   /**
    * Creates a Changeset Group. Wraps the
@@ -28,10 +28,10 @@ export class ChangesetGroupOperations<
    * @returns {Promise<ChangesetGroup>} newly created Changeset Group. See {@link ChangesetGroup}.
    */
   public async create(
-    params: CreateChangesetGroupParams
+    params: CreateChangesetGroupParams,
   ): Promise<ChangesetGroup> {
     const createChangesetGroupBody = this.getCreateChangesetGroupRequestBody(
-      params.changesetGroupProperties
+      params.changesetGroupProperties,
     );
     const createChangesetGroupResponse =
       await this.sendPostRequest<ChangesetGroupResponse>({
@@ -45,7 +45,7 @@ export class ChangesetGroupOperations<
     const result = this.appendRelatedEntityCallbacks(
       params.authorization,
       createChangesetGroupResponse.body.changesetGroup,
-      params.headers
+      params.headers,
     );
     return result;
   }
@@ -58,10 +58,10 @@ export class ChangesetGroupOperations<
    * @returns {Promise<ChangesetGroup>} updated Changeset Group. See {@link ChangesetGroup}.
    */
   public async update(
-    params: UpdateChangesetGroupParams
+    params: UpdateChangesetGroupParams,
   ): Promise<ChangesetGroup> {
     const updateChangesetGroupBody = this.getUpdateChangesetGroupRequestBody(
-      params.changesetGroupProperties
+      params.changesetGroupProperties,
     );
     const updateChangesetGroupResponse =
       await this.sendPatchRequest<ChangesetGroupResponse>({
@@ -76,13 +76,13 @@ export class ChangesetGroupOperations<
     const result = this.appendRelatedEntityCallbacks(
       params.authorization,
       updateChangesetGroupResponse.body.changesetGroup,
-      params.headers
+      params.headers,
     );
     return result;
   }
 
   private getCreateChangesetGroupRequestBody(
-    changesetGroupProperties: ChangesetGroupPropertiesForCreate
+    changesetGroupProperties: ChangesetGroupPropertiesForCreate,
   ): object {
     return {
       description: changesetGroupProperties.description,
@@ -90,7 +90,7 @@ export class ChangesetGroupOperations<
   }
 
   private getUpdateChangesetGroupRequestBody(
-    changesetGroupProperties: ChangesetGroupPropertiesForUpdate
+    changesetGroupProperties: ChangesetGroupPropertiesForUpdate,
   ): object {
     return {
       state: changesetGroupProperties.state,

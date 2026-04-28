@@ -21,7 +21,7 @@ import {
 } from "./LockOperationParams";
 
 export class LockOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Gets Locks for a specific iModel. This method returns Locks in their full representation. The returned iterator
@@ -41,7 +41,7 @@ export class LockOperations<
         }),
         entityCollectionAccessor: (response) => response.body.locks,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -53,7 +53,7 @@ export class LockOperations<
    * @returns {Promise<ReleaseLocksChunkResult>} result indicating if this was the last chunk. See {@link ReleaseLocksChunkResult}.
    */
   public async releaseLocksChunk(
-    params: ReleaseLocksChunkParams
+    params: ReleaseLocksChunkParams,
   ): Promise<ReleaseLocksChunkResult> {
     const releaseLocksChunkResponse =
       await this.sendPostRequest<ReleaseLocksChunkResponse>({

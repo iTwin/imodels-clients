@@ -40,8 +40,8 @@ describe("[Management] AxiosRetryPolicy", () => {
     expect(actualSleepDuration).to.be.equal(expectedSleepDuration);
     expect(
       backoffAlgorithmStub.getSleepDurationInMs.calledOnceWith(
-        params.retriesInvoked
-      )
+        params.retriesInvoked,
+      ),
     ).to.be.true;
   });
 
@@ -102,7 +102,7 @@ describe("[Management] AxiosRetryPolicy", () => {
 
       // Act & Assert
       expect(
-        testedClass.shouldRetry({ retriesInvoked: 0, error: testCase.error })
+        testedClass.shouldRetry({ retriesInvoked: 0, error: testCase.error }),
       ).to.be.equal(testCase.expectedShouldRetry);
     });
   });

@@ -17,7 +17,7 @@ import {
 } from "./ThumbnailOperationParams";
 
 export class ThumbnailOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Downloads a thumbnail for a specific iModel. The Thumbnail returned is either a default one or a custom

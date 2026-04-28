@@ -17,7 +17,7 @@ export class TestIModelGroupFactory {
   constructor(
     private readonly _iModelsClient: TestIModelsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
-    private readonly _testITwinProvider: TestITwinProvider
+    private readonly _testITwinProvider: TestITwinProvider,
   ) {}
 
   public create(testRunContext: {
@@ -29,7 +29,7 @@ export class TestIModelGroupFactory {
       this._iModelsClient,
       this._testAuthorizationProvider,
       this._testITwinProvider,
-      testRunContext
+      testRunContext,
     );
   }
 }

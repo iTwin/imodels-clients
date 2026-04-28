@@ -32,9 +32,12 @@ import {
 } from "./NamedVersionOperationParams";
 
 export class NamedVersionOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
-  constructor(options: TOptions, private _iModelsClient: IModelsClient) {
+  constructor(
+    options: TOptions,
+    private _iModelsClient: IModelsClient,
+  ) {
     super(options);
   }
 
@@ -48,7 +51,7 @@ export class NamedVersionOperations<
    * {@link MinimalNamedVersion}.
    */
   public getMinimalList(
-    params: GetNamedVersionListParams
+    params: GetNamedVersionListParams,
   ): EntityListIterator<MinimalNamedVersion> {
     return new EntityListIteratorImpl(async () =>
       this.getEntityCollectionPage<
@@ -63,7 +66,7 @@ export class NamedVersionOperations<
         preferReturn: PreferReturn.Minimal,
         entityCollectionAccessor: (response) => response.body.namedVersions,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -77,18 +80,18 @@ export class NamedVersionOperations<
    * {@link NamedVersion}.
    */
   public getRepresentationList(
-    params: GetNamedVersionListParams
+    params: GetNamedVersionListParams,
   ): EntityListIterator<NamedVersion> {
     const entityCollectionAccessor = (
-      response: HttpResponse<NamedVersionsResponse<NamedVersion>>
+      response: HttpResponse<NamedVersionsResponse<NamedVersion>>,
     ) => {
       const namedVersions = response.body.namedVersions;
       const mappedNamedVersions = namedVersions.map((namedVersion) =>
         this.appendRelatedEntityCallbacks(
           params.authorization,
           namedVersion,
-          params.headers
-        )
+          params.headers,
+        ),
       );
       return mappedNamedVersions;
     };
@@ -106,7 +109,7 @@ export class NamedVersionOperations<
         preferReturn: PreferReturn.Representation,
         entityCollectionAccessor,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -118,7 +121,7 @@ export class NamedVersionOperations<
    * @returns {Promise<NamedVersion>} a Named Version with specified id. See {@link NamedVersion}.
    */
   public async getSingle(
-    params: GetSingleNamedVersionParams
+    params: GetSingleNamedVersionParams,
   ): Promise<NamedVersion> {
     const response = await this.sendGetRequest<NamedVersionResponse>({
       authorization: params.authorization,
@@ -131,7 +134,7 @@ export class NamedVersionOperations<
     const result: NamedVersion = this.appendRelatedEntityCallbacks(
       params.authorization,
       response.body.namedVersion,
-      params.headers
+      params.headers,
     );
     return result;
   }
@@ -145,7 +148,7 @@ export class NamedVersionOperations<
    */
   public async create(params: CreateNamedVersionParams): Promise<NamedVersion> {
     const createNamedVersionBody = this.getCreateNamedVersionRequestBody(
-      params.namedVersionProperties
+      params.namedVersionProperties,
     );
     const createNamedVersionResponse =
       await this.sendPostRequest<NamedVersionResponse>({
@@ -159,7 +162,7 @@ export class NamedVersionOperations<
     const result: NamedVersion = this.appendRelatedEntityCallbacks(
       params.authorization,
       createNamedVersionResponse.body.namedVersion,
-      params.headers
+      params.headers,
     );
     return result;
   }
@@ -173,7 +176,7 @@ export class NamedVersionOperations<
    */
   public async update(params: UpdateNamedVersionParams): Promise<NamedVersion> {
     const updateNamedVersionBody = this.getUpdateNamedVersionRequestBody(
-      params.namedVersionProperties
+      params.namedVersionProperties,
     );
     const updateNamedVersionResponse =
       await this.sendPatchRequest<NamedVersionResponse>({
@@ -188,13 +191,13 @@ export class NamedVersionOperations<
     const result: NamedVersion = this.appendRelatedEntityCallbacks(
       params.authorization,
       updateNamedVersionResponse.body.namedVersion,
-      params.headers
+      params.headers,
     );
     return result;
   }
 
   private getCreateNamedVersionRequestBody(
-    namedVersionProperties: NamedVersionPropertiesForCreate
+    namedVersionProperties: NamedVersionPropertiesForCreate,
   ): object {
     return {
       name: namedVersionProperties.name,
@@ -204,7 +207,7 @@ export class NamedVersionOperations<
   }
 
   private getUpdateNamedVersionRequestBody(
-    namedVersionProperties: NamedVersionPropertiesForUpdate
+    namedVersionProperties: NamedVersionPropertiesForUpdate,
   ): object {
     return {
       name: namedVersionProperties.name,
@@ -216,7 +219,7 @@ export class NamedVersionOperations<
   protected appendRelatedEntityCallbacks(
     authorization: AuthorizationCallback,
     namedVersion: NamedVersion,
-    headers?: HeaderFactories
+    headers?: HeaderFactories,
   ): NamedVersion {
     const getCreator = async () =>
       getUser(
@@ -224,13 +227,13 @@ export class NamedVersionOperations<
         this._iModelsClient.users,
         this._options.urlFormatter,
         namedVersion._links.creator?.href,
-        headers
+        headers,
       );
     const getChangeset = async () =>
       this.getChangeset(
         authorization,
         namedVersion._links.changeset?.href,
-        headers
+        headers,
       );
 
     const result: NamedVersion = {
@@ -245,7 +248,7 @@ export class NamedVersionOperations<
   private async getChangeset(
     authorization: AuthorizationCallback,
     changesetLink: string | undefined,
-    headers?: HeaderFactories
+    headers?: HeaderFactories,
   ): Promise<Changeset | undefined> {
     if (!changesetLink) return undefined;
 

@@ -24,14 +24,14 @@ import {
 } from "./IModelOperationParams";
 
 export class IModelOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends ManagementIModelOperations<TOptions> {
   private _baselineFileOperations: BaselineFileOperations<TOptions>;
 
   constructor(options: TOptions, iModelsClient: IModelsClient) {
     super(options, iModelsClient);
     this._baselineFileOperations = new BaselineFileOperations<TOptions>(
-      options
+      options,
     );
   }
 
@@ -49,19 +49,19 @@ export class IModelOperations<
    * See {@link IModelsErrorCode}.
    */
   public async createFromBaseline(
-    params: CreateIModelFromBaselineParams
+    params: CreateIModelFromBaselineParams,
   ): Promise<IModel> {
     const baselineFileSize = await this._options.localFileSystem.getFileSize(
-      params.iModelProperties.filePath
+      params.iModelProperties.filePath,
     );
     const createIModelBody = this.getCreateIModelFromBaselineRequestBody(
       params.iModelProperties,
-      baselineFileSize
+      baselineFileSize,
     );
     const createdIModel = await this.sendIModelPostRequest(
       params.authorization,
       createIModelBody,
-      params.headers
+      params.headers,
     );
 
     assertLink(createdIModel._links.upload);
@@ -96,7 +96,7 @@ export class IModelOperations<
 
   private getCreateIModelFromBaselineRequestBody(
     iModelProperties: IModelPropertiesForCreateFromBaseline,
-    baselineFileSize: number
+    baselineFileSize: number,
   ): object {
     return {
       ...this.getCreateEmptyIModelRequestBody(iModelProperties),
@@ -108,7 +108,7 @@ export class IModelOperations<
 
   private async waitForBaselineFileInitialization(
     params: AuthorizationParam &
-      HeadersParam & { iModelId: string; timeOutInMs?: number }
+      HeadersParam & { iModelId: string; timeOutInMs?: number },
   ): Promise<void> {
     const isBaselineInitialized: () => Promise<boolean> = async () => {
       const { state } = await this._baselineFileOperations.getSingle(params);

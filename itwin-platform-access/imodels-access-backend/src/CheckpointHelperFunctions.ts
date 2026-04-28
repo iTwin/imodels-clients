@@ -26,23 +26,23 @@ import { PlatformToClientAdapter } from "./interface-adapters/PlatformToClientAd
 export async function queryCurrentOrPrecedingV2Checkpoint(
   iModelsClient: IModelsClient,
   iModelScopedOperationParams: IModelScopedOperationParams,
-  checkpointProps: CheckpointProps
+  checkpointProps: CheckpointProps,
 ): Promise<V2CheckpointAccessProps | undefined> {
   const changesetIndex = await resolveChangesetIndexFromParamsOrQueryApi(
     iModelsClient,
     iModelScopedOperationParams,
-    checkpointProps
+    checkpointProps,
   );
 
   if (changesetIndex === 0) {
     const baselineCheckpoint = await getBaselineCheckpoint(
       iModelsClient,
-      iModelScopedOperationParams
+      iModelScopedOperationParams,
     );
     if (!baselineCheckpoint?.directoryAccessInfo) return undefined;
     return ClientToPlatformAdapter.toV2CheckpointAccessProps(
       baselineCheckpoint.directoryAccessInfo,
-      baselineCheckpoint.dbName
+      baselineCheckpoint.dbName,
     );
   }
 
@@ -52,31 +52,31 @@ export async function queryCurrentOrPrecedingV2Checkpoint(
     iModelsClient,
     iModelScopedOperationParams,
     changesetIndex,
-    isQueriedCheckpointValid
+    isQueriedCheckpointValid,
   );
   if (checkpoint === undefined) return undefined;
   return ClientToPlatformAdapter.toV2CheckpointAccessProps(
     checkpoint.directoryAccessInfo!,
-    checkpoint.dbName
+    checkpoint.dbName,
   );
 }
 
 export async function queryCurrentOrPrecedingV1Checkpoint(
   iModelsClient: IModelsClient,
   iModelScopedOperationParams: IModelScopedOperationParams,
-  // eslint-disable-next-line deprecation/deprecation
-  checkpointArg: DownloadRequest
+
+  checkpointArg: DownloadRequest,
 ): Promise<Checkpoint | undefined> {
   const changesetIndex = await resolveChangesetIndexFromParamsOrQueryApi(
     iModelsClient,
     iModelScopedOperationParams,
-    checkpointArg.checkpoint
+    checkpointArg.checkpoint,
   );
 
   if (changesetIndex === 0) {
     const baselineCheckpoint = await getBaselineCheckpoint(
       iModelsClient,
-      iModelScopedOperationParams
+      iModelScopedOperationParams,
     );
     return baselineCheckpoint;
   }
@@ -87,7 +87,7 @@ export async function queryCurrentOrPrecedingV1Checkpoint(
     iModelsClient,
     iModelScopedOperationParams,
     changesetIndex,
-    isQueriedCheckpointValid
+    isQueriedCheckpointValid,
   );
   return checkpoint;
 }
@@ -106,7 +106,7 @@ export async function queryCurrentOrPrecedingV1Checkpoint(
  * `<unit> <range-start>-<range-end>/<size>`, e.g. `bytes 0-0/1253376`.
  */
 export async function getV1CheckpointSize(
-  downloadUrl: string
+  downloadUrl: string,
 ): Promise<number> {
   const emptyRangeHeaderValue = "bytes=0-0";
   const contentRangeHeaderName = "content-range";
@@ -119,7 +119,7 @@ export async function getV1CheckpointSize(
   if (!rangeHeaderValue) {
     Logger.logError(
       "BackendIModelsAccess",
-      "Cannot determine total V1 checkpoint size"
+      "Cannot determine total V1 checkpoint size",
     );
     return 0;
   }
@@ -134,7 +134,7 @@ async function findLatestCheckpointForChangeset(
   iModelsClient: IModelsClient,
   iModelScopedOperationParams: IModelScopedOperationParams,
   changesetIndex: number,
-  isExpectedCheckpoint: (checkpoint: Checkpoint) => boolean
+  isExpectedCheckpoint: (checkpoint: Checkpoint) => boolean,
 ): Promise<Checkpoint | undefined> {
   if (changesetIndex <= 0) return undefined;
 
@@ -144,10 +144,10 @@ async function findLatestCheckpointForChangeset(
   };
 
   const changeset = await handleAPIErrors(async () =>
-    iModelsClient.changesets.getSingle(getSingleChangesetParams)
+    iModelsClient.changesets.getSingle(getSingleChangesetParams),
   );
   const checkpoint = await handleAPIErrors(async () =>
-    changeset.getCurrentOrPrecedingCheckpoint()
+    changeset.getCurrentOrPrecedingCheckpoint(),
   );
 
   if (!checkpoint) return undefined;
@@ -159,20 +159,20 @@ async function findLatestCheckpointForChangeset(
     iModelsClient,
     iModelScopedOperationParams,
     previousChangesetIndex,
-    isExpectedCheckpoint
+    isExpectedCheckpoint,
   );
 }
 
 async function getBaselineCheckpoint(
   iModelsClient: IModelsClient,
-  iModelScopedOperationParams: IModelScopedOperationParams
+  iModelScopedOperationParams: IModelScopedOperationParams,
 ): Promise<Checkpoint | undefined> {
   const getCheckpointParams: GetSingleCheckpointParams = {
     ...iModelScopedOperationParams,
     changesetIndex: 0,
   };
   const result = await handleAPIErrors(async () =>
-    iModelsClient.checkpoints.getSingle(getCheckpointParams)
+    iModelsClient.checkpoints.getSingle(getCheckpointParams),
   );
   return result;
 }
@@ -180,7 +180,7 @@ async function getBaselineCheckpoint(
 async function resolveChangesetIndexFromParamsOrQueryApi(
   iModelsClient: IModelsClient,
   iModelScopedOperationParams: IModelScopedOperationParams,
-  checkpointProps: CheckpointProps
+  checkpointProps: CheckpointProps,
 ): Promise<number> {
   if (
     checkpointProps.changeset.id === Constants.ChangeSet0.id ||
@@ -197,7 +197,7 @@ async function resolveChangesetIndexFromParamsOrQueryApi(
   };
 
   const changeset = await handleAPIErrors(async () =>
-    iModelsClient.changesets.getSingle(getSingleChangesetParams)
+    iModelsClient.changesets.getSingle(getSingleChangesetParams),
   );
 
   return changeset.index;

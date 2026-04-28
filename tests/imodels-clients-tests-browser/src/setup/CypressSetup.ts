@@ -20,13 +20,13 @@ import { FrontendTestEnvVariableKeys } from "./FrontendTestEnvVariableKeys";
 export async function setupIntegrationTests(
   _on: unknown,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  config: { env: any }
+  config: { env: any },
 ): Promise<unknown> {
   const container = new Container();
   TestUtilBootstrapper.bind(container, path.join(__dirname, "..", ".env"));
 
   const iModelsClientOptions = container.get<IModelsClientOptions>(
-    TestUtilTypes.IModelsClientOptions
+    TestUtilTypes.IModelsClientOptions,
   );
   config.env[FrontendTestEnvVariableKeys.iModelsClientApiOptions] =
     JSON.stringify(iModelsClientOptions.api);
@@ -49,7 +49,7 @@ export async function setupIntegrationTests(
   config.env[FrontendTestEnvVariableKeys.testPngFilePath] = path.join(
     __dirname,
     "assets",
-    "Sample.png"
+    "Sample.png",
   );
 
   return config;

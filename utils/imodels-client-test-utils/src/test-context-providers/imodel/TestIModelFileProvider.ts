@@ -7,6 +7,7 @@ import * as fs from "fs";
 import { injectable } from "inversify";
 
 import { SynchronizationInfoForCreate } from "@itwin/imodels-client-authoring";
+import { ContainingChanges } from "@itwin/imodels-client-management";
 
 import { TestSetupError } from "../../CommonTestUtils";
 
@@ -19,7 +20,7 @@ export interface TestChangesetFile {
   index: number;
   description: string;
   parentId: string;
-  containingChanges: number;
+  containingChanges: ContainingChanges;
   synchronizationInfo?: SynchronizationInfoForCreate;
   filePath: string;
 }
@@ -49,7 +50,7 @@ export class TestIModelFileProvider {
   private initializeBaselineFile(): TestIModelBaselineFile {
     const fileNamesInDirectory = fs.readdirSync(this._iModelDataRootPath);
     const bimFile = fileNamesInDirectory.find(
-      (fileName) => fileName.indexOf(".bim") >= 0
+      (fileName) => fileName.indexOf(".bim") >= 0,
     );
     if (!bimFile)
       throw new TestSetupError("Baseline file for test iModel not found.");
@@ -64,19 +65,19 @@ export class TestIModelFileProvider {
     const changesetDescriptorFilePath = `${this._iModelDataRootPath}/changesets.json`;
     if (!fs.existsSync(changesetDescriptorFilePath))
       throw new TestSetupError(
-        "Changeset descriptor file for test iModel not found."
+        "Changeset descriptor file for test iModel not found.",
       );
 
     const changesetDescriptorFileString = fs.readFileSync(
       changesetDescriptorFilePath,
-      "utf8"
+      "utf8",
     );
     const changesetDescriptorFile: ChangesetDescriptorFile = JSON.parse(
-      changesetDescriptorFileString
+      changesetDescriptorFileString,
     );
     if (!changesetDescriptorFile?.changesets)
       throw new TestSetupError(
-        "Changeset descriptor file does not contain expected data."
+        "Changeset descriptor file does not contain expected data.",
       );
 
     this._changesetFiles = changesetDescriptorFile.changesets.map((cs) => {

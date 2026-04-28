@@ -50,7 +50,7 @@ describe("[Management] LockOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -58,7 +58,7 @@ describe("[Management] LockOperations", () => {
     authorization = authorizationProvider.getAdmin1Authorization();
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
 
@@ -70,13 +70,13 @@ describe("[Management] LockOperations", () => {
     });
 
     const authoringClientOptions = container.get<AuthoringIModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     authoringClient = new AuthoringIModelsClient(authoringClientOptions);
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModelForWrite = await testIModelCreator.createEmptyAndUploadChangesets(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"),
     );
   });
 
@@ -159,7 +159,7 @@ describe("[Management] LockOperations", () => {
         const expectedLock: Lock = {
           briefcaseId: testIModelForRead.lock.briefcaseId,
           lockedObjects: testIModelForRead.lock.lockedObjects.filter(
-            (lockedObject) => lockedObject.lockLevel === lockLevel
+            (lockedObject) => lockedObject.lockLevel === lockLevel,
           ),
         };
         expect(expectedLock.lockedObjects.length).to.be.greaterThan(0);
@@ -184,7 +184,7 @@ describe("[Management] LockOperations", () => {
           expectedLock,
         });
       });
-    }
+    },
   );
 
   it("should release locks chunk", async () => {
@@ -216,7 +216,7 @@ describe("[Management] LockOperations", () => {
 
     // Act
     const result = await iModelsClient.locks.releaseLocksChunk(
-      releaseLocksChunkParams
+      releaseLocksChunkParams,
     );
 
     // Assert

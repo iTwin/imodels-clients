@@ -31,22 +31,22 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
   before(async () => {
     const iModelsClientApiOptions: ApiOptions = JSON.parse(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      Cypress.env(FrontendTestEnvVariableKeys.iModelsClientApiOptions)
+      Cypress.env(FrontendTestEnvVariableKeys.iModelsClientApiOptions),
     );
     iModelsClient = new IModelsClient({ api: iModelsClientApiOptions });
 
     const admin1AuthorizationInfo: Authorization = JSON.parse(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      Cypress.env(FrontendTestEnvVariableKeys.admin1AuthorizationInfo)
+      Cypress.env(FrontendTestEnvVariableKeys.admin1AuthorizationInfo),
     );
     authorization = () => Promise.resolve(admin1AuthorizationInfo);
 
     testIModelForReadId = Cypress.env(
-      FrontendTestEnvVariableKeys.testIModelForReadId
+      FrontendTestEnvVariableKeys.testIModelForReadId,
     );
 
     const iTwinId: string = Cypress.env(
-      FrontendTestEnvVariableKeys.testITwinId
+      FrontendTestEnvVariableKeys.testITwinId,
     );
     const uniqueId = new Date().getTime();
     const testIModelForWrite = await iModelsClient.iModels.createEmpty({
@@ -79,7 +79,7 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
 
     // Act
     const thumbnail: Thumbnail = await iModelsClient.thumbnails.download(
-      downloadThumbnailParams
+      downloadThumbnailParams,
     );
 
     // Assert
@@ -98,7 +98,7 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
       iModelId: testIModelForWriteId,
     };
     const initialThumbnail: Thumbnail = await iModelsClient.thumbnails.download(
-      iModelScopedOperationParams
+      iModelScopedOperationParams,
     );
 
     const testPngFileBytes = await readFile(testPngFilePath);
@@ -115,10 +115,10 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
 
     // Assert
     const newThumbnail: Thumbnail = await iModelsClient.thumbnails.download(
-      iModelScopedOperationParams
+      iModelScopedOperationParams,
     );
     expect(newThumbnail.image.length).to.not.be.equal(
-      initialThumbnail.image.length
+      initialThumbnail.image.length,
     );
   });
 
@@ -126,7 +126,7 @@ describe(`[Management] ${ThumbnailOperations.name}`, () => {
     return new Promise((resolve) => {
       cy.readFile(filePath, "binary").then((stringContent: string) => {
         const binaryContent = Uint8Array.from(stringContent, (x) =>
-          x.charCodeAt(0)
+          x.charCodeAt(0),
         );
         resolve(binaryContent);
       });

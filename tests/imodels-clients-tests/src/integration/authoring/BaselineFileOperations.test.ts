@@ -32,7 +32,7 @@ describe("[Authoring] BaselineFileOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -42,7 +42,7 @@ describe("[Authoring] BaselineFileOperations", () => {
     testIModelFileProvider = container.get(TestIModelFileProvider);
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModelForRead = await reusableTestIModelProvider.getOrCreate();
   });

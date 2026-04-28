@@ -24,30 +24,30 @@ import { handleAPIErrors } from "./ErrorHandlingFunctions";
 
 export async function getLatestFullChangesetIfExists(
   iModelsClient: IModelsClient,
-  iModelScopedOperationParams: IModelScopedOperationParams
+  iModelScopedOperationParams: IModelScopedOperationParams,
 ): Promise<Changeset | undefined> {
   return getLatestChangeset(
     (getChangesetListParams) =>
       iModelsClient.changesets.getRepresentationList(getChangesetListParams),
-    iModelScopedOperationParams
+    iModelScopedOperationParams,
   );
 }
 
 export async function getLatestMinimalChangesetIfExists(
   iModelsClient: IModelsClient,
-  iModelScopedOperationParams: IModelScopedOperationParams
+  iModelScopedOperationParams: IModelScopedOperationParams,
 ): Promise<MinimalChangeset | undefined> {
   return getLatestChangeset(
     (getChangesetListParams) =>
       iModelsClient.changesets.getMinimalList(getChangesetListParams),
-    iModelScopedOperationParams
+    iModelScopedOperationParams,
   );
 }
 
 export async function getNamedVersionChangeset(
   iModelsClient: IModelsClient,
   iModelScopedOperationParams: IModelScopedOperationParams,
-  versionName: string
+  versionName: string,
 ): Promise<{ id: string; index: number }> {
   const getNamedVersionListParams: GetNamedVersionListParams = {
     ...iModelScopedOperationParams,
@@ -59,7 +59,7 @@ export async function getNamedVersionChangeset(
   const namedVersionsIterator: EntityListIterator<MinimalNamedVersion> =
     iModelsClient.namedVersions.getMinimalList(getNamedVersionListParams);
   const namedVersions: MinimalNamedVersion[] = await handleAPIErrors(async () =>
-    toArray(namedVersionsIterator)
+    toArray(namedVersionsIterator),
   );
 
   if (namedVersions.length === 0 || !namedVersions[0].changesetId)
@@ -79,9 +79,9 @@ export async function getNamedVersionChangeset(
 
 async function getLatestChangeset<TChangeset extends MinimalChangeset>(
   changesetQueryFunc: (
-    params: GetChangesetListParams
+    params: GetChangesetListParams,
   ) => EntityListIterator<TChangeset>,
-  iModelScopedOperationParams: IModelScopedOperationParams
+  iModelScopedOperationParams: IModelScopedOperationParams,
 ): Promise<TChangeset | undefined> {
   const getChangesetListParams: GetChangesetListParams = {
     ...iModelScopedOperationParams,
@@ -95,10 +95,10 @@ async function getLatestChangeset<TChangeset extends MinimalChangeset>(
   };
 
   const changesetsIterator: EntityListIterator<TChangeset> = changesetQueryFunc(
-    getChangesetListParams
+    getChangesetListParams,
   );
   const changesets: TChangeset[] = await handleAPIErrors(async () =>
-    take(changesetsIterator, 1)
+    take(changesetsIterator, 1),
   );
 
   if (changesets.length === 0) return undefined;

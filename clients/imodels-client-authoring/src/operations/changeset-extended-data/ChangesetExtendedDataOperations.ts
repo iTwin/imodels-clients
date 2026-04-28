@@ -16,7 +16,7 @@ import {
 } from "./ChangesetExtendedDataOperationsParams";
 
 export class ChangesetExtendedDataOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends ManagementChangesetExtendedDataOperations<TOptions> {
   /**
    * Creates Changeset Extended Data. Wraps the
@@ -26,7 +26,7 @@ export class ChangesetExtendedDataOperations<
    * @returns {Promise<ChangesetExtendedData>} newly created Changeset Extended Data. See {@link ChangesetExtendedData}.
    */
   public async create(
-    params: CreateChangesetExtendedDataParams
+    params: CreateChangesetExtendedDataParams,
   ): Promise<ChangesetExtendedData> {
     const {
       authorization,
@@ -37,7 +37,7 @@ export class ChangesetExtendedDataOperations<
     } = params;
     const createChangesetExtendedDataBody =
       this.getCreateChangesetExtendedDataRequestBody(
-        changesetExtendedDataProperties
+        changesetExtendedDataProperties,
       );
     const createChangesetExtendedDataResponse =
       await this.sendPostRequest<ChangesetExtendedDataResponse>({
@@ -51,12 +51,12 @@ export class ChangesetExtendedDataOperations<
       });
 
     return this.convertToChangesetExtendedData(
-      createChangesetExtendedDataResponse.body.extendedData
+      createChangesetExtendedDataResponse.body.extendedData,
     );
   }
 
   private getCreateChangesetExtendedDataRequestBody(
-    changesetExtendedDataProperties: ChangesetExtendedDataPropertiesForCreate
+    changesetExtendedDataProperties: ChangesetExtendedDataPropertiesForCreate,
   ): object {
     const dataJson = JSON.stringify(changesetExtendedDataProperties.data);
     const data = Buffer.from(dataJson).toString("base64");

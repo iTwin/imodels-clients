@@ -56,7 +56,7 @@ describe("[Management] BriefcaseOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -64,7 +64,7 @@ describe("[Management] BriefcaseOperations", () => {
     authorization = authorizationProvider.getAdmin1Authorization();
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModel = await reusableTestIModelProvider.getOrCreate();
 
@@ -76,13 +76,13 @@ describe("[Management] BriefcaseOperations", () => {
     });
 
     const authoringClientOptions = container.get<AuthoringIModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     authoringClient = new AuthoringIModelsClient(authoringClientOptions);
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModelForRelease = await testIModelCreator.createEmpty(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for release")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for release"),
     );
   });
 
@@ -138,7 +138,7 @@ describe("[Management] BriefcaseOperations", () => {
 
     // Act
     const briefcases = iModelsClient.briefcases.getRepresentationList(
-      getBriefcaseListParams
+      getBriefcaseListParams,
     );
 
     // Assert
@@ -166,7 +166,7 @@ describe("[Management] BriefcaseOperations", () => {
 
     // Act
     const briefcases = iModelsClient.briefcases.getRepresentationList(
-      getBriefcaseListParams
+      getBriefcaseListParams,
     );
 
     // Assert
@@ -187,7 +187,7 @@ describe("[Management] BriefcaseOperations", () => {
 
     // Act
     const briefcases = iModelsClient.briefcases.getRepresentationList(
-      getBriefcaseListParams
+      getBriefcaseListParams,
     );
 
     // Assert
@@ -195,7 +195,7 @@ describe("[Management] BriefcaseOperations", () => {
     expect(briefcasesArray.length).to.be.greaterThan(0);
     for (const actualBriefcase of briefcasesArray) {
       const expectedBriefcase = testIModel.briefcases.find(
-        (briefcase) => briefcase.id === actualBriefcase.briefcaseId
+        (briefcase) => briefcase.id === actualBriefcase.briefcaseId,
       );
       expect(expectedBriefcase).to.exist;
       await assertBriefcase({
@@ -218,7 +218,7 @@ describe("[Management] BriefcaseOperations", () => {
 
     // Act
     const briefcases = iModelsClient.briefcases.getRepresentationList(
-      getBriefcaseListParams
+      getBriefcaseListParams,
     );
 
     // Assert
@@ -238,7 +238,7 @@ describe("[Management] BriefcaseOperations", () => {
 
     // Act
     const minimalBriefcases = iModelsClient.briefcases.getMinimalList(
-      getBriefcaseListParams
+      getBriefcaseListParams,
     );
 
     // Assert
@@ -289,7 +289,7 @@ describe("[Management] BriefcaseOperations", () => {
 
     // Act
     const briefcase: Briefcase = await iModelsClient.briefcases.getSingle(
-      getSingleBriefcaseParams
+      getSingleBriefcaseParams,
     );
 
     // Assert
@@ -313,14 +313,14 @@ describe("[Management] BriefcaseOperations", () => {
 
     // Act
     const briefcases = await toArray(
-      iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams)
+      iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams),
     );
 
     // Assert
     expect(briefcases.length).to.equal(testIModel.briefcases.length);
     for (let i = 0; i < briefcases.length - 1; i++)
       expect(new Date(briefcases[i].acquiredDateTime)).to.be.lessThan(
-        new Date(briefcases[i + 1].acquiredDateTime)
+        new Date(briefcases[i + 1].acquiredDateTime),
       );
   });
 
@@ -339,14 +339,14 @@ describe("[Management] BriefcaseOperations", () => {
 
     // Act
     const briefcases = await toArray(
-      iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams)
+      iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams),
     );
 
     // Assert
     expect(briefcases.length).to.equal(testIModel.briefcases.length);
     for (let i = 0; i < briefcases.length - 1; i++)
       expect(new Date(briefcases[i].acquiredDateTime)).to.be.greaterThan(
-        new Date(briefcases[i + 1].acquiredDateTime)
+        new Date(briefcases[i + 1].acquiredDateTime),
       );
   });
 
@@ -357,7 +357,7 @@ describe("[Management] BriefcaseOperations", () => {
       iModelId: testIModelForRelease.id,
     };
     const briefcase = await authoringClient.briefcases.acquire(
-      acquireBriefcaseParams
+      acquireBriefcaseParams,
     );
 
     const getBriefcaseListParams: GetBriefcaseListParams = {
@@ -365,12 +365,12 @@ describe("[Management] BriefcaseOperations", () => {
       iModelId: testIModelForRelease.id,
     };
     const briefcasesBeforeRelease = await toArray(
-      iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams)
+      iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams),
     );
     expect(
       briefcasesBeforeRelease.some(
-        (b) => b.briefcaseId === briefcase.briefcaseId
-      )
+        (b) => b.briefcaseId === briefcase.briefcaseId,
+      ),
     ).to.be.true;
 
     const releaseBriefcaseParams: ReleaseBriefcaseParams = {
@@ -384,12 +384,12 @@ describe("[Management] BriefcaseOperations", () => {
 
     // Assert
     const briefcasesAfterRelease = await toArray(
-      iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams)
+      iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams),
     );
     expect(
       briefcasesAfterRelease.find(
-        (b) => b.briefcaseId === briefcase.briefcaseId
-      )
+        (b) => b.briefcaseId === briefcase.briefcaseId,
+      ),
     ).to.be.undefined;
   });
 });

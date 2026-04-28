@@ -27,28 +27,24 @@
     "build:cjs": "tsc 1>&2 --outDir lib/cjs",
     "build:esm": "tsc 1>&2 --module esnext --outDir lib/esm",
     "clean": "rimraf lib",
-    "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config ./src/**/*.ts 1>&2",
-    "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
+    "lint": "eslint ./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
   },
   "prettier": "./node_modules/@itwin/imodels-client-common-config/prettier.json",
-  "eslintConfig": {
-    "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.js"
-  },
   "dependencies": {
     "@itwin/imodels-client-management": "workspace:*",
-    "@itwin/object-storage-core": "^3.0.4"
+    "@itwin/object-storage-core": "^3.0.5"
   },
   "devDependencies": {
-    "@itwin/eslint-plugin": "~3.7.8",
+    "@itwin/eslint-plugin": "~6.0.0",
     "@itwin/imodels-client-common-config": "workspace:*",
     "@types/node": "^22.15.14",
-    "@typescript-eslint/eslint-plugin": "~6.14.0",
+    "@typescript-eslint/eslint-plugin": "~8.59.1",
     "cspell": "~5.21.0",
-    "eslint": "~8.55.0",
-    "eslint-plugin-deprecation": "~1.5.0",
-    "eslint-plugin-import": "~2.29.0",
-    "eslint-plugin-mocha": "~10.2.0",
+    "eslint": "~9.39.4",
+    "eslint-plugin-import": "~2.32.0",
+    "eslint-plugin-mocha": "~11.2.0",
     "eslint-plugin-prefer-arrow": "~1.2.3",
     "rimraf": "~3.0.2",
     "sort-package-json": "~1.53.1",

@@ -27,7 +27,7 @@ export class ReusableTestIModelProvider {
     private readonly _iModelsClient: TestIModelsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
     private readonly _testIModelRetriever: TestIModelRetriever,
-    private readonly _testIModelCreator: TestIModelCreator
+    private readonly _testIModelCreator: TestIModelCreator,
   ) {}
 
   public async getOrCreate(): Promise<ReusableIModelMetadata> {
@@ -39,17 +39,17 @@ export class ReusableTestIModelProvider {
   private async get(): Promise<ReusableIModelMetadata> {
     const existingReusableIModel =
       await this._testIModelRetriever.findIModelByName(
-        this._config.testIModelName
+        this._config.testIModelName,
       );
     if (!existingReusableIModel)
       return this._testIModelCreator.createReusable(
-        this._config.testIModelName
+        this._config.testIModelName,
       );
 
     if (this._config.behaviorOptions.recreateReusableIModel) {
       await this.deleteIModel(existingReusableIModel.id);
       return this._testIModelCreator.createReusable(
-        this._config.testIModelName
+        this._config.testIModelName,
       );
     }
 
@@ -57,7 +57,7 @@ export class ReusableTestIModelProvider {
   }
 
   private async waitForInitializedIModel(
-    iModel: IModel
+    iModel: IModel,
   ): Promise<ReusableIModelMetadata> {
     const timeoutInMs = 3 * 60 * 1000; // 3 minutes
     const pollingIntervalInMs = 5 * 1000; // 5 seconds
@@ -81,7 +81,7 @@ export class ReusableTestIModelProvider {
     }
 
     throw Error(
-      "Timed out while waiting for reusable iModel to be initialized."
+      "Timed out while waiting for reusable iModel to be initialized.",
     );
   }
 

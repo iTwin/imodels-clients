@@ -37,7 +37,7 @@ describe("[Authoring] ChangesetExtendedDataOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -55,7 +55,7 @@ describe("[Authoring] ChangesetExtendedDataOperations", () => {
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModel = await testIModelCreator.createEmptyAndUploadChangesets(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"),
     );
   });
 
@@ -85,7 +85,7 @@ describe("[Authoring] ChangesetExtendedDataOperations", () => {
     // Act
     const changesetExtendedData: ChangesetExtendedData =
       await iModelsClient.changesetExtendedData.create(
-        createChangesetExtendedDataParams
+        createChangesetExtendedDataParams,
       );
 
     // Assert
@@ -105,7 +105,7 @@ describe("[Authoring] ChangesetExtendedDataOperations", () => {
     // Act
     const singleChangesetExtendedData: ChangesetExtendedData =
       await iModelsClient.changesetExtendedData.getSingle(
-        getSingleChangesetExtendedDataParams
+        getSingleChangesetExtendedDataParams,
       );
 
     // Assert

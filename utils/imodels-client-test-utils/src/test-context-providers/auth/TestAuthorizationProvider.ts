@@ -18,7 +18,7 @@ export class TestAuthorizationProvider {
 
   constructor(
     private readonly _config: TestAuthorizationProviderConfig,
-    private readonly _testiModelsAuthClient: TestAuthorizationClient
+    private readonly _testiModelsAuthClient: TestAuthorizationClient,
   ) {}
 
   public getAdmin1Authorization(): AuthorizationCallback {
@@ -50,9 +50,8 @@ export class TestAuthorizationProvider {
     return async () => {
       const userKey = this.getKey(testUser);
       if (!this._authorizations[userKey]) {
-        const accessToken = await this._testiModelsAuthClient.getAccessToken(
-          testUser
-        );
+        const accessToken =
+          await this._testiModelsAuthClient.getAccessToken(testUser);
         this._authorizations[userKey] = {
           scheme: "Bearer",
           token: accessToken,

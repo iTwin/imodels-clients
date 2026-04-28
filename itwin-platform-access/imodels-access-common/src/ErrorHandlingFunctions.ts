@@ -6,7 +6,7 @@ import { ErrorAdapter, OperationNameForErrorMapping } from "./ErrorAdapter";
 
 export async function handleAPIErrors<TResult>(
   func: () => Promise<TResult>,
-  operationName?: OperationNameForErrorMapping
+  operationName?: OperationNameForErrorMapping,
 ): Promise<TResult> {
   try {
     const result = await func();

@@ -40,7 +40,7 @@ describe("[Management] ChangesetOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -50,7 +50,7 @@ describe("[Management] ChangesetOperations", () => {
     testIModelFileProvider = container.get(TestIModelFileProvider);
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModel = await reusableTestIModelProvider.getOrCreate();
   });
@@ -105,7 +105,7 @@ describe("[Management] ChangesetOperations", () => {
 
       // Assert
       const changesetIndexes = (await toArray(changesets)).map(
-        (changeset) => changeset.index
+        (changeset) => changeset.index,
       );
       for (let i = 0; i < changesetIndexes.length - 1; i++)
         expect(changesetIndexes[i]).to.be.lessThan(changesetIndexes[i + 1]);
@@ -129,7 +129,7 @@ describe("[Management] ChangesetOperations", () => {
 
       // Assert
       const changesetIndexes = (await toArray(changesets)).map(
-        (changeset) => changeset.index
+        (changeset) => changeset.index,
       );
       for (let i = 0; i < changesetIndexes.length - 1; i++)
         expect(changesetIndexes[i]).to.be.greaterThan(changesetIndexes[i + 1]);
@@ -179,7 +179,7 @@ describe("[Management] ChangesetOperations", () => {
 
       // Assert
       const changesetIndexes = (await toArray(changesets)).map(
-        (changeset) => changeset.index
+        (changeset) => changeset.index,
       );
       expect(changesetIndexes).to.deep.equal([10, 9, 8, 7, 6]);
     });
@@ -211,7 +211,7 @@ describe("[Management] ChangesetOperations", () => {
     const testChangesetFile =
       testIModelFileProvider.changesets[minimalChangeset.index - 1];
     const groupId = testIModel.changesetGroups.find((csGroup) =>
-      csGroup.changesetIndexes.includes(minimalChangeset.index)
+      csGroup.changesetIndexes.includes(minimalChangeset.index),
     )?.id;
     await assertMinimalChangeset({
       actualChangeset: minimalChangeset,
@@ -250,7 +250,7 @@ describe("[Management] ChangesetOperations", () => {
     const testChangesetFile =
       testIModelFileProvider.changesets[changeset.index - 1];
     const groupId = testIModel.changesetGroups.find((csGroup) =>
-      csGroup.changesetIndexes.includes(changeset.index)
+      csGroup.changesetIndexes.includes(changeset.index),
     )?.id;
     await assertChangeset({
       actualChangeset: changeset,
@@ -279,7 +279,7 @@ describe("[Management] ChangesetOperations", () => {
     const testChangesetFile =
       testIModelFileProvider.changesets[changesetWithNamedVersionIndex - 1];
     const groupId = testIModel.changesetGroups.find((csGroup) =>
-      csGroup.changesetIndexes.includes(changesetWithNamedVersionIndex)
+      csGroup.changesetIndexes.includes(changesetWithNamedVersionIndex),
     )?.id;
     const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
@@ -289,7 +289,7 @@ describe("[Management] ChangesetOperations", () => {
 
     // Act
     const changeset: Changeset = await iModelsClient.changesets.getSingle(
-      getSingleChangesetParams
+      getSingleChangesetParams,
     );
 
     // Assert
@@ -320,7 +320,7 @@ describe("[Management] ChangesetOperations", () => {
     const testChangesetFile =
       testIModelFileProvider.changesets[changesetWithGroupIndex - 1];
     const changesetHasNamedVersion = !!testIModel.namedVersions.find(
-      (version) => version.changesetIndex === changesetWithGroupIndex
+      (version) => version.changesetIndex === changesetWithGroupIndex,
     );
     const getSingleChangesetParams: GetSingleChangesetParams = {
       authorization,
@@ -330,7 +330,7 @@ describe("[Management] ChangesetOperations", () => {
 
     // Act
     const changeset: Changeset = await iModelsClient.changesets.getSingle(
-      getSingleChangesetParams
+      getSingleChangesetParams,
     );
 
     // Assert

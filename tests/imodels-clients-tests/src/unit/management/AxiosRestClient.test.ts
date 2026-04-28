@@ -175,7 +175,7 @@ describe("[Management] AxiosRestClient", () => {
     expect((thrownError as AxiosError).status).to.be.equal(500);
     expect(
       axiosMock.history.post.filter((x) => x.url === requestParams.url)
-        .length === 1
+        .length === 1,
     );
   });
 
@@ -207,7 +207,7 @@ describe("[Management] AxiosRestClient", () => {
     expect((thrownError as AxiosError).status).to.be.equal(500);
     expect(
       axiosMock.history.post.filter((x) => x.url === requestParams.url)
-        .length === 11
+        .length === 11,
     );
   });
 
@@ -222,8 +222,8 @@ describe("[Management] AxiosRestClient", () => {
       },
     };
 
-    axiosMock.onPost(requestParams.url).reply(500),
-      retryPolicyStub.shouldRetry.returns(false);
+    (axiosMock.onPost(requestParams.url).reply(500),
+      retryPolicyStub.shouldRetry.returns(false));
     const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
@@ -237,13 +237,13 @@ describe("[Management] AxiosRestClient", () => {
     // Assert
     expect((thrownError as AxiosError).status).to.be.equal(500);
     expect(
-      axiosMock.history.post.filter((x) => x.url === requestParams.url).length
+      axiosMock.history.post.filter((x) => x.url === requestParams.url).length,
     ).to.be.equal(1);
     expect(
       retryPolicyStub.shouldRetry.calledOnceWith({
         retriesInvoked: 0,
         error: sinon.match.any,
-      })
+      }),
     ).to.be.true;
     expect(retryPolicyStub.getSleepDurationInMs.callCount).to.be.equal(0);
     expect(sleepStub.callCount).to.be.equal(0);
@@ -261,12 +261,12 @@ describe("[Management] AxiosRestClient", () => {
       },
     };
 
-    axiosMock
+    (axiosMock
       .onPost(requestParams.url)
       .replyOnce(500)
       .onPost(requestParams.url)
       .replyOnce(200, responseData),
-      retryPolicyStub.shouldRetry.returns(true);
+      retryPolicyStub.shouldRetry.returns(true));
     retryPolicyStub.getSleepDurationInMs.returns(1000);
     const restClient = new AxiosRestClient(retryPolicyStub);
 
@@ -276,16 +276,18 @@ describe("[Management] AxiosRestClient", () => {
     // Assert
     expect(response.body).to.deep.equal(responseData);
     expect(
-      axiosMock.history.post.filter((x) => x.url === requestParams.url).length
+      axiosMock.history.post.filter((x) => x.url === requestParams.url).length,
     ).to.be.equal(2);
     expect(
       retryPolicyStub.shouldRetry.calledOnceWith({
         retriesInvoked: 0,
         error: sinon.match.any,
-      })
+      }),
     ).to.be.true;
     expect(
-      retryPolicyStub.getSleepDurationInMs.calledOnceWith({ retriesInvoked: 0 })
+      retryPolicyStub.getSleepDurationInMs.calledOnceWith({
+        retriesInvoked: 0,
+      }),
     ).to.be.true;
     expect(sleepStub.calledOnceWith(1000)).to.be.true;
   });
@@ -319,7 +321,7 @@ describe("[Management] AxiosRestClient", () => {
     // Assert
     expect((thrownError as AxiosError).status).to.be.equal(503);
     expect(
-      axiosMock.history.post.filter((x) => x.url === requestParams.url).length
+      axiosMock.history.post.filter((x) => x.url === requestParams.url).length,
     ).to.be.equal(4);
 
     expect(retryPolicyStub.shouldRetry.callCount).to.be.equal(3);
@@ -327,19 +329,19 @@ describe("[Management] AxiosRestClient", () => {
       retryPolicyStub.shouldRetry.calledWithMatch({
         retriesInvoked: 0,
         error: sinon.match.any,
-      })
+      }),
     ).to.be.true;
     expect(
       retryPolicyStub.shouldRetry.calledWithMatch({
         retriesInvoked: 1,
         error: sinon.match.any,
-      })
+      }),
     ).to.be.true;
     expect(
       retryPolicyStub.shouldRetry.calledWithMatch({
         retriesInvoked: 2,
         error: sinon.match.any,
-      })
+      }),
     ).to.be.true;
 
     expect(retryPolicyStub.getSleepDurationInMs.callCount).to.be.equal(3);

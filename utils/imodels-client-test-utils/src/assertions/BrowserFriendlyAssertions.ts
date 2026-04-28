@@ -67,18 +67,18 @@ export async function assertIModel(params: {
   });
 
   expect(params.actualIModel.name).to.equal(
-    params.expectedIModelProperties.name
+    params.expectedIModelProperties.name,
   );
   assertOptionalProperty(
     params.expectedIModelProperties.description,
-    params.actualIModel.description
+    params.actualIModel.description,
   );
   assertOptionalProperty(
     params.expectedIModelProperties.extent,
-    params.actualIModel.extent
+    params.actualIModel.extent,
   );
   expect(params.actualIModel.containersEnabled).to.equal(
-    params.expectedIModelProperties.containersEnabled
+    params.expectedIModelProperties.containersEnabled,
   );
   expect(params.actualIModel.createdDateTime).to.not.be.empty;
   expect(params.actualIModel.state).to.equal(IModelState.Initialized);
@@ -111,7 +111,7 @@ export async function assertBriefcase(params: {
 
   if (params.expectedBriefcaseProperties.ownerId)
     expect(params.actualBriefcase.ownerId).to.be.equal(
-      params.expectedBriefcaseProperties.ownerId
+      params.expectedBriefcaseProperties.ownerId,
     );
   else expect(params.actualBriefcase.ownerId).to.not.be.empty;
 
@@ -120,12 +120,12 @@ export async function assertBriefcase(params: {
   expect(params.actualBriefcase.fileSize).to.be.greaterThan(0);
   assertOptionalProperty(
     params.expectedBriefcaseProperties?.deviceName,
-    params.actualBriefcase.deviceName
+    params.actualBriefcase.deviceName,
   );
 
   if (params.expectedBriefcaseProperties.briefcaseId)
     expect(params.actualBriefcase.briefcaseId).to.equal(
-      params.expectedBriefcaseProperties.briefcaseId
+      params.expectedBriefcaseProperties.briefcaseId,
     );
   else expect(params.actualBriefcase.briefcaseId).to.be.greaterThan(0);
 
@@ -159,10 +159,10 @@ export function assertMinimalNamedVersion(params: {
 
   assertOptionalProperty(
     params.expectedNamedVersionProperties.changesetId,
-    params.actualNamedVersion.changesetId
+    params.actualNamedVersion.changesetId,
   );
   expect(params.actualNamedVersion.changesetIndex).to.equal(
-    params.expectedNamedVersionProperties.changesetIndex
+    params.expectedNamedVersionProperties.changesetIndex,
   );
 }
 
@@ -181,11 +181,11 @@ export async function assertNamedVersion(params: {
   });
 
   expect(params.actualNamedVersion.name).to.equal(
-    params.expectedNamedVersionProperties.name
+    params.expectedNamedVersionProperties.name,
   );
   assertOptionalProperty(
     params.expectedNamedVersionProperties.description,
-    params.actualNamedVersion.description
+    params.actualNamedVersion.description,
   );
   expect(params.actualNamedVersion.state).to.equal(NamedVersionState.Visible);
 
@@ -217,18 +217,18 @@ export function assertCheckpoint(params: {
 }): void {
   if (params.expectedCheckpointProperties.changesetId)
     expect(params.actualCheckpoint.changesetId).to.equal(
-      params.expectedCheckpointProperties.changesetId
+      params.expectedCheckpointProperties.changesetId,
     );
 
   if (params.expectedCheckpointProperties.changesetIndex != null)
     expect(params.actualCheckpoint.changesetIndex).to.equal(
-      params.expectedCheckpointProperties.changesetIndex
+      params.expectedCheckpointProperties.changesetIndex,
     );
   else
     expect(params.actualCheckpoint.changesetIndex).to.be.greaterThanOrEqual(0);
 
   expect(params.actualCheckpoint.state).to.equal(
-    params.expectedCheckpointProperties.state
+    params.expectedCheckpointProperties.state,
   );
 
   expect(params.actualCheckpoint.directoryAccessInfo).to.not.be.null;
@@ -237,7 +237,7 @@ export function assertCheckpoint(params: {
     .empty;
   expect(
     params.actualCheckpoint.directoryAccessInfo?.azure?.sasToken ??
-      params.actualCheckpoint.directoryAccessInfo?.google?.authorization
+      params.actualCheckpoint.directoryAccessInfo?.google?.authorization,
   ).to.not.be.empty;
   expect(params.actualCheckpoint.dbName).to.not.be.empty;
 
@@ -257,7 +257,7 @@ export function assertThumbnail(params: {
   expect(params.actualThumbnail.image).to.not.be.empty;
 
   expect(params.actualThumbnail.size).to.be.equal(
-    params.expectedThumbnailProperties.size
+    params.expectedThumbnailProperties.size,
   );
   expect(params.actualThumbnail.imageType).to.be.equal(ContentType.Png);
 }
@@ -283,10 +283,10 @@ export function assertUser(params: { actualUser: User }): void {
 
   expect(params.actualUser.statistics).to.exist;
   expect(
-    params.actualUser.statistics.pushedChangesetsCount
+    params.actualUser.statistics.pushedChangesetsCount,
   ).to.be.greaterThanOrEqual(0);
   expect(
-    params.actualUser.statistics.createdVersionsCount
+    params.actualUser.statistics.createdVersionsCount,
   ).to.be.greaterThanOrEqual(0);
   expect(params.actualUser.statistics.briefcasesCount).to.greaterThanOrEqual(0);
 }
@@ -305,22 +305,22 @@ export function assertUserStatistics(params: {
 }): void {
   expect(params.actualUser.statistics).to.exist;
   expect(params.actualUser.statistics.pushedChangesetsCount).to.equal(
-    params.expectedUserStatistics.pushedChangesetsCount
+    params.expectedUserStatistics.pushedChangesetsCount,
   );
   expect(params.actualUser.statistics.lastChangesetPushDate == null).to.equal(
-    params.actualUser.statistics.pushedChangesetsCount == 0
+    params.actualUser.statistics.pushedChangesetsCount == 0,
   );
   expect(params.actualUser.statistics.createdVersionsCount).to.equal(
-    params.expectedUserStatistics.createdVersionsCount
+    params.expectedUserStatistics.createdVersionsCount,
   );
   expect(params.actualUser.statistics.briefcasesCount).to.equal(
-    params.expectedUserStatistics.briefcasesCount
+    params.expectedUserStatistics.briefcasesCount,
   );
   expect(params.actualUser.statistics.applications.length).to.equal(
-    params.expectedUserStatistics.applications.length
+    params.expectedUserStatistics.applications.length,
   );
   expect(params.actualUser.statistics.applications.length).to.equal(
-    params.expectedUserStatistics.applications.length
+    params.expectedUserStatistics.applications.length,
   );
 
   for (let i = 0; i < params.actualUser.statistics.applications.length; i++) {
@@ -328,10 +328,11 @@ export function assertUserStatistics(params: {
     expect(application.id).to.not.be.empty;
     expect(application.name).to.not.be.empty;
     expect(application.ownsLocks).to.equal(
-      params.expectedUserStatistics.applications[i].ownsLocks
+      params.expectedUserStatistics.applications[i].ownsLocks,
     );
     expect(application.ownsExclusiveRootElementLock).to.equal(
-      params.expectedUserStatistics.applications[i].ownsExclusiveRootElementLock
+      params.expectedUserStatistics.applications[i]
+        .ownsExclusiveRootElementLock,
     );
   }
 }
@@ -343,12 +344,12 @@ export function assertUserPermissions(params: {
   expect(params.actualPermissions).to.exist;
   expect(params.actualPermissions.permissions).to.exist;
   expect(params.actualPermissions.permissions.length).to.be.equal(
-    params.expectedPermissions.length
+    params.expectedPermissions.length,
   );
 
   for (const actualIModelPermission of params.actualPermissions.permissions) {
     const isCurrentPermissionExpected = params.expectedPermissions.includes(
-      actualIModelPermission
+      actualIModelPermission,
     );
     expect(isCurrentPermissionExpected).to.equal(true);
   }
@@ -364,10 +365,10 @@ export function assertChangesetExtendedDataBrowser(params: {
   expect(params.actualChangesetExtendedData).to.exist;
   expect(params.actualChangesetExtendedData.changesetId).to.not.be.empty;
   expect(params.actualChangesetExtendedData.changesetIndex).to.equal(
-    params.expectedChangesetExtendedData.changesetIndex
+    params.expectedChangesetExtendedData.changesetIndex,
   );
   expect(params.actualChangesetExtendedData.data).to.deep.equal(
-    params.expectedChangesetExtendedData.data
+    params.expectedChangesetExtendedData.data,
   );
 }
 
@@ -387,7 +388,7 @@ export function assertError(params: {
   if (params.expectedError.details) {
     expect(iModelsError.details).to.exist;
     expect(iModelsError.details!.length).to.equal(
-      params.expectedError.details.length
+      params.expectedError.details.length,
     );
 
     for (const expectedDetail of params.expectedError.details) {
@@ -404,17 +405,17 @@ export function assertError(params: {
   if (params.expectedError.originalError) {
     expect(iModelsError.originalError).to.exist;
     expect(iModelsError.originalError!.code).to.equal(
-      params.expectedError.originalError.code
+      params.expectedError.originalError.code,
     );
     expect(iModelsError.originalError!.message).to.equal(
-      params.expectedError.originalError.message
+      params.expectedError.originalError.message,
     );
   }
 }
 
 export function assertOptionalProperty<TPropertyType>(
   expectedValue: TPropertyType,
-  actualValue: TPropertyType
+  actualValue: TPropertyType,
 ): void {
   if (expectedValue) expect(actualValue).to.deep.equal(expectedValue);
   else expect(actualValue).to.equal(null);

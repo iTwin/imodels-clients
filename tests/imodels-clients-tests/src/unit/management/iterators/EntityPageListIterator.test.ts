@@ -12,7 +12,7 @@ describe("EntityPageListIterator", () => {
   it("should return entities in pages", async () => {
     // Arrange
     const testIterator = new EntityPageListIterator(
-      getEntityPageQueryFunc(2, 2)
+      getEntityPageQueryFunc(2, 2),
     );
     const entityPages: TestEntity[][] = [];
 

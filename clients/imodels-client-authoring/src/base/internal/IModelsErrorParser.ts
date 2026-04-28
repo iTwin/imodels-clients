@@ -60,18 +60,18 @@ class ConflictingLocksErrorImpl
 export class IModelsErrorParser extends ManagementIModelsErrorParser {
   public static override parse(
     response: ResponseInfo,
-    originalError: IModelsOriginalError
+    originalError: IModelsOriginalError,
   ): Error {
     const errorFromApi: AuthoringIModelsApiErrorWrapper | undefined =
       response.body as AuthoringIModelsApiErrorWrapper;
     const errorCode: IModelsErrorCode = IModelsErrorParser.parseCode(
-      errorFromApi?.error?.code
+      errorFromApi?.error?.code,
     );
 
     if (errorCode === IModelsErrorCode.NewerChangesExist) {
       const errorMessage = IModelsErrorParser.parseAndFormatLockErrorMessage(
         errorFromApi?.error?.message,
-        errorFromApi?.error?.objectIds
+        errorFromApi?.error?.objectIds,
       );
       return new LocksErrorImpl({
         code: errorCode,
@@ -85,7 +85,7 @@ export class IModelsErrorParser extends ManagementIModelsErrorParser {
       const errorMessage =
         IModelsErrorParser.parseAndFormatLockConflictErrorMessage(
           errorFromApi?.error?.message,
-          errorFromApi?.error?.conflictingLocks
+          errorFromApi?.error?.conflictingLocks,
         );
       return new ConflictingLocksErrorImpl({
         code: errorCode,
@@ -100,7 +100,7 @@ export class IModelsErrorParser extends ManagementIModelsErrorParser {
 
   private static parseAndFormatLockErrorMessage(
     message: string | undefined,
-    objectIds: string[] | undefined
+    objectIds: string[] | undefined,
   ): string {
     let result = message ?? ManagementIModelsErrorParser._defaultErrorMessage;
     if (!objectIds || objectIds.length === 0) return result;
@@ -111,7 +111,7 @@ export class IModelsErrorParser extends ManagementIModelsErrorParser {
 
   private static parseAndFormatLockConflictErrorMessage(
     message: string | undefined,
-    conflictingLocks: ConflictingLock[] | undefined
+    conflictingLocks: ConflictingLock[] | undefined,
   ) {
     let result = message ?? ManagementIModelsErrorParser._defaultErrorMessage;
     if (!conflictingLocks || conflictingLocks.length === 0) return result;

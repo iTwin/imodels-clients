@@ -14,8 +14,8 @@ import { assertError } from "@itwin/imodels-client-test-utils";
 export function testIModelsErrorParser(
   testedFunction: (
     response: ResponseInfo,
-    originalError: IModelsOriginalError
-  ) => Error
+    originalError: IModelsOriginalError,
+  ) => Error,
 ): void {
   it("should parse valid iModels API error", () => {
     // Arrange
@@ -47,7 +47,7 @@ export function testIModelsErrorParser(
     // Act
     const parsedError: IModelsError = testedFunction(
       { statusCode: 422, body: errorResponse },
-      new Error()
+      new Error(),
     ) as IModelsError;
 
     // Assert
@@ -96,7 +96,7 @@ export function testIModelsErrorParser(
     // Act
     const parsedError: IModelsError = testedFunction(
       { statusCode: 401, body: errorResponse },
-      new Error()
+      new Error(),
     ) as IModelsError;
 
     // Assert
@@ -120,7 +120,7 @@ export function testIModelsErrorParser(
     // Act
     const parsedError: IModelsError = testedFunction(
       { statusCode: 401, body: errorResponse },
-      new Error()
+      new Error(),
     ) as IModelsError;
 
     // Assert
@@ -141,7 +141,7 @@ export function testIModelsErrorParser(
     // Act
     const parsedError: IModelsError = testedFunction(
       { statusCode: 401, body: errorResponse },
-      new Error()
+      new Error(),
     ) as IModelsError;
 
     // Assert
@@ -159,7 +159,7 @@ export function testIModelsErrorParser(
     // Act
     const parsedError: IModelsError = testedFunction(
       { statusCode: undefined, body: undefined },
-      new Error()
+      new Error(),
     ) as IModelsError;
 
     // Assert
@@ -184,7 +184,7 @@ export function testIModelsErrorParser(
     (originalError as any).code = "originalErrorCode";
     const parsedError: IModelsError = testedFunction(
       { statusCode: undefined, body: undefined },
-      originalError
+      originalError,
     ) as IModelsError;
 
     // Assert
@@ -206,7 +206,7 @@ export function testIModelsErrorParser(
     // Act
     const parsedError: IModelsError = testedFunction(
       { statusCode: 444, body: undefined },
-      new Error("originalErrorMessage")
+      new Error("originalErrorMessage"),
     ) as IModelsError;
 
     // Assert
@@ -229,7 +229,7 @@ export function testIModelsErrorParser(
     // Act
     const parsedError: IModelsError = testedFunction(
       { statusCode: 445, body: null },
-      new Error("originalErrorMessage")
+      new Error("originalErrorMessage"),
     ) as IModelsError;
 
     // Assert
@@ -252,7 +252,7 @@ export function testIModelsErrorParser(
     // Act
     const parsedError: IModelsError = testedFunction(
       { statusCode: 446, body: { unknownProperty: "unknown value" } },
-      new Error("originalErrorMessage")
+      new Error("originalErrorMessage"),
     ) as IModelsError;
 
     // Assert

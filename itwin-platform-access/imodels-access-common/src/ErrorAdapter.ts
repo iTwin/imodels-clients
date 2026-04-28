@@ -24,7 +24,7 @@ export type OperationNameForErrorMapping =
 export class ErrorAdapter {
   public static toITwinError(
     error: unknown,
-    operationName?: OperationNameForErrorMapping
+    operationName?: OperationNameForErrorMapping,
   ): unknown {
     if (!isIModelsApiError(error)) return error;
 
@@ -40,7 +40,7 @@ export class ErrorAdapter {
 
     let errorCode = ErrorAdapter.tryMapGenericErrorCode(
       error.code,
-      operationName
+      operationName,
     );
     if (!errorCode) errorCode = ErrorAdapter.mapErrorCode(error.code);
 
@@ -71,7 +71,7 @@ export class ErrorAdapter {
   }
 
   private static isIncorrectAPIUsageError(
-    apiErrorCode: IModelsErrorCode
+    apiErrorCode: IModelsErrorCode,
   ): boolean {
     switch (apiErrorCode) {
       case IModelsErrorCode.TooManyRequests:
@@ -95,7 +95,7 @@ export class ErrorAdapter {
   }
 
   private static isAPIErrorWithoutCorrespondingStatus(
-    apiErrorCode: IModelsErrorCode
+    apiErrorCode: IModelsErrorCode,
   ): boolean {
     switch (apiErrorCode) {
       case IModelsErrorCode.NamedVersionNotFound:
@@ -114,7 +114,7 @@ export class ErrorAdapter {
   }
 
   private static adaptInvalidRequestErrorIfPossible(
-    originalError: IModelsError
+    originalError: IModelsError,
   ): IModelsError | ITwinError {
     if (!originalError.details) return originalError;
 
@@ -136,7 +136,7 @@ export class ErrorAdapter {
 
   private static tryMapGenericErrorCode(
     apiErrorCode: IModelsErrorCode,
-    operationName?: OperationNameForErrorMapping
+    operationName?: OperationNameForErrorMapping,
   ): IModelsErrorCode | undefined {
     if (!operationName) return;
 
@@ -163,7 +163,7 @@ export class ErrorAdapter {
   }
 
   private static mapErrorCode(
-    apiErrorCode: IModelsErrorCode
+    apiErrorCode: IModelsErrorCode,
   ): IModelsErrorCode {
     switch (apiErrorCode) {
       case IModelsErrorCode.Unknown:

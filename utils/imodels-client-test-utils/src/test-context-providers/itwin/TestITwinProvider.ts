@@ -16,7 +16,7 @@ export class TestITwinProvider {
   constructor(
     private readonly _testITwinProviderConfig: TestITwinProviderConfig,
     private readonly _iTwinsClient: ITwinsClient,
-    private readonly _testAuthorizationProvider: TestAuthorizationProvider
+    private readonly _testAuthorizationProvider: TestAuthorizationProvider,
   ) {}
 
   public async getOrCreate(): Promise<string> {

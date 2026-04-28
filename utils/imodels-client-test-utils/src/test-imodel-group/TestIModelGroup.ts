@@ -23,7 +23,7 @@ export class TestIModelGroup {
     private readonly _iModelsClient: TestIModelsClient,
     private readonly _testAuthorizationProvider: TestAuthorizationProvider,
     private readonly _testITwinProvider: TestITwinProvider,
-    testRunContext: TestRunContext
+    testRunContext: TestRunContext,
   ) {
     this._iModelNamePrefix = `[${testRunContext.testRunId}][${testRunContext.packageName}]`;
     if (testRunContext.testSuiteName)

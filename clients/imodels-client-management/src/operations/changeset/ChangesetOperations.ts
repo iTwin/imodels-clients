@@ -29,9 +29,12 @@ import {
 } from "./ChangesetOperationParams";
 
 export class ChangesetOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
-  constructor(options: TOptions, private _iModelsClient: IModelsClient) {
+  constructor(
+    options: TOptions,
+    private _iModelsClient: IModelsClient,
+  ) {
     super(options);
   }
 
@@ -45,18 +48,18 @@ export class ChangesetOperations<
    * {@link MinimalChangeset}.
    */
   public getMinimalList(
-    params: GetChangesetListParams
+    params: GetChangesetListParams,
   ): EntityListIterator<MinimalChangeset> {
     const entityCollectionAccessor = (
-      response: HttpResponse<ChangesetsResponse<MinimalChangeset>>
+      response: HttpResponse<ChangesetsResponse<MinimalChangeset>>,
     ) => {
       const changesets = response.body.changesets;
       const mappedChangesets = changesets.map((changeset) =>
         this.appendRelatedMinimalEntityCallbacks(
           params.authorization,
           changeset,
-          params.headers
-        )
+          params.headers,
+        ),
       );
       return mappedChangesets;
     };
@@ -74,7 +77,7 @@ export class ChangesetOperations<
         preferReturn: PreferReturn.Minimal,
         entityCollectionAccessor,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -88,18 +91,18 @@ export class ChangesetOperations<
    * {@link Changeset}.
    */
   public getRepresentationList(
-    params: GetChangesetListParams
+    params: GetChangesetListParams,
   ): EntityListIterator<Changeset> {
     const entityCollectionAccessor = (
-      response: HttpResponse<ChangesetsResponse<Changeset>>
+      response: HttpResponse<ChangesetsResponse<Changeset>>,
     ) => {
       const changesets = response.body.changesets;
       const mappedChangesets = changesets.map((changeset) =>
         this.appendRelatedEntityCallbacks(
           params.authorization,
           changeset,
-          params.headers
-        )
+          params.headers,
+        ),
       );
       return mappedChangesets;
     };
@@ -114,7 +117,7 @@ export class ChangesetOperations<
         preferReturn: PreferReturn.Representation,
         entityCollectionAccessor,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -132,7 +135,7 @@ export class ChangesetOperations<
   }
 
   protected async querySingleInternal(
-    params: GetSingleChangesetParams
+    params: GetSingleChangesetParams,
   ): Promise<Changeset> {
     const { authorization, iModelId, headers, ...changesetIdOrIndex } = params;
     const response = await this.sendGetRequest<ChangesetResponse>({
@@ -146,17 +149,17 @@ export class ChangesetOperations<
     const result: Changeset = this.appendRelatedEntityCallbacks(
       params.authorization,
       response.body.changeset,
-      params.headers
+      params.headers,
     );
     return result;
   }
 
   protected appendRelatedMinimalEntityCallbacks<
-    TChangeset extends MinimalChangeset
+    TChangeset extends MinimalChangeset,
   >(
     authorization: AuthorizationCallback,
     changeset: TChangeset,
-    headers?: HeaderFactories
+    headers?: HeaderFactories,
   ): TChangeset {
     const getCreator = async () =>
       getUser(
@@ -164,7 +167,7 @@ export class ChangesetOperations<
         this._iModelsClient.users,
         this._options.urlFormatter,
         changeset._links.creator?.href,
-        headers
+        headers,
       );
 
     const result: TChangeset = {
@@ -178,26 +181,26 @@ export class ChangesetOperations<
   protected appendRelatedEntityCallbacks(
     authorization: AuthorizationCallback,
     changeset: Changeset,
-    headers?: HeaderFactories
+    headers?: HeaderFactories,
   ): Changeset {
     const getNamedVersion = async () =>
       this.getNamedVersion(
         authorization,
         changeset._links.namedVersion?.href,
-        headers
+        headers,
       );
     const getCurrentOrPrecedingCheckpoint = async () =>
       this.getCurrentOrPrecedingCheckpoint(
         authorization,
         changeset._links.currentOrPrecedingCheckpoint?.href,
-        headers
+        headers,
       );
 
     const changesetWithMinimalCallbacks =
       this.appendRelatedMinimalEntityCallbacks(
         authorization,
         changeset,
-        headers
+        headers,
       );
     const result: Changeset = {
       ...changesetWithMinimalCallbacks,
@@ -211,7 +214,7 @@ export class ChangesetOperations<
   private async getNamedVersion(
     authorization: AuthorizationCallback,
     namedVersionLink: string | undefined,
-    headers: HeaderFactories | undefined
+    headers: HeaderFactories | undefined,
   ): Promise<NamedVersion | undefined> {
     if (!namedVersionLink) return undefined;
 
@@ -228,12 +231,12 @@ export class ChangesetOperations<
   private async getCurrentOrPrecedingCheckpoint(
     authorization: AuthorizationCallback,
     currentOrPrecedingCheckpointLink: string | undefined,
-    headers: HeaderFactories | undefined
+    headers: HeaderFactories | undefined,
   ): Promise<Checkpoint | undefined> {
     if (!currentOrPrecedingCheckpointLink) return undefined;
 
     const entityIds = this._options.urlFormatter.parseCheckpointUrl(
-      currentOrPrecedingCheckpointLink
+      currentOrPrecedingCheckpointLink,
     );
     return this._iModelsClient.checkpoints.getSingle({
       authorization,

@@ -34,7 +34,7 @@ describe("[Management] ChangesetExtendedDataOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -42,7 +42,7 @@ describe("[Management] ChangesetExtendedDataOperations", () => {
     authorization = authorizationProvider.getAdmin1Authorization();
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModel = await reusableTestIModelProvider.getOrCreate();
   });
@@ -56,7 +56,7 @@ describe("[Management] ChangesetExtendedDataOperations", () => {
       };
     // Act
     const changesetExtendedData = iModelsClient.changesetExtendedData.getList(
-      getChangesetExtendedDataListParams
+      getChangesetExtendedDataListParams,
     );
 
     // Assert
@@ -79,7 +79,7 @@ describe("[Management] ChangesetExtendedDataOperations", () => {
       };
     // Act
     const changesetExtendedData = iModelsClient.changesetExtendedData.getList(
-      getChangesetExtendedDataListParams
+      getChangesetExtendedDataListParams,
     );
 
     // Assert
@@ -87,7 +87,7 @@ describe("[Management] ChangesetExtendedDataOperations", () => {
     expect(changesetExtendedDataList.length).to.be.equal(1);
     const actualChangesetExtendedData = changesetExtendedDataList[0];
     const expectedChangesetExtendedData = testIModel.changesetExtendedData.find(
-      (x) => x.changesetIndex === actualChangesetExtendedData.changesetIndex
+      (x) => x.changesetIndex === actualChangesetExtendedData.changesetIndex,
     );
     expect(actualChangesetExtendedData).to.exist;
     assertChangesetExtendedData({
@@ -109,7 +109,7 @@ describe("[Management] ChangesetExtendedDataOperations", () => {
     // Act
     const changesetExtendedData =
       await iModelsClient.changesetExtendedData.getSingle(
-        getSingleChangesetExtendedDataParams
+        getSingleChangesetExtendedDataParams,
       );
 
     // Assert
@@ -134,7 +134,7 @@ describe("[Management] ChangesetExtendedDataOperations", () => {
     let objectThrown: unknown;
     try {
       await iModelsClient.changesetExtendedData.getSingle(
-        getSingleChangesetExtendedDataParams
+        getSingleChangesetExtendedDataParams,
       );
     } catch (e) {
       objectThrown = e;

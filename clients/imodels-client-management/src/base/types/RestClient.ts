@@ -94,7 +94,7 @@ export interface RestClient {
    * @throws an error if the request fails.
    */
   sendGetRequest<TBody>(
-    params: HttpGetRequestParams & { responseType: ContentType.Json }
+    params: HttpGetRequestParams & { responseType: ContentType.Json },
   ): Promise<HttpResponse<TBody>>;
 
   /**
@@ -103,7 +103,7 @@ export interface RestClient {
    * @throws an error if the request fails.
    */
   sendGetRequest(
-    params: HttpGetRequestParams & { responseType: ContentType.Png }
+    params: HttpGetRequestParams & { responseType: ContentType.Png },
   ): Promise<HttpResponse<Uint8Array>>;
 
   /**
@@ -112,7 +112,7 @@ export interface RestClient {
    * @throws an error if the request fails.
    */
   sendPostRequest<TBody>(
-    params: HttpRequestWithJsonBodyParams
+    params: HttpRequestWithJsonBodyParams,
   ): Promise<HttpResponse<TBody>>;
 
   /**
@@ -121,7 +121,7 @@ export interface RestClient {
    * @throws an error if the request fails.
    */
   sendPutRequest<TBody>(
-    params: HttpRequestWithBinaryBodyParams
+    params: HttpRequestWithBinaryBodyParams,
   ): Promise<HttpResponse<TBody>>;
 
   /**
@@ -130,7 +130,7 @@ export interface RestClient {
    * @throws an error if the request fails.
    */
   sendPatchRequest<TBody>(
-    params: HttpRequestWithJsonBodyParams
+    params: HttpRequestWithJsonBodyParams,
   ): Promise<HttpResponse<TBody>>;
 
   /**
@@ -139,6 +139,6 @@ export interface RestClient {
    * @throws an error if the request fails.
    */
   sendDeleteRequest<TBody>(
-    params: HttpRequestParams
+    params: HttpRequestParams,
   ): Promise<HttpResponse<TBody>>;
 }

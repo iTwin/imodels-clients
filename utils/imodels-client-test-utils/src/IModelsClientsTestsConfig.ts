@@ -118,7 +118,7 @@ export class IModelsClientsTestsConfig {
     this.validateConfigValue("TEST_USERS_ADMIN2_FULLY_FEATURED_PASSWORD");
 
     this.validateConfigOptionalNumericValue(
-      "TEST_BEHAVIOR_OPTIONS_RECREATE_IMODEL"
+      "TEST_BEHAVIOR_OPTIONS_RECREATE_IMODEL",
     );
   }
 
@@ -133,7 +133,7 @@ export class IModelsClientsTestsConfig {
 
     if (isNaN(Number(value)))
       throw new TestSetupError(
-        `Invalid configuration: ${key} value must be a number.`
+        `Invalid configuration: ${key} value must be a number.`,
       );
   }
 }

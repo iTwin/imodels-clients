@@ -26,7 +26,7 @@ describe("[Authoring] IModelsApiUrlFormatter", () => {
 
       // Assert
       expect(baselineUrl).to.be.equal(
-        "https://api.bentley.com/imodels/IMODEL_ID/baselinefile"
+        "https://api.bentley.com/imodels/IMODEL_ID/baselinefile",
       );
     });
   });
@@ -42,7 +42,7 @@ describe("[Authoring] IModelsApiUrlFormatter", () => {
 
       // Assert
       expect(lockListUrl).to.be.equal(
-        "https://api.bentley.com/imodels/IMODEL_ID/locks"
+        "https://api.bentley.com/imodels/IMODEL_ID/locks",
       );
     });
   });

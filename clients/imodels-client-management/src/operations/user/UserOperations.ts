@@ -19,7 +19,7 @@ import { OperationOptions } from "../OperationOptions";
 import { GetSingleUserParams, GetUserListParams } from "./UserOperationParams";
 
 export class UserOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /** Gets Users who have ever been connected to the iModel specified by the iModel id. This method returns Users in
    * their minimal representation. The returned iterator internally queries entities in pages. Wraps the
@@ -29,7 +29,7 @@ export class UserOperations<
    * @returns {EntityListIterator<MinimalUser>} iterator for User list. See {@link EntityListIterator}, {@link MinimalUser}.
    */
   public getMinimalList(
-    params: GetUserListParams
+    params: GetUserListParams,
   ): EntityListIterator<MinimalUser> {
     return new EntityListIteratorImpl(async () =>
       this.getEntityCollectionPage<MinimalUser, UsersResponse<MinimalUser>>({
@@ -41,7 +41,7 @@ export class UserOperations<
         preferReturn: PreferReturn.Minimal,
         entityCollectionAccessor: (response) => response.body.users,
         headers: params.headers,
-      })
+      }),
     );
   }
 
@@ -54,7 +54,7 @@ export class UserOperations<
    * @returns {EntityListIterator<User>} iterator for User list. See {@link EntityListIterator}, {@link User}.
    */
   public getRepresentationList(
-    params: GetUserListParams
+    params: GetUserListParams,
   ): EntityListIterator<User> {
     return new EntityListIteratorImpl(async () =>
       this.getEntityCollectionPage<User, UsersResponse<User>>({
@@ -66,7 +66,7 @@ export class UserOperations<
         preferReturn: PreferReturn.Representation,
         entityCollectionAccessor: (response) => response.body.users,
         headers: params.headers,
-      })
+      }),
     );
   }
 

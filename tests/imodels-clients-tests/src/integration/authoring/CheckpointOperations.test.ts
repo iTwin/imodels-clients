@@ -47,7 +47,7 @@ describe("[Authoring] CheckpointOperations", () => {
     const container = getTestDIContainer();
 
     const iModelsClientOptions = container.get<IModelsClientOptions>(
-      TestUtilTypes.IModelsClientOptions
+      TestUtilTypes.IModelsClientOptions,
     );
     iModelsClient = new IModelsClient(iModelsClientOptions);
 
@@ -63,11 +63,11 @@ describe("[Authoring] CheckpointOperations", () => {
 
     const testIModelCreator = container.get(TestIModelCreator);
     testIModelForWrite = await testIModelCreator.createEmptyAndUploadChangesets(
-      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write")
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for write"),
     );
 
     const reusableTestIModelProvider = container.get(
-      ReusableTestIModelProvider
+      ReusableTestIModelProvider,
     );
     testIModel = await reusableTestIModelProvider.getOrCreate();
     testIModelNamedVersion = testIModel.namedVersions[0];
@@ -83,7 +83,7 @@ describe("[Authoring] CheckpointOperations", () => {
 
     // Act
     const checkpoint = await iModelsClient.checkpoints.getSingle(
-      getSingleCheckpointParams
+      getSingleCheckpointParams,
     );
 
     // Assert
@@ -107,7 +107,7 @@ describe("[Authoring] CheckpointOperations", () => {
 
     // Act
     const checkpoint = await iModelsClient.checkpoints.getSingle(
-      getSingleCheckpointParams
+      getSingleCheckpointParams,
     );
 
     // Assert
@@ -131,7 +131,7 @@ describe("[Authoring] CheckpointOperations", () => {
 
     // Act
     const checkpoint = await iModelsClient.checkpoints.getSingle(
-      getSingleCheckpointParams
+      getSingleCheckpointParams,
     );
 
     // Assert
@@ -156,7 +156,7 @@ describe("[Authoring] CheckpointOperations", () => {
 
     // Act
     const checkpoint = await iModelsClient.checkpoints.getSingle(
-      getSingleCheckpointParams
+      getSingleCheckpointParams,
     );
 
     // Assert
@@ -321,7 +321,7 @@ describe("[Authoring] CheckpointOperations", () => {
     // Act
     const checkpoint =
       await iModelsClient.checkpoints.updateNamedVersionCheckpoint(
-        getSingleNamedVersionParams
+        getSingleNamedVersionParams,
       );
 
     // Assert
@@ -344,7 +344,7 @@ describe("[Authoring] CheckpointOperations", () => {
     // Act
     const checkpoint =
       await iModelsClient.checkpoints.updateNamedVersionCheckpoint(
-        getSingleNamedVersionParams
+        getSingleNamedVersionParams,
       );
 
     // Assert
@@ -370,7 +370,7 @@ describe("[Authoring] CheckpointOperations", () => {
     let objectThrown: unknown;
     try {
       await iModelsClient.checkpoints.updateNamedVersionCheckpoint(
-        getSingleNamedVersionParams
+        getSingleNamedVersionParams,
       );
     } catch (e) {
       objectThrown = e;
@@ -398,7 +398,7 @@ describe("[Authoring] CheckpointOperations", () => {
     let objectThrown: unknown;
     try {
       await iModelsClient.checkpoints.updateNamedVersionCheckpoint(
-        getSingleNamedVersionParams
+        getSingleNamedVersionParams,
       );
     } catch (e) {
       objectThrown = e;
@@ -415,17 +415,17 @@ describe("[Authoring] CheckpointOperations", () => {
   });
 
   async function getChangesetWithoutNamedVersion(
-    params: IModelScopedOperationParams
+    params: IModelScopedOperationParams,
   ): Promise<Changeset> {
     for await (const changeset of iModelsClient.changesets.getRepresentationList(
-      params
+      params,
     )) {
       const namedVersion = await changeset.getNamedVersion();
       if (!namedVersion) return changeset;
     }
 
     throw new TestSetupError(
-      "Test iModel does not have any changesets without named versions."
+      "Test iModel does not have any changesets without named versions.",
     );
   }
 });
