@@ -6,8 +6,6 @@ settings:
 
 overrides:
   serialize-javascript: ^7.0.3
-  uuid: ^14.0.0
-  '@cypress/request': ^4.0.0
 
 pnpmfileChecksum: avk5jcsa6uxo2n5cahoirjiuw4
 
@@ -722,8 +720,8 @@ importers:
   ../../tests/imodels-clients-tests-browser:
     dependencies:
       '@cypress/request':
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^3.0.9
+        version: 3.0.10
       '@itwin/imodels-client-management':
         specifier: workspace:*
         version: link:../../clients/imodels-client-management
@@ -1174,9 +1172,9 @@ packages:
   '@cspell/dict-vue@2.0.2':
     resolution: {integrity: sha512-/MB0RS0Gn01s4pgmjy0FvsLfr3RRMrRphEuvTRserNcM8XVtoIVAtrjig/Gg0DPwDrN8Clm0L1j7iQay6S8D0g==}
 
-  '@cypress/request@4.0.0':
-    resolution: {integrity: sha512-wGTQfwDMMMiz/muFw4YbCLwTh0uZsXKK+6zWBzftADpitSi6iM62C8GzEhNcng2srUiGPksOriQkA8zakW2R0g==}
-    engines: {node: '>= 14.17.0'}
+  '@cypress/request@3.0.10':
+    resolution: {integrity: sha512-hauBrOdvu08vOsagkZ/Aju5XuiZx6ldsLfByg1htFeldhex+PeMrYauANzFsMJeAA0+dyPLbDoX2OYuvVoLDkQ==}
+    engines: {node: '>= 6'}
 
   '@cypress/xvfb@1.2.4':
     resolution: {integrity: sha512-skbBzPggOVYCbnGgV+0dmBdW/s77ZkAOXIC1knS8NagwDjBrNC1LuXtQJeiN6l+m7lzmHtaoUw/ctJKdqkG57Q==}
@@ -4437,8 +4435,14 @@ packages:
     resolution: {integrity: sha512-gMirHcfcq5D87nXDwbZqf5vl65S0mpMZBsHXJsXOO3Hc3G+JoQLwgaJa1h+PL7h3WhocnuLqoe8CuvMlztkyCA==}
     engines: {node: '>=4'}
 
-  uuid@14.0.0:
-    resolution: {integrity: sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==}
+  uuid@8.3.2:
+    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+    hasBin: true
+
+  uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   verror@1.10.0:
@@ -4947,7 +4951,7 @@ snapshots:
 
   '@cspell/dict-vue@2.0.2': {}
 
-  '@cypress/request@4.0.0':
+  '@cypress/request@3.0.10':
     dependencies:
       aws-sign2: 0.7.0
       aws4: 1.13.2
@@ -4966,6 +4970,7 @@ snapshots:
       safe-buffer: 5.2.1
       tough-cookie: 5.1.2
       tunnel-agent: 0.6.0
+      uuid: 8.3.2
 
   '@cypress/xvfb@1.2.4':
     dependencies:
@@ -5032,7 +5037,7 @@ snapshots:
       p-limit: 3.1.0
       retry-request: 7.0.2
       teeny-request: 9.0.0
-      uuid: 14.0.0
+      uuid: 8.3.2
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -6238,7 +6243,7 @@ snapshots:
 
   cypress@15.14.0:
     dependencies:
-      '@cypress/request': 4.0.0
+      '@cypress/request': 3.0.10
       '@cypress/xvfb': 1.2.4
       '@types/sinonjs__fake-timers': 8.1.1
       '@types/sizzle': 2.3.10
@@ -7017,7 +7022,7 @@ snapshots:
       https-proxy-agent: 7.0.6
       is-stream: 2.0.1
       node-fetch: 2.7.0
-      uuid: 14.0.0
+      uuid: 9.0.1
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -7538,7 +7543,7 @@ snapshots:
       istanbul-lib-coverage: 3.2.2
       p-map: 3.0.0
       rimraf: 3.0.2
-      uuid: 14.0.0
+      uuid: 8.3.2
 
   istanbul-lib-report@3.0.1:
     dependencies:
@@ -8680,7 +8685,7 @@ snapshots:
       https-proxy-agent: 5.0.1
       node-fetch: 2.7.0
       stream-events: 1.0.5
-      uuid: 14.0.0
+      uuid: 9.0.1
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -8866,7 +8871,9 @@ snapshots:
 
   util.inherits@1.0.3: {}
 
-  uuid@14.0.0: {}
+  uuid@8.3.2: {}
+
+  uuid@9.0.1: {}
 
   verror@1.10.0:
     dependencies:
