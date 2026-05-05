@@ -2,6 +2,7 @@
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/pnpm-config.schema.json",
   "useWorkspaces": true,
   "globalOverrides": {
-    "serialize-javascript": "^7.0.3" // mocha > serialize-javascript@6.0.0 -> CVE: https://github.com/advisories/GHSA-5c6j-r48x-rmvq
+    "serialize-javascript": "^7.0.3", // mocha > serialize-javascript@6.0.0 -> CVE: https://github.com/advisories/GHSA-5c6j-r48x-rmvq
+    "uuid": "^14.0.0" // gaxios > uuid@9.0.1 -> CVE: https://github.com/advisories/GHSA-w5hq-g745-h8pq
   }
 }
