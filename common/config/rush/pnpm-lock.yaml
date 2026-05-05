@@ -7,6 +7,7 @@ settings:
 overrides:
   serialize-javascript: ^7.0.3
   uuid: ^14.0.0
+  '@cypress/request': ^4.0.0
 
 pnpmfileChecksum: avk5jcsa6uxo2n5cahoirjiuw4
 
@@ -721,8 +722,8 @@ importers:
   ../../tests/imodels-clients-tests-browser:
     dependencies:
       '@cypress/request':
-        specifier: ^3.0.9
-        version: 3.0.10
+        specifier: ^4.0.0
+        version: 4.0.0
       '@itwin/imodels-client-management':
         specifier: workspace:*
         version: link:../../clients/imodels-client-management
@@ -1173,9 +1174,9 @@ packages:
   '@cspell/dict-vue@2.0.2':
     resolution: {integrity: sha512-/MB0RS0Gn01s4pgmjy0FvsLfr3RRMrRphEuvTRserNcM8XVtoIVAtrjig/Gg0DPwDrN8Clm0L1j7iQay6S8D0g==}
 
-  '@cypress/request@3.0.10':
-    resolution: {integrity: sha512-hauBrOdvu08vOsagkZ/Aju5XuiZx6ldsLfByg1htFeldhex+PeMrYauANzFsMJeAA0+dyPLbDoX2OYuvVoLDkQ==}
-    engines: {node: '>= 6'}
+  '@cypress/request@4.0.0':
+    resolution: {integrity: sha512-wGTQfwDMMMiz/muFw4YbCLwTh0uZsXKK+6zWBzftADpitSi6iM62C8GzEhNcng2srUiGPksOriQkA8zakW2R0g==}
+    engines: {node: '>= 14.17.0'}
 
   '@cypress/xvfb@1.2.4':
     resolution: {integrity: sha512-skbBzPggOVYCbnGgV+0dmBdW/s77ZkAOXIC1knS8NagwDjBrNC1LuXtQJeiN6l+m7lzmHtaoUw/ctJKdqkG57Q==}
@@ -4946,7 +4947,7 @@ snapshots:
 
   '@cspell/dict-vue@2.0.2': {}
 
-  '@cypress/request@3.0.10':
+  '@cypress/request@4.0.0':
     dependencies:
       aws-sign2: 0.7.0
       aws4: 1.13.2
@@ -4965,7 +4966,6 @@ snapshots:
       safe-buffer: 5.2.1
       tough-cookie: 5.1.2
       tunnel-agent: 0.6.0
-      uuid: 14.0.0
 
   '@cypress/xvfb@1.2.4':
     dependencies:
@@ -6238,7 +6238,7 @@ snapshots:
 
   cypress@15.14.0:
     dependencies:
-      '@cypress/request': 3.0.10
+      '@cypress/request': 4.0.0
       '@cypress/xvfb': 1.2.4
       '@types/sinonjs__fake-timers': 8.1.1
       '@types/sizzle': 2.3.10
