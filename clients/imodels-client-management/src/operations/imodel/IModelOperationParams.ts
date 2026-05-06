@@ -64,6 +64,11 @@ export interface IModelProperties {
   /** iModel container types. See {@link ContainerTypes}. */
   containersEnabled?: ContainerTypes;
   /**
+   * The date and time when the last changeset was pushed to the iModel.
+   * This property is optional and can be null if no changeset has been pushed.
+   */
+  lastChangesetPushDateTime?: string | null;
+  /**
    * iModel GCS. If provided, {@link creationMode} must be set or value will be ignored.
    * See {@link GeographicCoordinateSystem}.
    */

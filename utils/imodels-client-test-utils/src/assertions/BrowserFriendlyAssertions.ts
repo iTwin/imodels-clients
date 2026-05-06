@@ -81,6 +81,13 @@ export async function assertIModel(params: {
     params.expectedIModelProperties.containersEnabled
   );
   expect(params.actualIModel.createdDateTime).to.not.be.empty;
+  expect(params.actualIModel).to.have.property("lastChangesetPushDateTime");
+  if ("lastChangesetPushDateTime" in params.expectedIModelProperties)
+    expect(params.actualIModel.lastChangesetPushDateTime).to.equal(
+      params.expectedIModelProperties.lastChangesetPushDateTime
+    );
+  if (params.actualIModel.lastChangesetPushDateTime !== null)
+    expect(params.actualIModel.lastChangesetPushDateTime).to.not.be.empty;
   expect(params.actualIModel.state).to.equal(IModelState.Initialized);
   expect(params.actualIModel.dataCenterLocation).to.not.be.empty;
 
