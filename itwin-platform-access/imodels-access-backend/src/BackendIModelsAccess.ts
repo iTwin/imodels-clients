@@ -541,6 +541,16 @@ export class BackendIModelsAccess implements BackendHubAccess {
     );
   }
 
+  public async abandonLocks(
+    arg: BriefcaseIdArg,
+    locks: LockMap
+  ): Promise<void> {
+    return this.acquireLocks(
+      { ...arg, changeset: { id: "", index: 0 } },
+      locks
+    );
+  }
+
   public async queryAllLocks(arg: BriefcaseDbArg): Promise<LockProps[]> {
     const getLockListParams: GetLockListParams = {
       ...this.getIModelScopedOperationParams(arg),
@@ -580,6 +590,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
       );
       isLastChunk = result.isLastChunk;
     } while (!isLastChunk);
+  }
+
+  public async abandonAllLocks(arg: BriefcaseIdArg): Promise<void> {
+    return this.releaseAllLocks({ ...arg, changeset: { id: "", index: 0 } });
   }
 
   public async queryIModelByName(
