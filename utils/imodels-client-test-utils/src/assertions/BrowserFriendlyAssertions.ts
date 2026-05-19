@@ -60,7 +60,9 @@ export function assertMinimalIModel(params: {
 
 export async function assertIModel(params: {
   actualIModel: IModel;
-  expectedIModelProperties: IModelProperties;
+  expectedIModelProperties: IModelProperties & {
+    lastChangesetPushDateTime?: string | null;
+  };
 }): Promise<void> {
   assertMinimalIModel({
     actualIModel: params.actualIModel,
@@ -233,6 +235,8 @@ export function assertCheckpoint(params: {
     );
   else
     expect(params.actualCheckpoint.changesetIndex).to.be.greaterThanOrEqual(0);
+
+  expect(params.actualCheckpoint.size).to.be.greaterThanOrEqual(0);
 
   expect(params.actualCheckpoint.state).to.equal(
     params.expectedCheckpointProperties.state

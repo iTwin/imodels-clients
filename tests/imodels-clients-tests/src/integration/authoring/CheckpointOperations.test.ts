@@ -328,6 +328,7 @@ describe("[Authoring] CheckpointOperations", () => {
     expect(checkpoint.changesetId).to.equal(namedVersion.changesetId);
     expect(checkpoint.changesetIndex).to.equal(namedVersion.changesetIndex);
     expect(checkpoint.state).to.equal(CheckpointState.Scheduled);
+    expect(checkpoint.size).to.equal(0);
     expect(checkpoint.directoryAccessInfo).to.be.null;
     expect(checkpoint._links).to.exist;
     expect(checkpoint._links.download).to.be.null;
