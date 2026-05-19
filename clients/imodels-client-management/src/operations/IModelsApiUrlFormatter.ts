@@ -14,6 +14,7 @@ import { GetChangesetGroupListUrlParams } from "./changeset-group/ChangesetGroup
 import { CheckpointParentEntityId } from "./checkpoint/CheckpointOperationParams";
 import { GetFavoriteIModelListUrlParams } from "./favorite-imodel/FavoriteIModelOperationParams";
 import { GetIModelListUrlParams } from "./imodel/IModelOperationParams";
+import { GetLockListUrlParams } from "./lock/LockOperationParams";
 import { GetNamedVersionListUrlParams } from "./named-version/NamedVersionOperationParams";
 import { DownloadThumbnailUrlParams } from "./OperationParamExports";
 import { GetRecentIModelListUrlParams } from "./recent-imodel/RecentIModelOperationParams";
@@ -236,6 +237,19 @@ export class IModelsApiUrlFormatter {
 
   public getRecentIModelUrl(params: { iModelId: string }): string {
     return `${this.baseUrl}/recents/${params.iModelId}`;
+  }
+
+  public getLockListUrl(params: {
+    iModelId: string;
+    urlParams?: GetLockListUrlParams;
+  }): string {
+    return `${this.baseUrl}/${params.iModelId}/locks${this.formQueryString({
+      ...params.urlParams,
+    })}`;
+  }
+
+  public getReleaseLocksChunkUrl(params: { iModelId: string }): string {
+    return `${this.baseUrl}/${params.iModelId}/locks/release-chunk`;
   }
 
   public getCreateIModelOperationDetailsUrl(params: {

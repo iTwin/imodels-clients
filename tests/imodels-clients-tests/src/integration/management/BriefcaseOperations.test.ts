@@ -5,6 +5,11 @@
 import { expect } from "chai";
 
 import {
+  AcquireBriefcaseParams,
+  IModelsClient as AuthoringIModelsClient,
+  IModelsClientOptions as AuthoringIModelsClientOptions,
+} from "@itwin/imodels-client-authoring";
+import {
   AuthorizationCallback,
   Briefcase,
   BriefcaseOrderByProperty,
@@ -14,14 +19,19 @@ import {
   IModelsClient,
   IModelsClientOptions,
   OrderByOperator,
+  ReleaseBriefcaseParams,
   SPECIAL_VALUES_ME,
   take,
   toArray,
 } from "@itwin/imodels-client-management";
 import {
+  IModelMetadata,
   ReusableIModelMetadata,
   ReusableTestIModelProvider,
   TestAuthorizationProvider,
+  TestIModelCreator,
+  TestIModelGroup,
+  TestIModelGroupFactory,
   TestUtilTypes,
   assertBriefcase,
   assertCollection,
@@ -29,12 +39,16 @@ import {
   createGuidValue,
 } from "@itwin/imodels-client-test-utils";
 
-import { getTestDIContainer } from "../common";
+import { Constants, getTestDIContainer, getTestRunId } from "../common";
 
 describe("[Management] BriefcaseOperations", () => {
   let iModelsClient: IModelsClient;
   let authorizationProvider: TestAuthorizationProvider;
   let authorization: AuthorizationCallback;
+
+  let testIModelGroup: TestIModelGroup;
+  let testIModelForRelease: IModelMetadata;
+  let authoringClient: AuthoringIModelsClient;
 
   let testIModel: ReusableIModelMetadata;
 
@@ -53,6 +67,27 @@ describe("[Management] BriefcaseOperations", () => {
       ReusableTestIModelProvider
     );
     testIModel = await reusableTestIModelProvider.getOrCreate();
+
+    const testIModelGroupFactory = container.get(TestIModelGroupFactory);
+    testIModelGroup = testIModelGroupFactory.create({
+      testRunId: getTestRunId(),
+      packageName: Constants.PackagePrefix,
+      testSuiteName: "ManagementBriefcaseOperations",
+    });
+
+    const authoringClientOptions = container.get<AuthoringIModelsClientOptions>(
+      TestUtilTypes.IModelsClientOptions
+    );
+    authoringClient = new AuthoringIModelsClient(authoringClientOptions);
+
+    const testIModelCreator = container.get(TestIModelCreator);
+    testIModelForRelease = await testIModelCreator.createEmpty(
+      testIModelGroup.getPrefixedUniqueIModelName("Test iModel for release")
+    );
+  });
+
+  after(async () => {
+    await testIModelGroup.cleanupIModels();
   });
 
   [
@@ -313,5 +348,48 @@ describe("[Management] BriefcaseOperations", () => {
       expect(new Date(briefcases[i].acquiredDateTime)).to.be.greaterThan(
         new Date(briefcases[i + 1].acquiredDateTime)
       );
+  });
+
+  it("should release briefcase", async () => {
+    // Arrange
+    const acquireBriefcaseParams: AcquireBriefcaseParams = {
+      authorization,
+      iModelId: testIModelForRelease.id,
+    };
+    const briefcase = await authoringClient.briefcases.acquire(
+      acquireBriefcaseParams
+    );
+
+    const getBriefcaseListParams: GetBriefcaseListParams = {
+      authorization,
+      iModelId: testIModelForRelease.id,
+    };
+    const briefcasesBeforeRelease = await toArray(
+      iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams)
+    );
+    expect(
+      briefcasesBeforeRelease.some(
+        (b) => b.briefcaseId === briefcase.briefcaseId
+      )
+    ).to.be.true;
+
+    const releaseBriefcaseParams: ReleaseBriefcaseParams = {
+      authorization,
+      iModelId: testIModelForRelease.id,
+      briefcaseId: briefcase.briefcaseId,
+    };
+
+    // Act
+    await iModelsClient.briefcases.release(releaseBriefcaseParams);
+
+    // Assert
+    const briefcasesAfterRelease = await toArray(
+      iModelsClient.briefcases.getRepresentationList(getBriefcaseListParams)
+    );
+    expect(
+      briefcasesAfterRelease.find(
+        (b) => b.briefcaseId === briefcase.briefcaseId
+      )
+    ).to.be.undefined;
   });
 });

@@ -7,6 +7,7 @@ export * from "./briefcase/BriefcaseOperations";
 export * from "./changeset/ChangesetOperations";
 export * from "./changeset-extended-data/ChangesetExtendedDataOperations";
 export * from "./changeset-group/ChangesetGroupOperations";
+export * from "./lock/LockOperations";
 export * from "./named-version/NamedVersionOperations";
 export * from "./checkpoint/CheckpointOperations";
 export * from "./thumbnail/ThumbnailOperations";

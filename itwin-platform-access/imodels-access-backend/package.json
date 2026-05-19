@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-access-backend",
-  "version": "6.1.0",
+  "version": "6.1.1",
   "description": "Interoperability package between iModels API and iTwin.js library for backend.",
   "keywords": [
     "Bentley",
@@ -41,7 +41,7 @@
     "@itwin/object-storage-azure": "^3.0.4",
     "@itwin/object-storage-core": "^3.0.4",
     "@itwin/object-storage-google": "^3.0.4",
-    "axios": "^1.13.5"
+    "axios": "^1.15.2"
   },
   "devDependencies": {
     "@itwin/core-backend": "^5.0.0",

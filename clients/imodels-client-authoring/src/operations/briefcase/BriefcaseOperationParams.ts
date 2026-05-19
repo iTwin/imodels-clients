@@ -15,9 +15,3 @@ export interface AcquireBriefcaseParams extends IModelScopedOperationParams {
   /** Properties of the new Briefcase. */
   briefcaseProperties?: BriefcaseProperties;
 }
-
-/** Parameters for release Briefcase operation. */
-export interface ReleaseBriefcaseParams extends IModelScopedOperationParams {
-  /** Id of the Briefcase to release. */
-  briefcaseId: number;
-}

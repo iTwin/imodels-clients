@@ -2,6 +2,18 @@
   "name": "@itwin/imodels-client-authoring",
   "entries": [
     {
+      "version": "6.2.0",
+      "tag": "@itwin/imodels-client-authoring_v6.2.0",
+      "date": "Thu, 23 Apr 2026 08:41:43 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Move LockOperations.getList and BriefcaseOperations.release to @itwin/imodels-client-management; both are re-exported from authoring as deprecated for backward compatibility"
+          }
+        ]
+      }
+    },
+    {
       "version": "6.1.0",
       "tag": "@itwin/imodels-client-authoring_v6.1.0",
       "date": "Thu, 15 Jan 2026 01:26:06 GMT",

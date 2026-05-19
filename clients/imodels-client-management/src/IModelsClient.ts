@@ -22,6 +22,7 @@ import {
   ChangesetOperations,
   FavoriteIModelOperations,
   IModelOperations,
+  LockOperations,
   NamedVersionOperations,
   OperationOperations,
   RecentIModelOperations,
@@ -145,6 +146,11 @@ export class IModelsClient {
   /** Recent iModel operations. See {@link RecentIModelOperations}. */
   public get recentIModels(): RecentIModelOperations<OperationOptions> {
     return new RecentIModelOperations(this._operationsOptions);
+  }
+
+  /** Lock operations. See {@link LockOperations}. */
+  public get locks(): LockOperations<OperationOptions> {
+    return new LockOperations(this._operationsOptions);
   }
 
   private static fillManagementClientConfiguration(

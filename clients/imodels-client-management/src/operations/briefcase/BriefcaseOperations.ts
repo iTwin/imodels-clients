@@ -25,6 +25,7 @@ import { assertLink, getUser } from "../SharedFunctions";
 import {
   GetBriefcaseListParams,
   GetSingleBriefcaseParams,
+  ReleaseBriefcaseParams,
 } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<
@@ -124,6 +125,24 @@ export class BriefcaseOperations<
       params.headers
     );
     return result;
+  }
+
+  /**
+   * Releases the specified Briefcase. Wraps the
+   * {@link https://developer.bentley.com/apis/imodels-v2/operations/release-imodel-briefcase/ Release iModel Briefcase}
+   * operation from iModels API.
+   * @param {ReleaseBriefcaseParams} params parameters for this operation. See {@link ReleaseBriefcaseParams}.
+   * @returns {Promise<void>} a promise that resolves after operation completes.
+   */
+  public async release(params: ReleaseBriefcaseParams): Promise<void> {
+    await this.sendDeleteRequest({
+      authorization: params.authorization,
+      url: this._options.urlFormatter.getSingleBriefcaseUrl({
+        iModelId: params.iModelId,
+        briefcaseId: params.briefcaseId,
+      }),
+      headers: params.headers,
+    });
   }
 
   protected appendRelatedEntityCallbacks(

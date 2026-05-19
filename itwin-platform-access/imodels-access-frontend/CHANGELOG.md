@@ -1,6 +1,11 @@
 # Change Log - @itwin/imodels-access-frontend
 
-This log was last generated on Thu, 15 Jan 2026 01:26:07 GMT and should not be manually modified.
+This log was last generated on Thu, 23 Apr 2026 08:41:44 GMT and should not be manually modified.
+
+## 6.1.1
+Thu, 23 Apr 2026 08:41:44 GMT
+
+_Version update only_
 
 ## 6.1.0
 Thu, 15 Jan 2026 01:26:07 GMT
