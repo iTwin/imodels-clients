@@ -473,7 +473,7 @@ describe("BackendIModelsAccess error handling", () => {
 
     await executeFuncAndAssertError(
       async () =>
-        backendIModelsAccess.abandonLocks!(briefcaseIdArg, locksToAbandon),
+        backendIModelsAccess.abandonLocks(briefcaseIdArg, locksToAbandon),
       IModelsErrorCode.BriefcaseNotFound
     );
   });
@@ -486,7 +486,7 @@ describe("BackendIModelsAccess error handling", () => {
     };
 
     await executeFuncAndAssertError(
-      async () => backendIModelsAccess.abandonAllLocks!(briefcaseIdArg),
+      async () => backendIModelsAccess.abandonAllLocks(briefcaseIdArg),
       IModelsErrorCode.IModelNotFound
     );
   });

@@ -872,7 +872,7 @@ describe("BackendIModelsAccess", () => {
       ]);
 
       // Act
-      await backendIModelsAccess.abandonLocks!(briefcaseIdArg, locksToAbandon);
+      await backendIModelsAccess.abandonLocks(briefcaseIdArg, locksToAbandon);
 
       // Assert
       const actualLocks: LockProps[] = await backendIModelsAccess.queryAllLocks(
@@ -916,7 +916,7 @@ describe("BackendIModelsAccess", () => {
       };
 
       // Act
-      await backendIModelsAccess.abandonAllLocks!(briefcaseIdArg);
+      await backendIModelsAccess.abandonAllLocks(briefcaseIdArg);
 
       // Assert
       const actualLocks: LockProps[] = await backendIModelsAccess.queryAllLocks(
