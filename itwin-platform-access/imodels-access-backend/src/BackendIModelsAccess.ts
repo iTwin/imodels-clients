@@ -48,6 +48,7 @@ import {
   ChangesetIndexAndId,
   ChangesetProps,
   IModelVersion,
+  LockState,
 } from "@itwin/core-common";
 import {
   AccessTokenAdapter,
@@ -545,9 +546,12 @@ export class BackendIModelsAccess implements BackendHubAccess {
     arg: BriefcaseIdArg,
     locks: LockMap
   ): Promise<void> {
+    const locksWithNoneState: LockMap = new Map(
+      [...locks.keys()].map((id) => [id, LockState.None])
+    );
     return this.acquireLocks(
       { ...arg, changeset: { id: "", index: 0 } },
-      locks
+      locksWithNoneState
     );
   }
 
