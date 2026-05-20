@@ -267,6 +267,7 @@ describe("[Management] ChangesetOperations", () => {
       expectedLinks: {
         namedVersion: true,
         checkpoint: true,
+        elements: true,
       },
       isGetResponse: true,
     });
@@ -308,6 +309,7 @@ describe("[Management] ChangesetOperations", () => {
       expectedLinks: {
         namedVersion: true,
         checkpoint: true,
+        elements: true,
       },
       isGetResponse: true,
     });
@@ -349,6 +351,7 @@ describe("[Management] ChangesetOperations", () => {
       expectedLinks: {
         namedVersion: changesetHasNamedVersion,
         checkpoint: true,
+        elements: true,
       },
       isGetResponse: true,
     });
