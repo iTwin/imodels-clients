@@ -546,12 +546,19 @@ export class BackendIModelsAccess implements BackendHubAccess {
     arg: BriefcaseIdArg,
     locks: LockMap
   ): Promise<void> {
-    const locksWithNoneState: LockMap = new Map(
-      [...locks.keys()].map((id) => [id, LockState.None])
-    );
+    for (const lockState of locks.values()) {
+      if (lockState === LockState.Exclusive)
+        ITwinError.throwError({
+          iTwinErrorId: {
+            key: IModelsErrorCode.InvalidIModelsRequest,
+            scope: IModelsErrorScope,
+          },
+          message: "LockState.Exclusive is not allowed when abandoning locks.",
+        });
+    }
     return this.acquireLocks(
       { ...arg, changeset: { id: "", index: 0 } },
-      locksWithNoneState
+      locks
     );
   }
 

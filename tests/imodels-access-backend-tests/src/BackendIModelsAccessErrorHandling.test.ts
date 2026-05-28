@@ -459,6 +459,25 @@ describe("BackendIModelsAccess error handling", () => {
     );
   });
 
+  it("should throw ITwinError if Exclusive LockState is provided when abandoning locks", async () => {
+    const briefcaseIdArg: BriefcaseIdArg = {
+      accessToken,
+      iModelId: testIModelForWrite.id,
+      briefcaseId: 5,
+    };
+    // eslint-disable-next-line deprecation/deprecation
+    const locksToAbandon: LockMap = new Map<string, LockState>([
+      // eslint-disable-next-line deprecation/deprecation
+      ["0x1", LockState.Exclusive],
+    ]);
+
+    await executeFuncAndAssertError(
+      async () =>
+        backendIModelsAccess.abandonLocks(briefcaseIdArg, locksToAbandon),
+      IModelsErrorCode.InvalidIModelsRequest
+    );
+  });
+
   it("should throw ITwinError if briefcase does not exist when abandoning locks", async () => {
     const briefcaseIdArg: BriefcaseIdArg = {
       accessToken,
