@@ -48,6 +48,7 @@ import {
   ChangesetIndexAndId,
   ChangesetProps,
   IModelVersion,
+  LockState,
 } from "@itwin/core-common";
 import {
   AccessTokenAdapter,
@@ -541,6 +542,26 @@ export class BackendIModelsAccess implements BackendHubAccess {
     );
   }
 
+  public async abandonLocks(
+    arg: BriefcaseIdArg,
+    locks: LockMap
+  ): Promise<void> {
+    for (const lockState of locks.values()) {
+      if (lockState === LockState.Exclusive)
+        ITwinError.throwError({
+          iTwinErrorId: {
+            key: IModelsErrorCode.InvalidIModelsRequest,
+            scope: IModelsErrorScope,
+          },
+          message: "LockState.Exclusive is not allowed when abandoning locks.",
+        });
+    }
+    return this.acquireLocks(
+      { ...arg, changeset: { id: "", index: 0 } },
+      locks
+    );
+  }
+
   public async queryAllLocks(arg: BriefcaseDbArg): Promise<LockProps[]> {
     const getLockListParams: GetLockListParams = {
       ...this.getIModelScopedOperationParams(arg),
@@ -580,6 +601,10 @@ export class BackendIModelsAccess implements BackendHubAccess {
       );
       isLastChunk = result.isLastChunk;
     } while (!isLastChunk);
+  }
+
+  public async abandonAllLocks(arg: BriefcaseIdArg): Promise<void> {
+    return this.releaseAllLocks({ ...arg, changeset: { id: "", index: 0 } });
   }
 
   public async queryIModelByName(

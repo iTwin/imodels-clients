@@ -459,6 +459,57 @@ describe("BackendIModelsAccess error handling", () => {
     );
   });
 
+  it("should throw ITwinError if Exclusive LockState is provided when abandoning locks", async () => {
+    const briefcaseIdArg: BriefcaseIdArg = {
+      accessToken,
+      iModelId: testIModelForWrite.id,
+      briefcaseId: 5,
+    };
+    // eslint-disable-next-line deprecation/deprecation
+    const locksToAbandon: LockMap = new Map<string, LockState>([
+      // eslint-disable-next-line deprecation/deprecation
+      ["0x1", LockState.Exclusive],
+    ]);
+
+    await executeFuncAndAssertError(
+      async () =>
+        backendIModelsAccess.abandonLocks(briefcaseIdArg, locksToAbandon),
+      IModelsErrorCode.InvalidIModelsRequest
+    );
+  });
+
+  it("should throw ITwinError if briefcase does not exist when abandoning locks", async () => {
+    const briefcaseIdArg: BriefcaseIdArg = {
+      accessToken,
+      iModelId: testIModelForWrite.id,
+      briefcaseId: 555,
+    };
+    // eslint-disable-next-line deprecation/deprecation
+    const locksToAbandon: LockMap = new Map<string, LockState>([
+      // eslint-disable-next-line deprecation/deprecation
+      ["0x1", LockState.None],
+    ]);
+
+    await executeFuncAndAssertError(
+      async () =>
+        backendIModelsAccess.abandonLocks(briefcaseIdArg, locksToAbandon),
+      IModelsErrorCode.BriefcaseNotFound
+    );
+  });
+
+  it("should throw ITwinError if iModel does not exist when abandoning all locks", async () => {
+    const briefcaseIdArg: BriefcaseIdArg = {
+      accessToken,
+      iModelId: "nonExistentiModelId",
+      briefcaseId: 5,
+    };
+
+    await executeFuncAndAssertError(
+      async () => backendIModelsAccess.abandonAllLocks(briefcaseIdArg),
+      IModelsErrorCode.IModelNotFound
+    );
+  });
+
   it("should throw ITwinError if iModel does not exist when querying all locks", async () => {
     const queryAllLocksParams: BriefcaseDbArg = {
       accessToken,

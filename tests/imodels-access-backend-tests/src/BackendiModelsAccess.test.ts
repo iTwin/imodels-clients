@@ -13,6 +13,7 @@ import sinon from "sinon";
 import {
   AcquireNewBriefcaseIdArg,
   BriefcaseDbArg,
+  BriefcaseIdArg,
   ChangesetRangeArg,
   CheckpointProps,
   CreateNewIModelProps,
@@ -823,6 +824,99 @@ describe("BackendIModelsAccess", () => {
 
       // Act
       await backendIModelsAccess.releaseAllLocks(briefcaseDbParams);
+
+      // Assert
+      const actualLocks: LockProps[] = await backendIModelsAccess.queryAllLocks(
+        briefcaseDbParams
+      );
+      expect(actualLocks.length).to.be.equal(0);
+    });
+
+    it("should successfully abandon specific locks", async () => {
+      // Arrange
+      const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId({
+        accessToken,
+        iModelId: testIModelForWrite.id,
+      });
+      testIModelForWriteBriefcaseIds.push(briefcaseId);
+
+      const briefcaseDbParams: BriefcaseDbArg = {
+        accessToken,
+        iModelId: testIModelForWrite.id,
+        briefcaseId,
+        changeset: { id: "", index: 0 },
+      };
+      // eslint-disable-next-line deprecation/deprecation
+      const locksToAcquire: LockMap = new Map<string, LockState>([
+        // eslint-disable-next-line deprecation/deprecation
+        ["0x1", LockState.Exclusive],
+        // eslint-disable-next-line deprecation/deprecation
+        ["0x2", LockState.Exclusive],
+      ]);
+      await backendIModelsAccess.acquireLocks(
+        briefcaseDbParams,
+        locksToAcquire
+      );
+
+      const briefcaseIdArg: BriefcaseIdArg = {
+        accessToken,
+        iModelId: testIModelForWrite.id,
+        briefcaseId,
+      };
+      // eslint-disable-next-line deprecation/deprecation
+      const locksToAbandon: LockMap = new Map<string, LockState>([
+        // eslint-disable-next-line deprecation/deprecation
+        ["0x1", LockState.None],
+        // eslint-disable-next-line deprecation/deprecation
+        ["0x2", LockState.None],
+      ]);
+
+      // Act
+      await backendIModelsAccess.abandonLocks(briefcaseIdArg, locksToAbandon);
+
+      // Assert
+      const actualLocks: LockProps[] = await backendIModelsAccess.queryAllLocks(
+        briefcaseDbParams
+      );
+      expect(actualLocks.length).to.be.equal(0);
+    });
+
+    it("should successfully abandon all locks", async () => {
+      // Arrange
+      const briefcaseId = await backendIModelsAccess.acquireNewBriefcaseId({
+        accessToken,
+        iModelId: testIModelForWrite.id,
+      });
+      testIModelForWriteBriefcaseIds.push(briefcaseId);
+
+      const briefcaseDbParams: BriefcaseDbArg = {
+        accessToken,
+        iModelId: testIModelForWrite.id,
+        briefcaseId,
+        changeset: { id: "", index: 0 },
+      };
+      // eslint-disable-next-line deprecation/deprecation
+      const locksToAcquire: LockMap = new Map<string, LockState>([
+        // eslint-disable-next-line deprecation/deprecation
+        ["0x1", LockState.Exclusive],
+        // eslint-disable-next-line deprecation/deprecation
+        ["0x2", LockState.Exclusive],
+        // eslint-disable-next-line deprecation/deprecation
+        ["0x3", LockState.Shared],
+      ]);
+      await backendIModelsAccess.acquireLocks(
+        briefcaseDbParams,
+        locksToAcquire
+      );
+
+      const briefcaseIdArg: BriefcaseIdArg = {
+        accessToken,
+        iModelId: testIModelForWrite.id,
+        briefcaseId,
+      };
+
+      // Act
+      await backendIModelsAccess.abandonAllLocks(briefcaseIdArg);
 
       // Assert
       const actualLocks: LockProps[] = await backendIModelsAccess.queryAllLocks(
