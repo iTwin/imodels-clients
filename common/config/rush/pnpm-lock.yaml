@@ -65,7 +65,7 @@ importers:
   ../../clients/imodels-client-management:
     dependencies:
       axios:
-        specifier: ^1.13.5
+        specifier: ^1.15.2
         version: 1.16.1
     devDependencies:
       '@itwin/eslint-plugin':
@@ -129,7 +129,7 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(inversify@6.0.3)(reflect-metadata@0.1.14)
       axios:
-        specifier: ^1.13.5
+        specifier: ^1.15.2
         version: 1.16.1
     devDependencies:
       '@itwin/core-backend':
@@ -623,7 +623,7 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(inversify@6.0.3)(reflect-metadata@0.1.14)
       axios:
-        specifier: ^1.13.5
+        specifier: ^1.15.2
         version: 1.16.1
       chai:
         specifier: ~4.3.10
@@ -859,7 +859,7 @@ importers:
         specifier: ^2.10.0
         version: 2.13.2
       axios:
-        specifier: ^1.13.5
+        specifier: ^1.15.2
         version: 1.16.1
       chai:
         specifier: ~4.3.10
