@@ -13,17 +13,24 @@ import {
 import {
   ClientStorage,
   StrategyClientStorage,
+  RetryOptions,
 } from "@itwin/object-storage-core";
 
-export function createDefaultClientStorage(): ClientStorage {
+export function createDefaultClientStorage(
+  retryOptions?: RetryOptions
+): ClientStorage {
   return new StrategyClientStorage([
     {
       instanceName: "azure",
-      instance: new AzureClientStorage(new BlockBlobClientWrapperFactory()),
+      instance: new AzureClientStorage(
+        new BlockBlobClientWrapperFactory(retryOptions)
+      ),
     },
     {
       instanceName: "google",
-      instance: new GoogleClientStorage(new ClientStorageWrapperFactory()),
+      instance: new GoogleClientStorage(
+        new ClientStorageWrapperFactory(retryOptions)
+      ),
     },
   ]);
 }
