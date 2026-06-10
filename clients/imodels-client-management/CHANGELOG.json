@@ -2,6 +2,18 @@
   "name": "@itwin/imodels-client-management",
   "entries": [
     {
+      "version": "6.2.1",
+      "tag": "@itwin/imodels-client-management_v6.2.1",
+      "date": "Wed, 10 Jun 2026 10:51:55 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Update axios"
+          }
+        ]
+      }
+    },
+    {
       "version": "6.2.0",
       "tag": "@itwin/imodels-client-management_v6.2.0",
       "date": "Thu, 23 Apr 2026 08:41:43 GMT",

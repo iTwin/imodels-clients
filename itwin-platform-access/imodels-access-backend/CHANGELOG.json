@@ -2,6 +2,21 @@
   "name": "@itwin/imodels-access-backend",
   "entries": [
     {
+      "version": "6.1.2",
+      "tag": "@itwin/imodels-access-backend_v6.1.2",
+      "date": "Wed, 10 Jun 2026 10:51:56 GMT",
+      "comments": {
+        "none": [
+          {
+            "comment": "Expose RetryOptions"
+          },
+          {
+            "comment": "Update axios"
+          }
+        ]
+      }
+    },
+    {
       "version": "6.1.1",
       "tag": "@itwin/imodels-access-backend_v6.1.1",
       "date": "Thu, 23 Apr 2026 08:41:44 GMT",
