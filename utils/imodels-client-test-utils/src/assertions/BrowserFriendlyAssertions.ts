@@ -60,7 +60,9 @@ export function assertMinimalIModel(params: {
 
 export async function assertIModel(params: {
   actualIModel: IModel;
-  expectedIModelProperties: IModelProperties;
+  expectedIModelProperties: IModelProperties & {
+    lastChangesetPushDateTime?: string | null;
+  };
 }): Promise<void> {
   assertMinimalIModel({
     actualIModel: params.actualIModel,
@@ -81,6 +83,13 @@ export async function assertIModel(params: {
     params.expectedIModelProperties.containersEnabled
   );
   expect(params.actualIModel.createdDateTime).to.not.be.empty;
+  expect(params.actualIModel).to.have.property("lastChangesetPushDateTime");
+  if ("lastChangesetPushDateTime" in params.expectedIModelProperties)
+    expect(params.actualIModel.lastChangesetPushDateTime).to.equal(
+      params.expectedIModelProperties.lastChangesetPushDateTime
+    );
+  if (params.actualIModel.lastChangesetPushDateTime !== null)
+    expect(params.actualIModel.lastChangesetPushDateTime).to.not.be.empty;
   expect(params.actualIModel.state).to.equal(IModelState.Initialized);
   expect(params.actualIModel.dataCenterLocation).to.not.be.empty;
 
@@ -226,6 +235,8 @@ export function assertCheckpoint(params: {
     );
   else
     expect(params.actualCheckpoint.changesetIndex).to.be.greaterThanOrEqual(0);
+
+  expect(params.actualCheckpoint.size).to.be.greaterThanOrEqual(0);
 
   expect(params.actualCheckpoint.state).to.equal(
     params.expectedCheckpointProperties.state

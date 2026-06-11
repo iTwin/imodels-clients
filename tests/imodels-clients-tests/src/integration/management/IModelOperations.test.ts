@@ -509,7 +509,10 @@ describe("[Management] IModelOperations", () => {
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: createIModelParams.iModelProperties,
+      expectedIModelProperties: {
+        ...createIModelParams.iModelProperties,
+        lastChangesetPushDateTime: null,
+      },
     });
   });
 
@@ -543,7 +546,10 @@ describe("[Management] IModelOperations", () => {
 
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: createIModelParams.iModelProperties,
+      expectedIModelProperties: {
+        ...createIModelParams.iModelProperties,
+        lastChangesetPushDateTime: null,
+      },
     });
   });
 
@@ -578,7 +584,10 @@ describe("[Management] IModelOperations", () => {
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: createIModelFromTemplateParams.iModelProperties,
+      expectedIModelProperties: {
+        ...createIModelFromTemplateParams.iModelProperties,
+        lastChangesetPushDateTime: null,
+      },
     });
   });
 
@@ -616,7 +625,10 @@ describe("[Management] IModelOperations", () => {
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: createIModelFromTemplateParams.iModelProperties,
+      expectedIModelProperties: {
+        ...createIModelFromTemplateParams.iModelProperties,
+        lastChangesetPushDateTime: null,
+      },
     });
   });
 
@@ -652,7 +664,10 @@ describe("[Management] IModelOperations", () => {
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: createIModelFromTemplateParams.iModelProperties,
+      expectedIModelProperties: {
+        ...createIModelFromTemplateParams.iModelProperties,
+        lastChangesetPushDateTime: null,
+      },
     });
   });
 
@@ -690,6 +705,7 @@ describe("[Management] IModelOperations", () => {
         description: sourceIModel.description ?? undefined,
         extent: sourceIModel.extent ?? undefined,
         containersEnabled: cloneIModelParams.iModelProperties.containersEnabled,
+        lastChangesetPushDateTime: sourceIModel.lastChangesetPushDateTime,
       },
     });
     const changesets = await toArray(
@@ -734,6 +750,7 @@ describe("[Management] IModelOperations", () => {
         description: sourceIModel.description!,
         extent: undefined,
         containersEnabled: forkIModelParams.iModelProperties.containersEnabled,
+        lastChangesetPushDateTime: sourceIModel.lastChangesetPushDateTime,
       },
     });
     const changesets = await toArray(
@@ -786,6 +803,7 @@ describe("[Management] IModelOperations", () => {
         description: iModelBeforeUpdate.description!,
         extent: iModelBeforeUpdate.extent!,
         containersEnabled: iModelBeforeUpdate.containersEnabled,
+        lastChangesetPushDateTime: iModelBeforeUpdate.lastChangesetPushDateTime,
       },
     });
   });
@@ -827,6 +845,7 @@ describe("[Management] IModelOperations", () => {
         description: newIModelDescription,
         extent: iModelBeforeUpdate.extent!,
         containersEnabled: iModelBeforeUpdate.containersEnabled,
+        lastChangesetPushDateTime: iModelBeforeUpdate.lastChangesetPushDateTime,
       },
     });
   });
@@ -877,6 +896,7 @@ describe("[Management] IModelOperations", () => {
         description: iModelBeforeUpdate.description!,
         extent: newIModelExtent,
         containersEnabled: iModelBeforeUpdate.containersEnabled,
+        lastChangesetPushDateTime: iModelBeforeUpdate.lastChangesetPushDateTime,
       },
     });
   });

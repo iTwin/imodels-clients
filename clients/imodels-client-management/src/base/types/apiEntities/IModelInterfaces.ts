@@ -98,6 +98,8 @@ export interface IModel extends MinimalIModel {
   state: IModelState;
   /** Datetime string of when the iModel was created. */
   createdDateTime: string;
+  /** Datetime string of when the last changeset was pushed to the iModel. */
+  lastChangesetPushDateTime: string | null;
   /** Id of the iTwin that the iModel belongs to. */
   iTwinId: string;
   /** iModel extent. See {@link Extent}. */
