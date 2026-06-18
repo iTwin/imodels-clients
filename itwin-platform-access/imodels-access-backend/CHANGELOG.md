@@ -1,6 +1,14 @@
 # Change Log - @itwin/imodels-access-backend
 
-This log was last generated on Thu, 23 Apr 2026 08:41:44 GMT and should not be manually modified.
+This log was last generated on Wed, 10 Jun 2026 10:51:56 GMT and should not be manually modified.
+
+## 6.1.2
+Wed, 10 Jun 2026 10:51:56 GMT
+
+### Updates
+
+- Expose RetryOptions
+- Update axios
 
 ## 6.1.1
 Thu, 23 Apr 2026 08:41:44 GMT

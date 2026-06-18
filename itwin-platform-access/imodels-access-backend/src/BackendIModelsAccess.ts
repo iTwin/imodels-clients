@@ -98,6 +98,8 @@ import {
   toArray,
 } from "@itwin/imodels-client-management";
 
+import { RetryOptions } from "@itwin/object-storage-core";
+
 import {
   getV1CheckpointSize,
   queryCurrentOrPrecedingV1Checkpoint,
@@ -114,7 +116,9 @@ export type BackendIModelsAccessOptions = Pick<
   Partial<IModelsClientOptions>,
   "cloudStorage"
 > &
-  Omit<IModelsClientOptions, "cloudStorage">;
+  Omit<IModelsClientOptions, "cloudStorage"> & {
+    retryOptions?: RetryOptions;
+  };
 
 export class BackendIModelsAccess implements BackendHubAccess {
   protected readonly _iModelsClient: IModelsClient;
@@ -126,7 +130,8 @@ export class BackendIModelsAccess implements BackendHubAccess {
         : new IModelsClient({
             ...iModelsClient,
             cloudStorage:
-              iModelsClient?.cloudStorage ?? createDefaultClientStorage(),
+              iModelsClient?.cloudStorage ??
+              createDefaultClientStorage(iModelsClient?.retryOptions),
           });
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "@itwin/imodels-client-authoring",
-  "version": "6.2.0",
+  "version": "6.2.1",
   "description": "iModels API client wrapper for applications that author iModels.",
   "keywords": [
     "Bentley",
@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@itwin/imodels-client-management": "workspace:*",
-    "@itwin/object-storage-core": "^3.0.4"
+    "@itwin/object-storage-core": "^3.1.1"
   },
   "devDependencies": {
     "@itwin/eslint-plugin": "~3.7.8",
