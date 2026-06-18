@@ -84,7 +84,7 @@ export async function assertIModel(params: {
   );
   expect(params.actualIModel.createdDateTime).to.not.be.empty;
   expect(params.actualIModel).to.have.property("lastChangesetPushDateTime");
-  if ("lastChangesetPushDateTime" in params.expectedIModelProperties)
+  if (params.expectedIModelProperties.lastChangesetPushDateTime !== undefined)
     expect(params.actualIModel.lastChangesetPushDateTime).to.equal(
       params.expectedIModelProperties.lastChangesetPushDateTime
     );
