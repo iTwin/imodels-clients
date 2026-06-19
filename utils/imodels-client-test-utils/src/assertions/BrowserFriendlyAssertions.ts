@@ -428,7 +428,7 @@ export function assertOptionalLink(params: {
 }): void {
   if (params.shouldLinkExist) {
     expect(params.actualLink).to.exist;
-    expect(params.actualLink.href).to.not.be.empty;
+    expect(params.actualLink!.href).to.not.be.empty;
   } else {
     expect(params.actualLink).to.equal(null);
   }
@@ -438,6 +438,6 @@ export function assertApplication(params: {
   actualApplication: Application | null;
 }): void {
   expect(params.actualApplication).to.exist;
-  expect(params.actualApplication.id).to.not.be.empty;
-  expect(params.actualApplication.name).to.not.be.empty;
+  expect(params.actualApplication!.id).to.not.be.empty;
+  expect(params.actualApplication!.name).to.not.be.empty;
 }
