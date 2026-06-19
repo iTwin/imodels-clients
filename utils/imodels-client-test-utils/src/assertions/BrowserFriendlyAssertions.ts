@@ -60,9 +60,7 @@ export function assertMinimalIModel(params: {
 
 export async function assertIModel(params: {
   actualIModel: IModel;
-  expectedIModelProperties: IModelProperties & {
-    lastChangesetPushDateTime?: string | null;
-  };
+  expectedIModelProperties: IModelProperties;
 }): Promise<void> {
   assertMinimalIModel({
     actualIModel: params.actualIModel,
@@ -83,13 +81,6 @@ export async function assertIModel(params: {
     params.expectedIModelProperties.containersEnabled
   );
   expect(params.actualIModel.createdDateTime).to.not.be.empty;
-  expect(params.actualIModel).to.have.property("lastChangesetPushDateTime");
-  if (params.expectedIModelProperties.lastChangesetPushDateTime !== undefined)
-    expect(params.actualIModel.lastChangesetPushDateTime).to.equal(
-      params.expectedIModelProperties.lastChangesetPushDateTime
-    );
-  if (params.actualIModel.lastChangesetPushDateTime !== null)
-    expect(params.actualIModel.lastChangesetPushDateTime).to.not.be.empty;
   expect(params.actualIModel.state).to.equal(IModelState.Initialized);
   expect(params.actualIModel.dataCenterLocation).to.not.be.empty;
 
@@ -437,7 +428,7 @@ export function assertOptionalLink(params: {
 }): void {
   if (params.shouldLinkExist) {
     expect(params.actualLink).to.exist;
-    expect(params.actualLink!.href).to.not.be.empty;
+    expect(params.actualLink.href).to.not.be.empty;
   } else {
     expect(params.actualLink).to.equal(null);
   }
@@ -447,6 +438,6 @@ export function assertApplication(params: {
   actualApplication: Application | null;
 }): void {
   expect(params.actualApplication).to.exist;
-  expect(params.actualApplication!.id).to.not.be.empty;
-  expect(params.actualApplication!.name).to.not.be.empty;
+  expect(params.actualApplication.id).to.not.be.empty;
+  expect(params.actualApplication.name).to.not.be.empty;
 }
