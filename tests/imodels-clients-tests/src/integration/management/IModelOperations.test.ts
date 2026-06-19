@@ -509,9 +509,7 @@ describe("[Management] IModelOperations", () => {
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: {
-        ...createIModelParams.iModelProperties,
-      },
+      expectedIModelProperties: createIModelParams.iModelProperties,
     });
   });
 
@@ -545,9 +543,7 @@ describe("[Management] IModelOperations", () => {
 
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: {
-        ...createIModelParams.iModelProperties,
-      },
+      expectedIModelProperties: createIModelParams.iModelProperties,
     });
   });
 
@@ -582,9 +578,7 @@ describe("[Management] IModelOperations", () => {
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: {
-        ...createIModelFromTemplateParams.iModelProperties,
-      },
+      expectedIModelProperties: createIModelFromTemplateParams.iModelProperties,
     });
   });
 
@@ -622,9 +616,7 @@ describe("[Management] IModelOperations", () => {
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: {
-        ...createIModelFromTemplateParams.iModelProperties,
-      },
+      expectedIModelProperties: createIModelFromTemplateParams.iModelProperties,
     });
   });
 
@@ -660,9 +652,7 @@ describe("[Management] IModelOperations", () => {
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: {
-        ...createIModelFromTemplateParams.iModelProperties,
-      },
+      expectedIModelProperties: createIModelFromTemplateParams.iModelProperties,
     });
   });
 

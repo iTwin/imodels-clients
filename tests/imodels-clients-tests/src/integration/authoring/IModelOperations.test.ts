@@ -87,9 +87,7 @@ describe("[Authoring] IModelOperations", () => {
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: {
-        ...createIModelParams.iModelProperties,
-      },
+      expectedIModelProperties: createIModelParams.iModelProperties,
     });
   });
 
@@ -121,9 +119,7 @@ describe("[Authoring] IModelOperations", () => {
     // Assert
     await assertIModel({
       actualIModel: iModel,
-      expectedIModelProperties: {
-        ...createIModelParams.iModelProperties,
-      },
+      expectedIModelProperties: createIModelParams.iModelProperties,
     });
   });
 });
