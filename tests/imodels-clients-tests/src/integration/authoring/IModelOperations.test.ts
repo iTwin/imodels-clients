@@ -89,7 +89,6 @@ describe("[Authoring] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: {
         ...createIModelParams.iModelProperties,
-        lastChangesetPushDateTime: null,
       },
     });
   });
@@ -124,7 +123,6 @@ describe("[Authoring] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: {
         ...createIModelParams.iModelProperties,
-        lastChangesetPushDateTime: null,
       },
     });
   });

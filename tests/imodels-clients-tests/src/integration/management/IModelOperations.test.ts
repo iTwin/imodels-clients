@@ -511,7 +511,6 @@ describe("[Management] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: {
         ...createIModelParams.iModelProperties,
-        lastChangesetPushDateTime: null,
       },
     });
   });
@@ -548,7 +547,6 @@ describe("[Management] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: {
         ...createIModelParams.iModelProperties,
-        lastChangesetPushDateTime: null,
       },
     });
   });
@@ -586,7 +584,6 @@ describe("[Management] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: {
         ...createIModelFromTemplateParams.iModelProperties,
-        lastChangesetPushDateTime: null,
       },
     });
   });
@@ -627,7 +624,6 @@ describe("[Management] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: {
         ...createIModelFromTemplateParams.iModelProperties,
-        lastChangesetPushDateTime: null,
       },
     });
   });
@@ -666,7 +662,6 @@ describe("[Management] IModelOperations", () => {
       actualIModel: iModel,
       expectedIModelProperties: {
         ...createIModelFromTemplateParams.iModelProperties,
-        lastChangesetPushDateTime: null,
       },
     });
   });
@@ -803,7 +798,6 @@ describe("[Management] IModelOperations", () => {
         description: iModelBeforeUpdate.description!,
         extent: iModelBeforeUpdate.extent!,
         containersEnabled: iModelBeforeUpdate.containersEnabled,
-        lastChangesetPushDateTime: iModelBeforeUpdate.lastChangesetPushDateTime,
       },
     });
   });
@@ -845,7 +839,6 @@ describe("[Management] IModelOperations", () => {
         description: newIModelDescription,
         extent: iModelBeforeUpdate.extent!,
         containersEnabled: iModelBeforeUpdate.containersEnabled,
-        lastChangesetPushDateTime: iModelBeforeUpdate.lastChangesetPushDateTime,
       },
     });
   });
@@ -896,7 +889,6 @@ describe("[Management] IModelOperations", () => {
         description: iModelBeforeUpdate.description!,
         extent: newIModelExtent,
         containersEnabled: iModelBeforeUpdate.containersEnabled,
-        lastChangesetPushDateTime: iModelBeforeUpdate.lastChangesetPushDateTime,
       },
     });
   });
