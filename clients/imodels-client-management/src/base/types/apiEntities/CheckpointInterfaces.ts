@@ -60,6 +60,11 @@ export interface Checkpoint {
    * property.
    */
   changesetIndex: number;
+  /**
+   * Checkpoint file size in bytes. The value is 0 when the Checkpoint generation is scheduled but not yet
+   * complete, and the actual file size once generation is successful.
+   */
+  size: number;
   /** Checkpoint state. See {@link CheckpointState}. */
   state: CheckpointState;
   /** Name of checkpoint when downloading it in blocks. */

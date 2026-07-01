@@ -227,6 +227,8 @@ export function assertCheckpoint(params: {
   else
     expect(params.actualCheckpoint.changesetIndex).to.be.greaterThanOrEqual(0);
 
+  expect(params.actualCheckpoint.size).to.be.greaterThanOrEqual(0);
+
   expect(params.actualCheckpoint.state).to.equal(
     params.expectedCheckpointProperties.state
   );

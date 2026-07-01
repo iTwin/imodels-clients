@@ -692,6 +692,7 @@ describe("[Management] IModelOperations", () => {
         containersEnabled: cloneIModelParams.iModelProperties.containersEnabled,
       },
     });
+    expect(newIModel.lastChangesetPushDateTime).to.not.be.null;
     const changesets = await toArray(
       iModelsClient.changesets.getMinimalList({
         authorization,
@@ -736,6 +737,7 @@ describe("[Management] IModelOperations", () => {
         containersEnabled: forkIModelParams.iModelProperties.containersEnabled,
       },
     });
+    expect(iModelFork.lastChangesetPushDateTime).to.not.be.null;
     const changesets = await toArray(
       iModelsClient.changesets.getMinimalList({
         authorization,
