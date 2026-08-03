@@ -45,5 +45,43 @@ describe("[Authoring] IModelsApiUrlFormatter", () => {
         "https://api.bentley.com/imodels/IMODEL_ID/locks"
       );
     });
+
+    it("should format released lock list url with required params", () => {
+      // Arrange
+      const params = {
+        iModelId: "IMODEL_ID",
+        urlParams: { afterChangesetIndex: 5 },
+      };
+
+      // Act
+      const releasedLockListUrl =
+        iModelsApiUrlFormatter.getReleasedLockListUrl(params);
+
+      // Assert
+      expect(releasedLockListUrl).to.be.equal(
+        "https://api.bentley.com/imodels/IMODEL_ID/locks/releasedlocks?afterChangesetIndex=5"
+      );
+    });
+
+    it("should format released lock list url with all params", () => {
+      // Arrange
+      const params = {
+        iModelId: "IMODEL_ID",
+        urlParams: {
+          afterChangesetIndex: 3,
+          $top: 10,
+          $continuationToken: "TOKEN",
+        },
+      };
+
+      // Act
+      const releasedLockListUrl =
+        iModelsApiUrlFormatter.getReleasedLockListUrl(params);
+
+      // Assert
+      expect(releasedLockListUrl).to.be.equal(
+        "https://api.bentley.com/imodels/IMODEL_ID/locks/releasedlocks?afterChangesetIndex=3&$top=10&$continuationToken=TOKEN"
+      );
+    });
   });
 });
