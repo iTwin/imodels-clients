@@ -59,7 +59,7 @@ describe("[Authoring] IModelsApiUrlFormatter", () => {
 
       // Assert
       expect(releasedLockListUrl).to.be.equal(
-        "https://api.bentley.com/imodels/IMODEL_ID/locks/releasedlocks?afterChangesetIndex=5"
+        "https://api.bentley.com/imodels/IMODEL_ID/locks/released-locks?afterChangesetIndex=5"
       );
     });
 
@@ -80,7 +80,7 @@ describe("[Authoring] IModelsApiUrlFormatter", () => {
 
       // Assert
       expect(releasedLockListUrl).to.be.equal(
-        "https://api.bentley.com/imodels/IMODEL_ID/locks/releasedlocks?afterChangesetIndex=3&$top=10&$continuationToken=TOKEN"
+        "https://api.bentley.com/imodels/IMODEL_ID/locks/released-locks?afterChangesetIndex=3&$top=10&$continuationToken=TOKEN"
       );
     });
   });
