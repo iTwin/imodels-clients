@@ -257,13 +257,13 @@ describe("[Management] LockOperations", () => {
       iModelId: testIModelForWrite.id,
     });
     const changesetArray = await toArray(changesets);
-    const changesetId = changesetArray[0].id;
+    const changeset = changesetArray[0];
 
     await authoringClient.locks.update({
       authorization,
       iModelId: testIModelForWrite.id,
       briefcaseId: briefcase.briefcaseId,
-      changesetId,
+      changesetId: changeset.id,
       lockedObjects: [
         { lockLevel: LockLevel.None, objectIds: ["0xa1", "0xa2"] },
       ],
@@ -272,7 +272,7 @@ describe("[Management] LockOperations", () => {
     const getReleasedLockListParams: GetReleasedLockListParams = {
       authorization,
       iModelId: testIModelForWrite.id,
-      urlParams: { afterChangesetIndex: 0 },
+      urlParams: { afterChangesetIndex: changeset.index - 1 },
     };
 
     // Act
@@ -282,6 +282,9 @@ describe("[Management] LockOperations", () => {
 
     // Assert
     const releasedLockArray = await toArray(releasedLocks);
-    expect(releasedLockArray.length).to.be.greaterThan(0);
+    expect(releasedLockArray.length).to.equal(1);
+    const releasedLock = releasedLockArray[0];
+    expect(releasedLock.lockLevel).to.equal(LockLevel.Exclusive);
+    expect(releasedLock.objectIds).to.have.members(["0xa1", "0xa2"]);
   });
 });
