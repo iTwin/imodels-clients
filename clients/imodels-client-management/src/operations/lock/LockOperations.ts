@@ -49,6 +49,7 @@ export class LockOperations<
   }
 
   /**
+   * @beta
    * Gets Released Locks for a specific iModel. This method returns Released Locks in their full representation. The
    * returned iterator internally queries entities in pages. Wraps the
    * {@link https://developer.bentley.com/apis/imodels-v2/operations/get-imodel-released-locks/ Get iModel Released Locks}
