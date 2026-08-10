@@ -36,13 +36,13 @@ export interface ReleaseLocksChunkParams extends IModelScopedOperationParams {
   changesetId?: string;
 }
 
-/** Url parameters supported in Released Lock list query. */
+/** @beta Url parameters supported in Released Lock list query. */
 export interface GetReleasedLockListUrlParams extends CollectionRequestParams {
   /** Returns locks released in changesets strictly after the specified changeset index. */
   afterChangesetIndex: number;
 }
 
-/** Parameters for get Released Lock list operation. */
+/** @beta Parameters for get Released Lock list operation. */
 export interface GetReleasedLockListParams extends IModelScopedOperationParams {
   /** Parameters that will be appended to the entity list request url that will narrow down the results. */
   urlParams: GetReleasedLockListUrlParams;

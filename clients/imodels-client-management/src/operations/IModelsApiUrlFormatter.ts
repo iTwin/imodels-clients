@@ -259,9 +259,9 @@ export class IModelsApiUrlFormatter {
     iModelId: string;
     urlParams: GetReleasedLockListUrlParams;
   }): string {
-    return `${this.baseUrl}/${params.iModelId}/locks/released-locks${this.formQueryString(
-      { ...params.urlParams }
-    )}`;
+    return `${this.baseUrl}/${
+      params.iModelId
+    }/locks/released-locks${this.formQueryString({ ...params.urlParams })}`;
   }
 
   public getCreateIModelOperationDetailsUrl(params: {

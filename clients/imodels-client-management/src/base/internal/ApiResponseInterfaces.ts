@@ -127,6 +127,7 @@ export interface ReleaseLocksChunkResponse {
   isLastChunk: boolean;
 }
 
+/** @beta */
 export interface ReleasedLocksResponse extends CollectionResponse {
   releasedLocks: ReleasedLock[];
 }

@@ -35,7 +35,7 @@ export interface ReleaseLocksChunkResult {
   isLastChunk: boolean;
 }
 
-/** A group of released objects that had the same lock level. */
+/** @beta A group of released objects that had the same lock level. */
 export interface ReleasedLock {
   /** Lock level the objects were released from. */
   lockLevel: LockLevel.Shared | LockLevel.Exclusive;
