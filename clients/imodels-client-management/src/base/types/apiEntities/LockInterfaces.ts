@@ -34,3 +34,14 @@ export interface ReleaseLocksChunkResult {
   /** Indicates whether this was the last chunk of Locks to release. */
   isLastChunk: boolean;
 }
+
+/**
+ * @beta
+ * A group of released objects that had the same lock level.
+ */
+export interface ReleasedLock {
+  /** Lock level the objects were released from. */
+  lockLevel: LockLevel.Shared | LockLevel.Exclusive;
+  /** Released object ids. */
+  objectIds: string[];
+}

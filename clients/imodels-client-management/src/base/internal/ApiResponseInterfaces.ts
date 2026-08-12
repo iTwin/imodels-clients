@@ -17,6 +17,7 @@ import {
   MinimalNamedVersion,
   MinimalUser,
   NamedVersion,
+  ReleasedLock,
   User,
 } from "../types";
 
@@ -124,4 +125,9 @@ export interface LockResponse {
 
 export interface ReleaseLocksChunkResponse {
   isLastChunk: boolean;
+}
+
+/** @beta */
+export interface ReleasedLocksResponse extends CollectionResponse {
+  releasedLocks: ReleasedLock[];
 }

@@ -12,6 +12,7 @@ import {
 import {
   AuthorizationCallback,
   GetLockListParams,
+  GetReleasedLockListParams,
   IModelsClient,
   IModelsClientOptions,
   Lock,
@@ -232,5 +233,58 @@ describe("[Management] LockOperations", () => {
     const locks = iModelsClient.locks.getList(getLockListParams);
     const lockArray = await toArray(locks);
     expect(lockArray.length).to.equal(0);
+  });
+
+  it("should return released locks when querying released lock list", async () => {
+    // Arrange
+    const briefcase = await authoringClient.briefcases.acquire({
+      authorization,
+      iModelId: testIModelForWrite.id,
+    });
+    testIModelForWriteBriefcaseIds.push(briefcase.briefcaseId);
+
+    await authoringClient.locks.update({
+      authorization,
+      iModelId: testIModelForWrite.id,
+      briefcaseId: briefcase.briefcaseId,
+      lockedObjects: [
+        { lockLevel: LockLevel.Exclusive, objectIds: ["0xa1", "0xa2"] },
+      ],
+    });
+
+    const changesets = iModelsClient.changesets.getMinimalList({
+      authorization,
+      iModelId: testIModelForWrite.id,
+    });
+    const changesetArray = await toArray(changesets);
+    const changeset = changesetArray[0];
+
+    await authoringClient.locks.update({
+      authorization,
+      iModelId: testIModelForWrite.id,
+      briefcaseId: briefcase.briefcaseId,
+      changesetId: changeset.id,
+      lockedObjects: [
+        { lockLevel: LockLevel.None, objectIds: ["0xa1", "0xa2"] },
+      ],
+    });
+
+    const getReleasedLockListParams: GetReleasedLockListParams = {
+      authorization,
+      iModelId: testIModelForWrite.id,
+      urlParams: { afterChangesetIndex: changeset.index - 1 },
+    };
+
+    // Act
+    const releasedLocks = iModelsClient.locks.getReleasedLockList(
+      getReleasedLockListParams
+    );
+
+    // Assert
+    const releasedLockArray = await toArray(releasedLocks);
+    expect(releasedLockArray.length).to.equal(1);
+    const releasedLock = releasedLockArray[0];
+    expect(releasedLock.lockLevel).to.equal(LockLevel.Exclusive);
+    expect(releasedLock.objectIds).to.have.members(["0xa1", "0xa2"]);
   });
 });
