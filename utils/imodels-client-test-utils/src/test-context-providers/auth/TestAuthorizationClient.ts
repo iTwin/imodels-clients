@@ -57,8 +57,16 @@ export class TestAuthorizationClient {
         channel: "chrome",
       });
     } catch {
-      // Fall back to playwright's managed Chromium; install it via: npx playwright install chromium
-      browser = await chromium.launch(launchOptions);
+      try {
+        // Uses managed Chromium installed by @playwright/browser-chromium during rush install
+        browser = await chromium.launch(launchOptions);
+      } catch (e) {
+        throw new TestSetupError(
+          `Failed to launch browser. Run 'npx playwright install chromium' to install the managed browser. Details: ${String(
+            e
+          )}`
+        );
+      }
     }
     const browserPage: Page = await browser.newPage();
 
