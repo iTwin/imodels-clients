@@ -2,22 +2,13 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
+// cspell:ignore networkidle
 import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
 
-import {
-  Browser,
-  BrowserPlatform,
-  BrowserTag,
-  ChromeReleaseChannel,
-  computeSystemExecutablePath,
-  detectBrowserPlatform,
-  install,
-  resolveBuildId,
-} from "@puppeteer/browsers";
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
-import * as puppeteer from "puppeteer";
+import { Browser, ElementHandle, Page, chromium } from "playwright";
 
 import { TestSetupError } from "../../CommonTestUtils";
 
@@ -35,8 +26,6 @@ interface AccessTokenResponse {
 
 @injectable()
 export class TestAuthorizationClient {
-  // cspell:disable-next-line
-  private _pageLoadedEvent: puppeteer.PuppeteerLifeCycleEvent = "networkidle2";
   private _consentPageTitle = "Permissions";
   private _pageElementIds = {
     fields: {
@@ -55,47 +44,29 @@ export class TestAuthorizationClient {
   public async getAccessToken(
     testUserCredentials: TestUserCredentials
   ): Promise<string> {
-    let executablePath;
-    try {
-      executablePath = computeSystemExecutablePath({
-        browser: Browser.CHROME,
-        channel: ChromeReleaseChannel.STABLE,
-      });
-    } catch (e) {
-      const buildId = await resolveBuildId(
-        Browser.CHROMIUM,
-        detectBrowserPlatform() as BrowserPlatform,
-        BrowserTag.LATEST
-      );
-      const installedBrowser = await install({
-        browser: Browser.CHROMIUM,
-        buildId,
-        cacheDir: "../../common/temp",
-      });
-      executablePath = installedBrowser.executablePath;
-    }
-
-    const browserLaunchOptions: puppeteer.LaunchOptions &
-      puppeteer.ConnectOptions = {
-      executablePath,
+    const launchOptions = {
       headless: true,
-      defaultViewport: {
-        width: 800,
-        height: 1200,
-      },
       // cspell:disable-next-line
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     };
-    const browser: puppeteer.Browser = await puppeteer.launch(
-      browserLaunchOptions
-    );
-    const browserPage: puppeteer.Page = await browser.newPage();
+
+    let browser: Browser;
+    try {
+      browser = await chromium.launch({
+        ...launchOptions,
+        channel: "chrome",
+      });
+    } catch {
+      // Fall back to playwright's managed Chromium; install it via: npx playwright install chromium
+      browser = await chromium.launch(launchOptions);
+    }
+    const browserPage: Page = await browser.newPage();
 
     const authorizationCodePromise =
       this.interceptRedirectAndGetAuthorizationCode(browserPage);
 
     await browserPage.goto(this.getAuthorizationUrl(testUserCredentials), {
-      waitUntil: this._pageLoadedEvent,
+      waitUntil: "networkidle",
     });
     await this.fillCredentials(browserPage, testUserCredentials);
     await this.consentIfNeeded(browserPage);
@@ -120,14 +91,14 @@ export class TestAuthorizationClient {
   }
 
   private async fillCredentials(
-    browserPage: puppeteer.Page,
+    browserPage: Page,
     testUserCredentials: TestUserCredentials
   ): Promise<void> {
     const emailField = await this.captureElement(
       browserPage,
       this._pageElementIds.fields.email
     );
-    await emailField.type(testUserCredentials.email);
+    await emailField.fill(testUserCredentials.email);
 
     const nextButton = await this.captureElement(
       browserPage,
@@ -139,7 +110,7 @@ export class TestAuthorizationClient {
       browserPage,
       this._pageElementIds.fields.password
     );
-    await passwordField.type(testUserCredentials.password);
+    await passwordField.fill(testUserCredentials.password);
 
     const signInButton = await this.captureElement(
       browserPage,
@@ -147,11 +118,11 @@ export class TestAuthorizationClient {
     );
     await Promise.all([
       signInButton.click(),
-      browserPage.waitForNavigation({ waitUntil: this._pageLoadedEvent }),
+      browserPage.waitForLoadState("networkidle"),
     ]);
   }
 
-  private async consentIfNeeded(browserPage: puppeteer.Page): Promise<void> {
+  private async consentIfNeeded(browserPage: Page): Promise<void> {
     const isConsentPage =
       (await browserPage.title()) === this._consentPageTitle;
     if (!isConsentPage) return;
@@ -162,7 +133,7 @@ export class TestAuthorizationClient {
     );
     await Promise.all([
       consentButton.click(),
-      browserPage.waitForNavigation({ waitUntil: this._pageLoadedEvent }),
+      browserPage.waitForLoadState("networkidle"),
     ]);
   }
 
@@ -195,29 +166,24 @@ export class TestAuthorizationClient {
     return response.data.access_token;
   }
 
-  private async interceptRedirectAndGetAuthorizationCode(
-    browserPage: puppeteer.Page
+  private interceptRedirectAndGetAuthorizationCode(
+    browserPage: Page
   ): Promise<string> {
-    await browserPage.setRequestInterception(true);
     return new Promise<string>((resolve) => {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      browserPage.on("request", async (interceptedRequest) => {
-        const currentRequestUrl = interceptedRequest.url();
-        if (!currentRequestUrl.startsWith(this._authConfig.redirectUrl))
-          await interceptedRequest.continue();
-        else {
-          await this.respondSuccess(interceptedRequest);
+      void browserPage.route("**", async (route) => {
+        const currentRequestUrl = route.request().url();
+        if (!currentRequestUrl.startsWith(this._authConfig.redirectUrl)) {
+          await route.continue();
+        } else {
+          await route.fulfill({
+            status: 200,
+            contentType: "text/html",
+            body: "OK",
+          });
           resolve(this.getCodeFromUrl(currentRequestUrl));
         }
       });
-    });
-  }
-
-  private async respondSuccess(request: puppeteer.HTTPRequest): Promise<void> {
-    await request.respond({
-      status: 200,
-      contentType: "text/html",
-      body: "OK",
     });
   }
 
@@ -232,9 +198,9 @@ export class TestAuthorizationClient {
   }
 
   private async captureElement(
-    browserPage: puppeteer.Page,
+    browserPage: Page,
     selector: string
-  ): Promise<puppeteer.ElementHandle<Element>> {
+  ): Promise<ElementHandle<SVGElement | HTMLElement>> {
     const element = await browserPage.waitForSelector(selector);
     if (!element)
       throw new TestSetupError(
