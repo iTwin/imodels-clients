@@ -30,7 +30,7 @@
     "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json",
     "test": "npm run test:unit && npm run test:integration",
-    "test:integration": "mocha lib/integration/**/*.test.js --color --timeout 18000000 --exit",
+    "test:integration": "mocha lib/integration/**/*.test.js --color --timeout 1200000 --exit",
     "test:unit": "mocha lib/unit/**/*.test.js --color --timeout 180000 --exit"
   },
   "prettier": "./node_modules/@itwin/imodels-client-common-config/prettier.json",
