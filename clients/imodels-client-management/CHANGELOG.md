@@ -1,6 +1,15 @@
 # Change Log - @itwin/imodels-client-management
 
-This log was last generated on Wed, 10 Jun 2026 10:51:55 GMT and should not be manually modified.
+This log was last generated on Thu, 13 Aug 2026 06:44:28 GMT and should not be manually modified.
+
+## 6.2.2
+Thu, 13 Aug 2026 06:44:28 GMT
+
+### Minor changes
+
+- Add size to Checkpoint response model.
+- Add lastChangesetPushDateTime to iModel response model.
+- Add LockOperations.getReleasedLockList and LockOperations.releaseLocksChunk operations.
 
 ## 6.2.1
 Wed, 10 Jun 2026 10:51:55 GMT
