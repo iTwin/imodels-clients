@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-// cspell:ignore networkidle
+// cspell:ignore domcontentloaded
 import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
 
@@ -74,7 +74,7 @@ export class TestAuthorizationClient {
       this.interceptRedirectAndGetAuthorizationCode(browserPage);
 
     await browserPage.goto(this.getAuthorizationUrl(testUserCredentials), {
-      waitUntil: "networkidle",
+      waitUntil: "domcontentloaded",
     });
     await this.fillCredentials(browserPage, testUserCredentials);
     await this.consentIfNeeded(browserPage);
@@ -126,7 +126,7 @@ export class TestAuthorizationClient {
     );
     await Promise.all([
       signInButton.click(),
-      browserPage.waitForLoadState("networkidle"),
+      browserPage.waitForLoadState("domcontentloaded"),
     ]);
   }
 
@@ -141,7 +141,7 @@ export class TestAuthorizationClient {
     );
     await Promise.all([
       consentButton.click(),
-      browserPage.waitForLoadState("networkidle"),
+      browserPage.waitForLoadState("domcontentloaded"),
     ]);
   }
 
