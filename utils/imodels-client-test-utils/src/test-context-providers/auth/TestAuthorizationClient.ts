@@ -8,7 +8,7 @@ import { URLSearchParams, parse } from "url";
 
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
-import { Browser, ElementHandle, Page, chromium } from "playwright";
+import { Browser, ElementHandle, Page, chromium } from "playwright-core";
 
 import { TestSetupError } from "../../CommonTestUtils";
 
