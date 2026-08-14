@@ -163,11 +163,10 @@ export class ClientToPlatformAdapter {
   private static toChangesetType(
     containingChanges: ContainingChanges
   ): ChangesetType {
-    switch (containingChanges) {
-      case ContainingChanges.Schema:
-        return ChangesetType.Schema;
-      default:
-        return ChangesetType.Regular;
-    }
+    if ((containingChanges & ContainingChanges.SchemaSync) !== 0)
+      return ChangesetType.SchemaSync;
+    if ((containingChanges & ContainingChanges.Schema) !== 0)
+      return ChangesetType.Schema;
+    return ChangesetType.Regular;
   }
 }
