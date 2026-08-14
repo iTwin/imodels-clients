@@ -7,7 +7,13 @@ import { URLSearchParams, parse } from "url";
 
 import axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
-import { Browser, ElementHandle, Page, chromium } from "playwright-core";
+import {
+  Browser,
+  ElementHandle,
+  Page,
+  Request,
+  chromium,
+} from "playwright-core";
 
 import { TestSetupError } from "../../CommonTestUtils";
 
@@ -178,13 +184,27 @@ export class TestAuthorizationClient {
   private interceptRedirectAndGetAuthorizationCode(
     browserPage: Page
   ): Promise<string> {
-    return new Promise<string>((resolve) => {
+    return new Promise<string>((resolve, reject) => {
+      const timeoutHandle = setTimeout(() => {
+        browserPage.off("request", handler);
+        reject(
+          new TestSetupError(
+            "Sign in failed: timed out waiting for authorization code."
+          )
+        );
+      }, 60_000);
+
       // page.route doesn't intercept navigation-level redirects to unreachable hosts; page.on("request") does
-      browserPage.on("request", (request) => {
+      const handler = (request: Request): void => {
         const url = request.url();
-        if (url.startsWith(this._authConfig.redirectUrl))
+        if (url.startsWith(this._authConfig.redirectUrl)) {
+          clearTimeout(timeoutHandle);
+          browserPage.off("request", handler);
           resolve(this.getCodeFromUrl(url));
-      });
+        }
+      };
+
+      browserPage.on("request", handler);
     });
   }
 
