@@ -2,7 +2,6 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-// cspell:ignore domcontentloaded
 import { ParsedUrlQuery } from "querystring";
 import { URLSearchParams, parse } from "url";
 
@@ -26,6 +25,8 @@ interface AccessTokenResponse {
 
 @injectable()
 export class TestAuthorizationClient {
+  // cspell:ignore domcontentloaded
+  private readonly _pageLoadedEvent = "domcontentloaded" as const;
   private _consentPageTitle = "Permissions";
   private _pageElementIds = {
     fields: {
@@ -74,7 +75,7 @@ export class TestAuthorizationClient {
       this.interceptRedirectAndGetAuthorizationCode(browserPage);
 
     await browserPage.goto(this.getAuthorizationUrl(testUserCredentials), {
-      waitUntil: "domcontentloaded",
+      waitUntil: this._pageLoadedEvent,
     });
     await this.fillCredentials(browserPage, testUserCredentials);
     await this.consentIfNeeded(browserPage);
@@ -126,7 +127,7 @@ export class TestAuthorizationClient {
     );
     await Promise.all([
       signInButton.click(),
-      browserPage.waitForLoadState("domcontentloaded"),
+      browserPage.waitForLoadState(this._pageLoadedEvent),
     ]);
   }
 
@@ -141,7 +142,7 @@ export class TestAuthorizationClient {
     );
     await Promise.all([
       consentButton.click(),
-      browserPage.waitForLoadState("domcontentloaded"),
+      browserPage.waitForLoadState(this._pageLoadedEvent),
     ]);
   }
 
