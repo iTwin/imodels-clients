@@ -52,20 +52,14 @@ export class TestAuthorizationClient {
 
     let browser: Browser;
     try {
-      console.log("[Auth] Launching system Chrome...");
       browser = await chromium.launch({
         ...launchOptions,
         channel: "chrome",
       });
-      console.log("[Auth] System Chrome launched.");
     } catch {
       try {
-        console.log(
-          "[Auth] System Chrome not found, falling back to managed Chromium..."
-        );
         // Uses managed Chromium installed by @playwright/browser-chromium during rush install
         browser = await chromium.launch(launchOptions);
-        console.log("[Auth] Managed Chromium launched.");
       } catch (e) {
         throw new TestSetupError(
           `Failed to launch browser. Run 'npx playwright install chromium' to install the managed browser. Details: ${String(
@@ -79,20 +73,14 @@ export class TestAuthorizationClient {
     const authorizationCodePromise =
       this.interceptRedirectAndGetAuthorizationCode(browserPage);
 
-    console.log(
-      `[Auth] Navigating to auth URL (authority: ${this._authConfig.authority})...`
-    );
     await browserPage.goto(this.getAuthorizationUrl(testUserCredentials), {
       waitUntil: "domcontentloaded",
     });
-    console.log(`[Auth] Page loaded, title: "${await browserPage.title()}"`);
     await this.fillCredentials(browserPage, testUserCredentials);
     await this.consentIfNeeded(browserPage);
-    console.log("[Auth] Waiting for authorization code...");
     const accessToken = await this.exchangeAuthorizationCodeForAccessToken(
       await authorizationCodePromise
     );
-    console.log("[Auth] Access token obtained.");
 
     await browser.close();
     return accessToken;
@@ -114,28 +102,24 @@ export class TestAuthorizationClient {
     browserPage: Page,
     testUserCredentials: TestUserCredentials
   ): Promise<void> {
-    console.log("[Auth] Filling email...");
     const emailField = await this.captureElement(
       browserPage,
       this._pageElementIds.fields.email
     );
     await emailField.fill(testUserCredentials.email);
 
-    console.log("[Auth] Clicking next...");
     const nextButton = await this.captureElement(
       browserPage,
       this._pageElementIds.buttons.next
     );
     await nextButton.click();
 
-    console.log("[Auth] Filling password...");
     const passwordField = await this.captureElement(
       browserPage,
       this._pageElementIds.fields.password
     );
     await passwordField.fill(testUserCredentials.password);
 
-    console.log("[Auth] Clicking sign in...");
     const signInButton = await this.captureElement(
       browserPage,
       this._pageElementIds.buttons.signIn
@@ -144,15 +128,11 @@ export class TestAuthorizationClient {
       signInButton.click(),
       browserPage.waitForLoadState("domcontentloaded"),
     ]);
-    console.log(`[Auth] Signed in, title: "${await browserPage.title()}"`);
   }
 
   private async consentIfNeeded(browserPage: Page): Promise<void> {
-    const title = await browserPage.title();
-    const isConsentPage = title === this._consentPageTitle;
-    console.log(
-      `[Auth] Consent check - page title: "${title}", needs consent: ${isConsentPage}`
-    );
+    const isConsentPage =
+      (await browserPage.title()) === this._consentPageTitle;
     if (!isConsentPage) return;
 
     const consentButton = await this.captureElement(
@@ -163,7 +143,6 @@ export class TestAuthorizationClient {
       consentButton.click(),
       browserPage.waitForLoadState("domcontentloaded"),
     ]);
-    console.log("[Auth] Consent granted.");
   }
 
   private async exchangeAuthorizationCodeForAccessToken(
