@@ -121,6 +121,7 @@ export async function assertChangeset(params: {
   expectedLinks: {
     namedVersion: boolean;
     checkpoint: boolean;
+    elements: boolean;
   };
   isGetResponse: boolean;
 }): Promise<void> {
@@ -151,6 +152,11 @@ export async function assertChangeset(params: {
     shouldLinkExist: params.expectedLinks.checkpoint,
   });
 
+  assertOptionalLink({
+    actualLink: params.actualChangeset._links.changedElements,
+    shouldLinkExist: params.expectedLinks.elements,
+  });
+
   if (params.isGetResponse) {
     expect(params.actualChangeset._links.download).to.exist;
     expect(params.actualChangeset._links.download!.href).to.not.be.empty;
@@ -173,6 +179,7 @@ export async function assertDownloadedChangeset(params: {
   expectedLinks: {
     namedVersion: boolean;
     checkpoint: boolean;
+    elements: boolean;
   };
 }): Promise<void> {
   await assertChangeset({

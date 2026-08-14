@@ -18,6 +18,7 @@ import {
 
 import {
   DownloadProgressParam,
+  DownloadedChangedElements,
   DownloadedChangeset,
   GenericAbortSignal,
   RetryParams,
@@ -31,6 +32,7 @@ import {
   CreateChangesetParams,
   DownloadChangesetListParams,
   DownloadSingleChangesetParams,
+  DownloadChangedElementsFileParams,
 } from "./ChangesetOperationParams";
 import { LimitedParallelQueue } from "./LimitedParallelQueue";
 
@@ -128,6 +130,24 @@ export class ChangesetOperations<
   }
 
   /**
+   * Downloads a changed elements file from a changeset identified by either index or id. If the file does not exist
+   * in the changeset, an error is thrown. This operation does not retry the download on failure and does not check if the
+   * file already exists in the target directory.
+   * @param {DownloadSingleChangesetParams} params parameters for this operation. See {@link DownloadSingleChangesetParams}.
+   * @returns downloaded changed element. See {@link DownloadedChangedElements}.
+   */
+  public async downloadChangedElements(
+    params: DownloadChangedElementsFileParams
+  ): Promise<DownloadedChangedElements> {
+    await this._options.localFileSystem.createDirectory(
+      params.targetDirectoryPath
+    );
+
+    const changeset: Changeset = await this.querySingleInternal(params);
+    return this.downloadChangedElementsFile({ ...params, changeset });
+  }
+
+  /**
    * Downloads Changeset list. Internally the method uses {@link ChangesetOperations.getRepresentationList} to query the
    * Changeset collection so this operation supports most of the the same url parameters to specify what Changesets to
    * download. One of the most common properties used are `afterIndex` and `lastIndex` to download Changeset range. This
@@ -212,6 +232,47 @@ export class ChangesetOperations<
       state: ChangesetState.FileUploaded,
       briefcaseId: changesetProperties.briefcaseId,
     };
+  }
+
+  private async downloadChangedElementsFile(
+    params: IModelScopedOperationParams &
+      DownloadChangedElementsFileParams & { changeset: Changeset }
+  ): Promise<DownloadedChangedElements> {
+    const changedElementsWithPath: DownloadedChangedElements = {
+      ...params.changeset,
+      filePath: path.join(
+        params.targetDirectoryPath,
+        this.createChangedElementsFileName(params.changeset.id)
+      ),
+    };
+
+    let loggedError: Error | undefined;
+    try {
+      const downloadLink = params.changeset._links.download;
+      assertLink(downloadLink);
+      await downloadFile({
+        storage: this._options.cloudStorage,
+        localPath: params.targetDirectoryPath,
+        abortSignal: params.abortSignal,
+        url: downloadLink.href,
+        storageType: downloadLink.storageType,
+      });
+      return changedElementsWithPath;
+    } catch (error) {
+      this.throwIfAbortError(error, params.changeset, params.abortSignal);
+      if (error instanceof Error) loggedError = error;
+      throw new IModelsErrorImpl({
+        code: IModelsErrorCode.ChangedElementsDownloadFailed,
+        message: `Failed to download changedElements File. Changeset id: ${
+          params.changeset.id
+        }, changeset index: ${params.changeset.index}, error: ${JSON.stringify(
+          loggedError
+        )}.`,
+        originalError: loggedError,
+        statusCode: undefined,
+        details: undefined,
+      });
+    }
   }
 
   private async downloadChangeset(
@@ -342,6 +403,10 @@ export class ChangesetOperations<
 
   private createFileName(changesetId: string): string {
     return `${changesetId}.cs`;
+  }
+
+  private createChangedElementsFileName(changesetId: string): string {
+    return `${changesetId}.ndjson.gz`;
   }
 
   private async provideDownloadCallbacks(
