@@ -36,12 +36,12 @@
     "@itwin/object-storage-azure": "^3.1.1",
     "@itwin/object-storage-core": "^3.1.1",
     "@itwin/object-storage-google": "^3.1.1",
-    "@puppeteer/browsers": "^2.10.0",
+    "@playwright/browser-chromium": "^1.53.0",
     "axios": "^1.15.2",
     "chai": "~4.3.10",
     "dotenv": "~10.0.0",
     "inversify": "~6.0.2",
-    "puppeteer": "~24.39.1",
+    "playwright-core": "^1.53.0",
     "reflect-metadata": "~0.1.13"
   },
   "devDependencies": {
