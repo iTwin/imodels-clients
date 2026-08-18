@@ -216,6 +216,13 @@ describe("BackendIModelsAccess", () => {
           expect(downloadedChangeset.changesType).to.be.equal(
             ChangesetType.Schema
           );
+        else if (
+          expectedChangesetFile.containingChanges ===
+          (ContainingChanges.Schema | ContainingChanges.SchemaSync)
+        )
+          expect(downloadedChangeset.changesType).to.be.equal(
+            ChangesetType.SchemaSync
+          );
         else
           expect(downloadedChangeset.changesType).to.be.equal(
             ChangesetType.Regular
