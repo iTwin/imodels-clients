@@ -2,6 +2,12 @@
   "name": "@itwin/imodels-client-management",
   "entries": [
     {
+      "version": "6.2.3",
+      "tag": "@itwin/imodels-client-management_v6.2.3",
+      "date": "Tue, 18 Aug 2026 03:55:48 GMT",
+      "comments": {}
+    },
+    {
       "version": "6.2.2",
       "tag": "@itwin/imodels-client-management_v6.2.2",
       "date": "Thu, 13 Aug 2026 06:44:28 GMT",

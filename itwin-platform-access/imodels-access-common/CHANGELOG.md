@@ -1,6 +1,11 @@
 # Change Log - @itwin/imodels-access-common
 
-This log was last generated on Thu, 13 Aug 2026 06:44:29 GMT and should not be manually modified.
+This log was last generated on Tue, 18 Aug 2026 03:55:49 GMT and should not be manually modified.
+
+## 6.1.4
+Tue, 18 Aug 2026 03:55:49 GMT
+
+_Version update only_
 
 ## 6.1.3
 Thu, 13 Aug 2026 06:44:29 GMT
