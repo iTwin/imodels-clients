@@ -15,6 +15,7 @@ export enum IModelsErrorCode {
   BriefcaseNotFound = "BriefcaseNotFound",
   CannotAcquire = "CannotAcquire",
   ChangesetDownloadFailed = "ChangesetDownloadFailed",
+  ChangedElementsDownloadFailed = "ChangedElementsDownloadFailed",
   ChangesetExists = "ChangesetExists",
   ChangesetExtendedDataNotFound = "ChangesetExtendedDataNotFound",
   ChangesetGroupNotFound = "ChangesetGroupNotFound",
