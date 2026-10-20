@@ -16,7 +16,7 @@ import {
 } from "./ChangesetExtendedDataOperationsParams";
 
 export class ChangesetExtendedDataOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends ManagementChangesetExtendedDataOperations<TOptions> {
   /**
    * Creates Changeset Extended Data. Wraps the

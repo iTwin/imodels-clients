@@ -76,12 +76,12 @@ export class PlatformToClientAdapter {
   public static toContainingChanges(
     changesType: ChangesetType
   ): ContainingChanges {
-    switch (changesType as number) {
-      case ChangesetType.Regular as number:
+    switch (changesType) {
+      case ChangesetType.Regular:
         return ContainingChanges.Regular;
-      case ChangesetType.Schema as number:
+      case ChangesetType.Schema:
         return ContainingChanges.Schema;
-      case ContainingChanges.Schema | ContainingChanges.SchemaSync:
+      case ChangesetType.SchemaSync:
         return ContainingChanges.Schema | ContainingChanges.SchemaSync;
       default:
         ITwinError.throwError({
@@ -162,16 +162,12 @@ export class PlatformToClientAdapter {
     };
   }
 
-  // eslint-disable-next-line deprecation/deprecation
   private static toLockLevel(lockState: LockState): LockLevel {
     switch (lockState) {
-      // eslint-disable-next-line deprecation/deprecation
       case LockState.None:
         return LockLevel.None;
-      // eslint-disable-next-line deprecation/deprecation
       case LockState.Shared:
         return LockLevel.Shared;
-      // eslint-disable-next-line deprecation/deprecation
       case LockState.Exclusive:
         return LockLevel.Exclusive;
       default:

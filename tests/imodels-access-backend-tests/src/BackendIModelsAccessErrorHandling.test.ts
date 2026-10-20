@@ -2,7 +2,7 @@
  * Copyright (c) Bentley Systems, Incorporated. All rights reserved.
  * See LICENSE.md in the project root for license terms and full copyright notice.
  *--------------------------------------------------------------------------------------------*/
-import path = require("path");
+import path from "path";
 
 import { expect } from "chai";
 
@@ -394,7 +394,6 @@ describe("BackendIModelsAccess error handling", () => {
     };
 
     await executeFuncAndAssertError(
-      // eslint-disable-next-line deprecation/deprecation
       async () =>
         backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams),
       IModelsErrorCode.ChangesetNotFound
@@ -413,7 +412,6 @@ describe("BackendIModelsAccess error handling", () => {
     };
 
     await executeFuncAndAssertError(
-      // eslint-disable-next-line deprecation/deprecation
       async () =>
         backendIModelsAccess.downloadV1Checkpoint(downloadV1CheckpointParams),
       IModelsErrorCode.IModelNotFound
@@ -442,13 +440,9 @@ describe("BackendIModelsAccess error handling", () => {
       briefcaseId: 555,
       changeset: { id: "", index: 0 },
     };
-    // eslint-disable-next-line deprecation/deprecation
     const locksToAcquire: LockMap = new Map<string, LockState>([
-      // eslint-disable-next-line deprecation/deprecation
       ["0x1", LockState.Exclusive],
-      // eslint-disable-next-line deprecation/deprecation
       ["0x2", LockState.Exclusive],
-      // eslint-disable-next-line deprecation/deprecation
       ["0x3", LockState.Shared],
     ]);
 

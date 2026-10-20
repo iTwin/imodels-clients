@@ -22,24 +22,21 @@ export interface GetFavoriteIModelListUrlParams {
 
 /** Parameters for get favorite iModel list operation. */
 export interface GetFavoriteIModelListParams
-  extends AuthorizationParam,
-    HeadersParam {
+  extends AuthorizationParam, HeadersParam {
   /** Parameters that will be appended to the entity list request url that will narrow down the results. */
   urlParams: GetFavoriteIModelListUrlParams;
 }
 
 /** Parameters for add iModel to favorites operation. */
 export interface AddIModelToFavoritesParams
-  extends AuthorizationParam,
-    HeadersParam {
+  extends AuthorizationParam, HeadersParam {
   /** iModel id. iModel id must not be an empty or whitespace string. */
   iModelId: string;
 }
 
 /** Parameters for remove iModel from favorites operation. */
 export interface RemoveIModelFromFavoritesParams
-  extends AuthorizationParam,
-    HeadersParam {
+  extends AuthorizationParam, HeadersParam {
   /** iModel id. iModel id must not be an empty or whitespace string. */
   iModelId: string;
 }

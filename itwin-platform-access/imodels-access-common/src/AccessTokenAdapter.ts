@@ -33,7 +33,6 @@ export class AccessTokenAdapter {
     accessToken: AccessToken
   ): AuthorizationCallback;
 
-  // eslint-disable-next-line @typescript-eslint/unified-signatures
   public static toAuthorizationCallback(
     getAccessToken: () => Promise<AccessToken>
   ): AuthorizationCallback;

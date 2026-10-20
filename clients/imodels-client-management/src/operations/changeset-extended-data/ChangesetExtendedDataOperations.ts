@@ -22,7 +22,7 @@ import {
 } from "./ChangesetExtendedDataOperationParams";
 
 export class ChangesetExtendedDataOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   constructor(options: TOptions) {
     super(options);

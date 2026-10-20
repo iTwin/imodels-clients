@@ -18,7 +18,7 @@ import {
 } from "./ChangesetGroupOperationParams";
 
 export class ChangesetGroupOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends ManagementChangesetGroupOperations<TOptions> {
   /**
    * Creates a Changeset Group. Wraps the

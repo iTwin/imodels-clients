@@ -19,7 +19,7 @@ import { OperationOptions } from "../OperationOptions";
 import { GetSingleUserParams, GetUserListParams } from "./UserOperationParams";
 
 export class UserOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /** Gets Users who have ever been connected to the iModel specified by the iModel id. This method returns Users in
    * their minimal representation. The returned iterator internally queries entities in pages. Wraps the

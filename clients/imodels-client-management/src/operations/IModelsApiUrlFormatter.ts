@@ -25,8 +25,7 @@ import { GetRecentIModelListUrlParams } from "./recent-imodel/RecentIModelOperat
 type SingleOrderByForAnyEntity = OrderBy<{ [key: string]: unknown }, string>;
 type MultipleOrderByForAnyEntity = SingleOrderByForAnyEntity[];
 type OrderByForAnyEntity =
-  | SingleOrderByForAnyEntity
-  | MultipleOrderByForAnyEntity;
+  SingleOrderByForAnyEntity | MultipleOrderByForAnyEntity;
 type UrlParameterValue = string | number | OrderByForAnyEntity;
 
 export class IModelsApiUrlFormatter {

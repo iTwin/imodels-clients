@@ -128,9 +128,8 @@ describe("[Management] UserOperations", () => {
     };
 
     // Act
-    const queriedAdmin1User: User = await iModelsClient.users.getSingle(
-      getAdmin1UserParams
-    );
+    const queriedAdmin1User: User =
+      await iModelsClient.users.getSingle(getAdmin1UserParams);
 
     // Assert
     assertUser({

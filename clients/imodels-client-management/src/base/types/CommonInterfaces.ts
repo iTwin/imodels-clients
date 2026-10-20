@@ -63,8 +63,7 @@ export interface HeadersParam {
  * except for {@link https://developer.bentley.com/apis/imodels-v2/operations/get-itwin-imodels/ Get iTwin iModels}.
  */
 export interface IModelScopedOperationParams
-  extends AuthorizationParam,
-    HeadersParam {
+  extends AuthorizationParam, HeadersParam {
   /** iModel id. */
   iModelId: string;
 }
@@ -91,7 +90,7 @@ export interface CollectionRequestParams {
 /** Common url parameters that are supported for orderable entity list requests. */
 export interface OrderableCollectionRequestParams<
   TEntity,
-  TProperties extends keyof TEntity
+  TProperties extends keyof TEntity,
 > extends CollectionRequestParams {
   /** Specifies in what order should entities be returned. See {@link OrderBy}. */
   $orderBy?: OrderBy<TEntity, TProperties> | OrderBy<TEntity, TProperties>[];

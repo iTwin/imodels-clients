@@ -29,9 +29,12 @@ import {
 } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
-  constructor(options: TOptions, private _iModelsClient: IModelsClient) {
+  constructor(
+    options: TOptions,
+    private _iModelsClient: IModelsClient
+  ) {
     super(options);
   }
 

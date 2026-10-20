@@ -12,8 +12,7 @@ import { ChangesetIdOrIndex } from "../OperationParamExports";
 export type GetChangesetExtendedDataListUrlParams = CollectionRequestParams;
 
 /** Parameters for get Changeset Extended Data list operation. */
-export interface GetChangesetExtendedDataListParams
-  extends IModelScopedOperationParams {
+export interface GetChangesetExtendedDataListParams extends IModelScopedOperationParams {
   /** Parameters that will be appended to the entity list request url that will narrow down the results. */
   urlParams?: GetChangesetExtendedDataListUrlParams;
 }

@@ -150,8 +150,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
       PlatformToClientAdapter.toChangesetRangeUrlParams(arg.range);
 
     let downloadCancellationMonitorFunc:
-      | DownloadCancellationMonitorFunc
-      | undefined;
+      DownloadCancellationMonitorFunc | undefined;
     try {
       const downloadProgressParams =
         PlatformToClientAdapter.toDownloadProgressParam(arg.progressCallback);
@@ -186,8 +185,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     };
 
     let downloadCancellationMonitorFunc:
-      | DownloadCancellationMonitorFunc
-      | undefined;
+      DownloadCancellationMonitorFunc | undefined;
     try {
       const downloadProgressParams =
         PlatformToClientAdapter.toDownloadProgressParam(arg.progressCallback);
@@ -411,7 +409,6 @@ export class BackendIModelsAccess implements BackendHubAccess {
     return briefcaseIds;
   }
 
-  // eslint-disable-next-line deprecation/deprecation
   public async downloadV1Checkpoint(
     arg: DownloadRequest
   ): Promise<ChangesetIndexAndId> {
@@ -439,8 +436,7 @@ export class BackendIModelsAccess implements BackendHubAccess {
     );
 
     let downloadCancellationMonitorFunc:
-      | DownloadCancellationMonitorFunc
-      | undefined;
+      DownloadCancellationMonitorFunc | undefined;
     try {
       const downloadProgressParams =
         PlatformToClientAdapter.toDownloadProgressParam(arg.onProgress);

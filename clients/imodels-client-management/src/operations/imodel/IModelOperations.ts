@@ -45,9 +45,12 @@ import {
 } from "./IModelOperationParams";
 
 export class IModelOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
-  constructor(options: TOptions, private _iModelsClient: IModelsClient) {
+  constructor(
+    options: TOptions,
+    private _iModelsClient: IModelsClient
+  ) {
     super(options);
   }
   /**

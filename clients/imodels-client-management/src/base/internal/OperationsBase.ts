@@ -160,7 +160,7 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
 
   protected async getEntityCollectionPage<
     TEntity,
-    TResponse extends CollectionResponse
+    TResponse extends CollectionResponse,
   >(
     params: CommonRequestParams & {
       url: string;
@@ -238,12 +238,10 @@ export class OperationsBase<TOptions extends OperationsBaseOptions> {
   ): Promise<Dictionary<string>> {
     const headers: Dictionary<string> = {};
     const authorizationInfo = await params.authorization();
-    headers[
-      Constants.headers.authorization
-    ] = `${authorizationInfo.scheme} ${authorizationInfo.token}`;
-    headers[
-      Constants.headers.accept
-    ] = `application/vnd.bentley.${this._options.api.version}+json`;
+    headers[Constants.headers.authorization] =
+      `${authorizationInfo.scheme} ${authorizationInfo.token}`;
+    headers[Constants.headers.accept] =
+      `application/vnd.bentley.${this._options.api.version}+json`;
 
     if (params.preferReturn)
       headers[Constants.headers.prefer] = `return=${params.preferReturn}`;

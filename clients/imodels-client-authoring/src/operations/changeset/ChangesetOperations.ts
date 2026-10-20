@@ -41,8 +41,7 @@ type DownloadCallback = (bytesDownloaded: number) => void;
 type DownloadFailedCallback = (bytesDownloadedBeforeFailure: number) => void;
 
 interface DownloadChangesetFileWithRetryParams
-  extends IModelScopedOperationParams,
-    RetryParams {
+  extends IModelScopedOperationParams, RetryParams {
   changeset: DownloadedChangeset;
   abortSignal?: GenericAbortSignal;
   downloadCallback?: DownloadCallback;
@@ -50,7 +49,7 @@ interface DownloadChangesetFileWithRetryParams
 }
 
 export class ChangesetOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends ManagementChangesetOperations<TOptions> {
   /**
    * Creates a Changeset. Wraps the
@@ -326,14 +325,12 @@ export class ChangesetOperations<
     targetFilePath: string,
     expectedFileSize: number
   ): Promise<boolean> {
-    const fileExists = await this._options.localFileSystem.fileExists(
-      targetFilePath
-    );
+    const fileExists =
+      await this._options.localFileSystem.fileExists(targetFilePath);
     if (!fileExists) return false;
 
-    const existingFileSize = await this._options.localFileSystem.getFileSize(
-      targetFilePath
-    );
+    const existingFileSize =
+      await this._options.localFileSystem.getFileSize(targetFilePath);
     if (existingFileSize === expectedFileSize) return true;
 
     await this._options.localFileSystem.deleteFile(targetFilePath);

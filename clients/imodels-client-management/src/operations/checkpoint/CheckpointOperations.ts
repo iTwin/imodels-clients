@@ -10,7 +10,7 @@ import { OperationOptions } from "../OperationOptions";
 import { GetSingleCheckpointParams } from "./CheckpointOperationParams";
 
 export class CheckpointOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Gets a single Checkpoint generated either on a specific Changeset or for a specific Named Version. This method

@@ -29,9 +29,12 @@ import {
 } from "./ChangesetOperationParams";
 
 export class ChangesetOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
-  constructor(options: TOptions, private _iModelsClient: IModelsClient) {
+  constructor(
+    options: TOptions,
+    private _iModelsClient: IModelsClient
+  ) {
     super(options);
   }
 
@@ -152,7 +155,7 @@ export class ChangesetOperations<
   }
 
   protected appendRelatedMinimalEntityCallbacks<
-    TChangeset extends MinimalChangeset
+    TChangeset extends MinimalChangeset,
   >(
     authorization: AuthorizationCallback,
     changeset: TChangeset,

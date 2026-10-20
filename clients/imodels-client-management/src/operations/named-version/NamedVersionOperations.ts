@@ -32,9 +32,12 @@ import {
 } from "./NamedVersionOperationParams";
 
 export class NamedVersionOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
-  constructor(options: TOptions, private _iModelsClient: IModelsClient) {
+  constructor(
+    options: TOptions,
+    private _iModelsClient: IModelsClient
+  ) {
     super(options);
   }
 
