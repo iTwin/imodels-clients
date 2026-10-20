@@ -14,7 +14,7 @@ pr:
   drafts: false
 
 variables:
-  nodeVersion: '22.11.0'
+  nodeVersion: '22.13.0'
 
 jobs:
   - job: BuildAndTest

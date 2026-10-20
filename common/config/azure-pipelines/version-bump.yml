@@ -25,7 +25,7 @@ parameters:
 trigger: none
 
 variables:
-  nodeVersion: '22.11.0'
+  nodeVersion: '22.13.0'
 
 jobs:
   - deployment: iModelsApiClientsVersionBump
