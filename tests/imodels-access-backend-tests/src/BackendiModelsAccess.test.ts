@@ -210,8 +210,8 @@ describe("BackendIModelsAccess", () => {
         );
 
         if (
-          expectedChangesetFile.containingChanges ===
-          (ContainingChanges.Schema as number)
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+          expectedChangesetFile.containingChanges === ContainingChanges.Schema
         )
           expect(downloadedChangeset.changesType).to.be.equal(
             ChangesetType.Schema
@@ -315,9 +315,8 @@ describe("BackendIModelsAccess", () => {
         iTwinId,
       };
 
-      const newiModelId = await backendIModelsAccess.createNewIModel(
-        createNewIModelProps
-      );
+      const newiModelId =
+        await backendIModelsAccess.createNewIModel(createNewIModelProps);
 
       expect(newiModelId).to.not.be.empty;
     });
@@ -431,7 +430,6 @@ describe("BackendIModelsAccess", () => {
       };
 
       // Act
-      // eslint-disable-next-line deprecation/deprecation
       const downloadedCheckpoint: ChangesetIndexAndId =
         await backendIModelsAccess.downloadV1Checkpoint(
           downloadV1CheckpointParams
@@ -481,10 +479,10 @@ describe("BackendIModelsAccess", () => {
         allowPreceding: true,
       };
       const v2checkpointForChangesetAllowPreceding:
-        | V2CheckpointAccessProps
-        | undefined = await backendIModelsAccess.queryV2Checkpoint(
-        v2checkpointForChangesetAllowPrecedingParams
-      );
+        V2CheckpointAccessProps | undefined =
+        await backendIModelsAccess.queryV2Checkpoint(
+          v2checkpointForChangesetAllowPrecedingParams
+        );
       // Assert
       expect(v2checkpointForChangesetAllowPreceding).to.not.be.undefined;
     });
@@ -558,7 +556,6 @@ describe("BackendIModelsAccess", () => {
       };
 
       // Act
-      // eslint-disable-next-line deprecation/deprecation
       const downloadedCheckpoint: ChangesetIndexAndId =
         await backendIModelsAccess.downloadV1Checkpoint(
           downloadV1CheckpointParams
@@ -609,7 +606,6 @@ describe("BackendIModelsAccess", () => {
       };
 
       // Act
-      // eslint-disable-next-line deprecation/deprecation
       const changesetIndexAndId: ChangesetIndexAndId =
         await backendIModelsAccess.downloadV1Checkpoint(
           downloadV1CheckpointParams
@@ -649,7 +645,6 @@ describe("BackendIModelsAccess", () => {
       };
 
       // Act
-      // eslint-disable-next-line deprecation/deprecation
       await backendIModelsAccess.downloadV1Checkpoint(
         downloadV1CheckpointParams
       );
@@ -698,7 +693,6 @@ describe("BackendIModelsAccess", () => {
       // Act
       let thrownError: unknown;
       try {
-        // eslint-disable-next-line deprecation/deprecation
         await backendIModelsAccess.downloadV1Checkpoint(
           downloadV1CheckpointParams
         );
@@ -769,13 +763,9 @@ describe("BackendIModelsAccess", () => {
         briefcaseId,
         changeset: { id: "", index: 0 },
       };
-      // eslint-disable-next-line deprecation/deprecation
       const locksToAcquire: LockMap = new Map<string, LockState>([
-        // eslint-disable-next-line deprecation/deprecation
         ["0x1", LockState.Exclusive],
-        // eslint-disable-next-line deprecation/deprecation
         ["0x2", LockState.Exclusive],
-        // eslint-disable-next-line deprecation/deprecation
         ["0x3", LockState.Shared],
       ]);
 
@@ -810,12 +800,10 @@ describe("BackendIModelsAccess", () => {
         changeset: { id: "", index: 0 },
       };
 
-      // eslint-disable-next-line deprecation/deprecation
       const locksToAcquire: LockMap = new Map<string, LockState>();
 
       const objectIdsDec = Array.from({ length: 201 }, (_, i) => i + 1);
       for (const objectId of objectIdsDec) {
-        // eslint-disable-next-line deprecation/deprecation
         locksToAcquire.set(`0x${objectId.toString(16)}`, LockState.Exclusive);
       }
 
@@ -832,9 +820,8 @@ describe("BackendIModelsAccess", () => {
       await backendIModelsAccess.releaseAllLocks(briefcaseDbParams);
 
       // Assert
-      const actualLocks: LockProps[] = await backendIModelsAccess.queryAllLocks(
-        briefcaseDbParams
-      );
+      const actualLocks: LockProps[] =
+        await backendIModelsAccess.queryAllLocks(briefcaseDbParams);
       expect(actualLocks.length).to.be.equal(0);
     });
 

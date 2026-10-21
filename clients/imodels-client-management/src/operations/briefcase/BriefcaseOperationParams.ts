@@ -27,11 +27,10 @@ export enum BriefcaseOrderByProperty {
 }
 
 /** Url parameters supported in Briefcase list query. */
-export interface GetBriefcaseListUrlParams
-  extends OrderableCollectionRequestParams<
-    Briefcase,
-    BriefcaseOrderByProperty
-  > {
+export interface GetBriefcaseListUrlParams extends OrderableCollectionRequestParams<
+  Briefcase,
+  BriefcaseOrderByProperty
+> {
   /** Filters Briefcases with specific owner. See {@link ValidOwnerIdValue}. */
   ownerId?: ValidOwnerIdValue;
 }

@@ -20,11 +20,10 @@ export enum NamedVersionOrderByProperty {
 }
 
 /** Url parameters supported in Named Version list query. */
-export interface GetNamedVersionListUrlParams
-  extends OrderableCollectionRequestParams<
-    NamedVersion,
-    NamedVersionOrderByProperty
-  > {
+export interface GetNamedVersionListUrlParams extends OrderableCollectionRequestParams<
+  NamedVersion,
+  NamedVersionOrderByProperty
+> {
   /** Filters Named Versions whose name or description property contains the specified search value. */
   $search?: string;
   /** Filters Named Versions with a specific name. */
@@ -40,8 +39,7 @@ export interface GetNamedVersionListParams extends IModelScopedOperationParams {
 }
 
 /** Parameters for get single Named Version operation. */
-export interface GetSingleNamedVersionParams
-  extends IModelScopedOperationParams {
+export interface GetSingleNamedVersionParams extends IModelScopedOperationParams {
   /** Named Version id. */
   namedVersionId: string;
 }

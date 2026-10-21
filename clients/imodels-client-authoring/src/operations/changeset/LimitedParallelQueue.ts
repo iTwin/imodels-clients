@@ -26,10 +26,11 @@ export class LimitedParallelQueue {
       ) {
         // We create a promise that removes itself from the `currentlyExecutingPromises` queue after it resolves.
         const itemToExecute = this._queue.shift()!;
-        const executingItem = itemToExecute().then(() => {
+        const executingItem = itemToExecute().finally(() => {
           const indexOfItemInQueue =
             currentlyExecutingPromises.indexOf(executingItem);
-          currentlyExecutingPromises.splice(indexOfItemInQueue, 1);
+          if (indexOfItemInQueue !== -1)
+            void currentlyExecutingPromises.splice(indexOfItemInQueue, 1);
         });
         currentlyExecutingPromises.push(executingItem);
       }

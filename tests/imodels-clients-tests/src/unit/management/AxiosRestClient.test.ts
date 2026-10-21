@@ -222,8 +222,8 @@ describe("[Management] AxiosRestClient", () => {
       },
     };
 
-    axiosMock.onPost(requestParams.url).reply(500),
-      retryPolicyStub.shouldRetry.returns(false);
+    (axiosMock.onPost(requestParams.url).reply(500),
+      retryPolicyStub.shouldRetry.returns(false));
     const restClient = new AxiosRestClient(retryPolicyStub);
 
     // Act
@@ -261,12 +261,12 @@ describe("[Management] AxiosRestClient", () => {
       },
     };
 
-    axiosMock
+    (axiosMock
       .onPost(requestParams.url)
       .replyOnce(500)
       .onPost(requestParams.url)
       .replyOnce(200, responseData),
-      retryPolicyStub.shouldRetry.returns(true);
+      retryPolicyStub.shouldRetry.returns(true));
     retryPolicyStub.getSleepDurationInMs.returns(1000);
     const restClient = new AxiosRestClient(retryPolicyStub);
 

@@ -64,7 +64,6 @@ export async function queryCurrentOrPrecedingV2Checkpoint(
 export async function queryCurrentOrPrecedingV1Checkpoint(
   iModelsClient: IModelsClient,
   iModelScopedOperationParams: IModelScopedOperationParams,
-  // eslint-disable-next-line deprecation/deprecation
   checkpointArg: DownloadRequest
 ): Promise<Checkpoint | undefined> {
   const changesetIndex = await resolveChangesetIndexFromParamsOrQueryApi(

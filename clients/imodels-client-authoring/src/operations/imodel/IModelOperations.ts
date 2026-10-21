@@ -24,7 +24,7 @@ import {
 } from "./IModelOperationParams";
 
 export class IModelOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends ManagementIModelOperations<TOptions> {
   private _baselineFileOperations: BaselineFileOperations<TOptions>;
 

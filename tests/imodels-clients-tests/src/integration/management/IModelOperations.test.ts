@@ -502,9 +502,8 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.createEmpty(
-      createIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.createEmpty(createIModelParams);
 
     // Assert
     await assertIModel({
@@ -537,9 +536,8 @@ describe("[Management] IModelOperations", () => {
       },
     };
 
-    const iModel: IModel = await iModelsClient.iModels.createEmpty(
-      createIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.createEmpty(createIModelParams);
 
     await assertIModel({
       actualIModel: iModel,
@@ -775,9 +773,8 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.update(
-      updateIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.update(updateIModelParams);
 
     // Assert
     await assertIModel({
@@ -816,9 +813,8 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.update(
-      updateIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.update(updateIModelParams);
 
     // Assert
     await assertIModel({
@@ -866,9 +862,8 @@ describe("[Management] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.update(
-      updateIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.update(updateIModelParams);
 
     // Assert
     await assertIModel({

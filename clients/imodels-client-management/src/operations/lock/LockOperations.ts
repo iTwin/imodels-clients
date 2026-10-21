@@ -24,7 +24,7 @@ import {
 } from "./LockOperationParams";
 
 export class LockOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Gets Locks for a specific iModel. This method returns Locks in their full representation. The returned iterator

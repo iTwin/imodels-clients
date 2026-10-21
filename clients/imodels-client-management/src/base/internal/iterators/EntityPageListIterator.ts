@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 import { EntityCollectionPage, EntityPageQueryFunc } from "../UtilityTypes";
 
-export class EntityPageListIterator<TEntity>
-  implements AsyncIterableIterator<TEntity[]>
-{
+export class EntityPageListIterator<TEntity> implements AsyncIterableIterator<
+  TEntity[]
+> {
   private _entityPages: AsyncIterableIterator<TEntity[]>;
 
   constructor(pageQueryFunc: EntityPageQueryFunc<TEntity>) {

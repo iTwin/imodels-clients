@@ -16,7 +16,7 @@ import {
 } from "./BriefcaseOperationParams";
 
 export class BriefcaseOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends ManagementBriefcaseOperations<TOptions> {
   /**
    * Acquires a new Briefcase with specified properties. Wraps the

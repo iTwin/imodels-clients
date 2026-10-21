@@ -22,7 +22,7 @@ import {
 } from "./FavoriteIModelOperationParams";
 
 export class FavoriteIModelOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Gets favorite iModels for a specific iTwin. This method returns iModels in their minimal representation. The returned iterator

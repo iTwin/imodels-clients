@@ -11,7 +11,7 @@ import { OperationOptions } from "../OperationOptions";
 import { GetSingleBaselineFileParams } from "./BaselineFileOperationParams";
 
 export class BaselineFileOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Gets a single Baseline file by iModel id. This method returns a Baseline file in its full representation. Wraps the

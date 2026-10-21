@@ -22,14 +22,11 @@
     "build:copy-assets": "cpx \"./src/assets/**/*\" ./lib/assets",
     "clean": "rimraf lib",
     "cover": "nyc npm test",
-    "lint": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config ./src/**/*.ts 1>&2",
-    "lint-fix": "eslint --resolve-plugins-relative-to node_modules/@itwin/imodels-client-common-config --fix ./src/**/*.ts 1>&2 && sort-package-json",
+    "lint": "eslint ./src/**/*.ts 1>&2",
+    "lint-fix": "eslint --fix ./src/**/*.ts 1>&2 && sort-package-json",
     "spell-check": "cspell \"**\" --config ./node_modules/@itwin/imodels-client-common-config/cspell.json"
   },
   "prettier": "./node_modules/@itwin/imodels-client-common-config/prettier.json",
-  "eslintConfig": {
-    "extends": "./node_modules/@itwin/imodels-client-common-config/.eslintrc.js"
-  },
   "dependencies": {
     "@itwin/imodels-client-authoring": "workspace:*",
     "@itwin/imodels-client-management": "workspace:*",
@@ -50,7 +47,7 @@
     "@types/node": "^22.15.14",
     "cpx2": "4.2.0",
     "cspell": "~5.21.0",
-    "eslint": "~8.55.0",
+    "eslint": "^9.39.5",
     "rimraf": "~3.0.2",
     "sort-package-json": "~1.53.1",
     "typescript": "^5.8.3"

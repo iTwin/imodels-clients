@@ -9,7 +9,7 @@ import { OperationOptions } from "../OperationOptions";
 import { GetUserPermissionsParams } from "./UserPermissionOperationParams";
 
 export class UserPermissionOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Retrieves Permissions the current user has for the specified iModel. The current user is determined based on

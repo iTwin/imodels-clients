@@ -80,9 +80,8 @@ describe("[Authoring] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.createFromBaseline(
-      createIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.createFromBaseline(createIModelParams);
 
     // Assert
     await assertIModel({
@@ -112,9 +111,8 @@ describe("[Authoring] IModelOperations", () => {
     };
 
     // Act
-    const iModel: IModel = await iModelsClient.iModels.createFromBaseline(
-      createIModelParams
-    );
+    const iModel: IModel =
+      await iModelsClient.iModels.createFromBaseline(createIModelParams);
 
     // Assert
     await assertIModel({

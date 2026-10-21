@@ -22,7 +22,7 @@ import {
 } from "./RecentIModelOperationParams";
 
 export class RecentIModelOperations<
-  TOptions extends OperationOptions
+  TOptions extends OperationOptions,
 > extends OperationsBase<TOptions> {
   /**
    * Gets recently used iModels for a specific iTwin. A user can only have 25 recently used iModels.
